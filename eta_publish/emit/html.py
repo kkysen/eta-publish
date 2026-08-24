@@ -46,7 +46,7 @@ class HtmlEmitter(Emitter):
     def paragraph(self, node: Paragraph) -> str:
         raise NotImplementedError
 
-    def list(self, node: List) -> str:
+    def list_(self, node: List) -> str:
         raise NotImplementedError
 
     def figure(self, node: Figure) -> str:
