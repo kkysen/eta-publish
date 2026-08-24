@@ -188,6 +188,13 @@ class Parser:
             elif not (IGNORED_ELEMENTS & el.keys()):
                 kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
                 self.doc.warn(f"unhandled document element {kinds}, dropped")
+        # A soft break at either end is spacing in the document rather than
+        # part of what the paragraph says, and it renders as a stray line
+        # break with nothing on one side of it.
+        while out and isinstance(out[0], LineBreak):
+            out.pop(0)
+        while out and isinstance(out[-1], LineBreak):
+            out.pop()
         return out
 
     def _person(self, chip: JsonObject) -> Text:
