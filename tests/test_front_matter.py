@@ -144,3 +144,82 @@ def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
     doc = parse(unstyled)
     assert [i.object_id for i in doc.images] == ["io.hero"]
     assert any("TITLE-styled" in w for w in doc.warnings)
+
+
+def test_scaffolding_before_the_header_does_not_hide_it() -> None:
+    """The real doc opens with a `Draft 2` line before its `Header` heading.
+    Bailing on the first text meant no front matter was found at all, and
+    `URL:` and the rest landed in the body as prose."""
+    doc = parse(
+        {
+            "title": "SAS West Feasibility Response",
+            "body": {
+                "content": [
+                    para("Draft 2"),
+                    para("Header", "HEADING_2"),
+                    para("URL: /reports/digging-out-deep-hole-sas-west"),
+                    para("Short: A 125 St subway should be a slam dunk."),
+                    para("The Real Headline", "TITLE"),
+                    para("The Elephants in the Room", "HEADING_1"),
+                ]
+            },
+        }
+    )
+    assert doc.meta["url"] == "/reports/digging-out-deep-hole-sas-west"
+    assert doc.meta["short"] == "A 125 St subway should be a slam dunk."
+    assert doc.title == "The Real Headline"
+
+
+def test_dropped_scaffolding_is_reported() -> None:
+    """It is production notes rather than the report, so dropping it is
+    right, but it must not leave silently."""
+    doc = parse(
+        {
+            "title": "x",
+            "body": {
+                "content": [
+                    para("Draft 2"),
+                    para("Header", "HEADING_2"),
+                    para("URL: /reports/x"),
+                    para("Headline", "TITLE"),
+                ]
+            },
+        }
+    )
+    assert any("Draft 2" in w for w in doc.warnings)
+
+
+def test_a_document_with_no_header_section_is_left_intact() -> None:
+    """The preamble scan must not eat a whole document a paragraph at a
+    time when there is no `Header` heading to find."""
+    doc = parse(
+        {
+            "title": "x",
+            "body": {
+                "content": [para("Just a Headline", "TITLE"), para("Body."), para("More body.")]
+            },
+        }
+    )
+    assert len([b for b in doc.blocks if isinstance(b, Paragraph)]) == 2
+    assert doc.meta == {}
+    assert any("no front matter found" in w for w in doc.warnings)
+
+
+def test_a_headline_before_the_header_stops_the_search() -> None:
+    """Past the headline the report has started, so there is no header to
+    look for and nothing may be consumed."""
+    doc = parse(
+        {
+            "title": "x",
+            "body": {
+                "content": [
+                    para("Headline", "TITLE"),
+                    para("Body."),
+                    para("Header", "HEADING_2"),
+                    para("URL: /reports/x"),
+                ]
+            },
+        }
+    )
+    assert doc.meta == {}
+    assert len(doc.blocks) == 3

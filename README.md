@@ -226,6 +226,10 @@ Two rules matter, because both are load-bearing:
 the headline, a paragraph containing an image, or ordinary prose. Keep the
 header lines together, with nothing between them.
 
+Lines *before* the `Header` heading, such as the `Draft 2` the SAS West doc
+opens with, are treated as production scaffolding and dropped. Each one is
+reported, so nothing leaves the document silently.
+
 **The headline must be styled `Title`.** Otherwise it is
 `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`, which
 looks exactly like a `Key: value` line and gets filed as metadata. The

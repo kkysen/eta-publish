@@ -308,30 +308,36 @@ class Parser:
         header field to a future report cannot leak that line into the body.
         The real doc already has one such line
         (`MTA SAS West Feasibility Study:`).
-        """
-        header_seen = False
-        end = 0
 
-        for i, item in enumerate(content):
+        Anything before `Header` is production scaffolding rather than the
+        report, such as the `Draft 2` line the real doc opens with. It is
+        dropped, but each dropped line is reported, so nothing leaves the
+        document without saying so.
+        """
+        start = self._header_index(content)
+        if start is None:
+            self.doc.warn(
+                "no front matter found; expected a leading `Header` section with "
+                "`URL:`, `Short:`, and `SEO Description:` lines"
+            )
+            return content
+
+        for item in content[:start]:
             para = item.get("paragraph")
+            text = plain(para) if para is not None else ""
+            if text:
+                self.doc.warn(f"dropped a line before the `Header` section: {text[:80]}")
+
+        end = start + 1
+        for i in range(start + 1, len(content)):
+            para = content[i].get("paragraph")
             if para is None:
-                if header_seen:
-                    break
-                continue
+                break
 
             style = style_of(para)
-            level = HEADING_LEVELS.get(style)
             text = plain(para)
 
-            if not header_seen:
-                if level is not None and text.strip().lower() == "header":
-                    header_seen = True
-                    end = i + 1
-                elif text or has_image(para):
-                    break  # no `Header` section at all
-                continue
-
-            if style == "TITLE" or level is not None or has_image(para):
+            if style == "TITLE" or HEADING_LEVELS.get(style) is not None or has_image(para):
                 break
 
             if not text:
@@ -347,10 +353,29 @@ class Parser:
 
         if not self.doc.meta:
             self.doc.warn(
-                "no front matter found; expected a leading `Header` section with "
-                "`URL:`, `Short:`, and `SEO Description:` lines"
+                "the `Header` section holds no `Key: value` lines; expected "
+                "`URL:`, `Short:`, and `SEO Description:`"
             )
         return content[end:]
+
+    def _header_index(self, content: list[JsonObject]) -> int | None:
+        """Where the `Header` heading is, if the report has one.
+
+        Found before anything is consumed, so a document without one is left
+        untouched rather than being eaten a paragraph at a time. The search
+        stops at the headline or the first figure, since past either of those
+        the report has already started.
+        """
+        for i, item in enumerate(content):
+            para = item.get("paragraph")
+            if para is None:
+                continue
+            style = style_of(para)
+            if HEADING_LEVELS.get(style) is not None and plain(para).strip().lower() == "header":
+                return i
+            if style == "TITLE" or has_image(para):
+                return None
+        return None
 
     def title(self, content: list[JsonObject]) -> str:
         """Prefer a TITLE-styled paragraph over the Drive filename.
