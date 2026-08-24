@@ -17,6 +17,7 @@ emitters, because they are facts about how the docs are written:
 from __future__ import annotations
 
 import re
+from dataclasses import replace
 
 from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename
@@ -50,7 +51,14 @@ HEADING_LEVELS = {
 RESERVED_ANCHORS = frozenset({"footnotes"})
 
 KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
-SOURCE_RE = re.compile(r"^\s*Source\s*:", re.IGNORECASE)
+# A trailing note to whoever fills the field in, not part of its name. The
+# real doc writes `SEO Description (300 char limit):`, and a lookup for
+# `seo description` finds nothing unless the note is stripped.
+KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
+# Two spellings, both editorial: `Source: <file>` written before an image,
+# and `[Image Source](<url>)` written after its caption. Neither appears on
+# the published page, which is what makes them notes rather than content.
+SOURCE_RE = re.compile(r"^\s*\[?\s*(?:image\s+)?source\s*[:\]]", re.IGNORECASE)
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
@@ -240,6 +248,11 @@ class Parser:
                 continue
 
             if SOURCE_RE.match(text):
+                last = out[-1] if out else None
+                if isinstance(last, Figure):
+                    # The `[Image Source](...)` spelling follows its figure.
+                    last.source = last.source + self.inlines(para)
+                    continue
                 drop_pending()
                 pending_source = self.inlines(para)
                 caption_slot = 0
@@ -269,6 +282,13 @@ class Parser:
             out.append(Paragraph(content=self.inlines(para)))
 
         drop_pending()
+        for block in out:
+            if isinstance(block, Figure) and not block.image.alt and block.caption:
+                # The published page uses the caption as alt text as well as
+                # showing it, so an image with no description in Docs is not
+                # left unlabelled.
+                caption = "".join(i.text for i in block.caption if isinstance(i, Text))
+                block.image = replace(block.image, alt=caption.strip())
         return out
 
     def _only_image(self, para: JsonObject) -> Image:
@@ -348,7 +368,8 @@ class Parser:
             if match is None:
                 break  # prose: the header section is over
 
-            self.doc.meta[match.group("key").strip().lower()] = match.group("value").strip()
+            key = KEY_NOTE_RE.sub("", match.group("key").strip()).lower()
+            self.doc.meta[key] = match.group("value").strip()
             end = i + 1
 
         if not self.doc.meta:

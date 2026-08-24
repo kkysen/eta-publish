@@ -238,7 +238,9 @@ filename, which is a working name (`SAS West Feasibility Response`) and not
 what should publish. Alternatively, put `Title:` in the header block.
 
 Unrecognized keys are kept rather than treated as body text, so adding a
-field to a future report is safe.
+field to a future report is safe. A parenthetical note in a key is not part
+of its name: `SEO Description (300 char limit):` is read as
+`seo description`.
 
 ### The rest
 
@@ -246,12 +248,16 @@ field to a future report is safe.
   Heading text determines the anchor, which is a published URL,
   so renaming a heading moves it unless an override is set.
 - **Real footnotes.** Numbering and backlinks are generated from them.
-- **Images inserted inline.** An optional `Source:` paragraph immediately
-  *before* an image, and caption and `Credit:` paragraphs immediately
-  *after* it, are folded into that image's figure.
-  `Source:` is treated as an editorial note: it is kept in the Markdown
-  archive as a comment and never appears in the published HTML or the PDF,
-  matching what the live page does.
+- **Images inserted inline.** The lines around an image are folded into its
+  figure: a `Source: <file>` paragraph before it, or an
+  `[Image Source](<url>)` paragraph after the caption, plus the caption and
+  a `Credit:` line.
+  Both spellings of the source are treated as editorial notes: they are kept
+  in the Markdown archive as comments and never appear in the published HTML
+  or the PDF, matching the live page, where `Source:` and `Image Source`
+  each appear zero times and `Credit:` appears 26 times.
+  When an image has no alt text in Docs, its caption is used, which is what
+  the live page does by hand.
 - **Suggestions are rejected.** The doc is fetched as it currently reads,
   with every open suggestion rejected, so nothing publishes because someone
   proposed it and no one noticed. `--suggestions accepted` previews the
