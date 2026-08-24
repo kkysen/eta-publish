@@ -47,7 +47,7 @@ def download(
         existing = next(iter(outdir.glob(f"{image.filename}.*")), None)
         if existing is not None:
             written[image.object_id] = existing
-            doc.image_extensions[image.object_id] = existing.suffix
+            doc.image_files[image.object_id] = existing.name
             continue
         if not image.source_uri:
             doc.warn(f"image {image.object_id} has no source URI; not downloaded")
@@ -67,7 +67,7 @@ def download(
         dest = outdir / f"{image.filename}{extension}"
         dest.write_bytes(crop_to(image, response.content, doc))
         written[image.object_id] = dest
-        doc.image_extensions[image.object_id] = extension
+        doc.image_files[image.object_id] = dest.name
 
     return written
 
