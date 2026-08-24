@@ -39,6 +39,7 @@ from .nodes import (
     Paragraph,
     Table,
     Text,
+    Vector,
 )
 
 HEADING_LEVELS = {
@@ -72,6 +73,9 @@ KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
 # rather than content: the live SAS West report contains zero occurrences of
 # each, against 26 of `Credit:`.
 SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*[:\]]", re.IGNORECASE)
+
+# A Drive file id, from either shape of link Docs produces.
+DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
 
 # The same idea for chart assets: `SVG:` and `PNG:` name the file to link
 # beside a figure. They are notes to whoever assembles the page, and the
@@ -279,6 +283,30 @@ class Parser:
             crop=crop,
         )
 
+    def _vector(self, para: JsonObject) -> Vector | None:
+        """The vector original a `SVG:` line links, if it links one.
+
+        Only a link to Drive counts. `SVG: TODO` is a note to whoever is
+        assembling the report, and there is nothing to publish for it.
+        """
+        for el in para.get("elements", []):
+            props = el.get("richLink", {}).get("richLinkProperties", {})
+            uri = props.get("uri", "")
+            if not uri or "image/svg" not in props.get("mimeType", ""):
+                continue
+            match = DRIVE_ID_RE.search(uri)
+            if match is None:
+                self.doc.warn(f"cannot read a Drive file id from {uri}; the raster is used")
+                continue
+            file_id = match.group(1) or match.group(2)
+            return Vector(
+                file_id=file_id,
+                filename=image_filename(file_id, extension=".svg"),
+                title=props.get("title", ""),
+                uri=uri,
+            )
+        return None
+
     def _crop(self, object_id: str, props: JsonObject) -> Crop:
         """How much of the image the document trims from each side.
 
@@ -416,6 +444,7 @@ class Parser:
                 if isinstance(last, Figure):
                     # The `[Image Source](...)` spelling follows its figure.
                     last.source = last.source + self.inlines(para)
+                    self._attach_vector(last, para)
                     continue
                 drop_pending()
                 pending_source = self.inlines(para)
@@ -473,6 +502,19 @@ class Parser:
                 caption = "".join(i.text for i in block.caption if isinstance(i, Text))
                 block.image = replace(block.image, alt=caption.strip())
         return out
+
+    def _attach_vector(self, figure: Figure, para: JsonObject) -> None:
+        """Promote a `SVG:` line's link from a note to the figure's file."""
+        vector = self._vector(para)
+        if vector is None:
+            return
+        if figure.image.crop.trims:
+            self.doc.warn(
+                f"image {figure.image.object_id} is both cropped and given a vector "
+                "original; the crop cannot be applied to it, so the raster is used"
+            )
+            return
+        figure.image = replace(figure.image, vector=vector)
 
     def _only_image(self, para: JsonObject) -> Image:
         inlines = self.inlines(para)

@@ -99,6 +99,23 @@ class Crop:
 
 
 @dataclass(frozen=True)
+class Vector:
+    """A vector original the document names beside a rasterized copy.
+
+    Google Docs cannot place an SVG, so a chart is pasted as a PNG and the
+    real file is linked next to it on a `SVG:` line. Every output here can
+    show the vector, so the raster is only ever a stand-in for the editor.
+    """
+
+    file_id: str
+    """The Drive file id, which is what the API downloads by."""
+
+    filename: str
+    title: str = ""
+    uri: str = ""
+
+
+@dataclass(frozen=True)
 class Image:
     """An inline image.
 
@@ -113,6 +130,7 @@ class Image:
     alt: str = ""
     source_uri: str | None = None
     crop: Crop = field(default_factory=lambda: Crop())
+    vector: Vector | None = None
 
 
 Inline = Text | LineBreak | FootnoteRef | Image
