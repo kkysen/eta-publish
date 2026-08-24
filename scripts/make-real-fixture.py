@@ -4,11 +4,11 @@
     uv run eta-publish <doc-url> -o out
     uv run scripts/make-real-fixture.py out/doc.json
 
-Person smart chips carry an email address next to the name. The name is
-what the document displays and what the parser uses; the address is contact
-information the document happens to hold. It is stripped here rather than
-relied on being absent, so that a contributor chip added to a future report
-cannot put someone's address into a public repository.
+The response is committed as fetched. Person smart chips carry an email
+address beside the name, which stays: it is already in this repository on
+every commit's author line, so removing it from one file would be theatre.
+What does matter is that no *output* carries it, which
+`tests/test_real_document.py` asserts.
 
 Image extensions are recorded separately because they are only knowable by
 downloading each image, and the test that reads them does not use the
@@ -22,23 +22,6 @@ import sys
 from pathlib import Path
 
 REAL = Path(__file__).resolve().parent.parent / "tests" / "real"
-REDACTED = "redacted@example.invalid"
-
-
-def redact(node: object) -> int:
-    """Replace every person chip's email in place, returning how many."""
-    count = 0
-    if isinstance(node, dict):
-        props = node.get("personProperties")
-        if isinstance(props, dict) and props.get("email"):
-            props["email"] = REDACTED
-            count += 1
-        for value in node.values():
-            count += redact(value)
-    elif isinstance(node, list):
-        for value in node:
-            count += redact(value)
-    return count
 
 
 def main(argv: list[str]) -> int:
@@ -48,7 +31,6 @@ def main(argv: list[str]) -> int:
 
     source = Path(argv[1])
     doc_json = json.loads(source.read_text())
-    print(f"redacted {redact(doc_json)} person chip email(s)")
 
     REAL.mkdir(parents=True, exist_ok=True)
     (REAL / "sas-west.doc.json").write_text(json.dumps(doc_json, indent=2) + "\n")
