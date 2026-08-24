@@ -23,13 +23,9 @@ from urllib.parse import parse_qs, urlparse
 SCOPES = ["https://www.googleapis.com/auth/documents.readonly"]
 
 CLIENT_SECRETS = Path(
-    os.environ.get(
-        "ETA_CLIENT_SECRETS", Path.home() / ".config/eta-publish/client_secret.json"
-    )
+    os.environ.get("ETA_CLIENT_SECRETS", Path.home() / ".config/eta-publish/client_secret.json")
 )
-TOKEN_PATH = Path(
-    os.environ.get("ETA_TOKEN", Path.home() / ".config/eta-publish/token.json")
-)
+TOKEN_PATH = Path(os.environ.get("ETA_TOKEN", Path.home() / ".config/eta-publish/token.json"))
 
 
 class TabNotFound(LookupError):
@@ -96,8 +92,7 @@ def select_tab(document: dict, wanted: str | None) -> dict:
         matches = [tab for _, tab in tabs if tab_id(tab) == wanted]
         if not matches:
             raise TabNotFound(
-                f"no tab {wanted!r} in this document; available tabs:\n"
-                f"{describe_tabs(document)}"
+                f"no tab {wanted!r} in this document; available tabs:\n{describe_tabs(document)}"
             )
         chosen = matches[0]
 
@@ -139,11 +134,7 @@ def fetch_document(doc_id: str) -> dict:
     from googleapiclient.discovery import build
 
     service = build("docs", "v1", credentials=_credentials())
-    return (
-        service.documents()
-        .get(documentId=doc_id, includeTabsContent=True)
-        .execute()
-    )
+    return service.documents().get(documentId=doc_id, includeTabsContent=True).execute()
 
 
 def fetch(ref: str, tab: str | None = None) -> dict:

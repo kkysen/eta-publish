@@ -55,9 +55,7 @@ class AnchorAllocator:
         for text in heading_texts:
             if text not in self.overrides:
                 claimants[slugify(text)].add(text)
-        self._ambiguous = {
-            base for base, texts in claimants.items() if len(texts) > 1
-        }
+        self._ambiguous = {base for base, texts in claimants.items() if len(texts) > 1}
 
     def allocate(self, text: str) -> str:
         if text in self.overrides:

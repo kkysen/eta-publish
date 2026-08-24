@@ -204,8 +204,7 @@ def _images_in(block: Block) -> list[Image]:
         case Paragraph() | Heading():
             return [i for i in block.content if isinstance(i, Image)]
         case List():
-            return [i for item in _items(block.items) for i in item.content
-                    if isinstance(i, Image)]
+            return [i for item in _items(block.items) for i in item.content if isinstance(i, Image)]
     return []
 
 

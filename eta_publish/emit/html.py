@@ -10,7 +10,18 @@ from __future__ import annotations
 
 import html
 
-from ..nodes import Document, Figure, FootnoteRef, Heading, Image, List, ListItem, Paragraph, Table, Text
+from ..nodes import (
+    Document,
+    Figure,
+    FootnoteRef,
+    Heading,
+    Image,
+    List,
+    ListItem,
+    Paragraph,
+    Table,
+    Text,
+)
 from .base import Emitter
 
 
