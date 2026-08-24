@@ -4,8 +4,11 @@ By default `documents.get` fills `body` from the first tab only, so a
 report drafted in a later tab would parse cleanly and be wrong.
 """
 
+from collections.abc import Sequence
+
 import pytest
 
+from eta_publish.docs_json import JsonObject
 from eta_publish.fetch import TabNotFound, parse_ref, select_tab
 
 URL = (
@@ -16,7 +19,7 @@ URL = (
 DOC_ID = "1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg"
 
 
-def _tab(tab_id, title, text, children=()):
+def _tab(tab_id: str, title: str, text: str, children: Sequence[JsonObject] = ()) -> JsonObject:
     return {
         "tabProperties": {"tabId": tab_id, "title": title},
         "documentTab": {"body": {"content": [{"marker": text}]}},

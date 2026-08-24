@@ -136,6 +136,9 @@ def fetch_document(doc_id: str) -> JsonObject:
     from googleapiclient.discovery import build
 
     service = build("docs", "v1", credentials=_credentials())
+    # `build` returns a `Resource` whose methods are generated at runtime from
+    # the API's discovery document, so no static type can know about `documents`.
+    # pyrefly: ignore[missing-attribute]
     return service.documents().get(documentId=doc_id, includeTabsContent=True).execute()
 
 

@@ -14,6 +14,8 @@ from pathlib import Path
 
 import requests
 
+from .nodes import Document
+
 EXTENSIONS = {
     "image/png": ".png",
     "image/jpeg": ".jpg",
@@ -23,7 +25,9 @@ EXTENSIONS = {
 }
 
 
-def download(doc, outdir: Path, *, session: requests.Session | None = None) -> dict[str, Path]:
+def download(
+    doc: Document, outdir: Path, *, session: requests.Session | None = None
+) -> dict[str, Path]:
     """Fetch every image in `doc`, returning object id to written path.
 
     Images already on disk are left alone. The filename depends only on the
