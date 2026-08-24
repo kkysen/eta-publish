@@ -138,6 +138,19 @@ First run opens a browser for OAuth.
 Put the OAuth client JSON at `~/.config/eta-publish/client_secret.json`,
 or point `$ETA_CLIENT_SECRETS` at it.
 
+## Development
+
+```sh
+uv sync
+uv run pre-commit install
+uv run pytest
+```
+
+`ruff format`, `ruff check`, `ty`, `pyrefly`, and `pytest`
+run as pre-commit hooks and again in CI.
+Tests run against a checked-in Docs API fixture,
+so neither ever needs Google credentials.
+
 ## Document conventions
 
 The converter reads structure, so the doc has to carry it.
