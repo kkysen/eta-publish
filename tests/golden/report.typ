@@ -1,0 +1,28 @@
+#import "template.typ": report
+
+#show: report.with(
+  title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street",
+  url: "/reports/digging-out-deep-hole-sas-west",
+  short: "A 125 St subway should be a slam dunk.",
+  seo_description: "Cheaper, shallower, faster.",
+  mta_sas_west_feasibility_study: "https://www.mta.info/document/196361",
+)
+
+= The Elephants in the Room
+
+SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inflation-adjusted from the 2024 capital plan.], per the #link("https://www.mta.info/document/196361")[MTA study].
+
+#figure(
+  image("images/img-1933bef5.png", width: 100%),
+  caption: [The SAS West and Phase 2 alignments. #emph[Credit: MTA]],
+)
+
+That is a lot of money.
+
+== Ground Conditions
+
+- First point
+  - Nested point
+- Second point
+
+Stations are over 100 ft deep.#footnote[Measured from street level to platform.]

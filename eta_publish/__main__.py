@@ -39,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="how to resolve open suggestions (default: rejected, i.e. what the doc says now)",
     )
     p.add_argument(
+        "--no-pdf",
+        action="store_true",
+        help="write the Typst source but do not compile it",
+    )
+    p.add_argument(
         "--no-images",
         action="store_true",
         help="skip downloading images; the output still references them",
@@ -82,6 +87,32 @@ def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
     return written
 
 
+def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
+    """Compile the report PDF, reporting rather than failing the whole build.
+
+    The `.typ` is already written either way, so a missing `typst` or a
+    compile error costs the PDF and nothing else.
+    """
+    from .pdf import TypstMissing, compile_pdf, install_template
+
+    if skipped_images:
+        print(
+            "note: skipping the PDF because images were not downloaded; "
+            "Typst embeds them from disk, so it needs the real files",
+            file=sys.stderr,
+        )
+        return None
+
+    install_template(outdir)
+    try:
+        return compile_pdf(source)
+    except TypstMissing as e:
+        print(f"note: {e}", file=sys.stderr)
+    except RuntimeError as e:
+        print(f"warning: {e}", file=sys.stderr)
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     from .fetch import TabNotFound
@@ -103,6 +134,10 @@ def main(argv: list[str] | None = None) -> int:
         download(doc, args.outdir / "images")
 
     written = emit(doc, args.outdir, args.image_base)
+
+    typ = written.get("report.typ")
+    if typ is not None and not args.no_pdf:
+        build_pdf(typ, args.outdir, skipped_images=args.no_images and bool(doc.images))
 
     for warning in doc.warnings:
         print(f"warning: {warning}", file=sys.stderr)
