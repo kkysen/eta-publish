@@ -15,6 +15,7 @@ import pytest
 
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.markdown import MarkdownEmitter
+from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
@@ -48,3 +49,7 @@ def test_html_matches_golden(doc: Document, regenerate_golden: bool) -> None:
 
 def test_markdown_matches_golden(doc: Document, regenerate_golden: bool) -> None:
     check("report.md", MarkdownEmitter().emit(doc), regenerate_golden)
+
+
+def test_typst_matches_golden(doc: Document, regenerate_golden: bool) -> None:
+    check("report.typ", TypstEmitter().emit(doc), regenerate_golden)
