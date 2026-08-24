@@ -9,7 +9,19 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from ..nodes import Block, Document, Figure, Heading, Inline, List, Paragraph, Table
+from ..nodes import (
+    Block,
+    Document,
+    Figure,
+    FootnoteRef,
+    Heading,
+    Image,
+    Inline,
+    List,
+    Paragraph,
+    Table,
+    Text,
+)
 
 
 class Emitter(ABC):
@@ -18,6 +30,10 @@ class Emitter(ABC):
     Subclasses implement the per-node methods. The dispatch and the
     traversal live here so that adding a node type fails loudly in every
     emitter at once rather than being silently skipped by one of them.
+
+    Note the trailing underscore on `list_`. A method named `list` would
+    shadow the builtin throughout the class body, so every `list[...]`
+    annotation in this file would resolve to the method instead.
     """
 
     extension: str = ""
@@ -38,19 +54,16 @@ class Emitter(ABC):
             case Paragraph():
                 return self.paragraph(node)
             case List():
-                return self.list(node)
+                return self.list_(node)
             case Figure():
                 return self.figure(node)
             case Table():
                 return self.table(node)
-        raise NotImplementedError(f"{type(self).__name__} cannot emit {type(node).__name__}")
 
     def inlines(self, content: list[Inline]) -> str:
         return "".join(self.inline(i) for i in content)
 
     def inline(self, node: Inline) -> str:
-        from ..nodes import FootnoteRef, Image, Text
-
         match node:
             case Text():
                 return self.text(node)
@@ -58,7 +71,6 @@ class Emitter(ABC):
                 return self.footnote_ref(node)
             case Image():
                 return self.image(node)
-        raise NotImplementedError(f"{type(self).__name__} cannot emit {type(node).__name__}")
 
     # ---- overridable ------------------------------------------------
 
@@ -69,25 +81,25 @@ class Emitter(ABC):
     def document(self, doc: Document) -> str: ...
 
     @abstractmethod
-    def heading(self, node) -> str: ...
+    def heading(self, node: Heading) -> str: ...
 
     @abstractmethod
-    def paragraph(self, node) -> str: ...
+    def paragraph(self, node: Paragraph) -> str: ...
 
     @abstractmethod
-    def list(self, node) -> str: ...
+    def list_(self, node: List) -> str: ...
 
     @abstractmethod
-    def figure(self, node) -> str: ...
+    def figure(self, node: Figure) -> str: ...
 
     @abstractmethod
-    def table(self, node) -> str: ...
+    def table(self, node: Table) -> str: ...
 
     @abstractmethod
-    def text(self, node) -> str: ...
+    def text(self, node: Text) -> str: ...
 
     @abstractmethod
-    def footnote_ref(self, node) -> str: ...
+    def footnote_ref(self, node: FootnoteRef) -> str: ...
 
     @abstractmethod
-    def image(self, node) -> str: ...
+    def image(self, node: Image) -> str: ...
