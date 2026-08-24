@@ -1,0 +1,95 @@
+"""Markdown emitted for the committed archive."""
+
+import json
+from pathlib import Path
+
+import pytest
+
+from eta_publish.docs_json import JsonObject
+from eta_publish.emit.markdown import MarkdownEmitter
+from eta_publish.nodes import Document
+from eta_publish.parse import parse
+
+FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+
+
+@pytest.fixture
+def doc() -> Document:
+    parsed = parse(FIXTURE)
+    parsed.image_extensions["io.1"] = ".png"
+    return parsed
+
+
+@pytest.fixture
+def out(doc: Document) -> str:
+    return MarkdownEmitter().emit(doc)
+
+
+def with_paragraph(text: str) -> Document:
+    doc_json: JsonObject = json.loads(json.dumps(FIXTURE))
+    doc_json["body"]["content"].append(
+        {
+            "paragraph": {
+                "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                "elements": [{"textRun": {"content": text + "\n", "textStyle": {}}}],
+            }
+        }
+    )
+    return parse(doc_json)
+
+
+def test_front_matter_is_yaml(out: str) -> None:
+    assert out.startswith("---\n")
+    assert 'title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street"' in out
+    assert "url: /reports/digging-out-deep-hole-sas-west" in out
+
+
+def test_a_paragraph_is_one_line_per_sentence() -> None:
+    """The whole reason this file exists: a one-word fix must be a one-line
+    diff, not a whole paragraph reported as changed."""
+    text = "First sentence here. Second sentence here. Third sentence here."
+    out = MarkdownEmitter().emit(with_paragraph(text))
+    assert "First sentence here.\nSecond sentence here.\nThird sentence here." in out
+
+
+def test_editing_one_sentence_changes_one_line() -> None:
+    before = MarkdownEmitter().emit(with_paragraph("Alpha one. Beta two. Gamma three."))
+    after = MarkdownEmitter().emit(with_paragraph("Alpha one. Beta TWO. Gamma three."))
+    changed = [
+        (a, b) for a, b in zip(before.splitlines(), after.splitlines(), strict=True) if a != b
+    ]
+    assert changed == [("Beta two.", "Beta TWO.")]
+
+
+def test_headings_pin_their_anchors(out: str) -> None:
+    """The anchor is a published URL, so it must not be left to whatever the
+    renderer derives from the heading text."""
+    assert "## The Elephants in the Room {#the-elephants-in-the-room}" in out
+    assert "### Ground Conditions {#ground-conditions}" in out
+
+
+def test_footnotes_use_pandoc_syntax(out: str) -> None:
+    assert "[^1]" in out
+    assert "[^1]: Inflation-adjusted from the 2024 capital plan." in out
+
+
+def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
+    """Unlike the published outputs: it records which file in Drive an image
+    came from, which is provenance worth keeping in a durable record."""
+    assert "<!-- Source: sas-west-036.jpg -->" in out
+
+
+def test_figures_carry_caption_and_credit(out: str) -> None:
+    assert "![SAS West alignment map](img-1933bef5.png)" in out
+    assert "*The SAS West and Phase 2 alignments.*" in out
+    assert "*Credit: MTA*" in out
+
+
+def test_nested_lists_indent(out: str) -> None:
+    assert "- First point\n  - Nested point\n- Second point" in out
+
+
+def test_markdown_syntax_in_prose_is_escaped() -> None:
+    out = MarkdownEmitter().emit(with_paragraph("A [bracket] and an *asterisk*."))
+    assert r"\[bracket\]" in out
+    assert r"\*asterisk\*" in out

@@ -14,6 +14,7 @@ from pathlib import Path
 import pytest
 
 from eta_publish.emit.html import HtmlEmitter
+from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
@@ -43,3 +44,7 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 def test_html_matches_golden(doc: Document, regenerate_golden: bool) -> None:
     emitted = HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc)
     check("report.html", emitted, regenerate_golden)
+
+
+def test_markdown_matches_golden(doc: Document, regenerate_golden: bool) -> None:
+    check("report.md", MarkdownEmitter().emit(doc), regenerate_golden)
