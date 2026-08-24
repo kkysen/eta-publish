@@ -54,3 +54,16 @@ def test_an_override_wins_and_is_not_treated_as_a_collision():
 def test_image_names_depend_only_on_the_docs_object_id():
     assert image_filename("io.7", ".png") == image_filename("io.7", ".png")
     assert image_filename("io.7", ".png") != image_filename("io.8", ".png")
+
+
+def test_a_heading_cannot_take_an_id_the_emitter_reserves():
+    """The HTML emitter writes `<h2 id="footnotes">` for its own section, so
+    a heading titled `Footnotes` would produce a duplicate id."""
+    a = AnchorAllocator(["Footnotes"], reserved={"footnotes"})
+    assert a.allocate("Footnotes") != "footnotes"
+    assert a.allocate("Footnotes").startswith("footnotes-")
+
+
+def test_reserving_does_not_disturb_other_headings():
+    a = AnchorAllocator(["Footnotes", "Station Depth"], reserved={"footnotes"})
+    assert a.allocate("Station Depth") == "station-depth"

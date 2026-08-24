@@ -46,6 +46,9 @@ HEADING_LEVELS = {
     "HEADING_6": 6,
 }
 
+# Ids the emitters generate for themselves, which no heading may take.
+RESERVED_ANCHORS = frozenset({"footnotes"})
+
 KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
 SOURCE_RE = re.compile(r"^\s*Source\s*:", re.IGNORECASE)
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
@@ -401,7 +404,8 @@ class Parser:
                 plain(item["paragraph"])
                 for item in content
                 if "paragraph" in item and style_of(item["paragraph"]) in HEADING_LEVELS
-            ]
+            ],
+            reserved=RESERVED_ANCHORS,
         )
 
         body = [

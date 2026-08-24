@@ -43,14 +43,21 @@ class AnchorAllocator:
 
     `overrides` maps heading text to an explicit anchor, for headings whose
     published URL already exists and must not change.
+
+    `reserved` holds ids the emitters generate themselves, such as the
+    `footnotes` section. A heading actually titled "Footnotes" would
+    otherwise collide with it, producing exactly the duplicate id that is
+    one of the three defects on the live page.
     """
 
     def __init__(
         self,
         heading_texts: Iterable[str] = (),
         overrides: dict[str, str] | None = None,
+        reserved: Iterable[str] = (),
     ) -> None:
         self.overrides = overrides or {}
+        self.reserved = frozenset(reserved)
         claimants: dict[str, set[str]] = defaultdict(set)
         for text in heading_texts:
             if text not in self.overrides:
@@ -61,7 +68,7 @@ class AnchorAllocator:
         if text in self.overrides:
             return self.overrides[text]
         base = slugify(text)
-        if base in self._ambiguous:
+        if base in self._ambiguous or base in self.reserved:
             return f"{base}-{_short_hash(text)}"
         return base
 
