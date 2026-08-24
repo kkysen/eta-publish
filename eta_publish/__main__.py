@@ -33,6 +33,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="URL prefix for published images, e.g. https://assets.etany.org/sas-west",
     )
     p.add_argument(
+        "--suggestions",
+        choices=("rejected", "accepted"),
+        default="rejected",
+        help="how to resolve open suggestions (default: rejected, i.e. what the doc says now)",
+    )
+    p.add_argument(
         "--no-images",
         action="store_true",
         help="skip downloading images; the output still references them",
@@ -40,7 +46,9 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def load(ref: str, outdir: Path, tab: str | None = None) -> JsonObject:
+def load(
+    ref: str, outdir: Path, tab: str | None = None, suggestions: str = "rejected"
+) -> JsonObject:
     """Accept a saved JSON file so the pipeline can run without credentials."""
     path = Path(ref)
     if path.is_file():
@@ -49,7 +57,7 @@ def load(ref: str, outdir: Path, tab: str | None = None) -> JsonObject:
     from .fetch import fetch_to
 
     outdir.mkdir(parents=True, exist_ok=True)
-    return fetch_to(ref, outdir / "doc.json", tab)
+    return fetch_to(ref, outdir / "doc.json", tab, suggestions)
 
 
 def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
@@ -79,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
     from .fetch import TabNotFound
 
     try:
-        doc = parse(load(args.doc, args.outdir, args.tab))
+        doc = parse(load(args.doc, args.outdir, args.tab, args.suggestions))
     except TabNotFound as e:
         print(f"eta-publish: {e}", file=sys.stderr)
         return 2

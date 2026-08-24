@@ -11,6 +11,13 @@ leaves `document.tabs` empty. A report drafted in the third tab would
 therefore parse silently and produce a plausible, wrong document. So we
 always request `includeTabsContent` and select a tab explicitly, honoring
 the `?tab=` id in the URL that was handed to us.
+
+Suggestions matter for the same reason. The API's default,
+`DEFAULT_FOR_CURRENT_ACCESS`, resolves to `SUGGESTIONS_INLINE` for anyone
+with edit access, which mixes suggested text into the content as though it
+were part of the document. ETA reports are drafted with suggestions open,
+so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`: what the report says with
+every open suggestion rejected, which is what the doc reads as today.
 """
 
 from __future__ import annotations
@@ -23,6 +30,13 @@ from urllib.parse import parse_qs, urlparse
 from .docs_json import JsonObject
 
 SCOPES = ["https://www.googleapis.com/auth/documents.readonly"]
+
+# Rejecting is the safe default: it publishes what the document currently
+# says, rather than silently adopting whatever anyone has proposed.
+SUGGESTIONS = {
+    "rejected": "PREVIEW_WITHOUT_SUGGESTIONS",
+    "accepted": "PREVIEW_SUGGESTIONS_ACCEPTED",
+}
 
 CLIENT_SECRETS = Path(
     os.environ.get("ETA_CLIENT_SECRETS", Path.home() / ".config/eta-publish/client_secret.json")
@@ -131,24 +145,31 @@ def _credentials():
     return creds
 
 
-def fetch_document(doc_id: str) -> JsonObject:
-    """The whole document, every tab included."""
+def fetch_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
+    """The whole document, every tab included, suggestions resolved."""
     from googleapiclient.discovery import build
 
     service = build("docs", "v1", credentials=_credentials())
     # `build` returns a `Resource` whose methods are generated at runtime from
     # the API's discovery document, so no static type can know about `documents`.
-    # pyrefly: ignore[missing-attribute]
-    return service.documents().get(documentId=doc_id, includeTabsContent=True).execute()
+    documents = service.documents()  # pyrefly: ignore[missing-attribute]
+    request = documents.get(
+        documentId=doc_id,
+        includeTabsContent=True,
+        suggestionsViewMode=SUGGESTIONS[suggestions],
+    )
+    return request.execute()
 
 
-def fetch(ref: str, tab: str | None = None) -> JsonObject:
+def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
-    return select_tab(fetch_document(doc_id), tab or url_tab)
+    return select_tab(fetch_document(doc_id, suggestions), tab or url_tab)
 
 
-def fetch_to(ref: str, dest: Path, tab: str | None = None) -> JsonObject:
+def fetch_to(
+    ref: str, dest: Path, tab: str | None = None, suggestions: str = "rejected"
+) -> JsonObject:
     """Fetch and save the selected tab, so later runs need no credentials."""
-    document = fetch(ref, tab)
+    document = fetch(ref, tab, suggestions)
     dest.write_text(json.dumps(document, indent=2))
     return document
