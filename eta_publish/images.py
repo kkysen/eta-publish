@@ -44,6 +44,9 @@ def download(
     written: dict[str, Path] = {}
 
     for image in doc.images:
+        if image.vector is not None and _fetch_vector(image, outdir, doc, written):
+            continue
+
         existing = next(iter(outdir.glob(f"{image.filename}.*")), None)
         if existing is not None:
             written[image.object_id] = existing
@@ -70,6 +73,35 @@ def download(
         doc.image_files[image.object_id] = dest.name
 
     return written
+
+
+def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, Path]) -> bool:
+    """Write the vector original, returning whether it is what gets used.
+
+    A failure here falls back to the raster rather than to nothing: the
+    document still holds a perfectly good picture, and a chart that renders
+    slightly softer beats a report with a hole in it.
+    """
+    vector = image.vector
+    if vector is None:
+        return False
+
+    dest = outdir / vector.filename
+    if not dest.exists():
+        from .fetch import FetchFailed, download_drive_file
+
+        try:
+            dest.write_bytes(download_drive_file(vector.file_id))
+        except (FetchFailed, OSError) as e:
+            doc.warn(
+                f"could not download the vector {vector.title or vector.file_id} "
+                f"({e}); using the image from the document instead"
+            )
+            return False
+
+    written[image.object_id] = dest
+    doc.image_files[image.object_id] = dest.name
+    return True
 
 
 def crop_to(image: Image, data: bytes, doc: Document) -> bytes:

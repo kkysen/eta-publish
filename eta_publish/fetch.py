@@ -24,12 +24,21 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from .docs_json import JsonObject
 
-SCOPES = ["https://www.googleapis.com/auth/documents.readonly"]
+SCOPES = [
+    "https://www.googleapis.com/auth/documents.readonly",
+    # Charts are linked as Drive files rather than embedded: Docs cannot
+    # place an SVG, so the vector lives in Drive and a raster stands in for
+    # it in the document. Downloading it needs Drive read access, which is
+    # broader than we would like, but Drive offers nothing narrower for a
+    # file this application did not create.
+    "https://www.googleapis.com/auth/drive.readonly",
+]
 
 # Rejecting is the safe default: it publishes what the document currently
 # says, rather than silently adopting whatever anyone has proposed.
@@ -183,16 +192,36 @@ def _credentials():
     from google_auth_oauthlib.flow import InstalledAppFlow
 
     creds = None
-    if TOKEN_PATH.exists():
+    if TOKEN_PATH.exists() and _granted_scopes() >= set(SCOPES):
         creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     if not creds or not creds.valid:
+        missing = set(SCOPES) - _granted_scopes()
+        if TOKEN_PATH.exists() and missing:
+            print(
+                f"asking for access again, because this now needs {', '.join(sorted(missing))}",
+                file=sys.stderr,
+            )
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), SCOPES)
         creds = flow.run_local_server(port=0)
-    TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
-    TOKEN_PATH.write_text(creds.to_json())
+        TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        TOKEN_PATH.write_text(creds.to_json())
     return creds
+
+
+def _granted_scopes() -> set[str]:
+    """What the saved token was actually granted.
+
+    Read from the file rather than from `Credentials`, whose `scopes` are
+    whatever was passed to the loader rather than what the user consented
+    to. Adding a scope must trigger a new consent, and asking the object
+    would always answer yes.
+    """
+    try:
+        return set(json.loads(TOKEN_PATH.read_text()).get("scopes") or ())
+    except OSError, ValueError:
+        return set()
 
 
 def fetch_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
@@ -226,3 +255,15 @@ def fetch_to(
     document = fetch(ref, tab, suggestions)
     dest.write_text(json.dumps(document, indent=2))
     return document
+
+
+def download_drive_file(file_id: str) -> bytes:
+    """The raw bytes of a Drive file, for vectors the document links."""
+    from googleapiclient.discovery import build
+
+    service = build("drive", "v3", credentials=_credentials())
+    files = service.files()  # pyrefly: ignore[missing-attribute]
+    try:
+        return files.get_media(fileId=file_id).execute()
+    except Exception as e:  # noqa: BLE001
+        raise FetchFailed(_explain(e)) from e
