@@ -14,6 +14,8 @@ should be its own commit.
 
 from __future__ import annotations
 
+from typing import override
+
 from ..nodes import Document, Figure, FootnoteRef, Heading, Image, List, Paragraph, Table, Text
 from .base import Emitter
 
@@ -21,6 +23,7 @@ from .base import Emitter
 class MarkdownEmitter(Emitter):
     extension = ".md"
 
+    @override
     def document(self, doc: Document) -> str:
         raise NotImplementedError
 
@@ -28,26 +31,34 @@ class MarkdownEmitter(Emitter):
         """The doc's `Header` section, as YAML."""
         raise NotImplementedError
 
+    @override
     def heading(self, node: Heading) -> str:
         raise NotImplementedError
 
+    @override
     def paragraph(self, node: Paragraph) -> str:
         raise NotImplementedError
 
+    @override
     def list_(self, node: List) -> str:
         raise NotImplementedError
 
+    @override
     def figure(self, node: Figure) -> str:
         raise NotImplementedError
 
+    @override
     def table(self, node: Table) -> str:
         raise NotImplementedError
 
+    @override
     def text(self, node: Text) -> str:
         raise NotImplementedError
 
+    @override
     def footnote_ref(self, node: FootnoteRef) -> str:
         raise NotImplementedError
 
+    @override
     def image(self, node: Image) -> str:
         raise NotImplementedError
