@@ -2,75 +2,187 @@
 
 Scoped to `.eta-report` so the same CSS works inlined into the pasted
 fragment and injected once site-wide under Custom CSS. A Squarespace code
-block applies no styling of its own, so without this the captions, table
-of contents, and footnotes render as undifferentiated body text.
+block applies no styling of its own, so without this the captions, table of
+contents, and footnotes render as undifferentiated body text.
 """
 
 from __future__ import annotations
 
+import html
 from typing import override
 
 from ..nodes import (
     Document,
     Figure,
+    Footnote,
     FootnoteRef,
     Heading,
     Image,
+    Inline,
     List,
+    ListItem,
+    ListKind,
     Paragraph,
     Table,
     Text,
 )
 from .base import Emitter
 
+# Only styles what the emitter produces, and inherits everything else from
+# the theme, so a report does not fight the rest of the site.
+REPORT_CSS = """
+.eta-report figure { margin: 2.5em 0; }
+.eta-report figure img { width: 100%; height: auto; display: block; }
+.eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
+.eta-report .figure-credit { font-style: italic; }
+.eta-report .toc { font-size: .95rem; line-height: 2; }
+.eta-report .footnotes { font-size: .9rem; opacity: .85; }
+.eta-report .footnotes-sep { margin-top: 3em; }
+.eta-report .footnote-ref a,
+.eta-report .footnote-back { text-decoration: none; }
+.eta-report .table-scroll { overflow-x: auto; }
+.eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
+"""
+
+
+def escape(text: str) -> str:
+    return html.escape(text, quote=True)
+
 
 class HtmlEmitter(Emitter):
     extension = ".html"
 
-    def __init__(self, image_base: str = "") -> None:
+    def __init__(self, image_base: str = "", inline_css: bool = True) -> None:
         self.image_base = image_base.rstrip("/")
+        # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
+        self.inline_css = inline_css
 
     @override
     def document(self, doc: Document) -> str:
-        parts = ['<div class="eta-report">', self.toc(doc), self.blocks(doc.blocks)]
+        parts = []
+        if self.inline_css:
+            parts.append(f"<style>{REPORT_CSS}</style>")
+        parts.append('<div class="eta-report">')
+        parts.append(self.toc(doc))
+        parts.append(self.blocks(doc.blocks))
         parts.append(self.footnotes(doc))
         parts.append("</div>")
         return self.join(parts)
 
     def toc(self, doc: Document) -> str:
-        raise NotImplementedError
+        headings = doc.headings(level=2)
+        if not headings:
+            return ""
+        links = "  |  ".join(
+            f'<a href="#{h.anchor}">{escape(plain(h.content))}</a>' for h in headings
+        )
+        return f'<p class="toc"><strong>Table of Contents:</strong> {links}</p>'
 
     def footnotes(self, doc: Document) -> str:
-        raise NotImplementedError
+        if not doc.footnotes:
+            return ""
+        items = "\n".join(self.footnote(f) for f in doc.footnotes)
+        return (
+            '<hr class="footnotes-sep">\n'
+            '<section class="footnotes">\n'
+            '<h2 id="footnotes">Footnotes</h2>\n'
+            f"<ol>\n{items}\n</ol>\n"
+            "</section>"
+        )
+
+    def footnote(self, note: Footnote) -> str:
+        body = self.blocks(note.content)
+        back = (
+            f'<a href="#fnref{note.number}" class="footnote-back" aria-label="Back to text">↑</a>'
+        )
+        # Tucked inside the final `</p>` so the arrow ends the prose instead of
+        # starting a line of its own.
+        if body.endswith("</p>"):
+            return f'<li id="fn{note.number}">{body.removesuffix("</p>")} {back}</p></li>'
+        return f'<li id="fn{note.number}">{body} {back}</li>'
+
+    # ---- blocks -----------------------------------------------------
 
     @override
     def heading(self, node: Heading) -> str:
-        raise NotImplementedError
+        return f'<h{node.level} id="{node.anchor}">{self.inlines(node.content)}</h{node.level}>'
 
     @override
     def paragraph(self, node: Paragraph) -> str:
-        raise NotImplementedError
+        return f"<p>{self.inlines(node.content)}</p>"
 
     @override
     def list_(self, node: List) -> str:
-        raise NotImplementedError
+        tag = "ol" if node.kind is ListKind.NUMBER else "ul"
+        return f"<{tag}>{self.items(node.items, tag)}</{tag}>"
+
+    def items(self, items: list[ListItem], tag: str) -> str:
+        out = []
+        for item in items:
+            inner = self.inlines(item.content)
+            if item.children:
+                inner += f"<{tag}>{self.items(item.children, tag)}</{tag}>"
+            out.append(f"<li>{inner}</li>")
+        return "".join(out)
 
     @override
     def figure(self, node: Figure) -> str:
-        raise NotImplementedError
+        # `Figure.source` is deliberately not emitted. It names the original
+        # file in Drive, for whoever is assembling the report, and does not
+        # appear on the published page.
+        parts = [self.image(node.image)]
+        if node.caption:
+            parts.append(
+                f'<figcaption class="figure-caption">{self.inlines(node.caption)}</figcaption>'
+            )
+        if node.credit:
+            parts.append(
+                f'<figcaption class="figure-credit">{self.inlines(node.credit)}</figcaption>'
+            )
+        return f"<figure>{''.join(parts)}</figure>"
 
     @override
     def table(self, node: Table) -> str:
-        raise NotImplementedError
+        rows = "".join(
+            "<tr>" + "".join(f"<td>{self.blocks(cell)}</td>" for cell in row) + "</tr>"
+            for row in node.rows
+        )
+        return f'<div class="table-scroll"><table>{rows}</table></div>'
+
+    # ---- inline -----------------------------------------------------
 
     @override
     def text(self, node: Text) -> str:
-        raise NotImplementedError
+        out = escape(node.text)
+        if node.sup:
+            out = f"<sup>{out}</sup>"
+        elif node.sub:
+            out = f"<sub>{out}</sub>"
+        if node.bold:
+            out = f"<strong>{out}</strong>"
+        if node.italic:
+            out = f"<em>{out}</em>"
+        if node.underline:
+            out = f"<u>{out}</u>"
+        if node.href:
+            out = f'<a href="{escape(node.href)}">{out}</a>'
+        return out
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:
-        raise NotImplementedError
+        return (
+            f'<sup id="fnref{node.number}" class="footnote-ref">'
+            f'<a href="#fn{node.number}">{node.number}</a></sup>'
+        )
 
     @override
     def image(self, node: Image) -> str:
-        raise NotImplementedError
+        href = self.doc.image_href(node)
+        src = f"{self.image_base}/{href}" if self.image_base else href
+        return f'<img src="{escape(src)}" alt="{escape(node.alt)}" loading="lazy">'
+
+
+def plain(content: list[Inline]) -> str:
+    """Inline content with all markup dropped, for the table of contents."""
+    return "".join(i.text for i in content if isinstance(i, Text))

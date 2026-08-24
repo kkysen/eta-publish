@@ -154,6 +154,15 @@ class Document:
     footnotes: list[Footnote] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
+    image_extensions: dict[str, str] = field(default_factory=dict)
+    """Docs object id to file extension, e.g. `.png`.
+
+    Filled in by `images.download`, which is the only step that learns an
+    image's real content type: the Docs API describes an inline object
+    without saying what kind of file it is. Empty when images were skipped,
+    in which case `image_href` returns a name with no extension.
+    """
+
     @property
     def slug(self) -> str:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
@@ -178,6 +187,10 @@ class Document:
                 for image in _images_in(block):
                     seen.setdefault(image.object_id, image)
         return list(seen.values())
+
+    def image_href(self, image: Image) -> str:
+        """The image's filename as emitted, extension included when known."""
+        return image.filename + self.image_extensions.get(image.object_id, "")
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
