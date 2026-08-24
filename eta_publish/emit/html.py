@@ -8,6 +8,8 @@ of contents, and footnotes render as undifferentiated body text.
 
 from __future__ import annotations
 
+from typing import override
+
 from ..nodes import (
     Document,
     Figure,
@@ -28,6 +30,7 @@ class HtmlEmitter(Emitter):
     def __init__(self, image_base: str = "") -> None:
         self.image_base = image_base.rstrip("/")
 
+    @override
     def document(self, doc: Document) -> str:
         parts = ['<div class="eta-report">', self.toc(doc), self.blocks(doc.blocks)]
         parts.append(self.footnotes(doc))
@@ -40,26 +43,34 @@ class HtmlEmitter(Emitter):
     def footnotes(self, doc: Document) -> str:
         raise NotImplementedError
 
+    @override
     def heading(self, node: Heading) -> str:
         raise NotImplementedError
 
+    @override
     def paragraph(self, node: Paragraph) -> str:
         raise NotImplementedError
 
+    @override
     def list_(self, node: List) -> str:
         raise NotImplementedError
 
+    @override
     def figure(self, node: Figure) -> str:
         raise NotImplementedError
 
+    @override
     def table(self, node: Table) -> str:
         raise NotImplementedError
 
+    @override
     def text(self, node: Text) -> str:
         raise NotImplementedError
 
+    @override
     def footnote_ref(self, node: FootnoteRef) -> str:
         raise NotImplementedError
 
+    @override
     def image(self, node: Image) -> str:
         raise NotImplementedError
