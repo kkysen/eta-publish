@@ -1,4 +1,4 @@
-"""eta-publish: Google Doc -> publish-ready report HTML."""
+"""`eta-publish`: a Google Doc in, a publishable report out."""
 
 from __future__ import annotations
 
@@ -7,67 +7,91 @@ import json
 import sys
 from pathlib import Path
 
-from .convert import convert
-from .render import write_all
+from .emit.html import HtmlEmitter
+from .emit.markdown import MarkdownEmitter
+from .emit.typst import TypstEmitter
+from .nodes import Document
+from .parse import parse
 
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="eta-publish", description=__doc__)
-    p.add_argument("doc", help="Google Doc URL or id, or a path to saved Docs API JSON")
+    p.add_argument(
+        "doc",
+        help="a Google Doc URL or id, or a path to saved Docs API JSON",
+    )
     p.add_argument("-o", "--outdir", type=Path, default=Path("out"))
     p.add_argument(
         "--image-base",
         default="",
-        help="URL prefix the published <img src> should use, e.g. https://assets.etany.org/sas-west",
+        help="URL prefix for published images, e.g. https://assets.etany.org/sas-west",
     )
     p.add_argument(
         "--no-images",
         action="store_true",
-        help="skip downloading inline images (HTML still references them)",
-    )
-    p.add_argument(
-        "--site-css",
-        action="store_true",
-        help="omit the inline <style> block, for sites carrying REPORT_CSS in Custom CSS",
+        help="skip downloading images; the output still references them",
     )
     return p
 
 
 def load(ref: str, outdir: Path) -> dict:
+    """Accept a saved JSON file so the pipeline can run without credentials."""
     path = Path(ref)
     if path.is_file():
         return json.loads(path.read_text())
+
     from .fetch import fetch_to
 
     outdir.mkdir(parents=True, exist_ok=True)
     return fetch_to(ref, outdir / "doc.json")
 
 
+def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
+    """Run each emitter, reporting the ones not yet implemented rather than
+    failing the whole build for them."""
+    outdir.mkdir(parents=True, exist_ok=True)
+    emitters = {
+        "report.html": HtmlEmitter(image_base=image_base),
+        "report.md": MarkdownEmitter(),
+        "report.typ": TypstEmitter(),
+    }
+    written: dict[str, Path] = {}
+    for name, emitter in emitters.items():
+        try:
+            source = emitter.emit(doc)
+        except NotImplementedError as e:
+            print(f"skipped {name}: not implemented ({e})", file=sys.stderr)
+            continue
+        dest = outdir / name
+        dest.write_text(source)
+        written[name] = dest
+    return written
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    doc_json = load(args.doc, args.outdir)
-    doc = convert(doc_json, image_base=args.image_base)
+    try:
+        doc = parse(load(args.doc, args.outdir))
+    except NotImplementedError as e:
+        # The parser is still being filled in; say so plainly rather than
+        # handing the user a traceback.
+        print(f"eta-publish: not implemented yet: {e}", file=sys.stderr)
+        return 2
 
     if doc.images and not args.no_images:
         from .images import download
 
-        written = download(doc.images, args.outdir / "images")
-        # Downloading resolves the real extension, so fix up the references.
-        for name, dest in written.items():
-            if dest.name != name:
-                doc.body_html = doc.body_html.replace(name, dest.name)
+        download(doc, args.outdir / "images")
 
-    written = write_all(doc, args.outdir, inline_css=not args.site_css)
+    written = emit(doc, args.outdir, args.image_base)
 
-    for w in doc.warnings:
-        print(f"warning: {w}", file=sys.stderr)
+    for warning in doc.warnings:
+        print(f"warning: {warning}", file=sys.stderr)
     print(f"title:     {doc.title}")
-    print(f"url slug:  {doc.meta.get('url', '(missing)')}")
-    print(f"images:    {len(doc.images)}")
-    n_footnotes = doc.footnotes_html.count('<li id="fn')
-    print(f"footnotes: {n_footnotes}")
-    for label, path in written.items():
-        print(f"{label + ':':10} {path}  ({path.stat().st_size:,} bytes)")
+    print(f"url:       {doc.slug or '(missing)'}")
+    print(f"footnotes: {len(doc.footnotes)}")
+    for name, path in sorted(written.items()):
+        print(f"  {name:14} {path.stat().st_size:>9,} bytes")
     return 0
 
 

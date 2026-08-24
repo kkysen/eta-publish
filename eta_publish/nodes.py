@@ -164,5 +164,52 @@ class Document:
         """Headings at one level, for building a table of contents."""
         return [b for b in self.blocks if isinstance(b, Heading) and b.level == level]
 
+    @property
+    def images(self) -> list[Image]:
+        """Every image in the document, in order, including inside footnotes.
+
+        Deduplicated by `object_id`: the same image used twice is one file.
+        """
+        seen: dict[str, Image] = {}
+        for block in _walk(self.blocks):
+            for image in _images_in(block):
+                seen.setdefault(image.object_id, image)
+        for footnote in self.footnotes:
+            for block in _walk(footnote.content):
+                for image in _images_in(block):
+                    seen.setdefault(image.object_id, image)
+        return list(seen.values())
+
     def warn(self, message: str) -> None:
         self.warnings.append(message)
+
+
+# ---- traversal -----------------------------------------------------
+
+
+def _walk(blocks: list[Block]):
+    """Yield every block, descending into lists and table cells."""
+    for block in blocks:
+        yield block
+        if isinstance(block, Table):
+            for row in block.rows:
+                for cell in row:
+                    yield from _walk(cell)
+
+
+def _images_in(block: Block) -> list[Image]:
+    match block:
+        case Figure():
+            return [block.image]
+        case Paragraph() | Heading():
+            return [i for i in block.content if isinstance(i, Image)]
+        case List():
+            return [i for item in _items(block.items) for i in item.content
+                    if isinstance(i, Image)]
+    return []
+
+
+def _items(items: list[ListItem]):
+    for item in items:
+        yield item
+        yield from _items(item.children)
