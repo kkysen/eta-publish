@@ -9,6 +9,7 @@ contents, and footnotes render as undifferentiated body text.
 from __future__ import annotations
 
 import html
+import re
 from typing import override
 
 from ..nodes import (
@@ -46,8 +47,33 @@ REPORT_CSS = """
 """
 
 
+# A Squarespace code block holds 400 KB. Warn well before that, because the
+# limit is what the editor accepts, not what it is pleasant to paste: a
+# 200 KB paste into a browser textarea is already slow to save.
+CODE_BLOCK_LIMIT = 400_000
+CODE_BLOCK_WARN = 250_000
+
+
 def escape(text: str) -> str:
     return html.escape(text, quote=True)
+
+
+def split_at_headings(fragment: str) -> list[str]:
+    """Cut a fragment into pieces at `h2` boundaries, for oversized reports.
+
+    Each piece is a standalone `.eta-report` div, so they can be pasted into
+    consecutive code blocks and still pick up the same CSS.
+    """
+    opening = '<div class="eta-report">'
+    body = fragment
+    prefix = ""
+    if opening in body:
+        head, _, body = body.partition(opening)
+        prefix = head
+    body = body.removesuffix("</div>")
+
+    pieces = re.split(r"(?=<h2 id=)", body)
+    return [f"{prefix}{opening}\n{piece.strip()}\n</div>" for piece in pieces if piece.strip()]
 
 
 class HtmlEmitter(Emitter):
@@ -187,3 +213,49 @@ class HtmlEmitter(Emitter):
 def plain(content: list[Inline]) -> str:
     """Inline content with all markup dropped, for the table of contents."""
     return "".join(i.text for i in content if isinstance(i, Text))
+
+
+# Enough to read the report as it will look, and nothing more. The published
+# page inherits Squarespace's typography, so matching it here would be a
+# guess that goes stale.
+PREVIEW_CSS = """
+:root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fff; }
+@media (prefers-color-scheme: dark) { :root { --fg: #eaeaea; --bg: #141414; } }
+body { background: var(--bg); color: var(--fg); max-width: 46rem;
+       margin: 0 auto; padding: 3rem 1.25rem 6rem;
+       font: 17px/1.65 Georgia, "Times New Roman", serif; }
+h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25; }
+h1 { font-size: 2.1rem; margin-bottom: .2em; }
+h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
+a { color: inherit; }
+.standfirst { font-size: 1.15rem; opacity: .75; margin-top: 0; }
+.warnings { border-left: 3px solid #c60; padding: .4em 1em; margin: 2em 0;
+            font-family: system-ui, sans-serif; font-size: .9rem; }
+"""
+
+
+def preview_page(doc: Document, image_base: str = "") -> str:
+    """A standalone page for reading the report before it is published.
+
+    Deliberately not the Squarespace fragment with a wrapper bolted on: it
+    also surfaces the parser's warnings, which are the thing worth seeing
+    before publishing and have nowhere to go on the real page.
+    """
+    body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
+    warnings = ""
+    if doc.warnings:
+        items = "\n".join(f"<li>{escape(w)}</li>" for w in doc.warnings)
+        warnings = f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
+    short = doc.meta.get("short", "")
+    return (
+        "<!doctype html>\n"
+        '<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f"<title>{escape(doc.title)}</title>\n"
+        f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
+        f"<style>{PREVIEW_CSS}{REPORT_CSS}</style>\n"
+        f"<h1>{escape(doc.title)}</h1>\n"
+        f'<p class="standfirst">{escape(short)}</p>\n'
+        f"{warnings}\n"
+        f"{body}\n"
+    )
