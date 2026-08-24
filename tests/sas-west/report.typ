@@ -110,7 +110,6 @@ In part as a result of this cost, what was originally envisioned in 1929 as a si
   caption: [The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length. #link("https://www.mta.info/guides/apps")[Credit: MTA app]],
 )
 
- \
 #link("https://www.masstransitmag.com/rail/article/12227191/project-update-second-avenue-subway")[Many decisions created this mammoth price tag], a number of which have a direct impact on plans for a 125 St extension:
 
 - #strong[Station caverns that are far longer than the platform.] Because they require substantial excavation and cannot easily be streamlined by devices like TBMs, stations can easily become the most expensive part of subway construction. That's why, in most projects, stations are kept as small as possible, usually just a little longer than the platform. In SAS Phase 1, however, #link("https://transitcosts.com/wp-content/uploads/NewYork_Case_Study.pdf")[stations ranged from 60% to 160% longer than the platform]. The vast majority of this extra, incredibly expensive-to-construct space is not open to passengers, but is back-of-house facilities that would be far more cost-effective if placed literally anywhere else but underground.

@@ -58,6 +58,20 @@ def url(href: str) -> str:
     return "<" + href.replace("<", "%3C").replace(">", "%3E") + ">"
 
 
+def strip_trailing_space(text: str) -> str:
+    """Drop whitespace at the end of every line.
+
+    In Markdown two trailing spaces mean a hard line break and any other
+    number means nothing, so linters reject the in-between cases. Thirteen
+    lines of the SAS West report end in a single space, carried over from
+    where the sentence ends in the document.
+
+    Nothing is lost by removing them, because a hard break here is written
+    as a trailing backslash, which is unambiguous and visible.
+    """
+    return "\n".join(line.rstrip() for line in text.split("\n"))
+
+
 def yaml_value(value: str) -> str:
     """Quote only when the value could be read as something other than text."""
     if value == "":
@@ -87,7 +101,7 @@ class MarkdownEmitter(Emitter):
     @override
     def document(self, doc: Document) -> str:
         parts = [self.front_matter(doc), self.blocks(doc.blocks), self.footnotes(doc)]
-        return self.join(parts) + "\n"
+        return strip_trailing_space(self.join(parts)) + "\n"
 
     @override
     def join(self, parts: list[str]) -> str:

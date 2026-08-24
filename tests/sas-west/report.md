@@ -28,14 +28,14 @@ Despite their name, deep-bored tunnels need not be that deep under the street, j
 On paper, the [MTA’s proposed extension of the Second Avenue Subway (SAS) west across 125th Street](<https://www.mta.info/document/196361>) (SAS West) should be a slam dunk.
 It is the right route: a logical extension of SAS Phase 2 underneath the main street of Harlem, through a dense neighborhood full of homes, offices, shops, and entertainment venues.
 It is designed to replace buses that, even though they are slower than walking, still carry [over 25,000 riders per day](<https://reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72#dbaf>).
-It will also be the only crosstown rail route north of Midtown, connecting ten different subway lines and Metro-North, speeding a host of trips that are slow and difficult to make today. 
+It will also be the only crosstown rail route north of Midtown, connecting ten different subway lines and Metro-North, speeding a host of trips that are slow and difficult to make today.
 
 ![The SAS West and Phase 2 alignments.](<images/img-d064e131.jpg>)
 The SAS West and Phase 2 alignments.
 [Credit: MTA](<https://www.mta.info/document/196361#page=5>)
 <!-- Source: [sas-west-036.jpg](<https://drive.google.com/file/d/1pypAppcW1gOYpSMYkTWWUn4jEgE0cai-/view>) -->
 
-All these potential benefits, however, are overshadowed by a pair of massive elephants in the room, both of which paint the project in a completely different light. 
+All these potential benefits, however, are overshadowed by a pair of massive elephants in the room, both of which paint the project in a completely different light.
 
 The first and hardest to miss of these is the absolutely gargantuan price tag: $7.7 billion for 1.25 route-miles of subway and three stations.
 No matter how you approach it, that number is both astronomical and unjustifiable.
@@ -74,7 +74,7 @@ If New York is to build the transit it needs, the MTA needs to get serious about
 Stations should be shallower, enabling the stations to be largely dug from street level, reducing costs while easing passenger access.
 They should be narrower, avoiding overly wide platforms that are unneeded for sufficient capacity.
 They should be shorter, without including office and maintenance spaces in perhaps the most expensive space per cubic foot in the city.
-And they should be simpler, eliminating whole buildings just for ventilation and eschewing overly long tracks beyond the end of the line. 
+And they should be simpler, eliminating whole buildings just for ventilation and eschewing overly long tracks beyond the end of the line.
 
 The problem is ultimately not a 125 St subway or investing billions of dollars in New York transit expansion.
 These are both things that the region needs.
@@ -98,20 +98,19 @@ So many design decisions require carefully weighing trade-offs, but building a s
 Consider SAS Phase 1, which began construction in 2007 and opened one day shy of 2017.
 The line was the culmination of 90 years of subway planning, making real a line that had been on the drawing board since 1929.
 But at approximately $4.5 billion per mile in 2026 dollars, Phase 1 was the most expensive subway in the world, coming in at almost an order of magnitude more to build than the world average.
-In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including [eliminating](<https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations>) [platform screen doors from Phase 1](<https://www.nytimes.com/2007/04/05/nyregion/05doors.html>) and [postponing CBTC installation until Phase 2](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32>) at the cost of safety and reliability. 
+In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including [eliminating](<https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations>) [platform screen doors from Phase 1](<https://www.nytimes.com/2007/04/05/nyregion/05doors.html>) and [postponing CBTC installation until Phase 2](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32>) at the cost of safety and reliability.
 
 ![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/img-22d933dd.jpg>)
 The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.
 [Credit: MTA app](<https://www.mta.info/guides/apps>)
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
 
-\
 [Many decisions created this mammoth price tag](<https://www.masstransitmag.com/rail/article/12227191/project-update-second-avenue-subway>), a number of which have a direct impact on plans for a 125 St extension:
 
 - **Station caverns that are far longer than the platform.** Because they require substantial excavation and cannot easily be streamlined by devices like TBMs, stations can easily become the most expensive part of subway construction. That's why, in most projects, stations are kept as small as possible, usually just a little longer than the platform. In SAS Phase 1, however, [stations ranged from 60% to 160% longer than the platform](<https://transitcosts.com/wp-content/uploads/NewYork_Case_Study.pdf>). The vast majority of this extra, incredibly expensive-to-construct space is not open to passengers, but is back-of-house facilities that would be far more cost-effective if placed literally anywhere else but underground.
 - **Full-length mezzanines due to an uncommon and overly conservative interpretation of the fire code.** These mezzanines, which are not considered necessary in other countries using the exact same rules, National Fire Prevention Association (NFPA) 130, expanded the amount of excavation required, massively increasing the final project cost.
 - **Deep-mined stations purporting to reduce surface impact.** Rather than dig up the entire street to build shallow cut-and-cover stations, for both 72 St and 86 St, only access shafts were built to the surface, while the rest of the station caverns were mined. While this procedure might have promised to reduce surface impacts on paper, it did little to quell neighborhood anger, as [many residents complained](<https://nypost.com/2011/09/27/second-ave-subway-dust-harmless-says-mta/>) bitterly about blasting noise, narrowed sidewalks, and construction walls. Construction still required blocks-long on-street staging areas, which for many residents were functionally indistinguishable from a construction pit. It also took longer. Surface impact needs to be measured in both time and area; taking less street space but for longer can be more disruptive overall. If staging areas and construction pits are in practice equally disruptive, then the argument for quicker construction methods becomes even stronger.
-- **Long access times because of the station depth**. Each of the stations along SAS Phase 1 requires a several-minute-long escalator trip to reach the platforms or to return to the surface, for stations that are notably shallower than what’s being proposed for 125 St. This is particularly notable at Lexington Av/63 St, a station built in the 1980s but refurbished during the SAS work, and built deep underground due to its proximity to the East River. To reach that station’s Queens-bound platform from the uptown 4/5/6 platform at Lexington Av/59th St (a free out-of-system transfer) takes seven minutes.[^3] 
+- **Long access times because of the station depth**. Each of the stations along SAS Phase 1 requires a several-minute-long escalator trip to reach the platforms or to return to the surface, for stations that are notably shallower than what’s being proposed for 125 St. This is particularly notable at Lexington Av/63 St, a station built in the 1980s but refurbished during the SAS work, and built deep underground due to its proximity to the East River. To reach that station’s Queens-bound platform from the uptown 4/5/6 platform at Lexington Av/59th St (a free out-of-system transfer) takes seven minutes.[^3]
 
 The MTA echoed many of these same missteps in GCM, built largely simultaneously with SAS Phase 1.
 The original idea for GCM traces back to plans made in the 1950s to allow the LIRR to access the East Side of Manhattan, not just Penn Station.
@@ -151,7 +150,7 @@ To understand how to achieve that, however, it is important to understand the fo
 
 ![The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/img-21abacd4.png>)
 The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.
-[Credit: MTA](<https://www.mta.info/document/196361#page=28>) 
+[Credit: MTA](<https://www.mta.info/document/196361#page=28>)
 <!-- Source: [sas-west-207.jpg](<https://drive.google.com/file/d/1NWYQi_JwuV-Yv2OU8dR3LuDms1f-MhNy/view>) -->
 
 For the non-civil engineers among us, there are three primary causes of station depth:
@@ -290,7 +289,7 @@ Coming closer to the surface would save considerable sums of money for the stati
 
 Depth isn't the only problem driving up costs; so is the size of the stations.
 The feasibility study assumes station boxes, the basic excavated area a station is built within, to be [75 ft wide](<https://www.mta.info/document/196361#page=24>).
-This is excessive, even by the standards of the Second Ave subway. 
+This is excessive, even by the standards of the Second Ave subway.
 
 For example, the station box at [72 St is 64 ft wide](<https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes>), while the station itself has a 28 ft-wide platform.
 Measurements are similar at 86 St and 96 St (which has a 30 ft-wide platform).[^6] Even the plans for the very busy transfer station at 125 St/Lexington Av, with connections to the 4/5/6 and Metro-North, will be built inside a 63 ft-wide station box with a [30 ft-wide platform](<https://www.mta.info/document/131306#page=12>).
@@ -316,7 +315,7 @@ The end result is that PSDs effectively increase the amount of safely usable pla
 PSDs come with numerous other benefits as well.
 They save lives by preventing falling or being pushed onto the tracks, stopping people from jumping in front of trains, and helping prevent subway surfing.
 They massively reduce delays due to unauthorized people and debris on the tracks.
-They can also significantly lower station costs by isolating platform air from tunnel air, not only lowering HVAC costs, but simplifying ventilation for fires by creating two separate spaces. 
+They can also significantly lower station costs by isolating platform air from tunnel air, not only lowering HVAC costs, but simplifying ventilation for fires by creating two separate spaces.
 
 ### Station Length and Mezzanines
 
@@ -359,7 +358,7 @@ Credit: ETA, Blair Lorenzo
 Indeed, a key element for Seattle’s recent value engineering has been reducing headhouse and ventilation structures.
 Early signs from cost-savings measures on the proposed [West Seattle Link Extension](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>) suggest that a series of measures stand to cut $3 billion from a previously estimated cost of $8 billion.
 At Alaska Junction station, two station headhouses, a vent structure, and a traction and power subsystem structure (TPSS) were consolidated from four buildings to one, reducing the station box to a footprint not much longer than the trains, saving $190–235 million.
-At SODO station, they’ve reduced the size of an overbuilt mezzanine and removed redundant stairs and escalators, saving $125–160 million. 
+At SODO station, they’ve reduced the size of an overbuilt mezzanine and removed redundant stairs and escalators, saving $125–160 million.
 
 ![Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.](<images/img-d4ca00ff.png>)
 Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.
@@ -408,7 +407,7 @@ The SAS West feasibility study indicates that it may be possible to build the st
 In an age of highly capable electric multiple-unit trains, however, this shallow slope is incredibly conservative.
 Indeed, [NYCT’s ruling grade](<https://www.mta.info/document/172206#page=6>) (the steepest part of the network) today is 5.5%, which includes the Q train on the Manhattan Bridge's outdoor approaches, subject to rain, deicing fluid, and the elements.
 All NYCT trains, except for some soon-to-be-retired work trains, can already manage this 5.5% grade.
-Even in 1957, when electric traction technology was more primitive than it is today, the Port Authority was comfortable [proposing a track connection](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>) containing a 4.5% grade between the predecessor of the current PATH WTC station and the 6 train near Brooklyn Bridge-City Hall. 
+Even in 1957, when electric traction technology was more primitive than it is today, the Port Authority was comfortable [proposing a track connection](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>) containing a 4.5% grade between the predecessor of the current PATH WTC station and the 6 train near Brooklyn Bridge-City Hall.
 
 ![The engineering schematic of the Port Authority’s 1957 plans to connect the now-PATH to the 6.](<images/img-3230dd0e.png>)
 The engineering schematic of the Port Authority’s 1957 plans to connect the now-PATH to the 6.
@@ -437,7 +436,7 @@ In the feasibility study, the MTA's consultants proposed [tail tracks](<https://
 In a subsequent board meeting, however, it was proposed to extend these tail tracks all the way up to 12 Av to 137 St. At around 3000 ft, these would travel essentially the same distance as it would take to reach another station, and have enough room to store 8-10 trainsets.
 This is quite excessive.
 
-Tail tracks are used for three main purposes: 
+Tail tracks are used for three main purposes:
 
 1. Overrun protection for incoming trains so that they can enter the station at speed. This only requires about 100 ft of extra track.
 2. Layup tracks to immediately reverse trains outside the station. This only requires one train length plus a crossover.
@@ -445,7 +444,7 @@ Tail tracks are used for three main purposes:
 
 (1) and (2) are critical, and stations lacking these have reduced capacity.
 But storage tail tracks (3) are more about trading upfront capital costs for future operating costs.
-More storage tail tracks means fewer deadheading trains all the way from Coney Island Yard to start rush hour, and this is why storage tail tracks are commonly used worldwide. 
+More storage tail tracks means fewer deadheading trains all the way from Coney Island Yard to start rush hour, and this is why storage tail tracks are commonly used worldwide.
 
 But tunneling underground storage tracks in Manhattan is very expensive, and so these tail tracks must be subject to a rigorous cost-benefit analysis.
 While storage for two trains is reasonable, the MTA should not insist that storage for six trains is required a priori without a cost-benefit analysis.
@@ -580,7 +579,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 
 [^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
     The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>).\
-    The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>) and is in 2026 USD, inflation-adjusted using CPI. 
+    The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>) and is in 2026 USD, inflation-adjusted using CPI.
 
 [^2]: ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7
 
