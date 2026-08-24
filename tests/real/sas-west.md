@@ -16,8 +16,9 @@ mta sas west feasibility study: "https://www.mta.info/document/196361"
 
 ![](<images/img-8827f5de.jpg>)
 
-![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.Credit: MTA, ETA (Blair Lorenzo)](<images/img-6fb0f9c4.jpg>)
-*Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.[Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)*
+![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)
+*Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.*
+*[Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)*
 
 **Addendum: The following clarifying text was added to “*****Station Depth*****” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
@@ -104,7 +105,8 @@ In part as a result of this cost, what was originally envisioned in 1929 as a si
 *[Credit: MTA app](<https://www.mta.info/guides/apps>)*
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
 
-[Many decisions created this mammoth price tag](<https://www.masstransitmag.com/rail/article/12227191/project-update-second-avenue-subway>), a number of which have a direct impact on plans for a 125 St extension:
+\
+[Many decisions created this mammoth price tag](<https://www.masstransitmag.com/rail/article/12227191/project-update-second-avenue-subway>), a number of which have a direct impact on plans for a 125 St extension:
 
 - **Station caverns that are far longer than the platform.** Because they require substantial excavation and cannot easily be streamlined by devices like TBMs, stations can easily become the most expensive part of subway construction. That's why, in most projects, stations are kept as small as possible, usually just a little longer than the platform. In SAS Phase 1, however, [stations ranged from 60% to 160% longer than the platform](<https://transitcosts.com/wp-content/uploads/NewYork_Case_Study.pdf>). The vast majority of this extra, incredibly expensive-to-construct space is not open to passengers, but is back-of-house facilities that would be far more cost-effective if placed literally anywhere else but underground.
 - **Full-length mezzanines due to an uncommon and overly conservative interpretation of the fire code.** These mezzanines, which are not considered necessary in other countries using the exact same rules, National Fire Prevention Association (NFPA) 130, expanded the amount of excavation required, massively increasing the final project cost.
@@ -576,7 +578,9 @@ Furthermore, while this station is not truly elevator-only, the stairs are only 
 *A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.*
 *[Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)*
 
-[^1]:  ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>).The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>) and is in 2026 USD, inflation-adjusted using CPI. 
+[^1]:  ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
+    The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>).\
+    The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>) and is in 2026 USD, inflation-adjusted using CPI. 
 
 [^2]:  ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7
 

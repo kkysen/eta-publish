@@ -26,6 +26,7 @@ from ..nodes import (
     FootnoteRef,
     Heading,
     Image,
+    LineBreak,
     List,
     ListItem,
     ListKind,
@@ -147,6 +148,10 @@ class TypstEmitter(Emitter):
         if node.href:
             out = f"#link({string(node.href)})[{out}]"
         return out
+
+    @override
+    def line_break(self, node: LineBreak) -> str:
+        return " \\\n"
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:

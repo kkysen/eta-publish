@@ -23,6 +23,7 @@ from ..nodes import (
     Heading,
     Image,
     Inline,
+    LineBreak,
     List,
     ListItem,
     ListKind,
@@ -187,6 +188,12 @@ class MarkdownEmitter(Emitter):
         if node.href:
             out = f"[{out}]({url(node.href)})"
         return out
+
+    @override
+    def line_break(self, node: LineBreak) -> str:
+        # A backslash is the unambiguous hard break; two trailing spaces are
+        # invisible and get stripped by anything that tidies whitespace.
+        return "\\\n"
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:

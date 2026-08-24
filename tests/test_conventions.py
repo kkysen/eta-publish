@@ -237,3 +237,34 @@ def test_an_undescribed_image_is_reported() -> None:
         ]
     )
     assert any("no alt text and no caption" in w for w in doc.warnings)
+
+
+def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
+    """The hero image's caption and credit are one paragraph split by
+    Shift+Enter, which Docs encodes as a vertical tab inside the run."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("Composite image of the station diagram.\v\vCredit: MTA, ETA"),
+        ]
+    )
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert text_of(figure.caption) == "Composite image of the station diagram."
+    assert text_of(figure.credit) == "Credit: MTA, ETA"
+
+
+def test_soft_line_breaks_do_not_reach_the_output_as_control_characters() -> None:
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            para("One line.\vAnother line."),
+        ]
+    )
+    for emitted in (HtmlEmitter().emit(doc), TypstEmitter().emit(doc)):
+        assert "\v" not in emitted
+    assert "One line.<br>Another line." in HtmlEmitter().emit(doc)
