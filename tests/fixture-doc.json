@@ -1,0 +1,398 @@
+{
+  "title": "Digging Out of a Very Deep Hole",
+  "body": {
+    "content": [
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "HEADING_1"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Header\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "URL: /reports/digging-out-deep-hole-sas-west\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Short: A 125 St subway should be a slam dunk.\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "SEO Description: Cheaper, shallower, faster.\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "MTA SAS West Feasibility Study: https://www.mta.info/document/196361\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "TITLE"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Digging Out of a Very Deep Hole: Saving Billions on 125th Street\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "HEADING_1"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "The Elephants in the Room\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "SAS West is projected to cost ",
+                "textStyle": {}
+              }
+            },
+            {
+              "textRun": {
+                "content": "$7.7 billion",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": " for 1.25 miles",
+                "textStyle": {}
+              }
+            },
+            {
+              "footnoteReference": {
+                "footnoteId": "fn.a",
+                "footnoteNumber": "1"
+              }
+            },
+            {
+              "textRun": {
+                "content": ", per the ",
+                "textStyle": {}
+              }
+            },
+            {
+              "textRun": {
+                "content": "MTA study",
+                "textStyle": {
+                  "link": {
+                    "url": "https://www.mta.info/document/196361"
+                  }
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ".\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Source: sas-west-036.jpg\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "inlineObjectElement": {
+                "inlineObjectId": "io.1"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "The SAS West and Phase 2 alignments.\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Credit: MTA\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "That is a lot of money.\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "HEADING_2"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Ground Conditions\n",
+                "textStyle": {}
+              }
+            }
+          ]
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "First point\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "bullet": {
+            "listId": "l.1",
+            "nestingLevel": 0
+          }
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Nested point\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "bullet": {
+            "listId": "l.1",
+            "nestingLevel": 1
+          }
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Second point\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "bullet": {
+            "listId": "l.1",
+            "nestingLevel": 0
+          }
+        }
+      },
+      {
+        "paragraph": {
+          "paragraphStyle": {
+            "namedStyleType": "NORMAL_TEXT"
+          },
+          "elements": [
+            {
+              "textRun": {
+                "content": "Stations are over 100 ft deep.",
+                "textStyle": {}
+              }
+            },
+            {
+              "footnoteReference": {
+                "footnoteId": "fn.b",
+                "footnoteNumber": "2"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "footnotes": {
+    "fn.a": {
+      "content": [
+        {
+          "paragraph": {
+            "paragraphStyle": {
+              "namedStyleType": "NORMAL_TEXT"
+            },
+            "elements": [
+              {
+                "textRun": {
+                  "content": "Inflation-adjusted from the 2024 capital plan.\n",
+                  "textStyle": {}
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "fn.b": {
+      "content": [
+        {
+          "paragraph": {
+            "paragraphStyle": {
+              "namedStyleType": "NORMAL_TEXT"
+            },
+            "elements": [
+              {
+                "textRun": {
+                  "content": "Measured from street level to platform.\n",
+                  "textStyle": {}
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "inlineObjects": {
+    "io.1": {
+      "inlineObjectProperties": {
+        "embeddedObject": {
+          "description": "SAS West alignment map",
+          "imageProperties": {
+            "contentUri": "https://example.invalid/img1"
+          }
+        }
+      }
+    }
+  },
+  "lists": {
+    "l.1": {
+      "listProperties": {
+        "nestingLevels": [
+          {},
+          {}
+        ]
+      }
+    }
+  }
+}
