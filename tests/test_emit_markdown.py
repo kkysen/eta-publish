@@ -94,8 +94,10 @@ def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
     assert "![SAS West alignment map](<images/img-1933bef5.png>)" in out
-    assert "*The SAS West and Phase 2 alignments.*" in out
-    assert "*Credit: MTA*" in out
+    assert "The SAS West and Phase 2 alignments." in out
+    assert "Credit: MTA" in out
+    # Not italicized: the published report does not italicize either.
+    assert "*Credit: MTA*" not in out
 
 
 def test_nested_lists_indent(out: str) -> None:

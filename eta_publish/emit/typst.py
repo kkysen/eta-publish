@@ -106,11 +106,13 @@ class TypstEmitter(Emitter):
     def figure(self, node: Figure) -> str:
         # As in the HTML, `Figure.source` is not emitted: it names a file in
         # Drive for whoever assembles the report, and is not part of it.
+        # Not emphasized: the published report styles the credit exactly like
+        # the caption, and the template decides how a caption looks.
         caption_parts = []
         if node.caption:
             caption_parts.append(self.inlines(node.caption))
         if node.credit:
-            caption_parts.append(f"#emph[{self.inlines(node.credit)}]")
+            caption_parts.append(self.inlines(node.credit))
         caption = " ".join(caption_parts)
         path = f"{self.image_dir}/{self.doc.image_href(node.image)}"
         body = f"  image({string(path)}, width: 100%),"
