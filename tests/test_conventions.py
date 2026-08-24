@@ -193,3 +193,47 @@ def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
     assert [b.anchor for b in doc.blocks if isinstance(b, Heading)] == ["tail-tracks"]
     assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 1
     assert any("styled as a heading" in w for w in doc.warnings)
+
+
+def test_unfinished_text_is_reported() -> None:
+    """The real doc contains `TODO insert PSD image, maybe JFK AirTrain?`,
+    which the human publisher removed by hand. Nothing removes it here, so
+    the least the build can do is say it is there."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            para("TODO insert PSD image, maybe JFK AirTrain?"),
+        ]
+    )
+    assert any("unfinished text" in w for w in doc.warnings)
+
+
+def test_chart_asset_placeholders_are_editorial() -> None:
+    """`SVG:` and `PNG:` name a chart file for whoever assembles the page.
+    The published report carries real download links instead."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("Station length as a percentage of platform length."),
+            para("SVG: station-length.svg"),
+        ]
+    )
+    assert "SVG:" not in HtmlEmitter().emit(doc)
+    assert not [b for b in doc.blocks if isinstance(b, Paragraph)]
+
+
+def test_an_undescribed_image_is_reported() -> None:
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+        ]
+    )
+    assert any("no alt text and no caption" in w for w in doc.warnings)
