@@ -55,3 +55,20 @@ def test_warnings_are_shown_where_someone_will_see_them() -> None:
 def test_no_warnings_means_no_warning_box(doc: Document) -> None:
     assert doc.warnings == []
     assert 'class="warnings"' not in preview_page(doc)
+
+
+def test_markdown_images_resolve_next_to_the_archive(doc: Document, tmp_path: Path) -> None:
+    """The archive is read from the repository, where the files sit beside
+    it, not from whatever host serves the published site."""
+    images = tmp_path / "images"
+    images.mkdir()
+    (images / "img-1933bef5.png").write_bytes(b"not really a png")
+
+    emit(doc, tmp_path, image_base="https://assets.etany.org/sas-west")
+    archive = (tmp_path / "report.md").read_text()
+
+    links = re.findall(r"!\[[^\]]*\]\(<([^>]+)>\)", archive)
+    assert links
+    for link in links:
+        assert not link.startswith("http")
+        assert (tmp_path / link).exists(), f"{link} does not resolve next to report.md"

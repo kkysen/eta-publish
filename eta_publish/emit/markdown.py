@@ -67,6 +67,20 @@ def yaml_value(value: str) -> str:
 class MarkdownEmitter(Emitter):
     extension = ".md"
 
+    def __init__(self, image_dir: str = "images") -> None:
+        """`image_dir` is relative to the `.md`, which sits beside it.
+
+        Not the published `--image-base`: the archive is read from the
+        repository, where the files are on disk next to it, rather than from
+        whatever host serves the site.
+        """
+        super().__init__()
+        self.image_dir = image_dir.rstrip("/")
+
+    def href(self, image: Image) -> str:
+        name = self.doc.image_href(image)
+        return f"{self.image_dir}/{name}" if self.image_dir else name
+
     @override
     def document(self, doc: Document) -> str:
         parts = [self.front_matter(doc), self.blocks(doc.blocks), self.footnotes(doc)]
@@ -132,7 +146,7 @@ class MarkdownEmitter(Emitter):
         published.
         """
         caption = self.inlines(node.caption)
-        lines = [f"![{escape(node.image.alt)}]({url(self.doc.image_href(node.image))})"]
+        lines = [f"![{escape(node.image.alt)}]({url(self.href(node.image))})"]
         if caption:
             lines.append(f"*{caption}*")
         if node.credit:
@@ -180,7 +194,7 @@ class MarkdownEmitter(Emitter):
 
     @override
     def image(self, node: Image) -> str:
-        return f"![{escape(node.alt)}]({url(self.doc.image_href(node))})"
+        return f"![{escape(node.alt)}]({url(self.href(node))})"
 
 
 def plain(content: list[Inline]) -> str:

@@ -326,11 +326,15 @@ class Parser:
         return out
 
     def _only_image(self, para: JsonObject) -> Image:
-        images = [i for i in self.inlines(para) if isinstance(i, Image)]
+        inlines = self.inlines(para)
+        images = [i for i in inlines if isinstance(i, Image)]
         if len(images) > 1:
             self.doc.warn(
                 f"{len(images)} images share one paragraph; only the first becomes a figure"
             )
+        prose = "".join(i.text for i in inlines if isinstance(i, Text)).strip()
+        if prose:
+            self.doc.warn(f"text sharing a paragraph with an image was dropped: {prose[:80]}")
         return images[0]
 
     def table(self, table: JsonObject) -> Table:
