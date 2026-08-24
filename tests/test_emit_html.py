@@ -100,7 +100,7 @@ def test_inline_css_is_optional(doc: Document) -> None:
     assert not HtmlEmitter(inline_css=False).emit(doc).startswith("<style>")
 
 
-def test_emission_is_deterministic(doc: Document) -> None:
-    """The `.md` sibling of this output is committed to git, so anything
-    that varies between runs becomes diff noise."""
-    assert HtmlEmitter().emit(doc) == HtmlEmitter().emit(doc)
+# Determinism across runs is covered by `test_golden.py`. Comparing an
+# emitter with itself in one process cannot see it: hash randomization is
+# fixed for the life of an interpreter, so order-dependent output matches
+# itself perfectly and still differs from run to run.
