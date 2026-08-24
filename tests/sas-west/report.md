@@ -578,55 +578,55 @@ Furthermore, while this station is not truly elevator-only, the stairs are only 
 *A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.*
 *[Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)*
 
-[^1]:  ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
+[^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
     The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>).\
     The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>) and is in 2026 USD, inflation-adjusted using CPI. 
 
-[^2]:  ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7
+[^2]: ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7
 
-[^3]:  ETA timed the transfer at normal walking speed.
+[^3]: ETA timed the transfer at normal walking speed.
 
-[^4]:  This was measured by ETA.
+[^4]: This was measured by ETA.
 
-[^5]:  Underpinning is the reinforcement of existing structures’ foundations.
+[^5]: Underpinning is the reinforcement of existing structures’ foundations.
     In some cases a new station’s walls and slabs can themselves be designed to underpin other structures.
 
-[^6]:  Platform widths at 72 St, 86 St, and 96 St were measured by ETA.
+[^6]: Platform widths at 72 St, 86 St, and 96 St were measured by ETA.
 
-[^7]:  Odenplan station on the Stockholm City Tunnel is [117%](<https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>) as long as the longest trains that serve it.
+[^7]: Odenplan station on the Stockholm City Tunnel is [117%](<https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>) as long as the longest trains that serve it.
 
-[^8]:  [Page 26](<https://www.mta.info/document/179396#page=26>) shows an isometric view of the whole 116 St station within the street grid, while [page 25](<https://www.mta.info/document/179396#page=25>) shows a top-down view showing just the platform within the street grid with a scale bar.
+[^8]: [Page 26](<https://www.mta.info/document/179396#page=26>) shows an isometric view of the whole 116 St station within the street grid, while [page 25](<https://www.mta.info/document/179396#page=25>) shows a top-down view showing just the platform within the street grid with a scale bar.
     Synthesizing the information in the two diagrams, one obtains a station box length of approximately 1,000 ft.
 
-[^9]:  If the stations can be raised and built cut-and-cover as suggested in *Station Depth*, then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
+[^9]: If the stations can be raised and built cut-and-cover as suggested in *Station Depth*, then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
     Back-of-house space can be sited at unused parts of the mezzanine.
 
-[^10]:  The Transit Costs Project conducted extensive interviews with engineers working on subway and commuter rail tunnel construction in Turkey, and some interviews in China and Spain.
+[^10]: The Transit Costs Project conducted extensive interviews with engineers working on subway and commuter rail tunnel construction in Turkey, and some interviews in China and Spain.
     For Turkey, this is mentioned in the [Istanbul Case Study](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72>).
     Also see [diagrams of Spanish metro stations](<http://stations.albertguillaumes.cat/>) created by engineer Albert Guillaumes.
 
-[^11]:  From an NYU Marron Transit Cost Project interview with a high-ranking MTA employee who has direct knowledge of SAS Phase 1 operations.
+[^11]: From an NYU Marron Transit Cost Project interview with a high-ranking MTA employee who has direct knowledge of SAS Phase 1 operations.
 
-[^12]:  To run around 20 tph, no tail tracks are needed at all.
+[^12]: To run around 20 tph, no tail tracks are needed at all.
     For example, 8 Av on the L runs 22 tph with zero tail tracks.
     Slack protection tail tracks (1) are very short and usually needed for 30+ tph, and reversing tail tracks (2) are not needed for 30+ tph, but very often used.
 
-[^13]:  NYCT rolling stock can be [parked indefinitely on a 5.6% grade](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>), as specified in the [R211 Technical Specifications](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>).
+[^13]: NYCT rolling stock can be [parked indefinitely on a 5.6% grade](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>), as specified in the [R211 Technical Specifications](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>).
 
-[^14]:  Reported as [21% of the hard costs](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>), which maps to 17% of the total cost.
+[^14]: Reported as [21% of the hard costs](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>), which maps to 17% of the total cost.
     21% \* 100/(100 + 21) = 17%.
 
-[^15]:  Projected cost of $7.7 billion \* (1.17/1.43) = $6.3 billion, or a $1.4 billion savings.
+[^15]: Projected cost of $7.7 billion \* (1.17/1.43) = $6.3 billion, or a $1.4 billion savings.
 
-[^16]:  Italian definitions of soft costs include VAT and cost escalation, which should be proportionately allocated between hard and soft costs.
+[^16]: Italian definitions of soft costs include VAT and cost escalation, which should be proportionately allocated between hard and soft costs.
 
-[^17]:  1 - (1 - 43%)/(1 - 19%) = 29%.
+[^17]: 1 - (1 - 43%)/(1 - 19%) = 29%.
 
-[^18]:  Even strictly following the FTA guidelines, advancing to 60% design would lower the contingency to 26%, saving $770 million.
+[^18]: Even strictly following the FTA guidelines, advancing to 60% design would lower the contingency to 26%, saving $770 million.
 
-[^19]:  The MTA does not have enough yard storage for all of its trains, so must run some trains 24/7.
+[^19]: The MTA does not have enough yard storage for all of its trains, so must run some trains 24/7.
     They also currently have to store trains on the express tracks on Queens Blvd while there is ongoing CBTC work on QBL East because there is not enough room in Jamaica Yard, preventing express service at night.
 
-[^20]:  Baseline NFPA 130 standards allow for elevators to comprise only up to 50% of required emergency egress capacity from the platform to a point of safety.
+[^20]: Baseline NFPA 130 standards allow for elevators to comprise only up to 50% of required emergency egress capacity from the platform to a point of safety.
     Modern stations like REM’s Édouard-Montpetit, often use elevators for all or nearly all the egress capacity from a point of safety to the street.
     See section 5.3 of NFPA 130: [https://link.nfpa.org/free-access/publications/130/2026](<https://link.nfpa.org/free-access/publications/130/2026>)

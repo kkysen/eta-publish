@@ -122,13 +122,15 @@ class HtmlEmitter(Emitter):
     def footnote(self, note: Footnote) -> str:
         body = self.blocks(note.content)
         back = (
-            f'<a href="#fnref{note.number}" class="footnote-back" aria-label="Back to text">↑</a>'
+            f'<a href="#fnref{note.number}" class="footnote-back" '
+            f'aria-label="Back to footnote {note.number} in the text">↑</a>'
         )
-        # Tucked inside the final `</p>` so the arrow ends the prose instead of
-        # starting a line of its own.
-        if body.endswith("</p>"):
-            return f'<li id="fn{note.number}">{body.removesuffix("</p>")} {back}</p></li>'
-        return f'<li id="fn{note.number}">{body} {back}</li>'
+        # Immediately after the number the list renders, rather than after the
+        # note. Several of these run to a paragraph, and the way back should
+        # be where the eye already is instead of at the end of the reading.
+        if body.startswith("<p>"):
+            return f'<li id="fn{note.number}"><p>{back} {body.removeprefix("<p>")}</li>'
+        return f'<li id="fn{note.number}">{back} {body}</li>'
 
     # ---- blocks -----------------------------------------------------
 
