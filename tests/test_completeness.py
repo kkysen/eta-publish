@@ -44,7 +44,7 @@ from eta_publish.nodes import (
     Table,
     Text,
 )
-from eta_publish.parse import parse
+from eta_publish.parse import element_text, parse
 
 FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
 
@@ -142,14 +142,21 @@ def test_the_check_can_actually_fail(doc: Document) -> None:
 
 
 def source_text(doc_json: JsonObject) -> list[str]:
-    """Every text run in the raw API response, body and footnotes alike."""
+    """Every piece of text in the raw API response, body and footnotes alike.
+
+    Deliberately every inline element kind, not just `textRun`. Walking only
+    text runs is what let the parser drop every smart chip in the real
+    report unnoticed: two person chips, three date chips, and eleven linked
+    Drive files, none of which is a text run.
+    """
     out: list[str] = []
 
     def walk(node: object) -> None:
         if isinstance(node, dict):
-            run = node.get("textRun")
-            if isinstance(run, dict):
-                out.append(str(run.get("content", "")))
+            if "elements" in node and isinstance(node["elements"], list):
+                for el in node["elements"]:
+                    if isinstance(el, dict):
+                        out.append(element_text(el))
             for value in node.values():
                 walk(value)
         elif isinstance(node, list):
@@ -175,6 +182,9 @@ def tree_text(doc: Document) -> str:
     """
     parts = document_text(doc) + [doc.title]
     parts += [f"{key}: {value}" for key, value in doc.meta.items()]
+    # A key's parenthetical note is stripped on the way in, so the original
+    # spelling has to be reconstructed to compare against the source.
+    parts += list(doc.meta)
     for block in doc.blocks:
         if isinstance(block, Figure):
             parts += _inline_text(block.source)

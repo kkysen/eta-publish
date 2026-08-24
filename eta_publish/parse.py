@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import replace
+from datetime import datetime
 
 from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename
@@ -46,6 +47,9 @@ HEADING_LEVELS = {
     "HEADING_5": 6,
     "HEADING_6": 6,
 }
+
+# Carry no content of their own, so dropping them loses nothing.
+IGNORED_ELEMENTS = frozenset({"pageBreak", "columnBreak", "horizontalRule", "equation"})
 
 # Ids the emitters generate for themselves, which no heading may take.
 RESERVED_ANCHORS = frozenset({"footnotes"})
@@ -76,11 +80,39 @@ TODO_RE = re.compile(r"\bTODO\b|\bTK\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
+def date_text(chip: JsonObject) -> str:
+    """A date smart chip as the document shows it, e.g. `Aug 19, 2026`."""
+    stamp = chip.get("dateElementProperties", {}).get("timestamp", "")
+    try:
+        moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        return stamp
+    # `%-d` avoids the zero padding Docs does not show.
+    return moment.strftime("%b %-d, %Y")
+
+
+def element_text(el: JsonObject) -> str:
+    """The text an inline element contributes, smart chips included.
+
+    Reading only `textRun` loses every chip. In the real report that emptied
+    `Project Manager:` and all three date fields, and dropped the first name
+    from `Public Contributors:`, leaving it starting with a comma.
+    """
+    if "textRun" in el:
+        return el["textRun"].get("content", "")
+    if "person" in el:
+        props = el["person"].get("personProperties", {})
+        return props.get("name") or props.get("email", "")
+    if "dateElement" in el:
+        return date_text(el["dateElement"])
+    if "richLink" in el:
+        return el["richLink"].get("richLinkProperties", {}).get("title", "")
+    return ""
+
+
 def plain(para: JsonObject) -> str:
     """The paragraph's text with styling dropped, for matching conventions."""
-    return "".join(
-        el.get("textRun", {}).get("content", "") for el in para.get("elements", [])
-    ).strip()
+    return "".join(element_text(el) for el in para.get("elements", [])).strip()
 
 
 def style_of(para: JsonObject) -> str:
@@ -116,7 +148,38 @@ class Parser:
                 image = self._image(el["inlineObjectElement"])
                 if image is not None:
                     out.append(image)
+            elif "person" in el:
+                out.append(self._person(el["person"]))
+            elif "dateElement" in el:
+                out.append(self._date(el["dateElement"]))
+            elif "richLink" in el:
+                out.append(self._rich_link(el["richLink"]))
+            elif not (IGNORED_ELEMENTS & el.keys()):
+                kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
+                self.doc.warn(f"unhandled document element {kinds}, dropped")
         return out
+
+    def _person(self, chip: JsonObject) -> Text:
+        """A person smart chip renders as the person's name.
+
+        The chip also carries their email address. That is contact
+        information the document happens to hold, not something the report
+        says, so it is deliberately not emitted.
+        """
+        props = chip.get("personProperties", {})
+        return Text(text=props.get("name") or props.get("email", ""))
+
+    def _date(self, chip: JsonObject) -> Text:
+        """A date smart chip renders the way the document shows it."""
+        text = date_text(chip)
+        if not text:
+            self.doc.warn("a date chip carries no timestamp; dropped")
+        return Text(text=text)
+
+    def _rich_link(self, chip: JsonObject) -> Text:
+        """A linked Drive file, which is how `Source:` lines name an asset."""
+        props = chip.get("richLinkProperties", {})
+        return Text(text=props.get("title", ""), href=props.get("uri"))
 
     def _text_run(self, run: JsonObject) -> Text | None:
         text = run.get("content", "")
