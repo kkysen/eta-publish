@@ -22,16 +22,10 @@ from .naming import AnchorAllocator, image_filename
 from .nodes import (
     Block,
     Document,
-    Figure,
     Footnote,
     FootnoteRef,
-    Heading,
     Image,
     Inline,
-    List,
-    ListItem,
-    ListKind,
-    Paragraph,
     Table,
     Text,
 )
