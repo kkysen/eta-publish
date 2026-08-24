@@ -1,30 +1,26 @@
 """Snapshot of the real SAS West report, end to end.
 
-`tests/real/sas-west.doc.json` is an actual `documents.get` response for the
-published report, so this is the only test that exercises the parser against
-a document nobody wrote to make a point. Every bug that mattered so far came
-from that document's shape rather than from a hand-built fixture, and `out/`
-is ignored, so without this the next refactor could regress all of it
-silently.
+`tests/sas-west/` is literally a publish of the real report:
 
-The snapshots are committed output. When one changes, read the diff: it is
-exactly what the change does to a real published report. Regenerate with
-`pytest --regenerate-snapshots` once the diff looks right.
+    uv run eta-publish <doc-url> -o tests/sas-west
 
-Image extensions are recorded alongside in `sas-west.images.json`. They
-cannot be derived: a Docs `inlineObject` carries a `contentUri` with no
-extension and no mime type, so the only way to learn that an image is a JPEG
-is to fetch it. This test does not use the network, so a real run's answers
-are committed.
+That writes `doc.json`, the four outputs, `images/`, and `report.pdf`, and
+this test asserts the committed outputs still match what the code produces
+from the committed response. It is the only test that runs against a
+document nobody wrote to make a point, and every bug that mattered so far
+came from this document's shape rather than from a hand-built fixture.
 
-To refresh both from a new fetch:
+Only the text is committed. The images are 18 MB and the PDF 19 MB, and
+because a re-fetch rewrites every image, each one would add another copy to
+history permanently. They are ignored, so the command above is safe to rerun.
 
-    uv run eta-publish <doc-url> -o out
-    cp out/doc.json tests/real/sas-west.doc.json
-    uv run pytest --regenerate-snapshots
+`images.json` is the one derived thing kept: a Docs `inlineObject` carries a
+`contentUri` with no extension and no mime type, so the only way to learn an
+image is a JPEG is to fetch it, and this test does not use the network. It
+is refreshed from `images/` whenever that directory is present.
 
-The last step rereads `out/images/` when it is there, so the extensions
-follow the response they came from.
+When a snapshot changes, read the diff: it is exactly what the change does
+to a real published report. Accept it with `pytest --regenerate-snapshots`.
 """
 
 from __future__ import annotations
@@ -41,12 +37,15 @@ from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
-REAL = Path(__file__).parent / "real"
-EXTENSIONS_PATH = REAL / "sas-west.images.json"
-DOWNLOADED = Path("out/images")
-DOC_JSON = json.loads((REAL / "sas-west.doc.json").read_text())
+REAL = Path(__file__).parent / "sas-west"
+EXTENSIONS_PATH = REAL / "images.json"
+DOWNLOADED = REAL / "images"
+DOC_JSON = json.loads((REAL / "doc.json").read_text())
 
-IMAGE_BASE = "https://assets.etany.org/sas-west"
+# The snapshots are a plain publish, so no `--image-base`: where images are
+# hosted is still undecided, and pinning a placeholder into them would make
+# every snapshot line depend on a value nobody has chosen yet. That the flag
+# is applied when given is covered in `test_preview.py`.
 
 
 def image_extensions(regenerate: bool) -> dict[str, str]:
@@ -90,19 +89,19 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 
 
 def test_html_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("sas-west.html", HtmlEmitter(image_base=IMAGE_BASE).emit(doc), regenerate_snapshots)
+    check("report.html", HtmlEmitter().emit(doc), regenerate_snapshots)
 
 
 def test_markdown_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("sas-west.md", MarkdownEmitter().emit(doc), regenerate_snapshots)
+    check("report.md", MarkdownEmitter().emit(doc), regenerate_snapshots)
 
 
 def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("sas-west.typ", TypstEmitter().emit(doc), regenerate_snapshots)
+    check("report.typ", TypstEmitter().emit(doc), regenerate_snapshots)
 
 
 def test_preview_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("sas-west.preview.html", preview_page(doc), regenerate_snapshots)
+    check("preview.html", preview_page(doc), regenerate_snapshots)
 
 
 # ---- what the document should parse to ------------------------------
@@ -180,7 +179,7 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
     rests on, so it is asserted rather than estimated."""
     from eta_publish.emit.html import CODE_BLOCK_LIMIT
 
-    size = len(HtmlEmitter(image_base=IMAGE_BASE).emit(doc).encode())
+    size = len(HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc).encode())
     assert size < CODE_BLOCK_LIMIT
     assert size < 120_000, f"grown to {size:,} bytes; still fits, worth a look"
 
