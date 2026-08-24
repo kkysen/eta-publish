@@ -157,11 +157,11 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    from .fetch import TabNotFound
+    from .fetch import FetchFailed, TabNotFound
 
     try:
         doc = parse(load(args.doc, args.outdir, args.tab, args.suggestions))
-    except TabNotFound as e:
+    except (TabNotFound, FetchFailed) as e:
         print(f"eta-publish: {e}", file=sys.stderr)
         return 2
     except NotImplementedError as e:
