@@ -8,8 +8,6 @@ of contents, and footnotes render as undifferentiated body text.
 
 from __future__ import annotations
 
-import html
-
 from ..nodes import (
     Document,
     Figure,
@@ -17,7 +15,6 @@ from ..nodes import (
     Heading,
     Image,
     List,
-    ListItem,
     Paragraph,
     Table,
     Text,
