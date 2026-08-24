@@ -19,6 +19,16 @@ SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inf
 
 That is a lot of money.
 
+#table(
+  columns: 2,
+  [#strong[Project]],
+  [#strong[Cost per mile]],
+  [SAS West],
+  [\$6.2B],
+  [Grand Paris Express],
+  [\$530M],
+)
+
 == Ground Conditions
 
 - First point

@@ -17,6 +17,11 @@ SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA 
 
 That is a lot of money.
 
+| **Project** | **Cost per mile** |
+| --- | --- |
+| SAS West | $6.2B |
+| Grand Paris Express | $530M |
+
 ### Ground Conditions {#ground-conditions}
 
 - First point

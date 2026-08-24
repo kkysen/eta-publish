@@ -239,6 +239,150 @@
         }
       },
       {
+        "table": {
+          "tableRows": [
+            {
+              "tableCells": [
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "Project\n",
+                              "textStyle": {
+                                "bold": true
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "Cost per mile\n",
+                              "textStyle": {
+                                "bold": true
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tableCells": [
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "SAS West\n",
+                              "textStyle": {
+                                "bold": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "$6.2B\n",
+                              "textStyle": {
+                                "bold": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tableCells": [
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "Grand Paris Express\n",
+                              "textStyle": {
+                                "bold": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "paragraphStyle": {
+                          "namedStyleType": "NORMAL_TEXT"
+                        },
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "$530M\n",
+                              "textStyle": {
+                                "bold": false
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
         "paragraph": {
           "paragraphStyle": {
             "namedStyleType": "HEADING_2"

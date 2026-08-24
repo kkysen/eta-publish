@@ -76,3 +76,10 @@ def test_the_emitted_source_compiles(doc: Document, tmp_path: Path) -> None:
     pdf = compile_pdf(source)
     assert pdf.exists()
     assert pdf.read_bytes().startswith(b"%PDF")
+
+
+def test_tables_declare_their_column_count(out: str) -> None:
+    assert "#table(\n  columns: 2," in out
+    assert "[Grand Paris Express]," in out
+    # `$` opens math mode, so a currency figure in a cell needs escaping too.
+    assert r"[\$530M]," in out
