@@ -63,6 +63,16 @@ KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
 # rather than content: the live SAS West report contains zero occurrences of
 # each, against 26 of `Credit:`.
 SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*[:\]]", re.IGNORECASE)
+
+# The same idea for chart assets: `SVG:` and `PNG:` name the file to link
+# beside a figure. They are notes to whoever assembles the page, and the
+# published report carries real links instead.
+ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
+
+# Anything still marked as unfinished. The real doc has `Source: TODO` and
+# `SVG: TODO` in it, which are fine while drafting and not fine on a
+# published page, so they are worth one loud line before publishing.
+TODO_RE = re.compile(r"\bTODO\b|\bTK\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
@@ -261,7 +271,10 @@ class Parser:
                 )
                 continue
 
-            if SOURCE_RE.match(text):
+            if TODO_RE.search(text):
+                self.doc.warn(f"unfinished text in the document: {text[:80]}")
+
+            if SOURCE_RE.match(text) or ASSET_RE.match(text):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # The `[Image Source](...)` spelling follows its figure.
@@ -297,6 +310,13 @@ class Parser:
 
         drop_pending()
         for block in out:
+            if isinstance(block, Figure) and not block.image.alt and not block.caption:
+                # Nothing to describe it with: no alt text in Docs and no
+                # caption to borrow. Screen readers get an unlabelled image.
+                self.doc.warn(
+                    f"image {block.image.object_id} has no alt text and no caption; "
+                    "add a description to it in the doc"
+                )
             if isinstance(block, Figure) and not block.image.alt and block.caption:
                 # The published page uses the caption as alt text as well as
                 # showing it, so an image with no description in Docs is not
