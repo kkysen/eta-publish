@@ -115,6 +115,23 @@ def element_text(el: JsonObject) -> str:
     return ""
 
 
+def strip_leading_space(blocks: list[Block]) -> list[Block]:
+    """Drop the space Docs puts after a footnote's marker.
+
+    Every footnote body in the real report begins with one, which is how the
+    marker and the text are separated in the document rather than part of
+    what the note says. Left in, it doubles the space after the number.
+    """
+    for block in blocks:
+        if not isinstance(block, Paragraph) or not block.content:
+            break
+        first = block.content[0]
+        if isinstance(first, Text):
+            block.content[0] = replace(first, text=first.text.lstrip())
+        break
+    return blocks
+
+
 def split_lines(content: list[Inline]) -> list[list[Inline]]:
     """Break inline content at soft line breaks."""
     lines: list[list[Inline]] = [[]]
@@ -571,7 +588,9 @@ class Parser:
             Footnote(
                 footnote_id=fid,
                 number=number,
-                content=self.blocks(self.footnote_defs.get(fid, {}).get("content", [])),
+                content=strip_leading_space(
+                    self.blocks(self.footnote_defs.get(fid, {}).get("content", []))
+                ),
             )
             for number, fid in sorted(
                 (number, fid) for fid, number in self._footnote_numbers.items()
