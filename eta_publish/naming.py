@@ -13,6 +13,8 @@ from __future__ import annotations
 import hashlib
 import re
 import unicodedata
+from collections import defaultdict
+from collections.abc import Iterable
 
 _NON_SLUG = re.compile(r"[^\w\s-]")
 _SEPARATORS = re.compile(r"[\s_-]+")
@@ -26,29 +28,44 @@ def slugify(text: str) -> str:
 
 
 class AnchorAllocator:
-    """Assigns unique heading anchors that do not move.
+    """Assigns heading anchors that depend only on the heading's own text.
 
-    A positional counter would be wrong here. If two headings both slugify
-    to `overview`, numbering them by order of appearance means inserting a
-    third one earlier in the document silently reassigns `overview-2` to a
-    different section, breaking anyone's link to it.
+    Allocation is two-pass on purpose. The tempting approach, handing the
+    bare slug to whichever heading claims it first and suffixing the rest,
+    is still positional: if two headings slugify alike and their order
+    changes between drafts, both of their anchors move.
 
-    Instead a collision is broken with a short hash of the heading's full
-    text, which depends only on that heading. Colliding headings therefore
-    keep their anchors no matter what happens around them.
+    So the constructor is given every heading text up front, works out
+    which base slugs more than one distinct heading would claim, and
+    suffixes *all* claimants of those. A heading's anchor is then a pure
+    function of its own text plus the set of headings it collides with,
+    and reordering cannot touch it.
+
+    `overrides` maps heading text to an explicit anchor, for headings whose
+    published URL already exists and must not change.
     """
 
-    def __init__(self) -> None:
-        self._taken: dict[str, str] = {}
+    def __init__(
+        self,
+        heading_texts: Iterable[str] = (),
+        overrides: dict[str, str] | None = None,
+    ) -> None:
+        self.overrides = overrides or {}
+        claimants: dict[str, set[str]] = defaultdict(set)
+        for text in heading_texts:
+            if text not in self.overrides:
+                claimants[slugify(text)].add(text)
+        self._ambiguous = {
+            base for base, texts in claimants.items() if len(texts) > 1
+        }
 
     def allocate(self, text: str) -> str:
+        if text in self.overrides:
+            return self.overrides[text]
         base = slugify(text)
-        if self._taken.get(base) in (None, text):
-            self._taken[base] = text
-            return base
-        anchor = f"{base}-{_short_hash(text)}"
-        self._taken[anchor] = text
-        return anchor
+        if base in self._ambiguous:
+            return f"{base}-{_short_hash(text)}"
+        return base
 
 
 def image_filename(object_id: str, extension: str = "") -> str:
