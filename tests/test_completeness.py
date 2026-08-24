@@ -181,17 +181,41 @@ def tree_text(doc: Document) -> str:
     return normalize(" \u241f ".join(parts)).lower()
 
 
-@pytest.mark.parametrize("fixture", [FIXTURE, REAL_SHAPE], ids=["fixture", "real-shape"])
-def test_the_parser_keeps_everything_the_document_holds(fixture: JsonObject) -> None:
-    """The half that catches a parser bug rather than an emitter bug."""
-    doc = parse(fixture)
+def parser_losses(fixture: JsonObject, doc: Document) -> list[str]:
     kept = tree_text(doc)
-    missing = [
+    return [
         t
         for t in source_text(fixture)
         if t.lower() not in CONSUMED and normalize(t).lower() not in kept
     ]
-    assert not missing, f"the parser dropped: {missing}"
+
+
+@pytest.mark.parametrize("fixture", [FIXTURE, REAL_SHAPE], ids=["fixture", "real-shape"])
+def test_the_parser_keeps_everything_the_document_holds(fixture: JsonObject) -> None:
+    """The half that catches a parser bug rather than an emitter bug."""
+    doc = parse(fixture)
+    assert not parser_losses(fixture, doc), f"the parser dropped: {parser_losses(fixture, doc)}"
+
+
+def test_anything_the_parser_drops_is_reported() -> None:
+    """The weaker but more honest invariant. Some things are dropped on
+    purpose, such as the `Draft 2` scaffolding the real doc opens with, but
+    nothing may leave the document without saying so."""
+    scaffolded: JsonObject = json.loads(json.dumps(REAL_SHAPE))
+    scaffolded["body"]["content"].insert(
+        0,
+        {
+            "paragraph": {
+                "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                "elements": [{"textRun": {"content": "Draft 2\n", "textStyle": {}}}],
+            }
+        },
+    )
+    doc = parse(scaffolded)
+    losses = parser_losses(scaffolded, doc)
+    assert losses == ["Draft 2"]
+    for lost in losses:
+        assert any(lost in w for w in doc.warnings), f"{lost} was dropped without a warning"
 
 
 def test_the_parser_check_catches_the_front_matter_overrun() -> None:
