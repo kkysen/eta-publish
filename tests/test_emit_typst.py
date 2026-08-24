@@ -51,7 +51,8 @@ def test_the_source_line_is_not_emitted(out: str) -> None:
 def test_figures_carry_caption_and_credit(out: str) -> None:
     assert 'image("images/img-1933bef5.png", width: 100%)' in out
     assert "The SAS West and Phase 2 alignments." in out
-    assert "#emph[Credit: MTA]" in out
+    assert "Credit: MTA" in out
+    assert "#emph[Credit: MTA]" not in out
 
 
 def test_markup_characters_in_prose_are_escaped(out: str) -> None:

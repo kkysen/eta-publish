@@ -154,12 +154,15 @@ class MarkdownEmitter(Emitter):
         the provenance worth having in a durable record, and nothing here is
         published.
         """
+        # Caption and credit are their own lines rather than emphasized. The
+        # published report does not italicize either, and marking them up
+        # here would put styling in the archive that the report does not have.
         caption = self.inlines(node.caption)
         lines = [f"![{escape(node.image.alt)}]({url(self.href(node.image))})"]
         if caption:
-            lines.append(f"*{caption}*")
+            lines.append(caption)
         if node.credit:
-            lines.append(f"*{self.inlines(node.credit)}*")
+            lines.append(self.inlines(node.credit))
         if node.source:
             lines.append(f"<!-- {self.inlines(node.source)} -->")
         return "\n".join(lines)

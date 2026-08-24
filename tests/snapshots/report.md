@@ -11,8 +11,8 @@ mta sas west feasibility study: "https://www.mta.info/document/196361"
 SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>).
 
 ![SAS West alignment map](<images/img-1933bef5.png>)
-*The SAS West and Phase 2 alignments.*
-*Credit: MTA*
+The SAS West and Phase 2 alignments.
+Credit: MTA
 <!-- Source: sas-west-036.jpg -->
 
 That is a lot of money.
