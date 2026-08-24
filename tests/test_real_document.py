@@ -11,8 +11,20 @@ The snapshots are committed output. When one changes, read the diff: it is
 exactly what the change does to a real published report. Regenerate with
 `pytest --regenerate-golden` once the diff looks right.
 
-Image extensions are recorded alongside, because they are only knowable by
-downloading each image, and this test does not touch the network.
+Image extensions are recorded alongside in `sas-west.images.json`. They
+cannot be derived: a Docs `inlineObject` carries a `contentUri` with no
+extension and no mime type, so the only way to learn that an image is a JPEG
+is to fetch it. This test does not use the network, so a real run's answers
+are committed.
+
+To refresh both from a new fetch:
+
+    uv run eta-publish <doc-url> -o out
+    cp out/doc.json tests/real/sas-west.doc.json
+    uv run pytest --regenerate-golden
+
+The last step rereads `out/images/` when it is there, so the extensions
+follow the response they came from.
 """
 
 from __future__ import annotations
@@ -30,16 +42,33 @@ from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
 REAL = Path(__file__).parent / "real"
+EXTENSIONS_PATH = REAL / "sas-west.images.json"
+DOWNLOADED = Path("out/images")
 DOC_JSON = json.loads((REAL / "sas-west.doc.json").read_text())
-IMAGE_EXTENSIONS = json.loads((REAL / "sas-west.images.json").read_text())
 
 IMAGE_BASE = "https://assets.etany.org/sas-west"
 
 
+def image_extensions(regenerate: bool) -> dict[str, str]:
+    """What a real run resolved each image's format to.
+
+    Refreshed from a download when regenerating, so a re-fetched response
+    does not keep the previous one's extensions.
+    """
+    if regenerate and DOWNLOADED.is_dir():
+        by_stem = {i.filename: i.object_id for i in parse(DOC_JSON).images}
+        found = {
+            by_stem[p.stem]: p.suffix for p in sorted(DOWNLOADED.iterdir()) if p.stem in by_stem
+        }
+        if found:
+            EXTENSIONS_PATH.write_text(json.dumps(found, indent=2, sort_keys=True) + "\n")
+    return json.loads(EXTENSIONS_PATH.read_text())
+
+
 @pytest.fixture
-def doc() -> Document:
+def doc(regenerate_golden: bool) -> Document:
     parsed = parse(DOC_JSON)
-    parsed.image_extensions.update(IMAGE_EXTENSIONS)
+    parsed.image_extensions.update(image_extensions(regenerate_golden))
     return parsed
 
 
