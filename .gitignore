@@ -1,0 +1,11 @@
+# Build output: regenerated from the source Google Doc on every run.
+/out/
+
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# OAuth client secret and token; never commit these.
+client_secret*.json
+token.json
