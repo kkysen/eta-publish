@@ -65,46 +65,42 @@ def _explain(error: object) -> str:
     """Turn a Google API error into something with a next step in it.
 
     `HttpError`'s own string is a wall of JSON with the useful sentence
-    buried in it, and the two failures worth naming here both have a
-    specific fix rather than a general one.
+    buried in it, and the failures worth naming here have a specific fix
+    rather than a general one.
     """
     from googleapiclient.errors import HttpError
 
     if not isinstance(error, HttpError):
         return str(error)
 
-    status = error.status_code
-    reason = ""
-    details = getattr(error, "error_details", None) or []
-    for detail in details:
-        if isinstance(detail, dict) and detail.get("reason"):
-            reason = str(detail["reason"])
-            break
+    details = [d for d in (getattr(error, "error_details", None) or []) if isinstance(d, dict)]
+    reasons = {str(d.get("reason", "")) for d in details}
+    messages = [str(d.get("message", "")) for d in details if d.get("message")]
 
-    if reason == "SERVICE_DISABLED":
-        project = ""
-        for detail in details:
-            if isinstance(detail, dict):
-                project = str(detail.get("metadata", {}).get("consumer", "")).split("/")[-1]
-                if project:
-                    break
-        return (
-            "the Google Docs API is not enabled for this OAuth project.\n"
-            "Enable it at https://console.cloud.google.com/apis/api/"
-            f"docs.googleapis.com/overview?project={project}\n"
-            "then wait a minute for it to propagate and try again."
-        )
+    # An API that is not switched on for the project. Docs reports this as
+    # `SERVICE_DISABLED` and Drive as `accessNotConfigured`, and both put the
+    # console URL in the message, so Google's own wording is the clearest
+    # thing to pass along.
+    if reasons & {"SERVICE_DISABLED", "accessNotConfigured"}:
+        enable = next((m for m in messages if "has not been used in project" in m), "")
+        return enable or "an API this needs is not enabled for the OAuth project."
+
+    status = error.status_code
     if status == 403:
+        if "insufficient" in " ".join(messages).lower() or "ACCESS_TOKEN_SCOPE" in str(error):
+            return (
+                "the saved authorization does not cover this. "
+                f"Delete {TOKEN_PATH} and run again to grant it."
+            )
         return (
-            "access denied by the Docs API. Either the account you authorized "
-            "cannot open this document, or the API is not enabled for the "
-            f"OAuth project.\n{error.reason}"
+            "access denied. Either the account you authorized cannot open this, "
+            f"or an API is not enabled for the OAuth project.\n{error.reason}"
         )
     if status == 404:
-        return "no such document, or the account you authorized cannot open it."
+        return "not found, or the account you authorized cannot open it."
     if status == 429:
-        return "rate limited by the Docs API; wait a minute and try again."
-    return f"the Docs API returned {status}: {error.reason}"
+        return "rate limited by the API; wait a minute and try again."
+    return f"the API returned {status}: {error.reason}"
 
 
 def parse_ref(ref: str) -> tuple[str, str | None]:
