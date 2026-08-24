@@ -41,8 +41,8 @@ Reads the Google Doc, builds a document tree, and emits from that tree:
 | --- | --- |
 | `report.html` | One fragment to paste into a single Squarespace code block |
 | `report.md` | Human-readable, diffable archive committed to git |
-| `report.typ` | [Typst](https://typst.app/) source, rendered to a PDF |
-| `preview.html` | Standalone styled page for review before publishing |
+| `report.typ` / `report.pdf` | [Typst](https://typst.app/) source, and the compiled PDF |
+| `preview.html` | Standalone page for review, including any warnings |
 | `images/` | The doc's inline images, for hosting outside Squarespace |
 
 Headings, anchors, the table of contents, footnote numbering,
@@ -134,9 +134,44 @@ ETA reports live in multi-tab documents, and the Docs API defaults to the
 first tab, which is usually an earlier draft. A multi-tab document with no
 tab specified refuses to guess and lists its tabs.
 
-First run opens a browser for OAuth.
-Put the OAuth client JSON at `~/.config/eta-publish/client_secret.json`,
-or point `$ETA_CLIENT_SECRETS` at it.
+Outputs land in `out/`. Add `--split` for a report over the code block
+limit, and `--no-pdf` to skip compiling the Typst.
+
+### Authentication
+
+The Docs API needs an OAuth client, which is free and takes a few minutes.
+It is per-person: the token identifies you, and only grants read access to
+documents you can already open.
+
+1. Open the [Google Cloud console](https://console.cloud.google.com/) and
+   create a project, or reuse one.
+2. Enable the **Google Docs API** for it, under
+   *APIs & Services* → *Library*.
+3. Under *APIs & Services* → *OAuth consent screen*, configure it as
+   **External**, in **Testing**, and add your own Google account under
+   *Test users*. Nothing is being published to Google, so it never needs
+   verification.
+4. Under *APIs & Services* → *Credentials*, create an
+   **OAuth client ID** of type **Desktop app**, and download its JSON.
+5. Save it as `~/.config/eta-publish/client_secret.json`,
+   or point `$ETA_CLIENT_SECRETS` at it.
+
+The first run opens a browser to approve read-only access. The resulting
+token is cached at `~/.config/eta-publish/token.json` and refreshes itself,
+so this happens once. Both files are secrets; the repository ignores them
+by name, but they belong outside it anyway.
+
+### Rate limits
+
+Not a concern at this scale. The Docs API allows
+[3,000 read requests per minute per project, and 300 per minute per
+user](https://developers.google.com/workspace/docs/api/limits).
+One publish is one request, so an afternoon of re-running the build sits
+several orders of magnitude under the limit. Exceeding it returns HTTP 429
+rather than costing anything.
+
+The saved `out/doc.json` also means the pipeline can be re-run against the
+last fetch without touching the network at all, which is what the tests do.
 
 ## Development
 
@@ -154,23 +189,81 @@ so neither ever needs Google credentials.
 ## Document conventions
 
 The converter reads structure, so the doc has to carry it.
-Anything it cannot classify is reported as a warning rather than silently dropped.
+Anything it cannot classify is reported as a warning rather than
+silently dropped.
 
-- A leading section headed `Header`, holding `Key: value` lines
-  (`URL:`, `Short:`, `SEO Description:`, contributors, dates).
-  Unrecognized keys are preserved rather than treated as body text.
-- Real Google Docs heading styles, not bolded body text.
+None of this is fixed. If a convention is awkward to write,
+it is easier to change the converter than to fight it in every report,
+so say so.
+
+### Front matter
+
+"Front matter" is the block of `Key: value` lines at the top of a document
+that describes it rather than being part of it:
+where it publishes, what its summary is, who wrote it.
+The name comes from printing, where the front matter is the title page and
+copyright notice, as distinct from the body.
+
+ETA reports already have one, under the `Header` heading:
+
+```
+Header
+Project Manager: Khyber Sen
+Phase: published
+URL: /reports/digging-out-deep-hole-sas-west
+Short: A 125 St subway should be a slam dunk. But at $7.7B ...
+SEO Description: A 125 St subway should be a slam dunk ...
+```
+
+The converter reads that block into metadata and keeps it out of the body.
+`URL:` becomes the published path, `Short:` becomes the standfirst,
+`SEO Description:` becomes the page description.
+Everything else is carried along and made available to the templates.
+
+Two rules matter, because both are load-bearing:
+
+**The block ends at the first line that is not `Key: value`.** Any heading,
+the headline, a paragraph containing an image, or ordinary prose. Keep the
+header lines together, with nothing between them.
+
+**The headline must be styled `Title`.** Otherwise it is
+`Digging Out of a Very Deep Hole: Saving Billions on 125th Street`, which
+looks exactly like a `Key: value` line and gets filed as metadata. The
+converter warns when this happens, and falls back to the document's Drive
+filename, which is a working name (`SAS West Feasibility Response`) and not
+what should publish. Alternatively, put `Title:` in the header block.
+
+Unrecognized keys are kept rather than treated as body text, so adding a
+field to a future report is safe.
+
+### The rest
+
+- **Real heading styles**, not bolded body text.
   Heading text determines the anchor, which is a published URL,
   so renaming a heading moves it unless an override is set.
-- Real Google Docs footnotes.
-- Images inserted inline. An optional `Source:` paragraph immediately
+- **Real footnotes.** Numbering and backlinks are generated from them.
+- **Images inserted inline.** An optional `Source:` paragraph immediately
   *before* an image, and caption and `Credit:` paragraphs immediately
   *after* it, are folded into that image's figure.
+  `Source:` is treated as an editorial note: it is kept in the Markdown
+  archive as a comment and never appears in the published HTML or the PDF,
+  matching what the live page does.
+- **Suggestions are rejected.** The doc is fetched as it currently reads,
+  with every open suggestion rejected, so nothing publishes because someone
+  proposed it and no one noticed. `--suggestions accepted` previews the
+  other way.
+- **Tabs.** Pass the URL including its `?tab=` id. The Docs API defaults to
+  the first tab, which in the SAS West doc is an earlier draft.
 
 ## Status
 
-Early. The document tree and the Docs parser come first;
-the three emitters are being filled in behind it.
+The parser and all three emitters work, against a fixture.
+
+**Not yet run against a real report.** That needs OAuth credentials, and it
+is the next thing worth doing: every finding so far that mattered came from
+the real document's shape rather than from the fixture, and there are
+almost certainly more. It will also settle the code block size estimate,
+which is currently the one unmeasured number here.
 
 ## TODO
 
@@ -210,6 +303,10 @@ on every publish, git accumulates a usable history for free.
 Reconstructing the *existing* Google Docs history is a separate problem
 and probably not worth it: the Drive Revisions API merges revisions for Docs
 and may omit older ones, so a faithful replay is not available.
+
+**A PDF-first review loop.** The Typst template is deliberately plain.
+Once a report has actually been through it, the house style is the obvious
+next thing to invest in.
 
 **A static site.** `reports.etany.org` built from the same tree in CI
 would remove the paste step entirely, along with the block limits,
