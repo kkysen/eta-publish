@@ -11,7 +11,7 @@ import pytest
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.typst import TypstEmitter
-from eta_publish.nodes import Document, Figure, Inline, Paragraph, Text
+from eta_publish.nodes import Document, Figure, Heading, Inline, Paragraph, Text
 from eta_publish.parse import parse
 
 
@@ -146,3 +146,50 @@ def test_a_real_description_wins_over_the_caption() -> None:
     doc = build(APPENDIX, alt="Four tracks under Riverside Park")
     figure = next(b for b in doc.blocks if isinstance(b, Figure))
     assert figure.image.alt == "Four tracks under Riverside Park"
+
+
+# ---- found by running against the real document ---------------------
+
+
+def test_a_qualified_source_line_is_still_editorial() -> None:
+    """The real report writes `Source:`, `Uncropped Source:`, and
+    `[Image Source](...)`. All three appear zero times on the published
+    page, against 26 occurrences of `Credit:`."""
+    for label in ("Source:", "Uncropped Source:", "Cropped Source:"):
+        doc = build(
+            [
+                para("Header", "HEADING_2"),
+                para("URL: /reports/x"),
+                para("Headline", "TITLE"),
+                para(f"{label} sas-west-036.jpg"),
+                image(),
+                para("A caption."),
+            ]
+        )
+        figure = next(b for b in doc.blocks if isinstance(b, Figure))
+        assert label in text_of(figure.source), label
+        assert not [b for b in doc.blocks if isinstance(b, Paragraph)], label
+        assert label not in HtmlEmitter().emit(doc), label
+
+
+def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
+    """The real doc has one, from inserting an image while a heading style
+    was active. Treated as a heading it produced an empty one, whose anchor
+    is a published URL, and buried the image inside it."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            para("Tail Tracks", "HEADING_2"),
+            {
+                "paragraph": {
+                    "paragraphStyle": {"namedStyleType": "HEADING_3"},
+                    "elements": [{"inlineObjectElement": {"inlineObjectId": "io.1"}}],
+                }
+            },
+        ]
+    )
+    assert [b.anchor for b in doc.blocks if isinstance(b, Heading)] == ["tail-tracks"]
+    assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 1
+    assert any("styled as a heading" in w for w in doc.warnings)
