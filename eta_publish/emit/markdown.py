@@ -36,11 +36,23 @@ from .base import Emitter
 # Characters that would otherwise be read as Markdown syntax. Escaping is
 # deliberately minimal: over-escaping prose makes the archive harder to read
 # by hand, which is most of the point of having it.
-ESCAPE = re.compile(r"([\\`*_\[\]])")
+ESCAPE = re.compile(r"([\\`*_\[\]|])")
 
 
 def escape(text: str) -> str:
     return ESCAPE.sub(r"\\\1", text)
+
+
+def url(href: str) -> str:
+    """A link destination, angle-bracketed so parentheses cannot end it.
+
+    These reports cite heavily, and plenty of real URLs contain brackets:
+    Wikipedia disambiguation paths, agency PDF links. Bare, the first `)`
+    closes the link and the rest of the URL lands in the prose. The
+    angle-bracket form is always valid, so it is used unconditionally rather
+    than only when it looks necessary.
+    """
+    return "<" + href.replace("<", "%3C").replace(">", "%3E") + ">"
 
 
 def yaml_value(value: str) -> str:
@@ -120,7 +132,7 @@ class MarkdownEmitter(Emitter):
         published.
         """
         caption = self.inlines(node.caption)
-        lines = [f"![{escape(node.image.alt)}]({self.doc.image_href(node.image)})"]
+        lines = [f"![{escape(node.image.alt)}]({url(self.doc.image_href(node.image))})"]
         if caption:
             lines.append(f"*{caption}*")
         if node.credit:
@@ -159,7 +171,7 @@ class MarkdownEmitter(Emitter):
         if node.italic:
             out = f"*{out}*"
         if node.href:
-            out = f"[{out}]({node.href})"
+            out = f"[{out}]({url(node.href)})"
         return out
 
     @override
@@ -168,7 +180,7 @@ class MarkdownEmitter(Emitter):
 
     @override
     def image(self, node: Image) -> str:
-        return f"![{escape(node.alt)}]({self.doc.image_href(node)})"
+        return f"![{escape(node.alt)}]({url(self.doc.image_href(node))})"
 
 
 def plain(content: list[Inline]) -> str:

@@ -80,7 +80,7 @@ def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert "![SAS West alignment map](img-1933bef5.png)" in out
+    assert "![SAS West alignment map](<img-1933bef5.png>)" in out
     assert "*The SAS West and Phase 2 alignments.*" in out
     assert "*Credit: MTA*" in out
 
@@ -93,3 +93,28 @@ def test_markdown_syntax_in_prose_is_escaped() -> None:
     out = MarkdownEmitter().emit(with_paragraph("A [bracket] and an *asterisk*."))
     assert r"\[bracket\]" in out
     assert r"\*asterisk\*" in out
+
+
+def test_a_url_containing_parentheses_survives() -> None:
+    """A bare `)` would end the link early and drop the rest into the prose.
+    These reports cite Wikipedia and agency PDFs, which have plenty."""
+    doc_json: JsonObject = json.loads(json.dumps(FIXTURE))
+    href = "https://en.wikipedia.org/wiki/Second_Avenue_Subway_(Phase_2)"
+    doc_json["body"]["content"].append(
+        {
+            "paragraph": {
+                "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                "elements": [
+                    {"textRun": {"content": "see here\n", "textStyle": {"link": {"url": href}}}}
+                ],
+            }
+        }
+    )
+    out = MarkdownEmitter().emit(parse(doc_json))
+    assert f"[see here](<{href}>)" in out
+
+
+def test_a_pipe_in_prose_is_escaped() -> None:
+    """Unescaped, it would split a table row."""
+    out = MarkdownEmitter().emit(with_paragraph("Costs a | b compared."))
+    assert r"\|" in out
