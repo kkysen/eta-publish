@@ -495,7 +495,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 [In Turkey, soft costs are quoted as 25-30%](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>), but those include additional finance charges, and third-party design costs are actually lower than the Continental norm, usually 3-5%.
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.[^17]
 
-![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/img-1b1ba92f.png>)
+![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/img-033c133b.svg>)
 A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.
 <!-- SVG: [project\_cost\_comparison.svg](<https://drive.google.com/open?id=1BP66CGI9ioIx570isLn4ppS1qfJmBafA>)  -->
 

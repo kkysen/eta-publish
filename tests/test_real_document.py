@@ -56,7 +56,13 @@ def image_files(regenerate: bool) -> dict[str, str]:
     does not keep the previous one's filenames.
     """
     if regenerate and DOWNLOADED.is_dir():
-        by_stem = {i.filename: i.object_id for i in parse(DOC_JSON).images}
+        # Both names, because an image whose vector downloaded is written
+        # under the vector's name and never under the raster's.
+        by_stem: dict[str, str] = {}
+        for image in parse(DOC_JSON).images:
+            by_stem[image.filename] = image.object_id
+            if image.vector is not None:
+                by_stem[Path(image.vector.filename).stem] = image.object_id
         found = {by_stem[p.stem]: p.name for p in sorted(DOWNLOADED.iterdir()) if p.stem in by_stem}
         if found:
             FILENAMES_PATH.write_text(json.dumps(found, indent=2, sort_keys=True) + "\n")
@@ -212,3 +218,15 @@ def test_no_chip_email_reaches_any_output(doc: Document) -> None:
     ):
         for email in emails:
             assert email not in emitted, email
+
+
+def test_the_chart_publishes_as_a_vector(doc: Document) -> None:
+    """Docs cannot place an SVG, so `project_cost_comparison.svg` is pasted
+    into the report as a raster and linked beside it. All three outputs can
+    show the vector, so all three should."""
+    vectors = [i for i in doc.images if i.vector is not None]
+    assert [v.vector.title for v in vectors if v.vector] == ["project_cost_comparison.svg"]
+
+    for emitted in (HtmlEmitter().emit(doc), MarkdownEmitter().emit(doc), TypstEmitter().emit(doc)):
+        assert vectors[0].vector is not None
+        assert vectors[0].vector.filename in emitted
