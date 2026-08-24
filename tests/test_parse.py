@@ -83,6 +83,7 @@ def test_block_structure(doc: Document) -> None:
         "Paragraph",
         "Figure",
         "Paragraph",
+        "Table",
         "Heading",
         "List",
         "Paragraph",

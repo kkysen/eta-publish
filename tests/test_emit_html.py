@@ -104,3 +104,10 @@ def test_inline_css_is_optional(doc: Document) -> None:
 # emitter with itself in one process cannot see it: hash randomization is
 # fixed for the life of an interpreter, so order-dependent output matches
 # itself perfectly and still differs from run to run.
+
+
+def test_tables_scroll_rather_than_overflow(out: str) -> None:
+    """Wide comparison tables are common in these reports, and a page that
+    scrolls sideways on a phone is worse than a table that does."""
+    assert '<div class="table-scroll"><table>' in out
+    assert "<td><p>Grand Paris Express</p></td>" in out

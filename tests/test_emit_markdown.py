@@ -118,3 +118,11 @@ def test_a_pipe_in_prose_is_escaped() -> None:
     """Unescaped, it would split a table row."""
     out = MarkdownEmitter().emit(with_paragraph("Costs a | b compared."))
     assert r"\|" in out
+
+
+def test_tables_render_with_a_header_row(out: str) -> None:
+    """Markdown requires one, so the first row serves whether or not the doc
+    meant it as a header."""
+    assert "| **Project** | **Cost per mile** |" in out
+    assert "| --- | --- |" in out
+    assert "| Grand Paris Express | $530M |" in out
