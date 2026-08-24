@@ -54,6 +54,7 @@ class HtmlEmitter(Emitter):
     extension = ".html"
 
     def __init__(self, image_base: str = "", inline_css: bool = True) -> None:
+        super().__init__()
         self.image_base = image_base.rstrip("/")
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css

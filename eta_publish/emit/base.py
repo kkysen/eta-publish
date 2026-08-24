@@ -38,6 +38,11 @@ class Emitter(ABC):
 
     extension: str = ""
 
+    def __init__(self) -> None:
+        # Set by `emit`, which is the only entry point. Node methods read it
+        # for document-wide context, so calling one directly will fail.
+        self.doc = Document()
+
     def emit(self, doc: Document) -> str:
         self.doc = doc
         return self.document(doc)
