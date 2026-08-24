@@ -234,12 +234,17 @@ a { color: inherit; }
 """
 
 
-def preview_page(doc: Document, image_base: str = "") -> str:
+def preview_page(doc: Document, image_base: str = "images") -> str:
     """A standalone page for reading the report before it is published.
 
     Deliberately not the Squarespace fragment with a wrapper bolted on: it
     also surfaces the parser's warnings, which are the thing worth seeing
     before publishing and have nowhere to go on the real page.
+
+    The image base is local and independent of `--image-base`. The published
+    fragment points at a host the images have not been uploaded to yet,
+    since that upload comes after review, and a preview whose figures are
+    all broken is not a preview.
     """
     body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
     warnings = ""
