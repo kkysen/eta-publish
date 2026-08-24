@@ -17,7 +17,8 @@ history permanently. They are ignored, so the command above is safe to rerun.
 `images.json` is the one derived thing kept: a Docs `inlineObject` carries a
 `contentUri` with no extension and no mime type, so the only way to learn an
 image is a JPEG is to fetch it, and this test does not use the network. It
-is refreshed from `images/` whenever that directory is present.
+records the filename actually written for each image, and is refreshed from
+`images/` whenever that directory is present.
 
 When a snapshot changes, read the diff: it is exactly what the change does
 to a real published report. Accept it with `pytest --regenerate-snapshots`.
@@ -38,7 +39,7 @@ from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
 REAL = Path(__file__).parent / "sas-west"
-EXTENSIONS_PATH = REAL / "images.json"
+FILENAMES_PATH = REAL / "images.json"
 DOWNLOADED = REAL / "images"
 DOC_JSON = json.loads((REAL / "doc.json").read_text())
 
@@ -48,26 +49,24 @@ DOC_JSON = json.loads((REAL / "doc.json").read_text())
 # is applied when given is covered in `test_preview.py`.
 
 
-def image_extensions(regenerate: bool) -> dict[str, str]:
-    """What a real run resolved each image's format to.
+def image_files(regenerate: bool) -> dict[str, str]:
+    """What a real run wrote for each image.
 
     Refreshed from a download when regenerating, so a re-fetched response
-    does not keep the previous one's extensions.
+    does not keep the previous one's filenames.
     """
     if regenerate and DOWNLOADED.is_dir():
         by_stem = {i.filename: i.object_id for i in parse(DOC_JSON).images}
-        found = {
-            by_stem[p.stem]: p.suffix for p in sorted(DOWNLOADED.iterdir()) if p.stem in by_stem
-        }
+        found = {by_stem[p.stem]: p.name for p in sorted(DOWNLOADED.iterdir()) if p.stem in by_stem}
         if found:
-            EXTENSIONS_PATH.write_text(json.dumps(found, indent=2, sort_keys=True) + "\n")
-    return json.loads(EXTENSIONS_PATH.read_text())
+            FILENAMES_PATH.write_text(json.dumps(found, indent=2, sort_keys=True) + "\n")
+    return json.loads(FILENAMES_PATH.read_text())
 
 
 @pytest.fixture
 def doc(regenerate_snapshots: bool) -> Document:
     parsed = parse(DOC_JSON)
-    parsed.image_extensions.update(image_extensions(regenerate_snapshots))
+    parsed.image_files.update(image_files(regenerate_snapshots))
     return parsed
 
 

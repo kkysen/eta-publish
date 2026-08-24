@@ -203,13 +203,15 @@ class Document:
     footnotes: list[Footnote] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
-    image_extensions: dict[str, str] = field(default_factory=dict)
-    """Docs object id to file extension, e.g. `.png`.
+    image_files: dict[str, str] = field(default_factory=dict)
+    """Docs object id to the filename actually written, extension included.
 
-    Filled in by `images.download`, which is the only step that learns an
-    image's real content type: the Docs API describes an inline object
-    without saying what kind of file it is. Empty when images were skipped,
-    in which case `image_href` returns a name with no extension.
+    Filled in by `images.download`, which is the only step that can know it.
+    The Docs API describes an inline object without saying what kind of file
+    it is, so the extension comes from the response; and where the document
+    names a vector alongside a raster, the file written is the vector, under
+    a different name entirely. Empty when images were skipped, in which case
+    `image_href` falls back to the raster's name without an extension.
     """
 
     @property
@@ -238,8 +240,8 @@ class Document:
         return list(seen.values())
 
     def image_href(self, image: Image) -> str:
-        """The image's filename as emitted, extension included when known."""
-        return image.filename + self.image_extensions.get(image.object_id, "")
+        """The filename as emitted, once a download has settled what it is."""
+        return self.image_files.get(image.object_id, image.filename)
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
