@@ -80,7 +80,7 @@ def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert "![SAS West alignment map](<img-1933bef5.png>)" in out
+    assert "![SAS West alignment map](<images/img-1933bef5.png>)" in out
     assert "*The SAS West and Phase 2 alignments.*" in out
     assert "*Credit: MTA*" in out
 
