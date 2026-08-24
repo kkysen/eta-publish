@@ -95,7 +95,8 @@ def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
     }
     written: dict[str, Path] = {}
     preview = outdir / "preview.html"
-    preview.write_text(preview_page(doc, image_base))
+    # Not `image_base`: see `preview_page`.
+    preview.write_text(preview_page(doc))
     written[preview.name] = preview
     for name, emitter in emitters.items():
         try:
