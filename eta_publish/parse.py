@@ -289,19 +289,30 @@ class Parser:
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
-        Front matter runs from the `Header` heading to the next heading of
-        the same or higher level. Unrecognized `Key: value` lines are kept
-        rather than ending the scan, so adding a header field to a future
-        report cannot leak that line into the body. The real doc already
-        has one such line (`MTA SAS West Feasibility Study:`).
+        Front matter is the run of `Key: value` paragraphs following the
+        `Header` heading. It ends at the first paragraph that is not one:
+        a heading of any level, the TITLE-styled headline, a paragraph
+        holding an image, or ordinary prose.
+
+        Deliberately not "until the next heading of the same or higher
+        level". In the real doc `Header` is an `h2` while the body sections
+        are `h1`, so that rule runs past the headline, the hero image, its
+        caption and credit, and the addendum, all the way to the first body
+        section. The image would vanish without a warning, since a paragraph
+        holding only an image has no text to report.
+
+        Unrecognized keys are kept rather than ending the scan, so adding a
+        header field to a future report cannot leak that line into the body.
+        The real doc already has one such line
+        (`MTA SAS West Feasibility Study:`).
         """
-        header_level: int | None = None
+        header_seen = False
         end = 0
 
         for i, item in enumerate(content):
             para = item.get("paragraph")
             if para is None:
-                if header_level is not None:
+                if header_seen:
                     break
                 continue
 
@@ -309,30 +320,27 @@ class Parser:
             level = HEADING_LEVELS.get(style)
             text = plain(para)
 
-            # The headline sits above every heading, so it ends the section.
-            # It also usually contains a colon, and would otherwise be read as
-            # a `Key: value` line and vanish into the metadata.
-            if style == "TITLE":
-                break
-
-            if header_level is None:
+            if not header_seen:
                 if level is not None and text.strip().lower() == "header":
-                    header_level = level
+                    header_seen = True
                     end = i + 1
-                elif text:
+                elif text or has_image(para):
                     break  # no `Header` section at all
                 continue
 
-            if level is not None and level <= header_level:
+            if style == "TITLE" or level is not None or has_image(para):
                 break
-            end = i + 1
+
             if not text:
+                end = i + 1
                 continue
+
             match = KEY_RE.match(text)
-            if match:
-                self.doc.meta[match.group("key").strip().lower()] = match.group("value").strip()
-            elif level is None:
-                self.doc.warn(f"unparsed line in the `Header` section, dropped: {text[:80]}")
+            if match is None:
+                break  # prose: the header section is over
+
+            self.doc.meta[match.group("key").strip().lower()] = match.group("value").strip()
+            end = i + 1
 
         if not self.doc.meta:
             self.doc.warn(
@@ -355,8 +363,9 @@ class Parser:
             return self.doc.meta["title"]
         filename = self.json.get("title", "")
         self.doc.warn(
-            "no TITLE-styled paragraph and no `Title:` header field; "
-            f"falling back to the document name {filename!r}"
+            "no TITLE-styled paragraph and no `Title:` header field, so the "
+            f"document name {filename!r} is being used as the headline; "
+            "style the headline as Title in the doc to fix this"
         )
         return filename
 
