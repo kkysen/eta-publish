@@ -4,6 +4,12 @@ The Docs API hands back short-lived `contentUri` values, so they can never
 be the published `src`. We fetch each once at build time and write it under
 the deterministic filename the parser assigned.
 
+Crops are applied here, to the file. A Docs crop is stored as fractions of
+the original and the API serves the uncropped image, so every output would
+otherwise show the untrimmed picture. Doing it here rather than in the HTML
+is what makes it reach all three: Markdown cannot express a crop at all, and
+a CSS one would never reach the PDF.
+
 These same files are what the PDF needs, so one download serves both the
 web and the print output, and one upload to whatever host serves both.
 """
@@ -14,7 +20,7 @@ from pathlib import Path
 
 import requests
 
-from .nodes import Document
+from .nodes import Document, Image
 
 EXTENSIONS = {
     "image/png": ".png",
@@ -59,8 +65,33 @@ def download(
             extension = ""
 
         dest = outdir / f"{image.filename}{extension}"
-        dest.write_bytes(response.content)
+        dest.write_bytes(crop_to(image, response.content, doc))
         written[image.object_id] = dest
         doc.image_extensions[image.object_id] = extension
 
     return written
+
+
+def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
+    """Trim `data` to the image's crop, returning it unchanged if there is none."""
+    if not image.crop.trims:
+        return data
+
+    import io
+
+    from PIL import Image as Pillow
+
+    try:
+        with Pillow.open(io.BytesIO(data)) as opened:
+            box = image.crop.box(opened.width, opened.height)
+            if box[2] <= box[0] or box[3] <= box[1]:
+                doc.warn(f"image {image.object_id} crops to nothing; left uncropped")
+                return data
+            trimmed = opened.crop(box)
+            buffer = io.BytesIO()
+            # Keep the format it arrived in, so the extension stays honest.
+            trimmed.save(buffer, format=opened.format)
+            return buffer.getvalue()
+    except OSError as e:
+        doc.warn(f"could not crop image {image.object_id} ({e}); left uncropped")
+        return data
