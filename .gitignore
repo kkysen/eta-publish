@@ -9,3 +9,13 @@ __pycache__/
 # OAuth client secret and token; never commit these.
 client_secret*.json
 token.json
+
+# Scratch output directories from ad-hoc runs.
+/out*/
+
+# `tests/sas-west/` is written by `eta-publish -o tests/sas-west`, but only
+# its text outputs are committed: the images are 18 MB and the PDF 19 MB,
+# and every re-fetch would add another copy to history forever.
+/tests/sas-west/images/
+/tests/sas-west/report.pdf
+/tests/sas-west/template.typ
