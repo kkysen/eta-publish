@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 
+from .docs_json import JsonObject
 from .emit.html import HtmlEmitter
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
@@ -39,7 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def load(ref: str, outdir: Path, tab: str | None = None) -> dict:
+def load(ref: str, outdir: Path, tab: str | None = None) -> JsonObject:
     """Accept a saved JSON file so the pipeline can run without credentials."""
     path = Path(ref)
     if path.is_file():
