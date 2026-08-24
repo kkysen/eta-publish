@@ -37,6 +37,8 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.pyrefly]
 preset = "strict"
+# Test modules import each other by name, the way `pytest` resolves them.
+search-path = ["tests"]
 
 [tool.ty.rules]
 blanket-ignore-comment = "warn"
