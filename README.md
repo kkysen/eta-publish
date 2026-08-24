@@ -159,6 +159,37 @@ Anything it cannot classify is reported as a warning rather than silently droppe
 Early. The document tree and the Docs parser come first;
 the three emitters are being filled in behind it.
 
+## TODO
+
+### Preserve the anchors of already-published reports
+
+Existing reports have short, hand-chosen anchors.
+The live SAS West table of contents links to `#elephants` and
+`#unlearned-lessons`, where generated anchors would be
+`#the-elephants-in-the-room` and `#the-unlearned-lessons-of-recent-projects`.
+Regenerating one of those reports as-is would break every inbound link
+to a section, including links from outside `etany.org`
+that we cannot see or fix.
+
+`AnchorAllocator` already accepts an `overrides` mapping;
+what is missing is somewhere in the doc to write them
+and a decision between two approaches:
+
+- **Remap**, pinning each heading to its existing anchor.
+  Keeps one anchor per section and keeps the short readable URLs,
+  which are nicer than slugified headline text regardless of history.
+- **Emit both**, generating the new anchor and keeping the legacy one
+  alongside it as an empty target, so old links keep working.
+  Safer for links already loose in the world,
+  at the cost of two anchors per section.
+
+These are not exclusive: remapping suits reports we are actively
+republishing, and duplicate legacy targets suit ones we are not.
+
+Wherever the overrides live, they have to be in the Google Doc,
+since that is the source of truth
+and the person republishing a report will be working there, not here.
+
 ## Possible directions
 
 **Version history.** Because the `.md` is regenerated and committed
