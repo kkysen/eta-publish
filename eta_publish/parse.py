@@ -55,10 +55,14 @@ KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
 # real doc writes `SEO Description (300 char limit):`, and a lookup for
 # `seo description` finds nothing unless the note is stripped.
 KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
-# Two spellings, both editorial: `Source: <file>` written before an image,
-# and `[Image Source](<url>)` written after its caption. Neither appears on
-# the published page, which is what makes them notes rather than content.
-SOURCE_RE = re.compile(r"^\s*\[?\s*(?:image\s+)?source\s*[:\]]", re.IGNORECASE)
+# Editorial notes naming where an image came from. The real report uses
+# three spellings: `Source:` before an image, `Uncropped Source:` for one
+# that was trimmed, and `[Image Source](<url>)` after a caption. One
+# optional qualifying word covers all three and whatever the next one is.
+# None of them appears on the published page, which is what makes them notes
+# rather than content: the live SAS West report contains zero occurrences of
+# each, against 26 of `Credit:`.
+SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*[:\]]", re.IGNORECASE)
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
@@ -234,6 +238,16 @@ class Parser:
             if not text and not has_image(para):
                 caption_slot = 0
                 continue
+
+            if style in HEADING_LEVELS and not text and has_image(para):
+                # An image inserted while a heading style was still active.
+                # Treating it as a heading yields an empty one, whose anchor
+                # is a published URL, and buries the image inside it.
+                self.doc.warn(
+                    "an image is styled as a heading; treating it as a figure. "
+                    "Set that paragraph to normal text in the doc."
+                )
+                style = "NORMAL_TEXT"
 
             if style in HEADING_LEVELS:
                 drop_pending()
