@@ -330,9 +330,11 @@ class Parser:
         (`MTA SAS West Feasibility Study:`).
 
         Anything before `Header` is production scaffolding rather than the
-        report, such as the `Draft 2` line the real doc opens with. It is
-        dropped, but each dropped line is reported, so nothing leaves the
-        document without saying so.
+        report. It is dropped, but each dropped line is reported, so nothing
+        leaves the document without saying so. The SAS West tabs happen to
+        open with `Header` directly, so this is defensive rather than load
+        bearing; what is load bearing is that a document with no `Header` at
+        all is left untouched instead of being eaten a paragraph at a time.
         """
         start = self._header_index(content)
         if start is None:

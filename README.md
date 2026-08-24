@@ -113,11 +113,12 @@ own documentation; the one estimate below is marked as such.
   are unavailable; those are 7.0-only. A single code block on an otherwise
   empty page is the closest thing to a pure HTML page, and it is close enough.
 - **A code block holds 400 KB (~300,000 characters).**
-  The SAS West report is *estimated* at roughly 220 KB, measured from the
-  live page's text blocks plus a per-figure allowance; nothing has been
-  generated and pasted yet. If that holds it fits at about half the budget,
-  but longer reports will not, so the HTML emitter can split at `h2`
-  boundaries when needed.
+  Two measurements bracket the SAS West report: its source text is 69 KB,
+  and the live page's rendered text blocks come to 226 KB including
+  Squarespace's own markup, which this emitter does not produce. The
+  fragment should land between them, comfortably inside the limit, but it
+  has not been generated from the real document yet. `--split` cuts at `h2`
+  boundaries for a report that does not fit.
 - **There is no file upload API.** Custom Files is a manual GUI
   that accepts images and fonts only. Host report images elsewhere
   and reference absolute URLs; the PDF needs those same local files anyway,
@@ -226,9 +227,9 @@ Two rules matter, because both are load-bearing:
 the headline, a paragraph containing an image, or ordinary prose. Keep the
 header lines together, with nothing between them.
 
-Lines *before* the `Header` heading, such as the `Draft 2` the SAS West doc
-opens with, are treated as production scaffolding and dropped. Each one is
-reported, so nothing leaves the document silently.
+Lines *before* the `Header` heading are treated as production scaffolding
+and dropped, with each one reported so nothing leaves silently. The SAS West
+tabs open with `Header` directly, so this is defensive.
 
 **The headline must be styled `Title`.** Otherwise it is
 `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`, which
@@ -262,8 +263,12 @@ of its name: `SEO Description (300 char limit):` is read as
   with every open suggestion rejected, so nothing publishes because someone
   proposed it and no one noticed. `--suggestions accepted` previews the
   other way.
-- **Tabs.** Pass the URL including its `?tab=` id. The Docs API defaults to
-  the first tab, which in the SAS West doc is an earlier draft.
+- **Tabs.** Pass the URL including its `?tab=` id. The SAS West document has
+  eight tabs, including `Draft 1 [OBSOLETE]`, `Draft 3 [OBSOLETE]`,
+  `Research`, and `Notes/Scratch`. The Docs API returns only the first tab
+  unless asked otherwise, so publishing the wrong draft is a real
+  possibility rather than a theoretical one. A multi-tab document with no
+  tab named refuses to guess and lists what it found.
 
 ## Status
 
