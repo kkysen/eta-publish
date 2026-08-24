@@ -16,6 +16,7 @@ eta-publish = "eta_publish.__main__:main"
 dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.2",
+    "ty>=0.0.70",
 ]
 
 [build-system]
@@ -30,3 +31,13 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.rules]
+blanket-ignore-comment = "warn"
+division-by-zero = "warn"
+missing-override-decorator = "warn"
+missing-type-argument = "warn"
+possibly-missing-attribute = "warn"
+possibly-missing-import = "warn"
+possibly-unresolved-reference = "warn"
+unsupported-dynamic-base = "warn"
