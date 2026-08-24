@@ -1,7 +1,9 @@
 """Markdown for the committed, diffable archive.
 
 Pandoc-flavored, because CommonMark has no footnotes and these reports are
-built on them.
+built on them. Where Pandoc and GitHub disagree, GitHub wins: this file is
+read in the repository, and GitHub supports the footnotes that made Pandoc
+necessary in the first place.
 
 This is not what gets published. It exists so that every regeneration lands
 in git as a readable diff: what changed between draft 6 and draft 7, what
@@ -112,9 +114,15 @@ class MarkdownEmitter(Emitter):
 
     @override
     def heading(self, node: Heading) -> str:
-        # The anchor is a published URL, so it is pinned explicitly rather
-        # than left to whatever the renderer would derive from the text.
-        return f"{'#' * node.level} {self.inlines(node.content)} {{#{node.anchor}}}"
+        """Just the heading, with no explicit identifier.
+
+        Pandoc's `{#anchor}` syntax was here so the archive's anchors matched
+        the published ones. GitHub has no attribute syntax and renders it as
+        literal text inside the heading, which is where this file is actually
+        read, and it bought nothing: the anchor is a property of the HTML,
+        and a static site would be built from the tree rather than from here.
+        """
+        return f"{'#' * node.level} {self.inlines(node.content)}"
 
     @override
     def paragraph(self, node: Paragraph) -> str:
@@ -177,10 +185,13 @@ class MarkdownEmitter(Emitter):
     @override
     def text(self, node: Text) -> str:
         out = escape(node.text)
+        # HTML rather than Pandoc's `^x^` and `~x~`, which both Pandoc and
+        # GitHub accept. GitHub renders `^x^` literally and, worse, renders
+        # `~x~` as strikethrough, which is not merely ugly but wrong.
         if node.sup:
-            out = f"^{out}^"
+            out = f"<sup>{out}</sup>"
         elif node.sub:
-            out = f"~{out}~"
+            out = f"<sub>{out}</sub>"
         if node.bold:
             out = f"**{out}**"
         if node.italic:

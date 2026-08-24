@@ -23,7 +23,7 @@ mta sas west feasibility study: "https://www.mta.info/document/196361"
 **Addendum: The following clarifying text was added to “*****Station Depth*****” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
-## The Elephants in the Room {#the-elephants-in-the-room}
+## The Elephants in the Room
 
 On paper, the [MTA’s proposed extension of the Second Avenue Subway (SAS) west across 125th Street](<https://www.mta.info/document/196361>) (SAS West) should be a slam dunk.
 It is the right route: a logical extension of SAS Phase 2 underneath the main street of Harlem, through a dense neighborhood full of homes, offices, shops, and entertainment venues.
@@ -82,7 +82,7 @@ But New York must get value for its money.
 The city and region have massive transit needs, from the installation of elevators to commuter rail electrification to subway extensions to underserved areas and more.
 But if New York cannot build a mile of subway and three stations for less than $7.7 billion, then there is no way the city will ever be able to meet all of its transit needs.
 
-## The Unlearned Lessons of Recent Projects {#the-unlearned-lessons-of-recent-projects}
+## The Unlearned Lessons of Recent Projects
 
 New York transit has become infamous over the past two decades for projects that overbuild, fall years behind schedule, and finally finish with massively inflated price tags.
 Both of the MTA’s last two megaprojects, SAS Phase 1 (today’s Q train from Lexington Av/63 St to 96 St) and GCM (LIRR’s new East Side Access terminal under Grand Central), embody this reality.
@@ -135,9 +135,9 @@ Too deep stations are unfixable mistakes—while eventually the debt from even m
 Subpar utility and its reflection in poor ridership will permanently plague misguided projects like it did GCM.
 Unless it changes course, the MTA is running headlong into repeating these same expensive mistakes on SAS West.
 
-## The Stations: Too Big and Too Deep {#the-stations-too-big-and-too-deep}
+## The Stations: Too Big and Too Deep
 
-### Station Depth {#station-depth}
+### Station Depth
 
 By far the biggest issue facing the current plans for SAS West is the depth of its stations.
 According to current plans, the stations will be built incredibly deep: [120 ft at Lenox Av](<https://www.mta.info/document/196361#page=26>), [130 ft at St Nicholas Av](<https://www.mta.info/document/196361#page=28>), and [100 ft at Broadway](<https://www.mta.info/document/196361#page=30>).
@@ -162,7 +162,7 @@ For the non-civil engineers among us, there are three primary causes of station 
 
 On SAS West, poor ground conditions and fear of surface impacts dominate.
 
-#### Ground Conditions {#ground-conditions}
+#### Ground Conditions
 
 The ground under 125 St is indeed much more difficult to dig into than what was encountered in SAS Phases 1 and 2.
 The ground is [“loose sand and gravel, with some softer clay and silt,”](<https://www.mta.info/document/196361#page=16>) with groundwater only 10–20 ft deep, unlike the hard Manhattan schist of Phase 1.
@@ -191,7 +191,7 @@ Once excavation is deep enough, either a temporary or the permanent tunnel roof 
 Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
-#### Surface Impacts {#surface-impacts}
+#### Surface Impacts
 
 The MTA does have recent experience with cut-and-cover stations but has increasingly shied away from them due to the surface impacts.
 The 106 St Phase 2 station, [37 ft deep](<https://www.mta.info/document/179396#page=6>), will be built cut-and-cover and includes [underpinning nearby buildings](<https://www.mta.info/document/131306#page=25>).
@@ -207,7 +207,7 @@ This is within the bounds [set in the SAS Phase 1 EIS](<https://www.mta.info/doc
 Variations on construction staging methodology can be used to further reduce costs and surface disruption: Kire station in Osaka, for example, used temporary walls composed of steel piles closer to the surface, [permitting diaphragm wall construction to occur underground](<https://archive.org/details/slurrywallsasstr0000xant/page/658/mode/2up>) without disrupting traffic and with lower noise impacts.
 Diaphragm walls can be constructed with a water table as high as 3 ft below ground level, so the 10–20 ft water table depth at 125 St presents opportunities for combining techniques with carefully controlled noise and traffic impacts.
 
-#### Existing Lines {#existing-lines}
+#### Existing Lines
 
 Moving to cheaper, shallower stations still requires contending with poor ground conditions and potential impacts to existing lines, but even here, the current plans are excessively conservative.
 Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)) TBM is required between tunneling and the existing stations, far less than what has been proposed.
@@ -286,7 +286,7 @@ See *SAS Phase 2 Tail Tracks* for more information on how this can be done.
 
 Coming closer to the surface would save considerable sums of money for the stations on SAS West: if for example, the stations can be built an average of 60-70 ft deep based on the international precedents, then the cost can follow the [A Better Billion model](<https://transitcosts.com/a-better-billion.html>) based on SAS costs, $770 million per station and a total of $3.4 billion for SAS West in 2025 prices.
 
-### Station Width {#station-width}
+### Station Width
 
 Depth isn't the only problem driving up costs; so is the size of the stations.
 The feasibility study assumes station boxes, the basic excavated area a station is built within, to be [75 ft wide](<https://www.mta.info/document/196361#page=24>).
@@ -318,7 +318,7 @@ They save lives by preventing falling or being pushed onto the tracks, stopping 
 They massively reduce delays due to unauthorized people and debris on the tracks.
 They can also significantly lower station costs by isolating platform air from tunnel air, not only lowering HVAC costs, but simplifying ventilation for fires by creating two separate spaces. 
 
-### Station Length and Mezzanines {#station-length-and-mezzanines}
+### Station Length and Mezzanines
 
 One of the largest drivers of cost inflation on SAS Phase 1 was the construction of stations far longer than the trains they serve.
 Underground construction is phenomenally expensive, and as a result, international best practice is usually to build stations that are as short as practicable, generally between [105% and 120% of train length](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36>)[^7].
@@ -368,9 +368,9 @@ At SODO station, they’ve reduced the size of an overbuilt mezzanine and remove
 This is the model that the MTA should follow on SAS West and future projects.
 Cutting unnecessary structures and making the remaining ones smaller can save hundreds of millions of dollars at a time—very quickly adding up to major savings.
 
-## Overscoping and Overly Conservative Design {#overscoping-and-overly-conservative-design}
+## Overscoping and Overly Conservative Design
 
-### Fire Code {#fire-code}
+### Fire Code
 
 Beyond the sheer size of the stations, the MTA and its contractors are also overdesigning many elements, provisioning for conditions that are extremely unlikely to happen.
 For example, it is [designing all elements of SAS Phase 2](<https://www.mta.info/document/179396#page=9>) so that pedestrian flows and queues never exceed LOS (level of service) C—a minor slowdown in free walking speed.
@@ -401,7 +401,7 @@ Indeed, one such structure built for SAS Phase 1 broke and the MTA found that th
 Other cities around the world show that subways can achieve NFPA 130 compliance without many of the massive, oversize features of the Second Ave subway.
 The MTA and its contractors should import these global lessons: they allow transit to achieve the same level of safety at a greatly reduced price tag.
 
-### Ruling Grade: The Wrong Place to Scale Back {#ruling-grade-the-wrong-place-to-scale-back}
+### Ruling Grade: The Wrong Place to Scale Back
 
 The SAS West feasibility study indicates that it may be possible to build the station at Broadway more cheaply using cut-and-cover, but still deeper than might otherwise be ideal, because the grade is limited to 3% when climbing from the incredibly deep station at St Nicholas Av. Indeed, the feasibility study claims that a [3% grade](<https://www.mta.info/document/196361#page=18>) is the maximum allowed on the New York City subway.
 
@@ -424,9 +424,9 @@ As an example of how such grade requirements can make a huge cost difference, Ca
 By updating its [design criteria to allow 4% grades](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>) (with a 3.5% baseline), up from the original 2.5% (with a 1.25% baseline), CAHSR has [reduced tunneling length](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>) by a massive 50%, [saving ](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)[*tens of billions *](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)[of](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)[ dollars](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>).
 In NYCT’s case, they only need to follow their current maximum sustained grade to reap these benefits.
 
-### Tail Tracks {#tail-tracks}
+### Tail Tracks
 
-#### SAS West Tail Tracks {#sas-west-tail-tracks}
+#### SAS West Tail Tracks
 
 ![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/img-673d98dd.png>)
 *The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.*
@@ -468,7 +468,7 @@ This is even noted as an alternative in the feasibility study, but the MTA board
 If the MTA is insistent on more storage tracks, there is another much cheaper, much more expansive option that could be reviewed if necessary: the Freedom Tunnel, which is owned by Amtrak but has space for more tracks than it needs.
 For more details on possible Freedom Tunnel tail track configurations, see Appendix A.
 
-#### SAS Phase 2 Tail Tracks {#sas-phase-2-tail-tracks}
+#### SAS Phase 2 Tail Tracks
 
 The MTA would also be well served to not build any storage tail tracks for Phase 2, or build them on a sufficient grade.
 Currently, they intend to have the Phase 2 tail tracks run all the way from Lexington Av to Lenox Av to store six trainsets.
@@ -481,7 +481,7 @@ And it could store them on the steep tracks as well,[^13] even if it’s not ide
 By combining Phase 2 and SAS West, however, tail tracks will soon be ready once SAS West is complete, hopefully just a few years later.
 Moreover, construction of the Lenox Av station will likely require temporarily closing some of those tail tracks during construction anyway.
 
-## Procurement {#procurement}
+## Procurement
 
 A huge amount of the SAS West costs comes from soft costs.
 Soft costs are generally defined as those attributable to design, planning, project management, land acquisition, and contingency, as opposed to hard costs, which are the physical infrastructure costs.
@@ -515,7 +515,7 @@ SAS West has only completed a feasibility study so far, meaning it is still very
 Changes now can still avoid most of the soft cost waste.
 But it is imperative to act quickly: environmental review and preliminary design are already set to commence this year, meaning there is not much time before soft costs start piling up.
 
-## Conclusion {#conclusion}
+## Conclusion
 
 Continuing the Second Avenue Subway west across 125 St should be a major victory worth celebrating, and indeed, by any measure it will be a well-used project.
 Its combination of extreme cost and extreme depth, however, simply cannot be justified.
@@ -537,7 +537,7 @@ Making projects affordable does not mean less money for the region; it means bei
 New York needs to learn from its international peers and reform the way it builds transit.
 Otherwise, it will simply become impossible for the region to build the transit infrastructure that it needs, and provide the transit its residents deserve.
 
-### Appendix A: Freedom Tunnel {#appendix-a-freedom-tunnel}
+### Appendix A: Freedom Tunnel
 
 ![A photo inside the Freedom Tunnel, showing room for 4 tracks.](<images/img-d4734d4b.jpg>)
 *A photo inside the Freedom Tunnel, showing room for 4 tracks.*
@@ -558,7 +558,7 @@ It also contains an off-ramp from the Henry Hudson Pkwy, but luckily the off-ram
 
 Between Broadway and the 129 St highway off-ramp is only ~1000 ft long, three times shorter than the MTA’s proposed tail tracks all the way to 137 St. So even if the MTA doesn't wish to reuse the Freedom Tunnel, a southern route is probably still simpler and cheaper: it's on publicly owned land, at a higher elevation with a lower flood risk, not under the landmarked Riverside Viaduct, and could be built cut-and-cover or at-grade for those ~1400 intermediary ft.
 
-### Appendix B: Endless Escalators, or High-Speed Elevator Stations? {#appendix-b-endless-escalators-or-high-speed-elevator-stations}
+### Appendix B: Endless Escalators, or High-Speed Elevator Stations?
 
 If the MTA does not sufficiently reduce station depth, they could embrace elevator stations where capacity permits, as they’re already doing at 116 St in SAS Phase 2.
 The current design for 116 St is elevator-only between the street and a [56 ft-deep](<https://www.mta.info/document/179396#page=20>) below-platform mezzanine; stairs will be for emergencies only.

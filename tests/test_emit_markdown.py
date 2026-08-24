@@ -61,11 +61,24 @@ def test_editing_one_sentence_changes_one_line() -> None:
     assert changed == [("Beta two.", "Beta TWO.")]
 
 
-def test_headings_pin_their_anchors(out: str) -> None:
-    """The anchor is a published URL, so it must not be left to whatever the
-    renderer derives from the heading text."""
-    assert "## The Elephants in the Room {#the-elephants-in-the-room}" in out
-    assert "### Ground Conditions {#ground-conditions}" in out
+def test_headings_carry_no_explicit_anchor(out: str) -> None:
+    """Pandoc's `{#anchor}` syntax renders as literal text inside the
+    heading on GitHub, which is where this file is read, and the anchor is a
+    property of the HTML rather than of the archive."""
+    assert "## The Elephants in the Room\n" in out
+    assert "{#" not in out
+
+
+def test_superscript_uses_html_that_both_renderers_accept(out: str) -> None:
+    """GitHub renders Pandoc's `^x^` literally and `~x~` as strikethrough,
+    which is wrong rather than merely ugly. Both accept the HTML."""
+    from eta_publish.emit.markdown import MarkdownEmitter
+    from eta_publish.nodes import Document, Paragraph, Text
+
+    doc = Document(blocks=[Paragraph([Text("2", sup=True), Text("2", sub=True)])])
+    emitted = MarkdownEmitter().emit(doc)
+    assert "<sup>2</sup>" in emitted
+    assert "<sub>2</sub>" in emitted
 
 
 def test_footnotes_use_pandoc_syntax(out: str) -> None:
