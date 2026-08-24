@@ -5,13 +5,13 @@ from pathlib import Path
 
 import pytest
 
-from eta_publish.nodes import FootnoteRef, Image, Text
+from eta_publish.nodes import FootnoteRef, Image, Inline, Text
 from eta_publish.parse import Parser
 
 FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
 
 
-def _para(parser, text):
+def _para(parser: Parser, text: str) -> list[Inline]:
     """Find the fixture paragraph containing `text` and parse its inlines."""
     for item in FIXTURE["body"]["content"]:
         para = item.get("paragraph")
