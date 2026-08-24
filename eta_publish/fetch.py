@@ -20,6 +20,8 @@ import os
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from .docs_json import JsonObject
+
 SCOPES = ["https://www.googleapis.com/auth/documents.readonly"]
 
 CLIENT_SECRETS = Path(
@@ -48,29 +50,29 @@ def parse_ref(ref: str) -> tuple[str, str | None]:
 # ---- tabs ----------------------------------------------------------
 
 
-def iter_tabs(tabs: list[dict], depth: int = 0):
+def iter_tabs(tabs: list[JsonObject], depth: int = 0):
     """Yield `(depth, tab)` for every tab, descending into child tabs."""
     for tab in tabs:
         yield depth, tab
         yield from iter_tabs(tab.get("childTabs", []), depth + 1)
 
 
-def tab_title(tab: dict) -> str:
+def tab_title(tab: JsonObject) -> str:
     return tab.get("tabProperties", {}).get("title", "(untitled)")
 
 
-def tab_id(tab: dict) -> str:
+def tab_id(tab: JsonObject) -> str:
     return tab.get("tabProperties", {}).get("tabId", "")
 
 
-def describe_tabs(document: dict) -> str:
+def describe_tabs(document: JsonObject) -> str:
     return "\n".join(
         f"  {'  ' * depth}{tab_id(tab)}  {tab_title(tab)}"
         for depth, tab in iter_tabs(document.get("tabs", []))
     )
 
 
-def select_tab(document: dict, wanted: str | None) -> dict:
+def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
     """Return one tab's content, shaped like a single-tab document.
 
     The parser only ever sees `body`, `footnotes`, `inlineObjects`, and
@@ -129,7 +131,7 @@ def _credentials():
     return creds
 
 
-def fetch_document(doc_id: str) -> dict:
+def fetch_document(doc_id: str) -> JsonObject:
     """The whole document, every tab included."""
     from googleapiclient.discovery import build
 
@@ -137,12 +139,12 @@ def fetch_document(doc_id: str) -> dict:
     return service.documents().get(documentId=doc_id, includeTabsContent=True).execute()
 
 
-def fetch(ref: str, tab: str | None = None) -> dict:
+def fetch(ref: str, tab: str | None = None) -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     return select_tab(fetch_document(doc_id), tab or url_tab)
 
 
-def fetch_to(ref: str, dest: Path, tab: str | None = None) -> dict:
+def fetch_to(ref: str, dest: Path, tab: str | None = None) -> JsonObject:
     """Fetch and save the selected tab, so later runs need no credentials."""
     document = fetch(ref, tab)
     dest.write_text(json.dumps(document, indent=2))

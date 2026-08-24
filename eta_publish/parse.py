@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import re
 
+from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename
 from .nodes import (
     Block,
@@ -45,7 +46,7 @@ CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
 class Parser:
-    def __init__(self, doc_json: dict) -> None:
+    def __init__(self, doc_json: JsonObject) -> None:
         self.json = doc_json
         self.inline_objects = doc_json.get("inlineObjects", {})
         self.lists = doc_json.get("lists", {})
@@ -56,7 +57,7 @@ class Parser:
 
     # ---- inline ------------------------------------------------------
 
-    def inlines(self, para: dict) -> list[Inline]:
+    def inlines(self, para: JsonObject) -> list[Inline]:
         out: list[Inline] = []
         for el in para.get("elements", []):
             if "textRun" in el:
@@ -71,7 +72,7 @@ class Parser:
                     out.append(image)
         return out
 
-    def _text_run(self, run: dict) -> Text | None:
+    def _text_run(self, run: JsonObject) -> Text | None:
         text = run.get("content", "")
         # A trailing newline is paragraph structure, not content.
         if text.endswith("\n"):
@@ -90,7 +91,7 @@ class Parser:
             href=style.get("link", {}).get("url"),
         )
 
-    def _footnote_ref(self, ref: dict) -> FootnoteRef:
+    def _footnote_ref(self, ref: JsonObject) -> FootnoteRef:
         fid = ref["footnoteId"]
         # Numbered in document order, so a reference and its definition
         # cannot disagree the way hand-written anchors did.
@@ -98,7 +99,7 @@ class Parser:
             self._footnote_numbers[fid] = len(self._footnote_numbers) + 1
         return FootnoteRef(footnote_id=fid, number=self._footnote_numbers[fid])
 
-    def _image(self, ioe: dict) -> Image | None:
+    def _image(self, ioe: JsonObject) -> Image | None:
         object_id = ioe.get("inlineObjectId", "")
         embedded = (
             self.inline_objects.get(object_id, {})
@@ -118,15 +119,15 @@ class Parser:
 
     # ---- blocks ------------------------------------------------------
 
-    def blocks(self, content: list[dict]) -> list[Block]:
+    def blocks(self, content: list[JsonObject]) -> list[Block]:
         raise NotImplementedError("block assembly")
 
-    def table(self, table: dict) -> Table:
+    def table(self, table: JsonObject) -> Table:
         raise NotImplementedError("tables")
 
     # ---- document ----------------------------------------------------
 
-    def front_matter(self, content: list[dict]) -> list[dict]:
+    def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
         Front matter runs from the `Header` heading to the next heading of
@@ -137,7 +138,7 @@ class Parser:
         """
         raise NotImplementedError("front matter")
 
-    def title(self, content: list[dict]) -> str:
+    def title(self, content: list[JsonObject]) -> str:
         """Prefer a TITLE-styled paragraph over the Drive filename."""
         raise NotImplementedError("title")
 
@@ -148,11 +149,11 @@ class Parser:
         raise NotImplementedError("parse")
 
 
-def parse(doc_json: dict) -> Document:
+def parse(doc_json: JsonObject) -> Document:
     return Parser(doc_json).parse()
 
 
-def _plain(para: dict) -> str:
+def _plain(para: JsonObject) -> str:
     """The paragraph's text with styling dropped, for matching conventions."""
     return "".join(
         el.get("textRun", {}).get("content", "") for el in para.get("elements", [])
