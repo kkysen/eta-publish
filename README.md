@@ -193,7 +193,7 @@ that mattered came from that document's shape rather than from a
 hand-written fixture, so the snapshots are the regression net for all of
 it. When one changes, read the diff before accepting it: it is exactly
 what the change does to a real published report. Regenerate with
-`uv run pytest --regenerate-golden`.
+`uv run pytest --regenerate-snapshots`.
 
 ## Document conventions
 

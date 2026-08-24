@@ -5,7 +5,7 @@ is per-interpreter, so anything order- or hash-dependent still matches
 itself. A committed file compares across runs, and doubles as the diff that
 shows what a parser change actually did to the output.
 
-Regenerate with `pytest --regenerate-golden` after checking the diff.
+Regenerate with `pytest --regenerate-snapshots` after checking the diff.
 """
 
 import json
@@ -19,7 +19,7 @@ from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
-GOLDEN = Path(__file__).parent / "golden"
+SNAPSHOTS = Path(__file__).parent / "snapshots"
 FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
 
 
@@ -31,25 +31,25 @@ def doc() -> Document:
 
 
 def check(name: str, actual: str, regenerate: bool) -> None:
-    path = GOLDEN / name
+    path = SNAPSHOTS / name
     if regenerate or not path.exists():
         path.write_text(actual)
         if not regenerate:
             pytest.fail(f"{path} did not exist; wrote it, review and commit")
         return
     assert actual == path.read_text(), (
-        f"{path} differs; review the change and rerun with --regenerate-golden"
+        f"{path} differs; review the change and rerun with --regenerate-snapshots"
     )
 
 
-def test_html_matches_golden(doc: Document, regenerate_golden: bool) -> None:
+def test_html_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
     emitted = HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc)
-    check("report.html", emitted, regenerate_golden)
+    check("report.html", emitted, regenerate_snapshots)
 
 
-def test_markdown_matches_golden(doc: Document, regenerate_golden: bool) -> None:
-    check("report.md", MarkdownEmitter().emit(doc), regenerate_golden)
+def test_markdown_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("report.md", MarkdownEmitter().emit(doc), regenerate_snapshots)
 
 
-def test_typst_matches_golden(doc: Document, regenerate_golden: bool) -> None:
-    check("report.typ", TypstEmitter().emit(doc), regenerate_golden)
+def test_typst_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("report.typ", TypstEmitter().emit(doc), regenerate_snapshots)
