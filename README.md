@@ -184,8 +184,16 @@ uv run pytest
 
 `ruff format`, `ruff check`, `ty`, `pyrefly`, and `pytest`
 run as pre-commit hooks and again in CI.
-Tests run against a checked-in Docs API fixture,
-so neither ever needs Google credentials.
+Tests run against checked-in Docs API responses,
+so neither ever needs Google credentials or the network.
+
+`tests/real/` holds an actual `documents.get` response for the published
+SAS West report, together with the output it currently produces. Every bug
+that mattered came from that document's shape rather than from a
+hand-written fixture, so the snapshots are the regression net for all of
+it. When one changes, read the diff before accepting it: it is exactly
+what the change does to a real published report. Regenerate with
+`uv run pytest --regenerate-golden`.
 
 ## Document conventions
 
