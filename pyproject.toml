@@ -46,3 +46,11 @@ possibly-missing-attribute = "warn"
 possibly-missing-import = "warn"
 possibly-unresolved-reference = "warn"
 unsupported-dynamic-base = "warn"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Anything reaching the Docs API is opt-in: `uv run pytest -m network`.
+# Everything else runs against the checked-in fixture, so neither CI nor a
+# pre-commit hook ever needs Google credentials.
+markers = ["network: needs internet access and Google credentials"]
+addopts = "-m 'not network'"
