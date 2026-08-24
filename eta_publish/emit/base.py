@@ -17,6 +17,7 @@ from ..nodes import (
     Heading,
     Image,
     Inline,
+    LineBreak,
     List,
     Paragraph,
     Table,
@@ -72,6 +73,8 @@ class Emitter(ABC):
         match node:
             case Text():
                 return self.text(node)
+            case LineBreak():
+                return self.line_break(node)
             case FootnoteRef():
                 return self.footnote_ref(node)
             case Image():
@@ -102,6 +105,9 @@ class Emitter(ABC):
 
     @abstractmethod
     def text(self, node: Text) -> str: ...
+
+    @abstractmethod
+    def line_break(self, node: LineBreak) -> str: ...
 
     @abstractmethod
     def footnote_ref(self, node: FootnoteRef) -> str: ...

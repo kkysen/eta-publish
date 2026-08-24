@@ -20,6 +20,7 @@ from ..nodes import (
     Heading,
     Image,
     Inline,
+    LineBreak,
     List,
     ListItem,
     ListKind,
@@ -195,6 +196,10 @@ class HtmlEmitter(Emitter):
         if node.href:
             out = f'<a href="{escape(node.href)}">{out}</a>'
         return out
+
+    @override
+    def line_break(self, node: LineBreak) -> str:
+        return "<br>"
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:

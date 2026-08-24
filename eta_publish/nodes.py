@@ -39,6 +39,17 @@ class Text:
 
 
 @dataclass(frozen=True)
+class LineBreak:
+    """A soft line break inside a paragraph, from Shift+Enter in Docs.
+
+    Docs encodes these as a vertical tab inside the text run rather than as
+    a paragraph boundary. Left alone they reach the published page as a raw
+    control character, and they hide the convention that a `Credit:` line
+    following one is a credit rather than part of the caption.
+    """
+
+
+@dataclass(frozen=True)
 class FootnoteRef:
     """A reference to a footnote, identified by the Docs footnote id.
 
@@ -66,7 +77,7 @@ class Image:
     source_uri: str | None = None
 
 
-Inline = Text | FootnoteRef | Image
+Inline = Text | LineBreak | FootnoteRef | Image
 
 
 # ---- block content -------------------------------------------------

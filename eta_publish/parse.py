@@ -31,6 +31,7 @@ from .nodes import (
     Heading,
     Image,
     Inline,
+    LineBreak,
     List,
     ListItem,
     ListKind,
@@ -53,6 +54,9 @@ IGNORED_ELEMENTS = frozenset({"pageBreak", "columnBreak", "horizontalRule", "equ
 
 # Ids the emitters generate for themselves, which no heading may take.
 RESERVED_ANCHORS = frozenset({"footnotes"})
+
+# Docs writes a Shift+Enter line break as a vertical tab inside the run.
+SOFT_BREAK = "\v"
 
 KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
 # A trailing note to whoever fills the field in, not part of its name. The
@@ -99,7 +103,8 @@ def element_text(el: JsonObject) -> str:
     from `Public Contributors:`, leaving it starting with a comma.
     """
     if "textRun" in el:
-        return el["textRun"].get("content", "")
+        # A soft break is a line break, so it reads as one here too.
+        return el["textRun"].get("content", "").replace(SOFT_BREAK, "\n")
     if "person" in el:
         props = el["person"].get("personProperties", {})
         return props.get("name") or props.get("email", "")
@@ -108,6 +113,17 @@ def element_text(el: JsonObject) -> str:
     if "richLink" in el:
         return el["richLink"].get("richLinkProperties", {}).get("title", "")
     return ""
+
+
+def split_lines(content: list[Inline]) -> list[list[Inline]]:
+    """Break inline content at soft line breaks."""
+    lines: list[list[Inline]] = [[]]
+    for node in content:
+        if isinstance(node, LineBreak):
+            lines.append([])
+        else:
+            lines[-1].append(node)
+    return lines
 
 
 def plain(para: JsonObject) -> str:
@@ -139,9 +155,7 @@ class Parser:
         out: list[Inline] = []
         for el in para.get("elements", []):
             if "textRun" in el:
-                node = self._text_run(el["textRun"])
-                if node is not None:
-                    out.append(node)
+                out.extend(self._text_run(el["textRun"]))
             elif "footnoteReference" in el:
                 out.append(self._footnote_ref(el["footnoteReference"]))
             elif "inlineObjectElement" in el:
@@ -181,24 +195,35 @@ class Parser:
         props = chip.get("richLinkProperties", {})
         return Text(text=props.get("title", ""), href=props.get("uri"))
 
-    def _text_run(self, run: JsonObject) -> Text | None:
+    def _text_run(self, run: JsonObject) -> list[Inline]:
+        """One run, split at any soft line breaks it contains."""
         text = run.get("content", "")
         # A trailing newline is paragraph structure, not content.
         if text.endswith("\n"):
             text = text[:-1]
         if not text:
-            return None
+            return []
         style = run.get("textStyle", {})
         offset = style.get("baselineOffset")
-        return Text(
-            text=text,
-            bold=bool(style.get("bold")),
-            italic=bool(style.get("italic")),
-            underline=bool(style.get("underline")) and "link" not in style,
-            sup=offset == "SUPERSCRIPT",
-            sub=offset == "SUBSCRIPT",
-            href=style.get("link", {}).get("url"),
-        )
+
+        def styled(part: str) -> Text:
+            return Text(
+                text=part,
+                bold=bool(style.get("bold")),
+                italic=bool(style.get("italic")),
+                underline=bool(style.get("underline")) and "link" not in style,
+                sup=offset == "SUPERSCRIPT",
+                sub=offset == "SUBSCRIPT",
+                href=style.get("link", {}).get("url"),
+            )
+
+        out: list[Inline] = []
+        for n, part in enumerate(text.split(SOFT_BREAK)):
+            if n:
+                out.append(LineBreak())
+            if part:
+                out.append(styled(part))
+        return out
 
     def _footnote_ref(self, ref: JsonObject) -> FootnoteRef:
         fid = ref["footnoteId"]
@@ -360,12 +385,24 @@ class Parser:
             # figures has a great many of those.
             last = out[-1] if out else None
             if isinstance(last, Figure):
-                if CREDIT_RE.match(text):
-                    last.credit = self.inlines(para)
-                    continue
-                if caption_slot:
-                    last.caption = self.inlines(para)
-                    caption_slot = 0
+                # A caption and its credit are often one paragraph split by a
+                # soft line break, so each line is classified separately.
+                claimed = False
+                for line in split_lines(self.inlines(para)):
+                    line_text = "".join(i.text for i in line if isinstance(i, Text)).strip()
+                    if not line_text:
+                        continue
+                    if CREDIT_RE.match(line_text):
+                        last.credit = line
+                        claimed = True
+                    elif SOURCE_RE.match(line_text) or ASSET_RE.match(line_text):
+                        last.source = last.source + line
+                        claimed = True
+                    elif caption_slot:
+                        last.caption = line
+                        caption_slot = 0
+                        claimed = True
+                if claimed:
                     continue
 
             caption_slot = 0
