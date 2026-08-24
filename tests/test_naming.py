@@ -45,9 +45,7 @@ def test_colliding_anchors_survive_an_unrelated_insertion():
 
 
 def test_an_override_wins_and_is_not_treated_as_a_collision():
-    a = AnchorAllocator(
-        [COST_COLON, COST_PLAIN], overrides={COST_COLON: "elephants"}
-    )
+    a = AnchorAllocator([COST_COLON, COST_PLAIN], overrides={COST_COLON: "elephants"})
     assert a.allocate(COST_COLON) == "elephants"
     # With the override removed from contention, nothing collides any more.
     assert a.allocate(COST_PLAIN) == "cost-overview"
