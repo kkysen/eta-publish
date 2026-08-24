@@ -9,7 +9,7 @@ silently.
 
 The snapshots are committed output. When one changes, read the diff: it is
 exactly what the change does to a real published report. Regenerate with
-`pytest --regenerate-golden` once the diff looks right.
+`pytest --regenerate-snapshots` once the diff looks right.
 
 Image extensions are recorded alongside in `sas-west.images.json`. They
 cannot be derived: a Docs `inlineObject` carries a `contentUri` with no
@@ -21,7 +21,7 @@ To refresh both from a new fetch:
 
     uv run eta-publish <doc-url> -o out
     cp out/doc.json tests/real/sas-west.doc.json
-    uv run pytest --regenerate-golden
+    uv run pytest --regenerate-snapshots
 
 The last step rereads `out/images/` when it is there, so the extensions
 follow the response they came from.
@@ -66,9 +66,9 @@ def image_extensions(regenerate: bool) -> dict[str, str]:
 
 
 @pytest.fixture
-def doc(regenerate_golden: bool) -> Document:
+def doc(regenerate_snapshots: bool) -> Document:
     parsed = parse(DOC_JSON)
-    parsed.image_extensions.update(image_extensions(regenerate_golden))
+    parsed.image_extensions.update(image_extensions(regenerate_snapshots))
     return parsed
 
 
@@ -82,27 +82,27 @@ def check(name: str, actual: str, regenerate: bool) -> None:
     expected = path.read_text()
     assert actual == expected, (
         f"{path} differs. This is a real published report, so read the diff "
-        "before accepting it, then rerun with --regenerate-golden."
+        "before accepting it, then rerun with --regenerate-snapshots."
     )
 
 
 # ---- snapshots ------------------------------------------------------
 
 
-def test_html_snapshot(doc: Document, regenerate_golden: bool) -> None:
-    check("sas-west.html", HtmlEmitter(image_base=IMAGE_BASE).emit(doc), regenerate_golden)
+def test_html_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("sas-west.html", HtmlEmitter(image_base=IMAGE_BASE).emit(doc), regenerate_snapshots)
 
 
-def test_markdown_snapshot(doc: Document, regenerate_golden: bool) -> None:
-    check("sas-west.md", MarkdownEmitter().emit(doc), regenerate_golden)
+def test_markdown_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("sas-west.md", MarkdownEmitter().emit(doc), regenerate_snapshots)
 
 
-def test_typst_snapshot(doc: Document, regenerate_golden: bool) -> None:
-    check("sas-west.typ", TypstEmitter().emit(doc), regenerate_golden)
+def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("sas-west.typ", TypstEmitter().emit(doc), regenerate_snapshots)
 
 
-def test_preview_snapshot(doc: Document, regenerate_golden: bool) -> None:
-    check("sas-west.preview.html", preview_page(doc), regenerate_golden)
+def test_preview_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("sas-west.preview.html", preview_page(doc), regenerate_snapshots)
 
 
 # ---- what the document should parse to ------------------------------

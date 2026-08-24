@@ -100,7 +100,7 @@ def test_inline_css_is_optional(doc: Document) -> None:
     assert not HtmlEmitter(inline_css=False).emit(doc).startswith("<style>")
 
 
-# Determinism across runs is covered by `test_golden.py`. Comparing an
+# Determinism across runs is covered by `test_snapshots.py`. Comparing an
 # emitter with itself in one process cannot see it: hash randomization is
 # fixed for the life of an interpreter, so order-dependent output matches
 # itself perfectly and still differs from run to run.
