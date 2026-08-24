@@ -22,6 +22,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("-o", "--outdir", type=Path, default=Path("out"))
     p.add_argument(
+        "--tab",
+        help="Docs tab id; defaults to the `?tab=` in the URL. Multi-tab "
+        "documents refuse to guess, and list their tabs.",
+    )
+    p.add_argument(
         "--image-base",
         default="",
         help="URL prefix for published images, e.g. https://assets.etany.org/sas-west",
@@ -34,7 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def load(ref: str, outdir: Path) -> dict:
+def load(ref: str, outdir: Path, tab: str | None = None) -> dict:
     """Accept a saved JSON file so the pipeline can run without credentials."""
     path = Path(ref)
     if path.is_file():
@@ -43,7 +48,7 @@ def load(ref: str, outdir: Path) -> dict:
     from .fetch import fetch_to
 
     outdir.mkdir(parents=True, exist_ok=True)
-    return fetch_to(ref, outdir / "doc.json")
+    return fetch_to(ref, outdir / "doc.json", tab)
 
 
 def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
@@ -70,8 +75,13 @@ def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    from .fetch import TabNotFound
+
     try:
-        doc = parse(load(args.doc, args.outdir))
+        doc = parse(load(args.doc, args.outdir, args.tab))
+    except TabNotFound as e:
+        print(f"eta-publish: {e}", file=sys.stderr)
+        return 2
     except NotImplementedError as e:
         # The parser is still being filled in; say so plainly rather than
         # handing the user a traceback.
