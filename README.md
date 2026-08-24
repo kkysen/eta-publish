@@ -101,7 +101,9 @@ and should be its own commit.
 
 ## Squarespace constraints
 
-These are load-bearing, and all of them were verified against the live site.
+These are load-bearing. The block counts, the 7.1 version, and the two
+documented limits were verified against the live site and Squarespace's
+own documentation; the one estimate below is marked as such.
 
 - **There is no content API.** The public Squarespace API covers commerce only.
   Nothing can create or update a page from a script,
@@ -111,9 +113,11 @@ These are load-bearing, and all of them were verified against the live site.
   are unavailable; those are 7.0-only. A single code block on an otherwise
   empty page is the closest thing to a pure HTML page, and it is close enough.
 - **A code block holds 400 KB (~300,000 characters).**
-  The SAS West report comes to roughly 220 KB, so it fits,
-  at about half the budget. Longer reports will not,
-  so the HTML emitter can split at `h2` boundaries when needed.
+  The SAS West report is *estimated* at roughly 220 KB, measured from the
+  live page's text blocks plus a per-figure allowance; nothing has been
+  generated and pasted yet. If that holds it fits at about half the budget,
+  but longer reports will not, so the HTML emitter can split at `h2`
+  boundaries when needed.
 - **There is no file upload API.** Custom Files is a manual GUI
   that accepts images and fonts only. Host report images elsewhere
   and reference absolute URLs; the PDF needs those same local files anyway,
@@ -124,6 +128,11 @@ These are load-bearing, and all of them were verified against the live site.
 ```sh
 uv run eta-publish <google-doc-url> --image-base https://assets.etany.org/sas-west
 ```
+
+Pass the full URL including its `?tab=` id.
+ETA reports live in multi-tab documents, and the Docs API defaults to the
+first tab, which is usually an earlier draft. A multi-tab document with no
+tab specified refuses to guess and lists its tabs.
 
 First run opens a browser for OAuth.
 Put the OAuth client JSON at `~/.config/eta-publish/client_secret.json`,
@@ -138,6 +147,8 @@ Anything it cannot classify is reported as a warning rather than silently droppe
   (`URL:`, `Short:`, `SEO Description:`, contributors, dates).
   Unrecognized keys are preserved rather than treated as body text.
 - Real Google Docs heading styles, not bolded body text.
+  Heading text determines the anchor, which is a published URL,
+  so renaming a heading moves it unless an override is set.
 - Real Google Docs footnotes.
 - Images inserted inline. An optional `Source:` paragraph immediately
   *before* an image, and caption and `Credit:` paragraphs immediately
