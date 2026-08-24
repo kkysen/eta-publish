@@ -523,7 +523,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.#footnote[1 - (1 - 43%)/(1 - 19%) = 29%.]
 
 #figure(
-  image("images/img-1b1ba92f.png", width: 100%),
+  image("images/img-033c133b.svg", width: 100%),
   caption: [A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.],
 )
 

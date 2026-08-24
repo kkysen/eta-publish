@@ -33,7 +33,7 @@ def image(object_id: str = "io.1") -> JsonObject:
     }
 
 
-def build(content: list[JsonObject], alt: str = "") -> Document:
+def build(content: list[JsonObject], alt: str = "", crop: JsonObject | None = None) -> Document:
     return parse(
         {
             "title": "SAS West Feasibility Response",
@@ -45,7 +45,10 @@ def build(content: list[JsonObject], alt: str = "") -> Document:
                     "inlineObjectProperties": {
                         "embeddedObject": {
                             "description": alt,
-                            "imageProperties": {"contentUri": "https://x.invalid/1"},
+                            "imageProperties": {
+                                "contentUri": "https://x.invalid/1",
+                                "cropProperties": crop or {},
+                            },
                         }
                     }
                 }
@@ -268,3 +271,84 @@ def test_soft_line_breaks_do_not_reach_the_output_as_control_characters() -> Non
     for emitted in (HtmlEmitter().emit(doc), TypstEmitter().emit(doc)):
         assert "\v" not in emitted
     assert "One line.<br>Another line." in HtmlEmitter().emit(doc)
+
+
+def _svg_doc(mime: str = "image/svg+xml", uri: str = "https://drive.google.com/open?id=ABC123"):
+    return build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            {
+                "paragraph": {
+                    "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                    "elements": [
+                        {"textRun": {"content": "SVG: ", "textStyle": {}}},
+                        {
+                            "richLink": {
+                                "richLinkProperties": {
+                                    "title": "chart.svg",
+                                    "uri": uri,
+                                    "mimeType": mime,
+                                }
+                            }
+                        },
+                    ],
+                }
+            },
+            para("A bar graph comparing costs."),
+        ]
+    )
+
+
+def test_a_linked_svg_becomes_the_figure_file() -> None:
+    """Docs cannot place an SVG, so a chart is pasted as a raster and the
+    real file linked beside it. Every output here can show the vector."""
+    figure = next(b for b in _svg_doc().blocks if isinstance(b, Figure))
+    assert figure.image.vector is not None
+    assert figure.image.vector.file_id == "ABC123"
+    assert figure.image.vector.filename.endswith(".svg")
+
+
+def test_the_svg_line_is_still_not_published() -> None:
+    doc = _svg_doc()
+    assert "SVG:" not in HtmlEmitter().emit(doc)
+    assert "drive.google.com" not in HtmlEmitter().emit(doc)
+
+
+def test_a_source_line_that_links_no_vector_leaves_the_raster() -> None:
+    """`SVG: TODO`, which the real report also contains, is a note."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("SVG: TODO"),
+        ]
+    )
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.image.vector is None
+
+
+def test_a_non_vector_link_is_not_mistaken_for_one() -> None:
+    figure = next(b for b in _svg_doc(mime="image/png").blocks if isinstance(b, Figure))
+    assert figure.image.vector is None
+
+
+def test_a_cropped_figure_keeps_its_raster() -> None:
+    """The crop is expressed in pixels of the rasterized copy, so it cannot
+    be carried over to the vector."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("SVG: chart.svg"),
+        ],
+        crop={"offsetLeft": 0.1},
+    )
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.image.crop.trims
