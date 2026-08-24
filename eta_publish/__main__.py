@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from .docs_json import JsonObject
-from .emit.html import HtmlEmitter
+from .emit.html import HtmlEmitter, preview_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .nodes import Document
@@ -39,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="how to resolve open suggestions (default: rejected, i.e. what the doc says now)",
     )
     p.add_argument(
+        "--split",
+        action="store_true",
+        help="write the HTML as numbered pieces cut at h2, for reports over the code block limit",
+    )
+    p.add_argument(
         "--no-pdf",
         action="store_true",
         help="write the Typst source but do not compile it",
@@ -65,6 +70,20 @@ def load(
     return fetch_to(ref, outdir / "doc.json", tab, suggestions)
 
 
+def write_split(doc: Document, outdir: Path, image_base: str) -> list[Path]:
+    """One file per piece, named so paste order is obvious."""
+    from .emit.html import HtmlEmitter, split_at_headings
+
+    fragment = HtmlEmitter(image_base=image_base).emit(doc)
+    pieces = split_at_headings(fragment)
+    written = []
+    for n, piece in enumerate(pieces, start=1):
+        dest = outdir / f"report.part{n:02d}.html"
+        dest.write_text(piece)
+        written.append(dest)
+    return written
+
+
 def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
     """Run each emitter, reporting the ones not yet implemented rather than
     failing the whole build for them."""
@@ -75,6 +94,9 @@ def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
         "report.typ": TypstEmitter(),
     }
     written: dict[str, Path] = {}
+    preview = outdir / "preview.html"
+    preview.write_text(preview_page(doc, image_base))
+    written[preview.name] = preview
     for name, emitter in emitters.items():
         try:
             source = emitter.emit(doc)
@@ -85,6 +107,25 @@ def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
         dest.write_text(source)
         written[name] = dest
     return written
+
+
+def check_code_block_size(doc: Document, report: Path) -> None:
+    """Say something before a paste fails, not after."""
+    from .emit.html import CODE_BLOCK_LIMIT, CODE_BLOCK_WARN
+
+    size = report.stat().st_size
+    if size > CODE_BLOCK_LIMIT:
+        doc.warn(
+            f"{report.name} is {size:,} bytes, over Squarespace's "
+            f"{CODE_BLOCK_LIMIT:,} byte code block limit; "
+            "split it at h2 boundaries with `--split`"
+        )
+    elif size > CODE_BLOCK_WARN:
+        doc.warn(
+            f"{report.name} is {size:,} bytes, within Squarespace's "
+            f"{CODE_BLOCK_LIMIT:,} byte limit but large enough that the editor "
+            "may be slow to save it"
+        )
 
 
 def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
@@ -138,6 +179,13 @@ def main(argv: list[str] | None = None) -> int:
     typ = written.get("report.typ")
     if typ is not None and not args.no_pdf:
         build_pdf(typ, args.outdir, skipped_images=args.no_images and bool(doc.images))
+
+    report = written.get("report.html")
+    if report is not None:
+        check_code_block_size(doc, report)
+    if args.split:
+        for part in write_split(doc, args.outdir, args.image_base):
+            written[part.name] = part
 
     for warning in doc.warnings:
         print(f"warning: {warning}", file=sys.stderr)
