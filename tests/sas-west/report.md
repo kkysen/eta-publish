@@ -30,7 +30,7 @@ It is the right route: a logical extension of SAS Phase 2 underneath the main st
 It is designed to replace buses that, even though they are slower than walking, still carry [over 25,000 riders per day](<https://reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72#dbaf>).
 It will also be the only crosstown rail route north of Midtown, connecting ten different subway lines and Metro-North, speeding a host of trips that are slow and difficult to make today.
 
-![The SAS West and Phase 2 alignments.](<images/img-d064e131.jpg>)
+![The SAS West and Phase 2 alignments.](<images/img-afb00c85.jpg>)
 The SAS West and Phase 2 alignments.
 [Credit: MTA](<https://www.mta.info/document/196361#page=5>)
 <!-- Source: [sas-west-036.jpg](<https://drive.google.com/file/d/1pypAppcW1gOYpSMYkTWWUn4jEgE0cai-/view>) -->
@@ -100,7 +100,7 @@ The line was the culmination of 90 years of subway planning, making real a line 
 But at approximately $4.5 billion per mile in 2026 dollars, Phase 1 was the most expensive subway in the world, coming in at almost an order of magnitude more to build than the world average.
 In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including [eliminating](<https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations>) [platform screen doors from Phase 1](<https://www.nytimes.com/2007/04/05/nyregion/05doors.html>) and [postponing CBTC installation until Phase 2](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32>) at the cost of safety and reliability.
 
-![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/img-22d933dd.jpg>)
+![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/img-52b19425.jpg>)
 The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.
 [Credit: MTA app](<https://www.mta.info/guides/apps>)
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
@@ -212,7 +212,7 @@ Moving to cheaper, shallower stations still requires contending with poor ground
 Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)) TBM is required between tunneling and the existing stations, far less than what has been proposed.
 With underpinning, this separation can be reduced even further to mere feet below existing structures, even in watery sand.[^5]
 
-![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/img-13ef5df2.png>)
+![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/img-af4262b6.png>)
 The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.
 [Credit: MTA](<https://www.mta.info/document/196361#page=18>)
 <!-- Source: [SAS West - Tunnel Profile - pg 18.screenshot.png](<https://drive.google.com/file/d/1mMpIVzR8WSHexUaNgyqP-MxSn9k9Gd_U/view>) -->
@@ -223,11 +223,11 @@ Zhongsheng station on Nanjing Metro Line 7 (a busy station with [40,000 daily ri
 For comparison, the [maximum allowed settlement in historic sections of Rome](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=120>), with priceless monuments from Antiquity like the Colosseum, is 3 mm (0.12 in).
 Similarly, the city-center Yuyuan Garden station on Shanghai Line 14 was built only [4 ft beneath](<https://mp.weixin.qq.com/s/fE7l03P3F4j28NoO6eoegA#:~:text=10%E5%8F%B7%E7%BA%BF%EF%BC%8C-,%E5%9E%82%E7%9B%B4%E8%B7%9D%E7%A6%BB1.2%E7%B1%B3,-%E3%80%82>) Line 10, and Jing’an Temple station on Shanghai Metro Line 14 used [rectangular pipe-jacking](<https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw>) and [thixotropic mud](<https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw#:~:text=%E6%96%B0%E5%9E%8B%E5%87%8F%E6%91%A9-,%E8%A7%A6%E5%8F%98%E6%B3%A5,-%E6%B5%86%E5%92%8C%E7%9B%B8%E5%BA%94>) to [limit settlement to only 0.2-0.6 in](<https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw#:~:text=%E6%8E%A7%E5%88%B6%E5%9C%A8%2D-,15%EF%BD%9E5%20mm,-%E3%80%82>), with both being in watery soft soil and clays.
 
-![Cross-section of Zhongsheng station.](<images/img-556bc17c.jpg>)
+![Cross-section of Zhongsheng station.](<images/img-f5b8dae7.jpg>)
 Cross-section of Zhongsheng station.
 [Credit: China Railway Sixth Survey and Design Institute Group Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>)
 
-![Cross-section of the pipe-jacking at Jing’an Temple station.](<images/img-383ca3be.png>)
+![Cross-section of the pipe-jacking at Jing’an Temple station.](<images/img-6a139fa2.png>)
 Cross-section of the pipe-jacking at Jing’an Temple station.
 [Credit: Wu Liecheng et al., Shanghai Tunnel Engineering Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>)
 
@@ -236,11 +236,11 @@ Furthermore, underpinning can be built in combination with short mezzanines dire
 This would be especially useful at Lenox Av (2/3), which currently has no mezzanine to facilitate transferring from uptown to downtown (with the proposed design, this would take 7 minutes on escalators).
 Conversely, St Nicholas Av (A/B/C/D) already has a mezzanine, so the new SAS station could either reuse it (adding direct stairs and escalators from the SAS platform) or build a new below-mezzanine to help underpin the existing station and ease transfers.
 
-![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/img-9090d086.jpg>)
+![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/img-6c3ad309.jpg>)
 The existing elevated 125 St/Broadway station with a wide, 172 ft arch.
 [Credit: Jim Henderson](<https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG>)
 
-![The 72 St headhouse in the Broadway median.](<images/img-80748094.jpg>)
+![The 72 St headhouse in the Broadway median.](<images/img-a5e93aab.jpg>)
 The 72 St headhouse in the Broadway median.
 [Credit: Gryffindor](<https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG>)
 
@@ -278,7 +278,7 @@ Because SAS West will continue from the end of SAS Phase 2, the depth of the sta
 First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>).
 See *SAS Phase 2 Tail Tracks* for more information on how this can be done.
 
-![A video rendering of the 125 St/Lexington Av station.](<images/img-f7309956.png>)
+![A video rendering of the 125 St/Lexington Av station.](<images/img-4392a78e.png>)
 A video rendering of the 125 St/Lexington Av station.
 [Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)
 <!-- Uncropped Source: [Screenshot 2026-07-18 100636.png](<https://drive.google.com/file/d/1_UuQs5LygSlFd62nZK6yndl0gDIPlxyq/view>) -->
@@ -296,11 +296,11 @@ Measurements are similar at 86 St and 96 St (which has a 30 ft-wide platform).[^
 And at 116 St, which will be built within an existing subway tunnel built during the 1970s, the station box will be 59 ft wide with a 25.25 ft-wide platform.
 All on its own, narrowing the station on SAS West from 75 ft to the already large 63 ft of Phases 1 and 2 would reduce the amount of required excavation by 16%.
 
-![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-7433f12d.png>)
+![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-a718beb8.png>)
 Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>) that switched the mezzanine from above to below the platform.
 Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)
 
-![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/img-d0e3f8fe.jpg>)
+![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/img-3ec53fb1.jpg>)
 A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.
 [Credit: MTA](<https://www.mta.info/document/114626#page=5>)
 <!-- Source: [sas-2-029.jpg](<https://drive.google.com/file/d/1L5XwcbIAWiqnp15ALHRJ9xpRNK4GWQhB/view>) -->
@@ -325,7 +325,7 @@ For the 600 ft trains used on the SAS, that would be around 620-660 ft. In contr
 None of this extra space is accessible to passengers.
 Instead, as a general rule, most of it is deeply underutilized back-of-house space for MTA employees.
 
-![Station length as a percentage of platform length.](<images/img-3ed6b91d.png>)
+![Station length as a percentage of platform length.](<images/img-44bf278f.png>)
 Station length as a percentage of platform length.
 <!-- SVG: TODO -->
 
@@ -427,7 +427,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 
 #### SAS West Tail Tracks
 
-![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/img-673d98dd.png>)
+![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/img-e68e5d52.png>)
 The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.
 [Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)
 <!-- Uncropped Source: [Screenshot 2026-04-27 160823.png](<https://drive.google.com/file/d/1wP8kC13_147MWx12IOlPU0jtMU0VOw1f/view>) -->
@@ -569,11 +569,11 @@ Elevators, in contrast with the proposed escalators, only take [1.6](<https://ww
 At the 236 ft-deep Édouard-Montpetit REM station in Montreal, high-speed elevators traverse 198 ft to the Blue Line in [19 seconds](<https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>), door closing to door opening.
 Furthermore, while this station is not truly elevator-only, the stairs are only for emergency use, similar to 116 St. The elevators are a means of egress in a fire, and the station is NFPA 130-compliant.[^20]
 
-![A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.](<images/img-49aa56fc.jpg>)
+![A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.](<images/img-0fb4cdcf.jpg>)
 A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.
 [Credit: MTA](<https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>)
 
-![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/img-a0a0cb5e.png>)
+![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/img-ed748d24.png>)
 A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.
 [Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)
 

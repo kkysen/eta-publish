@@ -73,18 +73,23 @@ class AnchorAllocator:
         return base
 
 
-def image_filename(object_id: str, extension: str = "") -> str:
-    """Name an image after its Docs object id.
+def image_filename(object_id: str, extension: str = "", crop_key: str = "") -> str:
+    """Name an image after its Docs object id and how it is cropped.
 
     The id is stable across edits, so inserting an image cannot rename the
     ones around it. It is opaque rather than descriptive, which is the
     trade we want: a descriptive name would have to come from position or
     from a caption, and both of those change.
 
+    The crop is part of the name because it is part of the file. Recropping
+    in the document produces a different published image, and without this
+    it would keep the old name and the old cached file. An uncropped image
+    is named as it always was.
+
     The extension is filled in once the image is downloaded and its real
     content type is known.
     """
-    return f"img-{_short_hash(object_id)}{extension}"
+    return f"img-{_short_hash(object_id + crop_key)}{extension}"
 
 
 def _short_hash(value: str, length: int = 8) -> str:

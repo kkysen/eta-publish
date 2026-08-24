@@ -24,6 +24,7 @@ from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename
 from .nodes import (
     Block,
+    Crop,
     Document,
     Figure,
     Footnote,
@@ -264,15 +265,39 @@ class Parser:
             .get("inlineObjectProperties", {})
             .get("embeddedObject", {})
         )
-        uri = embedded.get("imageProperties", {}).get("contentUri")
+        image_props = embedded.get("imageProperties", {})
+        uri = image_props.get("contentUri")
         if not uri:
             self.doc.warn(f"inline object {object_id} has no image; skipped")
             return None
+        crop = self._crop(object_id, image_props.get("cropProperties", {}))
         return Image(
             object_id=object_id,
-            filename=image_filename(object_id),
+            filename=image_filename(object_id, crop_key=crop.key),
             alt=embedded.get("description") or embedded.get("title") or "",
             source_uri=uri,
+            crop=crop,
+        )
+
+    def _crop(self, object_id: str, props: JsonObject) -> Crop:
+        """How much of the image the document trims from each side.
+
+        Docs stores tiny negative offsets for an edge that is not trimmed,
+        so the values are clamped rather than trusted.
+        """
+        if props.get("angle"):
+            self.doc.warn(
+                f"image {object_id} is rotated in the document; the rotation is not applied"
+            )
+
+        def side(name: str) -> float:
+            return max(0.0, min(1.0, float(props.get(name, 0.0) or 0.0)))
+
+        return Crop(
+            left=side("offsetLeft"),
+            right=side("offsetRight"),
+            top=side("offsetTop"),
+            bottom=side("offsetBottom"),
         )
 
     # ---- lists -------------------------------------------------------

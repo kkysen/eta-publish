@@ -62,6 +62,43 @@ class FootnoteRef:
 
 
 @dataclass(frozen=True)
+class Crop:
+    """How much of an image the document trims from each side.
+
+    Docs stores a crop as fractions of the original, so the image file it
+    serves is always the uncropped one. Nothing downstream can express this:
+    Markdown has no way to crop, and a CSS crop would not reach the PDF. So
+    the crop is applied to the file, which is also what the document's own
+    `Uncropped Source:` lines imply is the published form.
+    """
+
+    left: float = 0.0
+    right: float = 0.0
+    top: float = 0.0
+    bottom: float = 0.0
+
+    @property
+    def trims(self) -> bool:
+        return any((self.left, self.right, self.top, self.bottom))
+
+    @property
+    def key(self) -> str:
+        """Identifies this crop, so changing it renames the file."""
+        if not self.trims:
+            return ""
+        return f"|{self.left:.6f},{self.right:.6f},{self.top:.6f},{self.bottom:.6f}"
+
+    def box(self, width: int, height: int) -> tuple[int, int, int, int]:
+        """The pixel box to keep, for an original of this size."""
+        return (
+            round(self.left * width),
+            round(self.top * height),
+            width - round(self.right * width),
+            height - round(self.bottom * height),
+        )
+
+
+@dataclass(frozen=True)
 class Image:
     """An inline image.
 
@@ -75,6 +112,7 @@ class Image:
     filename: str
     alt: str = ""
     source_uri: str | None = None
+    crop: Crop = field(default_factory=lambda: Crop())
 
 
 Inline = Text | LineBreak | FootnoteRef | Image
