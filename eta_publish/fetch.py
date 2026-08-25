@@ -183,6 +183,22 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 
 
 def _credentials():
+    """The credentials to call the API with, interactive or not.
+
+    Two ways in. On a person's machine it is the installed-app flow: a
+    browser opens once, and the token caches. Anywhere unattended, notably
+    CI, there is no browser to open and no one to click, so a service
+    account is used instead through `google.auth.default`, which reads
+    `$GOOGLE_APPLICATION_CREDENTIALS`.
+
+    Application default credentials are checked first, because a machine
+    that has them has them deliberately: they are set by an environment
+    variable naming a key file, not found by accident.
+    """
+    ambient = _ambient_credentials()
+    if ambient is not None:
+        return ambient
+
     from google.auth.transport.requests import Request
     from google.oauth2.credentials import Credentials
     from google_auth_oauthlib.flow import InstalledAppFlow
@@ -203,6 +219,32 @@ def _credentials():
         creds = flow.run_local_server(port=0)
         TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
         TOKEN_PATH.write_text(creds.to_json())
+    return creds
+
+
+def _ambient_credentials():
+    """Service account credentials, when the environment supplies them.
+
+    Returns `None` when it does not, so the interactive flow stays the
+    default and nothing changes for someone running this by hand.
+
+    A service account reaches only what has been shared with it, which is
+    why CI can be given one at all: its Drive is empty, so the key grants
+    read access to the report and to nothing else in anybody's Drive.
+    """
+    if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        return None
+
+    import google.auth
+    from google.auth.exceptions import DefaultCredentialsError
+
+    try:
+        creds, _ = google.auth.default(scopes=SCOPES)
+    except DefaultCredentialsError as e:
+        raise FetchFailed(
+            "$GOOGLE_APPLICATION_CREDENTIALS is set but the credentials it "
+            f"names could not be loaded: {e}"
+        ) from e
     return creds
 
 
