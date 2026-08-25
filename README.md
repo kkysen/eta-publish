@@ -265,7 +265,9 @@ of its name: `SEO Description (300 char limit):` is read as
 - **Images inserted inline.** The lines around an image are folded into its
   figure: a `Source: <file>` paragraph before it, or an
   `[Image Source](<url>)` paragraph after the caption, plus the caption and
-  a `Credit:` line.
+  a `Credit:` line. A paragraph whose entire text is the link, reading just
+  `Image Source`, counts as the same note; a paragraph that merely starts
+  with the word is prose and is left alone.
   Both spellings of the source are treated as editorial notes: they are kept
   in the Markdown archive as comments and never appear in the published HTML
   or the PDF, matching the live page, where `Source:` and `Image Source`
