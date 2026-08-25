@@ -7,6 +7,9 @@
   title: "",
   url: none,
   short: none,
+  // `Public Contributors:` only. The header block keeps the private list
+  // under its own key so that those names do not reach a published page.
+  public_contributors: none,
   ..rest,
   body,
 ) = {
@@ -54,6 +57,10 @@
     #if short != none [
       #v(0.6em)
       #text(size: 11.5pt, fill: luma(35%), style: "italic")[#short]
+    ]
+    #if public_contributors not in (none, "") [
+      #v(0.6em)
+      #text(size: 10pt)[By #public_contributors]
     ]
     #v(0.4em)
     #line(length: 100%, stroke: 0.8pt)

@@ -233,6 +233,20 @@ class Document:
     """
 
     @property
+    def contributors(self) -> list[str]:
+        """The people credited on the published page, in document order.
+
+        Read from `Public Contributors:` and from nothing else. The document
+        carries a separate `Private Contributors:` field precisely so that
+        some names do not publish, so no fallback to it belongs here.
+
+        The names come from person chips, which resolve to a chip's display
+        name, so this is a list of names and not of addresses.
+        """
+        names = self.meta.get("public contributors", "")
+        return [name.strip() for name in names.split(",") if name.strip()]
+
+    @property
     def slug(self) -> str:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
         return self.meta.get("url", "")
