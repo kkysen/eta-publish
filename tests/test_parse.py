@@ -163,3 +163,58 @@ def test_a_source_line_with_no_image_is_reported_not_dropped_silently() -> None:
     )
     doc = parse(doc_json)
     assert any("orphan.jpg" in w for w in doc.warnings)
+
+
+def _text_para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": style},
+            "elements": [{"textRun": {"content": text + "\n", "textStyle": {}}}],
+        }
+    }
+
+
+def _image_para(object_id: str) -> JsonObject:
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+            "elements": [{"inlineObjectElement": {"inlineObjectId": object_id}}],
+        }
+    }
+
+
+def test_a_bare_image_source_link_is_still_an_editorial_note() -> None:
+    """The doc writes this both ways. Where the brackets are typed the text
+    reads `[Image Source](<url>)`; where the whole paragraph is simply the
+    link, it reads `Image Source` and nothing else, and both name the file
+    the figure came from rather than saying anything to a reader."""
+    doc = parse(
+        {
+            "body": {
+                "content": [
+                    _text_para("Report", "TITLE"),
+                    _image_para("io.1"),
+                    _text_para("A caption."),
+                    _text_para("Image Source"),
+                    _text_para("Credit: MTA"),
+                ]
+            },
+            "inlineObjects": {
+                "io.1": {
+                    "inlineObjectProperties": {
+                        "embeddedObject": {
+                            "description": "alt",
+                            "imageProperties": {"contentUri": "https://example.invalid/1"},
+                        }
+                    }
+                }
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    figures = [b for b in doc.blocks if isinstance(b, Figure)]
+    assert len(figures) == 1
+    assert _text(figures[0].source) == "Image Source"
+    assert _text(figures[0].credit) == "Credit: MTA"
+    assert not [b for b in doc.blocks if isinstance(b, Paragraph)]

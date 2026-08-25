@@ -66,13 +66,19 @@ KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
 # `seo description` finds nothing unless the note is stripped.
 KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
 # Editorial notes naming where an image came from. The real report uses
-# three spellings: `Source:` before an image, `Uncropped Source:` for one
-# that was trimmed, and `[Image Source](<url>)` after a caption. One
-# optional qualifying word covers all three and whatever the next one is.
+# four spellings: `Source:` before an image, `Uncropped Source:` for one
+# that was trimmed, and, after a caption, either `[Image Source](<url>)` or
+# a bare `Image Source` whose whole text is the link. One optional
+# qualifying word covers all of them and whatever the next one is.
 # None of them appears on the published page, which is what makes them notes
 # rather than content: the live SAS West report contains zero occurrences of
 # each, against 26 of `Credit:`.
-SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*[:\]]", re.IGNORECASE)
+#
+# The trailing `$` is what admits the bare spelling, and it is why the
+# alternative before it is anchored rather than merely a prefix: a paragraph
+# beginning "Source of the estimate is ..." is prose, and only one that says
+# nothing but "Image Source" is a note.
+SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*(?:[:\]]|$)", re.IGNORECASE)
 
 # A Drive file id, from either shape of link Docs produces.
 DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
