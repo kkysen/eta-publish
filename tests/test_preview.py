@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from eta_publish.__main__ import emit
+from eta_publish.build import emit
 from eta_publish.emit.html import preview_page
 from eta_publish.nodes import Document
 from eta_publish.parse import parse

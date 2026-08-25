@@ -1,13 +1,14 @@
 """The build itself: fetch, emit, compile, and the checks around them.
 
-Separate from `__main__` because there are two entry points into the same
-pipeline, `eta-publish` for one document and `eta-publish-site` for every
-report the project publishes, and the second must not have to import the
-first's argument parser to reuse it.
+Separate from `__main__` so that what a build does is not tangled up with
+how a command line describes it, and so the one document and the whole list
+of them run the same code rather than two copies of the same order of
+operations that drift apart.
 """
 
 import json
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from .docs_json import JsonObject
@@ -15,6 +16,24 @@ from .emit.html import HtmlEmitter, preview_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .nodes import Document
+from .parse import parse
+
+
+@dataclass(frozen=True)
+class BuildOptions:
+    """Everything the command line can vary about one build.
+
+    A record rather than six parameters: every one of these has to reach
+    `build_one` from the argument parser, and a positional list that long is
+    where a caller silently transposes two flags.
+    """
+
+    image_base: str = ""
+    suggestions: str = "rejected"
+    tab: str | None = None
+    split: bool = False
+    pdf: bool = True
+    images: bool = True
 
 
 def load(
@@ -114,3 +133,53 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     except RuntimeError as e:
         print(f"warning: {e}", file=sys.stderr)
     return None
+
+
+def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tuple[Document, str]:
+    """Build one report, returning it and the site-relative path it went to.
+
+    The whole per-document order of operations lives here, and only here.
+    It ran twice before, once for a single document and once per report of a
+    site, which is exactly the kind of duplication that ends with images
+    downloaded in one and not the other.
+
+    A report's directory comes from its own front matter, which is inside
+    the document, so the response is fetched to a staging directory and the
+    destination is only known afterwards.
+    """
+    from .site import report_path
+
+    options = options or BuildOptions()
+    staging = outdir / ".staging"
+    doc = parse(load(ref, staging, options.tab, options.suggestions))
+    path = report_path(doc)
+    dest = outdir / path
+    dest.mkdir(parents=True, exist_ok=True)
+
+    saved = staging / "doc.json"
+    if saved.exists():
+        # Kept, because re-running against it needs no credentials, and it is
+        # what the tests build from. It moves rather than being fetched into
+        # place because where it belongs was not known until it was read.
+        saved.replace(dest / "doc.json")
+    if staging.is_dir() and not any(staging.iterdir()):
+        staging.rmdir()
+
+    if doc.images and options.images:
+        from .images import download
+
+        download(doc, dest / "images")
+
+    written = emit(doc, dest, options.image_base)
+
+    typ = written.get("report.typ")
+    if typ is not None and options.pdf:
+        build_pdf(typ, dest, skipped_images=not options.images and bool(doc.images))
+
+    report = written.get("report.html")
+    if report is not None:
+        check_code_block_size(doc, report)
+    if options.split:
+        write_split(doc, dest, options.image_base)
+
+    return doc, path

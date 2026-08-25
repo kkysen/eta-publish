@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 
+from eta_publish.build import BuildOptions
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.site import (
@@ -92,7 +93,7 @@ def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
         Report(url=str(broken), name="gone"),
         Report(url=str(good), name="fine"),
     ]
-    site = build_site(reports, tmp_path / "site", no_images=True)
+    site = build_site(reports, tmp_path / "site", BuildOptions(images=False, pdf=False))
     assert [f.report.name for f in site.failed] == ["gone"]
     assert [b.report.name for b in site.built] == ["fine"]
     assert (tmp_path / "site" / site.built[0].path / "preview.html").exists()
