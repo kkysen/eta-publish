@@ -1,16 +1,15 @@
 """Markdown emitted for the committed archive."""
 
 import json
-from pathlib import Path
 
 import pytest
+from paths import FIXTURE_DIR
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 

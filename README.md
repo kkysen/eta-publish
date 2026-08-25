@@ -221,7 +221,7 @@ and a schedule would put whatever the doc said at 3 a.m. onto a public URL
 with nobody looking at it.
 
 The job fetches the document rather than deploying the committed
-`tests/sas-west/`, because the images are not in the repository
+`tests/real/`, because the images are not in the repository
 and cannot be recovered from what is:
 the `contentUri` values in a saved `doc.json` are signed and short-lived,
 and are already `403` the next day.
@@ -318,11 +318,28 @@ run as pre-commit hooks and again in CI.
 Tests run against checked-in Docs API responses,
 so neither ever needs Google credentials or the network.
 
-`tests/real/` holds an actual `documents.get` response for the published
-SAS West report, together with the output it currently produces. Every bug
-that mattered came from that document's shape rather than from a
-hand-written fixture, so the snapshots are the regression net for all of
-it. When one changes, read the diff before accepting it: it is exactly
+`tests/real/` and `tests/fixture/` are the two test corpora, and they are
+the same shape: a publish directory, holding a report at its published path
+with its `doc.json` and everything emitted from it. `real` is an actual
+`documents.get` response for the published SAS West report; `fixture` is a
+hand-written miniature. Every bug that mattered came from the real
+document's shape rather than from the fixture, so its snapshots are the
+regression net for all of it.
+
+Either can be rebuilt by passing its report directory back, which reads the
+saved response and needs no credentials:
+
+```sh
+uv run eta-publish tests/real/reports/digging-out-deep-hole-sas-west
+```
+
+Add `--no-images` and it needs no network at all. The one thing a
+no-network rebuild cannot reproduce is the image filenames: a Docs
+`inlineObject` says nothing about what kind of file it is, so `.jpg` and
+`.png` are learned by fetching, and without that the links lose their
+extensions.
+
+When a snapshot changes, read the diff before accepting it: it is exactly
 what the change does to a real published report. Regenerate with
 `uv run pytest --regenerate-snapshots`.
 

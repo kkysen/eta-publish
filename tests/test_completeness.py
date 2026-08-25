@@ -19,10 +19,10 @@ passes while the content is gone.
 import html
 import json
 import re
-from pathlib import Path
 from typing import override
 
 import pytest
+from paths import FIXTURE_DIR
 from test_front_matter import REAL_SHAPE
 
 from eta_publish.docs_json import JsonObject
@@ -44,7 +44,6 @@ from eta_publish.nodes import (
 )
 from eta_publish.parse import element_text, parse
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
