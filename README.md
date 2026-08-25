@@ -162,6 +162,86 @@ token is cached at `~/.config/eta-publish/token.json` and refreshes itself,
 so this happens once. Both files are secrets; the repository ignores them
 by name, but they belong outside it anyway.
 
+### Publishing the preview to GitHub Pages
+
+`.github/workflows/pages.yml` builds the report from the live document and
+deploys `preview.html` as the site's index, with `report.html`,
+`report.pdf`, and the images alongside it.
+It runs on `workflow_dispatch` only:
+a report publishes when someone decides it is ready,
+and a schedule would put whatever the doc said at 3 a.m. onto a public URL
+with nobody looking at it.
+
+The job fetches the document rather than deploying the committed
+`tests/sas-west/`, because the images are not in the repository
+and cannot be recovered from what is:
+the `contentUri` values in a saved `doc.json` are signed and short-lived,
+and are already `403` the next day.
+
+So CI needs credentials, and they are a **service account**, not a person.
+A service account is an identity inside the Cloud project, with no inbox,
+no password, and an empty Drive of its own,
+so its key grants read access to exactly what has been shared with it
+and to nothing else in anyone's Drive.
+The interactive flow is unchanged and still the default:
+`_credentials` uses a service account only when
+`$GOOGLE_APPLICATION_CREDENTIALS` names one.
+
+Set it up once:
+
+```sh
+gcloud auth login
+gcloud config set project eta-publish
+
+gcloud iam service-accounts create eta-publish-ci \
+  --display-name "eta-publish CI"
+
+gcloud iam service-accounts keys create key.json \
+  --iam-account eta-publish-ci@eta-publish.iam.gserviceaccount.com
+```
+
+No IAM roles are needed: access to the document comes from sharing it,
+not from a project role.
+
+Then, in the Google Doc's **Share** dialog,
+add `eta-publish-ci@eta-publish.iam.gserviceaccount.com` as a **Viewer**.
+Do the same for the Drive files the document links as `SVG:` charts,
+or for the folder holding them,
+or the vectors fall back to the rasters with a warning.
+
+Finally, hand the key and the document URL to GitHub, and delete the key:
+
+```sh
+gh secret set GOOGLE_CREDENTIALS < key.json
+gh variable set ETA_DOC_URL --body 'https://docs.google.com/document/d/<id>/edit?tab=<tab>'
+rm key.json
+
+# Pages serves what the workflow uploads, rather than a branch.
+gh api -X POST repos/:owner/:repo/pages -f build_type=workflow
+```
+
+Then run it with `gh workflow run Pages`,
+or from the Actions tab, where the dispatch form takes a one-off doc URL.
+
+Two things to know about the key:
+
+- **It is a long-lived secret in a public repository's settings.**
+  Fork pull requests never receive it, and `pull_request_target`,
+  which would hand it to unreviewed code, is deliberately not used here.
+  Anyone with write access can read it, as with any Actions secret.
+- **Rotate it with**
+  `gcloud iam service-accounts keys list --iam-account <account>`
+  and `keys delete`, which revokes it immediately.
+  Workload Identity Federation removes the stored key entirely
+  by exchanging GitHub's OIDC token for a short-lived one;
+  it is the better answer if this outlives being a convenience.
+
+The deployed site is public.
+It publishes an unreleased report at a stable URL, which is a decision
+rather than a detail: build it as a plain artifact instead
+(swap the last two steps for `actions/upload-artifact`)
+if a report should stay inside the repository until it ships.
+
 ### Rate limits
 
 Not a concern at this scale. The Docs API allows

@@ -5,11 +5,12 @@ report drafted in a later tab would parse cleanly and be wrong.
 """
 
 from collections.abc import Sequence
+from pathlib import Path
 
 import pytest
 
 from eta_publish.docs_json import JsonObject
-from eta_publish.fetch import TabNotFound, parse_ref, select_tab
+from eta_publish.fetch import SCOPES, TabNotFound, parse_ref, select_tab
 
 URL = (
     "https://docs.google.com/document/d/1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg"
@@ -78,3 +79,35 @@ def test_a_single_tab_document_needs_no_choice():
 def test_a_document_with_no_tabs_is_passed_through():
     plain = {"title": "x", "body": {"content": [{"marker": "plain"}]}}
     assert select_tab(plain, None) is plain
+
+
+# ---- credentials ----------------------------------------------------
+
+
+def test_service_account_credentials_are_used_when_the_environment_names_them(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """CI has no browser to open and nobody to click, so the interactive
+    flow must not be what runs there."""
+    import google.auth
+
+    from eta_publish import fetch as fetch_module
+
+    sentinel = object()
+
+    def fake_default(scopes: list[str]) -> tuple[object, str]:
+        assert scopes == SCOPES
+        return sentinel, "eta-publish"
+
+    monkeypatch.setenv("GOOGLE_APPLICATION_CREDENTIALS", str(tmp_path / "key.json"))
+    monkeypatch.setattr(google.auth, "default", fake_default)
+    assert fetch_module._credentials() is sentinel
+
+
+def test_without_the_environment_variable_nothing_is_ambient(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from eta_publish import fetch as fetch_module
+
+    monkeypatch.delenv("GOOGLE_APPLICATION_CREDENTIALS", raising=False)
+    assert fetch_module._ambient_credentials() is None

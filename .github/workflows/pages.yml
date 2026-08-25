@@ -1,0 +1,95 @@
+# Publish the preview to GitHub Pages, built from the live Google Doc.
+#
+# Manual only. A report is published when someone decides it is ready, and
+# a schedule here would put whatever the document said at 3 a.m. onto a
+# public URL without anyone looking at it.
+#
+# The images are not in the repository (18 MB, rewritten by every fetch), so
+# the site cannot be built from a checkout alone: the `contentUri` values in
+# a committed `doc.json` are signed and short-lived, and are already 403 by
+# the next day. That is why this job fetches the document itself rather than
+# deploying `tests/sas-west/`.
+name: Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      doc:
+        description: "Doc URL to publish; defaults to the ETA_DOC_URL variable"
+        required: false
+        type: string
+
+# Read-only on the repository. `pages` and `id-token` are what the deploy
+# needs, and nothing here writes a commit.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time, and let a running one finish: cancelling mid-deploy
+# can leave the site serving a half-uploaded build.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          enable-cache: true
+
+      # Written to the runner's temp directory rather than the workspace, so
+      # it cannot be picked up by a later step that globs the checkout.
+      - name: Write the service account key
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          if [ -z "$GOOGLE_CREDENTIALS" ]; then
+            echo "::error::the GOOGLE_CREDENTIALS secret is not set; see README" >&2
+            exit 1
+          fi
+          umask 077
+          printf '%s' "$GOOGLE_CREDENTIALS" > "$RUNNER_TEMP/key.json"
+
+      # Pinned rather than latest: the PDF is a deliverable, and a Typst
+      # release that changed layout would silently reflow it.
+      - name: Install Typst
+        run: |
+          version=0.15.1
+          url="https://github.com/typst/typst/releases/download/v${version}/typst-x86_64-unknown-linux-musl.tar.xz"
+          curl -fsSL "$url" | tar -xJ --strip-components=1 -C "$RUNNER_TEMP" \
+            "typst-x86_64-unknown-linux-musl/typst"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      - name: Build the report
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/key.json
+          DOC: ${{ inputs.doc || vars.ETA_DOC_URL }}
+        run: |
+          if [ -z "$DOC" ]; then
+            echo "::error::no document URL; set the ETA_DOC_URL variable or pass one" >&2
+            exit 1
+          fi
+          uv run eta-publish "$DOC" -o site
+
+      # The preview is the page worth serving: it carries the warnings, which
+      # are the thing to read before publishing anywhere else. `report.html`
+      # is the Squarespace fragment and is deployed too, so it can be linked.
+      - name: Lay out the site
+        run: |
+          cp site/preview.html site/index.html
+          rm -f site/doc.json site/template.typ
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
