@@ -8,7 +8,7 @@
 # the site cannot be built from a checkout alone: the `contentUri` values in
 # a committed `doc.json` are signed and short-lived, and are already 403 by
 # the next day. That is why this job fetches the document itself rather than
-# deploying `tests/real/`.
+# deploying the committed `site/`.
 name: Pages
 
 on:
