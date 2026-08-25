@@ -1,0 +1,13 @@
+# The reports the site publishes, one `[[report]]` per document.
+#
+# Adding the next report is an entry here and nothing else: the site path
+# comes from the document's own `URL:` line, so nothing in this file or in
+# the workflow names a report twice.
+#
+# `url` is the Docs URL including its `?tab=` id. ETA documents have many
+# tabs, several of them obsolete drafts, and the API returns the first tab
+# unless told otherwise, so a URL without one publishes the wrong draft.
+
+[[report]]
+name = "SAS West"
+url = "https://docs.google.com/document/d/1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg/edit?tab=t.ul3yzv5xed4w"

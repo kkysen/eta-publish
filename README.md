@@ -164,9 +164,29 @@ by name, but they belong outside it anyway.
 
 ### Publishing the preview to GitHub Pages
 
-`.github/workflows/pages.yml` builds the report from the live document and
-deploys `preview.html` as the site's index, with `report.html`,
-`report.pdf`, and the images alongside it.
+`.github/workflows/pages.yml` builds **every report in `reports.toml`**
+from its live document and deploys them as one site.
+Each lands at the path its own front matter names,
+so `/reports/digging-out-deep-hole-sas-west` in the header
+becomes `kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/`,
+carrying `preview.html` as its index alongside `report.html`, `report.pdf`,
+and its images. The site's front page lists them, with each report's date,
+byline, and warning count, and names any report that failed to build.
+
+Adding the next report is an entry in `reports.toml` and nothing else:
+
+```toml
+[[report]]
+name = "Next Report"
+url = "https://docs.google.com/document/d/<id>/edit?tab=<tab>"
+```
+
+Nothing else in the repository or the workflow names a document,
+and one report failing to build does not take the others with it;
+the run still exits non-zero, and the failure is on the front page.
+Building one document on its own, before it is on the list,
+is what the dispatch form's optional URL is for.
+
 It runs on `workflow_dispatch` only:
 a report publishes when someone decides it is ready,
 and a schedule would put whatever the doc said at 3 a.m. onto a public URL
@@ -203,17 +223,18 @@ gcloud iam service-accounts keys create key.json \
 No IAM roles are needed: access to the document comes from sharing it,
 not from a project role.
 
-Then, in the Google Doc's **Share** dialog,
-add `eta-publish-ci@eta-publish.iam.gserviceaccount.com` as a **Viewer**.
-Do the same for the Drive files the document links as `SVG:` charts,
-or for the folder holding them,
-or the vectors fall back to the rasters with a warning.
+Then share each report with
+`eta-publish-ci@eta-publish.iam.gserviceaccount.com` as a **Viewer**.
+Sharing the folder a report lives in is the better move:
+it covers the document, the images, and the Drive files
+the document links as `SVG:` charts in one action,
+and it covers the next report in that folder without another visit.
+Without the chart files, the vectors fall back to the rasters with a warning.
 
 Finally, hand the key and the document URL to GitHub, and delete the key:
 
 ```sh
 gh secret set GOOGLE_CREDENTIALS < key.json
-gh variable set ETA_DOC_URL --body 'https://docs.google.com/document/d/<id>/edit?tab=<tab>'
 rm key.json
 
 # Pages serves what the workflow uploads, rather than a branch.
@@ -221,7 +242,7 @@ gh api -X POST repos/:owner/:repo/pages -f build_type=workflow
 ```
 
 Then run it with `gh workflow run Pages`,
-or from the Actions tab, where the dispatch form takes a one-off doc URL.
+or from the Actions tab.
 
 Two things to know about the key:
 

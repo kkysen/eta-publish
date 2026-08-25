@@ -12,6 +12,7 @@ dependencies = [
 
 [project.scripts]
 eta-publish = "eta_publish.__main__:main"
+eta-publish-site = "eta_publish.site:main"
 
 [dependency-groups]
 dev = [
