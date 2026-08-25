@@ -131,3 +131,13 @@ def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
     saved = tmp_path / "doc.json"
     saved.write_text("{}")
     assert reports_from(str(saved)) == [Report(url=str(saved))]
+
+
+def test_only_one_document_or_list_at_a_time() -> None:
+    """Building several at once is what a list is for, and a list is a file
+    that can be reviewed rather than a shell line that is right once."""
+    from eta_publish.__main__ import build_parser
+
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(["one.toml", "two.toml"])
+    assert build_parser().parse_args([]).doc == "reports.toml"
