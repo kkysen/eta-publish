@@ -14,8 +14,6 @@ These same files are what the PDF needs, so one download serves both the
 web and the print output, and one upload to whatever host serves both.
 """
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import requests

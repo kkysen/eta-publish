@@ -20,8 +20,6 @@ so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`: what the report says with
 every open suggestion rejected, which is what the doc reads as today.
 """
 
-from __future__ import annotations
-
 import json
 import os
 import sys

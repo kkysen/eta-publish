@@ -1,7 +1,5 @@
 """`eta-publish`: a Google Doc in, a publishable report out."""
 
-from __future__ import annotations
-
 import argparse
 import sys
 from pathlib import Path

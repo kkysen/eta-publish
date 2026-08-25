@@ -5,8 +5,6 @@ or the filesystem, so an emitter can be tested against a fixture tree
 without credentials.
 """
 
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
 
 from ..nodes import (

@@ -23,8 +23,6 @@ Changing anything here reflows every archived report, so it should be its
 own commit, reviewed as a reflow rather than as content.
 """
 
-from __future__ import annotations
-
 import re
 
 # Words that end in a period without ending a sentence. Kept explicit and

@@ -6,8 +6,6 @@ block applies no styling of its own, so without this the captions, table of
 contents, and footnotes render as undifferentiated body text.
 """
 
-from __future__ import annotations
-
 import html
 import re
 from typing import override

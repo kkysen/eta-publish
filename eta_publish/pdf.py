@@ -6,8 +6,6 @@ build reports what to install, instead of failing everything for the sake
 of one output.
 """
 
-from __future__ import annotations
-
 import shutil
 import subprocess
 from importlib import resources

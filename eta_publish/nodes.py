@@ -12,8 +12,6 @@ not a general model of what a Google Doc can express. Anything the parser
 meets and cannot place here becomes a warning rather than a silent drop.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from enum import Enum
 
