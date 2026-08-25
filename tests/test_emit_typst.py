@@ -12,7 +12,8 @@ from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.pdf import compile_pdf, install_template
 
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 # A 1x1 PNG, so the figure path is exercised without checking in an asset.
 PNG = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="

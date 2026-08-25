@@ -284,15 +284,6 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     return select_tab(fetch_document(doc_id, suggestions), tab or url_tab)
 
 
-def fetch_to(
-    ref: str, dest: Path, tab: str | None = None, suggestions: str = "rejected"
-) -> JsonObject:
-    """Fetch and save the selected tab, so later runs need no credentials."""
-    document = fetch(ref, tab, suggestions)
-    dest.write_text(json.dumps(document, indent=2))
-    return document
-
-
 def download_drive_file(file_id: str) -> bytes:
     """The raw bytes of a Drive file, for vectors the document links."""
     from googleapiclient.discovery import build

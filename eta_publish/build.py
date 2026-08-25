@@ -45,21 +45,35 @@ class BuildOptions:
     images: bool = True
 
 
-def load(ref: str, outdir: Path, suggestions: str = "rejected") -> JsonObject:
-    """Accept a saved JSON file so the pipeline can run without credentials.
+DOC_JSON = "doc.json"
+"""The saved API response, written by every build beside its outputs."""
+
+
+def load(ref: str, suggestions: str = "rejected") -> JsonObject:
+    """Resolve a reference to the document it names.
+
+    A saved response can be given as the file itself or as the directory
+    holding it, because a build writes `doc.json` into the report's own
+    directory: whatever a previous run produced can be handed straight back
+    without anyone having to know the filename inside it. That is what lets
+    a test run the whole pipeline with no network at all.
 
     Which tab to read is part of the reference, as `?tab=` in the URL, and
     not a separate argument: a tab is named the same way here as it is in
     `reports.toml`, which is the only way it can be named there.
     """
     path = Path(ref)
+    if path.is_dir():
+        saved = path / DOC_JSON
+        if not saved.is_file():
+            raise FileNotFoundError(f"{path} holds no {DOC_JSON}; is it a report directory?")
+        return json.loads(saved.read_text())
     if path.is_file():
         return json.loads(path.read_text())
 
-    from .fetch import fetch_to
+    from .fetch import fetch
 
-    outdir.mkdir(parents=True, exist_ok=True)
-    return fetch_to(ref, outdir / "doc.json", suggestions=suggestions)
+    return fetch(ref, suggestions=suggestions)
 
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:
@@ -154,27 +168,22 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     site, which is exactly the kind of duplication that ends with images
     downloaded in one and not the other.
 
-    A report's directory comes from its own front matter, which is inside
-    the document, so the response is fetched to a staging directory and the
-    destination is only known afterwards.
+    Where a report goes comes from its own front matter, which is inside
+    the document, so nothing about the destination is known until the
+    document has been read. That is why the response is not written on the
+    way in: it is saved into the report's directory afterwards, whether it
+    arrived from the API or from a previous build, so what one run wrote is
+    always what the next can be handed.
     """
     from .site import report_path
 
     options = options or BuildOptions()
-    staging = outdir / ".staging"
-    doc = parse(load(ref, staging, options.suggestions))
+    document = load(ref, options.suggestions)
+    doc = parse(document)
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)
-
-    saved = staging / "doc.json"
-    if saved.exists():
-        # Kept, because re-running against it needs no credentials, and it is
-        # what the tests build from. It moves rather than being fetched into
-        # place because where it belongs was not known until it was read.
-        saved.replace(dest / "doc.json")
-    if staging.is_dir() and not any(staging.iterdir()):
-        staging.rmdir()
+    (dest / DOC_JSON).write_text(json.dumps(document, indent=2))
 
     if doc.images and options.images:
         from .images import download

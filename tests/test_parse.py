@@ -9,7 +9,8 @@ from eta_publish.docs_json import JsonObject
 from eta_publish.nodes import Document, Figure, Heading, Inline, List, ListKind, Paragraph, Text
 from eta_publish.parse import Parser, parse
 
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 @pytest.fixture

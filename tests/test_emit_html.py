@@ -10,7 +10,8 @@ from eta_publish.emit.html import HtmlEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
-FIXTURE = json.loads((Path(__file__).parent.parent / "tests/fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 @pytest.fixture

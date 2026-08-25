@@ -20,7 +20,8 @@ from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
 SNAPSHOTS = Path(__file__).parent / "snapshots"
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 @pytest.fixture
