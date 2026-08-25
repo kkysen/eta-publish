@@ -7,7 +7,8 @@ from pathlib import Path
 from eta_publish.emit.html import CODE_BLOCK_LIMIT, HtmlEmitter, split_at_headings
 from eta_publish.parse import parse
 
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 def fragment() -> str:

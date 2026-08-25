@@ -44,7 +44,8 @@ from eta_publish.nodes import (
 )
 from eta_publish.parse import element_text, parse
 
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 def _inline_text(content: list[Inline]) -> list[str]:

@@ -139,7 +139,9 @@ uv run eta-publish drafts.toml -o preview
 
 The argument is a document or a list of them, told apart without opening
 either: a URL is always a document, and only a local `.toml` path is a
-list. One at a time: building several documents in one run is what a list
+list. A document can also be a directory that a previous build wrote, which
+holds the API response as `doc.json` beside its outputs, so anything built
+once can be rebuilt with no network and no credentials. One at a time: building several documents in one run is what a list
 is for, and a list is a file that can be committed and reviewed rather than
 a shell line that was right once.
 
@@ -298,8 +300,10 @@ One publish is one request, so an afternoon of re-running the build sits
 several orders of magnitude under the limit. Exceeding it returns HTTP 429
 rather than costing anything.
 
-The saved `out/doc.json` also means the pipeline can be re-run against the
-last fetch without touching the network at all, which is what the tests do.
+Every build saves the response as `doc.json` in the report's own
+directory, so the pipeline can be re-run against the last fetch without
+touching the network at all: pass the directory. That is what the tests do,
+and `tests/fixture/` is a document folder with nothing else in it.
 
 ## Development
 

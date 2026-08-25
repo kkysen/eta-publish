@@ -25,7 +25,8 @@ from eta_publish.site import (
     reports_from,
 )
 
-FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
+FIXTURE_DIR = Path(__file__).parent / "fixture"
+FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 @pytest.fixture
@@ -154,3 +155,31 @@ def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
     result = CliRunner().invoke(app, [str(tmp_path / "absent.toml")])
     assert result.exit_code != 0
     assert "absent.toml" in result.output
+
+
+def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
+    """A build writes `doc.json` beside its outputs, so what one run wrote
+    is what the next can be handed, with no network and no knowing the
+    filename inside it."""
+    from typer.testing import CliRunner
+
+    from eta_publish.__main__ import app
+
+    result = CliRunner().invoke(
+        app, [str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images"]
+    )
+    assert result.exit_code == 0, result.output
+    built = tmp_path / "site" / "reports" / "digging-out-deep-hole-sas-west"
+    assert (built / "report.md").is_file()
+    assert (built / "doc.json").is_file()
+
+
+def test_a_directory_without_a_saved_response_says_so(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from eta_publish.__main__ import app
+
+    (tmp_path / "empty").mkdir()
+    result = CliRunner().invoke(app, [str(tmp_path / "empty"), "-o", str(tmp_path / "site")])
+    assert result.exit_code != 0
+    assert "doc.json" in result.output
