@@ -10,6 +10,8 @@
   // `Public Contributors:` only. The header block keeps the private list
   // under its own key so that those names do not reach a published page.
   public_contributors: none,
+  // The date the report publishes on, as the document shows it.
+  final_due_date: none,
   ..rest,
   body,
 ) = {
@@ -61,6 +63,10 @@
     #if public_contributors not in (none, "") [
       #v(0.6em)
       #text(size: 10pt)[By #public_contributors]
+    ]
+    #if final_due_date not in (none, "") [
+      #v(0.3em)
+      #text(size: 10pt, fill: luma(35%))[#final_due_date]
     ]
     #v(0.4em)
     #line(length: 100%, stroke: 0.8pt)

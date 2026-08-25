@@ -247,6 +247,18 @@ class Document:
         return [name.strip() for name in names.split(",") if name.strip()]
 
     @property
+    def dateline(self) -> str:
+        """The publication date, as the document shows it, e.g. `Aug 19, 2026`.
+
+        `Final Due Date:` is the date a report publishes on, and it is a date
+        chip, so the string here is the one Docs renders in the document.
+        It is passed through rather than reformatted: the header block is
+        where the date is decided, and a longer form is a change to how every
+        date reads, front matter included, rather than to this line alone.
+        """
+        return self.meta.get("final due date", "")
+
+    @property
     def slug(self) -> str:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
         return self.meta.get("url", "")
