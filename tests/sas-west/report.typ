@@ -323,8 +323,6 @@ One straightforward approach would be to commit to installing platform screen do
 While PSDs do take up some width on their own, they allow passengers to safely stand up against the platform edge rather than cautiously back from the yellow warning strip.
 The end result is that PSDs effectively increase the amount of safely usable platform space, even on a narrower platform.
 
-#strong[TODO insert PSD image, maybe JFK AirTrain?]
-
 PSDs come with numerous other benefits as well.
 They save lives by preventing falling or being pushed onto the tracks, stopping people from jumping in front of trains, and helping prevent subway surfing.
 They massively reduce delays due to unauthorized people and debris on the tracks.

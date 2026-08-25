@@ -121,6 +121,7 @@ While the MTA [initially envisioned the LIRR using Grand Central Terminal (GCT)�
 ![One of the two massive caverns blasted out of bedrock 140 ft below Grand Central Terminal.](<images/img-4b8ff8de.jpg>)
 One of the two massive caverns blasted out of bedrock 140 ft below Grand Central Terminal.
 [Credit: MTA](<https://www.flickr.com/photos/mtaphotos/8475914281/in/album-72157632775809340>)
+<!-- [Image Source](<https://www.flickr.com/photo_download.gne?id=8475914281&secret=4efa092c06&size=o&source=photoPageEngagement>) -->
 
 In no small part because of this complex, deep design, GCM wound up wildly over budget, exploding from [$4.3 to $11 billion and more than 14 years behind schedule](<https://web.archive.org/web/20180415065109/https://www.newsday.com/long-island/east-side-access-tour-1.18020231>).
 More importantly for the final project, GCM’s depth has significantly impacted its utility to travelers.
@@ -226,10 +227,12 @@ Similarly, the city-center Yuyuan Garden station on Shanghai Line 14 was built o
 ![Cross-section of Zhongsheng station.](<images/img-f5b8dae7.jpg>)
 Cross-section of Zhongsheng station.
 [Credit: China Railway Sixth Survey and Design Institute Group Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>)
+<!-- [Image Source](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>) -->
 
 ![Cross-section of the pipe-jacking at Jing’an Temple station.](<images/img-6a139fa2.png>)
 Cross-section of the pipe-jacking at Jing’an Temple station.
 [Credit: Wu Liecheng et al., Shanghai Tunnel Engineering Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>)
+<!-- [Image Source](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>) -->
 
 Underpinning to cut station depth does add complexity and risk, but it also massively reduces the cost of the station and drastically shortens transfer times, speeding up trips in perpetuity.
 Furthermore, underpinning can be built in combination with short mezzanines directly below existing stations.
@@ -239,10 +242,12 @@ Conversely, St Nicholas Av (A/B/C/D) already has a mezzanine, so the new SAS sta
 ![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/img-6c3ad309.jpg>)
 The existing elevated 125 St/Broadway station with a wide, 172 ft arch.
 [Credit: Jim Henderson](<https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG>)
+<!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/d/d9/W125irtjeh.JPG>) -->
 
 ![The 72 St headhouse in the Broadway median.](<images/img-a5e93aab.jpg>)
 The 72 St headhouse in the Broadway median.
 [Credit: Gryffindor](<https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG>)
+<!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/2/27/72nd_Street_IRT_Broadway_013.JPG>) -->
 
 Underpinning should be much less of a concern at Broadway (1), as a [172 ft-wide](<https://en.wikipedia.org/wiki/125th_Street_station_(IRT_Broadway%E2%80%93Seventh_Avenue_Line)#:~:text=The%20arch%20measures-,172%20feet,-(52%C2%A0m)%20long>) [viaduct arch](<https://www.google.com/maps/@40.8155549,-73.9580419,3a,75y,303.51h,90.96t/data=!3m7!1e1!3m5!1s435DcOmetEdoxLraSju-2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.9596236859238161%26panoid%3D435DcOmetEdoxLraSju-2Q%26yaw%3D303.5128416340331!7i16384!8i8192!5m1!1e2?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D>) spans 125 St, 2–3x the width of the station box.
 Here, the MTA could potentially build a mezzanine in a surface headhouse in the median of the street directly above the tracks, as is already seen along Broadway at 72 St and 96 St. This would enable raising the platform and tunnels even further, to only about 15 ft below street level, and would eliminate the need for an expensive, mined crossover cavern to turn trains at the terminal.
@@ -265,6 +270,7 @@ There, engineers mixed traditional cut-and-cover with a [pipe roof method called
 ![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/img-60a0a749.png>)
 Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.
 [Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)
+<!-- [Image Source](<https://ars.els-cdn.com/content/image/1-s2.0-S2214509525014135-gr2_lrg.jpg>) -->
 
 Some combination of one or all of these methods could be used along SAS West to not only massively reduce cost, but make the stations far more useful once completed.
 Different stations along 125 St may well require different construction techniques due to different ground profiles, impacts to existing different ground profiles, impacts to existing stations and buildings, or traffic requirements.
@@ -299,6 +305,7 @@ All on its own, narrowing the station on SAS West from 75 ft to the already larg
 ![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-a718beb8.png>)
 Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>) that switched the mezzanine from above to below the platform.
 Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)
+<!-- [Image Source](<https://storage.ghost.io/c/19/31/1931222a-d1c5-42ac-8932-2ee3ac1f8927/content/images/old-theurbanist-org/wp-content/uploads/2026/01/nyc-mta-116th-station-design.png>) -->
 
 ![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/img-3ec53fb1.jpg>)
 A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.
@@ -309,8 +316,6 @@ Narrowing the station boxes should be a high priority to keep costs reasonable.
 One straightforward approach would be to commit to installing platform screen doors (PSDs) from the start.
 While PSDs do take up some width on their own, they allow passengers to safely stand up against the platform edge rather than cautiously back from the yellow warning strip.
 The end result is that PSDs effectively increase the amount of safely usable platform space, even on a narrower platform.
-
-**TODO insert PSD image, maybe JFK AirTrain?**
 
 PSDs come with numerous other benefits as well.
 They save lives by preventing falling or being pushed onto the tracks, stopping people from jumping in front of trains, and helping prevent subway surfing.

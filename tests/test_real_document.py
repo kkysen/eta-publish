@@ -138,7 +138,6 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
         "Set that paragraph to normal text in the doc.",
         "image kix.6v8dr3hm2747 has no alt text and no caption; add a description to it in the doc",
         "unfinished text in the document: SVG: TODO",
-        "unfinished text in the document: TODO insert PSD image, maybe JFK AirTrain?",
     ]
 
 
