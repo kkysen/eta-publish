@@ -226,7 +226,10 @@ SEO Description: A 125 St subway should be a slam dunk ...
 
 The converter reads that block into metadata and keeps it out of the body.
 `URL:` becomes the published path, `Short:` becomes the standfirst,
-`SEO Description:` becomes the page description.
+`SEO Description:` becomes the page description,
+and `Public Contributors:` becomes the byline, named the way the header
+lists them. `Private Contributors:` is never read for it, which is the
+point of the two fields being separate.
 Everything else is carried along and made available to the templates.
 
 Two rules matter, because both are load-bearing:

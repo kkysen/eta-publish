@@ -39,6 +39,7 @@ REPORT_CSS = """
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
+.eta-report .byline { font-size: .95rem; }
 .eta-report .toc { font-size: .95rem; line-height: 2; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnotes-sep { margin-top: 3em; }
@@ -94,11 +95,29 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
+        parts.append(self.byline(doc))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.blocks))
         parts.append(self.footnotes(doc))
         parts.append("</div>")
         return self.join(parts)
+
+    def byline(self, doc: Document) -> str:
+        """Who is credited, from the header block rather than typed again.
+
+        The names are listed the way the document lists them, separated by
+        commas and in its order, with no "and" spliced in before the last:
+        the header block is the one place the credits are maintained, and
+        rewording them here would make the published line something no one
+        wrote.
+
+        A report with no `Public Contributors:` gets no byline at all, the
+        way `slug` is simply empty when the header names no URL.
+        """
+        names = doc.contributors
+        if not names:
+            return ""
+        return f'<p class="byline">By {escape(", ".join(names))}</p>'
 
     def toc(self, doc: Document) -> str:
         headings = doc.headings(level=2)

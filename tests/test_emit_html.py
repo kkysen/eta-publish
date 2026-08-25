@@ -111,3 +111,16 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
     scrolls sideways on a phone is worse than a table that does."""
     assert '<div class="table-scroll"><table>' in out
     assert "<td><p>Grand Paris Express</p></td>" in out
+
+
+def test_the_byline_lists_the_public_contributors(doc: Document) -> None:
+    doc.meta["public contributors"] = "Khyber Sen, Alon Levy"
+    doc.meta["private contributors"] = "Someone Unnamed"
+    out = HtmlEmitter(inline_css=False).emit(doc)
+    assert '<p class="byline">By Khyber Sen, Alon Levy</p>' in out
+    assert "Someone Unnamed" not in out
+
+
+def test_a_report_with_no_public_contributors_has_no_byline(doc: Document) -> None:
+    doc.meta.pop("public contributors", None)
+    assert 'class="byline"' not in HtmlEmitter(inline_css=False).emit(doc)
