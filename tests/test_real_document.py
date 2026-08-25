@@ -38,7 +38,7 @@ from pathlib import Path
 import pytest
 from paths import REAL_DIR as REAL
 
-from eta_publish.emit.html import HtmlEmitter, preview_page
+from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document, Figure, Heading
@@ -110,8 +110,8 @@ def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
     check("report.typ", TypstEmitter().emit(doc), regenerate_snapshots)
 
 
-def test_preview_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("preview.html", preview_page(doc), regenerate_snapshots)
+def test_page_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+    check("index.html", report_page(doc), regenerate_snapshots)
 
 
 # ---- what the document should parse to ------------------------------
@@ -218,7 +218,7 @@ def test_no_chip_email_reaches_any_output(doc: Document) -> None:
         HtmlEmitter().emit(doc),
         MarkdownEmitter().emit(doc),
         TypstEmitter().emit(doc),
-        preview_page(doc),
+        report_page(doc),
     ):
         for email in emails:
             assert email not in emitted, email

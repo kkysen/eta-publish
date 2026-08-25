@@ -98,7 +98,7 @@ def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
     site = build_site(reports, tmp_path / "site", BuildOptions(images=False))
     assert [f.report.name for f in site.failed] == ["gone"]
     assert [b.report.name for b in site.built] == ["fine"]
-    assert (tmp_path / "site" / site.built[0].path / "preview.html").exists()
+    assert (tmp_path / "site" / site.built[0].path / "index.html").exists()
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:

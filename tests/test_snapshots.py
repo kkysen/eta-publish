@@ -17,7 +17,7 @@ import json
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.emit.html import HtmlEmitter, preview_page
+from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document
@@ -60,8 +60,8 @@ def test_typst_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> No
     check("report.typ", TypstEmitter().emit(doc), regenerate_snapshots)
 
 
-def test_preview_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
+def test_page_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
     """Snapshotted for the same reason as the rest: it is one of the four
     files a build writes, and leaving it out would make this directory
     something a build cannot reproduce."""
-    check("preview.html", preview_page(doc), regenerate_snapshots)
+    check("index.html", report_page(doc), regenerate_snapshots)

@@ -1,4 +1,4 @@
-"""The preview page, whose whole purpose is being readable before publishing."""
+"""The report as a page: `index.html`, which is what the site serves."""
 
 import json
 import re
@@ -8,7 +8,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.build import emit
-from eta_publish.emit.html import preview_page
+from eta_publish.emit.html import report_page
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
@@ -22,7 +22,7 @@ def doc() -> Document:
     return parsed
 
 
-def test_preview_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) -> None:
+def test_page_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) -> None:
     """Everything a build writes references its images the same way: by the
     path they sit at, right beside the page."""
     images = tmp_path / "images"
@@ -30,13 +30,13 @@ def test_preview_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) 
     (images / "img-1933bef5.png").write_bytes(b"not really a png")
 
     emit(doc, tmp_path)
-    page = (tmp_path / "preview.html").read_text()
+    page = (tmp_path / "index.html").read_text()
 
     sources = re.findall(r'<img src="([^"]+)"', page)
     assert sources
     for src in sources:
         assert not src.startswith("http")
-        assert (tmp_path / src).exists(), f"{src} does not resolve next to preview.html"
+        assert (tmp_path / src).exists(), f"{src} does not resolve next to index.html"
 
 
 def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Path) -> None:
@@ -53,12 +53,12 @@ def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Pa
 def test_warnings_are_shown_where_someone_will_see_them() -> None:
     doc = parse(FIXTURE)
     doc.warn("something looked wrong")
-    assert "something looked wrong" in preview_page(doc)
+    assert "something looked wrong" in report_page(doc)
 
 
 def test_no_warnings_means_no_warning_box(doc: Document) -> None:
     assert doc.warnings == []
-    assert 'class="warnings"' not in preview_page(doc)
+    assert 'class="warnings"' not in report_page(doc)
 
 
 def test_markdown_images_resolve_next_to_the_archive(doc: Document, tmp_path: Path) -> None:

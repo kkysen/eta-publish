@@ -1,4 +1,4 @@
-"""HTML for the Squarespace code block, and for the standalone preview.
+"""HTML two ways: a fragment to embed, and a page to read.
 
 Scoped to `.eta-report` so the same CSS works inlined into the pasted
 fragment and injected once site-wide under Custom CSS. A Squarespace code
@@ -257,10 +257,10 @@ def plain(content: list[Inline]) -> str:
     return "".join(i.text for i in content if isinstance(i, Text))
 
 
-# Enough to read the report as it will look, and nothing more. The published
-# page inherits Squarespace's typography, so matching it here would be a
-# guess that goes stale.
-PREVIEW_CSS = """
+# Enough to read the report as it will look, and nothing more. A page
+# pasted into Squarespace inherits that site's typography, so matching it
+# here would be a guess that goes stale.
+PAGE_CSS = """
 :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fff; }
 @media (prefers-color-scheme: dark) { :root { --fg: #eaeaea; --bg: #141414; } }
 body { background: var(--bg); color: var(--fg); max-width: 46rem;
@@ -276,16 +276,15 @@ a { color: inherit; }
 """
 
 
-def preview_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
-    """A standalone page for reading the report before it is published.
+def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
+    """The whole report as a page, which is what a build writes as
+    `index.html` and what the site serves.
 
-    Deliberately not the Squarespace fragment with a wrapper bolted on: it
-    also surfaces the parser's warnings, which are the thing worth seeing
-    before publishing and have nowhere to go on the real page.
-
-    The image base is the preview's own, independent of whatever the
-    fragment is pointed at: a preview whose figures are all broken is not a
-    preview, so it always reads the files a build wrote beside it.
+    Deliberately not the fragment with a wrapper bolted on. `report.html` is
+    the fragment: a `div` to paste into a Squarespace code block, which
+    inherits the site's typography and has nowhere to put a warning. This is
+    a document, with its own head, its own type, and the parser's warnings
+    where whoever is about to publish will see them.
     """
     body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
     warnings = ""
@@ -299,7 +298,7 @@ def preview_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f"<title>{escape(doc.title)}</title>\n"
         f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
-        f"<style>{PREVIEW_CSS}{REPORT_CSS}</style>\n"
+        f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
         f"<h1>{escape(doc.title)}</h1>\n"
         f'<p class="standfirst">{escape(short)}</p>\n'
         f"{warnings}\n"
