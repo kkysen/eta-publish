@@ -14,6 +14,16 @@ import unicodedata
 from collections import defaultdict
 from collections.abc import Iterable
 
+IMAGE_DIR = "images"
+"""The directory a build writes images into, relative to the report.
+
+Every output refers to them by this name, and the download writes them
+under it, so it lives here rather than being spelled out in each of the
+four places that has to agree with the other three. Serving them from
+somewhere else is what an emitter's `image_base` is for, and is a decision
+about hosting rather than about a build.
+"""
+
 _NON_SLUG = re.compile(r"[^\w\s-]")
 _SEPARATORS = re.compile(r"[\s_-]+")
 

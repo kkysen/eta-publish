@@ -15,6 +15,7 @@ YAML rather than prose.
 import re
 from typing import override
 
+from ..naming import IMAGE_DIR
 from ..nodes import (
     Document,
     Figure,
@@ -82,7 +83,7 @@ def yaml_value(value: str) -> str:
 class MarkdownEmitter(Emitter):
     extension = ".md"
 
-    def __init__(self, image_dir: str = "images") -> None:
+    def __init__(self, image_dir: str = IMAGE_DIR) -> None:
         """`image_dir` is relative to the `.md`, which sits beside it.
 
         Not a published URL prefix: the archive is read from the

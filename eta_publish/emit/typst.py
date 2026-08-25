@@ -18,6 +18,7 @@ house style lives in one place rather than being regenerated per report.
 import re
 from typing import override
 
+from ..naming import IMAGE_DIR
 from ..nodes import (
     Document,
     Figure,
@@ -52,7 +53,7 @@ def string(value: str) -> str:
 class TypstEmitter(Emitter):
     extension = ".typ"
 
-    def __init__(self, template: str = "template.typ", image_dir: str = "images") -> None:
+    def __init__(self, template: str = "template.typ", image_dir: str = IMAGE_DIR) -> None:
         super().__init__()
         self.template = template
         self.image_dir = image_dir.rstrip("/")
