@@ -1,8 +1,9 @@
 """Snapshot of the real SAS West report, end to end.
 
-`tests/real/` is literally a publish of the real report:
+`site/` is literally a publish of the real report, at the top level
+because it is the site this project publishes rather than a test fixture:
 
-    uv run eta-publish <doc-url> -o tests/real
+    uv run eta-publish -o site
 
 A publish is a site, so the report lands under the path its own front
 matter names, `reports/digging-out-deep-hole-sas-west/`, next to the index

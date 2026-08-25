@@ -13,11 +13,16 @@ token.json
 # Scratch output directories from ad-hoc runs.
 /out*/
 
-# `tests/real/` is written by `eta-publish <doc-url> -o tests/real`, but
-# only its text outputs are committed: the images are 18 MB and the PDF
-# 19 MB, and every re-fetch would add another copy to history forever.
-# `tests/fixture/` is the same shape, built from a hand-written document.
-/tests/*/**/images/
-/tests/*/**/report.pdf
-/tests/*/**/template.typ
-/tests/*/index.html
+# `site/` is the published site, written by `eta-publish -o site`, and
+# `tests/fixture/` is the same shape built from a hand-written document.
+# Only the text is committed: the images are 18 MB and the PDF 19 MB, and
+# every re-fetch would add another copy to history forever. Both are
+# rebuilt by CI before deploying, so nothing here is needed to publish.
+/site/**/images/
+/site/**/report.pdf
+/site/**/template.typ
+/site/index.html
+/tests/fixture/**/images/
+/tests/fixture/**/report.pdf
+/tests/fixture/**/template.typ
+/tests/fixture/index.html
