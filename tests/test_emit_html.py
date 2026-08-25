@@ -124,3 +124,14 @@ def test_the_byline_lists_the_public_contributors(doc: Document) -> None:
 def test_a_report_with_no_public_contributors_has_no_byline(doc: Document) -> None:
     doc.meta.pop("public contributors", None)
     assert 'class="byline"' not in HtmlEmitter(inline_css=False).emit(doc)
+
+
+def test_the_dateline_is_the_final_due_date(doc: Document) -> None:
+    doc.meta["final due date"] = "Aug 19, 2026"
+    out = HtmlEmitter(inline_css=False).emit(doc)
+    assert '<p class="dateline">Aug 19, 2026</p>' in out
+
+
+def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
+    doc.meta.pop("final due date", None)
+    assert 'class="dateline"' not in HtmlEmitter(inline_css=False).emit(doc)

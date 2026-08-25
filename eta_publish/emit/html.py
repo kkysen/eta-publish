@@ -40,6 +40,7 @@ REPORT_CSS = """
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .byline { font-size: .95rem; }
+.eta-report .dateline { font-size: .95rem; opacity: .75; }
 .eta-report .toc { font-size: .95rem; line-height: 2; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnotes-sep { margin-top: 3em; }
@@ -96,6 +97,7 @@ class HtmlEmitter(Emitter):
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
         parts.append(self.byline(doc))
+        parts.append(self.dateline(doc))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.blocks))
         parts.append(self.footnotes(doc))
@@ -118,6 +120,19 @@ class HtmlEmitter(Emitter):
         if not names:
             return ""
         return f'<p class="byline">By {escape(", ".join(names))}</p>'
+
+    def dateline(self, doc: Document) -> str:
+        """When the report published, from `Final Due Date:` in the header.
+
+        Absent entirely when the header names no date. Plain text rather
+        than a `<time>`: that element only carries machine-readable meaning
+        with an ISO stamp, and `date_text` keeps the formatted string the
+        chip displays and drops the timestamp behind it.
+        """
+        date = doc.dateline
+        if not date:
+            return ""
+        return f'<p class="dateline">{escape(date)}</p>'
 
     def toc(self, doc: Document) -> str:
         headings = doc.headings(level=2)
