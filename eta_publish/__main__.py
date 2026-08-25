@@ -1,8 +1,10 @@
 """`eta-publish`: Google Docs in, a publishable site out.
 
-One document or the whole list of them, the same way. Reports are named on
-the command line, or read from `reports.toml` when none are, and each lands
-under the path its own front matter gives it, with an index listing them.
+One document or the whole list of them, the same way. An argument is either
+a document (a Docs URL, an id, or a saved response) or a `.toml` list of
+them, and `reports.toml` is what runs when there are no arguments at all.
+Each report lands under the path its own front matter gives it, with an
+index listing them.
 
 There is no separate single-document mode. A publish of one report is a
 publish of a list with one entry in it, and keeping that true means the
@@ -14,7 +16,7 @@ import sys
 from pathlib import Path
 
 from .build import BuildOptions
-from .site import Report, build_site, index_page, load_reports
+from .site import build_site, index_page, reports_from
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -22,16 +24,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "doc",
         nargs="*",
-        help="Google Doc URLs or ids, or paths to saved Docs API JSON; "
-        "defaults to every entry in reports.toml",
+        metavar="DOC",
+        help="Google Doc URLs (including their `?tab=` id), ids, saved Docs "
+        "API JSON, or a `.toml` list of reports; defaults to reports.toml",
     )
     p.add_argument("-o", "--outdir", type=Path, default=Path("out"))
-    p.add_argument("--reports", type=Path, help="the report list to build (default: reports.toml)")
-    p.add_argument(
-        "--tab",
-        help="Docs tab id for a single document; otherwise give each URL its "
-        "own `?tab=`. Multi-tab documents refuse to guess, and list their tabs.",
-    )
     p.add_argument(
         "--image-base",
         default="",
@@ -65,22 +62,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    if args.tab and len(args.doc) != 1:
-        parser.error("--tab names a tab of one document; put `?tab=` in each URL instead")
-
     try:
-        reports = (
-            [Report(url=doc) for doc in args.doc]
-            if args.doc
-            else load_reports(args.reports or Path("reports.toml"))
-        )
+        reports = [r for ref in args.doc or ["reports.toml"] for r in reports_from(ref)]
     except (OSError, ValueError) as e:
         parser.error(str(e))
 
     options = BuildOptions(
         image_base=args.image_base,
         suggestions=args.suggestions,
-        tab=args.tab,
         split=args.split,
         pdf=not args.no_pdf,
         images=not args.no_images,

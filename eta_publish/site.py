@@ -91,6 +91,22 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
     return reports
 
 
+def reports_from(ref: str) -> list[Report]:
+    """What one command line argument means: a document, or a list of them.
+
+    A URL is always a document. Only a local path can be a list, and only
+    when it is named like one: `reports.toml` is TOML, a saved Docs response
+    is `.json`, and a document reference is a URL or a bare id. Nothing has
+    to be opened to tell them apart, so a typo in a filename is a missing
+    file rather than a confident wrong answer about what it was.
+    """
+    if ref.startswith(("http://", "https://")):
+        return [Report(url=ref)]
+    if Path(ref).suffix == ".toml":
+        return load_reports(Path(ref))
+    return [Report(url=ref)]
+
+
 def report_path(doc: Document) -> str:
     """Where this report goes on the site, from its own front matter.
 

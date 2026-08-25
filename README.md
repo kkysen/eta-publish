@@ -132,7 +132,14 @@ uv run eta-publish -o site
 
 # Or one document, before it is on the list.
 uv run eta-publish <google-doc-url> --image-base https://assets.etany.org/sas-west
+
+# Or a different list.
+uv run eta-publish drafts.toml -o preview
 ```
+
+An argument is a document or a list of them, told apart without opening
+either: a URL is always a document, and only a local `.toml` path is a
+list.
 
 A publish is always a site, whether it holds one report or four:
 each lands under the path its own front matter names,
@@ -144,6 +151,10 @@ Pass the full URL including its `?tab=` id.
 ETA reports live in multi-tab documents, and the Docs API defaults to the
 first tab, which is usually an earlier draft. A multi-tab document with no
 tab specified refuses to guess and lists its tabs.
+
+The URL is the only way to name a tab, on the command line and in
+`reports.toml` alike, so the same reference means the same document
+wherever it is written.
 
 Outputs land in `out/<the report's path>/`. Add `--split` for a report over
 the code block limit, and `--no-pdf` to skip compiling the Typst.

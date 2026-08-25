@@ -153,8 +153,8 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
     if wanted is None:
         if len(tabs) > 1:
             raise TabNotFound(
-                f"this document has {len(tabs)} tabs; name one with `--tab`, "
-                f"or pass the URL including its `?tab=` id:\n{describe_tabs(document)}"
+                f"this document has {len(tabs)} tabs; pass the URL including "
+                f"the `?tab=` id of the one to publish:\n{describe_tabs(document)}"
             )
         chosen = tabs[0][1]
     else:

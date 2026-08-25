@@ -22,6 +22,7 @@ from eta_publish.site import (
     index_page,
     load_reports,
     report_path,
+    reports_from,
 )
 
 FIXTURE = json.loads((Path(__file__).parent / "fixture-doc.json").read_text())
@@ -108,3 +109,25 @@ def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
     assert 'href="reports/sas-west/"' in page
     assert doc.title in page
     assert "Next: not found" in page
+
+
+def test_a_url_is_a_document_even_when_it_ends_in_toml() -> None:
+    """Only a local path can name a list. A URL is a document, whatever it
+    is spelled like, so a Drive link can never be mistaken for a roster."""
+    ref = "https://docs.google.com/document/d/abc/edit?tab=t.1"
+    assert reports_from(ref) == [Report(url=ref)]
+    assert reports_from("https://example.invalid/reports.toml") == [
+        Report(url="https://example.invalid/reports.toml")
+    ]
+
+
+def test_a_toml_path_is_a_list(tmp_path: Path) -> None:
+    path = tmp_path / "more.toml"
+    path.write_text('[[report]]\nurl = "https://example.invalid/a"\n')
+    assert reports_from(str(path)) == [Report(url="https://example.invalid/a")]
+
+
+def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
+    saved = tmp_path / "doc.json"
+    saved.write_text("{}")
+    assert reports_from(str(saved)) == [Report(url=str(saved))]
