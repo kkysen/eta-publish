@@ -83,12 +83,22 @@ jobs:
             uv run eta-publish -o site
           fi
 
-      # Nothing to lay out: a build writes each report as `index.html` in
-      # its own directory, and the site index beside them, which is the site
-      # already. The Typst template is the one file that is a build input
-      # rather than part of the site.
-      - name: Drop what is not part of the site
-        run: find site -name template.typ -delete
+      # The deploy is a copy of `site/`: a build already writes each report
+      # as `index.html` in its own directory, with the site index beside
+      # them. What is removed is what is not content.
+      #
+      # `doc.json` is the one that matters. It is the API response as
+      # fetched, so it carries the email address behind every person chip,
+      # and `Public Contributors:` is made of person chips. Publishing it
+      # would put contributors' addresses at a stable URL for anyone who
+      # thought to look, which is not something a report does.
+      # `template.typ` is a build input, and `images.json` records what the
+      # images were named so a test can run without downloading them.
+      - name: Drop what is not content
+        run: |
+          find site \
+            \( -name doc.json -o -name template.typ -o -name images.json \) \
+            -delete
 
       - uses: actions/upload-pages-artifact@v3
         with:
