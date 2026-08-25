@@ -1,10 +1,13 @@
 """`eta-publish`: Google Docs in, a publishable site out.
 
-One document or the whole list of them, the same way. An argument is either
-a document (a Docs URL, an id, or a saved response) or a `.toml` list of
-them, and `reports.toml` is what runs when there are no arguments at all.
-Each report lands under the path its own front matter gives it, with an
-index listing them.
+One document or the whole list of them, the same way. The single argument
+is either a document (a Docs URL, an id, or a saved response) or a `.toml`
+list of them, and it defaults to `reports.toml`. Each report lands under
+the path its own front matter gives it, with an index listing them.
+
+One argument rather than many: building several documents at once is what
+a list is for, and a list is a file that can be committed, reviewed, and
+commented rather than a shell line that is right once.
 
 There is no separate single-document mode. A publish of one report is a
 publish of a list with one entry in it, and keeping that true means the
@@ -23,10 +26,11 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="eta-publish", description=__doc__)
     p.add_argument(
         "doc",
-        nargs="*",
+        nargs="?",
+        default="reports.toml",
         metavar="DOC",
-        help="Google Doc URLs (including their `?tab=` id), ids, saved Docs "
-        "API JSON, or a `.toml` list of reports; defaults to reports.toml",
+        help="a Google Doc URL (including its `?tab=` id), an id, saved Docs "
+        "API JSON, or a `.toml` list of reports (default: reports.toml)",
     )
     p.add_argument("-o", "--outdir", type=Path, default=Path("out"))
     p.add_argument(
@@ -63,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        reports = [r for ref in args.doc or ["reports.toml"] for r in reports_from(ref)]
+        reports = reports_from(args.doc)
     except (OSError, ValueError) as e:
         parser.error(str(e))
 

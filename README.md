@@ -137,9 +137,11 @@ uv run eta-publish <google-doc-url> --image-base https://assets.etany.org/sas-we
 uv run eta-publish drafts.toml -o preview
 ```
 
-An argument is a document or a list of them, told apart without opening
+The argument is a document or a list of them, told apart without opening
 either: a URL is always a document, and only a local `.toml` path is a
-list.
+list. One at a time: building several documents in one run is what a list
+is for, and a list is a file that can be committed and reviewed rather than
+a shell line that was right once.
 
 A publish is always a site, whether it holds one report or four:
 each lands under the path its own front matter names,
