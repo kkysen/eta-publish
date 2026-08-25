@@ -1,9 +1,9 @@
-"""Build every report the project publishes into one static site.
+"""What makes a set of reports a site: the list, the paths, and the index.
 
-The single-report command answers "convert this document". This answers
-"publish the reports", which is the question with more than one document in
-it: ETA has published several and will publish more, so nothing here may be
-written in terms of *the* doc.
+The per-document build lives in `build.py`. What is here is everything that
+only exists once there is more than one report, which is the case the
+project is actually in: ETA has published several and will publish more, so
+nothing may be written in terms of *the* doc.
 
 Each report lands under its own published path, taken from the `URL:` line
 in its front matter, so a preview of
@@ -19,17 +19,15 @@ a site missing one report beats no site at all. The exit status still
 reports it.
 """
 
-import argparse
 import sys
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .build import build_pdf, check_code_block_size, emit, load
+from .build import BuildOptions, build_one
 from .emit.html import escape
 from .naming import slugify
 from .nodes import Document
-from .parse import parse
 
 REPORTS = Path("reports.toml")
 """Which documents the site is built from, committed beside the code.
@@ -111,50 +109,21 @@ def report_path(doc: Document) -> str:
     return fallback
 
 
-def build_report(report: Report, outdir: Path, no_images: bool = False) -> Built:
-    """Fetch, parse, and write one report into its own directory.
+def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
+    """Build every report, keeping going when one of them cannot be built.
 
-    Two passes over the output directory are unavoidable: the path a report
-    belongs at is inside the document, so the fetch has to happen before
-    the destination is known. The response is saved where it lands and
-    moved with the rest.
+    Failing late rather than at the first error is the only behavior that
+    makes sense for a list: a document that cannot be fetched says nothing
+    about the next one, and a site missing one report beats no site at all.
+    With a single report it costs nothing, since there is nothing after it
+    to salvage.
     """
-    staging = outdir / ".staging"
-    doc = parse(load(report.url, staging))
-    path = report_path(doc)
-    dest = outdir / path
-
-    if doc.images and not no_images:
-        from .images import download
-
-        download(doc, dest / "images")
-
-    written = emit(doc, dest, image_base="")
-    typ = written.get("report.typ")
-    if typ is not None:
-        build_pdf(typ, dest, skipped_images=no_images and bool(doc.images))
-    html = written.get("report.html")
-    if html is not None:
-        check_code_block_size(doc, html)
-
-    saved = staging / "doc.json"
-    if saved.exists():
-        # Not published: it is the API's response, including the signed
-        # image URLs, and it is 400 KB of JSON nobody reads in a browser.
-        saved.unlink()
-    if staging.exists() and not any(staging.iterdir()):
-        staging.rmdir()
-
-    return Built(report=report, doc=doc, path=path)
-
-
-def build_site(reports: list[Report], outdir: Path, no_images: bool = False) -> Site:
     site = Site()
     for report in reports:
         label = report.name or report.url
         print(f"building {label}", file=sys.stderr)
         try:
-            built = build_report(report, outdir, no_images)
+            doc, path = build_one(report.url, outdir, options)
         except Exception as e:  # noqa: BLE001
             # Deliberately broad: a fetch failure, a parse failure, and a
             # disk failure are all the same decision here, which is to keep
@@ -162,9 +131,9 @@ def build_site(reports: list[Report], outdir: Path, no_images: bool = False) -> 
             print(f"failed: {label}: {e}", file=sys.stderr)
             site.failed.append(Failed(report=report, error=str(e)))
             continue
-        for warning in built.doc.warnings:
+        for warning in doc.warnings:
             print(f"  warning: {warning}", file=sys.stderr)
-        site.built.append(built)
+        site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
 
@@ -217,35 +186,3 @@ def index_page(site: Site) -> str:
         f"<ul>\n{''.join(items)}\n</ul>\n"
         f"{failures}"
     )
-
-
-def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="eta-publish-site", description=__doc__)
-    p.add_argument(
-        "doc",
-        nargs="*",
-        help="documents to build; defaults to every entry in reports.toml",
-    )
-    p.add_argument("-o", "--outdir", type=Path, default=Path("site"))
-    p.add_argument("--reports", type=Path, default=REPORTS)
-    p.add_argument("--no-images", action="store_true")
-    return p
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
-    reports = [Report(url=d) for d in args.doc] if args.doc else load_reports(args.reports)
-
-    site = build_site(reports, args.outdir, args.no_images)
-    args.outdir.mkdir(parents=True, exist_ok=True)
-    (args.outdir / "index.html").write_text(index_page(site))
-
-    for built in site.built:
-        print(f"  {built.path}")
-    # A failure is worth a non-zero status even though the site was written,
-    # so a scheduled run cannot fail silently.
-    return 1 if site.failed else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

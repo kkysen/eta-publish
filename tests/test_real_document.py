@@ -4,9 +4,11 @@
 
     uv run eta-publish <doc-url> -o tests/sas-west
 
-That writes `doc.json`, the four outputs, `images/`, and `report.pdf`, and
-this test asserts the committed outputs still match what the code produces
-from the committed response. It is the only test that runs against a
+A publish is a site, so the report lands under the path its own front
+matter names, `reports/digging-out-deep-hole-sas-west/`, next to the index
+listing it. That directory holds `doc.json`, the four outputs, `images/`,
+and `report.pdf`, and this test asserts the committed outputs still match
+what the code produces from the committed response. It is the only test that runs against a
 document nobody wrote to make a point, and every bug that mattered so far
 came from this document's shape rather than from a hand-built fixture.
 
@@ -36,7 +38,8 @@ from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
-REAL = Path(__file__).parent / "sas-west"
+SITE = Path(__file__).parent / "sas-west"
+REAL = SITE / "reports" / "digging-out-deep-hole-sas-west"
 FILENAMES_PATH = REAL / "images.json"
 DOWNLOADED = REAL / "images"
 DOC_JSON = json.loads((REAL / "doc.json").read_text())

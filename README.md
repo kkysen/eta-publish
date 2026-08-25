@@ -127,16 +127,26 @@ own documentation; the one estimate below is marked as such.
 ## Usage
 
 ```sh
+# Every report in `reports.toml`.
+uv run eta-publish -o site
+
+# Or one document, before it is on the list.
 uv run eta-publish <google-doc-url> --image-base https://assets.etany.org/sas-west
 ```
+
+A publish is always a site, whether it holds one report or four:
+each lands under the path its own front matter names,
+alongside an `index.html` listing them.
+One report failing to build does not stop the rest;
+the run exits non-zero and the index names what failed.
 
 Pass the full URL including its `?tab=` id.
 ETA reports live in multi-tab documents, and the Docs API defaults to the
 first tab, which is usually an earlier draft. A multi-tab document with no
 tab specified refuses to guess and lists its tabs.
 
-Outputs land in `out/`. Add `--split` for a report over the code block
-limit, and `--no-pdf` to skip compiling the Typst.
+Outputs land in `out/<the report's path>/`. Add `--split` for a report over
+the code block limit, and `--no-pdf` to skip compiling the Typst.
 
 ### Authentication
 
@@ -164,7 +174,8 @@ by name, but they belong outside it anyway.
 
 ### Publishing the preview to GitHub Pages
 
-`.github/workflows/pages.yml` builds **every report in `reports.toml`**
+`.github/workflows/pages.yml` runs `eta-publish`,
+which builds **every report in `reports.toml`**
 from its live document and deploys them as one site.
 Each lands at the path its own front matter names,
 so `/reports/digging-out-deep-hole-sas-west` in the header
