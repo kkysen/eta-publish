@@ -8,6 +8,7 @@ dependencies = [
     "google-auth-oauthlib>=1.2",
     "pillow>=11.0",
     "requests>=2.32",
+    "typer>=0.27.1",
 ]
 
 [project.scripts]

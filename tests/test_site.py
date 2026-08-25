@@ -136,8 +136,21 @@ def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
 def test_only_one_document_or_list_at_a_time() -> None:
     """Building several at once is what a list is for, and a list is a file
     that can be reviewed rather than a shell line that is right once."""
-    from eta_publish.__main__ import build_parser
+    from typer.testing import CliRunner
 
-    with pytest.raises(SystemExit):
-        build_parser().parse_args(["one.toml", "two.toml"])
-    assert build_parser().parse_args([]).doc == "reports.toml"
+    from eta_publish.__main__ import app
+
+    result = CliRunner().invoke(app, ["one.toml", "two.toml"])
+    assert result.exit_code != 0
+
+
+def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
+    """Not a traceback: naming a file that is not there is a typo, and the
+    message should read like one."""
+    from typer.testing import CliRunner
+
+    from eta_publish.__main__ import app
+
+    result = CliRunner().invoke(app, [str(tmp_path / "absent.toml")])
+    assert result.exit_code != 0
+    assert "absent.toml" in result.output

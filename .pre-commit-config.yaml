@@ -23,6 +23,7 @@ repos:
             "requests>=2.32",
             "types-requests>=2.32",
             "pytest>=9.1.1",
+            "typer>=0.27",
           ]
 
   - repo: local
