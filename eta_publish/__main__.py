@@ -14,74 +14,88 @@ publish of a list with one entry in it, and keeping that true means the
 common case and the real case run the same code.
 """
 
-import argparse
 import sys
+from enum import StrEnum
 from pathlib import Path
+from typing import Annotated
+
+# `Option` and `Argument` stay qualified as `typer.Option` and
+# `typer.Argument`: both are ordinary words that a document tool can expect
+# to want for its own things. The rest are distinctive enough to import.
+import typer
+from typer import BadParameter, Exit, Typer
 
 from .build import BuildOptions
 from .site import build_site, index_page, reports_from
 
 
-def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="eta-publish", description=__doc__)
-    p.add_argument(
-        "doc",
-        nargs="?",
-        default="reports.toml",
-        metavar="DOC",
-        help="a Google Doc URL (including its `?tab=` id), an id, saved Docs "
-        "API JSON, or a `.toml` list of reports (default: reports.toml)",
-    )
-    p.add_argument("-o", "--outdir", type=Path, default=Path("out"))
-    p.add_argument(
-        "--image-base",
-        default="",
-        help="URL prefix for published images, e.g. https://assets.etany.org/sas-west",
-    )
-    p.add_argument(
-        "--suggestions",
-        choices=("rejected", "accepted"),
-        default="rejected",
-        help="how to resolve open suggestions (default: rejected, i.e. what the doc says now)",
-    )
-    p.add_argument(
-        "--split",
-        action="store_true",
-        help="write the HTML as numbered pieces cut at h2, for reports over the code block limit",
-    )
-    p.add_argument(
-        "--no-pdf",
-        action="store_true",
-        help="write the Typst source but do not compile it",
-    )
-    p.add_argument(
-        "--no-images",
-        action="store_true",
-        help="skip downloading images; the output still references them",
-    )
-    return p
+class Suggestions(StrEnum):
+    """How to resolve the document's open suggestions.
+
+    An enum rather than a pair of strings, so the choices are the type and
+    `--suggestions` cannot be handed a mode the API does not have.
+    """
+
+    REJECTED = "rejected"
+    ACCEPTED = "accepted"
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = build_parser()
-    args = parser.parse_args(argv)
+app = Typer(
+    add_completion=False,
+    context_settings={"help_option_names": ["-h", "--help"]},
+    # The help is prose, not markup to be reinterpreted on the way out.
+    rich_markup_mode=None,
+)
 
+
+@app.command(help=__doc__)
+def publish(
+    doc: Annotated[
+        str,
+        typer.Argument(
+            metavar="DOC",
+            help="a Google Doc URL (including its `?tab=` id), an id, saved "
+            "Docs API JSON, or a `.toml` list of reports",
+        ),
+    ] = "reports.toml",
+    outdir: Annotated[Path, typer.Option("-o", "--outdir")] = Path("out"),
+    image_base: Annotated[
+        str,
+        typer.Option(help="URL prefix for published images, e.g. https://assets.etany.org/x"),
+    ] = "",
+    suggestions: Annotated[
+        Suggestions,
+        typer.Option(help="how to resolve open suggestions; rejected is what the doc says now"),
+    ] = Suggestions.REJECTED,
+    split: Annotated[
+        bool,
+        typer.Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
+    ] = False,
+    pdf: Annotated[bool, typer.Option(help="compile the Typst source")] = True,
+    images: Annotated[
+        bool, typer.Option(help="download the images; the output references them either way")
+    ] = True,
+) -> None:
     try:
-        reports = reports_from(args.doc)
+        reports = reports_from(doc)
     except (OSError, ValueError) as e:
-        parser.error(str(e))
+        # Typer's own wording for a bad argument, because that is what it is.
+        raise BadParameter(str(e), param_hint="DOC") from e
 
-    options = BuildOptions(
-        image_base=args.image_base,
-        suggestions=args.suggestions,
-        split=args.split,
-        pdf=not args.no_pdf,
-        images=not args.no_images,
+    site = build_site(
+        reports,
+        outdir,
+        BuildOptions(
+            image_base=image_base,
+            suggestions=str(suggestions),
+            split=split,
+            pdf=pdf,
+            images=images,
+        ),
     )
-    site = build_site(reports, args.outdir, options)
 
-    args.outdir.mkdir(parents=True, exist_ok=True)
-    (args.outdir / "index.html").write_text(index_page(site))
+    outdir.mkdir(parents=True, exist_ok=True)
+    (outdir / "index.html").write_text(index_page(site))
 
     for built in site.built:
         print(f"  {built.path}  {built.doc.title}")
@@ -89,8 +103,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  failed: {failure.report.name or failure.report.url}", file=sys.stderr)
     # Non-zero when anything failed, even though the rest of the site was
     # written, so an unattended run cannot fail quietly.
-    return 1 if site.failed else 0
+    if site.failed:
+        raise Exit(code=1)
+
+
+def main() -> None:
+    app()
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
