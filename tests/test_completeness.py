@@ -16,8 +16,6 @@ it is absent from both sides of a tree-to-output comparison, and that check
 passes while the content is gone.
 """
 
-from __future__ import annotations
-
 import html
 import json
 import re

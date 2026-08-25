@@ -11,8 +11,6 @@ So the JSON stays untyped by design, but says so with a name. `fetch` and
 works on the tree in `nodes.py`, which is precisely typed.
 """
 
-from __future__ import annotations
-
 from typing import Any
 
 type JsonObject = dict[str, Any]

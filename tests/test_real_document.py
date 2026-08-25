@@ -24,8 +24,6 @@ When a snapshot changes, read the diff: it is exactly what the change does
 to a real published report. Accept it with `pytest --regenerate-snapshots`.
 """
 
-from __future__ import annotations
-
 import json
 import re
 from pathlib import Path

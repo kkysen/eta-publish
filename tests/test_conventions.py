@@ -4,8 +4,6 @@ Everything here was read off the actual doc and checked against the
 published page, rather than guessed from the fixture.
 """
 
-from __future__ import annotations
-
 import pytest
 
 from eta_publish.docs_json import JsonObject

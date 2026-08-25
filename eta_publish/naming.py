@@ -8,8 +8,6 @@ the committed Markdown fills with diff noise that a human has to read past.
 So both are derived from the content they name, never from position.
 """
 
-from __future__ import annotations
-
 import hashlib
 import re
 import unicodedata

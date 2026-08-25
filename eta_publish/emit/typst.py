@@ -15,8 +15,6 @@ The emitted file is a document body that imports `template.typ`, so the ETA
 house style lives in one place rather than being regenerated per report.
 """
 
-from __future__ import annotations
-
 import re
 from typing import override
 

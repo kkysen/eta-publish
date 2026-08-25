@@ -14,8 +14,6 @@ emitters, because they are facts about how the docs are written:
   lines after it
 """
 
-from __future__ import annotations
-
 import re
 from dataclasses import replace
 from datetime import datetime

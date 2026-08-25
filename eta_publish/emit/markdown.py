@@ -12,8 +12,6 @@ at sentences (see `sentences.py`) and why the front matter is written as
 YAML rather than prose.
 """
 
-from __future__ import annotations
-
 import re
 from typing import override
 
