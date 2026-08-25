@@ -83,15 +83,12 @@ jobs:
             uv run eta-publish -o site
           fi
 
-      # Each report writes its own directory, with `preview.html` as the page
-      # worth reading: it carries the warnings. `eta-publish` writes the
-      # index listing them, so all that is left is the per-report entry point.
-      - name: Lay out the site
-        run: |
-          for report in $(find site -name preview.html -printf '%h\n'); do
-            cp "$report/preview.html" "$report/index.html"
-            rm -f "$report/template.typ"
-          done
+      # Nothing to lay out: a build writes each report as `index.html` in
+      # its own directory, and the site index beside them, which is the site
+      # already. The Typst template is the one file that is a build input
+      # rather than part of the site.
+      - name: Drop what is not part of the site
+        run: find site -name template.typ -delete
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -121,7 +121,7 @@ def test_a_parenthetical_note_is_not_part_of_the_key() -> None:
 
 
 def test_the_description_reaches_the_preview() -> None:
-    from eta_publish.emit.html import preview_page
+    from eta_publish.emit.html import report_page
 
     doc = build(
         [
@@ -130,7 +130,7 @@ def test_the_description_reaches_the_preview() -> None:
             para("Headline", "TITLE"),
         ]
     )
-    assert 'content="Cheaper and shallower."' in preview_page(doc)
+    assert 'content="Cheaper and shallower."' in report_page(doc)
 
 
 # ---- alt text -------------------------------------------------------

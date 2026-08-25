@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .docs_json import JsonObject
-from .emit.html import HtmlEmitter, preview_page
+from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .naming import IMAGE_DIR
@@ -89,9 +89,13 @@ def emit(doc: Document, outdir: Path) -> dict[str, Path]:
         "report.typ": TypstEmitter(),
     }
     written: dict[str, Path] = {}
-    preview = outdir / "preview.html"
-    preview.write_text(preview_page(doc))
-    written[preview.name] = preview
+    # `index.html`, so a report directory is a page at its own URL: the site
+    # serves `/reports/<slug>/` and gets the report rather than a listing of
+    # files. `report.html` beside it is the fragment, which is a piece of a
+    # page rather than one.
+    page = outdir / "index.html"
+    page.write_text(report_page(doc))
+    written[page.name] = page
     for name, emitter in emitters.items():
         try:
             source = emitter.emit(doc)
