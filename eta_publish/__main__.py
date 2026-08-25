@@ -59,10 +59,6 @@ def publish(
         ),
     ] = "reports.toml",
     outdir: Annotated[Path, typer.Option("-o", "--outdir")] = Path("out"),
-    image_base: Annotated[
-        str,
-        typer.Option(help="URL prefix for published images, e.g. https://assets.etany.org/x"),
-    ] = "",
     suggestions: Annotated[
         Suggestions,
         typer.Option(help="how to resolve open suggestions; rejected is what the doc says now"),
@@ -71,7 +67,6 @@ def publish(
         bool,
         typer.Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
     ] = False,
-    pdf: Annotated[bool, typer.Option(help="compile the Typst source")] = True,
     images: Annotated[
         bool, typer.Option(help="download the images; the output references them either way")
     ] = True,
@@ -85,13 +80,7 @@ def publish(
     site = build_site(
         reports,
         outdir,
-        BuildOptions(
-            image_base=image_base,
-            suggestions=str(suggestions),
-            split=split,
-            pdf=pdf,
-            images=images,
-        ),
+        BuildOptions(suggestions=str(suggestions), split=split, images=images),
     )
 
     outdir.mkdir(parents=True, exist_ok=True)

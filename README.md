@@ -131,7 +131,7 @@ own documentation; the one estimate below is marked as such.
 uv run eta-publish -o site
 
 # Or one document, before it is on the list.
-uv run eta-publish <google-doc-url> --image-base https://assets.etany.org/sas-west
+uv run eta-publish <google-doc-url>
 
 # Or a different list.
 uv run eta-publish drafts.toml -o preview
@@ -158,8 +158,10 @@ The URL is the only way to name a tab, on the command line and in
 `reports.toml` alike, so the same reference means the same document
 wherever it is written.
 
-Outputs land in `out/<the report's path>/`. Add `--split` for a report over
-the code block limit, and `--no-pdf` to skip compiling the Typst.
+Outputs land in `out/<the report's path>/`, each report's images in an
+`images/` directory beside its pages, which is how every output refers to
+them. Add `--split` for a report over the code block limit, and
+`--no-images` to skip the download while iterating on the text.
 
 ### Authentication
 

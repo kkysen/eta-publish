@@ -22,14 +22,13 @@ def doc() -> Document:
 
 
 def test_preview_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) -> None:
-    """The published fragment points at a host nothing is uploaded to yet,
-    since that upload happens after review. A preview whose figures are all
-    broken is not a preview."""
+    """Everything a build writes references its images the same way: by the
+    path they sit at, right beside the page."""
     images = tmp_path / "images"
     images.mkdir()
     (images / "img-1933bef5.png").write_bytes(b"not really a png")
 
-    emit(doc, tmp_path, image_base="https://assets.etany.org/sas-west")
+    emit(doc, tmp_path)
     page = (tmp_path / "preview.html").read_text()
 
     sources = re.findall(r'<img src="([^"]+)"', page)
@@ -39,11 +38,15 @@ def test_preview_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) 
         assert (tmp_path / src).exists(), f"{src} does not resolve next to preview.html"
 
 
-def test_the_published_fragment_still_uses_the_image_base(doc: Document, tmp_path: Path) -> None:
+def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Path) -> None:
+    """A build writes the images it references, so the fragment names them
+    where they were written. Serving them from somewhere else is the
+    emitter's `image_base`, which is not something a build decides."""
     (tmp_path / "images").mkdir()
-    emit(doc, tmp_path, image_base="https://assets.etany.org/sas-west")
+    emit(doc, tmp_path)
     fragment = (tmp_path / "report.html").read_text()
-    assert 'src="https://assets.etany.org/sas-west/img-1933bef5.png"' in fragment
+    assert 'src="images/img-1933bef5.png"' in fragment
+    assert "http" not in re.findall(r'<img src="([^"]+)"', fragment)[0]
 
 
 def test_warnings_are_shown_where_someone_will_see_them() -> None:
@@ -64,7 +67,7 @@ def test_markdown_images_resolve_next_to_the_archive(doc: Document, tmp_path: Pa
     images.mkdir()
     (images / "img-1933bef5.png").write_bytes(b"not really a png")
 
-    emit(doc, tmp_path, image_base="https://assets.etany.org/sas-west")
+    emit(doc, tmp_path)
     archive = (tmp_path / "report.md").read_text()
 
     links = re.findall(r"!\[[^\]]*\]\(<([^>]+)>\)", archive)
