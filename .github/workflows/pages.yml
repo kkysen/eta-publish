@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       doc:
-        description: "Doc URL to publish; defaults to the ETA_DOC_URL variable"
+        description: "Doc URL to build on its own; defaults to every entry in reports.toml"
         required: false
         type: string
 
@@ -68,24 +68,30 @@ jobs:
             "typst-x86_64-unknown-linux-musl/typst"
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
-      - name: Build the report
+      # Which documents to build lives in `reports.toml`, so adding the next
+      # report is a pull request rather than an edit to this file. The
+      # dispatch input builds one document on its own, for a report that is
+      # not on the list yet.
+      - name: Build the reports
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/key.json
-          DOC: ${{ inputs.doc || vars.ETA_DOC_URL }}
+          DOC: ${{ inputs.doc }}
         run: |
-          if [ -z "$DOC" ]; then
-            echo "::error::no document URL; set the ETA_DOC_URL variable or pass one" >&2
-            exit 1
+          if [ -n "$DOC" ]; then
+            uv run eta-publish-site "$DOC" -o site
+          else
+            uv run eta-publish-site -o site
           fi
-          uv run eta-publish "$DOC" -o site
 
-      # The preview is the page worth serving: it carries the warnings, which
-      # are the thing to read before publishing anywhere else. `report.html`
-      # is the Squarespace fragment and is deployed too, so it can be linked.
+      # Each report writes its own directory, with `preview.html` as the page
+      # worth reading: it carries the warnings. `eta-publish-site` writes the
+      # index listing them, so all that is left is the per-report entry point.
       - name: Lay out the site
         run: |
-          cp site/preview.html site/index.html
-          rm -f site/doc.json site/template.typ
+          for report in $(find site -name preview.html -printf '%h\n'); do
+            cp "$report/preview.html" "$report/index.html"
+            rm -f "$report/template.typ"
+          done
 
       - uses: actions/upload-pages-artifact@v3
         with:
