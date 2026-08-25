@@ -30,16 +30,18 @@ class BuildOptions:
 
     image_base: str = ""
     suggestions: str = "rejected"
-    tab: str | None = None
     split: bool = False
     pdf: bool = True
     images: bool = True
 
 
-def load(
-    ref: str, outdir: Path, tab: str | None = None, suggestions: str = "rejected"
-) -> JsonObject:
-    """Accept a saved JSON file so the pipeline can run without credentials."""
+def load(ref: str, outdir: Path, suggestions: str = "rejected") -> JsonObject:
+    """Accept a saved JSON file so the pipeline can run without credentials.
+
+    Which tab to read is part of the reference, as `?tab=` in the URL, and
+    not a separate argument: a tab is named the same way here as it is in
+    `reports.toml`, which is the only way it can be named there.
+    """
     path = Path(ref)
     if path.is_file():
         return json.loads(path.read_text())
@@ -47,7 +49,7 @@ def load(
     from .fetch import fetch_to
 
     outdir.mkdir(parents=True, exist_ok=True)
-    return fetch_to(ref, outdir / "doc.json", tab, suggestions)
+    return fetch_to(ref, outdir / "doc.json", suggestions=suggestions)
 
 
 def write_split(doc: Document, outdir: Path, image_base: str) -> list[Path]:
@@ -151,7 +153,7 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
 
     options = options or BuildOptions()
     staging = outdir / ".staging"
-    doc = parse(load(ref, staging, options.tab, options.suggestions))
+    doc = parse(load(ref, staging, options.suggestions))
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)
