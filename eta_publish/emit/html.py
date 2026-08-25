@@ -10,6 +10,7 @@ import html
 import re
 from typing import override
 
+from ..naming import IMAGE_DIR
 from ..nodes import (
     Document,
     Figure,
@@ -275,7 +276,7 @@ a { color: inherit; }
 """
 
 
-def preview_page(doc: Document, image_base: str = "images") -> str:
+def preview_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     """A standalone page for reading the report before it is published.
 
     Deliberately not the Squarespace fragment with a wrapper bolted on: it

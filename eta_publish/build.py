@@ -15,20 +15,9 @@ from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, preview_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
+from .naming import IMAGE_DIR
 from .nodes import Document
 from .parse import parse
-
-IMAGE_DIR = "images"
-"""Where a build writes the images, and so how every output refers to them.
-
-One name for one directory: the emitters each take where the images are as
-a parameter, because an emitter can be pointed anywhere, but a build writes
-them in exactly one place and every output it writes has to agree.
-
-Serving them from a CDN instead is `HtmlEmitter(image_base=...)`, which is
-a decision about hosting rather than about a build, and is not one this
-makes today.
-"""
 
 
 @dataclass(frozen=True)
