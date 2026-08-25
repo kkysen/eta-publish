@@ -18,6 +18,18 @@ from .emit.typst import TypstEmitter
 from .nodes import Document
 from .parse import parse
 
+IMAGE_DIR = "images"
+"""Where a build writes the images, and so how every output refers to them.
+
+One name for one directory: the emitters each take where the images are as
+a parameter, because an emitter can be pointed anywhere, but a build writes
+them in exactly one place and every output it writes has to agree.
+
+Serving them from a CDN instead is `HtmlEmitter(image_base=...)`, which is
+a decision about hosting rather than about a build, and is not one this
+makes today.
+"""
+
 
 @dataclass(frozen=True)
 class BuildOptions:
@@ -28,10 +40,8 @@ class BuildOptions:
     where a caller silently transposes two flags.
     """
 
-    image_base: str = ""
     suggestions: str = "rejected"
     split: bool = False
-    pdf: bool = True
     images: bool = True
 
 
@@ -52,11 +62,11 @@ def load(ref: str, outdir: Path, suggestions: str = "rejected") -> JsonObject:
     return fetch_to(ref, outdir / "doc.json", suggestions=suggestions)
 
 
-def write_split(doc: Document, outdir: Path, image_base: str) -> list[Path]:
+def write_split(doc: Document, outdir: Path) -> list[Path]:
     """One file per piece, named so paste order is obvious."""
     from .emit.html import HtmlEmitter, split_at_headings
 
-    fragment = HtmlEmitter(image_base=image_base).emit(doc)
+    fragment = HtmlEmitter(image_base=IMAGE_DIR).emit(doc)
     pieces = split_at_headings(fragment)
     written = []
     for n, piece in enumerate(pieces, start=1):
@@ -66,18 +76,17 @@ def write_split(doc: Document, outdir: Path, image_base: str) -> list[Path]:
     return written
 
 
-def emit(doc: Document, outdir: Path, image_base: str) -> dict[str, Path]:
+def emit(doc: Document, outdir: Path) -> dict[str, Path]:
     """Run each emitter, reporting the ones not yet implemented rather than
     failing the whole build for them."""
     outdir.mkdir(parents=True, exist_ok=True)
     emitters = {
-        "report.html": HtmlEmitter(image_base=image_base),
+        "report.html": HtmlEmitter(image_base=IMAGE_DIR),
         "report.md": MarkdownEmitter(),
         "report.typ": TypstEmitter(),
     }
     written: dict[str, Path] = {}
     preview = outdir / "preview.html"
-    # Not `image_base`: see `preview_page`.
     preview.write_text(preview_page(doc))
     written[preview.name] = preview
     for name, emitter in emitters.items():
@@ -170,18 +179,18 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     if doc.images and options.images:
         from .images import download
 
-        download(doc, dest / "images")
+        download(doc, dest / IMAGE_DIR)
 
-    written = emit(doc, dest, options.image_base)
+    written = emit(doc, dest)
 
     typ = written.get("report.typ")
-    if typ is not None and options.pdf:
+    if typ is not None:
         build_pdf(typ, dest, skipped_images=not options.images and bool(doc.images))
 
     report = written.get("report.html")
     if report is not None:
         check_code_block_size(doc, report)
     if options.split:
-        write_split(doc, dest, options.image_base)
+        write_split(doc, dest)
 
     return doc, path

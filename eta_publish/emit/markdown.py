@@ -85,7 +85,7 @@ class MarkdownEmitter(Emitter):
     def __init__(self, image_dir: str = "images") -> None:
         """`image_dir` is relative to the `.md`, which sits beside it.
 
-        Not the published `--image-base`: the archive is read from the
+        Not a published URL prefix: the archive is read from the
         repository, where the files are on disk next to it, rather than from
         whatever host serves the site.
         """
