@@ -1,15 +1,14 @@
 """Parsing the fixture document into a tree."""
 
 import json
-from pathlib import Path
 
 import pytest
+from paths import FIXTURE_DIR
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.nodes import Document, Figure, Heading, Inline, List, ListKind, Paragraph, Text
 from eta_publish.parse import Parser, parse
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 

@@ -1,14 +1,19 @@
 """Snapshot of the real SAS West report, end to end.
 
-`tests/sas-west/` is literally a publish of the real report:
+`tests/real/` is literally a publish of the real report:
 
-    uv run eta-publish <doc-url> -o tests/sas-west
+    uv run eta-publish <doc-url> -o tests/real
 
 A publish is a site, so the report lands under the path its own front
 matter names, `reports/digging-out-deep-hole-sas-west/`, next to the index
 listing it. That directory holds `doc.json`, the four outputs, `images/`,
 and `report.pdf`, and this test asserts the committed outputs still match
-what the code produces from the committed response. It is the only test that runs against a
+what the code produces from the committed response.
+
+`tests/fixture/` is the same directory in miniature, built from a document
+nobody fetched, and the two are told apart by that and nothing else. Either
+rebuilds from its own `doc.json` by passing the report directory back to
+`eta-publish`. It is the only test that runs against a
 document nobody wrote to make a point, and every bug that mattered so far
 came from this document's shape rather than from a hand-built fixture.
 
@@ -31,6 +36,7 @@ import re
 from pathlib import Path
 
 import pytest
+from paths import REAL_DIR as REAL
 
 from eta_publish.emit.html import HtmlEmitter, preview_page
 from eta_publish.emit.markdown import MarkdownEmitter
@@ -38,8 +44,6 @@ from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
-SITE = Path(__file__).parent / "sas-west"
-REAL = SITE / "reports" / "digging-out-deep-hole-sas-west"
 FILENAMES_PATH = REAL / "images.json"
 DOWNLOADED = REAL / "images"
 DOC_JSON = json.loads((REAL / "doc.json").read_text())

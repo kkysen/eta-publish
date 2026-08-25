@@ -2,12 +2,12 @@
 
 import json
 import re
-from pathlib import Path
+
+from paths import FIXTURE_DIR
 
 from eta_publish.emit.html import CODE_BLOCK_LIMIT, HtmlEmitter, split_at_headings
 from eta_publish.parse import parse
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 

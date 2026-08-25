@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 import pytest
+from paths import FIXTURE_DIR
 
 from eta_publish.build import BuildOptions
 from eta_publish.nodes import Document
@@ -25,7 +26,6 @@ from eta_publish.site import (
     reports_from,
 )
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 

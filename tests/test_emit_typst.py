@@ -6,13 +6,13 @@ import shutil
 from pathlib import Path
 
 import pytest
+from paths import FIXTURE_DIR
 
 from eta_publish.emit.typst import TypstEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.pdf import compile_pdf, install_template
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 # A 1x1 PNG, so the figure path is exercised without checking in an asset.
 PNG = base64.b64decode(

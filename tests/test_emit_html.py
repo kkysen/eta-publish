@@ -2,15 +2,14 @@
 
 import json
 import re
-from pathlib import Path
 
 import pytest
+from paths import FIXTURE_DIR
 
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
-FIXTURE_DIR = Path(__file__).parent / "fixture"
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
