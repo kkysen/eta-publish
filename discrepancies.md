@@ -25,17 +25,17 @@ for the report the section is about, and *live* is that URL.
 Naming all three is what makes an entry actionable,
 because where a difference sits says who fixes it:
 
-- **Emitter.** `doc.json` and `index.html` disagree.
+- Emitter. `doc.json` and `index.html` disagree.
   The document is right and the code is wrong. Fix the code.
-- **Document.** `index.html` faithfully carries something
+- Document. `index.html` faithfully carries something
   missing or miswritten in `doc.json`.
   Live may look right, because someone fixed it by hand after publishing.
   Fix the document, and the fix reaches every output at once.
-- **Hand assembly.** `doc.json` and `index.html` agree and live differs.
+- Hand assembly. `doc.json` and `index.html` agree and live differs.
   Either the live page is defective,
   or the emitter deliberately publishes something else.
   Nothing to fix in this repository.
-- **Stale live.** All three agreed when the report published,
+- Stale live. All three agreed when the report published,
   and `doc.json` has been edited since.
 
 A report is compared by normalizing live and `index.html`
