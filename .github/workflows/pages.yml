@@ -1,17 +1,20 @@
-# Publish the preview to GitHub Pages, built from the live Google Doc.
+# Publish the site to GitHub Pages, built from the live Google Doc.
 #
-# Manual only. A report is published when someone decides it is ready, and
-# a schedule here would put whatever the document said at 3 a.m. onto a
-# public URL without anyone looking at it.
+# On every push to `main`, so that what is published is what the repository
+# says. Publishing was manual, on the reasoning that a report goes out when
+# someone decides it is ready; merging to `main` is that decision, and a
+# deploy that has to be remembered separately is one that gets forgotten.
 #
-# The images are not in the repository (18 MB, rewritten by every fetch), so
-# the site cannot be built from a checkout alone: the `contentUri` values in
-# a committed `doc.json` are signed and short-lived, and are already 403 by
-# the next day. That is why this job fetches the document itself rather than
-# deploying the committed `site/`.
+# Note what this means: the deploy is built by fetching the documents, not
+# from the committed `site/`, so a push republishes whatever the Google Doc
+# says at that moment rather than whatever was committed. It has to be that
+# way, because the images are not in the repository (18 MB, and every fetch
+# rewrites them), so a checkout alone is not a site.
 name: Pages
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       doc:
