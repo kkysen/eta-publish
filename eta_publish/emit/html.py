@@ -169,16 +169,42 @@ class HtmlEmitter(Emitter):
         document that bothered to write a subsection is a document that
         thinks it worth finding. The published report lists two levels and
         stops, which is why `Ground Conditions` appears nowhere.
+
+        The back matter is listed too, though the emitter writes those two
+        headings rather than the document. They are sections of the page
+        like any other, and "at the end" is not an address in a report this
+        long: the only other way to the footnotes is to click a reference,
+        which means finding one first. So every heading the page shows is
+        in here, which is a simpler promise than every heading but two.
+
+        A document with no headings of its own still gets no table of
+        contents. A table listing only the footnotes is not a table of
+        contents, it is a link.
         """
         headings = doc.headings()
         if not headings:
             return ""
+        headings = headings + self.back_matter(doc)
         return (
             '<nav class="toc" aria-label="Table of contents">\n'
             "<strong>Table of Contents</strong>\n"
             f"{self.toc_list(headings)}\n"
             "</nav>"
         )
+
+    def back_matter(self, doc: Document) -> list[Heading]:
+        """The sections this emitter appends, as headings a table can list.
+
+        At the top level, so they close the appendices rather than joining
+        them: the footnotes are not part of the last section, whatever
+        level the document happens to give that section's neighbours.
+        """
+        sections = []
+        if doc.footnotes:
+            sections.append(Heading(level=2, anchor="footnotes", content=[Text("Footnotes")]))
+        if doc.contributors:
+            sections.append(Heading(level=2, anchor="contributors", content=[Text("Contributors")]))
+        return sections
 
     def toc_list(self, headings: list[Heading]) -> str:
         """The headings as nested lists, one level of nesting per level.
