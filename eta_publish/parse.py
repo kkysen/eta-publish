@@ -273,11 +273,16 @@ class Parser:
             .get("inlineObjectProperties", {})
             .get("embeddedObject", {})
         )
-        image_props = embedded.get("imageProperties", {})
-        uri = image_props.get("contentUri")
-        if not uri:
+        if "imageProperties" not in embedded:
             self.doc.warn(f"inline object {object_id} has no image; skipped")
             return None
+        image_props = embedded["imageProperties"]
+        # `contentUri` says where to fetch this image, not whether it is one.
+        # A saved response has none: they expire within the hour, so they are
+        # dropped rather than committed. The image is still an image, and its
+        # filename comes from the object id, so everything but the download
+        # works from a response with no URIs in it.
+        uri = image_props.get("contentUri")
         crop = self._crop(object_id, image_props.get("cropProperties", {}))
         return Image(
             object_id=object_id,

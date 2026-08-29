@@ -79,6 +79,46 @@ def write_split(doc: Document, outdir: Path) -> list[Path]:
     return written
 
 
+def without_content_uris(document: JsonObject) -> JsonObject:
+    """The response as it is worth saving: no `contentUri` values.
+
+    A `contentUri` is a signed URL that expires within the hour, so a saved
+    one is dead on arrival: it cannot serve an image and it cannot be
+    fetched again. What it can do is change on every fetch, which made a
+    re-publish of an unedited document a diff in a committed file.
+
+    Dropping them is what makes `doc.json` a record of the document. The
+    parser treats an inline object with `imageProperties` as an image
+    whether or not a URI came with it, so everything but the download works
+    from a saved response; `images.download` says so when asked to fetch
+    from one.
+    """
+    inline_objects = document.get("inlineObjects")
+    if not inline_objects:
+        return document
+    stripped = dict(document)
+    stripped["inlineObjects"] = {
+        object_id: _without_uri(inline_object)
+        for object_id, inline_object in inline_objects.items()
+    }
+    return stripped
+
+
+def _without_uri(inline_object: JsonObject) -> JsonObject:
+    properties = inline_object.get("inlineObjectProperties", {})
+    embedded = properties.get("embeddedObject", {})
+    if "imageProperties" not in embedded:
+        return inline_object
+    image_properties = {k: v for k, v in embedded["imageProperties"].items() if k != "contentUri"}
+    return {
+        **inline_object,
+        "inlineObjectProperties": {
+            **properties,
+            "embeddedObject": {**embedded, "imageProperties": image_properties},
+        },
+    }
+
+
 def emit(doc: Document, outdir: Path) -> dict[str, Path]:
     """Run each emitter, reporting the ones not yet implemented rather than
     failing the whole build for them."""
@@ -176,7 +216,7 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)
-    (dest / DOC_JSON).write_text(json.dumps(document, indent=2))
+    (dest / DOC_JSON).write_text(json.dumps(without_content_uris(document), indent=2))
 
     if doc.images and options.images:
         from .images import download
