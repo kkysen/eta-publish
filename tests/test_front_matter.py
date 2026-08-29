@@ -235,3 +235,25 @@ def test_contributors_are_sorted_by_surname() -> None:
 def test_a_one_word_name_sorts_on_itself() -> None:
     doc = Document(meta={"public contributors": "Zoe, Alon Levy"})
     assert doc.contributors == ["Alon Levy", "Zoe"]
+
+
+def test_the_date_is_written_out() -> None:
+    """etany.org writes the month out; a Docs chip renders it short."""
+    assert Document(meta={"final due date": "Aug 19, 2026"}).dateline == "August 19, 2026"
+
+
+def test_a_day_is_not_padded() -> None:
+    assert Document(meta={"final due date": "Aug 1, 2026"}).dateline == "August 1, 2026"
+
+
+def test_a_date_already_written_out_is_left_alone() -> None:
+    assert Document(meta={"final due date": "August 19, 2026"}).dateline == "August 19, 2026"
+
+
+def test_something_that_is_not_a_date_is_published_as_written() -> None:
+    """Guessing would be worse than showing what the header block says."""
+    assert Document(meta={"final due date": "when it is ready"}).dateline == "when it is ready"
+
+
+def test_no_date_is_still_no_dateline() -> None:
+    assert Document().dateline == ""

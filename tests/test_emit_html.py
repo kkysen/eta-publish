@@ -165,9 +165,10 @@ def test_a_report_with_no_public_contributors_has_no_contributors(doc: Document)
 
 
 def test_the_dateline_is_the_final_due_date(doc: Document) -> None:
+    """Written out, which is how etany.org dates a report."""
     doc.meta["final due date"] = "Aug 19, 2026"
     out = HtmlEmitter(inline_css=False).emit(doc)
-    assert '<p class="dateline">Aug 19, 2026</p>' in out
+    assert '<p class="dateline">August 19, 2026</p>' in out
 
 
 def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
