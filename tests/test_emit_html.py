@@ -68,11 +68,11 @@ def test_the_table_of_contents_links_to_real_anchors(out: str) -> None:
 
 
 def test_the_table_of_contents_lists_every_heading(out: str) -> None:
-    """Not just the top level, which is all the published report lists."""
+    """Every heading on the page, in order, footnotes and contributors too."""
     toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
     linked = re.findall(r'href="#([^"]+)"', toc_html)
     targets = re.findall(r'<h\d id="([^"]+)"', out)
-    assert linked == [t for t in targets if t != "footnotes"]
+    assert linked == targets
 
 
 def test_the_table_of_contents_indents_a_subsection(out: str) -> None:

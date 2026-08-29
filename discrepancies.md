@@ -59,12 +59,13 @@ Hand assembly.
 Live runs six links together on one line separated by pipes,
 so the eight subsections `doc.json` carries appear nowhere
 and `Ground Conditions` is unreachable from the top of the page.
-`index.html` lists all nineteen headings as a nested list,
+`index.html` lists all twenty-one headings as a nested list,
 one per line, each indented under the section it belongs to.
 
-The generated `Footnotes` heading is not among them.
-It is written by the emitter rather than by the document,
-so it is not one of `doc.json`'s headings.
+`Footnotes` and `Contributors` are listed too,
+though the emitter writes those two headings rather than the document.
+They are sections of the page like any other,
+and "at the end" is not an address in a report this long.
 
 ### One `h1`, not a split title (intended)
 
