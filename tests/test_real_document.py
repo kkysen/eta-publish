@@ -42,6 +42,7 @@ from paths import REAL_DIR as REAL
 from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
+from eta_publish.naming import IMAGE_DIR
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
@@ -100,7 +101,7 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 
 
 def test_html_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("report.html", HtmlEmitter().emit(doc), regenerate_snapshots)
+    check("report.html", HtmlEmitter(image_base=IMAGE_DIR).emit(doc), regenerate_snapshots)
 
 
 def test_markdown_snapshot(doc: Document, regenerate_snapshots: bool) -> None:

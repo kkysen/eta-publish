@@ -20,6 +20,7 @@ from paths import FIXTURE_DIR
 from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
+from eta_publish.naming import IMAGE_DIR
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
@@ -49,7 +50,7 @@ def test_html_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> Non
     # The emitter's defaults, so the snapshot is what a build of this
     # document writes rather than a shape only this test produces. Pointing
     # the images somewhere else is covered in `test_emit_html.py`.
-    check("report.html", HtmlEmitter().emit(doc), regenerate_snapshots)
+    check("report.html", HtmlEmitter(image_base=IMAGE_DIR).emit(doc), regenerate_snapshots)
 
 
 def test_markdown_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
