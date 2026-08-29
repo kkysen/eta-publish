@@ -142,19 +142,50 @@ class HtmlEmitter(Emitter):
         leaves room for the entries to be indented under the section they
         belong to. The published report runs them together separated by
         pipes, which reads as a sentence and has nowhere to put a subsection.
+
+        Every heading is listed, not just the top level. A reader who wants
+        `Station Depth` should be able to see that it is there, and a
+        document that bothered to write a subsection is a document that
+        thinks it worth finding. The published report lists two levels and
+        stops, which is why `Ground Conditions` appears nowhere.
         """
-        headings = doc.headings(level=2)
+        headings = doc.headings()
         if not headings:
             return ""
-        items = "\n".join(
-            f'<li><a href="#{h.anchor}">{escape(plain(h.content))}</a></li>' for h in headings
-        )
         return (
             '<nav class="toc" aria-label="Table of contents">\n'
             "<strong>Table of Contents</strong>\n"
-            f"<ul>\n{items}\n</ul>\n"
+            f"{self.toc_list(headings)}\n"
             "</nav>"
         )
+
+    def toc_list(self, headings: list[Heading]) -> str:
+        """The headings as nested lists, one level of nesting per level.
+
+        A heading that skips a level, an `h4` directly under an `h2`, opens
+        one list rather than two: the empty list a strict reading would
+        emit renders as an indent with nothing in it, and the document
+        meant a subsection either way.
+        """
+        out: list[str] = []
+        # The level each open `<ul>` holds, outermost first.
+        open_levels: list[int] = []
+        for i, heading in enumerate(headings):
+            if not open_levels or heading.level > open_levels[-1]:
+                out.append("<ul>")
+                open_levels.append(heading.level)
+            else:
+                while len(open_levels) > 1 and heading.level < open_levels[-1]:
+                    out.append("</ul></li>")
+                    open_levels.pop()
+            link = f'<a href="#{heading.anchor}">{escape(plain(heading.content))}</a>'
+            # An entry with subsections stays open until its own list closes.
+            nests = i + 1 < len(headings) and headings[i + 1].level > heading.level
+            out.append(f"<li>{link}" if nests else f"<li>{link}</li>")
+        while open_levels:
+            open_levels.pop()
+            out.append("</ul></li>" if open_levels else "</ul>")
+        return "\n".join(out)
 
     def footnotes(self, doc: Document) -> str:
         if not doc.footnotes:
