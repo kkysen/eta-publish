@@ -13,6 +13,7 @@
   dateline: none,
   contributors: (),
   contributors_note: none,
+  hero: none,
   // The date the report publishes on, as the document shows it.
   final_due_date: none,
   ..rest,
@@ -70,6 +71,13 @@
     #v(0.4em)
     #line(length: 100%, stroke: 0.8pt)
   ]
+  // With the title rather than after the contents: the document puts it
+  // under the headline, and it introduces the report rather than the
+  // section that happens to follow the outline.
+  if hero != none {
+    hero
+  }
+
   v(1.2em)
 
   // The report is long enough that finding a section by turning pages is
