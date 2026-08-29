@@ -1,21 +1,52 @@
 # Discrepancies
 
-Every place the generated output differs from the same report
-as it is published today on Squarespace, and whether that difference
-is intended or still to do.
+## What is being compared
 
-A report is compared by normalizing both sides to a tagged stream
+Three things, not two.
+For a report whose header block names `URL: /reports/$report`,
+which is the one place its name is written:
+
+1. `https://www.etany.org/reports/$report`,
+   the live page, as Squarespace serves it today.
+   It is assembled by hand, one block at a time,
+   162 of them for SAS West,
+   so it is a record of what a person typed, not a reference.
+2. `site/reports/$report/doc.json`,
+   the `documents.get` response for the tab named in that report's
+   `url` in `reports.toml`, committed next to the outputs it produced.
+   This is the source: everything published comes from here.
+3. `site/reports/$report/index.html`,
+   written from that `doc.json` by `uv run eta-publish -o site`,
+   or offline by `uv run eta-publish site/reports/$report --no-images`.
+
+Below, `doc.json` and `index.html` are those two files
+for the report the section is about, and *live* is that URL.
+
+Naming all three is what makes an entry actionable,
+because where a difference sits says who fixes it:
+
+- **Emitter.** `doc.json` and `index.html` disagree.
+  The document is right and the code is wrong. Fix the code.
+- **Document.** `index.html` faithfully carries something
+  missing or miswritten in `doc.json`.
+  Live may look right, because someone fixed it by hand after publishing.
+  Fix the document, and the fix reaches every output at once.
+- **Hand assembly.** `doc.json` and `index.html` agree and live differs.
+  Either the live page is defective,
+  or the emitter deliberately publishes something else.
+  Nothing to fix in this repository.
+- **Stale live.** All three agreed when the report published,
+  and `doc.json` has been edited since.
+
+A report is compared by normalizing live and `index.html`
+to a tagged stream
 (headings, paragraphs, list items, captions, alt text, cells)
 and diffing that in both directions,
-then checking footnote anchors, figure captions, credits,
-and heading levels against `doc.json`.
-Wording, credits, and caption text are not listed when they match;
-today they do, for every figure and every footnote body.
-
-A live page is not the reference.
-It was assembled by hand out of Squarespace blocks,
-so a difference can just as easily be a defect on the live side,
-and several are.
+then settling every hit against `doc.json`:
+footnote references and bodies, figure captions, credits, heading styles.
+Anything the three agree on is not listed.
+Today that includes every figure caption, every image credit,
+and the text of every footnote body.
 
 ## All reports
 
@@ -24,87 +55,113 @@ so they apply to whatever report is published next.
 
 ### Table of contents lists only top-level sections (todo)
 
-The generated table of contents has one entry per `HEADING_1`.
-The live page also lists every subsection under them.
-This is the one place where a live page is genuinely richer
-than what we emit.
+Emitter.
+`toc()` asks for `doc.headings(level=2)`, which is `HEADING_1`,
+so the six top-level sections are linked and nothing under them is.
+Live lists those six and all eight subsections, fourteen entries.
+`doc.json` has the subsections as `HEADING_2` and `HEADING_3`
+and says nothing about which belong in a table of contents,
+so this is the emitter's decision to revisit,
+and the one code fix on the list.
 
 ### One `h1`, not a split title (intended)
 
-The live page puts the title in an `h1` and the subtitle in an `h2`,
-which makes the subtitle look like the first section.
-The generated page keeps the whole title in the `h1`
-and the standfirst in a paragraph.
+Hand assembly.
+`doc.json` holds one `TITLE` paragraph,
+`Digging Out of a Very Deep Hole: Saving Billions on 125th Street`,
+and `index.html` emits exactly that as a single `h1`.
+Live splits it across an `h1` and an `h2`,
+which leaves the subtitle looking like the first section heading.
 
-### A byline instead of a contributors section (intended)
+### A byline, not a contributors section (intended)
 
-The live page ends with a `Contributors` heading, a sentence of
-acknowledgement, and a list of names.
-The generated page names the same people in a byline under the title,
-which is where a reader looks for them.
+Hand assembly.
+`doc.json` names the credits once, in the header block,
+as `Public Contributors:`.
+`index.html` renders them there as a byline under the title.
+Live has no byline and instead ends with a hand-written `Contributors`
+heading, a sentence of acknowledgement, and the same nine names typed again.
 See the commit `Credit the contributors the header already names`.
 
 ### Short dates (intended)
 
-`Aug 19, 2026`, against `August 19, 2026` live.
+Hand assembly.
+The dateline comes from `Final Due Date:` in the header block,
+and `index.html` prints the date chip as the document displays it,
+`Aug 19, 2026`.
+Live has `August 19, 2026`, typed by hand.
 
 ### Footnote markers are bare superscripts after the punctuation (intended)
 
-Live renders `[3]` and places it before the closing period.
-The generated marker is a plain superscript number
-and sits where the document puts the reference, after the period.
+Hand assembly.
+`index.html` puts each marker exactly where `doc.json` puts the
+`footnoteReference`, which for reference 3 is after the period in
+`takes seven minutes.`, and renders it as a plain superscript number.
+Live renders `[3]` and places it before the period.
 
 ## SAS West
 
-<https://www.etany.org/reports/digging-out-deep-hole-sas-west>
+- <https://www.etany.org/reports/digging-out-deep-hole-sas-west>
+- `site/reports/digging-out-deep-hole-sas-west/doc.json`
+- `site/reports/digging-out-deep-hole-sas-west/index.html`
 
 ### The live footnotes are misnumbered from 13 onward (intended)
 
-The live page carries 21 markers and 21 `id="fnN"` anchors
-but only 20 rendered footnote bodies.
-An extra marker sits on
-"...has space for more tracks than it needs",
-so every marker after it resolves one footnote too far:
-live `[14]`, on the steep-tracks sentence, lands on the soft-costs note,
+Hand assembly, and the clearest case of it.
+`doc.json` holds 20 footnotes and 20 references,
+and `index.html` emits 20 references, 20 bodies, and 20 backlinks, 1:1.
+Live carries 21 markers and 21 `id="fnN"` anchors against 20 rendered
+bodies: an extra marker sits on
+`...has space for more tracks than it needs`,
+so every marker after it resolves one footnote too far.
+Live `[14]`, on the steep-tracks sentence, lands on the soft-costs note,
 and live `[21]` lands on nothing at all.
-The live page also still carries the debris the `README.md` describes,
+Live also still carries the debris the `README.md` describes,
 an `id="#fn3-return"` and a duplicated `fn18-return`.
 
-Nothing to do. The generated apparatus is 1:1,
-20 references, 20 bodies, 20 backlinks,
-and this is the discrepancy the project exists to produce.
+Nothing to do. This is the discrepancy the project exists to produce.
 
 ### The chart captions lost their `SVG` and `PNG` links (todo)
 
+Document.
 Live ends both chart captions with `[SVG] [PNG]` download links.
-The document now holds bare `SVG: TODO` and `SVG:` placeholders
-where those links were, which is what the `unfinished text` warning reports.
-The links have to go back into the document.
-There is nothing to fix in the emitters.
+`doc.json` has bare `SVG: TODO` and `SVG:` placeholders where those links
+were, so `index.html` has no links to emit and the `unfinished text`
+warning fires.
+Put the links back in the document.
 
 ### Appendix A and B are a level too low (todo)
 
-The document styles both as `HEADING_2`
-while the report's own sections are `HEADING_1`,
-so they emit as `h3` and fall out of the table of contents.
+Document.
+`doc.json` styles both as `HEADING_2`,
+the same level as `Station Depth` and `Fire Code`,
+while the report's own sections are `HEADING_1`.
+`index.html` follows that and emits `h3`,
+which is also why both appendices are absent from its table of contents.
 Live shows them as `h2` because someone corrected it by hand.
-Restyle them in the document.
+Restyle them in the document, and they rise in every output at once.
 
 ### The lead image has no alt text (todo)
 
-It also carries no caption, so nothing describes it.
-Add a description in the document.
+Document.
+`doc.json` gives the image neither alt text nor a caption,
+so `index.html` emits `alt=""` and nothing describes it.
+Already reported by the `no alt text and no caption` warning.
+Describe it in the document.
 
 ### An image is styled as a heading (todo)
 
-An empty `HEADING_3` holds an image.
+Document.
+`doc.json` has an empty `HEADING_3` paragraph holding an image.
+`index.html` treats it as a figure and warns.
 Set that paragraph to normal text in the document.
 
 ### Four wordings the live page predates (intended)
 
-The document has been edited since it was published:
+Stale live.
+`doc.json` has been edited since the report published,
+and `index.html` carries the current text:
 `10-story` for `10 story`,
 `station box, while` for `station box while`,
 `more cheaply` for `cheaper`,
 and footnote 9's reference moved to a different sentence.
-The generated output is the current one.
