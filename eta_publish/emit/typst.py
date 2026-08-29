@@ -139,8 +139,7 @@ class TypstEmitter(Emitter):
         if node.credit:
             caption_parts.append(self.inlines(node.credit))
         caption = " ".join(caption_parts)
-        path = f"{self.image_dir}/{self.doc.image_href(node.image)}"
-        body = f"  image({string(path)}, width: 100%),"
+        body = f"  {self.image_call(node.image)},"
         if caption:
             return f"#figure(\n{body}\n  caption: [{caption}],\n)"
         return f"#figure(\n{body}\n)"
@@ -197,5 +196,16 @@ class TypstEmitter(Emitter):
 
     @override
     def image(self, node: Image) -> str:
+        return f"#{self.image_call(node)}"
+
+    def image_call(self, node: Image) -> str:
+        """The `image` call, which a figure wraps and a bare image does not.
+
+        Written once so the two cannot drift: the alt text was added here
+        and reached inline images only, because the figure built its own
+        call. A PDF carries alt text the way a page does, and it is the
+        same sentence in both.
+        """
         path = f"{self.image_dir}/{self.doc.image_href(node)}"
-        return f"#image({string(path)}, width: 100%)"
+        alt = f", alt: {string(node.alt)}" if node.alt else ""
+        return f"image({string(path)}, width: 100%{alt})"

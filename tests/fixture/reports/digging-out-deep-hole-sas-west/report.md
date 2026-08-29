@@ -2,6 +2,12 @@
 
 A 125 St subway should be a slam dunk.
 
+## Table of Contents
+
+- [The Elephants in the Room](<#the-elephants-in-the-room>)
+  - [Ground Conditions](<#ground-conditions>)
+- [Footnotes](<#footnotes>)
+
 ## The Elephants in the Room
 
 SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>).
@@ -25,6 +31,8 @@ That is a lot of money.
 - Second point
 
 Stations are over 100 ft deep.[^2]
+
+## Footnotes
 
 [^1]: Inflation-adjusted from the 2024 capital plan.
 
