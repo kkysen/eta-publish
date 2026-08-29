@@ -59,7 +59,7 @@ Hand assembly.
 Live runs six links together on one line separated by pipes,
 so the eight subsections `doc.json` carries appear nowhere
 and `Ground Conditions` is unreachable from the top of the page.
-`index.html` lists all twenty-one headings as a nested list,
+`index.html` lists all twenty-two headings as a nested list,
 one per line, each indented under the section it belongs to.
 
 `Footnotes` and `Contributors` are listed too,
@@ -108,6 +108,8 @@ One of the three was linked by hand, to `#phase2-tail-tracks`.
 The parser reads the convention,
 so all three resolve to the heading they name,
 in the HTML, the Markdown, and the PDF alike.
+All four references the live page links resolve,
+`Appendix A` among them, by the name a heading gives before its colon.
 Live italicizes exactly two other things, `and` and `tens of billions`,
 and both stay italic here: they name no section.
 This is a defect the live page and the generated page shared,
@@ -159,18 +161,6 @@ an `id="#fn3-return"` and a duplicated `fn18-return`.
 
 Nothing to do. This is the discrepancy the project exists to produce.
 
-### `Appendix A` is not marked as a reference (todo)
-
-Document.
-Live links four section references in the body.
-Three of them the document italicizes, and all three resolve here.
-The fourth, `Appendix A` in
-"there is another much cheaper, much more expansive option",
-is plain text in the document and was linked on the live page by hand,
-so there is nothing here to read.
-Italicize it, and it resolves to `Appendix A: Freedom Tunnel`:
-a reference naming a section up to its colon is matched.
-
 ### The chart captions lost their `SVG` and `PNG` links (todo)
 
 Document.
@@ -179,18 +169,6 @@ Live ends both chart captions with `[SVG] [PNG]` download links.
 were, so `index.html` has no links to emit and the `unfinished text`
 warning fires.
 Put the links back in the document.
-
-### Appendix A and B are a level too low (todo)
-
-Document.
-`doc.json` styles both as `HEADING_2`,
-the same level as `Station Depth` and `Fire Code`,
-while the report's own sections are `HEADING_1`.
-`index.html` follows that and emits `h3`,
-so the table of contents indents both appendices under `Conclusion`,
-which is what the document says and not what the report means.
-Live shows them as `h2` because someone corrected it by hand.
-Restyle them in the document, and they rise in every output at once.
 
 ### The share card has no alt text (todo)
 
@@ -214,8 +192,13 @@ and until it is there a hash is the only thing that is stable across edits.
 ### An image is styled as a heading (todo)
 
 Document.
-`doc.json` has an empty `HEADING_3` paragraph holding an image.
-`index.html` treats it as a figure and warns.
+An empty `HEADING_3` paragraph holds the 125 St map under
+`SAS West Tail Tracks`, the one captioned
+"The MTA proposed extending tail tracks all the way up 12 Av to 137 St
+in a board meeting on April 27, 2026".
+Left as a heading it would publish as an empty `h3`, whose anchor is a
+published URL, with the image buried inside it, so it is treated as a
+figure and reported.
 Set that paragraph to normal text in the document.
 
 ### Four wordings the live page predates (intended)

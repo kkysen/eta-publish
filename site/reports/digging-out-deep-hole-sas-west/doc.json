@@ -9093,9 +9093,27 @@
           "elements": [
             {
               "startIndex": 45571,
+              "endIndex": 45879,
+              "textRun": {
+                "content": "If the MTA is insistent on more storage tracks, there is another much cheaper, much more expansive option that could be reviewed if necessary: the Freedom Tunnel, which is owned by Amtrak but has space for more tracks than it needs. For more details on possible Freedom Tunnel tail track configurations, see ",
+                "textStyle": {}
+              }
+            },
+            {
+              "startIndex": 45879,
+              "endIndex": 45889,
+              "textRun": {
+                "content": "Appendix A",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            },
+            {
+              "startIndex": 45889,
               "endIndex": 45891,
               "textRun": {
-                "content": "If the MTA is insistent on more storage tracks, there is another much cheaper, much more expansive option that could be reviewed if necessary: the Freedom Tunnel, which is owned by Amtrak but has space for more tracks than it needs. For more details on possible Freedom Tunnel tail track configurations, see Appendix A.\n",
+                "content": ".\n",
                 "textStyle": {}
               }
             }
@@ -9914,12 +9932,33 @@
       },
       {
         "startIndex": 52463,
-        "endIndex": 52490,
+        "endIndex": 52472,
         "paragraph": {
           "elements": [
             {
               "startIndex": 52463,
-              "endIndex": 52490,
+              "endIndex": 52472,
+              "textRun": {
+                "content": "Appendix\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "headingId": "h.dmor1u3y9y77",
+            "namedStyleType": "HEADING_1",
+            "direction": "LEFT_TO_RIGHT"
+          }
+        }
+      },
+      {
+        "startIndex": 52472,
+        "endIndex": 52499,
+        "paragraph": {
+          "elements": [
+            {
+              "startIndex": 52472,
+              "endIndex": 52499,
               "textRun": {
                 "content": "Appendix A: Freedom Tunnel\n",
                 "textStyle": {}
@@ -9934,13 +9973,13 @@
         }
       },
       {
-        "startIndex": 52490,
-        "endIndex": 52492,
+        "startIndex": 52499,
+        "endIndex": 52501,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 52490,
-              "endIndex": 52491,
+              "startIndex": 52499,
+              "endIndex": 52500,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.uju7t02yz82o",
                 "textStyle": {
@@ -9961,8 +10000,8 @@
               }
             },
             {
-              "startIndex": 52491,
-              "endIndex": 52492,
+              "startIndex": 52500,
+              "endIndex": 52501,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -9976,13 +10015,13 @@
         }
       },
       {
-        "startIndex": 52492,
-        "endIndex": 52554,
+        "startIndex": 52501,
+        "endIndex": 52563,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 52492,
-              "endIndex": 52554,
+              "startIndex": 52501,
+              "endIndex": 52563,
               "textRun": {
                 "content": "A photo inside the Freedom Tunnel, showing room for 4 tracks.\n",
                 "textStyle": {}
@@ -9996,13 +10035,13 @@
         }
       },
       {
-        "startIndex": 52554,
-        "endIndex": 52574,
+        "startIndex": 52563,
+        "endIndex": 52583,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 52554,
-              "endIndex": 52573,
+              "startIndex": 52563,
+              "endIndex": 52582,
               "textRun": {
                 "content": "Credit: Logan Hicks",
                 "textStyle": {
@@ -10023,8 +10062,8 @@
               }
             },
             {
-              "startIndex": 52573,
-              "endIndex": 52574,
+              "startIndex": 52582,
+              "endIndex": 52583,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10038,21 +10077,21 @@
         }
       },
       {
-        "startIndex": 52574,
-        "endIndex": 53232,
+        "startIndex": 52583,
+        "endIndex": 53241,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 52574,
-              "endIndex": 52779,
+              "startIndex": 52583,
+              "endIndex": 52788,
               "textRun": {
                 "content": "The Freedom Tunnel was formerly the 4-track, at-grade West Side Line used by freight, which was then capped by Riverside Park. It now contains only 2 tracks, which are used by Amtrak\u2019s Empire Service, and ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 52779,
-              "endIndex": 52843,
+              "startIndex": 52788,
+              "endIndex": 52852,
               "textRun": {
                 "content": "potentially Metro-North\u2019s Penn Station Access West in the future",
                 "textStyle": {
@@ -10073,16 +10112,16 @@
               }
             },
             {
-              "startIndex": 52843,
-              "endIndex": 53072,
+              "startIndex": 52852,
+              "endIndex": 53081,
               "textRun": {
                 "content": ". This leaves room for 2 additional tracks that could be used as a linear yard for the Q, essentially just extremely long tail tracks. At 2.6 miles long, this is long enough for around 40 trainsets, more than enough to store all ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 53072,
-              "endIndex": 53119,
+              "startIndex": 53081,
+              "endIndex": 53128,
               "textRun": {
                 "content": "33 trainsets projected to be required for the Q",
                 "textStyle": {
@@ -10103,16 +10142,16 @@
               }
             },
             {
-              "startIndex": 53119,
-              "endIndex": 53194,
+              "startIndex": 53128,
+              "endIndex": 53203,
               "textRun": {
                 "content": " after Phase 2. For an MTA that is in desperate need of more storage space,",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 53194,
-              "endIndex": 53195,
+              "startIndex": 53203,
+              "endIndex": 53204,
               "footnoteReference": {
                 "footnoteId": "kix.jtcwg2wdhl9h",
                 "footnoteNumber": "19",
@@ -10120,8 +10159,8 @@
               }
             },
             {
-              "startIndex": 53195,
-              "endIndex": 53232,
+              "startIndex": 53204,
+              "endIndex": 53241,
               "textRun": {
                 "content": " this could be a golden opportunity.\n",
                 "textStyle": {}
@@ -10135,13 +10174,13 @@
         }
       },
       {
-        "startIndex": 53232,
-        "endIndex": 53589,
+        "startIndex": 53241,
+        "endIndex": 53598,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 53232,
-              "endIndex": 53589,
+              "startIndex": 53241,
+              "endIndex": 53598,
               "textRun": {
                 "content": "The MTA may be hesitant to work with Amtrak, who owns the Freedom Tunnel, after their numerous fights over Penn Station Access (PSA) and the New Haven Line. However, the IBX will run alongside an active freight line, part of which is even owned by CSX. If they can manage corridor sharing for the IBX, they should be able to for the Freedom Tunnel as well.\n",
                 "textStyle": {}
@@ -10155,13 +10194,13 @@
         }
       },
       {
-        "startIndex": 53589,
-        "endIndex": 53871,
+        "startIndex": 53598,
+        "endIndex": 53880,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 53589,
-              "endIndex": 53871,
+              "startIndex": 53598,
+              "endIndex": 53880,
               "textRun": {
                 "content": "The ~1400 ft between the north end of the Freedom Tunnel and 129 St is at-grade, making this an easy site for a portal and TBM extraction pit. It also contains an off-ramp from the Henry Hudson Pkwy, but luckily the off-ramp is about to be closed, presenting a perfect opportunity.\n",
                 "textStyle": {}
@@ -10175,28 +10214,28 @@
         }
       },
       {
-        "startIndex": 53871,
-        "endIndex": 54338,
+        "startIndex": 53880,
+        "endIndex": 54347,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 53871,
-              "endIndex": 54336,
+              "startIndex": 53880,
+              "endIndex": 54345,
               "textRun": {
                 "content": "Between Broadway and the 129 St highway off-ramp is only ~1000 ft long, three times shorter than the MTA\u2019s proposed tail tracks all the way to 137 St. So even if the MTA doesn't wish to reuse the Freedom Tunnel, a southern route is probably still simpler and cheaper: it's on publicly owned land, at a higher elevation with a lower flood risk, not under the landmarked Riverside Viaduct, and could be built cut-and-cover or at-grade for those ~1400 intermediary ft.",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 54336,
-              "endIndex": 54337,
+              "startIndex": 54345,
+              "endIndex": 54346,
               "pageBreak": {
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 54337,
-              "endIndex": 54338,
+              "startIndex": 54346,
+              "endIndex": 54347,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10210,13 +10249,13 @@
         }
       },
       {
-        "startIndex": 54338,
-        "endIndex": 54403,
+        "startIndex": 54347,
+        "endIndex": 54412,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 54338,
-              "endIndex": 54403,
+              "startIndex": 54347,
+              "endIndex": 54412,
               "textRun": {
                 "content": "Appendix B: Endless Escalators, or High-Speed Elevator Stations?\n",
                 "textStyle": {}
@@ -10231,21 +10270,21 @@
         }
       },
       {
-        "startIndex": 54403,
-        "endIndex": 54949,
+        "startIndex": 54412,
+        "endIndex": 54958,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 54403,
-              "endIndex": 54642,
+              "startIndex": 54412,
+              "endIndex": 54651,
               "textRun": {
                 "content": "If the MTA does not sufficiently reduce station depth, they could embrace elevator stations where capacity permits, as they\u2019re already doing at 116 St in SAS Phase 2. The current design for 116 St is elevator-only between the street and a ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 54642,
-              "endIndex": 54652,
+              "startIndex": 54651,
+              "endIndex": 54661,
               "textRun": {
                 "content": "56 ft-deep",
                 "textStyle": {
@@ -10266,16 +10305,16 @@
               }
             },
             {
-              "startIndex": 54652,
-              "endIndex": 54781,
+              "startIndex": 54661,
+              "endIndex": 54790,
               "textRun": {
                 "content": " below-platform mezzanine; stairs will be for emergencies only. While this is a mistake at 116 St because the platforms are only ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 54781,
-              "endIndex": 54791,
+              "startIndex": 54790,
+              "endIndex": 54800,
               "textRun": {
                 "content": "39 ft deep",
                 "textStyle": {
@@ -10296,8 +10335,8 @@
               }
             },
             {
-              "startIndex": 54791,
-              "endIndex": 54949,
+              "startIndex": 54800,
+              "endIndex": 54958,
               "textRun": {
                 "content": ", adding travel time and complexity unnecessarily, elevators make sense for deeper stations where they speed rather than slow the time to reach the platform.\n",
                 "textStyle": {}
@@ -10311,21 +10350,21 @@
         }
       },
       {
-        "startIndex": 54949,
-        "endIndex": 55820,
+        "startIndex": 54958,
+        "endIndex": 55829,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 54949,
-              "endIndex": 55110,
+              "startIndex": 54958,
+              "endIndex": 55119,
               "textRun": {
                 "content": "The proposed SAS West stations are over twice as deep as 116 St, and yet the MTA is proposing huge and expensive shafts of escalator switchbacks that would take ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 55110,
-              "endIndex": 55124,
+              "startIndex": 55119,
+              "endIndex": 55133,
               "textRun": {
                 "content": "over 5 minutes",
                 "textStyle": {
@@ -10346,16 +10385,16 @@
               }
             },
             {
-              "startIndex": 55124,
-              "endIndex": 55356,
+              "startIndex": 55133,
+              "endIndex": 55365,
               "textRun": {
                 "content": " to reach the platform. Transfer volumes will be greater than at 116 St, but that just means more and larger elevators would be needed, like at the busy 168 St station. Elevators, in contrast with the proposed escalators, only take ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 55356,
-              "endIndex": 55359,
+              "startIndex": 55365,
+              "endIndex": 55368,
               "textRun": {
                 "content": "1.6",
                 "textStyle": {
@@ -10376,16 +10415,16 @@
               }
             },
             {
-              "startIndex": 55359,
-              "endIndex": 55363,
+              "startIndex": 55368,
+              "endIndex": 55372,
               "textRun": {
                 "content": " to ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 55363,
-              "endIndex": 55374,
+              "startIndex": 55372,
+              "endIndex": 55383,
               "textRun": {
                 "content": "2.1 minutes",
                 "textStyle": {
@@ -10406,16 +10445,16 @@
               }
             },
             {
-              "startIndex": 55374,
-              "endIndex": 55573,
+              "startIndex": 55383,
+              "endIndex": 55582,
               "textRun": {
                 "content": " for transfers in the feasibility study, and even faster elevators can be used. At the 236 ft-deep \u00c9douard-Montpetit REM station in Montreal, high-speed elevators traverse 198 ft to the Blue Line in ",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 55573,
-              "endIndex": 55583,
+              "startIndex": 55582,
+              "endIndex": 55592,
               "textRun": {
                 "content": "19 seconds",
                 "textStyle": {
@@ -10436,16 +10475,16 @@
               }
             },
             {
-              "startIndex": 55583,
-              "endIndex": 55818,
+              "startIndex": 55592,
+              "endIndex": 55827,
               "textRun": {
                 "content": ", door closing to door opening. Furthermore, while this station is not truly elevator-only, the stairs are only for emergency use, similar to 116 St. The elevators are a means of egress in a fire, and the station is NFPA 130-compliant.",
                 "textStyle": {}
               }
             },
             {
-              "startIndex": 55818,
-              "endIndex": 55819,
+              "startIndex": 55827,
+              "endIndex": 55828,
               "footnoteReference": {
                 "footnoteId": "kix.snpwtkeff8o1",
                 "footnoteNumber": "20",
@@ -10453,8 +10492,8 @@
               }
             },
             {
-              "startIndex": 55819,
-              "endIndex": 55820,
+              "startIndex": 55828,
+              "endIndex": 55829,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10468,13 +10507,13 @@
         }
       },
       {
-        "startIndex": 55820,
-        "endIndex": 55821,
+        "startIndex": 55829,
+        "endIndex": 55830,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55820,
-              "endIndex": 55821,
+              "startIndex": 55829,
+              "endIndex": 55830,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10488,13 +10527,13 @@
         }
       },
       {
-        "startIndex": 55821,
-        "endIndex": 55823,
+        "startIndex": 55830,
+        "endIndex": 55832,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55821,
-              "endIndex": 55822,
+              "startIndex": 55830,
+              "endIndex": 55831,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.llssjjfgvjxv",
                 "textStyle": {
@@ -10515,8 +10554,8 @@
               }
             },
             {
-              "startIndex": 55822,
-              "endIndex": 55823,
+              "startIndex": 55831,
+              "endIndex": 55832,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10530,13 +10569,13 @@
         }
       },
       {
-        "startIndex": 55823,
-        "endIndex": 55929,
+        "startIndex": 55832,
+        "endIndex": 55938,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55823,
-              "endIndex": 55929,
+              "startIndex": 55832,
+              "endIndex": 55938,
               "textRun": {
                 "content": "A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.\n",
                 "textStyle": {}
@@ -10550,13 +10589,13 @@
         }
       },
       {
-        "startIndex": 55929,
-        "endIndex": 55941,
+        "startIndex": 55938,
+        "endIndex": 55950,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55929,
-              "endIndex": 55940,
+              "startIndex": 55938,
+              "endIndex": 55949,
               "textRun": {
                 "content": "Credit: MTA",
                 "textStyle": {
@@ -10577,8 +10616,8 @@
               }
             },
             {
-              "startIndex": 55940,
-              "endIndex": 55941,
+              "startIndex": 55949,
+              "endIndex": 55950,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10592,13 +10631,13 @@
         }
       },
       {
-        "startIndex": 55941,
-        "endIndex": 55942,
+        "startIndex": 55950,
+        "endIndex": 55951,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55941,
-              "endIndex": 55942,
+              "startIndex": 55950,
+              "endIndex": 55951,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10612,13 +10651,13 @@
         }
       },
       {
-        "startIndex": 55942,
-        "endIndex": 55944,
+        "startIndex": 55951,
+        "endIndex": 55953,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55942,
-              "endIndex": 55943,
+              "startIndex": 55951,
+              "endIndex": 55952,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.uyms48a3zm7g",
                 "textStyle": {
@@ -10639,8 +10678,8 @@
               }
             },
             {
-              "startIndex": 55943,
-              "endIndex": 55944,
+              "startIndex": 55952,
+              "endIndex": 55953,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -10654,13 +10693,13 @@
         }
       },
       {
-        "startIndex": 55944,
-        "endIndex": 56072,
+        "startIndex": 55953,
+        "endIndex": 56081,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 55944,
-              "endIndex": 56072,
+              "startIndex": 55953,
+              "endIndex": 56081,
               "textRun": {
                 "content": "A station diagram of Montreal\u2019s \u00c9douard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.\n",
                 "textStyle": {}
@@ -10674,13 +10713,13 @@
         }
       },
       {
-        "startIndex": 56072,
-        "endIndex": 56091,
+        "startIndex": 56081,
+        "endIndex": 56100,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 56072,
-              "endIndex": 56090,
+              "startIndex": 56081,
+              "endIndex": 56099,
               "textRun": {
                 "content": "Credit: CDPQ Infra",
                 "textStyle": {
@@ -10701,8 +10740,8 @@
               }
             },
             {
-              "startIndex": 56090,
-              "endIndex": 56091,
+              "startIndex": 56099,
+              "endIndex": 56100,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -10721,13 +10760,13 @@
         }
       },
       {
-        "startIndex": 56091,
-        "endIndex": 56092,
+        "startIndex": 56100,
+        "endIndex": 56101,
         "paragraph": {
           "elements": [
             {
-              "startIndex": 56091,
-              "endIndex": 56092,
+              "startIndex": 56100,
+              "endIndex": 56101,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
