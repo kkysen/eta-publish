@@ -787,9 +787,20 @@ class Parser:
         # Built before the body is walked, because a section can be referred
         # to from above itself: the report links to `Station Depth` long
         # before reaching it.
-        self._heading_anchors = {
-            _normalized(text): self.anchors.allocate(text) for text in heading_texts if text
-        }
+        self._heading_anchors = {}
+        for text in heading_texts:
+            if not text:
+                continue
+            anchor = self.anchors.allocate(text)
+            self._heading_anchors.setdefault(_normalized(text), anchor)
+            # `Appendix A: Freedom Tunnel` is referred to as `Appendix A`,
+            # and `Ruling Grade: The Wrong Place to Scale Back` as `Ruling
+            # Grade`. The part before the colon names the section and the
+            # part after it describes the section, so a reference that uses
+            # only the name is naming this heading.
+            name, colon, _ = text.partition(":")
+            if colon and name.strip():
+                self._heading_anchors.setdefault(_normalized(name), anchor)
 
         above, below = self._split_at_title(content)
         self.doc.card = self.card(above)
