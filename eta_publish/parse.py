@@ -152,6 +152,14 @@ def split_lines(content: list[Inline]) -> list[list[Inline]]:
     return lines
 
 
+def _normalized(text: str) -> str:
+    """A section name as written, for matching a reference to it.
+
+    Case and spacing vary between the heading and the sentence referring to
+    it; anything more forgiving than that starts matching prose."""
+    return " ".join(text.split()).casefold()
+
+
 def plain(para: JsonObject) -> str:
     """The paragraph's text with styling dropped, for matching conventions."""
     return "".join(element_text(el) for el in para.get("elements", [])).strip()
@@ -173,6 +181,7 @@ class Parser:
         self.footnote_defs: JsonObject = doc_json.get("footnotes", {})
         self.doc = Document()
         self.anchors = AnchorAllocator()
+        self._heading_anchors: dict[str, str] = {}
         self._footnote_numbers: dict[str, int] = {}
 
     # ---- inline ------------------------------------------------------
@@ -204,6 +213,45 @@ class Parser:
             out.pop(0)
         while out and isinstance(out[-1], LineBreak):
             out.pop()
+        return self.cross_references(out)
+
+    def cross_references(self, content: list[Inline]) -> list[Inline]:
+        """Turn italicized section names into links to those sections.
+
+        Google Docs cannot write a link to a heading in the same document,
+        so ETA writes the section's name in italics and means a link by it.
+        The live report has these all through it, `See Station Depth`, and
+        every one of them is a dead end for the reader: a name, italicized,
+        pointing nowhere. One was linked by hand.
+
+        So the italics are the convention, and it is read here rather than
+        in an emitter, because it is a fact about how the documents are
+        written and all three outputs want the link.
+
+        Matching is on the whole italic run, not on each styled piece of
+        one, so a section name with a bold word in it still resolves. The
+        italics come off: they stood in for the link, and now there is one.
+        """
+        if not self._heading_anchors:
+            return content
+        out: list[Inline] = []
+        run: list[Text] = []
+
+        def flush() -> None:
+            anchor = self._heading_anchors.get(_normalized("".join(t.text for t in run)))
+            if anchor is None:
+                out.extend(run)
+            else:
+                out.extend(replace(t, italic=False, href=f"#{anchor}") for t in run)
+            run.clear()
+
+        for node in content:
+            if isinstance(node, Text) and node.italic and node.href is None:
+                run.append(node)
+                continue
+            flush()
+            out.append(node)
+        flush()
         return out
 
     def _person(self, chip: JsonObject) -> Text:
@@ -730,14 +778,18 @@ class Parser:
 
         # Allocated knowing every heading up front, so that two headings which
         # slugify alike keep their anchors when the document is reordered.
-        self.anchors = AnchorAllocator(
-            [
-                plain(item["paragraph"])
-                for item in content
-                if "paragraph" in item and style_of(item["paragraph"]) in HEADING_LEVELS
-            ],
-            reserved=RESERVED_ANCHORS,
-        )
+        heading_texts = [
+            plain(item["paragraph"])
+            for item in content
+            if "paragraph" in item and style_of(item["paragraph"]) in HEADING_LEVELS
+        ]
+        self.anchors = AnchorAllocator(heading_texts, reserved=RESERVED_ANCHORS)
+        # Built before the body is walked, because a section can be referred
+        # to from above itself: the report links to `Station Depth` long
+        # before reaching it.
+        self._heading_anchors = {
+            _normalized(text): self.anchors.allocate(text) for text in heading_texts if text
+        }
 
         above, below = self._split_at_title(content)
         self.doc.card = self.card(above)

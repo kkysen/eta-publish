@@ -21,7 +21,7 @@
   caption: [Composite image of the MTA’s #link("https://www.mta.info/document/196361#page=28")[SAS West St Nicholas Av station diagram] and a Grand Central Madison escalator. #link("https://www.mta.info/document/196361#page=28")[Credit: MTA], ETA (Blair Lorenzo)],
 )
 
-#strong[Addendum: The following clarifying text was added to “]#emph[#strong[Station Depth]]#strong[” on August 21, 2026: ]Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
+#strong[Addendum: The following clarifying text was added to “]#link("#station-depth")[#strong[Station Depth]]#strong[” on August 21, 2026: ]Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
 = The Elephants in the Room
@@ -283,7 +283,7 @@ A one-size-fits-all approach that locks the project into deep SEM stations also 
 There is a pressing time constraint when it comes to depth.
 Because SAS West will continue from the end of SAS Phase 2, the depth of the station at Lenox Av (2/3) will ultimately be determined by the depth of the tail tracks of the earlier project.
 First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't #link("https://www.mta.info/document/196361#page=39")[reach Lenox Av until 2028].
-See #emph[SAS Phase 2 Tail Tracks] for more information on how this can be done.
+See #link("#sas-phase-2-tail-tracks")[SAS Phase 2 Tail Tracks] for more information on how this can be done.
 
 #figure(
   image("images/img-4392a78e.png", width: 100%),
@@ -345,7 +345,7 @@ While an improvement, this is still far longer than the 620-660 ft that internat
 
 Like their Phase 1 counterparts, much of this extra space is planned to be filled by unnecessary back-of-house space.
 Because underground construction is so expensive, subterranean back-of-house functions should be minimized.
-This can mean locating them in other, less expensive locations, colocating different departments in shared spaces, ensuring that they are as compact as possible, and using the existing space above the platform wherever possible.#footnote[If the stations can be raised and built cut-and-cover as suggested in #emph[Station Depth], then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
+This can mean locating them in other, less expensive locations, colocating different departments in shared spaces, ensuring that they are as compact as possible, and using the existing space above the platform wherever possible.#footnote[If the stations can be raised and built cut-and-cover as suggested in #link("#station-depth")[Station Depth], then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
 Back-of-house space can be sited at unused parts of the mezzanine.]
 Indeed, as late as the 1980s, this was standard practice for American subway stations.
 For instance, the first underground segments on the LA Metro have back-of-house spaces that are shared between departments and sit within station boxes only slightly longer than the platform.

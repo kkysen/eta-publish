@@ -18,7 +18,7 @@ mta sas west feasibility study: "https://www.mta.info/document/196361"
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)
 
-**Addendum: The following clarifying text was added to “*****Station Depth*****” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
+**Addendum: The following clarifying text was added to “**[**Station Depth**](<#station-depth>)**” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
 ## The Elephants in the Room
@@ -280,7 +280,7 @@ A one-size-fits-all approach that locks the project into deep SEM stations also 
 There is a pressing time constraint when it comes to depth.
 Because SAS West will continue from the end of SAS Phase 2, the depth of the station at Lenox Av (2/3) will ultimately be determined by the depth of the tail tracks of the earlier project.
 First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>).
-See *SAS Phase 2 Tail Tracks* for more information on how this can be done.
+See [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>) for more information on how this can be done.
 
 ![A video rendering of the 125 St/Lexington Av station.](<images/img-4392a78e.png>)
 A video rendering of the 125 St/Lexington Av station.
@@ -600,7 +600,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 [^8]: [Page 26](<https://www.mta.info/document/179396#page=26>) shows an isometric view of the whole 116 St station within the street grid, while [page 25](<https://www.mta.info/document/179396#page=25>) shows a top-down view showing just the platform within the street grid with a scale bar.
     Synthesizing the information in the two diagrams, one obtains a station box length of approximately 1,000 ft.
 
-[^9]: If the stations can be raised and built cut-and-cover as suggested in *Station Depth*, then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
+[^9]: If the stations can be raised and built cut-and-cover as suggested in [Station Depth](<#station-depth>), then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
     Back-of-house space can be sited at unused parts of the mezzanine.
 
 [^10]: The Transit Costs Project conducted extensive interviews with engineers working on subway and commuter rail tunnel construction in Turkey, and some interviews in China and Spain.
