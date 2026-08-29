@@ -81,6 +81,23 @@ class AnchorAllocator:
         return base
 
 
+def content_anchor(prefix: str, text: str) -> str:
+    """An id for a block that has no name of its own, from what it says.
+
+    Paragraphs, tables, and lists carry no identifier in the Docs API and
+    no title to slugify, but they still want to be linkable: a report this
+    long is quoted a paragraph at a time.
+
+    Hashing what the block says rather than counting where it sits is the
+    same trade the rest of this module makes, and here it is the difference
+    between two failures. Numbering paragraphs means inserting one silently
+    repoints every link after it in that section at the wrong text. Hashing
+    means editing a paragraph breaks links to that paragraph, loudly, and
+    to nothing else.
+    """
+    return f"{prefix}-{_short_hash(text)}"
+
+
 def image_filename(object_id: str, extension: str = "", crop_key: str = "") -> str:
     """Name an image after its Docs object id and how it is cropped.
 

@@ -220,7 +220,7 @@ def test_the_report_opens_with_its_hero(doc: Document) -> None:
     """Above the table of contents, which it introduces rather than follows."""
     page = report_page(doc)
     assert page.index("img-6fb0f9c4") < page.index('<nav class="toc"')
-    assert page.index('property="og:image"') < page.index("<h1>")
+    assert page.index('property="og:image"') < page.index('<h1 id="title">')
 
 
 def test_no_chip_email_reaches_any_output(doc: Document) -> None:
