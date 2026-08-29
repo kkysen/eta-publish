@@ -8603,8 +8603,7 @@
             }
           ],
           "paragraphStyle": {
-            "headingId": "h.ye6kra8pw4zz",
-            "namedStyleType": "HEADING_3",
+            "namedStyleType": "NORMAL_TEXT",
             "direction": "LEFT_TO_RIGHT"
           }
         }
