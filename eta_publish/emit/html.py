@@ -40,7 +40,9 @@ REPORT_CSS = """
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .byline { font-size: .95rem; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
-.eta-report .toc { font-size: .95rem; line-height: 2; }
+.eta-report .toc { font-size: .95rem; line-height: 1.9; }
+.eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
+.eta-report .toc > ul { padding-left: 0; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnotes-sep { margin-top: 3em; }
 .eta-report .footnote-ref a,
@@ -134,13 +136,25 @@ class HtmlEmitter(Emitter):
         return f'<p class="dateline">{escape(date)}</p>'
 
     def toc(self, doc: Document) -> str:
+        """The sections, as a list rather than a run of separated links.
+
+        A list is what a table of contents is: one entry per line, which
+        leaves room for the entries to be indented under the section they
+        belong to. The published report runs them together separated by
+        pipes, which reads as a sentence and has nowhere to put a subsection.
+        """
         headings = doc.headings(level=2)
         if not headings:
             return ""
-        links = "  |  ".join(
-            f'<a href="#{h.anchor}">{escape(plain(h.content))}</a>' for h in headings
+        items = "\n".join(
+            f'<li><a href="#{h.anchor}">{escape(plain(h.content))}</a></li>' for h in headings
         )
-        return f'<p class="toc"><strong>Table of Contents:</strong> {links}</p>'
+        return (
+            '<nav class="toc" aria-label="Table of contents">\n'
+            "<strong>Table of Contents</strong>\n"
+            f"<ul>\n{items}\n</ul>\n"
+            "</nav>"
+        )
 
     def footnotes(self, doc: Document) -> str:
         if not doc.footnotes:
