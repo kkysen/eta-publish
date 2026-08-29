@@ -38,7 +38,6 @@ REPORT_CSS = """
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
-.eta-report .byline { font-size: .95rem; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
 .eta-report .toc { font-size: .95rem; line-height: 1.9; }
 .eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
@@ -47,11 +46,21 @@ REPORT_CSS = """
 .eta-report .footnotes-sep { margin-top: 3em; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
+.eta-report .contributors { font-size: .95rem; }
 .eta-report .table-scroll { overflow-x: auto; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
 """
 
+
+# The line the published report introduces its contributors with. It is
+# not in the document: the header block names who they are, and this says
+# what naming them means. Reports say it the same way, so it lives here
+# rather than being retyped per report.
+CONTRIBUTORS_NOTE = (
+    "We wish to acknowledge the following ETA members who contributed to "
+    "this report, and without whose hard work it would not be possible:"
+)
 
 # A Squarespace code block holds 400 KB. Warn well before that, because the
 # limit is what the editor accepts, not what it is pleasant to paste: a
@@ -97,30 +106,42 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
-        parts.append(self.byline(doc))
         parts.append(self.dateline(doc))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.blocks))
         parts.append(self.footnotes(doc))
+        parts.append(self.contributors(doc))
         parts.append("</div>")
         return self.join(parts)
 
-    def byline(self, doc: Document) -> str:
-        """Who is credited, from the header block rather than typed again.
+    def contributors(self, doc: Document) -> str:
+        """Who is credited, in a section at the end, the way ETA credits them.
 
-        The names are listed the way the document lists them, separated by
-        commas and in its order, with no "and" spliced in before the last:
-        the header block is the one place the credits are maintained, and
-        rewording them here would make the published line something no one
-        wrote.
+        Not a byline under the title. A report is the work of most of a
+        chapter, nine people here, and a line of nine names above the first
+        paragraph reads as a masthead rather than as a credit. The published
+        report puts them at the bottom, after the footnotes, and says what
+        they did.
 
-        A report with no `Public Contributors:` gets no byline at all, the
+        The names come from `Public Contributors:` and are listed in the
+        order the document lists them: the header block is the one place the
+        credits are maintained, so reordering them here would publish
+        something no one wrote.
+
+        A report with no `Public Contributors:` gets no section at all, the
         way `slug` is simply empty when the header names no URL.
         """
         names = doc.contributors
         if not names:
             return ""
-        return f'<p class="byline">By {escape(", ".join(names))}</p>'
+        items = "\n".join(f"<li>{escape(name)}</li>" for name in names)
+        return (
+            '<section class="contributors">\n'
+            '<h2 id="contributors">Contributors</h2>\n'
+            f"<p>{CONTRIBUTORS_NOTE}</p>\n"
+            f"<ul>\n{items}\n</ul>\n"
+            "</section>"
+        )
 
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.

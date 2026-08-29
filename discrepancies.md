@@ -75,15 +75,19 @@ and `index.html` emits exactly that as a single `h1`.
 Live splits it across an `h1` and an `h2`,
 which leaves the subtitle looking like the first section heading.
 
-### A byline, not a contributors section (intended)
+### The contributors are ordered as the document orders them (intended)
 
 Hand assembly.
-`doc.json` names the credits once, in the header block,
-as `Public Contributors:`.
-`index.html` renders them there as a byline under the title.
-Live has no byline and instead ends with a hand-written `Contributors`
-heading, a sentence of acknowledgement, and the same nine names typed again.
-See the commit `Credit the contributors the header already names`.
+`index.html` credits the same nine people the live page credits,
+in a `Contributors` section after the footnotes,
+under the sentence the live page introduces them with.
+The names come from `Public Contributors:` in the header block,
+which is the one place a report's credits are maintained,
+and they publish in the order that field lists them.
+Live lists them alphabetically by surname, which is a different order,
+retyped by hand.
+Reordering them in the emitter would publish a list no one wrote,
+so a different order is a change to that field.
 
 ### Short dates (intended)
 
