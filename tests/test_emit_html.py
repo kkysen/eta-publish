@@ -60,7 +60,7 @@ def test_images_use_the_image_base_and_resolved_extension(out: str) -> None:
 
 
 def test_the_table_of_contents_links_to_real_anchors(out: str) -> None:
-    toc_html = re.findall(r'<p class="toc".*?</p>', out, re.S)[0]
+    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
     linked = set(re.findall(r'href="#([^"]+)"', toc_html))
     targets = set(re.findall(r'<h\d id="([^"]+)"', out))
     assert linked and linked <= targets

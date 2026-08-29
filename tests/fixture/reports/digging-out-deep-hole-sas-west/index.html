@@ -25,7 +25,9 @@ a { color: inherit; }
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .byline { font-size: .95rem; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
-.eta-report .toc { font-size: .95rem; line-height: 2; }
+.eta-report .toc { font-size: .95rem; line-height: 1.9; }
+.eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
+.eta-report .toc > ul { padding-left: 0; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnotes-sep { margin-top: 3em; }
 .eta-report .footnote-ref a,
@@ -38,7 +40,12 @@ a { color: inherit; }
 <p class="standfirst">A 125 St subway should be a slam dunk.</p>
 
 <div class="eta-report">
-<p class="toc"><strong>Table of Contents:</strong> <a href="#the-elephants-in-the-room">The Elephants in the Room</a></p>
+<nav class="toc" aria-label="Table of contents">
+<strong>Table of Contents</strong>
+<ul>
+<li><a href="#the-elephants-in-the-room">The Elephants in the Room</a></li>
+</ul>
+</nav>
 <h2 id="the-elephants-in-the-room">The Elephants in the Room</h2>
 <p>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
 <figure><img src="images/img-1933bef5.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
