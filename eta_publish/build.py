@@ -6,6 +6,7 @@ of them run the same code rather than two copies of the same order of
 operations that drift apart.
 """
 
+import hashlib
 import json
 import sys
 from dataclasses import dataclass
@@ -35,6 +36,7 @@ class BuildOptions:
 
 
 DOC_JSON = "doc.json"
+IMAGES_JSON = "images.json"
 """The saved API response, written by every build beside its outputs."""
 
 
@@ -77,6 +79,29 @@ def write_split(doc: Document, outdir: Path) -> list[Path]:
         dest.write_text(piece)
         written.append(dest)
     return written
+
+
+def write_image_index(dest: Path, written: dict[str, Path]) -> None:
+    """Record what each image was written as, and what is in it.
+
+    The images are not committed, so without this the repository has no way
+    to say whether a rebuild fetched the same pictures. The hash is what
+    makes that checkable: a build that downloads a different image writes a
+    different digest, and the diff says so.
+
+    The filename is here because it cannot be derived. A Docs
+    `inlineObject` says nothing about what kind of file it is, so `.jpg` or
+    `.png` is learned by fetching, and an image with a vector original is
+    written under the vector's name instead.
+
+    Only written when images were downloaded. A `--no-images` build knows
+    nothing about them and must not replace what a real build recorded.
+    """
+    index = {
+        object_id: {"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        for object_id, path in sorted(written.items())
+    }
+    (dest / IMAGES_JSON).write_text(json.dumps(index, indent=2, sort_keys=True) + "\n")
 
 
 def without_content_uris(document: JsonObject) -> JsonObject:
@@ -221,7 +246,7 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     if doc.images and options.images:
         from .images import download
 
-        download(doc, dest / IMAGE_DIR)
+        write_image_index(dest, download(doc, dest / IMAGE_DIR))
 
     written = emit(doc, dest)
 

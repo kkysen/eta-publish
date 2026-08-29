@@ -34,7 +34,6 @@ to a real published report. Accept it with `pytest --regenerate-snapshots`.
 
 import json
 import re
-from pathlib import Path
 
 import pytest
 from paths import REAL_DIR as REAL
@@ -57,23 +56,17 @@ DOC_JSON = json.loads((REAL / "doc.json").read_text())
 
 
 def image_files(regenerate: bool) -> dict[str, str]:
-    """What a real run wrote for each image.
+    """What a real run wrote for each image, read from `images.json`.
 
-    Refreshed from a download when regenerating, so a re-fetched response
-    does not keep the previous one's filenames.
+    Written by a build rather than by this test, because it is a record of
+    what was published rather than of what was asserted. The hash beside
+    each filename is what lets CI check that a rebuild fetched the same
+    pictures, and is not needed here.
     """
-    if regenerate and DOWNLOADED.is_dir():
-        # Both names, because an image whose vector downloaded is written
-        # under the vector's name and never under the raster's.
-        by_stem: dict[str, str] = {}
-        for image in parse(DOC_JSON).images:
-            by_stem[image.filename] = image.object_id
-            if image.vector is not None:
-                by_stem[Path(image.vector.filename).stem] = image.object_id
-        found = {by_stem[p.stem]: p.name for p in sorted(DOWNLOADED.iterdir()) if p.stem in by_stem}
-        if found:
-            FILENAMES_PATH.write_text(json.dumps(found, indent=2, sort_keys=True) + "\n")
-    return json.loads(FILENAMES_PATH.read_text())
+    return {
+        object_id: entry["file"]
+        for object_id, entry in json.loads(FILENAMES_PATH.read_text()).items()
+    }
 
 
 @pytest.fixture

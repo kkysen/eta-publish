@@ -86,6 +86,29 @@ jobs:
             uv run eta-publish -o site
           fi
 
+      # What is deployed has to be what was reviewed. A push deploys by
+      # fetching the documents, so without this it would publish whatever
+      # Google Docs said at that moment: a sentence someone was still
+      # editing, or a paragraph deleted an hour ago and not yet restored.
+      #
+      # A build is deterministic, so if the documents have not changed since
+      # they were committed, it rewrites the committed files byte for byte
+      # and there is no diff. `doc.json` covers the text and `images.json`
+      # covers the pictures, which are not committed themselves but whose
+      # hashes are.
+      #
+      # Failing here publishes nothing and keeps the previous deploy up,
+      # which is the safe direction: the fix is to re-run the build locally
+      # and commit what it produces, which is the same act as reviewing it.
+      - name: Check the build matches what was committed
+        run: |
+          if ! git diff --quiet -- site; then
+            git diff --stat -- site >&2
+            echo '::error::the documents have changed since site/ was committed; run' \
+                 '"uv run eta-publish" locally, review the diff, and commit the result' >&2
+            exit 1
+          fi
+
       # The deploy is a copy of `site/`: a build already writes each report
       # as `index.html` in its own directory, with the site index beside
       # them. One file is removed rather than served.
