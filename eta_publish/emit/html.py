@@ -43,10 +43,12 @@ REPORT_CSS = """
 .eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
 .eta-report .toc > ul { padding-left: 0; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
-.eta-report .footnotes-sep { margin-top: 3em; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
 .eta-report .contributors { font-size: .95rem; }
+/* The back matter is set off by space, not by a rule. A page gives every
+   `h2` a rule of its own, so a separator here drew a second one. */
+.eta-report .footnotes, .eta-report .contributors { margin-top: 3em; }
 .eta-report .table-scroll { overflow-x: auto; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
@@ -239,7 +241,6 @@ class HtmlEmitter(Emitter):
             return ""
         items = "\n".join(self.footnote(f) for f in doc.footnotes)
         return (
-            '<hr class="footnotes-sep">\n'
             '<section class="footnotes">\n'
             '<h2 id="footnotes">Footnotes</h2>\n'
             f"<ol>\n{items}\n</ol>\n"
