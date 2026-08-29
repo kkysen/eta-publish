@@ -236,3 +236,10 @@ def test_emitting_twice_gives_the_same_ids(doc: Document) -> None:
     """The suffixing counter must not carry over between runs."""
     emitter = HtmlEmitter(inline_css=False)
     assert emitter.emit(doc) == emitter.emit(doc)
+
+
+def test_the_backlink_sits_inside_the_first_paragraph(out: str) -> None:
+    """A paragraph is a block, so an arrow placed before one lands on a line
+    of its own with the note starting underneath it."""
+    for note in re.findall(r'<li id="fn\d+">.*?</li>', out, re.S):
+        assert re.match(r'<li id="fn\d+"><p[^>]*><a href="#fnref\d+"', note), note[:120]

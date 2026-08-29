@@ -293,8 +293,15 @@ class HtmlEmitter(Emitter):
         # Immediately after the number the list renders, rather than after the
         # note. Several of these run to a paragraph, and the way back should
         # be where the eye already is instead of at the end of the reading.
-        if body.startswith("<p>"):
-            return f'<li id="fn{note.number}"><p>{back} {body.removeprefix("<p>")}</li>'
+        #
+        # Inside that first paragraph, not before it: a paragraph is a block,
+        # so an arrow placed ahead of one sits on a line of its own with the
+        # note beginning underneath it. Matched as a tag rather than as the
+        # literal `<p>`, because the paragraph carries an id.
+        opening = re.match(r"<p\b[^>]*>", body)
+        if opening:
+            rest = body[opening.end() :]
+            return f'<li id="fn{note.number}">{opening.group()}{back} {rest}</li>'
         return f'<li id="fn{note.number}">{back} {body}</li>'
 
     # ---- blocks -----------------------------------------------------
