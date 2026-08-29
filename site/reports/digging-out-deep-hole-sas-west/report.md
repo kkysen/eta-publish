@@ -4,31 +4,6 @@ A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 
 
 August 19, 2026
 
-## Table of Contents
-
-- [The Elephants in the Room](<#the-elephants-in-the-room>)
-- [The Unlearned Lessons of Recent Projects](<#the-unlearned-lessons-of-recent-projects>)
-- [The Stations: Too Big and Too Deep](<#the-stations-too-big-and-too-deep>)
-  - [Station Depth](<#station-depth>)
-    - [Ground Conditions](<#ground-conditions>)
-    - [Surface Impacts](<#surface-impacts>)
-    - [Existing Lines](<#existing-lines>)
-  - [Station Width](<#station-width>)
-  - [Station Length and Mezzanines](<#station-length-and-mezzanines>)
-- [Overscoping and Overly Conservative Design](<#overscoping-and-overly-conservative-design>)
-  - [Fire Code](<#fire-code>)
-  - [Ruling Grade: The Wrong Place to Scale Back](<#ruling-grade-the-wrong-place-to-scale-back>)
-  - [Tail Tracks](<#tail-tracks>)
-    - [SAS West Tail Tracks](<#sas-west-tail-tracks>)
-    - [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>)
-- [Procurement](<#procurement>)
-- [Conclusion](<#conclusion>)
-- [Appendix](<#appendix>)
-  - [Appendix A: Freedom Tunnel](<#appendix-a-freedom-tunnel>)
-  - [Appendix B: Endless Escalators, or High-Speed Elevator Stations?](<#appendix-b-endless-escalators-or-high-speed-elevator-stations>)
-- [Footnotes](<#footnotes>)
-- [Contributors](<#contributors>)
-
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)
@@ -596,8 +571,6 @@ A rendering of the short below-mezzanine and elevator-only entrance to the 116 S
 ![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/img-ed748d24.png>)
 A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.
 [Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)
-
-## Footnotes
 
 [^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
     The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>).\

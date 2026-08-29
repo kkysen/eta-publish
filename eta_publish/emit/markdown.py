@@ -98,7 +98,6 @@ class MarkdownEmitter(Emitter):
         parts = [
             self.title(doc),
             self.dateline(doc),
-            self.toc(doc),
             self.blocks([doc.hero] if doc.hero is not None else []),
             self.blocks(doc.body),
             self.footnotes(doc),
@@ -123,36 +122,6 @@ class MarkdownEmitter(Emitter):
         heading = f"# {escape(doc.title)}"
         return f"{heading}\n\n{escape(short)}" if short else heading
 
-    def toc(self, doc: Document) -> str:
-        """The same contents the page lists, indented the same way.
-
-        Linking by the heading's own anchor, which is what the report's
-        cross-references already use, and what GitHub derives from the
-        heading text for a `.md` read in the repository.
-        """
-        headings = doc.headings()
-        if not headings:
-            return ""
-        lines = ["## Table of Contents"]
-        top = min(h.level for h in headings)
-        for heading in headings + self.back_matter(doc):
-            indent = "  " * (heading.level - top)
-            text = escape(plain(heading.content))
-            lines.append(f"{indent}- [{text}](<#{heading.anchor}>)")
-        return "\n".join(lines[:1]) + "\n\n" + "\n".join(lines[1:])
-
-    def back_matter(self, doc: Document) -> list[Heading]:
-        """The sections this emitter appends, as headings a table can list."""
-        top = min((h.level for h in doc.headings()), default=2)
-        sections = []
-        if doc.footnotes:
-            sections.append(Heading(level=top, anchor="footnotes", content=[Text("Footnotes")]))
-        if doc.contributors:
-            sections.append(
-                Heading(level=top, anchor="contributors", content=[Text("Contributors")])
-            )
-        return sections
-
     def dateline(self, doc: Document) -> str:
         """When the report published, as the page and the PDF date it."""
         return escape(doc.dateline)
@@ -171,15 +140,15 @@ class MarkdownEmitter(Emitter):
         return f"## Contributors\n\n{CONTRIBUTORS_NOTE}\n\n{listed}"
 
     def footnotes(self, doc: Document) -> str:
-        """Under a heading, as the page has them.
+        """The notes themselves, with no heading over them.
 
-        Pandoc and GitHub both collect the notes at the end by themselves,
-        so the heading is what says the collection has started. Without it
-        the notes run on from the last paragraph of the report.
+        Pandoc and GitHub both collect these at the end under a rule of
+        their own, and a table of contents is likewise something a Markdown
+        reader builds from the headings. What the format provides, this
+        does not write again: the same content, reached the way the format
+        reaches it.
         """
-        if not doc.footnotes:
-            return ""
-        return self.join(["## Footnotes"] + [self.footnote(f) for f in doc.footnotes])
+        return self.join([self.footnote(f) for f in doc.footnotes])
 
     def footnote(self, note: Footnote) -> str:
         body = self.blocks(note.content)
