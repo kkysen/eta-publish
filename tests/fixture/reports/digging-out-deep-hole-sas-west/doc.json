@@ -522,9 +522,7 @@
       "inlineObjectProperties": {
         "embeddedObject": {
           "description": "SAS West alignment map",
-          "imageProperties": {
-            "contentUri": "https://example.invalid/img1"
-          }
+          "imageProperties": {}
         }
       }
     }

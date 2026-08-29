@@ -41,6 +41,17 @@ def download(
     http = session or requests.Session()
     written: dict[str, Path] = {}
 
+    # A saved response carries no URIs at all, because they expire and are
+    # not committed. That is the ordinary shape of a rebuild rather than a
+    # defect in any one image, so it is said once here instead of 29 times
+    # below, and the remedy is a fetch rather than an edit to the document.
+    no_uris = bool(doc.images) and not any(image.source_uri for image in doc.images)
+    if no_uris:
+        doc.warn(
+            "this response carries no image URIs, because they expire and are "
+            "not saved; re-fetch the document to download its images"
+        )
+
     for image in doc.images:
         if image.vector is not None and _fetch_vector(image, outdir, doc, written):
             continue
@@ -51,7 +62,8 @@ def download(
             doc.image_files[image.object_id] = existing.name
             continue
         if not image.source_uri:
-            doc.warn(f"image {image.object_id} has no source URI; not downloaded")
+            if not no_uris:
+                doc.warn(f"image {image.object_id} has no source URI; not downloaded")
             continue
 
         response = http.get(image.source_uri, timeout=60)
