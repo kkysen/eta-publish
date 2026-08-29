@@ -125,7 +125,7 @@ def test_the_shape_of_the_report(doc: Document) -> None:
     assert len(doc.footnotes) == 20
     assert len(doc.images) == 29, "28 figures and the share card"
     assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 28
-    assert len([b for b in doc.blocks if isinstance(b, Heading)]) == 19
+    assert len([b for b in doc.blocks if isinstance(b, Heading)]) == 20
 
 
 def test_smart_chips_resolve(doc: Document) -> None:

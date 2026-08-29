@@ -468,7 +468,7 @@ If the Broadway station is raised, they could cut-and-cover the station and its 
 This is even noted as an alternative in the feasibility study, but the MTA board meeting shows they are favoring the more expensive, lengthy option.
 
 If the MTA is insistent on more storage tracks, there is another much cheaper, much more expansive option that could be reviewed if necessary: the Freedom Tunnel, which is owned by Amtrak but has space for more tracks than it needs.
-For more details on possible Freedom Tunnel tail track configurations, see Appendix A.
+For more details on possible Freedom Tunnel tail track configurations, see [Appendix A](<#appendix-a-freedom-tunnel>).
 
 #### SAS Phase 2 Tail Tracks
 
@@ -538,6 +538,8 @@ But even in flush times, it is imperative that transit leaders strive to gain th
 Making projects affordable does not mean less money for the region; it means being able to build far more with what the region obtains.
 New York needs to learn from its international peers and reform the way it builds transit.
 Otherwise, it will simply become impossible for the region to build the transit infrastructure that it needs, and provide the transit its residents deserve.
+
+## Appendix
 
 ### Appendix A: Freedom Tunnel
 
