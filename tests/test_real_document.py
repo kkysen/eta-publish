@@ -3,7 +3,7 @@
 `site/` is literally a publish of the real report, at the top level
 because it is the site this project publishes rather than a test fixture:
 
-    uv run eta-publish -o site
+    uv run eta-publish
 
 A publish is a site, so the report lands under the path its own front
 matter names, `reports/digging-out-deep-hole-sas-west/`, next to the index
