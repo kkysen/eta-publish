@@ -223,3 +223,15 @@ def test_a_headline_before_the_header_stops_the_search() -> None:
     )
     assert doc.meta == {}
     assert len(doc.blocks) == 3
+
+
+def test_contributors_are_sorted_by_surname() -> None:
+    """etany.org credits contributors alphabetically, and the field they are
+    typed into is in whatever order people were added."""
+    doc = Document(meta={"public contributors": "Khyber Sen, Alon Levy, Robert Hale"})
+    assert doc.contributors == ["Robert Hale", "Alon Levy", "Khyber Sen"]
+
+
+def test_a_one_word_name_sorts_on_itself() -> None:
+    doc = Document(meta={"public contributors": "Zoe, Alon Levy"})
+    assert doc.contributors == ["Alon Levy", "Zoe"]

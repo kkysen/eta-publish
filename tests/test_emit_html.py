@@ -144,10 +144,11 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
 
 
 def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
+    """Alphabetically by surname, which is how etany.org credits them."""
     doc.meta["public contributors"] = "Khyber Sen, Alon Levy"
     doc.meta["private contributors"] = "Someone Unnamed"
     out = HtmlEmitter(inline_css=False).emit(doc)
-    assert "<li>Khyber Sen</li>\n<li>Alon Levy</li>" in out
+    assert "<li>Alon Levy</li>\n<li>Khyber Sen</li>" in out
     assert "Someone Unnamed" not in out
 
 

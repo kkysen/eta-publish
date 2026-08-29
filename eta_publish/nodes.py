@@ -232,7 +232,7 @@ class Document:
 
     @property
     def contributors(self) -> list[str]:
-        """The people credited on the published page, in document order.
+        """The people credited on the published page, by surname.
 
         Read from `Public Contributors:` and from nothing else. The document
         carries a separate `Private Contributors:` field precisely so that
@@ -240,9 +240,15 @@ class Document:
 
         The names come from person chips, which resolve to a chip's display
         name, so this is a list of names and not of addresses.
+
+        Sorted, because etany.org credits contributors alphabetically and
+        the field they are typed into has no order worth publishing: it is
+        whoever was added when. Sorting here rather than in one emitter is
+        what keeps the report and the site index naming them the same way.
         """
         names = self.meta.get("public contributors", "")
-        return [name.strip() for name in names.split(",") if name.strip()]
+        listed = [name.strip() for name in names.split(",") if name.strip()]
+        return sorted(listed, key=_by_surname)
 
     @property
     def dateline(self) -> str:
@@ -294,6 +300,18 @@ class Document:
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
+
+
+def _by_surname(name: str) -> tuple[str, str]:
+    """Sort key for a person's name: last word first, then the whole name.
+
+    The last word is the surname for every name these reports have carried,
+    and a display name is all the document gives us to work with. It is a
+    guess for a surname written in more than one word, `van der Berg`
+    sorting under `Berg`, which is wrong but wrong quietly and in one place.
+    Casefolded so `de Vries` and `De Vries` land together.
+    """
+    return (name.split()[-1].casefold(), name.casefold())
 
 
 # ---- traversal -----------------------------------------------------

@@ -76,19 +76,20 @@ and `index.html` emits exactly that as a single `h1`.
 Live splits it across an `h1` and an `h2`,
 which leaves the subtitle looking like the first section heading.
 
-### The contributors are ordered as the document orders them (intended)
+### The back matter headings are `h2` (intended)
 
 Hand assembly.
 `index.html` credits the same nine people the live page credits,
-in a `Contributors` section after the footnotes,
+in the same order, in a `Contributors` section after the footnotes,
 under the sentence the live page introduces them with.
-The names come from `Public Contributors:` in the header block,
-which is the one place a report's credits are maintained,
-and they publish in the order that field lists them.
-Live lists them alphabetically by surname, which is a different order,
-retyped by hand.
-Reordering them in the emitter would publish a list no one wrote,
-so a different order is a change to that field.
+The names come from `Public Contributors:` in the header block
+and are sorted by surname, which is how etany.org credits contributors
+and is not the order that field happens to be typed in.
+
+What differs is the level.
+`Footnotes` and `Contributors` are `h2` here and `h3` live,
+which makes them sections of the report rather than
+subsections of whatever came last.
 
 ### Short dates (intended)
 
