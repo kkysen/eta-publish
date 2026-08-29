@@ -5,6 +5,10 @@ is either a document (a Docs URL, an id, or a saved response) or a `.toml`
 list of them, and it defaults to `reports.toml`. Each report lands under
 the path its own front matter gives it, with an index listing them.
 
+Both defaults name the committed thing: `reports.toml` is the list this
+site publishes and `site/` is where it publishes from, so `eta-publish`
+with no arguments rebuilds the site as it ships.
+
 One argument rather than many: building several documents at once is what
 a list is for, and a list is a file that can be committed, reviewed, and
 commented rather than a shell line that is right once.
@@ -58,7 +62,10 @@ def publish(
             "Docs API JSON, or a `.toml` list of reports",
         ),
     ] = "reports.toml",
-    outdir: Annotated[Path, typer.Option("-o", "--outdir")] = Path("out"),
+    outdir: Annotated[
+        Path,
+        typer.Option("-o", "--outdir", help="where the site is written; `site/` is published"),
+    ] = Path("site"),
     suggestions: Annotated[
         Suggestions,
         typer.Option(help="how to resolve open suggestions; rejected is what the doc says now"),

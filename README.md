@@ -127,11 +127,11 @@ own documentation; the one estimate below is marked as such.
 ## Usage
 
 ```sh
-# Every report in `reports.toml`.
-uv run eta-publish -o site
+# Every report in `reports.toml`, into `site/`.
+uv run eta-publish
 
-# Or one document, before it is on the list.
-uv run eta-publish <google-doc-url>
+# Or one document, before it is on the list, somewhere scratch.
+uv run eta-publish <google-doc-url> -o out
 
 # Or a different list.
 uv run eta-publish drafts.toml -o preview
