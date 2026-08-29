@@ -28,7 +28,7 @@ from ..nodes import (
     Table,
     Text,
 )
-from .base import Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter
 
 # Only styles what the emitter produces, and inherits everything else from
 # the theme, so a report does not fight the rest of the site.
@@ -55,15 +55,6 @@ REPORT_CSS = """
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
 """
 
-
-# The line the published report introduces its contributors with. It is
-# not in the document: the header block names who they are, and this says
-# what naming them means. Reports say it the same way, so it lives here
-# rather than being retyped per report.
-CONTRIBUTORS_NOTE = (
-    "We wish to acknowledge the following ETA members who contributed to "
-    "this report, and without whose hard work it would not be possible:"
-)
 
 # A Squarespace code block holds 400 KB. Warn well before that, because the
 # limit is what the editor accepts, not what it is pleasant to paste: a

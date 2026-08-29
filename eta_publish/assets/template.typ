@@ -10,6 +10,9 @@
   // `Public Contributors:` only. The header block keeps the private list
   // under its own key so that those names do not reach a published page.
   public_contributors: none,
+  dateline: none,
+  contributors: (),
+  contributors_note: none,
   // The date the report publishes on, as the document shows it.
   final_due_date: none,
   ..rest,
@@ -60,18 +63,30 @@
       #v(0.6em)
       #text(size: 11.5pt, fill: luma(35%), style: "italic")[#short]
     ]
-    #if public_contributors not in (none, "") [
+    #if dateline not in (none, "") [
       #v(0.6em)
-      #text(size: 10pt)[By #public_contributors]
-    ]
-    #if final_due_date not in (none, "") [
-      #v(0.3em)
-      #text(size: 10pt, fill: luma(35%))[#final_due_date]
+      #text(size: 10pt, fill: luma(35%))[#dateline]
     ]
     #v(0.4em)
     #line(length: 100%, stroke: 0.8pt)
   ]
   v(1.2em)
 
+  // The report is long enough that finding a section by turning pages is
+  // not reasonable, which is the same reason the page has a table of
+  // contents. Typst builds it from the headings, so it cannot disagree
+  // with them.
+  outline(title: [Table of Contents], depth: 3, indent: auto)
+  v(1.2em)
+
   body
+
+  // Credited at the end, not under the title: a report is the work of most
+  // of a chapter, and nine names above the first paragraph read as a
+  // masthead rather than as a credit.
+  if contributors.len() > 0 {
+    heading(level: 1, [Contributors])
+    if contributors_note != none [#contributors_note]
+    list(..contributors)
+  }
 }

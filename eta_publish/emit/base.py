@@ -22,6 +22,15 @@ from ..nodes import (
     Text,
 )
 
+# The line a report introduces its contributors with. It is not in the
+# document: the header block names who they are, and this says what naming
+# them means. Every report says it the same way, and every output says it,
+# so it lives here rather than in one emitter or in each document.
+CONTRIBUTORS_NOTE = (
+    "We wish to acknowledge the following ETA members who contributed to "
+    "this report, and without whose hard work it would not be possible:"
+)
+
 
 class Emitter(ABC):
     """Walks a `Document` and returns source in one output format.
