@@ -547,6 +547,49 @@ class Parser:
 
     # ---- document ----------------------------------------------------
 
+    def _split_at_title(
+        self, content: list[JsonObject]
+    ) -> tuple[list[JsonObject], list[JsonObject]]:
+        """What sits above the headline, and the report itself below it.
+
+        A document with no headline has nothing above it: everything is the
+        report, which is what happened before anything was read from up
+        there and is what should keep happening.
+        """
+        for i, item in enumerate(content):
+            if "paragraph" in item and style_of(item["paragraph"]) == "TITLE":
+                return content[:i], content[i + 1 :]
+        return [], content
+
+    def card(self, above: list[JsonObject]) -> Image | None:
+        """The share card, which is an image the document puts above the headline.
+
+        ETA reports open with a wide image with the title set into it, for
+        whatever is linking to the report to show as a thumbnail. It is not
+        part of the report: the published page does not show it, and a
+        reader who is already reading does not need to be told the title
+        again in a picture.
+
+        So it is metadata, and it publishes as `og:image` rather than as a
+        figure. Recognized by position, because that is what the document
+        already says: an image above the headline is not in the report.
+
+        Nothing warns about it lacking alt text or a caption. It has no
+        business having either, and both warnings were only ever about
+        figures.
+        """
+        for item in above:
+            para = item.get("paragraph")
+            if para is None:
+                continue
+            for el in para.get("elements", []):
+                if "inlineObjectElement" not in el:
+                    continue
+                image = self._image(el["inlineObjectElement"])
+                if image is not None:
+                    return image
+        return None
+
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
@@ -696,12 +739,9 @@ class Parser:
             reserved=RESERVED_ANCHORS,
         )
 
-        body = [
-            item
-            for item in content
-            if not ("paragraph" in item and style_of(item["paragraph"]) == "TITLE")
-        ]
-        self.doc.blocks = self.blocks(body)
+        above, below = self._split_at_title(content)
+        self.doc.card = self.card(above)
+        self.doc.blocks = self.blocks(below)
         # After the body, so that every reference has been numbered.
         self.doc.footnotes = self.footnotes()
         return self.doc

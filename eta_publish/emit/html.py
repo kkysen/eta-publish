@@ -12,6 +12,7 @@ from typing import override
 
 from ..naming import IMAGE_DIR
 from ..nodes import (
+    Block,
     Document,
     Figure,
     Footnote,
@@ -108,13 +109,32 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
+        hero, body = self.hero(doc)
+        parts.append(hero)
         parts.append(self.dateline(doc))
         parts.append(self.toc(doc))
-        parts.append(self.blocks(doc.blocks))
+        parts.append(self.blocks(body))
         parts.append(self.footnotes(doc))
         parts.append(self.contributors(doc))
         parts.append("</div>")
         return self.join(parts)
+
+    def hero(self, doc: Document) -> tuple[str, list[Block]]:
+        """The opening figure, and the blocks left after taking it.
+
+        A report that opens with a figure opens with it: the document put it
+        under the headline, so it belongs with the headline rather than
+        below a table of contents that it should be introducing. This is the
+        title page, and a title page is a title and a picture.
+
+        Recognized by position, which is what the document already says.
+        Nothing else in these reports leads with a figure, and if one ever
+        does and does not mean it, that is the point at which a `Hero:` line
+        earns its place beside `Source:` and `Credit:`.
+        """
+        if doc.blocks and isinstance(doc.blocks[0], Figure):
+            return self.figure(doc.blocks[0]), doc.blocks[1:]
+        return "", doc.blocks
 
     def contributors(self, doc: Document) -> str:
         """Who is credited, in a section at the end, the way ETA credits them.
@@ -385,12 +405,24 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         items = "\n".join(f"<li>{escape(w)}</li>" for w in doc.warnings)
         warnings = f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
     short = doc.meta.get("short", "")
+    # The share card is what a link to the report unfurls as, and the only
+    # place it appears: it is a picture of the title, which a reader who has
+    # arrived does not need. `og:image` is read by everything that unfurls a
+    # link, Slack and Twitter included, so it is the one tag worth writing.
+    card = ""
+    if doc.card is not None:
+        href = doc.image_href(doc.card)
+        src = f"{image_base}/{href}" if image_base else href
+        card = f'<meta property="og:image" content="{escape(src)}">\n'
+        if doc.card.alt:
+            card += f'<meta property="og:image:alt" content="{escape(doc.card.alt)}">\n'
     return (
         "<!doctype html>\n"
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f"<title>{escape(doc.title)}</title>\n"
         f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
+        f"{card}"
         f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
         f"<h1>{escape(doc.title)}</h1>\n"
         f'<p class="standfirst">{escape(short)}</p>\n'

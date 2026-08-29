@@ -220,6 +220,13 @@ class Document:
     footnotes: list[Footnote] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
+    card: Image | None = None
+    """The share card: a wide image with the title set into it, placed above
+    the headline for whatever links to the report to show as a thumbnail.
+
+    Not part of the report, so it is not in `blocks`. It publishes as
+    `og:image` and nowhere else."""
+
     image_files: dict[str, str] = field(default_factory=dict)
     """Docs object id to the filename actually written, extension included.
 
@@ -287,8 +294,14 @@ class Document:
         """Every image in the document, in order, including inside footnotes.
 
         Deduplicated by `object_id`: the same image used twice is one file.
+
+        The share card is one of them even though it is not in `blocks`. It
+        is published as `og:image`, which is a URL like any other and needs
+        the file to be there.
         """
         seen: dict[str, Image] = {}
+        if self.card is not None:
+            seen[self.card.object_id] = self.card
         for block in _walk(self.blocks):
             for image in _images_in(block):
                 seen.setdefault(image.object_id, image)

@@ -14,8 +14,6 @@ seo description: "A 125 St subway should be a slam dunk. But at $7.7B and with s
 mta sas west feasibility study: "https://www.mta.info/document/196361"
 ---
 
-![](<images/img-8827f5de.jpg>)
-
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)

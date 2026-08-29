@@ -122,8 +122,8 @@ def test_the_shape_of_the_report(doc: Document) -> None:
     assert doc.title == "Digging Out of a Very Deep Hole: Saving Billions on 125th Street"
     assert doc.slug == "/reports/digging-out-deep-hole-sas-west"
     assert len(doc.footnotes) == 20
-    assert len(doc.images) == 29
-    assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 29
+    assert len(doc.images) == 29, "28 figures and the share card"
+    assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 28
     assert len([b for b in doc.blocks if isinstance(b, Heading)]) == 19
 
 
@@ -142,7 +142,6 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     assert sorted(doc.warnings) == [
         "an image is styled as a heading; treating it as a figure. "
         "Set that paragraph to normal text in the doc.",
-        "image kix.6v8dr3hm2747 has no alt text and no caption; add a description to it in the doc",
         "unfinished text in the document: SVG: TODO",
     ]
 
@@ -195,14 +194,33 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:
-    """One image in the report has neither, and is reported. If a second
-    appears, this catches it."""
+    """Every figure in the report carries alt text or a caption.
+
+    The one image that had neither is the share card, which is not a figure
+    and is not in the body at all."""
     undescribed = [
         b.image.object_id
         for b in doc.blocks
         if isinstance(b, Figure) and not b.image.alt and not b.caption
     ]
-    assert undescribed == ["kix.6v8dr3hm2747"]
+    assert undescribed == []
+
+
+def test_the_share_card_is_not_in_the_report(doc: Document) -> None:
+    """It is a picture of the title, for whatever unfurls a link to it."""
+    assert doc.card is not None
+    assert doc.card.object_id == "kix.6v8dr3hm2747"
+    assert doc.card.object_id not in [
+        b.image.object_id for b in doc.blocks if isinstance(b, Figure)
+    ]
+    assert doc.card in doc.images, "still has to be downloaded to be linked"
+
+
+def test_the_report_opens_with_its_hero(doc: Document) -> None:
+    """Above the table of contents, which it introduces rather than follows."""
+    page = report_page(doc)
+    assert page.index("img-6fb0f9c4") < page.index('<nav class="toc"')
+    assert page.index('property="og:image"') < page.index("<h1>")
 
 
 def test_no_chip_email_reaches_any_output(doc: Document) -> None:
