@@ -94,6 +94,23 @@ link after it at the wrong text;
 hashing means editing a paragraph breaks links to that paragraph and
 nothing else.
 
+### Section references are links (intended)
+
+Hand assembly.
+Google Docs cannot write a link to a heading in the same document,
+so the report italicizes the section's name and means a link by it.
+Live publishes the italics as italics:
+`See SAS Phase 2 Tail Tracks`, `as suggested in Station Depth`,
+and the addendum's `Station Depth`,
+each of them a name pointing nowhere.
+One of the three was linked by hand, to `#phase2-tail-tracks`.
+
+The parser reads the convention,
+so all three resolve to the heading they name,
+in the HTML, the Markdown, and the PDF alike.
+This is a defect the live page and the generated page shared,
+which is why comparing the two could not surface it.
+
 ### The back matter headings are `h2` (intended)
 
 Hand assembly.

@@ -350,3 +350,171 @@ def test_a_cropped_figure_keeps_its_raster() -> None:
     )
     figure = next(b for b in doc.blocks if isinstance(b, Figure))
     assert figure.image.crop.trims
+
+
+# ---- italicized section names are links ------------------------------
+
+
+def runs(*pieces: tuple[str, bool]) -> JsonObject:
+    """A paragraph of text runs, each either italic or not."""
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+            "elements": [
+                {"textRun": {"content": text, "textStyle": {"italic": True} if italic else {}}}
+                for text, italic in pieces
+            ],
+        }
+    }
+
+
+def linked(doc: Document) -> list[tuple[str, str | None]]:
+    para = next(b for b in doc.blocks if isinstance(b, Paragraph))
+    return [(t.text, t.href) for t in para.content if isinstance(t, Text)]
+
+
+def test_an_italicized_section_name_becomes_a_link() -> None:
+    """Docs cannot link to a heading in the same document, so the report
+    italicizes the section's name and means a link by it."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Station Depth", "HEADING_2"),
+                    runs(("See ", False), ("Station Depth", True), (" for more.\n", False)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc) == [
+        ("See ", None),
+        ("Station Depth", "#station-depth"),
+        (" for more.", None),
+    ]
+
+
+def test_the_italics_come_off_once_it_is_a_link() -> None:
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Fire Code", "HEADING_2"),
+                    runs(("Fire Code", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    para_node = next(b for b in doc.blocks if isinstance(b, Paragraph))
+    assert [t.italic for t in para_node.content if isinstance(t, Text)] == [False]
+
+
+def test_a_reference_can_precede_the_section_it_names() -> None:
+    """The report links to `Station Depth` long before reaching it."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    runs(("as suggested in ", False), ("Station Depth", True)),
+                    para("Station Depth", "HEADING_2"),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc)[1] == ("Station Depth", "#station-depth")
+
+
+def test_a_name_split_across_runs_still_matches() -> None:
+    """Docs splits a run wherever styling changes, mid-name included."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Tail Tracks", "HEADING_2"),
+                    runs(("Tail ", True), ("Tracks", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert [href for _, href in linked(doc)] == ["#tail-tracks", "#tail-tracks"]
+
+
+def test_case_and_spacing_are_forgiven() -> None:
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Ruling Grade", "HEADING_2"),
+                    runs(("ruling  grade", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc) == [("ruling  grade", "#ruling-grade")]
+
+
+def test_italics_that_name_no_section_stay_italics() -> None:
+    """The real report italicizes `and` and `tens of billions` for emphasis."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Fire Code", "HEADING_2"),
+                    runs(("tens of billions", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    para_node = next(b for b in doc.blocks if isinstance(b, Paragraph))
+    text = next(t for t in para_node.content if isinstance(t, Text))
+    assert text.italic and text.href is None
+
+
+def test_an_italicized_link_is_left_alone() -> None:
+    """Already a link, and to somewhere the author chose."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Fire Code", "HEADING_2"),
+                    {
+                        "paragraph": {
+                            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                            "elements": [
+                                {
+                                    "textRun": {
+                                        "content": "Fire Code",
+                                        "textStyle": {
+                                            "italic": True,
+                                            "link": {"url": "https://nfpa.test/130"},
+                                        },
+                                    }
+                                }
+                            ],
+                        }
+                    },
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc) == [("Fire Code", "https://nfpa.test/130")]
