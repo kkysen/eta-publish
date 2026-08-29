@@ -19,16 +19,20 @@ class TypstMissing(RuntimeError):
 
 
 def install_template(outdir: Path) -> Path:
-    """Copy the house style next to the emitted source.
+    """Write the house style next to the emitted source, every build.
 
     It is a package asset rather than something the emitter writes, so that
-    editing how reports look does not mean editing a Python string, and so a
-    hand-tweaked copy in an output directory is not silently overwritten by
-    a rebuild.
+    editing how reports look means editing Typst rather than a Python
+    string.
+
+    Overwritten rather than kept, because an output directory is build
+    output: it is rebuilt from the document on every run, and `site/` is
+    gitignored precisely because nothing in it is edited by hand. Keeping
+    an existing copy meant a change to the house style reached a directory
+    that had ever been built once, never, and the PDF was compiled against
+    a template several versions old without saying so.
     """
     dest = outdir / TEMPLATE
-    if dest.exists():
-        return dest
     source = resources.files("eta_publish.assets").joinpath(TEMPLATE)
     dest.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
     return dest

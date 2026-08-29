@@ -85,3 +85,15 @@ def test_tables_declare_their_column_count(out: str) -> None:
     assert "[Grand Paris Express]," in out
     # `$` opens math mode, so a currency figure in a cell needs escaping too.
     assert r"[\$530M]," in out
+
+
+def test_the_template_is_rewritten_every_build(tmp_path: Path) -> None:
+    """An output directory is build output, so a change to the house style
+    has to reach one that has been built before, which is all of them."""
+    stale = tmp_path / "template.typ"
+    stale.write_text("#let report(..) = none  // an old house style\n")
+
+    install_template(tmp_path)
+
+    assert stale.read_text() != "#let report(..) = none  // an old house style\n"
+    assert "#show: doc" in stale.read_text() or "report(" in stale.read_text()
