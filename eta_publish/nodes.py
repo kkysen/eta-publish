@@ -261,9 +261,16 @@ class Document:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
         return self.meta.get("url", "")
 
-    def headings(self, level: int = 2) -> list[Heading]:
-        """Headings at one level, for building a table of contents."""
-        return [b for b in self.blocks if isinstance(b, Heading) and b.level == level]
+    def headings(self, level: int | None = None) -> list[Heading]:
+        """Every heading in order, or only those at one level.
+
+        The title is not among them: it is `Document.title`, not a block,
+        so a table of contents over all of these never lists the report
+        itself.
+        """
+        return [
+            b for b in self.blocks if isinstance(b, Heading) and (level is None or b.level == level)
+        ]
 
     @property
     def images(self) -> list[Image]:

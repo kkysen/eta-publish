@@ -67,6 +67,36 @@ def test_the_table_of_contents_links_to_real_anchors(out: str) -> None:
     assert '<a href="#the-elephants-in-the-room">The Elephants in the Room</a>' in toc_html
 
 
+def test_the_table_of_contents_lists_every_heading(out: str) -> None:
+    """Not just the top level, which is all the published report lists."""
+    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    linked = re.findall(r'href="#([^"]+)"', toc_html)
+    targets = re.findall(r'<h\d id="([^"]+)"', out)
+    assert linked == [t for t in targets if t != "footnotes"]
+
+
+def test_the_table_of_contents_indents_a_subsection(out: str) -> None:
+    """A subsection sits in a list inside its section's own entry."""
+    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    assert (
+        '<li><a href="#the-elephants-in-the-room">The Elephants in the Room</a>\n'
+        '<ul>\n<li><a href="#ground-conditions">Ground Conditions</a></li>\n'
+        "</ul></li>" in toc_html
+    )
+
+
+def test_toc_entries_close_in_order(out: str) -> None:
+    """Nesting a list inside an entry is easy to close in the wrong order."""
+    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    stack: list[str] = []
+    for tag in re.findall(r"</?(?:ul|li)\b", toc_html):
+        if tag.startswith("</"):
+            assert stack.pop() == tag.removeprefix("</")
+        else:
+            stack.append(tag.removeprefix("<"))
+    assert not stack
+
+
 def test_nested_lists_nest(out: str) -> None:
     assert "<ul><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul>" in out
 

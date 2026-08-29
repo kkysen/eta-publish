@@ -53,16 +53,18 @@ and the text of every footnote body.
 These follow from what the emitters do,
 so they apply to whatever report is published next.
 
-### Table of contents lists only top-level sections (todo)
+### The table of contents lists every heading, indented (intended)
 
-Emitter.
-`toc()` asks for `doc.headings(level=2)`, which is `HEADING_1`,
-so the six top-level sections are linked and nothing under them is.
-Live lists those six and all eight subsections, fourteen entries.
-`doc.json` has the subsections as `HEADING_2` and `HEADING_3`
-and says nothing about which belong in a table of contents,
-so this is the emitter's decision to revisit,
-and the one code fix on the list.
+Hand assembly.
+Live runs six links together on one line separated by pipes,
+so the eight subsections `doc.json` carries appear nowhere
+and `Ground Conditions` is unreachable from the top of the page.
+`index.html` lists all nineteen headings as a nested list,
+one per line, each indented under the section it belongs to.
+
+The generated `Footnotes` heading is not among them.
+It is written by the emitter rather than by the document,
+so it is not one of `doc.json`'s headings.
 
 ### One `h1`, not a split title (intended)
 
@@ -137,7 +139,8 @@ Document.
 the same level as `Station Depth` and `Fire Code`,
 while the report's own sections are `HEADING_1`.
 `index.html` follows that and emits `h3`,
-which is also why both appendices are absent from its table of contents.
+so the table of contents indents both appendices under `Conclusion`,
+which is what the document says and not what the report means.
 Live shows them as `h2` because someone corrected it by hand.
 Restyle them in the document, and they rise in every output at once.
 
