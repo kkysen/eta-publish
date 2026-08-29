@@ -141,8 +141,6 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     """Each of these is something to fix in the document, not in the code.
     A new warning appearing here means the report changed or the parser did."""
     assert sorted(doc.warnings) == [
-        "an image is styled as a heading; treating it as a figure. "
-        "Set that paragraph to normal text in the doc.",
         "unfinished text in the document: SVG: TODO",
     ]
 

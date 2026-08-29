@@ -189,18 +189,6 @@ Live serves `saswest.jpg`, named by a person.
 A name belongs in the document, next to the image, the way `Credit:` is,
 and until it is there a hash is the only thing that is stable across edits.
 
-### An image is styled as a heading (todo)
-
-Document.
-An empty `HEADING_3` paragraph holds the 125 St map under
-`SAS West Tail Tracks`, the one captioned
-"The MTA proposed extending tail tracks all the way up 12 Av to 137 St
-in a board meeting on April 27, 2026".
-Left as a heading it would publish as an empty `h3`, whose anchor is a
-published URL, with the image buried inside it, so it is treated as a
-figure and reported.
-Set that paragraph to normal text in the document.
-
 ### Four wordings the live page predates (intended)
 
 Stale live.
