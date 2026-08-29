@@ -1,5 +1,12 @@
 <style>
 .eta-report figure { margin: 2.5em 0; }
+/* Figures the document puts next to each other sit next to each other, if
+   the reader's screen has room for them. `flex-basis` is what decides: two
+   fit in the 46rem the page is set at, and one does on a phone, with no
+   width named anywhere and nothing to keep in step with a media query. */
+.eta-report .figure-row { display: flex; flex-wrap: wrap; gap: 1.5em;
+                          align-items: flex-start; margin: 2.5em 0; }
+.eta-report .figure-row > figure { flex: 1 1 18rem; margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay

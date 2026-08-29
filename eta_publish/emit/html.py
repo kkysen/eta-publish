@@ -12,6 +12,7 @@ from typing import override
 
 from ..naming import IMAGE_DIR, content_anchor
 from ..nodes import (
+    Block,
     Document,
     Figure,
     Footnote,
@@ -33,6 +34,13 @@ from .base import CONTRIBUTORS_NOTE, Emitter
 # the theme, so a report does not fight the rest of the site.
 REPORT_CSS = """
 .eta-report figure { margin: 2.5em 0; }
+/* Figures the document puts next to each other sit next to each other, if
+   the reader's screen has room for them. `flex-basis` is what decides: two
+   fit in the 46rem the page is set at, and one does on a phone, with no
+   width named anywhere and nothing to keep in step with a media query. */
+.eta-report .figure-row { display: flex; flex-wrap: wrap; gap: 1.5em;
+                          align-items: flex-start; margin: 2.5em 0; }
+.eta-report .figure-row > figure { flex: 1 1 18rem; margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
@@ -286,6 +294,33 @@ class HtmlEmitter(Emitter):
         return f'<li id="fn{note.number}">{back} {body}</li>'
 
     # ---- blocks -----------------------------------------------------
+
+    @override
+    def blocks(self, blocks: list[Block]) -> str:
+        """Blocks in order, with runs of figures kept together in a row.
+
+        The document has no way to say "these two go side by side", but it
+        does say they belong together by putting them one after another
+        with nothing in between. That is the whole signal, and it is what
+        the row is built from.
+
+        A lone figure is left as it was. Wrapping one in a row would change
+        every figure in the report to say something about a run of one.
+        """
+        out: list[str] = []
+        i = 0
+        while i < len(blocks):
+            run = i
+            while run < len(blocks) and isinstance(blocks[run], Figure):
+                run += 1
+            if run - i > 1:
+                figures = "\n".join(self.block(b) for b in blocks[i:run])
+                out.append(f'<div class="figure-row">\n{figures}\n</div>')
+                i = run
+            else:
+                out.append(self.block(blocks[i]))
+                i += 1
+        return self.join(out)
 
     @override
     def heading(self, node: Heading) -> str:
