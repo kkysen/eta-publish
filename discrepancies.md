@@ -76,6 +76,24 @@ and `index.html` emits exactly that as a single `h1`.
 Live splits it across an `h1` and an `h2`,
 which leaves the subtitle looking like the first section heading.
 
+### Everything on the page has an id (intended)
+
+Hand assembly.
+Live gives ids to headings and to the footnote anchors someone typed by
+hand, and to nothing else,
+so there is no way to link to a paragraph, a figure, or a table.
+`index.html` gives an id to the title, the standfirst, the table of
+contents, the date, every heading, every paragraph, list, figure, and
+table, each footnote, and the footnotes and contributors sections
+themselves.
+
+The ids of blocks with no name of their own are hashes of what they say,
+not of where they sit.
+Numbering them would mean inserting a paragraph silently repoints every
+link after it at the wrong text;
+hashing means editing a paragraph breaks links to that paragraph and
+nothing else.
+
 ### The back matter headings are `h2` (intended)
 
 Hand assembly.

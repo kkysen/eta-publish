@@ -10,7 +10,7 @@ import html
 import re
 from typing import override
 
-from ..naming import IMAGE_DIR
+from ..naming import IMAGE_DIR, content_anchor
 from ..nodes import (
     Block,
     Document,
@@ -102,9 +102,35 @@ class HtmlEmitter(Emitter):
         self.image_base = image_base.rstrip("/")
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
+        self._taken: set[str] = set()
+
+    def anchor(self, prefix: str, text: str) -> str:
+        """An id for a block, unique within the page.
+
+        Two blocks saying exactly the same thing hash the same, and the
+        second one gets a counted suffix. That suffix is positional, which
+        nothing else here is, and it is the least bad option available: the
+        blocks are indistinguishable, so there is nothing else to tell them
+        apart with. It applies only to the duplicates.
+        """
+        return self.take(content_anchor(prefix, text))
+
+    def take(self, base: str) -> str:
+        """`base`, or the first counted variant of it not already used."""
+        candidate = base
+        n = 1
+        while candidate in self._taken:
+            n += 1
+            candidate = f"{base}-{n}"
+        self._taken.add(candidate)
+        return candidate
 
     @override
     def document(self, doc: Document) -> str:
+        # Every id on the page is allocated here, so a second `emit` of the
+        # same document produces the same ids rather than suffixed ones.
+        self._taken = {"title", "short", "contents", "footnotes", "contributors"}
+        self._taken.update(b.anchor for b in doc.blocks if isinstance(b, Heading))
         parts = []
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
@@ -158,8 +184,8 @@ class HtmlEmitter(Emitter):
             return ""
         items = "\n".join(f"<li>{escape(name)}</li>" for name in names)
         return (
-            '<section class="contributors">\n'
-            '<h2 id="contributors">Contributors</h2>\n'
+            '<section class="contributors" id="contributors">\n'
+            "<h2>Contributors</h2>\n"
             f"<p>{CONTRIBUTORS_NOTE}</p>\n"
             f"<ul>\n{items}\n</ul>\n"
             "</section>"
@@ -176,7 +202,7 @@ class HtmlEmitter(Emitter):
         date = doc.dateline
         if not date:
             return ""
-        return f'<p class="dateline">{escape(date)}</p>'
+        return f'<p class="dateline" id="date">{escape(date)}</p>'
 
     def toc(self, doc: Document) -> str:
         """The sections, as a list rather than a run of separated links.
@@ -208,7 +234,7 @@ class HtmlEmitter(Emitter):
             return ""
         headings = headings + self.back_matter(doc)
         return (
-            '<nav class="toc" aria-label="Table of contents">\n'
+            '<nav class="toc" id="contents" aria-label="Table of contents">\n'
             "<strong>Table of Contents</strong>\n"
             f"{self.toc_list(headings)}\n"
             "</nav>"
@@ -261,8 +287,8 @@ class HtmlEmitter(Emitter):
             return ""
         items = "\n".join(self.footnote(f) for f in doc.footnotes)
         return (
-            '<section class="footnotes">\n'
-            '<h2 id="footnotes">Footnotes</h2>\n'
+            '<section class="footnotes" id="footnotes">\n'
+            "<h2>Footnotes</h2>\n"
             f"<ol>\n{items}\n</ol>\n"
             "</section>"
         )
@@ -288,12 +314,25 @@ class HtmlEmitter(Emitter):
 
     @override
     def paragraph(self, node: Paragraph) -> str:
-        return f"<p>{self.inlines(node.content)}</p>"
+        """A paragraph is linkable, because a report this long gets quoted
+        a paragraph at a time. One holding no text is not: there is nothing
+        to hash and nothing anyone would link to."""
+        text = plain(node.content)
+        if not text:
+            return f"<p>{self.inlines(node.content)}</p>"
+        return f'<p id="{self.anchor("p", text)}">{self.inlines(node.content)}</p>'
 
     @override
     def list_(self, node: List) -> str:
+        """The list is linkable; its items are not.
+
+        An item is a line rather than a passage, and every one of them
+        would want an id derived from a few words that a copy edit moves
+        around. The list is the unit someone links to."""
         tag = "ol" if node.kind is ListKind.NUMBER else "ul"
-        return f"<{tag}>{self.items(node.items, tag)}</{tag}>"
+        text = " ".join(plain(item.content) for item in node.items)
+        anchor = f' id="{self.anchor("list", text)}"' if text else ""
+        return f"<{tag}{anchor}>{self.items(node.items, tag)}</{tag}>"
 
     def items(self, items: list[ListItem], tag: str) -> str:
         out = []
@@ -318,7 +357,10 @@ class HtmlEmitter(Emitter):
             parts.append(
                 f'<figcaption class="figure-credit">{self.inlines(node.credit)}</figcaption>'
             )
-        return f"<figure>{''.join(parts)}</figure>"
+        # Named for the image it holds, so the anchor is whatever the image
+        # is called. Today that is `img-` and a hash of the Docs object id;
+        # when the document names its images, this becomes that name.
+        return f'<figure id="{self.take(node.image.filename)}">{"".join(parts)}</figure>'
 
     @override
     def table(self, node: Table) -> str:
@@ -326,7 +368,15 @@ class HtmlEmitter(Emitter):
             "<tr>" + "".join(f"<td>{self.blocks(cell)}</td>" for cell in row) + "</tr>"
             for row in node.rows
         )
-        return f'<div class="table-scroll"><table>{rows}</table></div>'
+        text = " ".join(
+            plain(block.content)
+            for row in node.rows
+            for cell in row
+            for block in cell
+            if isinstance(block, Paragraph)
+        )
+        anchor = f' id="{self.anchor("table", text)}"' if text else ""
+        return f'<div class="table-scroll"{anchor}><table>{rows}</table></div>'
 
     # ---- inline -----------------------------------------------------
 
@@ -424,8 +474,8 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
         f"{card}"
         f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
-        f"<h1>{escape(doc.title)}</h1>\n"
-        f'<p class="standfirst">{escape(short)}</p>\n'
+        f'<h1 id="title">{escape(doc.title)}</h1>\n'
+        f'<p class="standfirst" id="short">{escape(short)}</p>\n'
         f"{warnings}\n"
         f"{body}\n"
     )
