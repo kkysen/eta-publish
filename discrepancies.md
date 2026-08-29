@@ -108,15 +108,18 @@ One of the three was linked by hand, to `#phase2-tail-tracks`.
 The parser reads the convention,
 so all three resolve to the heading they name,
 in the HTML, the Markdown, and the PDF alike.
+Live italicizes exactly two other things, `and` and `tens of billions`,
+and both stay italic here: they name no section.
 This is a defect the live page and the generated page shared,
 which is why comparing the two could not surface it.
 
 ### The back matter headings are `h2` (intended)
 
 Hand assembly.
-`index.html` credits the same nine people the live page credits,
+Every output credits the same nine people the live page credits,
 in the same order, in a `Contributors` section after the footnotes,
 under the sentence the live page introduces them with.
+The PDF has a table of contents for the same reason the page does.
 The names come from `Public Contributors:` in the header block
 and are sorted by surname, which is how etany.org credits contributors
 and is not the order that field happens to be typed in.
@@ -155,6 +158,18 @@ Live also still carries the debris the `README.md` describes,
 an `id="#fn3-return"` and a duplicated `fn18-return`.
 
 Nothing to do. This is the discrepancy the project exists to produce.
+
+### `Appendix A` is not marked as a reference (todo)
+
+Document.
+Live links four section references in the body.
+Three of them the document italicizes, and all three resolve here.
+The fourth, `Appendix A` in
+"there is another much cheaper, much more expansive option",
+is plain text in the document and was linked on the live page by hand,
+so there is nothing here to read.
+Italicize it, and it resolves to `Appendix A: Freedom Tunnel`:
+a reference naming a section up to its colon is matched.
 
 ### The chart captions lost their `SVG` and `PNG` links (todo)
 

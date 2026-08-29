@@ -518,3 +518,41 @@ def test_an_italicized_link_is_left_alone() -> None:
         }
     )
     assert linked(doc) == [("Fire Code", "https://nfpa.test/130")]
+
+
+def test_a_section_named_before_its_colon_still_matches() -> None:
+    """`Appendix A: Freedom Tunnel` is referred to as `Appendix A`, which is
+    how the live page links it."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Appendix A: Freedom Tunnel", "HEADING_2"),
+                    runs(("see ", False), ("Appendix A", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc)[1] == ("Appendix A", "#appendix-a-freedom-tunnel")
+
+
+def test_the_full_name_wins_over_a_shortened_one() -> None:
+    """A heading actually called `Appendix A` keeps its own anchor."""
+    doc = parse(
+        {
+            "title": "A report",
+            "body": {
+                "content": [
+                    para("Appendix A", "HEADING_2"),
+                    para("Appendix A: Freedom Tunnel", "HEADING_2"),
+                    runs(("Appendix A", True)),
+                ]
+            },
+            "footnotes": {},
+            "lists": {},
+        }
+    )
+    assert linked(doc) == [("Appendix A", "#appendix-a")]
