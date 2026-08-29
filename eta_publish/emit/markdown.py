@@ -33,7 +33,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter
 
 # Characters that would otherwise be read as Markdown syntax. Escaping is
 # deliberately minimal: over-escaping prose makes the archive harder to read
@@ -99,7 +99,12 @@ class MarkdownEmitter(Emitter):
 
     @override
     def document(self, doc: Document) -> str:
-        parts = [self.front_matter(doc), self.blocks(doc.blocks), self.footnotes(doc)]
+        parts = [
+            self.front_matter(doc),
+            self.blocks(doc.blocks),
+            self.footnotes(doc),
+            self.contributors(doc),
+        ]
         return strip_trailing_space(self.join(parts)) + "\n"
 
     @override
@@ -112,6 +117,19 @@ class MarkdownEmitter(Emitter):
         lines += [f"{key}: {yaml_value(value)}" for key, value in doc.meta.items()]
         lines.append("---")
         return "\n".join(lines)
+
+    def contributors(self, doc: Document) -> str:
+        """Credited at the end, as they are on the page.
+
+        The front matter above carries `public contributors` as the header
+        block writes it, which is the field. This is the credit, in the
+        order it publishes in, so the archive says what the page said.
+        """
+        names = doc.contributors
+        if not names:
+            return ""
+        listed = "\n".join(f"- {name}" for name in names)
+        return f"## Contributors\n\n{CONTRIBUTORS_NOTE}\n\n{listed}"
 
     def footnotes(self, doc: Document) -> str:
         return self.join([self.footnote(f) for f in doc.footnotes])

@@ -34,7 +34,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter
 
 # Typst's markup characters. `#` and `@` start code and references, and the
 # rest delimit markup, so any of them in prose has to be escaped.
@@ -60,6 +60,14 @@ class TypstEmitter(Emitter):
 
     @override
     def document(self, doc: Document) -> str:
+        """The header block as written, plus what the page publishes.
+
+        `doc.meta` is the fields as typed, which is what the template shows
+        for everything nobody has an opinion about. Two of them the page
+        does have an opinion about, so they are passed separately rather
+        than silently rewritten: the date written out, and the contributors
+        in the order they are credited in.
+        """
         meta = "\n".join(
             f"  {key.replace(' ', '_')}: {string(value)}," for key, value in doc.meta.items()
         )
@@ -68,9 +76,16 @@ class TypstEmitter(Emitter):
             f"#show: report.with(\n"
             f"  title: {string(doc.title)},\n"
             f"{meta}\n"
+            f"  dateline: {string(doc.dateline)},\n"
+            f"  contributors: ({self.contributors(doc)}),\n"
+            f"  contributors_note: {string(CONTRIBUTORS_NOTE)},\n"
             f")\n"
         )
         return header + "\n" + self.blocks(doc.blocks) + "\n"
+
+    def contributors(self, doc: Document) -> str:
+        """The credited names as a Typst array, so the template can list them."""
+        return "".join(f"{string(name)}, " for name in doc.contributors)
 
     @override
     def join(self, parts: list[str]) -> str:

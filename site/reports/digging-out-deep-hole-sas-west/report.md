@@ -632,3 +632,17 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 [^20]: Baseline NFPA 130 standards allow for elevators to comprise only up to 50% of required emergency egress capacity from the platform to a point of safety.
     Modern stations like REM’s Édouard-Montpetit, often use elevators for all or nearly all the egress capacity from a point of safety to the street.
     See section 5.3 of NFPA 130: [https://link.nfpa.org/free-access/publications/130/2026](<https://link.nfpa.org/free-access/publications/130/2026>)
+
+## Contributors
+
+We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:
+
+- Madison Feinberg
+- Robert Hale
+- Darius Jankauskas
+- Tim Lazaroff
+- Alon Levy
+- Blair Lorenzo
+- William Meehan
+- Khyber Sen
+- Franklin Tang
