@@ -143,17 +143,24 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
     assert "<td><p>Grand Paris Express</p></td>" in out
 
 
-def test_the_byline_lists_the_public_contributors(doc: Document) -> None:
+def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
     doc.meta["public contributors"] = "Khyber Sen, Alon Levy"
     doc.meta["private contributors"] = "Someone Unnamed"
     out = HtmlEmitter(inline_css=False).emit(doc)
-    assert '<p class="byline">By Khyber Sen, Alon Levy</p>' in out
+    assert "<li>Khyber Sen</li>\n<li>Alon Levy</li>" in out
     assert "Someone Unnamed" not in out
 
 
-def test_a_report_with_no_public_contributors_has_no_byline(doc: Document) -> None:
+def test_the_contributors_section_comes_last(doc: Document) -> None:
+    """After the footnotes, which is where the published report credits them."""
+    doc.meta["public contributors"] = "Khyber Sen"
+    out = HtmlEmitter(inline_css=False).emit(doc)
+    assert out.index('<section class="footnotes">') < out.index('<section class="contributors">')
+
+
+def test_a_report_with_no_public_contributors_has_no_contributors(doc: Document) -> None:
     doc.meta.pop("public contributors", None)
-    assert 'class="byline"' not in HtmlEmitter(inline_css=False).emit(doc)
+    assert 'class="contributors"' not in HtmlEmitter(inline_css=False).emit(doc)
 
 
 def test_the_dateline_is_the_final_due_date(doc: Document) -> None:

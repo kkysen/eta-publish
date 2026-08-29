@@ -53,7 +53,7 @@ HEADING_LEVELS = {
 IGNORED_ELEMENTS = frozenset({"pageBreak", "columnBreak", "horizontalRule", "equation"})
 
 # Ids the emitters generate for themselves, which no heading may take.
-RESERVED_ANCHORS = frozenset({"footnotes"})
+RESERVED_ANCHORS = frozenset({"footnotes", "contributors"})
 
 # Docs writes a Shift+Enter line break as a vertical tab inside the run.
 SOFT_BREAK = "\v"
