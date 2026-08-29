@@ -125,8 +125,8 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
-        parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.dateline(doc))
+        parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.body))
         parts.append(self.footnotes(doc))
