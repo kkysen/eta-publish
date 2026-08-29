@@ -239,6 +239,28 @@ class Document:
     """
 
     @property
+    def hero(self) -> Figure | None:
+        """The figure a report opens with, if it opens with one.
+
+        The document puts it under the headline, so it belongs with the
+        headline rather than after a table of contents it should be
+        introducing. This is the title page, and a title page is a title
+        and a picture.
+
+        Recognized by position, which is what the document already says.
+        Nothing else in these reports leads with a figure, and if one ever
+        does and does not mean it, that is when a `Hero:` line earns its
+        place beside `Source:` and `Credit:`.
+        """
+        first = self.blocks[0] if self.blocks else None
+        return first if isinstance(first, Figure) else None
+
+    @property
+    def body(self) -> list[Block]:
+        """Everything after the hero, which is the report proper."""
+        return self.blocks[1:] if self.hero is not None else self.blocks
+
+    @property
     def contributors(self) -> list[str]:
         """The people credited on the published page, by surname.
 

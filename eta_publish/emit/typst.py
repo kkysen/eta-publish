@@ -79,9 +79,20 @@ class TypstEmitter(Emitter):
             f"  dateline: {string(doc.dateline)},\n"
             f"  contributors: ({self.contributors(doc)}),\n"
             f"  contributors_note: {string(CONTRIBUTORS_NOTE)},\n"
+            f"{self.hero(doc)}"
             f")\n"
         )
-        return header + "\n" + self.blocks(doc.blocks) + "\n"
+        return header + "\n" + self.blocks(doc.body) + "\n"
+
+    def hero(self, doc: Document) -> str:
+        """The opening figure, passed to the template rather than emitted.
+
+        It belongs above the outline, with the title, and the template is
+        what knows where the outline goes.
+        """
+        if doc.hero is None:
+            return ""
+        return f"  hero: [\n{self.blocks([doc.hero])}\n  ],\n"
 
     def contributors(self, doc: Document) -> str:
         """The credited names as a Typst array, so the template can list them."""

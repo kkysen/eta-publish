@@ -17,11 +17,12 @@
   dateline: "August 19, 2026",
   contributors: ("Madison Feinberg", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "William Meehan", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
-)
-
+  hero: [
 #figure(
   image("images/img-6fb0f9c4.jpg", width: 100%),
   caption: [Composite image of the MTA’s #link("https://www.mta.info/document/196361#page=28")[SAS West St Nicholas Av station diagram] and a Grand Central Madison escalator. #link("https://www.mta.info/document/196361#page=28")[Credit: MTA], ETA (Blair Lorenzo)],
+)
+  ],
 )
 
 #strong[Addendum: The following clarifying text was added to “]#link("#station-depth")[#strong[Station Depth]]#strong[” on August 21, 2026: ]Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.

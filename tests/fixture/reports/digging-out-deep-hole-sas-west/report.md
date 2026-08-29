@@ -6,6 +6,10 @@ seo description: Cheaper, shallower, faster.
 mta sas west feasibility study: "https://www.mta.info/document/196361"
 ---
 
+# Digging Out of a Very Deep Hole: Saving Billions on 125th Street
+
+A 125 St subway should be a slam dunk.
+
 ## The Elephants in the Room
 
 SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>).

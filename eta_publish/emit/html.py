@@ -12,7 +12,6 @@ from typing import override
 
 from ..naming import IMAGE_DIR, content_anchor
 from ..nodes import (
-    Block,
     Document,
     Figure,
     Footnote,
@@ -126,32 +125,14 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
-        hero, body = self.hero(doc)
-        parts.append(hero)
+        parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.dateline(doc))
         parts.append(self.toc(doc))
-        parts.append(self.blocks(body))
+        parts.append(self.blocks(doc.body))
         parts.append(self.footnotes(doc))
         parts.append(self.contributors(doc))
         parts.append("</div>")
         return self.join(parts)
-
-    def hero(self, doc: Document) -> tuple[str, list[Block]]:
-        """The opening figure, and the blocks left after taking it.
-
-        A report that opens with a figure opens with it: the document put it
-        under the headline, so it belongs with the headline rather than
-        below a table of contents that it should be introducing. This is the
-        title page, and a title page is a title and a picture.
-
-        Recognized by position, which is what the document already says.
-        Nothing else in these reports leads with a figure, and if one ever
-        does and does not mean it, that is the point at which a `Hero:` line
-        earns its place beside `Source:` and `Credit:`.
-        """
-        if doc.blocks and isinstance(doc.blocks[0], Figure):
-            return self.figure(doc.blocks[0]), doc.blocks[1:]
-        return "", doc.blocks
 
     def contributors(self, doc: Document) -> str:
         """Who is credited, in a section at the end, the way ETA credits them.

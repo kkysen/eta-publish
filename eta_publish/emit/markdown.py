@@ -101,7 +101,9 @@ class MarkdownEmitter(Emitter):
     def document(self, doc: Document) -> str:
         parts = [
             self.front_matter(doc),
-            self.blocks(doc.blocks),
+            self.title(doc),
+            self.blocks([doc.hero] if doc.hero is not None else []),
+            self.blocks(doc.body),
             self.footnotes(doc),
             self.contributors(doc),
         ]
@@ -117,6 +119,23 @@ class MarkdownEmitter(Emitter):
         lines += [f"{key}: {yaml_value(value)}" for key, value in doc.meta.items()]
         lines.append("---")
         return "\n".join(lines)
+
+    def title(self, doc: Document) -> str:
+        """The headline, and the standfirst under it, as the page has them.
+
+        The front matter above carries both as fields, for whatever reads
+        this as data. A person reading the file sees the fields as a block
+        of YAML, so without this the archive of a report opens with an
+        image and never says what it is.
+
+        `#` is free: the document's own sections are `##`, because the tree
+        counts the title as the level above them.
+        """
+        if not doc.title:
+            return ""
+        short = doc.meta.get("short", "")
+        heading = f"# {escape(doc.title)}"
+        return f"{heading}\n\n{escape(short)}" if short else heading
 
     def contributors(self, doc: Document) -> str:
         """Credited at the end, as they are on the page.
