@@ -142,13 +142,24 @@ which is what the document says and not what the report means.
 Live shows them as `h2` because someone corrected it by hand.
 Restyle them in the document, and they rise in every output at once.
 
-### The lead image has no alt text (todo)
+### The share card has no alt text (todo)
 
 Document.
-`doc.json` gives the image neither alt text nor a caption,
-so `index.html` emits `alt=""` and nothing describes it.
-Already reported by the `no alt text and no caption` warning.
+The wide image with the title set into it, which the document puts above
+the headline, publishes as `og:image` and nowhere else,
+the same image live serves as `saswest.jpg`.
+`og:image:alt` is written when the image has alt text, and this one has
+none, so a link preview that is read aloud says nothing.
 Describe it in the document.
+
+### The images are named by hash (todo)
+
+Emitter.
+`index.html` references `images/img-8827f5de.jpg`, from the Docs object id,
+because the document gives an image no name at all.
+Live serves `saswest.jpg`, named by a person.
+A name belongs in the document, next to the image, the way `Credit:` is,
+and until it is there a hash is the only thing that is stable across edits.
 
 ### An image is styled as a heading (todo)
 

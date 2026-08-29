@@ -17,10 +17,6 @@
 )
 
 #figure(
-  image("images/img-8827f5de.jpg", width: 100%),
-)
-
-#figure(
   image("images/img-6fb0f9c4.jpg", width: 100%),
   caption: [Composite image of the MTA’s #link("https://www.mta.info/document/196361#page=28")[SAS West St Nicholas Av station diagram] and a Grand Central Madison escalator. #link("https://www.mta.info/document/196361#page=28")[Credit: MTA], ETA (Blair Lorenzo)],
 )
