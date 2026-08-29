@@ -8,8 +8,13 @@ necessary in the first place.
 This is not what gets published. It exists so that every regeneration lands
 in git as a readable diff: what changed between draft 6 and draft 7, what
 the August 21 addendum actually added. That is why the output breaks lines
-at sentences (see `sentences.py`) and why the front matter is written as
-YAML rather than prose.
+at sentences (see `sentences.py`).
+
+It is the same report as the page and the PDF, not a different view of it:
+the same headline, standfirst, date, and hero, in the same order, and the
+same contributors at the end. The header block itself is not here. It is
+production scaffolding, `Draft Due Date:` and a discussion channel, and
+`doc.json` beside this file keeps every field of it verbatim.
 """
 
 import re
@@ -71,15 +76,6 @@ def strip_trailing_space(text: str) -> str:
     return "\n".join(line.rstrip() for line in text.split("\n"))
 
 
-def yaml_value(value: str) -> str:
-    """Quote only when the value could be read as something other than text."""
-    if value == "":
-        return '""'
-    if re.fullmatch(r"[\w /.,'&()-]+", value) and not value[0].isdigit():
-        return value
-    return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
-
-
 class MarkdownEmitter(Emitter):
     extension = ".md"
 
@@ -100,8 +96,8 @@ class MarkdownEmitter(Emitter):
     @override
     def document(self, doc: Document) -> str:
         parts = [
-            self.front_matter(doc),
             self.title(doc),
+            self.dateline(doc),
             self.blocks([doc.hero] if doc.hero is not None else []),
             self.blocks(doc.body),
             self.footnotes(doc),
@@ -114,19 +110,8 @@ class MarkdownEmitter(Emitter):
         # A blank line between blocks, which is Markdown's block separator.
         return "\n\n".join(p for p in parts if p)
 
-    def front_matter(self, doc: Document) -> str:
-        lines = ["---", f"title: {yaml_value(doc.title)}"]
-        lines += [f"{key}: {yaml_value(value)}" for key, value in doc.meta.items()]
-        lines.append("---")
-        return "\n".join(lines)
-
     def title(self, doc: Document) -> str:
         """The headline, and the standfirst under it, as the page has them.
-
-        The front matter above carries both as fields, for whatever reads
-        this as data. A person reading the file sees the fields as a block
-        of YAML, so without this the archive of a report opens with an
-        image and never says what it is.
 
         `#` is free: the document's own sections are `##`, because the tree
         counts the title as the level above them.
@@ -136,6 +121,10 @@ class MarkdownEmitter(Emitter):
         short = doc.meta.get("short", "")
         heading = f"# {escape(doc.title)}"
         return f"{heading}\n\n{escape(short)}" if short else heading
+
+    def dateline(self, doc: Document) -> str:
+        """When the report published, as the page and the PDF date it."""
+        return escape(doc.dateline)
 
     def contributors(self, doc: Document) -> str:
         """Credited at the end, as they are on the page.

@@ -38,10 +38,18 @@ def with_paragraph(text: str) -> Document:
     return parse(doc_json)
 
 
-def test_front_matter_is_yaml(out: str) -> None:
-    assert out.startswith("---\n")
-    assert 'title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street"' in out
-    assert "url: /reports/digging-out-deep-hole-sas-west" in out
+def test_it_opens_the_way_the_page_does(out: str) -> None:
+    """The same report as the page and the PDF, not a different view of it."""
+    assert out.startswith("# Digging Out of a Very Deep Hole: Saving Billions on 125th Street\n")
+
+
+def test_the_header_block_is_not_in_the_archive(out: str) -> None:
+    """It is production scaffolding, and `doc.json` beside this file keeps
+    every field of it verbatim."""
+    assert not out.startswith("---")
+    assert "draft due date" not in out.lower()
+    assert "url: /reports/" not in out
+    assert "seo description" not in out.lower()
 
 
 def test_a_paragraph_is_one_line_per_sentence() -> None:
