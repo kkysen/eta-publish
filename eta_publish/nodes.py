@@ -13,6 +13,7 @@ meets and cannot place here becomes a warning rather than a silent drop.
 """
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 
 # ---- inline content ------------------------------------------------
@@ -252,15 +253,18 @@ class Document:
 
     @property
     def dateline(self) -> str:
-        """The publication date, as the document shows it, e.g. `Aug 19, 2026`.
+        """The publication date, written out, e.g. `August 19, 2026`.
 
         `Final Due Date:` is the date a report publishes on, and it is a date
-        chip, so the string here is the one Docs renders in the document.
-        It is passed through rather than reformatted: the header block is
-        where the date is decided, and a longer form is a change to how every
-        date reads, front matter included, rather than to this line alone.
+        chip, so what the document holds is whatever short form Docs renders,
+        `Aug 19, 2026`. etany.org writes the month out, and a published date
+        is not the place to abbreviate three letters.
+
+        A date the chip writes some other way, or a field holding something
+        that is not a date at all, is published exactly as it was written.
+        Guessing at it would be worse than showing what the header says.
         """
-        return self.meta.get("final due date", "")
+        return _long_date(self.meta.get("final due date", ""))
 
     @property
     def slug(self) -> str:
@@ -300,6 +304,23 @@ class Document:
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
+
+
+# What a Docs date chip can render, most likely first. A chip is a real
+# date, so this is a short list of ways to write one rather than an attempt
+# at parsing dates in general.
+DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%Y-%m-%d", "%m/%d/%Y")
+
+
+def _long_date(text: str) -> str:
+    """`Aug 19, 2026` written out, or `text` unchanged if it is not a date."""
+    for fmt in DATE_FORMATS:
+        try:
+            date = datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+        return f"{date:%B} {date.day}, {date.year}"
+    return text
 
 
 def _by_surname(name: str) -> tuple[str, str]:

@@ -91,14 +91,6 @@ What differs is the level.
 which makes them sections of the report rather than
 subsections of whatever came last.
 
-### Short dates (intended)
-
-Hand assembly.
-The dateline comes from `Final Due Date:` in the header block,
-and `index.html` prints the date chip as the document displays it,
-`Aug 19, 2026`.
-Live has `August 19, 2026`, typed by hand.
-
 ### Footnote markers are bare superscripts after the punctuation (intended)
 
 Hand assembly.
