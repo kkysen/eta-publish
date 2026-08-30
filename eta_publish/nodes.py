@@ -343,6 +343,18 @@ class Document:
                     seen.setdefault(image.object_id, image)
         return list(seen.values())
 
+    @property
+    def figures(self) -> list[Figure]:
+        """Every figure in the document, in order, footnotes included.
+
+        Unlike `images`, not the share card: the card is a picture of the
+        title rather than a figure of the report, and it is not in `blocks`
+        at all.
+        """
+        blocks = list(_walk(self.blocks))
+        blocks += [b for note in self.footnotes for b in _walk(note.content)]
+        return [b for b in blocks if isinstance(b, Figure)]
+
     def image_href(self, image: Image) -> str:
         """The filename as emitted, once a download has settled what it is."""
         return self.image_files.get(image.object_id, image.filename)

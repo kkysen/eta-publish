@@ -6,7 +6,7 @@ A 125 St subway should be a slam dunk.
 
 SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>).
 
-![SAS West alignment map](<images/img-1933bef5.png>)
+![SAS West alignment map](<images/sas-west-036.png>)
 The SAS West and Phase 2 alignments.
 Credit: MTA
 <!-- Source: sas-west-036.jpg -->

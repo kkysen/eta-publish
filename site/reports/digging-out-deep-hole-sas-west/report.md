@@ -18,7 +18,7 @@ It is the right route: a logical extension of SAS Phase 2 underneath the main st
 It is designed to replace buses that, even though they are slower than walking, still carry [over 25,000 riders per day](<https://reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72#dbaf>).
 It will also be the only crosstown rail route north of Midtown, connecting ten different subway lines and Metro-North, speeding a host of trips that are slow and difficult to make today.
 
-![The SAS West and Phase 2 alignments.](<images/img-afb00c85.jpg>)
+![The SAS West and Phase 2 alignments.](<images/sas-west-036-afb00c85.jpg>)
 The SAS West and Phase 2 alignments.
 [Credit: MTA](<https://www.mta.info/document/196361#page=5>)
 <!-- Source: [sas-west-036.jpg](<https://drive.google.com/file/d/1pypAppcW1gOYpSMYkTWWUn4jEgE0cai-/view>) -->
@@ -39,7 +39,7 @@ According to the [MTA’s feasibility study](<https://www.mta.info/document/1963
 An additional ten minutes of round-trip travel time to simply travel between the street and platform will negate a huge amount of the project’s usefulness, especially for crosstown trips.
 Just as many travellers today would rather walk than take a painfully slow bus, many will continue to walk rather than take subway trips where descending into the ground and returning to the surface takes more time than the train ride itself.
 
-![The proposed design for Broadway station, with transfers to the 1 train. The 100 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/img-59c9861c.jpg>)
+![The proposed design for Broadway station, with transfers to the 1 train. The 100 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/sas-west-217.jpg>)
 The proposed design for Broadway station, with transfers to the 1 train. The 100 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.
 [Credit: MTA](<https://www.mta.info/document/196361#page=30>)
 <!-- Source: [sas-west-217.jpg](<https://drive.google.com/file/d/1sUVj1RTPdDY_gXMN8e_6IYskemIYPPEU/view>) -->
@@ -88,7 +88,7 @@ The line was the culmination of 90 years of subway planning, making real a line 
 But at approximately $4.5 billion per mile in 2026 dollars, Phase 1 was the most expensive subway in the world, coming in at almost an order of magnitude more to build than the world average.
 In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including [eliminating](<https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations>) [platform screen doors from Phase 1](<https://www.nytimes.com/2007/04/05/nyregion/05doors.html>) and [postponing CBTC installation until Phase 2](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32>) at the cost of safety and reliability.
 
-![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/img-52b19425.jpg>)
+![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/96st-station-52b19425.jpg>)
 The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.
 [Credit: MTA app](<https://www.mta.info/guides/apps>)
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
@@ -137,7 +137,7 @@ Excessive depth also creates excessive transfer times to the various subway line
 The simplest way to lower the project’s cost and increase its utility is to decrease the station’s depth.
 To understand how to achieve that, however, it is important to understand the forces that are encouraging the MTA to consider ever deeper construction.
 
-![The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/img-21abacd4.png>)
+![The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/sas-west-207.png>)
 The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>)
 <!-- Source: [sas-west-207.jpg](<https://drive.google.com/file/d/1NWYQi_JwuV-Yv2OU8dR3LuDms1f-MhNy/view>) -->
@@ -201,7 +201,7 @@ Moving to cheaper, shallower stations still requires contending with poor ground
 Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)) TBM is required between tunneling and the existing stations, far less than what has been proposed.
 With underpinning, this separation can be reduced even further to mere feet below existing structures, even in watery sand.[^5]
 
-![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/img-af4262b6.png>)
+![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/sas-west-tunnel-profile-pg-18-screenshot-af4262b6.png>)
 The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.
 [Credit: MTA](<https://www.mta.info/document/196361#page=18>)
 <!-- Source: [SAS West - Tunnel Profile - pg 18.screenshot.png](<https://drive.google.com/file/d/1mMpIVzR8WSHexUaNgyqP-MxSn9k9Gd_U/view>) -->
@@ -246,7 +246,7 @@ These techniques call for digging dozens of small parallel tunnels and filling t
 The small diameter of the initial drillings means there is much less risk of ground settlement, and the resulting arch supports the ground above while the rest of the structure is dug out.
 Seoul Line 9’s underground Express Bus Terminal station combined CAM and TRCM, allowing construction of an entire station mere feet beneath the existing Line 3 metro station.
 
-![Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.](<images/img-87c9c055.png>)
+![Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.](<images/express-bus-terminal-station-seoul-line-9-seungho-kang.png>)
 Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.
 Credit: Seungho Kang, Joint Transit Association
 <!-- Source: [Express Bus Terminal Station - Seoul Line 9 - Seungho Kang.jpg](<https://drive.google.com/open?id=1ZK5KLfWUF5A5UXlw2LIWEGtUkB8TUECo&authuser=0>) -->
@@ -272,7 +272,7 @@ Because SAS West will continue from the end of SAS Phase 2, the depth of the sta
 First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>).
 See [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>) for more information on how this can be done.
 
-![A video rendering of the 125 St/Lexington Av station.](<images/img-4392a78e.png>)
+![A video rendering of the 125 St/Lexington Av station.](<images/screenshot-2026-07-18-100636-4392a78e.png>)
 A video rendering of the 125 St/Lexington Av station.
 [Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)
 <!-- Uncropped Source: [Screenshot 2026-07-18 100636.png](<https://drive.google.com/file/d/1_UuQs5LygSlFd62nZK6yndl0gDIPlxyq/view>) -->
@@ -295,7 +295,7 @@ Cross-section of the 116 St station on SAS Phase 2. This is before the [June 202
 Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)
 <!-- [Image Source](<https://storage.ghost.io/c/19/31/1931222a-d1c5-42ac-8932-2ee3ac1f8927/content/images/old-theurbanist-org/wp-content/uploads/2026/01/nyc-mta-116th-station-design.png>) -->
 
-![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/img-3ec53fb1.jpg>)
+![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/sas-2-029-3ec53fb1.jpg>)
 A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.
 [Credit: MTA](<https://www.mta.info/document/114626#page=5>)
 <!-- Source: [sas-2-029.jpg](<https://drive.google.com/file/d/1L5XwcbIAWiqnp15ALHRJ9xpRNK4GWQhB/view>) -->
@@ -339,7 +339,7 @@ Unfortunately, the current plan for SAS West calls for many such ancillary struc
 Such surface structures are simply not needed.
 Other metro systems around the world, such as Milan Line 4, build ventilation systems inside their stations using surface vents, eliminating land acquisition costs and long-term surface impacts.
 
-![A ventilation and daylight structure from Milan’s M1 line.](<images/img-6e8887de.jpg>)
+![A ventilation and daylight structure from Milan’s M1 line.](<images/italian-case-study-139.jpg>)
 A ventilation and daylight structure from Milan’s M1 line.
 [Credit: Transit Costs Report](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>)
 <!-- Uncropped Source: [italian-case-study-139.jpg](<https://drive.google.com/file/d/1SpTWO0qh8Ak3r3SW32aIn12RSqa16fBy/view>) -->
@@ -420,7 +420,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 
 #### SAS West Tail Tracks
 
-![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/img-e68e5d52.png>)
+![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/screenshot-2026-04-27-160823-e68e5d52.png>)
 The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.
 [Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)
 <!-- Uncropped Source: [Screenshot 2026-04-27 160823.png](<https://drive.google.com/file/d/1wP8kC13_147MWx12IOlPU0jtMU0VOw1f/view>) -->
@@ -488,7 +488,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 [In Turkey, soft costs are quoted as 25-30%](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>), but those include additional finance charges, and third-party design costs are actually lower than the Continental norm, usually 3-5%.
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.[^17]
 
-![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/img-033c133b.svg>)
+![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/project-cost-comparison.svg>)
 A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.
 <!-- SVG: [project\_cost\_comparison.svg](<https://drive.google.com/open?id=1BP66CGI9ioIx570isLn4ppS1qfJmBafA>)  -->
 

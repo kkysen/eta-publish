@@ -16,7 +16,7 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 @pytest.fixture
 def doc() -> Document:
     parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "img-1933bef5.png"
+    parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
 
@@ -44,7 +44,11 @@ def test_ids_are_unique() -> None:
 
 def test_the_source_line_is_not_published(out: str) -> None:
     """`Source:` names the original file in Drive, for whoever assembles the
-    report. It appears nowhere on the live page and must not leak."""
+    report. It appears nowhere on the live page and must not leak.
+
+    The published image is named after it, which is a filename rather than
+    the line: the note itself, and the extension it was exported under, are
+    both absent."""
     assert "Source:" not in out
     assert "sas-west-036.jpg" not in out
 
@@ -55,7 +59,7 @@ def test_the_caption_and_credit_are_published(out: str) -> None:
 
 
 def test_images_use_the_image_base_and_resolved_extension(out: str) -> None:
-    assert 'src="https://assets.etany.org/sas-west/img-1933bef5.png"' in out
+    assert 'src="https://assets.etany.org/sas-west/sas-west-036.png"' in out
     assert 'alt="SAS West alignment map"' in out
 
 

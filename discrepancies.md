@@ -180,14 +180,21 @@ the same image live serves as `saswest.jpg`.
 none, so a link preview that is read aloud says nothing.
 Describe it in the document.
 
-### The images are named by hash (todo)
+### The images the document names no source for are named by hash (todo)
 
 Emitter.
-`index.html` references `images/img-8827f5de.jpg`, from the Docs object id,
-because the document gives an image no name at all.
+Where a figure has a `Source:` line, that file is the name:
+`images/sas-west-217.jpg`, which is what the document calls it.
+Seventeen of the 28 figures have no such line, and those are still
+`images/img-8827f5de.jpg`, from the Docs object id.
 Live serves `saswest.jpg`, named by a person.
-A name belongs in the document, next to the image, the way `Credit:` is,
-and until it is there a hash is the only thing that is stable across edits.
+Naming an image also names the figure's anchor, so the eleven that have a
+source line moved: `#img-af4262b6` is now
+`#sas-west-tunnel-profile-pg-18-screenshot-af4262b6`.
+The rest of the names belong in the document too, next to the image,
+the way `Credit:` and `Source:` are,
+and until they are there a hash is the only thing that is stable across
+edits.
 
 ### Four wordings the live page predates (intended)
 

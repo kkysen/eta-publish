@@ -18,7 +18,7 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 @pytest.fixture
 def doc() -> Document:
     parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "img-1933bef5.png"
+    parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
 
@@ -27,7 +27,7 @@ def test_page_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) -> 
     path they sit at, right beside the page."""
     images = tmp_path / "images"
     images.mkdir()
-    (images / "img-1933bef5.png").write_bytes(b"not really a png")
+    (images / "sas-west-036.png").write_bytes(b"not really a png")
 
     emit(doc, tmp_path)
     page = (tmp_path / "index.html").read_text()
@@ -46,7 +46,7 @@ def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Pa
     (tmp_path / "images").mkdir()
     emit(doc, tmp_path)
     fragment = (tmp_path / "report.html").read_text()
-    assert 'src="images/img-1933bef5.png"' in fragment
+    assert 'src="images/sas-west-036.png"' in fragment
     assert "http" not in re.findall(r'<img src="([^"]+)"', fragment)[0]
 
 
@@ -66,7 +66,7 @@ def test_markdown_images_resolve_next_to_the_archive(doc: Document, tmp_path: Pa
     it, not from whatever host serves the published site."""
     images = tmp_path / "images"
     images.mkdir()
-    (images / "img-1933bef5.png").write_bytes(b"not really a png")
+    (images / "sas-west-036.png").write_bytes(b"not really a png")
 
     emit(doc, tmp_path)
     archive = (tmp_path / "report.md").read_text()

@@ -101,7 +101,7 @@ def normalize(text: str) -> str:
 @pytest.fixture
 def doc() -> Document:
     parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "img-1933bef5.png"
+    parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
 

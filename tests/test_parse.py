@@ -7,7 +7,7 @@ from paths import FIXTURE_DIR
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.nodes import Document, Figure, Heading, Inline, List, ListKind, Paragraph, Text
-from eta_publish.parse import Parser, parse
+from eta_publish.parse import Parser, parse, plain
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
@@ -148,6 +148,18 @@ def test_an_unreferenced_footnote_is_reported_rather_than_numbered() -> None:
 
 def test_images_are_collected_with_stable_names(doc: Document) -> None:
     assert [i.object_id for i in doc.images] == ["io.1"]
+    # `Source: sas-west-036.jpg` is the document saying which file this is.
+    assert doc.images[0].filename == "sas-west-036"
+
+
+def test_an_image_the_document_names_no_source_for_keeps_its_hashed_name() -> None:
+    doc_json = json.loads(json.dumps(FIXTURE))
+    doc_json["body"]["content"] = [
+        item
+        for item in doc_json["body"]["content"]
+        if "paragraph" not in item or not plain(item["paragraph"]).startswith("Source:")
+    ]
+    doc = parse(doc_json)
     assert doc.images[0].filename.startswith("img-")
 
 
