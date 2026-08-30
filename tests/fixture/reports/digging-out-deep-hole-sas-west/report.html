@@ -41,10 +41,14 @@
 .eta-report :has(> .link-mark):hover > .link-mark,
 .eta-report .link-mark:focus-visible { opacity: .45; }
 .eta-report .link-mark:hover { opacity: 1; }
-/* Inside a list item or a table cell there is no margin to hang a mark in:
-   ahead of a footnote is where its number goes, and ahead of a cell is the
-   cell before it. Those marks stay in the line instead. */
-.eta-report :is(li, td) .link-mark { position: static; margin-left: .35em; }
+/* Inside a table cell there is no margin to hang a mark in: ahead of a cell
+   is the cell before it. Those marks stay in the line instead. */
+.eta-report td .link-mark { position: static; margin-left: .35em; }
+/* A footnote's mark goes outside its number rather than after it, where it
+   was crowding the arrow back to the text. The list is indented far enough
+   to leave room for both. */
+.eta-report .footnotes ol { padding-left: 3.4em; }
+.eta-report .footnotes li > .link-mark { left: -3.4em; }
 @media print { .eta-report .link-mark { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
@@ -78,18 +82,18 @@
 </ul>
 </nav>
 <h2 id="the-elephants-in-the-room"><a class="link-mark" href="#the-elephants-in-the-room" aria-label="Link to this section"></a>The Elephants in the Room</h2>
-<p id="p-16fc5577"><a class="link-mark" href="#p-16fc5577" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
+<p id="the-elephants-in-the-room-p1"><a class="link-mark" href="#the-elephants-in-the-room-p1" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
 <figure id="sas-west-036"><a class="link-mark" href="#sas-west-036" aria-label="Link to this figure"></a><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
-<p id="p-766855dc"><a class="link-mark" href="#p-766855dc" aria-label="Link to this paragraph"></a>That is a lot of money.</p>
-<div class="table-scroll" id="table-943f5817"><a class="link-mark" href="#table-943f5817" aria-label="Link to this table"></a><table><tr><td><p id="p-98595978"><a class="link-mark" href="#p-98595978" aria-label="Link to this paragraph"></a><strong>Project</strong></p></td><td><p id="p-75c5bb4f"><a class="link-mark" href="#p-75c5bb4f" aria-label="Link to this paragraph"></a><strong>Cost per mile</strong></p></td></tr><tr><td><p id="p-325d692e"><a class="link-mark" href="#p-325d692e" aria-label="Link to this paragraph"></a>SAS West</p></td><td><p id="p-efd0b54d"><a class="link-mark" href="#p-efd0b54d" aria-label="Link to this paragraph"></a>$6.2B</p></td></tr><tr><td><p id="p-b83e816c"><a class="link-mark" href="#p-b83e816c" aria-label="Link to this paragraph"></a>Grand Paris Express</p></td><td><p id="p-34cb9ccc"><a class="link-mark" href="#p-34cb9ccc" aria-label="Link to this paragraph"></a>$530M</p></td></tr></table></div>
+<p id="the-elephants-in-the-room-p2"><a class="link-mark" href="#the-elephants-in-the-room-p2" aria-label="Link to this paragraph"></a>That is a lot of money.</p>
+<div class="table-scroll" id="table-943f5817"><a class="link-mark" href="#table-943f5817" aria-label="Link to this table"></a><table><tr><td><p id="table-943f5817-p1"><strong>Project</strong></p></td><td><p id="table-943f5817-p2"><strong>Cost per mile</strong></p></td></tr><tr><td><p id="table-943f5817-p3">SAS West</p></td><td><p id="table-943f5817-p4">$6.2B</p></td></tr><tr><td><p id="table-943f5817-p5">Grand Paris Express</p></td><td><p id="table-943f5817-p6">$530M</p></td></tr></table></div>
 <h3 id="ground-conditions"><a class="link-mark" href="#ground-conditions" aria-label="Link to this section"></a>Ground Conditions</h3>
 <div class="list-block" id="list-231d1d6f"><a class="link-mark" href="#list-231d1d6f" aria-label="Link to this list"></a><ul><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul></div>
-<p id="p-4ddc1abe"><a class="link-mark" href="#p-4ddc1abe" aria-label="Link to this paragraph"></a>Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
+<p id="ground-conditions-p1"><a class="link-mark" href="#ground-conditions-p1" aria-label="Link to this paragraph"></a>Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
 <section class="footnotes" id="footnotes">
 <h2><a class="link-mark" href="#footnotes" aria-label="Link to this section"></a>Footnotes</h2>
 <ol>
-<li id="fn1"><p id="p-54c2c38c"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a><a class="link-mark" href="#fn1" aria-label="Link to this footnote"></a> <a class="link-mark" href="#p-54c2c38c" aria-label="Link to this paragraph"></a>Inflation-adjusted from the 2024 capital plan.</p></li>
-<li id="fn2"><p id="p-ea3e1527"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a><a class="link-mark" href="#fn2" aria-label="Link to this footnote"></a> <a class="link-mark" href="#p-ea3e1527" aria-label="Link to this paragraph"></a>Measured from street level to platform.</p></li>
+<li id="fn1"><a class="link-mark" href="#fn1" aria-label="Link to this footnote"></a><p id="fn1-p1"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a> Inflation-adjusted from the 2024 capital plan.</p></li>
+<li id="fn2"><a class="link-mark" href="#fn2" aria-label="Link to this footnote"></a><p id="fn2-p1"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a> Measured from street level to platform.</p></li>
 </ol>
 </section>
 </div>

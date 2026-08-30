@@ -7,7 +7,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.emit.html import HtmlEmitter
-from eta_publish.nodes import Document, Paragraph, Text
+from eta_publish.nodes import Document, Heading, Paragraph, Text
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -173,7 +173,9 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
     scrolls sideways on a phone is worse than a table that does."""
     marked = without_marks(out)
     assert re.search(r'<div class="table-scroll" id="table-[0-9a-f]{8}"><table>', marked)
-    assert re.search(r'<td><p id="p-[0-9a-f]{8}">Grand Paris Express</p></td>', marked)
+    # A cell's paragraphs are numbered within the table, not within the
+    # section the table sits in.
+    assert re.search(r'<td><p id="table-[0-9a-f]{8}-p\d+">Grand Paris Express</p></td>', marked)
 
 
 def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
@@ -220,27 +222,37 @@ def test_every_block_can_be_linked_to(out: str) -> None:
             assert "id=" in tag, f"{tag} cannot be linked to"
 
 
-def test_ids_do_not_move_when_something_is_inserted_before_them(doc: Document) -> None:
-    """The property the whole scheme exists for.
-
-    A published id outlives the draft it was written in. Numbering blocks
-    would repoint every link after an insertion at the wrong text; hashing
-    what a block says means a new paragraph changes nothing but itself.
-    """
-    before = set(re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc)))
-    doc.blocks.insert(1, Paragraph(content=[Text(text="A paragraph added while editing.")]))
-    after = set(re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc)))
-    assert before < after
-    assert len(after - before) == 1
+def test_a_paragraph_is_named_by_its_section_and_its_place_in_it(out: str) -> None:
+    """`#ground-conditions-p2` says where it is, which is what someone
+    reading the link before following it wants to know."""
+    assert '<p id="ground-conditions-p1">' in out
+    assert re.search(r'<p id="the-elephants-in-the-room-p\d+">', out)
 
 
-def test_an_edited_paragraph_takes_a_new_id(doc: Document) -> None:
-    """The cost of hashing, stated as a test: a link into edited text breaks,
-    loudly, rather than pointing at a neighbour."""
+def test_editing_a_paragraph_does_not_move_its_id(doc: Document) -> None:
+    """A copy edit is most of what happens to a report after it publishes,
+    and a link into the paragraph that was fixed should still land on it."""
     first = re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc))[0]
     para = next(b for b in doc.blocks if isinstance(b, Paragraph) and b.content)
     para.content = [Text(text="Rewritten.")]
-    assert first not in HtmlEmitter(inline_css=False).emit(doc)
+    assert f'<p id="{first}">' in HtmlEmitter(inline_css=False).emit(doc)
+
+
+def test_inserting_a_paragraph_moves_only_what_follows_it_in_that_section(
+    doc: Document,
+) -> None:
+    """The cost of counting, stated as a test. A new paragraph renumbers the
+    rest of its own section and nothing else, where hashing moved nothing
+    and a page-wide count would have moved everything after it."""
+    headings = [b for b in doc.blocks if isinstance(b, Heading)]
+    at = doc.blocks.index(headings[-1]) + 1
+    before = re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc))
+    doc.blocks.insert(at, Paragraph(content=[Text(text="A paragraph added while editing.")]))
+    after = re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc))
+    section = headings[-1].anchor
+    assert [i for i in before if not i.startswith(section)] == [
+        i for i in after if not i.startswith(section)
+    ]
 
 
 def test_repeated_text_still_gets_unique_ids(doc: Document) -> None:
@@ -261,7 +273,9 @@ def test_the_backlink_sits_inside_the_first_paragraph(out: str) -> None:
     """A paragraph is a block, so an arrow placed before one lands on a line
     of its own with the note starting underneath it."""
     for note in re.findall(r'<li id="fn\d+">.*?</li>', out, re.S):
-        assert re.match(r'<li id="fn\d+"><p[^>]*><a href="#fnref\d+"', note), note[:120]
+        assert re.match(
+            r'<li id="fn\d+"><a class="link-mark"[^>]*></a><p[^>]*><a href="#fnref\d+"', note
+        ), note[:160]
 
 
 def test_a_figure_carries_the_shape_of_its_image(doc: Document) -> None:
@@ -284,11 +298,26 @@ def test_a_figure_of_unrecorded_size_says_nothing_about_its_shape(doc: Document)
 
 def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
     """Anything with an id is something a reader may want to send someone,
-    so the link to it is on the page rather than in its source."""
-    anchors = re.findall(r'<(?:h[1-6]|p|figure|div|nav|section|li)[^>]* id="([^"]+)"', out)
+    so the link to it is on the page rather than in its source.
+
+    Except inside the back matter and inside a table, where the paragraphs
+    are not passages of the report: a footnote is reached from the reference
+    citing it and left by the arrow back, and a cell is part of its table.
+    """
+    report = re.sub(r'<section class="footnotes".*?</section>', "", out, flags=re.S)
+    report = re.sub(r"<td>.*?</td>", "", report, flags=re.S)
+    anchors = re.findall(r'<(?:h[1-6]|p|figure|div|nav|section)[^>]* id="([^"]+)"', report)
     assert anchors
+    marked = set(re.findall(r'<a class="link-mark"[^>]* href="#([^"]+)"', out))
     for anchor in anchors:
-        assert f'<a class="link-mark" href="#{anchor}"' in out, f"nothing links to {anchor}"
+        assert anchor in marked, f"nothing links to {anchor}"
+
+
+def test_a_footnotes_mark_sits_outside_its_number(out: str) -> None:
+    """Beside the arrow back it crowded the one control that was already
+    there, so it hangs outside the list's own numbering instead."""
+    footnote = re.findall(r'<li id="fn1">.*?</li>', out, re.S)[0]
+    assert footnote.index("link-mark") < footnote.index("footnote-back")
 
 
 def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:
@@ -297,3 +326,17 @@ def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:
     cannot see the mark is given the label instead."""
     assert 'aria-label="Link to this section"></a>' in out
     assert "#</a>" not in out
+
+
+def test_paragraphs_are_numbered_from_one_in_each_section(out: str) -> None:
+    """Within the section rather than across the page: a paragraph added to
+    the first section would otherwise renumber the last one."""
+    for section in ("ground-conditions", "the-elephants-in-the-room"):
+        numbers = [int(n) for n in re.findall(rf'<p id="{section}-p(\d+)"', out)]
+        assert numbers == list(range(1, len(numbers) + 1))
+
+
+def test_a_footnote_numbers_its_own_paragraphs(out: str) -> None:
+    """Numbering a footnote's paragraphs along with the report would put 43
+    between 12 and 13, and nobody could do anything with that number."""
+    assert '<p id="fn1-p1">' in out
