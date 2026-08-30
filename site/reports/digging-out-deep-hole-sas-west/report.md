@@ -201,7 +201,7 @@ Moving to cheaper, shallower stations still requires contending with poor ground
 Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)) TBM is required between tunneling and the existing stations, far less than what has been proposed.
 With underpinning, this separation can be reduced even further to mere feet below existing structures, even in watery sand.[^5]
 
-![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/sas-west-tunnel-profile-pg-18-screenshot-af4262b6.png>)
+![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/SAS_West_-_Tunnel_Profile_-_pg_18.screenshot-af4262b6.png>)
 The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.
 [Credit: MTA](<https://www.mta.info/document/196361#page=18>)
 <!-- Source: [SAS West - Tunnel Profile - pg 18.screenshot.png](<https://drive.google.com/file/d/1mMpIVzR8WSHexUaNgyqP-MxSn9k9Gd_U/view>) -->
@@ -246,7 +246,7 @@ These techniques call for digging dozens of small parallel tunnels and filling t
 The small diameter of the initial drillings means there is much less risk of ground settlement, and the resulting arch supports the ground above while the rest of the structure is dug out.
 Seoul Line 9’s underground Express Bus Terminal station combined CAM and TRCM, allowing construction of an entire station mere feet beneath the existing Line 3 metro station.
 
-![Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.](<images/express-bus-terminal-station-seoul-line-9-seungho-kang.png>)
+![Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.](<images/Express_Bus_Terminal_Station_-_Seoul_Line_9_-_Seungho_Kang.png>)
 Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.
 Credit: Seungho Kang, Joint Transit Association
 <!-- Source: [Express Bus Terminal Station - Seoul Line 9 - Seungho Kang.jpg](<https://drive.google.com/open?id=1ZK5KLfWUF5A5UXlw2LIWEGtUkB8TUECo&authuser=0>) -->
@@ -272,7 +272,7 @@ Because SAS West will continue from the end of SAS Phase 2, the depth of the sta
 First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>).
 See [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>) for more information on how this can be done.
 
-![A video rendering of the 125 St/Lexington Av station.](<images/screenshot-2026-07-18-100636-4392a78e.png>)
+![A video rendering of the 125 St/Lexington Av station.](<images/Screenshot_2026-07-18_100636-4392a78e.png>)
 A video rendering of the 125 St/Lexington Av station.
 [Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)
 <!-- Uncropped Source: [Screenshot 2026-07-18 100636.png](<https://drive.google.com/file/d/1_UuQs5LygSlFd62nZK6yndl0gDIPlxyq/view>) -->
@@ -420,7 +420,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 
 #### SAS West Tail Tracks
 
-![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/screenshot-2026-04-27-160823-e68e5d52.png>)
+![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/Screenshot_2026-04-27_160823-e68e5d52.png>)
 The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.
 [Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)
 <!-- Uncropped Source: [Screenshot 2026-04-27 160823.png](<https://drive.google.com/file/d/1wP8kC13_147MWx12IOlPU0jtMU0VOw1f/view>) -->

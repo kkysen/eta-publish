@@ -56,20 +56,30 @@ def test_image_names_depend_only_on_the_docs_object_id():
     assert image_filename("io.7", ".png") != image_filename("io.8", ".png")
 
 
-def test_a_name_keeps_the_separators_it_was_written_with():
-    """A hyphen and an underscore are both legal in a URL and mean
-    different things to whoever named the file, so neither becomes the
-    other. A run of them is still one separator."""
+def test_an_anchor_is_slugged_the_way_markdown_slugs_one():
+    """The same report publishes as HTML and as Markdown, so a link to a
+    section has to mean the same thing in both. GitHub's slugger keeps `-`
+    and `_`, drops the rest of the punctuation, and writes one hyphen per
+    space."""
+    assert slugify("The Stations: Too Big and Too Deep") == "the-stations-too-big-and-too-deep"
     assert slugify("project_cost_comparison") == "project_cost_comparison"
-    assert slugify("SAS West - Tunnel Profile") == "sas-west-tunnel-profile"
-    assert slugify("Screenshot 2026-07-18 100636") == "screenshot-2026-07-18-100636"
-    assert slugify("a__b") == "a_b"
+    assert slugify("SAS West - Tunnel Profile") == "sas-west---tunnel-profile"
 
 
 def test_an_image_is_named_after_the_file_its_source_line_names():
     assert image_filename("io.7", ".png", name="sas-west-036.jpg") == "sas-west-036.png"
     # The underscore is the name's own, and a legal character in a URL.
     assert image_filename("io.7", ".png", name="96st_station") == "96st_station.png"
+
+
+def test_a_filename_is_the_name_that_was_written_and_not_a_slug_of_it():
+    """Only what cannot appear in a name changes, one underscore for each.
+    Runs stay runs, capitals stay capitals, and a dot is a legal part of a
+    filename rather than punctuation to be dropped."""
+    assert (
+        image_filename("io.7", ".png", name="SAS West - Tunnel Profile - pg 18.screenshot.png")
+        == "SAS_West_-_Tunnel_Profile_-_pg_18.screenshot.png"
+    )
 
 
 def test_the_extension_a_source_line_writes_is_not_the_published_one():

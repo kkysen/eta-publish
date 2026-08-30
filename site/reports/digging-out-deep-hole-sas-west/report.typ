@@ -220,7 +220,7 @@ With underpinning, this separation can be reduced even further to mere feet belo
 In some cases a new station’s walls and slabs can themselves be designed to underpin other structures.]
 
 #figure(
-  image("images/sas-west-tunnel-profile-pg-18-screenshot-af4262b6.png", width: 100%, alt: "The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times."),
+  image("images/SAS_West_-_Tunnel_Profile_-_pg_18.screenshot-af4262b6.png", width: 100%, alt: "The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times."),
   caption: [The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times. #link("https://www.mta.info/document/196361#page=18")[Credit: MTA]],
 )
 
@@ -264,7 +264,7 @@ The small diameter of the initial drillings means there is much less risk of gro
 Seoul Line 9’s underground Express Bus Terminal station combined CAM and TRCM, allowing construction of an entire station mere feet beneath the existing Line 3 metro station.
 
 #figure(
-  image("images/express-bus-terminal-station-seoul-line-9-seungho-kang.png", width: 100%, alt: "Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station."),
+  image("images/Express_Bus_Terminal_Station_-_Seoul_Line_9_-_Seungho_Kang.png", width: 100%, alt: "Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station."),
   caption: [Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station. Credit: Seungho Kang, Joint Transit Association],
 )
 
@@ -290,7 +290,7 @@ First and foremost, for all the reasons listed above, all available measures sho
 See #link("#sas-phase-2-tail-tracks")[SAS Phase 2 Tail Tracks] for more information on how this can be done.
 
 #figure(
-  image("images/screenshot-2026-07-18-100636-4392a78e.png", width: 100%, alt: "A video rendering of the 125 St/Lexington Av station."),
+  image("images/Screenshot_2026-07-18_100636-4392a78e.png", width: 100%, alt: "A video rendering of the 125 St/Lexington Av station."),
   caption: [A video rendering of the 125 St/Lexington Av station. #link("https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137")[Credit: MTA]],
 )
 
@@ -450,7 +450,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 === SAS West Tail Tracks
 
 #figure(
-  image("images/screenshot-2026-04-27-160823-e68e5d52.png", width: 100%, alt: "The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026."),
+  image("images/Screenshot_2026-04-27_160823-e68e5d52.png", width: 100%, alt: "The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026."),
   caption: [The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026. #link("https://www.youtube.com/live/syjWBXSAbyM?t=2940s")[Credit: MTA]],
 )
 

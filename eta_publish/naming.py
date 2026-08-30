@@ -25,31 +25,46 @@ about hosting rather than about a build.
 """
 
 _NON_SLUG = re.compile(r"[^\w\s-]")
-_SEPARATORS = re.compile(r"[\s_-]+")
+# What a filename may keep: a dot is as much a part of a name as a letter
+# is, and `-` and `_` are the two characters people join names with.
+_NON_FILENAME = re.compile(r"[^\w.-]")
+# The extension a source line writes names the format rather than the
+# picture, and the one that publishes is whatever the download turns out to
+# fetch, so it is dropped and the real one appended in its place.
+_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
 
 
 def slugify(text: str) -> str:
-    """`text` as one lowercase word, joined by the separators it already
-    used.
+    """`text` as a heading anchor, by the rule Markdown uses for one.
 
-    An underscore is left as an underscore. It is a legal character in a
-    URL and it is one the name was written with, so turning it into a
-    hyphen edits a name this is supposed to be carrying: `96st_station` is
-    what the document calls that file.
+    That is the point of following someone else's rule rather than picking
+    one: this project publishes the same report as HTML and as Markdown,
+    and a link to a section has to mean the same thing in both. GitHub's
+    slugger lowercases, drops punctuation, keeps `-` and `_`, and writes a
+    hyphen for each space. So does this.
 
-    A run is still one separator, which is what makes ` - ` and `_ ` and a
-    double space each come out as a single character rather than as three.
-    The run keeps the character it was written with, and a hyphen wins a
-    run that holds both, because that is the one a reader of a URL expects.
+    Not the rule a filename gets. A heading is a sentence, and every
+    separator in its anchor is one this invented; a filename is a name
+    somebody chose, and `_ascii_name` keeps it.
     """
     text = unicodedata.normalize("NFKD", text)
     text = text.encode("ascii", "ignore").decode()
-    text = _NON_SLUG.sub("", text).strip().lower()
-    return _SEPARATORS.sub(_separator, text) or "section"
+    text = _NON_SLUG.sub("", text.strip().lower())
+    return text.replace(" ", "-") or "section"
 
 
-def _separator(run: re.Match[str]) -> str:
-    return "_" if "_" in run.group() and "-" not in run.group() else "-"
+def _ascii_name(name: str) -> str:
+    """A filename as close to `name` as a URL can carry it.
+
+    Every space and every character that cannot appear becomes one
+    underscore, and nothing else moves: runs are not collapsed, case is not
+    folded, and a dot is left where it was. `SAS West - Tunnel Profile - pg
+    18.screenshot` publishes under a name its author would recognize, which
+    is the whole reason for reading the source line at all.
+    """
+    name = unicodedata.normalize("NFKD", name)
+    name = name.encode("ascii", "ignore").decode()
+    return _NON_FILENAME.sub("_", _ASSET_EXTENSION.sub("", name.strip()))
 
 
 class AnchorAllocator:
@@ -115,13 +130,6 @@ def content_anchor(prefix: str, text: str) -> str:
     return f"{prefix}-{_short_hash(text)}"
 
 
-# The file extensions a source line writes, which name the format rather
-# than the picture. `sas-west-036.jpg` and `sas-west-036.png` are the same
-# image exported twice, and the extension the published file gets is the
-# one the download learns, so the one written here is dropped.
-_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
-
-
 def image_filename(object_id: str, extension: str = "", crop_key: str = "", name: str = "") -> str:
     """Name an image after the file the document says it came from.
 
@@ -145,8 +153,9 @@ def image_filename(object_id: str, extension: str = "", crop_key: str = "", name
     The extension is filled in once the image is downloaded and its real
     content type is known.
     """
-    base = slugify(_ASSET_EXTENSION.sub("", name).replace(".", " ")) if name.strip() else ""
-    if not base or base == "section":
+    base = _ascii_name(name)
+    # A name of nothing but separators names nothing.
+    if not base.strip("_.-"):
         return f"img-{_short_hash(object_id + crop_key)}{extension}"
     if crop_key:
         base = f"{base}-{_short_hash(object_id + crop_key)}"
