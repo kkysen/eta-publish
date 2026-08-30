@@ -22,6 +22,19 @@
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
+/* The link a heading carries to itself. The `#` is written by the
+   stylesheet rather than by the emitter so that it is not part of the
+   heading's text: selecting a section title to quote it should not pick up
+   a stray character, and a reader who cannot see it hears the label
+   instead. Shown on hover, and on focus as well, or it would be a control
+   only a mouse can reach. */
+.eta-report .heading-link { margin-left: .35em; text-decoration: none;
+                            font-weight: normal; opacity: 0; }
+.eta-report .heading-link::before { content: "#"; }
+.eta-report :is(h1, h2, h3, h4, h5, h6):hover > .heading-link,
+.eta-report .heading-link:focus-visible { opacity: .5; }
+.eta-report .heading-link:hover { opacity: 1; }
+@media print { .eta-report .heading-link { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
@@ -52,12 +65,12 @@
 <li><a href="#footnotes">Footnotes</a></li>
 </ul>
 </nav>
-<h2 id="the-elephants-in-the-room">The Elephants in the Room</h2>
+<h2 id="the-elephants-in-the-room">The Elephants in the Room<a class="heading-link" href="#the-elephants-in-the-room" aria-label="Link to this section"></a></h2>
 <p id="p-16fc5577">SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
 <figure id="sas-west-036"><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
 <p id="p-766855dc">That is a lot of money.</p>
 <div class="table-scroll" id="table-943f5817"><table><tr><td><p id="p-98595978"><strong>Project</strong></p></td><td><p id="p-75c5bb4f"><strong>Cost per mile</strong></p></td></tr><tr><td><p id="p-325d692e">SAS West</p></td><td><p id="p-efd0b54d">$6.2B</p></td></tr><tr><td><p id="p-b83e816c">Grand Paris Express</p></td><td><p id="p-34cb9ccc">$530M</p></td></tr></table></div>
-<h3 id="ground-conditions">Ground Conditions</h3>
+<h3 id="ground-conditions">Ground Conditions<a class="heading-link" href="#ground-conditions" aria-label="Link to this section"></a></h3>
 <ul id="list-231d1d6f"><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul>
 <p id="p-4ddc1abe">Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
 <section class="footnotes" id="footnotes">

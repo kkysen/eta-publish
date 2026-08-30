@@ -56,6 +56,19 @@ REPORT_CSS = """
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
+/* The link a heading carries to itself. The `#` is written by the
+   stylesheet rather than by the emitter so that it is not part of the
+   heading's text: selecting a section title to quote it should not pick up
+   a stray character, and a reader who cannot see it hears the label
+   instead. Shown on hover, and on focus as well, or it would be a control
+   only a mouse can reach. */
+.eta-report .heading-link { margin-left: .35em; text-decoration: none;
+                            font-weight: normal; opacity: 0; }
+.eta-report .heading-link::before { content: "#"; }
+.eta-report :is(h1, h2, h3, h4, h5, h6):hover > .heading-link,
+.eta-report .heading-link:focus-visible { opacity: .5; }
+.eta-report .heading-link:hover { opacity: 1; }
+@media print { .eta-report .heading-link { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
@@ -338,7 +351,19 @@ class HtmlEmitter(Emitter):
 
     @override
     def heading(self, node: Heading) -> str:
-        return f'<h{node.level} id="{node.anchor}">{self.inlines(node.content)}</h{node.level}>'
+        """Every heading carries a link to itself.
+
+        A section of a report this long is what people send each other, and
+        the anchor it is sent by is already there: this only gives the
+        reader something to copy it from, rather than reading the id out of
+        the page source or scrolling and hoping the address bar caught up.
+        """
+        link = (
+            f'<a class="heading-link" href="#{node.anchor}" aria-label="Link to this section"></a>'
+        )
+        return (
+            f'<h{node.level} id="{node.anchor}">{self.inlines(node.content)}{link}</h{node.level}>'
+        )
 
     @override
     def paragraph(self, node: Paragraph) -> str:

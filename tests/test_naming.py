@@ -60,10 +60,21 @@ def test_an_anchor_is_slugged_the_way_markdown_slugs_one():
     """The same report publishes as HTML and as Markdown, so a link to a
     section has to mean the same thing in both. GitHub's slugger keeps `-`
     and `_`, drops the rest of the punctuation, and writes one hyphen per
-    space."""
+    space. The rule is imported rather than reimplemented; this says what
+    was imported."""
     assert slugify("The Stations: Too Big and Too Deep") == "the-stations-too-big-and-too-deep"
     assert slugify("project_cost_comparison") == "project_cost_comparison"
     assert slugify("SAS West - Tunnel Profile") == "sas-west---tunnel-profile"
+    # A letter is a letter whether or not it is ASCII, which is where a
+    # rule written here to look like GitHub's stopped looking like it.
+    assert slugify("Café Society") == "café-society"
+
+
+def test_a_heading_of_nothing_sluggable_still_has_an_anchor():
+    """An id is what the emitter writes into `id=`, so it cannot be empty
+    however little of the heading survives the rule."""
+    assert slugify("!?") == "section"
+    assert slugify("") == "section"
 
 
 def test_an_image_is_named_after_the_file_its_source_line_names():
