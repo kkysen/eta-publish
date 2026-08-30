@@ -88,7 +88,7 @@ The line was the culmination of 90 years of subway planning, making real a line 
 But at approximately $4.5 billion per mile in 2026 dollars, Phase 1 was the most expensive subway in the world, coming in at almost an order of magnitude more to build than the world average.
 In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including [eliminating](<https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations>) [platform screen doors from Phase 1](<https://www.nytimes.com/2007/04/05/nyregion/05doors.html>) and [postponing CBTC installation until Phase 2](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32>) at the cost of safety and reliability.
 
-![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/96st-station-52b19425.jpg>)
+![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/96st_station-52b19425.jpg>)
 The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.
 [Credit: MTA app](<https://www.mta.info/guides/apps>)
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
@@ -488,7 +488,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 [In Turkey, soft costs are quoted as 25-30%](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>), but those include additional finance charges, and third-party design costs are actually lower than the Continental norm, usually 3-5%.
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.[^17]
 
-![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/project-cost-comparison.svg>)
+![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/project_cost_comparison.svg>)
 A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.
 <!-- SVG: [project\_cost\_comparison.svg](<https://drive.google.com/open?id=1BP66CGI9ioIx570isLn4ppS1qfJmBafA>)  -->
 
