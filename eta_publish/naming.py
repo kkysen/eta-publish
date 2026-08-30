@@ -14,6 +14,8 @@ import unicodedata
 from collections import defaultdict
 from collections.abc import Iterable
 
+from pymdownx.slugs import slugify as _slugify
+
 IMAGE_DIR = "images"
 """The directory a build writes images into, relative to the report.
 
@@ -24,7 +26,6 @@ somewhere else is what an emitter's `image_base` is for, and is a decision
 about hosting rather than about a build.
 """
 
-_NON_SLUG = re.compile(r"[^\w\s-]")
 # What a filename may keep: a dot is as much a part of a name as a letter
 # is, and `-` and `_` are the two characters people join names with.
 _NON_FILENAME = re.compile(r"[^\w.-]")
@@ -34,23 +35,32 @@ _NON_FILENAME = re.compile(r"[^\w.-]")
 _ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
 
 
+# GitHub's rule for a heading anchor, as implemented by `pymdown-extensions`
+# rather than by this file. The two rules agreeing today is not a reason to
+# write a second copy of one: they agree until a heading has an accent in
+# it, and then whichever copy is wrong is wrong in published URLs. This is
+# the same implementation MkDocs Material publishes GitHub-style slugs with.
+#
+# The dedicated port of GitHub's slugger on PyPI, `github-slugger`, cannot
+# be imported at all on a current Python: it carries the JavaScript regex as
+# lone surrogates, which is a `UnicodeEncodeError` on import.
+_github_slug = _slugify(case="lower")
+
+
 def slugify(text: str) -> str:
     """`text` as a heading anchor, by the rule Markdown uses for one.
 
-    That is the point of following someone else's rule rather than picking
-    one: this project publishes the same report as HTML and as Markdown,
-    and a link to a section has to mean the same thing in both. GitHub's
-    slugger lowercases, drops punctuation, keeps `-` and `_`, and writes a
-    hyphen for each space. So does this.
+    This project publishes the same report as HTML and as Markdown, and a
+    link to a section has to mean the same thing in both, so the rule is
+    not this project's to choose: lowercase, punctuation dropped, `-` and
+    `_` kept, one hyphen per space, and letters that are not ASCII kept as
+    they are, which is what GitHub renders an anchor as.
 
     Not the rule a filename gets. A heading is a sentence, and every
     separator in its anchor is one this invented; a filename is a name
     somebody chose, and `_ascii_name` keeps it.
     """
-    text = unicodedata.normalize("NFKD", text)
-    text = text.encode("ascii", "ignore").decode()
-    text = _NON_SLUG.sub("", text.strip().lower())
-    return text.replace(" ", "-") or "section"
+    return _github_slug(text, "-") or "section"
 
 
 def _ascii_name(name: str) -> str:

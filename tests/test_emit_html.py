@@ -265,3 +265,20 @@ def test_a_figure_of_unrecorded_size_says_nothing_about_its_shape(doc: Document)
     pixel size at all. The stylesheet's own default stands in, so a row of
     them is still a row."""
     assert "--aspect" not in HtmlEmitter(inline_css=False).emit(doc)
+
+
+def test_every_heading_links_to_itself(out: str) -> None:
+    """A section is what people send each other, so the link to one is on
+    the page rather than in its source."""
+    headings = re.findall(r"<h[1-6] id=\"([^\"]+)\">(.*?)</h[1-6]>", out)
+    assert headings
+    for anchor, inner in headings:
+        assert f'<a class="heading-link" href="#{anchor}"' in inner
+
+
+def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:
+    """The `#` is drawn by the stylesheet. Selecting a section title to
+    quote it must not pick up a character nobody wrote, and a reader who
+    cannot see the mark is given the label instead."""
+    assert 'aria-label="Link to this section"></a>' in out
+    assert "#</a>" not in out
