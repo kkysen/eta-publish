@@ -386,8 +386,8 @@ class HtmlEmitter(Emitter):
                 f'<figcaption class="figure-credit">{self.inlines(node.credit)}</figcaption>'
             )
         # Named for the image it holds, so the anchor is whatever the image
-        # is called. Today that is `img-` and a hash of the Docs object id;
-        # when the document names its images, this becomes that name.
+        # is called: the file its `Source:` line names, or `img-` and a hash
+        # of the Docs object id for a figure the document names none for.
         # `--aspect` is a fact about the picture, written wherever it is
         # known. Only `.figure-row` reads it, and only when the row has
         # more than one figure to divide a line between.

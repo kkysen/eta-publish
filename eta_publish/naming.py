@@ -98,23 +98,76 @@ def content_anchor(prefix: str, text: str) -> str:
     return f"{prefix}-{_short_hash(text)}"
 
 
-def image_filename(object_id: str, extension: str = "", crop_key: str = "") -> str:
-    """Name an image after its Docs object id and how it is cropped.
+# The file extensions a source line writes, which name the format rather
+# than the picture. `sas-west-036.jpg` and `sas-west-036.png` are the same
+# image exported twice, and the extension the published file gets is the
+# one the download learns, so the one written here is dropped.
+_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
 
-    The id is stable across edits, so inserting an image cannot rename the
-    ones around it. It is opaque rather than descriptive, which is the
-    trade we want: a descriptive name would have to come from position or
-    from a caption, and both of those change.
+
+def image_filename(object_id: str, extension: str = "", crop_key: str = "", name: str = "") -> str:
+    """Name an image after the file the document says it came from.
+
+    A `Source:` line is the document stating which file this is, which is
+    what makes it usable as a name where a caption is not: a caption
+    describes the picture and gets rewritten in copy-editing, and a
+    position changes whenever anything is inserted above it. Editing a
+    source line does move a published URL, and that is the cost of the
+    names being readable at all.
+
+    Most images are given no source line, and those keep the name they
+    always had: their Docs object id, hashed. The id is stable across
+    edits, so inserting an image cannot rename the ones around it.
 
     The crop is part of the name because it is part of the file. Recropping
     in the document produces a different published image, and without this
-    it would keep the old name and the old cached file. An uncropped image
-    is named as it always was.
+    it would keep the old name and the old cached file. So a named image
+    that is cropped carries the hash too, which is also what tells two
+    crops of one source file apart. An uncropped image is named as it was.
 
     The extension is filled in once the image is downloaded and its real
     content type is known.
     """
-    return f"img-{_short_hash(object_id + crop_key)}{extension}"
+    base = slugify(_ASSET_EXTENSION.sub("", name).replace(".", " ")) if name.strip() else ""
+    if not base or base == "section":
+        return f"img-{_short_hash(object_id + crop_key)}{extension}"
+    if crop_key:
+        base = f"{base}-{_short_hash(object_id + crop_key)}"
+    return f"{base}{extension}"
+
+
+def image_filenames(claims: Iterable[tuple[str, str, str]]) -> dict[str, str]:
+    """A filename for each image, given every claim in the document.
+
+    A claim is an object id, a crop key, and the name the document gave the
+    image, which is empty for the images it named nothing. Allocated
+    knowing all of them for the reason `AnchorAllocator` is: two images
+    whose source lines name the same file would otherwise be told apart by
+    which came first, and reordering the report would move a published URL.
+
+    So both of them keep the name and carry the hash as well, which is the
+    same way a crop is told from its original. The name is still the useful
+    half: `96st-station-a1b2c3d4` says what the file is, where
+    `img-a1b2c3d4` says only that it is an image.
+    """
+    claims = list(claims)
+    claimants: dict[str, set[str]] = defaultdict(set)
+    for object_id, crop_key, name in claims:
+        claimants[image_filename(object_id, crop_key=crop_key, name=name)].add(object_id)
+    ambiguous = {base for base, ids in claimants.items() if len(ids) > 1}
+
+    names: dict[str, str] = {}
+    for object_id, crop_key, name in claims:
+        plain = image_filename(object_id, crop_key=crop_key, name=name)
+        # `crop_key` on its own would be enough to make the name distinct,
+        # and asking for it here is what says why: the two images say they
+        # are the same file, and only the hash can disagree.
+        names[object_id] = (
+            image_filename(object_id, crop_key=crop_key or object_id, name=name)
+            if plain in ambiguous
+            else plain
+        )
+    return names
 
 
 def _short_hash(value: str, length: int = 8) -> str:

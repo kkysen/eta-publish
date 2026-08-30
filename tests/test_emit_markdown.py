@@ -16,7 +16,7 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 @pytest.fixture
 def doc() -> Document:
     parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "img-1933bef5.png"
+    parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
 
@@ -101,7 +101,7 @@ def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert "![SAS West alignment map](<images/img-1933bef5.png>)" in out
+    assert "![SAS West alignment map](<images/sas-west-036.png>)" in out
     assert "The SAS West and Phase 2 alignments." in out
     assert "Credit: MTA" in out
     # Not italicized: the published report does not italicize either.

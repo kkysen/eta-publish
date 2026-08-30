@@ -78,8 +78,10 @@ Unchanged input must produce byte-identical output.
 The `.md` is committed to git, so every accidental difference
 becomes noise in a diff that someone has to read.
 
-This is why image filenames are keyed on the stable Docs object id
-rather than on a counter: inserting one image into a 54-image report
+This is why image filenames are keyed on what the document says about an
+image rather than on a counter: the file its `Source:` line names, and the
+stable Docs object id where there is no such line.
+Inserting one image into a 54-image report
 must not rename the other 53, or change their published URLs.
 The same reasoning applies to heading anchors, which are published URLs
 that must not move when an unrelated section is added.
@@ -334,10 +336,12 @@ uv run eta-publish site/reports/digging-out-deep-hole-sas-west
 ```
 
 Add `--no-images` and it needs no network at all. The one thing a
-no-network rebuild cannot reproduce is the image filenames: a Docs
+no-network rebuild cannot reproduce is the image extensions: a Docs
 `inlineObject` says nothing about what kind of file it is, so `.jpg` and
-`.png` are learned by fetching, and without that the links lose their
-extensions.
+`.png` are learned by fetching, and without that the links lose them. The
+names themselves come from the document, and the shape each image turned
+out to be is read from the committed `images.json`, so the page a build
+without images writes is otherwise the page that publishes.
 
 When a snapshot changes, read the diff before accepting it: it is exactly
 what the change does to a real published report. Regenerate with

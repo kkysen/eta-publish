@@ -4,7 +4,7 @@ These tests use headings that genuinely collide, since the collision
 branch is the only one that can be positional.
 """
 
-from eta_publish.naming import AnchorAllocator, image_filename, slugify
+from eta_publish.naming import AnchorAllocator, image_filename, image_filenames, slugify
 
 # Two distinct headings that slugify identically.
 COST_COLON = "Cost: Overview"
@@ -54,6 +54,46 @@ def test_an_override_wins_and_is_not_treated_as_a_collision():
 def test_image_names_depend_only_on_the_docs_object_id():
     assert image_filename("io.7", ".png") == image_filename("io.7", ".png")
     assert image_filename("io.7", ".png") != image_filename("io.8", ".png")
+
+
+def test_an_image_is_named_after_the_file_its_source_line_names():
+    assert image_filename("io.7", ".png", name="sas-west-036.jpg") == "sas-west-036.png"
+    assert image_filename("io.7", ".png", name="96st_station") == "96st-station.png"
+
+
+def test_the_extension_a_source_line_writes_is_not_the_published_one():
+    """`Source: chart.png` is the file that was exported, and the published
+    file is whatever the download turns out to fetch."""
+    assert image_filename("io.7", ".jpg", name="chart.png") == "chart.jpg"
+
+
+def test_a_source_line_that_names_no_file_leaves_the_hashed_name():
+    assert image_filename("io.7", ".png", name="   ") == image_filename("io.7", ".png")
+    assert image_filename("io.7", ".png", name="!?").startswith("img-")
+
+
+def test_a_cropped_image_is_not_named_the_same_as_its_original():
+    """The crop is part of the file: recropping publishes a different
+    picture, and it must not keep the old name and the old cached file."""
+    cropped = image_filename("io.7", ".png", crop_key="0.1,0,0,0", name="96st_station.png")
+    assert cropped.startswith("96st-station-")
+    assert cropped != image_filename("io.7", ".png", name="96st_station.png")
+
+
+def test_two_images_naming_one_file_are_both_told_apart_by_hash():
+    """Not the first one wins: which came first is position, and reordering
+    the report would move a published URL."""
+    names = image_filenames([("io.7", "", "plan.jpg"), ("io.8", "", "plan.jpg")])
+    assert names["io.7"] != names["io.8"]
+    assert all(n.startswith("plan-") for n in names.values())
+    # And the one that was alone in claiming its name keeps it whole.
+    alone = image_filenames([("io.7", "", "plan.jpg"), ("io.8", "", "section.jpg")])
+    assert alone["io.7"] == "plan"
+
+
+def test_a_name_a_reordered_document_still_gives_the_same_image():
+    claims = [("io.7", "", "plan.jpg"), ("io.8", "", "plan.jpg"), ("io.9", "", "")]
+    assert image_filenames(claims) == image_filenames(list(reversed(claims)))
 
 
 def test_a_heading_cannot_take_an_id_the_emitter_reserves():

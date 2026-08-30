@@ -10,8 +10,8 @@ emitters, because they are facts about how the docs are written:
 - the report headline living in the body as a TITLE-styled paragraph,
   since the Drive filename is a working name (`SAS West Feasibility
   Response`) and not what gets published
-- a figure's `Source:` line before the image, with caption and `Credit:`
-  lines after it
+- a figure's `Source:` line between the image and its caption, with the
+  caption and `Credit:` lines after that
 """
 
 import re
@@ -19,7 +19,7 @@ from dataclasses import replace
 from datetime import datetime
 
 from .docs_json import JsonObject
-from .naming import AnchorAllocator, image_filename
+from .naming import AnchorAllocator, image_filename, image_filenames
 from .nodes import (
     Block,
     Crop,
@@ -64,9 +64,10 @@ KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
 # `seo description` finds nothing unless the note is stripped.
 KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
 # Editorial notes naming where an image came from. The real report uses
-# four spellings: `Source:` before an image, `Uncropped Source:` for one
+# four spellings: `Source:` under an image, `Uncropped Source:` for one
 # that was trimmed, and, after a caption, either `[Image Source](<url>)` or
-# a bare `Image Source` whose whole text is the link. One optional
+# a bare `Image Source` whose whole text is the link. The first two name a
+# file, and the published image is named after it. One optional
 # qualifying word covers all of them and whatever the next one is.
 # None of them appears on the published page, which is what makes them notes
 # rather than content: the live SAS West report contains zero occurrences of
@@ -91,6 +92,22 @@ ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
 # published page, so they are worth one loud line before publishing.
 TODO_RE = re.compile(r"\bTODO\b|\bTK\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
+
+
+def source_name(source: list[Inline]) -> str:
+    """The file a `Source:` line names, or nothing if it names no file.
+
+    The value after the colon, which is a Drive chip's title where the line
+    links the file and plain text where it was typed. `Source: TODO` is a
+    note to whoever is assembling the report rather than a name, and a bare
+    URL names a page rather than a file, so neither becomes a filename.
+    """
+    text = "".join(i.text for i in source if isinstance(i, Text))
+    _, colon, value = text.partition(":")
+    value = value.strip() if colon else ""
+    if not value or TODO_RE.search(value) or value.startswith(("http:", "https:", "//")):
+        return ""
+    return value
 
 
 def date_text(chip: JsonObject) -> str:
@@ -183,6 +200,7 @@ class Parser:
         self.anchors = AnchorAllocator()
         self._heading_anchors: dict[str, str] = {}
         self._footnote_numbers: dict[str, int] = {}
+        self._source_names: dict[str, str] = {}
 
     # ---- inline ------------------------------------------------------
 
@@ -356,10 +374,15 @@ class Parser:
                 self.doc.warn(f"cannot read a Drive file id from {uri}; the raster is used")
                 continue
             file_id = match.group(1) or match.group(2)
+            title = props.get("title", "")
             return Vector(
                 file_id=file_id,
-                filename=image_filename(file_id, extension=".svg"),
-                title=props.get("title", ""),
+                # The `SVG:` line links the file, so Drive's name for it is
+                # the document naming this picture, the same as a `Source:`
+                # line does. A vector is never cropped: the crop is applied
+                # to pixels, and an image that has both is refused above.
+                filename=image_filename(file_id, extension=".svg", name=title),
+                title=title,
                 uri=uri,
             )
         return None
@@ -499,8 +522,12 @@ class Parser:
             if SOURCE_RE.match(text) or ASSET_RE.match(text):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
-                    # The `[Image Source](...)` spelling follows its figure.
-                    last.source = last.source + self.inlines(para)
+                    # The `[Image Source](...)` spelling follows its figure,
+                    # and so, in this report, does every `Source:` line: the
+                    # note sits between the image and its caption.
+                    note = self.inlines(para)
+                    last.source = last.source + note
+                    self._claim_name(last, note)
                     self._attach_vector(last, para)
                     continue
                 drop_pending()
@@ -509,7 +536,9 @@ class Parser:
                 continue
 
             if has_image(para):
-                out.append(Figure(image=self._only_image(para), source=pending_source or []))
+                figure = Figure(image=self._only_image(para), source=pending_source or [])
+                self._claim_name(figure, pending_source or [])
+                out.append(figure)
                 pending_source = None
                 caption_slot = 1
                 continue
@@ -532,6 +561,7 @@ class Parser:
                         claimed = True
                     elif SOURCE_RE.match(line_text) or ASSET_RE.match(line_text):
                         last.source = last.source + line
+                        self._claim_name(last, line)
                         claimed = True
                     elif caption_slot:
                         last.caption = line
@@ -559,6 +589,22 @@ class Parser:
                 caption = "".join(i.text for i in block.caption if isinstance(i, Text))
                 block.image = replace(block.image, alt=caption.strip())
         return out
+
+    def _claim_name(self, figure: Figure, source: list[Inline]) -> None:
+        """Note what a source line calls this figure's image, if it calls it
+        anything.
+
+        Kept until the whole document has been read rather than applied
+        here: what an image ends up called depends on whether another one
+        further down names the same file.
+
+        The first line to name a file wins. A figure with both a `Source:`
+        and an `Image Source` link is naming the file once and linking to
+        where it came from once, and only the first of those is a name.
+        """
+        name = source_name(source)
+        if name:
+            self._source_names.setdefault(figure.image.object_id, name)
 
     def _attach_vector(self, figure: Figure, para: JsonObject) -> None:
         """Promote a `SVG:` line's link from a note to the figure's file."""
@@ -807,7 +853,28 @@ class Parser:
         self.doc.blocks = self.blocks(below)
         # After the body, so that every reference has been numbered.
         self.doc.footnotes = self.footnotes()
+        # Last, because a name is only known to be unambiguous once every
+        # image in the document has claimed one.
+        self._name_images()
         return self.doc
+
+    def _name_images(self) -> None:
+        """Rename every figure the document named a source file for.
+
+        The names are settled here rather than where the images are read,
+        because an image's name depends on what the other images are
+        called, and the report goes on naming them for several pages after
+        the first one is built.
+
+        Only figures: a source line is written above a figure, so an image
+        inside a paragraph is never named and keeps the name it was given.
+        """
+        names = image_filenames(
+            (image.object_id, image.crop.key, self._source_names.get(image.object_id, ""))
+            for image in self.doc.images
+        )
+        for figure in self.doc.figures:
+            figure.image = replace(figure.image, filename=names[figure.image.object_id])
 
 
 def parse(doc_json: JsonObject) -> Document:

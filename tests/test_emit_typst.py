@@ -23,7 +23,7 @@ PNG = base64.b64decode(
 @pytest.fixture
 def doc() -> Document:
     parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "img-1933bef5.png"
+    parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
 
@@ -50,7 +50,7 @@ def test_the_source_line_is_not_emitted(out: str) -> None:
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert 'image("images/img-1933bef5.png", width: 100%, alt: "SAS West alignment map")' in out
+    assert 'image("images/sas-west-036.png", width: 100%, alt: "SAS West alignment map")' in out
     assert "The SAS West and Phase 2 alignments." in out
     assert "Credit: MTA" in out
     assert "#emph[Credit: MTA]" not in out
@@ -70,7 +70,7 @@ def test_metadata_keys_become_valid_identifiers(out: str) -> None:
 def test_the_emitted_source_compiles(doc: Document, tmp_path: Path) -> None:
     """Escaping and syntax errors only show up here."""
     (tmp_path / "images").mkdir()
-    (tmp_path / "images" / "img-1933bef5.png").write_bytes(PNG)
+    (tmp_path / "images" / "sas-west-036.png").write_bytes(PNG)
     source = tmp_path / "report.typ"
     source.write_text(TypstEmitter().emit(doc))
     install_template(tmp_path)
