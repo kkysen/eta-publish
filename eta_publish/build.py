@@ -94,14 +94,62 @@ def write_image_index(dest: Path, written: dict[str, Path]) -> None:
     `.png` is learned by fetching, and an image with a vector original is
     written under the vector's name instead.
 
+    The pixel size is here for the same reason. Docs says how large an
+    image is placed rather than how large it is, and the crop applied on
+    the way down changes the shape of the file, so the written file is the
+    only thing that knows it. The HTML lays a row of figures out by it, and
+    a build without the images has to be able to write the same page.
+
     Only written when images were downloaded. A `--no-images` build knows
     nothing about them and must not replace what a real build recorded.
     """
     index = {
-        object_id: {"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+        object_id: {
+            "file": path.name,
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            **_pixel_size(path),
+        }
         for object_id, path in sorted(written.items())
     }
     (dest / IMAGES_JSON).write_text(json.dumps(index, indent=2, sort_keys=True) + "\n")
+
+
+def _pixel_size(path: Path) -> dict[str, int]:
+    """`path`'s width and height, or nothing for a file that has no pixels.
+
+    An SVG is the file that has none: it is a drawing rather than a grid,
+    and Pillow will not open one. Nothing else reads a size it did not get,
+    so this stays a missing key rather than a guess.
+    """
+    from PIL import Image, UnidentifiedImageError
+
+    try:
+        with Image.open(path) as opened:
+            return {"width": opened.width, "height": opened.height}
+    except OSError, UnidentifiedImageError:
+        return {}
+
+
+def read_image_shapes(dest: Path, doc: Document) -> None:
+    """Tell `doc` how large the last build's images turned out to be.
+
+    An image's shape is measured from the file, and the files are not
+    committed, so a build that skipped the download would otherwise lay a
+    row of figures out differently from the page beside it in the
+    repository. The record is committed precisely so that it does not have
+    to. A build that just downloaded reads back what it wrote a moment ago,
+    which is the same answer by a shorter route than passing it along.
+
+    Only the shapes. What each image was written as is `download`'s to say,
+    and a build without it means the page to name the images it did not
+    fetch the way a build without a record does.
+    """
+    index = dest / IMAGES_JSON
+    if not index.exists():
+        return
+    for object_id, entry in json.loads(index.read_text()).items():
+        if "width" in entry and "height" in entry:
+            doc.image_shapes[object_id] = (entry["width"], entry["height"])
 
 
 def without_content_uris(document: JsonObject) -> JsonObject:
@@ -247,6 +295,7 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
         from .images import download
 
         write_image_index(dest, download(doc, dest / IMAGE_DIR))
+    read_image_shapes(dest, doc)
 
     written = emit(doc, dest)
 

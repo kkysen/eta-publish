@@ -38,6 +38,7 @@ import re
 import pytest
 from paths import REAL_DIR as REAL
 
+from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
@@ -55,17 +56,28 @@ DOC_JSON = json.loads((REAL / "doc.json").read_text())
 # is applied when given is covered in `test_preview.py`.
 
 
-def image_files(regenerate: bool) -> dict[str, str]:
+def image_index(regenerate: bool) -> dict[str, JsonObject]:
     """What a real run wrote for each image, read from `images.json`.
 
     Written by a build rather than by this test, because it is a record of
-    what was published rather than of what was asserted. The hash beside
-    each filename is what lets CI check that a rebuild fetched the same
-    pictures, and is not needed here.
+    what was published rather than of what was asserted. The filename and
+    the pixel size are both facts only a fetch can learn, and the committed
+    page is laid out from the size, so a test with no network reads them
+    from here. The hash beside them is what lets CI check that a rebuild
+    fetched the same pictures, and is not needed here.
     """
+    return json.loads(FILENAMES_PATH.read_text())
+
+
+def image_files(regenerate: bool) -> dict[str, str]:
+    return {object_id: entry["file"] for object_id, entry in image_index(regenerate).items()}
+
+
+def image_shapes(regenerate: bool) -> dict[str, tuple[int, int]]:
     return {
-        object_id: entry["file"]
-        for object_id, entry in json.loads(FILENAMES_PATH.read_text()).items()
+        object_id: (entry["width"], entry["height"])
+        for object_id, entry in image_index(regenerate).items()
+        if "width" in entry
     }
 
 
@@ -73,6 +85,7 @@ def image_files(regenerate: bool) -> dict[str, str]:
 def doc(regenerate_snapshots: bool) -> Document:
     parsed = parse(DOC_JSON)
     parsed.image_files.update(image_files(regenerate_snapshots))
+    parsed.image_shapes.update(image_shapes(regenerate_snapshots))
     return parsed
 
 
