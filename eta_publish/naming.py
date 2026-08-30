@@ -29,10 +29,27 @@ _SEPARATORS = re.compile(r"[\s_-]+")
 
 
 def slugify(text: str) -> str:
+    """`text` as one lowercase word, joined by the separators it already
+    used.
+
+    An underscore is left as an underscore. It is a legal character in a
+    URL and it is one the name was written with, so turning it into a
+    hyphen edits a name this is supposed to be carrying: `96st_station` is
+    what the document calls that file.
+
+    A run is still one separator, which is what makes ` - ` and `_ ` and a
+    double space each come out as a single character rather than as three.
+    The run keeps the character it was written with, and a hyphen wins a
+    run that holds both, because that is the one a reader of a URL expects.
+    """
     text = unicodedata.normalize("NFKD", text)
     text = text.encode("ascii", "ignore").decode()
     text = _NON_SLUG.sub("", text).strip().lower()
-    return _SEPARATORS.sub("-", text) or "section"
+    return _SEPARATORS.sub(_separator, text) or "section"
+
+
+def _separator(run: re.Match[str]) -> str:
+    return "_" if "_" in run.group() and "-" not in run.group() else "-"
 
 
 class AnchorAllocator:

@@ -106,7 +106,7 @@ But at approximately \$4.5 billion per mile in 2026 dollars, Phase 1 was the mos
 In part as a result of this cost, what was originally envisioned in 1929 as a six-track mainline running the length of Manhattan—and which was most recently reinvisioned as a line from 63 St to 125 St, the so-called “Second Avenue Stubway”—only made it three stops and two miles to 96 St. Cost escalations during planning and construction even forced further cuts, including #link("https://web.archive.org/web/20130201032329/http://www.capitalnewyork.com/article/politics/2012/12/6785265/no-seoul-style-platform-doors-new-york-subways-even-new-stations")[eliminating] #link("https://www.nytimes.com/2007/04/05/nyregion/05doors.html")[platform screen doors from Phase 1] and #link("https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf#page=32")[postponing CBTC installation until Phase 2] at the cost of safety and reliability. 
 
 #figure(
-  image("images/96st-station-52b19425.jpg", width: 100%, alt: "The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length."),
+  image("images/96st_station-52b19425.jpg", width: 100%, alt: "The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length."),
   caption: [The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length. #link("https://www.mta.info/guides/apps")[Credit: MTA app]],
 )
 
@@ -521,7 +521,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.#footnote[1 - (1 - 43%)/(1 - 19%) = 29%.]
 
 #figure(
-  image("images/project-cost-comparison.svg", width: 100%, alt: "A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs."),
+  image("images/project_cost_comparison.svg", width: 100%, alt: "A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs."),
   caption: [A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.],
 )
 

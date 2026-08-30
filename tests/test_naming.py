@@ -56,9 +56,20 @@ def test_image_names_depend_only_on_the_docs_object_id():
     assert image_filename("io.7", ".png") != image_filename("io.8", ".png")
 
 
+def test_a_name_keeps_the_separators_it_was_written_with():
+    """A hyphen and an underscore are both legal in a URL and mean
+    different things to whoever named the file, so neither becomes the
+    other. A run of them is still one separator."""
+    assert slugify("project_cost_comparison") == "project_cost_comparison"
+    assert slugify("SAS West - Tunnel Profile") == "sas-west-tunnel-profile"
+    assert slugify("Screenshot 2026-07-18 100636") == "screenshot-2026-07-18-100636"
+    assert slugify("a__b") == "a_b"
+
+
 def test_an_image_is_named_after_the_file_its_source_line_names():
     assert image_filename("io.7", ".png", name="sas-west-036.jpg") == "sas-west-036.png"
-    assert image_filename("io.7", ".png", name="96st_station") == "96st-station.png"
+    # The underscore is the name's own, and a legal character in a URL.
+    assert image_filename("io.7", ".png", name="96st_station") == "96st_station.png"
 
 
 def test_the_extension_a_source_line_writes_is_not_the_published_one():
@@ -76,7 +87,7 @@ def test_a_cropped_image_is_not_named_the_same_as_its_original():
     """The crop is part of the file: recropping publishes a different
     picture, and it must not keep the old name and the old cached file."""
     cropped = image_filename("io.7", ".png", crop_key="0.1,0,0,0", name="96st_station.png")
-    assert cropped.startswith("96st-station-")
+    assert cropped.startswith("96st_station-")
     assert cropped != image_filename("io.7", ".png", name="96st_station.png")
 
 
