@@ -238,6 +238,16 @@ class Document:
     `image_href` falls back to the raster's name without an extension.
     """
 
+    image_shapes: dict[str, tuple[int, int]] = field(default_factory=dict)
+    """Docs object id to the pixel size of the file actually written.
+
+    Filled in from the same record as `image_files`, and for the same
+    reason: Docs says how large an image is placed, not how large it is,
+    and the crop this pipeline applies changes the shape of the file
+    without the document knowing. An SVG has no pixel size to read, so it
+    is one of the images this is empty for.
+    """
+
     @property
     def hero(self) -> Figure | None:
         """The figure a report opens with, if it opens with one.
@@ -336,6 +346,13 @@ class Document:
     def image_href(self, image: Image) -> str:
         """The filename as emitted, once a download has settled what it is."""
         return self.image_files.get(image.object_id, image.filename)
+
+    def image_aspect(self, image: Image) -> float | None:
+        """The written file's width over its height, if that was recorded."""
+        size = self.image_shapes.get(image.object_id)
+        if size is None or not size[1]:
+            return None
+        return size[0] / size[1]
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)

@@ -243,3 +243,21 @@ def test_the_backlink_sits_inside_the_first_paragraph(out: str) -> None:
     of its own with the note starting underneath it."""
     for note in re.findall(r'<li id="fn\d+">.*?</li>', out, re.S):
         assert re.match(r'<li id="fn\d+"><p[^>]*><a href="#fnref\d+"', note), note[:120]
+
+
+def test_a_figure_carries_the_shape_of_its_image(doc: Document) -> None:
+    """The ratio a row divides a line by is the written file's own.
+
+    Not the document's: Docs says how large an image is placed rather than
+    how large it is, and the crop this pipeline applies has already changed
+    the shape by the time anything is emitted.
+    """
+    doc.image_shapes["io.1"] = (400, 250)
+    assert 'style="--aspect: 1.600"' in HtmlEmitter(inline_css=False).emit(doc)
+
+
+def test_a_figure_of_unrecorded_size_says_nothing_about_its_shape(doc: Document) -> None:
+    """A build that skipped the images, and the SVG originals that have no
+    pixel size at all. The stylesheet's own default stands in, so a row of
+    them is still a row."""
+    assert "--aspect" not in HtmlEmitter(inline_css=False).emit(doc)

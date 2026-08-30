@@ -37,10 +37,24 @@ REPORT_CSS = """
 /* Figures the document puts next to each other sit next to each other, if
    the reader's screen has room for them. `flex-basis` is what decides: two
    fit in the 46rem the page is set at, and one does on a phone, with no
-   width named anywhere and nothing to keep in step with a media query. */
+   width named anywhere and nothing to keep in step with a media query.
+
+   Both the basis and the growth are the image's own aspect ratio, so the
+   widths a row settles on are proportional to it and the pictures come out
+   the same height rather than the same width. A cross-section next to the
+   cross-section it is compared with is read across, and equal heights are
+   what make that comparison one line rather than two scales. The ratio is
+   measured from the file and written on the figure; 1.4 is the landscape
+   photo the report is mostly made of, for an image whose size a build did
+   not learn.
+
+   The 10rem is the wrap point rather than a width: it is one page's worth
+   of column divided by the widest pair the report puts in a row, so the
+   pairs that fit on a tablet still do and a phone still stacks them. */
 .eta-report .figure-row { display: flex; flex-wrap: wrap; gap: 1.5em;
                           align-items: flex-start; margin: 2.5em 0; }
-.eta-report .figure-row > figure { flex: 1 1 18rem; margin: 0; }
+.eta-report .figure-row > figure {
+  flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
@@ -374,7 +388,12 @@ class HtmlEmitter(Emitter):
         # Named for the image it holds, so the anchor is whatever the image
         # is called. Today that is `img-` and a hash of the Docs object id;
         # when the document names its images, this becomes that name.
-        return f'<figure id="{self.take(node.image.filename)}">{"".join(parts)}</figure>'
+        # `--aspect` is a fact about the picture, written wherever it is
+        # known. Only `.figure-row` reads it, and only when the row has
+        # more than one figure to divide a line between.
+        aspect = self.doc.image_aspect(node.image)
+        shape = f' style="--aspect: {aspect:.3f}"' if aspect is not None else ""
+        return f'<figure id="{self.take(node.image.filename)}"{shape}>{"".join(parts)}</figure>'
 
     @override
     def table(self, node: Table) -> str:
