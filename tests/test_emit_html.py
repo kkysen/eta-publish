@@ -63,6 +63,19 @@ def test_images_use_the_image_base_and_resolved_extension(out: str) -> None:
     assert 'alt="SAS West alignment map"' in out
 
 
+MARK = re.compile(r'<a class="link-mark"[^>]*></a>')
+
+
+def without_marks(html: str) -> str:
+    """`html` with the self-links stripped.
+
+    Every block carries one, and a test about what a block contains is not
+    about the link to it. The links themselves are checked in
+    `test_every_linkable_block_carries_a_link_to_itself`.
+    """
+    return MARK.sub("", html)
+
+
 def sections_and_headings(out: str) -> list[str]:
     """The ids the table of contents is allowed to point at, in page order.
 
@@ -75,7 +88,7 @@ def sections_and_headings(out: str) -> list[str]:
 
 
 def test_the_table_of_contents_links_to_real_anchors(out: str) -> None:
-    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    toc_html = without_marks(re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0])
     linked = set(re.findall(r'href="#([^"]+)"', toc_html))
     targets = set(sections_and_headings(out))
     assert linked and linked <= targets
@@ -84,14 +97,14 @@ def test_the_table_of_contents_links_to_real_anchors(out: str) -> None:
 
 def test_the_table_of_contents_lists_every_heading(out: str) -> None:
     """Every heading on the page, in order, footnotes and contributors too."""
-    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    toc_html = without_marks(re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0])
     linked = re.findall(r'href="#([^"]+)"', toc_html)
     assert linked == sections_and_headings(out)
 
 
 def test_the_table_of_contents_indents_a_subsection(out: str) -> None:
     """A subsection sits in a list inside its section's own entry."""
-    toc_html = re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0]
+    toc_html = without_marks(re.findall(r'<nav class="toc".*?</nav>', out, re.S)[0])
     assert (
         '<li><a href="#the-elephants-in-the-room">The Elephants in the Room</a>\n'
         '<ul>\n<li><a href="#ground-conditions">Ground Conditions</a></li>\n'
@@ -113,9 +126,10 @@ def test_toc_entries_close_in_order(out: str) -> None:
 
 def test_nested_lists_nest(out: str) -> None:
     assert re.search(
-        r'<ul id="list-[0-9a-f]{8}"><li>First point<ul><li>Nested point</li></ul></li>'
-        r"<li>Second point</li></ul>",
-        out,
+        r'<div class="list-block" id="list-[0-9a-f]{8}">'
+        r"<ul><li>First point<ul><li>Nested point</li></ul></li>"
+        r"<li>Second point</li></ul></div>",
+        without_marks(out),
     )
 
 
@@ -157,8 +171,9 @@ def test_inline_css_is_optional(doc: Document) -> None:
 def test_tables_scroll_rather_than_overflow(out: str) -> None:
     """Wide comparison tables are common in these reports, and a page that
     scrolls sideways on a phone is worse than a table that does."""
-    assert re.search(r'<div class="table-scroll" id="table-[0-9a-f]{8}"><table>', out)
-    assert re.search(r'<td><p id="p-[0-9a-f]{8}">Grand Paris Express</p></td>', out)
+    marked = without_marks(out)
+    assert re.search(r'<div class="table-scroll" id="table-[0-9a-f]{8}"><table>', marked)
+    assert re.search(r'<td><p id="p-[0-9a-f]{8}">Grand Paris Express</p></td>', marked)
 
 
 def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
@@ -186,7 +201,7 @@ def test_the_dateline_is_the_final_due_date(doc: Document) -> None:
     """Written out, which is how etany.org dates a report."""
     doc.meta["final due date"] = "Aug 19, 2026"
     out = HtmlEmitter(inline_css=False).emit(doc)
-    assert '<p class="dateline" id="date">August 19, 2026</p>' in out
+    assert '<p class="dateline" id="date">August 19, 2026</p>' in without_marks(out)
 
 
 def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
@@ -267,13 +282,13 @@ def test_a_figure_of_unrecorded_size_says_nothing_about_its_shape(doc: Document)
     assert "--aspect" not in HtmlEmitter(inline_css=False).emit(doc)
 
 
-def test_every_heading_links_to_itself(out: str) -> None:
-    """A section is what people send each other, so the link to one is on
-    the page rather than in its source."""
-    headings = re.findall(r"<h[1-6] id=\"([^\"]+)\">(.*?)</h[1-6]>", out)
-    assert headings
-    for anchor, inner in headings:
-        assert f'<a class="heading-link" href="#{anchor}"' in inner
+def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
+    """Anything with an id is something a reader may want to send someone,
+    so the link to it is on the page rather than in its source."""
+    anchors = re.findall(r'<(?:h[1-6]|p|figure|div|nav|section|li)[^>]* id="([^"]+)"', out)
+    assert anchors
+    for anchor in anchors:
+        assert f'<a class="link-mark" href="#{anchor}"' in out, f"nothing links to {anchor}"
 
 
 def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:

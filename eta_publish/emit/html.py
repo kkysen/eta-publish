@@ -56,19 +56,30 @@ REPORT_CSS = """
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
-/* The link a heading carries to itself. The `#` is written by the
-   stylesheet rather than by the emitter so that it is not part of the
-   heading's text: selecting a section title to quote it should not pick up
-   a stray character, and a reader who cannot see it hears the label
-   instead. Shown on hover, and on focus as well, or it would be a control
-   only a mouse can reach. */
-.eta-report .heading-link { margin-left: .35em; text-decoration: none;
-                            font-weight: normal; opacity: 0; }
-.eta-report .heading-link::before { content: "#"; }
-.eta-report :is(h1, h2, h3, h4, h5, h6):hover > .heading-link,
-.eta-report .heading-link:focus-visible { opacity: .5; }
-.eta-report .heading-link:hover { opacity: 1; }
-@media print { .eta-report .heading-link { display: none; } }
+/* Everything with an id carries a link to itself, because everything with
+   an id is something a reader may want to send someone: a section, a
+   figure, a paragraph they are quoting. The `#` is written by the
+   stylesheet rather than by the emitter, so that it is not part of the
+   text: selecting a heading to quote it should not pick up a stray
+   character, and a reader who cannot see the mark hears the label instead.
+
+   It hangs in the margin ahead of the block rather than sitting at the end
+   of it, so that every mark on the page is in the same column and the eye
+   knows where to look. Shown on hover, and on focus as well, or it would be
+   a control only a mouse can reach. */
+.eta-report :has(> .link-mark) { position: relative; }
+.eta-report .link-mark { position: absolute; left: -1.15em; top: 0;
+                         text-decoration: none; font-weight: normal;
+                         opacity: 0; }
+.eta-report .link-mark::before { content: "#"; }
+.eta-report :has(> .link-mark):hover > .link-mark,
+.eta-report .link-mark:focus-visible { opacity: .45; }
+.eta-report .link-mark:hover { opacity: 1; }
+/* Inside a list item or a table cell there is no margin to hang a mark in:
+   ahead of a footnote is where its number goes, and ahead of a cell is the
+   cell before it. Those marks stay in the line instead. */
+.eta-report :is(li, td) .link-mark { position: static; margin-left: .35em; }
+@media print { .eta-report .link-mark { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
@@ -192,7 +203,7 @@ class HtmlEmitter(Emitter):
         items = "\n".join(f"<li>{escape(name)}</li>" for name in names)
         return (
             '<section class="contributors" id="contributors">\n'
-            "<h2>Contributors</h2>\n"
+            f"<h2>{self.mark('contributors')}Contributors</h2>\n"
             f"<p>{CONTRIBUTORS_NOTE}</p>\n"
             f"<ul>\n{items}\n</ul>\n"
             "</section>"
@@ -209,7 +220,7 @@ class HtmlEmitter(Emitter):
         date = doc.dateline
         if not date:
             return ""
-        return f'<p class="dateline" id="date">{escape(date)}</p>'
+        return f'<p class="dateline" id="date">{self.mark("date", "date")}{escape(date)}</p>'
 
     def toc(self, doc: Document) -> str:
         """The sections, as a list rather than a run of separated links.
@@ -242,6 +253,7 @@ class HtmlEmitter(Emitter):
         headings = headings + self.back_matter(doc)
         return (
             '<nav class="toc" id="contents" aria-label="Table of contents">\n'
+            f"{self.mark('contents', 'table of contents')}\n"
             "<strong>Table of Contents</strong>\n"
             f"{self.toc_list(headings)}\n"
             "</nav>"
@@ -295,7 +307,7 @@ class HtmlEmitter(Emitter):
         items = "\n".join(self.footnote(f) for f in doc.footnotes)
         return (
             '<section class="footnotes" id="footnotes">\n'
-            "<h2>Footnotes</h2>\n"
+            f"<h2>{self.mark('footnotes')}Footnotes</h2>\n"
             f"<ol>\n{items}\n</ol>\n"
             "</section>"
         )
@@ -314,11 +326,12 @@ class HtmlEmitter(Emitter):
         # so an arrow placed ahead of one sits on a line of its own with the
         # note beginning underneath it. Matched as a tag rather than as the
         # literal `<p>`, because the paragraph carries an id.
+        mark = self.mark(f"fn{note.number}", "footnote")
         opening = re.match(r"<p\b[^>]*>", body)
         if opening:
             rest = body[opening.end() :]
-            return f'<li id="fn{note.number}">{opening.group()}{back} {rest}</li>'
-        return f'<li id="fn{note.number}">{back} {body}</li>'
+            return f'<li id="fn{note.number}">{opening.group()}{back}{mark} {rest}</li>'
+        return f'<li id="fn{note.number}">{back}{mark} {body}</li>'
 
     # ---- blocks -----------------------------------------------------
 
@@ -349,6 +362,17 @@ class HtmlEmitter(Emitter):
                 i += 1
         return self.join(out)
 
+    def mark(self, anchor: str, what: str = "section") -> str:
+        """The link a block carries to itself.
+
+        Written ahead of the block's own content rather than after it, so
+        that every mark on the page hangs in one column: a reader looking
+        for the link to a figure looks where the link to the paragraph
+        above it was. The `#` is the stylesheet's, so that quoting a
+        heading does not copy a character nobody wrote.
+        """
+        return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
+
     @override
     def heading(self, node: Heading) -> str:
         """Every heading carries a link to itself.
@@ -358,11 +382,9 @@ class HtmlEmitter(Emitter):
         reader something to copy it from, rather than reading the id out of
         the page source or scrolling and hoping the address bar caught up.
         """
-        link = (
-            f'<a class="heading-link" href="#{node.anchor}" aria-label="Link to this section"></a>'
-        )
+        mark = self.mark(node.anchor)
         return (
-            f'<h{node.level} id="{node.anchor}">{self.inlines(node.content)}{link}</h{node.level}>'
+            f'<h{node.level} id="{node.anchor}">{mark}{self.inlines(node.content)}</h{node.level}>'
         )
 
     @override
@@ -373,7 +395,8 @@ class HtmlEmitter(Emitter):
         text = plain(node.content)
         if not text:
             return f"<p>{self.inlines(node.content)}</p>"
-        return f'<p id="{self.anchor("p", text)}">{self.inlines(node.content)}</p>'
+        anchor = self.anchor("p", text)
+        return f'<p id="{anchor}">{self.mark(anchor, "paragraph")}{self.inlines(node.content)}</p>'
 
     @override
     def list_(self, node: List) -> str:
@@ -384,8 +407,15 @@ class HtmlEmitter(Emitter):
         around. The list is the unit someone links to."""
         tag = "ol" if node.kind is ListKind.NUMBER else "ul"
         text = " ".join(plain(item.content) for item in node.items)
-        anchor = f' id="{self.anchor("list", text)}"' if text else ""
-        return f"<{tag}{anchor}>{self.items(node.items, tag)}</{tag}>"
+        items = f"<{tag}>{self.items(node.items, tag)}</{tag}>"
+        if not text:
+            return items
+        # Wrapped, because a list may hold only list items: the mark cannot
+        # be a child of the `ul` the way it is a child of a `p`, and putting
+        # it inside the first item would hang it beside that item's bullet
+        # rather than beside the list.
+        anchor = self.anchor("list", text)
+        return f'<div class="list-block" id="{anchor}">{self.mark(anchor, "list")}{items}</div>'
 
     def items(self, items: list[ListItem], tag: str) -> str:
         out = []
@@ -418,7 +448,10 @@ class HtmlEmitter(Emitter):
         # more than one figure to divide a line between.
         aspect = self.doc.image_aspect(node.image)
         shape = f' style="--aspect: {aspect:.3f}"' if aspect is not None else ""
-        return f'<figure id="{self.take(node.image.filename)}"{shape}>{"".join(parts)}</figure>'
+        anchor = self.take(node.image.filename)
+        return (
+            f'<figure id="{anchor}"{shape}>{self.mark(anchor, "figure")}{"".join(parts)}</figure>'
+        )
 
     @override
     def table(self, node: Table) -> str:
@@ -433,8 +466,11 @@ class HtmlEmitter(Emitter):
             for block in cell
             if isinstance(block, Paragraph)
         )
-        anchor = f' id="{self.anchor("table", text)}"' if text else ""
-        return f'<div class="table-scroll"{anchor}><table>{rows}</table></div>'
+        if not text:
+            return f'<div class="table-scroll"><table>{rows}</table></div>'
+        anchor = self.anchor("table", text)
+        mark = self.mark(anchor, "table")
+        return f'<div class="table-scroll" id="{anchor}">{mark}<table>{rows}</table></div>'
 
     # ---- inline -----------------------------------------------------
 
@@ -488,6 +524,15 @@ body { background: var(--bg); color: var(--fg); max-width: 46rem;
        margin: 0 auto; padding: 3rem 1.25rem 6rem;
        font: 17px/1.65 Georgia, "Times New Roman", serif; }
 h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25; }
+/* The headline and standfirst sit outside `.eta-report`, so the rules that
+   hang a mark beside a block do not reach them. These two do. */
+#title, #short { position: relative; }
+#title > .link-mark, #short > .link-mark {
+  position: absolute; left: -1.15em; top: 0; text-decoration: none;
+  font-weight: normal; font-size: 1rem; opacity: 0; }
+#title > .link-mark::before, #short > .link-mark::before { content: "#"; }
+#title:hover > .link-mark, #short:hover > .link-mark,
+#title > .link-mark:focus-visible, #short > .link-mark:focus-visible { opacity: .45; }
 h1 { font-size: 2.1rem; margin-bottom: .2em; }
 h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
 a { color: inherit; }
@@ -495,6 +540,14 @@ a { color: inherit; }
 .warnings { border-left: 3px solid #c60; padding: .4em 1em; margin: 2em 0;
             font-family: system-ui, sans-serif; font-size: .9rem; }
 """
+
+
+def _page_mark(what: str) -> str:
+    """The same self-link the emitter writes, for the two blocks the page
+    writes itself. The headline and the standfirst are the page's rather
+    than the report's, so they are built here and not walked to."""
+    anchor = "title" if what == "title" else "short"
+    return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
 
 
 def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
@@ -532,8 +585,8 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
         f"{card}"
         f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
-        f'<h1 id="title">{escape(doc.title)}</h1>\n'
-        f'<p class="standfirst" id="short">{escape(short)}</p>\n'
+        f'<h1 id="title">{_page_mark("title")}{escape(doc.title)}</h1>\n'
+        f'<p class="standfirst" id="short">{_page_mark("standfirst")}{escape(short)}</p>\n'
         f"{warnings}\n"
         f"{body}\n"
     )

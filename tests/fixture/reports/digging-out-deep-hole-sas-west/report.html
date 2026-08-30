@@ -22,19 +22,30 @@
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
-/* The link a heading carries to itself. The `#` is written by the
-   stylesheet rather than by the emitter so that it is not part of the
-   heading's text: selecting a section title to quote it should not pick up
-   a stray character, and a reader who cannot see it hears the label
-   instead. Shown on hover, and on focus as well, or it would be a control
-   only a mouse can reach. */
-.eta-report .heading-link { margin-left: .35em; text-decoration: none;
-                            font-weight: normal; opacity: 0; }
-.eta-report .heading-link::before { content: "#"; }
-.eta-report :is(h1, h2, h3, h4, h5, h6):hover > .heading-link,
-.eta-report .heading-link:focus-visible { opacity: .5; }
-.eta-report .heading-link:hover { opacity: 1; }
-@media print { .eta-report .heading-link { display: none; } }
+/* Everything with an id carries a link to itself, because everything with
+   an id is something a reader may want to send someone: a section, a
+   figure, a paragraph they are quoting. The `#` is written by the
+   stylesheet rather than by the emitter, so that it is not part of the
+   text: selecting a heading to quote it should not pick up a stray
+   character, and a reader who cannot see the mark hears the label instead.
+
+   It hangs in the margin ahead of the block rather than sitting at the end
+   of it, so that every mark on the page is in the same column and the eye
+   knows where to look. Shown on hover, and on focus as well, or it would be
+   a control only a mouse can reach. */
+.eta-report :has(> .link-mark) { position: relative; }
+.eta-report .link-mark { position: absolute; left: -1.15em; top: 0;
+                         text-decoration: none; font-weight: normal;
+                         opacity: 0; }
+.eta-report .link-mark::before { content: "#"; }
+.eta-report :has(> .link-mark):hover > .link-mark,
+.eta-report .link-mark:focus-visible { opacity: .45; }
+.eta-report .link-mark:hover { opacity: 1; }
+/* Inside a list item or a table cell there is no margin to hang a mark in:
+   ahead of a footnote is where its number goes, and ahead of a cell is the
+   cell before it. Those marks stay in the line instead. */
+.eta-report :is(li, td) .link-mark { position: static; margin-left: .35em; }
+@media print { .eta-report .link-mark { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
@@ -56,6 +67,7 @@
 </style>
 <div class="eta-report">
 <nav class="toc" id="contents" aria-label="Table of contents">
+<a class="link-mark" href="#contents" aria-label="Link to this table of contents"></a>
 <strong>Table of Contents</strong>
 <ul>
 <li><a href="#the-elephants-in-the-room">The Elephants in the Room</a>
@@ -65,19 +77,19 @@
 <li><a href="#footnotes">Footnotes</a></li>
 </ul>
 </nav>
-<h2 id="the-elephants-in-the-room">The Elephants in the Room<a class="heading-link" href="#the-elephants-in-the-room" aria-label="Link to this section"></a></h2>
-<p id="p-16fc5577">SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
-<figure id="sas-west-036"><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
-<p id="p-766855dc">That is a lot of money.</p>
-<div class="table-scroll" id="table-943f5817"><table><tr><td><p id="p-98595978"><strong>Project</strong></p></td><td><p id="p-75c5bb4f"><strong>Cost per mile</strong></p></td></tr><tr><td><p id="p-325d692e">SAS West</p></td><td><p id="p-efd0b54d">$6.2B</p></td></tr><tr><td><p id="p-b83e816c">Grand Paris Express</p></td><td><p id="p-34cb9ccc">$530M</p></td></tr></table></div>
-<h3 id="ground-conditions">Ground Conditions<a class="heading-link" href="#ground-conditions" aria-label="Link to this section"></a></h3>
-<ul id="list-231d1d6f"><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul>
-<p id="p-4ddc1abe">Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
+<h2 id="the-elephants-in-the-room"><a class="link-mark" href="#the-elephants-in-the-room" aria-label="Link to this section"></a>The Elephants in the Room</h2>
+<p id="p-16fc5577"><a class="link-mark" href="#p-16fc5577" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
+<figure id="sas-west-036"><a class="link-mark" href="#sas-west-036" aria-label="Link to this figure"></a><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
+<p id="p-766855dc"><a class="link-mark" href="#p-766855dc" aria-label="Link to this paragraph"></a>That is a lot of money.</p>
+<div class="table-scroll" id="table-943f5817"><a class="link-mark" href="#table-943f5817" aria-label="Link to this table"></a><table><tr><td><p id="p-98595978"><a class="link-mark" href="#p-98595978" aria-label="Link to this paragraph"></a><strong>Project</strong></p></td><td><p id="p-75c5bb4f"><a class="link-mark" href="#p-75c5bb4f" aria-label="Link to this paragraph"></a><strong>Cost per mile</strong></p></td></tr><tr><td><p id="p-325d692e"><a class="link-mark" href="#p-325d692e" aria-label="Link to this paragraph"></a>SAS West</p></td><td><p id="p-efd0b54d"><a class="link-mark" href="#p-efd0b54d" aria-label="Link to this paragraph"></a>$6.2B</p></td></tr><tr><td><p id="p-b83e816c"><a class="link-mark" href="#p-b83e816c" aria-label="Link to this paragraph"></a>Grand Paris Express</p></td><td><p id="p-34cb9ccc"><a class="link-mark" href="#p-34cb9ccc" aria-label="Link to this paragraph"></a>$530M</p></td></tr></table></div>
+<h3 id="ground-conditions"><a class="link-mark" href="#ground-conditions" aria-label="Link to this section"></a>Ground Conditions</h3>
+<div class="list-block" id="list-231d1d6f"><a class="link-mark" href="#list-231d1d6f" aria-label="Link to this list"></a><ul><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul></div>
+<p id="p-4ddc1abe"><a class="link-mark" href="#p-4ddc1abe" aria-label="Link to this paragraph"></a>Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
 <section class="footnotes" id="footnotes">
-<h2>Footnotes</h2>
+<h2><a class="link-mark" href="#footnotes" aria-label="Link to this section"></a>Footnotes</h2>
 <ol>
-<li id="fn1"><p id="p-54c2c38c"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a> Inflation-adjusted from the 2024 capital plan.</p></li>
-<li id="fn2"><p id="p-ea3e1527"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a> Measured from street level to platform.</p></li>
+<li id="fn1"><p id="p-54c2c38c"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a><a class="link-mark" href="#fn1" aria-label="Link to this footnote"></a> <a class="link-mark" href="#p-54c2c38c" aria-label="Link to this paragraph"></a>Inflation-adjusted from the 2024 capital plan.</p></li>
+<li id="fn2"><p id="p-ea3e1527"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a><a class="link-mark" href="#fn2" aria-label="Link to this footnote"></a> <a class="link-mark" href="#p-ea3e1527" aria-label="Link to this paragraph"></a>Measured from street level to platform.</p></li>
 </ol>
 </section>
 </div>
