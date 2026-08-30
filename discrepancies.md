@@ -87,12 +87,17 @@ contents, the date, every heading, every paragraph, list, figure, and
 table, each footnote, and the footnotes and contributors sections
 themselves.
 
-The ids of blocks with no name of their own are hashes of what they say,
-not of where they sit.
-Numbering them would mean inserting a paragraph silently repoints every
-link after it at the wrong text;
-hashing means editing a paragraph breaks links to that paragraph and
-nothing else.
+A paragraph is named by the section it is in and its place in that section:
+`#ground-conditions-p2`.
+That is a name a reader can read before following it,
+and it survives the copy edits that are most of what happens to a report
+after it publishes, which a hash of the text does not.
+The cost is the other direction: inserting a paragraph renumbers the ones
+after it in its own section, and links to those land one paragraph early.
+Numbering across the whole page would have spread that cost to every
+paragraph below the insertion instead.
+Figures and tables are still named by what they hold rather than by where
+they sit.
 
 ### Section references are links (intended)
 

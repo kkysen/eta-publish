@@ -86,6 +86,15 @@ must not rename the other 53, or change their published URLs.
 The same reasoning applies to heading anchors, which are published URLs
 that must not move when an unrelated section is added.
 
+A paragraph has no name of its own, so it is named by the section it is in
+and its place in that section: `#ground-conditions-p2`.
+That is a link worth reading before following it, and it survives the copy
+edits that are most of what happens to a published report.
+What it does not survive is an insertion above it in the same section,
+which is a smaller blast radius than numbering the page as a whole and a
+larger one than hashing the text, which moved the id of every paragraph
+anyone corrected.
+
 ### Semantic line breaks in the Markdown
 
 The `.md` breaks lines at sentence and clause boundaries

@@ -8,6 +8,7 @@ contents, and footnotes render as undifferentiated body text.
 
 import html
 import re
+from collections.abc import Callable
 from typing import override
 
 from ..naming import IMAGE_DIR, content_anchor
@@ -75,10 +76,14 @@ REPORT_CSS = """
 .eta-report :has(> .link-mark):hover > .link-mark,
 .eta-report .link-mark:focus-visible { opacity: .45; }
 .eta-report .link-mark:hover { opacity: 1; }
-/* Inside a list item or a table cell there is no margin to hang a mark in:
-   ahead of a footnote is where its number goes, and ahead of a cell is the
-   cell before it. Those marks stay in the line instead. */
-.eta-report :is(li, td) .link-mark { position: static; margin-left: .35em; }
+/* Inside a table cell there is no margin to hang a mark in: ahead of a cell
+   is the cell before it. Those marks stay in the line instead. */
+.eta-report td .link-mark { position: static; margin-left: .35em; }
+/* A footnote's mark goes outside its number rather than after it, where it
+   was crowding the arrow back to the text. The list is indented far enough
+   to leave room for both. */
+.eta-report .footnotes ol { padding-left: 3.4em; }
+.eta-report .footnotes li > .link-mark { left: -3.4em; }
 @media print { .eta-report .link-mark { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
@@ -139,6 +144,12 @@ class HtmlEmitter(Emitter):
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
         self._taken: set[str] = set()
+        # The section paragraphs are being numbered within, and how many of
+        # them have been written. A paragraph's id is its section's id and
+        # its place in that section, so both reset at every heading.
+        self._scope = ""
+        self._paragraphs = 0
+        self._marked = True
 
     def anchor(self, prefix: str, text: str) -> str:
         """An id for a block, unique within the page.
@@ -166,6 +177,9 @@ class HtmlEmitter(Emitter):
         # Every id on the page is allocated here, so a second `emit` of the
         # same document produces the same ids rather than suffixed ones.
         self._taken = {"title", "short", "contents", "footnotes", "contributors"}
+        self._scope = ""
+        self._paragraphs = 0
+        self._marked = True
         self._taken.update(b.anchor for b in doc.blocks if isinstance(b, Heading))
         parts = []
         if self.inline_css:
@@ -313,7 +327,7 @@ class HtmlEmitter(Emitter):
         )
 
     def footnote(self, note: Footnote) -> str:
-        body = self.blocks(note.content)
+        body = self.within(f"fn{note.number}", lambda: self.blocks(note.content))
         back = (
             f'<a href="#fnref{note.number}" class="footnote-back" '
             f'aria-label="Back to footnote {note.number} in the text">↑</a>'
@@ -326,12 +340,14 @@ class HtmlEmitter(Emitter):
         # so an arrow placed ahead of one sits on a line of its own with the
         # note beginning underneath it. Matched as a tag rather than as the
         # literal `<p>`, because the paragraph carries an id.
+        # The mark hangs outside the footnote's own number rather than
+        # sitting beside the arrow, which it crowded.
         mark = self.mark(f"fn{note.number}", "footnote")
         opening = re.match(r"<p\b[^>]*>", body)
         if opening:
             rest = body[opening.end() :]
-            return f'<li id="fn{note.number}">{opening.group()}{back}{mark} {rest}</li>'
-        return f'<li id="fn{note.number}">{back}{mark} {body}</li>'
+            return f'<li id="fn{note.number}">{mark}{opening.group()}{back} {rest}</li>'
+        return f'<li id="fn{note.number}">{mark}{back} {body}</li>'
 
     # ---- blocks -----------------------------------------------------
 
@@ -362,6 +378,25 @@ class HtmlEmitter(Emitter):
                 i += 1
         return self.join(out)
 
+    def within(self, scope: str, emit: Callable[[], str]) -> str:
+        """`emit()`, with the paragraphs inside it numbered from `scope`.
+
+        A footnote and a table cell are made of paragraphs, and they are not
+        passages of the report: numbering them along with it would put 43
+        between 12 and 13. They are numbered within the footnote or the
+        table that holds them instead, which is where anyone would count
+        them from anyway.
+        """
+        was = self._scope, self._paragraphs, self._marked
+        # And unmarked: a footnote already carries a mark of its own and an
+        # arrow back to the text, and a table cell has no margin to hang one
+        # in. The ids are still there, for a link written by hand.
+        self._scope, self._paragraphs, self._marked = scope, 0, False
+        try:
+            return emit()
+        finally:
+            self._scope, self._paragraphs, self._marked = was
+
     def mark(self, anchor: str, what: str = "section") -> str:
         """The link a block carries to itself.
 
@@ -382,6 +417,9 @@ class HtmlEmitter(Emitter):
         reader something to copy it from, rather than reading the id out of
         the page source or scrolling and hoping the address bar caught up.
         """
+        # The section every paragraph after this one is numbered within,
+        # until the next heading opens the next one.
+        self._scope, self._paragraphs = node.anchor, 0
         mark = self.mark(node.anchor)
         return (
             f'<h{node.level} id="{node.anchor}">{mark}{self.inlines(node.content)}</h{node.level}>'
@@ -392,11 +430,13 @@ class HtmlEmitter(Emitter):
         """A paragraph is linkable, because a report this long gets quoted
         a paragraph at a time. One holding no text is not: there is nothing
         to hash and nothing anyone would link to."""
-        text = plain(node.content)
-        if not text:
+        if not plain(node.content):
             return f"<p>{self.inlines(node.content)}</p>"
-        anchor = self.anchor("p", text)
-        return f'<p id="{anchor}">{self.mark(anchor, "paragraph")}{self.inlines(node.content)}</p>'
+        self._paragraphs += 1
+        counted = f"{self._scope}-p{self._paragraphs}" if self._scope else f"p{self._paragraphs}"
+        anchor = self.take(counted)
+        mark = self.mark(anchor, "paragraph") if self._marked else ""
+        return f'<p id="{anchor}">{mark}{self.inlines(node.content)}</p>'
 
     @override
     def list_(self, node: List) -> str:
@@ -455,10 +495,6 @@ class HtmlEmitter(Emitter):
 
     @override
     def table(self, node: Table) -> str:
-        rows = "".join(
-            "<tr>" + "".join(f"<td>{self.blocks(cell)}</td>" for cell in row) + "</tr>"
-            for row in node.rows
-        )
         text = " ".join(
             plain(block.content)
             for row in node.rows
@@ -466,9 +502,19 @@ class HtmlEmitter(Emitter):
             for block in cell
             if isinstance(block, Paragraph)
         )
-        if not text:
+        # The anchor first, because the paragraphs in the cells are
+        # numbered within the table rather than within the section it sits
+        # in: a comparison table's cells are not passages of the report.
+        anchor = self.anchor("table", text) if text else ""
+        rows = self.within(
+            anchor,
+            lambda: "".join(
+                "<tr>" + "".join(f"<td>{self.blocks(cell)}</td>" for cell in row) + "</tr>"
+                for row in node.rows
+            ),
+        )
+        if not anchor:
             return f'<div class="table-scroll"><table>{rows}</table></div>'
-        anchor = self.anchor("table", text)
         mark = self.mark(anchor, "table")
         return f'<div class="table-scroll" id="{anchor}">{mark}<table>{rows}</table></div>'
 
