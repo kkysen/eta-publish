@@ -176,7 +176,7 @@ class HtmlEmitter(Emitter):
     def document(self, doc: Document) -> str:
         # Every id on the page is allocated here, so a second `emit` of the
         # same document produces the same ids rather than suffixed ones.
-        self._taken = {"title", "short", "contents", "footnotes", "contributors"}
+        self._taken = {"title", "short", "table-of-contents", "footnotes", "contributors"}
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
@@ -266,8 +266,8 @@ class HtmlEmitter(Emitter):
             return ""
         headings = headings + self.back_matter(doc)
         return (
-            '<nav class="toc" id="contents" aria-label="Table of contents">\n'
-            f"{self.mark('contents', 'table of contents')}\n"
+            '<nav class="toc" id="table-of-contents" aria-label="Table of contents">\n'
+            f"{self.mark('table-of-contents', 'table of contents')}\n"
             "<strong>Table of Contents</strong>\n"
             f"{self.toc_list(headings)}\n"
             "</nav>"
