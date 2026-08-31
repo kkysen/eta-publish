@@ -1,8 +1,10 @@
 """Building more than one report into one site.
 
-The single-document path is covered everywhere else. What matters here is
-what only appears with several: where each report lands, that one failure
-does not take the others with it, and that the index says so.
+The single-document path is covered everywhere else.
+What matters here is what only appears with several:
+where each report lands,
+that one failure does not take the others with it,
+and that the index says so.
 """
 
 import json
@@ -40,8 +42,8 @@ def test_a_report_is_published_at_the_path_its_header_names(doc: Document) -> No
 
 
 def test_a_report_with_no_url_falls_back_to_its_title_and_says_so(doc: Document) -> None:
-    """A missing `URL:` is a line to add to the document. It must not take
-    the other reports down, and it must not pass unmentioned."""
+    """A missing `URL:` is a line to add to the document.
+    It must not take the other reports down, and it must not pass unmentioned."""
     doc.meta.pop("url", None)
     doc.title = "Digging Out of a Very Deep Hole"
     assert report_path(doc) == "digging-out-of-a-very-deep-hole"
@@ -49,8 +51,8 @@ def test_a_report_with_no_url_falls_back_to_its_title_and_says_so(doc: Document)
 
 
 def test_an_absolute_url_cannot_escape_the_site_root(doc: Document) -> None:
-    """`/reports/x` is a published path, not a filesystem one; joined
-    unstripped it would write to the root of the disk."""
+    """`/reports/x` is a published path, not a filesystem one;
+    joined unstripped it would write to the root of the disk."""
     doc.meta["url"] = "/reports/x"
     assert not Path(report_path(doc)).is_absolute()
 
@@ -86,9 +88,9 @@ def test_the_project_list_parses() -> None:
 def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
     good = tmp_path / "good.json"
     good.write_text(json.dumps(FIXTURE))
-    # Unreadable rather than absent: a path that does not exist is taken for
-    # a document reference and would reach for the network, and the test
-    # suite never does that.
+    # Unreadable rather than absent:
+    # a path that does not exist is taken for a document reference
+    # and would reach for the network, and the test suite never does that.
     broken = tmp_path / "broken.json"
     broken.write_text("{not json")
     reports = [
@@ -113,8 +115,9 @@ def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
 
 
 def test_a_url_is_a_document_even_when_it_ends_in_toml() -> None:
-    """Only a local path can name a list. A URL is a document, whatever it
-    is spelled like, so a Drive link can never be mistaken for a roster."""
+    """Only a local path can name a list.
+    A URL is a document, whatever it is spelled like,
+    so a Drive link can never be mistaken for a roster."""
     ref = "https://docs.google.com/document/d/abc/edit?tab=t.1"
     assert reports_from(ref) == [Report(url=ref)]
     assert reports_from("https://example.invalid/reports.toml") == [
@@ -135,8 +138,9 @@ def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
 
 
 def test_only_one_document_or_list_at_a_time() -> None:
-    """Building several at once is what a list is for, and a list is a file
-    that can be reviewed rather than a shell line that is right once."""
+    """Building several at once is what a list is for,
+    and a list is a file that can be reviewed
+    rather than a shell line that is right once."""
     from typer.testing import CliRunner
 
     from eta_publish.__main__ import app
@@ -146,8 +150,8 @@ def test_only_one_document_or_list_at_a_time() -> None:
 
 
 def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
-    """Not a traceback: naming a file that is not there is a typo, and the
-    message should read like one."""
+    """Not a traceback:
+    naming a file that is not there is a typo, and the message should read like one."""
     from typer.testing import CliRunner
 
     from eta_publish.__main__ import app
@@ -158,9 +162,9 @@ def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
 
 
 def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
-    """A build writes `doc.json` beside its outputs, so what one run wrote
-    is what the next can be handed, with no network and no knowing the
-    filename inside it."""
+    """A build writes `doc.json` beside its outputs,
+    so what one run wrote is what the next can be handed,
+    with no network and no knowing the filename inside it."""
     from typer.testing import CliRunner
 
     from eta_publish.__main__ import app

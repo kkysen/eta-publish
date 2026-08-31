@@ -1,7 +1,7 @@
 """Conventions found in the real SAS West document.
 
-Everything here was read off the actual doc and checked against the
-published page, rather than guessed from the fixture.
+Everything here was read off the actual doc and checked against the published page,
+rather than guessed from the fixture.
 """
 
 import pytest
@@ -79,9 +79,9 @@ def appendix() -> Document:
 
 
 def test_image_source_lines_attach_to_the_figure(appendix: Document) -> None:
-    """The doc writes `Source: <file>` before an image in the body and
-    `[Image Source](<url>)` after the caption in the appendices. Both are
-    editorial; neither appears on the published page."""
+    """The doc writes `Source: <file>` before an image in the body
+    and `[Image Source](<url>)` after the caption in the appendices.
+    Both are editorial; neither appears on the published page."""
     figure = next(b for b in appendix.blocks if isinstance(b, Figure))
     assert "Image Source" in text_of(figure.source)
     assert text_of(figure.caption).startswith("A photo inside the Freedom Tunnel")
@@ -108,8 +108,8 @@ def test_image_source_never_reaches_a_published_output(
 
 
 def test_a_parenthetical_note_is_not_part_of_the_key() -> None:
-    """The doc writes `SEO Description (300 char limit):`, and a lookup for
-    `seo description` finds nothing unless the note is stripped."""
+    """The doc writes `SEO Description (300 char limit):`,
+    and a lookup for `seo description` finds nothing unless the note is stripped."""
     doc = build(
         [
             para("Header", "HEADING_2"),
@@ -137,8 +137,8 @@ def test_the_description_reaches_the_preview() -> None:
 
 
 def test_the_caption_becomes_alt_text_when_docs_has_none(appendix: Document) -> None:
-    """On the live page the caption appears twice: as the image's `alt` and
-    as visible small text beneath it."""
+    """On the live page the caption appears twice:
+    as the image's `alt` and as visible small text beneath it."""
     figure = next(b for b in appendix.blocks if isinstance(b, Figure))
     assert figure.image.alt == "A photo inside the Freedom Tunnel, showing room for 4 tracks."
 
@@ -153,9 +153,9 @@ def test_a_real_description_wins_over_the_caption() -> None:
 
 
 def test_a_qualified_source_line_is_still_editorial() -> None:
-    """The real report writes `Source:`, `Uncropped Source:`, and
-    `[Image Source](...)`. All three appear zero times on the published
-    page, against 26 occurrences of `Credit:`."""
+    """The real report writes `Source:`, `Uncropped Source:`, and `[Image Source](...)`.
+    All three appear zero times on the published page,
+    against 26 occurrences of `Credit:`."""
     for label in ("Source:", "Uncropped Source:", "Cropped Source:"):
         doc = build(
             [
@@ -174,9 +174,9 @@ def test_a_qualified_source_line_is_still_editorial() -> None:
 
 
 def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
-    """The real doc has one, from inserting an image while a heading style
-    was active. Treated as a heading it produced an empty one, whose anchor
-    is a published URL, and buried the image inside it."""
+    """The real doc has one, from inserting an image while a heading style was active.
+    Treated as a heading it produced an empty one, whose anchor is a published URL,
+    and buried the image inside it."""
     doc = build(
         [
             para("Header", "HEADING_2"),
@@ -198,8 +198,8 @@ def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
 
 def test_unfinished_text_is_reported() -> None:
     """The real doc contains `TODO insert PSD image, maybe JFK AirTrain?`,
-    which the human publisher removed by hand. Nothing removes it here, so
-    the least the build can do is say it is there."""
+    which the human publisher removed by hand.
+    Nothing removes it here, so the least the build can do is say it is there."""
     doc = build(
         [
             para("Header", "HEADING_2"),
@@ -241,8 +241,8 @@ def test_an_undescribed_image_is_reported() -> None:
 
 
 def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
-    """The hero image's caption and credit are one paragraph split by
-    Shift+Enter, which Docs encodes as a vertical tab inside the run."""
+    """The hero image's caption and credit are one paragraph split by Shift+Enter,
+    which Docs encodes as a vertical tab inside the run."""
     doc = build(
         [
             para("Header", "HEADING_2"),
@@ -301,8 +301,9 @@ def _svg_doc(mime: str = "image/svg+xml", uri: str = "https://drive.google.com/o
 
 
 def test_a_linked_svg_becomes_the_figure_file() -> None:
-    """Docs cannot place an SVG, so a chart is pasted as a raster and the
-    real file linked beside it. Every output here can show the vector."""
+    """Docs cannot place an SVG,
+    so a chart is pasted as a raster and the real file linked beside it.
+    Every output here can show the vector."""
     figure = next(b for b in _svg_doc().blocks if isinstance(b, Figure))
     assert figure.image.vector is not None
     assert figure.image.vector.file_id == "ABC123"
@@ -336,8 +337,8 @@ def test_a_non_vector_link_is_not_mistaken_for_one() -> None:
 
 
 def test_a_cropped_figure_keeps_its_raster() -> None:
-    """The crop is expressed in pixels of the rasterized copy, so it cannot
-    be carried over to the vector."""
+    """The crop is expressed in pixels of the rasterized copy,
+    so it cannot be carried over to the vector."""
     doc = build(
         [
             para("Header", "HEADING_2"),
@@ -374,8 +375,8 @@ def linked(doc: Document) -> list[tuple[str, str | None]]:
 
 
 def test_an_italicized_section_name_becomes_a_link() -> None:
-    """Docs cannot link to a heading in the same document, so the report
-    italicizes the section's name and means a link by it."""
+    """Docs cannot link to a heading in the same document,
+    so the report italicizes the section's name and means a link by it."""
     doc = parse(
         {
             "title": "A report",
@@ -521,8 +522,8 @@ def test_an_italicized_link_is_left_alone() -> None:
 
 
 def test_a_section_named_before_its_colon_still_matches() -> None:
-    """`Appendix A: Freedom Tunnel` is referred to as `Appendix A`, which is
-    how the live page links it."""
+    """`Appendix A: Freedom Tunnel` is referred to as `Appendix A`,
+    which is how the live page links it."""
     doc = parse(
         {
             "title": "A report",

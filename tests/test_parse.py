@@ -50,22 +50,22 @@ def test_a_repeated_reference_keeps_its_number() -> None:
 
 
 def test_the_headline_comes_from_the_body_not_the_filename(doc: Document) -> None:
-    """The Drive filename is a working name. The real doc is called
-    `SAS West Feasibility Response`, which is not what publishes."""
+    """The Drive filename is a working name.
+    The real doc is called `SAS West Feasibility Response`, which is not what publishes."""
     assert doc.title == "Digging Out of a Very Deep Hole: Saving Billions on 125th Street"
     assert doc.title != FIXTURE["title"]
 
 
 def test_a_title_containing_a_colon_is_not_eaten_as_front_matter(doc: Document) -> None:
-    """`Digging Out...: Saving Billions...` matches `Key: value`, so a
-    front-matter scan that does not stop at TITLE swallows the headline."""
+    """`Digging Out...: Saving Billions...` matches `Key: value`,
+    so a front-matter scan that does not stop at TITLE swallows the headline."""
     assert "digging out of a very deep hole" not in doc.meta
     assert doc.meta["url"] == "/reports/digging-out-deep-hole-sas-west"
 
 
 def test_an_unrecognized_header_key_is_kept_and_does_not_end_the_scan(doc: Document) -> None:
-    """The real doc has an `MTA SAS West Feasibility Study:` line, which a
-    whitelist would have leaked into the body."""
+    """The real doc has an `MTA SAS West Feasibility Study:` line,
+    which a whitelist would have leaked into the body."""
     assert doc.meta["mta sas west feasibility study"] == "https://www.mta.info/document/196361"
     assert doc.meta["seo description"] == "Cheaper, shallower, faster."
 
@@ -107,8 +107,8 @@ def test_a_figure_absorbs_its_source_caption_and_credit(doc: Document) -> None:
 
 
 def test_a_short_paragraph_after_a_figure_stays_a_paragraph(doc: Document) -> None:
-    """Folding captions by length would swallow body text, and a report with
-    54 figures has many short paragraphs following one."""
+    """Folding captions by length would swallow body text,
+    and a report with 54 figures has many short paragraphs following one."""
     after = doc.blocks[3]
     assert isinstance(after, Paragraph)
     assert _text(after.content) == "That is a lot of money."
@@ -196,10 +196,11 @@ def _image_para(object_id: str) -> JsonObject:
 
 
 def test_a_bare_image_source_link_is_still_an_editorial_note() -> None:
-    """The doc writes this both ways. Where the brackets are typed the text
-    reads `[Image Source](<url>)`; where the whole paragraph is simply the
-    link, it reads `Image Source` and nothing else, and both name the file
-    the figure came from rather than saying anything to a reader."""
+    """The doc writes this both ways.
+    Where the brackets are typed the text reads `[Image Source](<url>)`;
+    where the whole paragraph is simply the link,
+    it reads `Image Source` and nothing else,
+    and both name the file the figure came from rather than saying anything to a reader."""
     doc = parse(
         {
             "body": {

@@ -32,8 +32,8 @@ def test_each_side_is_trimmed_by_its_fraction() -> None:
 
 
 def test_the_format_survives_the_crop() -> None:
-    """The extension is chosen from the download's content type, so a JPEG
-    that came back as a PNG would be a lie."""
+    """The extension is chosen from the download's content type,
+    so a JPEG that came back as a PNG would be a lie."""
     buffer = io.BytesIO()
     Pillow.new("RGB", (100, 100), "white").save(buffer, format="JPEG")
     image = Image(object_id="io.1", filename="img-x", crop=Crop(bottom=0.5))
@@ -65,7 +65,7 @@ def test_unreadable_data_is_reported_not_raised() -> None:
     ],
 )
 def test_only_a_real_crop_changes_the_filename(crop: Crop, expected: str) -> None:
-    """Recropping in the document produces a different published image, so it
-    must not keep the old name and the old cached file. An uncropped image
-    keeps the name it always had."""
+    """Recropping in the document produces a different published image,
+    so it must not keep the old name and the old cached file.
+    An uncropped image keeps the name it always had."""
     assert crop.key == expected

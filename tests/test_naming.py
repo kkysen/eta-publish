@@ -1,7 +1,7 @@
 """Naming must not move when the document is edited around it.
 
-These tests use headings that genuinely collide, since the collision
-branch is the only one that can be positional.
+These tests use headings that genuinely collide,
+since the collision branch is the only one that can be positional.
 """
 
 from eta_publish.naming import AnchorAllocator, image_filename, image_filenames, slugify
@@ -28,9 +28,9 @@ def test_repeated_heading_text_reuses_its_anchor():
 
 
 def test_colliding_anchors_survive_reordering():
-    """The bug this guards: giving the bare slug to whichever heading
-    claims it first is still positional, so swapping two colliding
-    headings moves both of their anchors."""
+    """The bug this guards:
+    giving the bare slug to whichever heading claims it first is still positional,
+    so swapping two colliding headings moves both of their anchors."""
     first = AnchorAllocator([COST_COLON, COST_PLAIN])
     second = AnchorAllocator([COST_PLAIN, COST_COLON])
     assert first.allocate(COST_COLON) == second.allocate(COST_COLON)
@@ -57,22 +57,22 @@ def test_image_names_depend_only_on_the_docs_object_id():
 
 
 def test_an_anchor_is_slugged_the_way_markdown_slugs_one():
-    """The same report publishes as HTML and as Markdown, so a link to a
-    section has to mean the same thing in both. GitHub's slugger keeps `-`
-    and `_`, drops the rest of the punctuation, and writes one hyphen per
-    space. The rule is imported rather than reimplemented; this says what
-    was imported."""
+    """The same report publishes as HTML and as Markdown,
+    so a link to a section has to mean the same thing in both.
+    GitHub's slugger keeps `-` and `_`, drops the rest of the punctuation,
+    and writes one hyphen per space.
+    The rule is imported rather than reimplemented; this says what was imported."""
     assert slugify("The Stations: Too Big and Too Deep") == "the-stations-too-big-and-too-deep"
     assert slugify("project_cost_comparison") == "project_cost_comparison"
     assert slugify("SAS West - Tunnel Profile") == "sas-west---tunnel-profile"
-    # A letter is a letter whether or not it is ASCII, which is where a
-    # rule written here to look like GitHub's stopped looking like it.
+    # A letter is a letter whether or not it is ASCII,
+    # which is where a rule written here to look like GitHub's stopped looking like it.
     assert slugify("Café Society") == "café-society"
 
 
 def test_a_heading_of_nothing_sluggable_still_has_an_anchor():
-    """An id is what the emitter writes into `id=`, so it cannot be empty
-    however little of the heading survives the rule."""
+    """An id is what the emitter writes into `id=`,
+    so it cannot be empty however little of the heading survives the rule."""
     assert slugify("!?") == "section"
     assert slugify("") == "section"
 
@@ -85,8 +85,8 @@ def test_an_image_is_named_after_the_file_its_source_line_names():
 
 def test_a_filename_is_the_name_that_was_written_and_not_a_slug_of_it():
     """Only what cannot appear in a name changes, one underscore for each.
-    Runs stay runs, capitals stay capitals, and a dot is a legal part of a
-    filename rather than punctuation to be dropped."""
+    Runs stay runs, capitals stay capitals,
+    and a dot is a legal part of a filename rather than punctuation to be dropped."""
     assert (
         image_filename("io.7", ".png", name="SAS West - Tunnel Profile - pg 18.screenshot.png")
         == "SAS_West_-_Tunnel_Profile_-_pg_18.screenshot.png"
@@ -94,8 +94,8 @@ def test_a_filename_is_the_name_that_was_written_and_not_a_slug_of_it():
 
 
 def test_the_extension_a_source_line_writes_is_not_the_published_one():
-    """`Source: chart.png` is the file that was exported, and the published
-    file is whatever the download turns out to fetch."""
+    """`Source: chart.png` is the file that was exported,
+    and the published file is whatever the download turns out to fetch."""
     assert image_filename("io.7", ".jpg", name="chart.png") == "chart.jpg"
 
 
@@ -105,16 +105,17 @@ def test_a_source_line_that_names_no_file_leaves_the_hashed_name():
 
 
 def test_a_cropped_image_is_not_named_the_same_as_its_original():
-    """The crop is part of the file: recropping publishes a different
-    picture, and it must not keep the old name and the old cached file."""
+    """The crop is part of the file:
+    recropping publishes a different picture,
+    and it must not keep the old name and the old cached file."""
     cropped = image_filename("io.7", ".png", crop_key="0.1,0,0,0", name="96st_station.png")
     assert cropped.startswith("96st_station-")
     assert cropped != image_filename("io.7", ".png", name="96st_station.png")
 
 
 def test_two_images_naming_one_file_are_both_told_apart_by_hash():
-    """Not the first one wins: which came first is position, and reordering
-    the report would move a published URL."""
+    """Not the first one wins:
+    which came first is position, and reordering the report would move a published URL."""
     names = image_filenames([("io.7", "", "plan.jpg"), ("io.8", "", "plan.jpg")])
     assert names["io.7"] != names["io.8"]
     assert all(n.startswith("plan-") for n in names.values())
@@ -129,8 +130,8 @@ def test_a_name_a_reordered_document_still_gives_the_same_image():
 
 
 def test_a_heading_cannot_take_an_id_the_emitter_reserves():
-    """The HTML emitter writes `<h2 id="footnotes">` for its own section, so
-    a heading titled `Footnotes` would produce a duplicate id."""
+    """The HTML emitter writes `<h2 id="footnotes">` for its own section,
+    so a heading titled `Footnotes` would produce a duplicate id."""
     a = AnchorAllocator(["Footnotes"], reserved={"footnotes"})
     assert a.allocate("Footnotes") != "footnotes"
     assert a.allocate("Footnotes").startswith("footnotes-")

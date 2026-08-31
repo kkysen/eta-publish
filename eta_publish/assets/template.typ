@@ -1,14 +1,15 @@
 // ETA report house style.
 //
-// The emitted `.typ` is a document body that imports this, so a change to
-// how reports look is a change to one file rather than to every report.
+// The emitted `.typ` is a document body that imports this,
+// so a change to how reports look is a change to one file rather than to every report.
 
 #let report(
   title: "",
   url: none,
   short: none,
-  // `Public Contributors:` only. The header block keeps the private list
-  // under its own key so that those names do not reach a published page.
+  // `Public Contributors:` only.
+  // The header block keeps the private list under its own key
+  // so that those names do not reach a published page.
   public_contributors: none,
   dateline: none,
   contributors: (),
@@ -23,9 +24,9 @@
   set page(
     paper: "us-letter",
     margin: (x: 1.4in, y: 1.2in),
-    // Footnotes land at the bottom of the page they are cited on, which is
-    // the whole reason these reports are typeset rather than printed from
-    // the web page.
+    // Footnotes land at the bottom of the page they are cited on,
+    // which is the whole reason these reports are typeset
+    // rather than printed from the web page.
     footer: context {
       set align(center)
       set text(size: 9pt, fill: luma(40%))
@@ -71,27 +72,27 @@
     #v(0.4em)
     #line(length: 100%, stroke: 0.8pt)
   ]
-  // With the title rather than after the contents: the document puts it
-  // under the headline, and it introduces the report rather than the
-  // section that happens to follow the outline.
+  // With the title rather than after the contents:
+  // the document puts it under the headline,
+  // and it introduces the report
+  // rather than the section that happens to follow the outline.
   if hero != none {
     hero
   }
 
   v(1.2em)
 
-  // The report is long enough that finding a section by turning pages is
-  // not reasonable, which is the same reason the page has a table of
-  // contents. Typst builds it from the headings, so it cannot disagree
-  // with them.
+  // The report is long enough that finding a section by turning pages is not reasonable,
+  // which is the same reason the page has a table of contents.
+  // Typst builds it from the headings, so it cannot disagree with them.
   outline(title: [Table of Contents], depth: 3, indent: auto)
   v(1.2em)
 
   body
 
-  // Credited at the end, not under the title: a report is the work of most
-  // of a chapter, and nine names above the first paragraph read as a
-  // masthead rather than as a credit.
+  // Credited at the end, not under the title:
+  // a report is the work of most of a chapter,
+  // and nine names above the first paragraph read as a masthead rather than as a credit.
   if contributors.len() > 0 {
     heading(level: 1, [Contributors])
     if contributors_note != none [#contributors_note]

@@ -79,25 +79,25 @@ which leaves the subtitle looking like the first section heading.
 ### Everything on the page has an id (intended)
 
 Hand assembly.
-Live gives ids to headings and to the footnote anchors someone typed by
-hand, and to nothing else,
+Live gives ids to headings and to the footnote anchors someone typed by hand,
+and to nothing else,
 so there is no way to link to a paragraph, a figure, or a table.
-`index.html` gives an id to the title, the standfirst, the table of
-contents, the date, every heading, every paragraph, list, figure, and
-table, each footnote, and the footnotes and contributors sections
-themselves.
+`index.html` gives an id to the title, the standfirst, the table of contents,
+the date, every heading, every paragraph, list, figure, and table,
+each footnote,
+and the footnotes and contributors sections themselves.
 
 A paragraph is named by the section it is in and its place in that section:
 `#ground-conditions-p2`.
 That is a name a reader can read before following it,
 and it survives the copy edits that are most of what happens to a report
 after it publishes, which a hash of the text does not.
-The cost is the other direction: inserting a paragraph renumbers the ones
-after it in its own section, and links to those land one paragraph early.
-Numbering across the whole page would have spread that cost to every
-paragraph below the insertion instead.
-Figures and tables are still named by what they hold rather than by where
-they sit.
+The cost is the other direction:
+inserting a paragraph renumbers the ones after it in its own section,
+and links to those land one paragraph early.
+Numbering across the whole page would have spread that cost
+to every paragraph below the insertion instead.
+Figures and tables are still named by what they hold rather than by where they sit.
 
 ### Section references are links (intended)
 
@@ -139,9 +139,9 @@ subsections of whatever came last.
 ### Footnote markers are bare superscripts after the punctuation (intended)
 
 Hand assembly.
-`index.html` puts each marker exactly where `doc.json` puts the
-`footnoteReference`, which for reference 3 is after the period in
-`takes seven minutes.`, and renders it as a plain superscript number.
+`index.html` puts each marker exactly where `doc.json` puts the `footnoteReference`,
+which for reference 3 is after the period in `takes seven minutes.`,
+and renders it as a plain superscript number.
 Live renders `[3]` and places it before the period.
 
 ## SAS West
@@ -155,8 +155,8 @@ Live renders `[3]` and places it before the period.
 Hand assembly, and the clearest case of it.
 `doc.json` holds 20 footnotes and 20 references,
 and `index.html` emits 20 references, 20 bodies, and 20 backlinks, 1:1.
-Live carries 21 markers and 21 `id="fnN"` anchors against 20 rendered
-bodies: an extra marker sits on
+Live carries 21 markers and 21 `id="fnN"` anchors against 20 rendered bodies:
+an extra marker sits on
 `...has space for more tracks than it needs`,
 so every marker after it resolves one footnote too far.
 Live `[14]`, on the steep-tracks sentence, lands on the soft-costs note,
@@ -170,19 +170,19 @@ Nothing to do. This is the discrepancy the project exists to produce.
 
 Document.
 Live ends both chart captions with `[SVG] [PNG]` download links.
-`doc.json` has bare `SVG: TODO` and `SVG:` placeholders where those links
-were, so `index.html` has no links to emit and the `unfinished text`
-warning fires.
+`doc.json` has bare `SVG: TODO` and `SVG:` placeholders where those links were,
+so `index.html` has no links to emit and the `unfinished text` warning fires.
 Put the links back in the document.
 
 ### The share card has no alt text (todo)
 
 Document.
-The wide image with the title set into it, which the document puts above
-the headline, publishes as `og:image` and nowhere else,
+The wide image with the title set into it,
+which the document puts above the headline,
+publishes as `og:image` and nowhere else,
 the same image live serves as `saswest.jpg`.
-`og:image:alt` is written when the image has alt text, and this one has
-none, so a link preview that is read aloud says nothing.
+`og:image:alt` is written when the image has alt text, and this one has none,
+so a link preview that is read aloud says nothing.
 Describe it in the document.
 
 ### The images the document names no source for are named by hash (todo)
@@ -190,16 +190,15 @@ Describe it in the document.
 Emitter.
 Where a figure has a `Source:` line, that file is the name:
 `images/sas-west-217.jpg`, which is what the document calls it.
-Seventeen of the 28 figures have no such line, and those are still
-`images/img-8827f5de.jpg`, from the Docs object id.
+Seventeen of the 28 figures have no such line,
+and those are still `images/img-8827f5de.jpg`, from the Docs object id.
 Live serves `saswest.jpg`, named by a person.
-Naming an image also names the figure's anchor, so the eleven that have a
-source line moved: `#img-af4262b6` is now
-`#sas-west-tunnel-profile-pg-18-screenshot-af4262b6`.
+Naming an image also names the figure's anchor,
+so the eleven that have a source line moved:
+`#img-af4262b6` is now `#sas-west-tunnel-profile-pg-18-screenshot-af4262b6`.
 The rest of the names belong in the document too, next to the image,
 the way `Credit:` and `Source:` are,
-and until they are there a hash is the only thing that is stable across
-edits.
+and until they are there a hash is the only thing that is stable across edits.
 
 ### Four wordings the live page predates (intended)
 

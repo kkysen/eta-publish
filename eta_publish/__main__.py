@@ -1,21 +1,25 @@
 """`eta-publish`: Google Docs in, a publishable site out.
 
-One document or the whole list of them, the same way. The single argument
-is either a document (a Docs URL, an id, or a saved response) or a `.toml`
-list of them, and it defaults to `reports.toml`. Each report lands under
-the path its own front matter gives it, with an index listing them.
+One document or the whole list of them, the same way.
+The single argument is either a document
+(a Docs URL, an id, or a saved response)
+or a `.toml` list of them, and it defaults to `reports.toml`.
+Each report lands under the path its own front matter gives it,
+with an index listing them.
 
-Both defaults name the committed thing: `reports.toml` is the list this
-site publishes and `site/` is where it publishes from, so `eta-publish`
-with no arguments rebuilds the site as it ships.
+Both defaults name the committed thing:
+`reports.toml` is the list this site publishes
+and `site/` is where it publishes from,
+so `eta-publish` with no arguments rebuilds the site as it ships.
 
-One argument rather than many: building several documents at once is what
-a list is for, and a list is a file that can be committed, reviewed, and
-commented rather than a shell line that is right once.
+One argument rather than many:
+building several documents at once is what a list is for,
+and a list is a file that can be committed, reviewed, and commented
+rather than a shell line that is right once.
 
-There is no separate single-document mode. A publish of one report is a
-publish of a list with one entry in it, and keeping that true means the
-common case and the real case run the same code.
+There is no separate single-document mode.
+A publish of one report is a publish of a list with one entry in it,
+and keeping that true means the common case and the real case run the same code.
 """
 
 import sys
@@ -23,9 +27,9 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-# `Option` and `Argument` stay qualified as `typer.Option` and
-# `typer.Argument`: both are ordinary words that a document tool can expect
-# to want for its own things. The rest are distinctive enough to import.
+# `Option` and `Argument` stay qualified as `typer.Option` and `typer.Argument`:
+# both are ordinary words that a document tool can expect to want for its own things.
+# The rest are distinctive enough to import.
 import typer
 from typer import BadParameter, Exit, Typer
 
@@ -36,8 +40,9 @@ from .site import build_site, index_page, reports_from
 class Suggestions(StrEnum):
     """How to resolve the document's open suggestions.
 
-    An enum rather than a pair of strings, so the choices are the type and
-    `--suggestions` cannot be handed a mode the API does not have.
+    An enum rather than a pair of strings,
+    so the choices are the type
+    and `--suggestions` cannot be handed a mode the API does not have.
     """
 
     REJECTED = "rejected"
@@ -97,8 +102,8 @@ def publish(
         print(f"  {built.path}  {built.doc.title}")
     for failure in site.failed:
         print(f"  failed: {failure.report.name or failure.report.url}", file=sys.stderr)
-    # Non-zero when anything failed, even though the rest of the site was
-    # written, so an unattended run cannot fail quietly.
+    # Non-zero when anything failed, even though the rest of the site was written,
+    # so an unattended run cannot fail quietly.
     if site.failed:
         raise Exit(code=1)
 

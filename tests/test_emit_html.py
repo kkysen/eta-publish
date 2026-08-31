@@ -26,8 +26,8 @@ def out(doc: Document) -> str:
 
 
 def test_every_footnote_has_a_matching_backlink(out: str) -> None:
-    """The defect this whole tool exists to prevent: the published SAS West
-    report has a footnote whose `↑` leads nowhere."""
+    """The defect this whole tool exists to prevent:
+    the published SAS West report has a footnote whose `↑` leads nowhere."""
     refs = set(re.findall(r'id="fnref(\d+)"', out))
     notes = set(re.findall(r'id="fn(\d+)"', out))
     backlinks = set(re.findall(r'href="#fnref(\d+)"', out))
@@ -43,12 +43,11 @@ def test_ids_are_unique() -> None:
 
 
 def test_the_source_line_is_not_published(out: str) -> None:
-    """`Source:` names the original file in Drive, for whoever assembles the
-    report. It appears nowhere on the live page and must not leak.
+    """`Source:` names the original file in Drive, for whoever assembles the report.
+    It appears nowhere on the live page and must not leak.
 
-    The published image is named after it, which is a filename rather than
-    the line: the note itself, and the extension it was exported under, are
-    both absent."""
+    The published image is named after it, which is a filename rather than the line:
+    the note itself, and the extension it was exported under, are both absent."""
     assert "Source:" not in out
     assert "sas-west-036.jpg" not in out
 
@@ -69,9 +68,10 @@ MARK = re.compile(r'<a class="link-mark"[^>]*></a>')
 def without_marks(html: str) -> str:
     """`html` with the self-links stripped.
 
-    Every block carries one, and a test about what a block contains is not
-    about the link to it. The links themselves are checked in
-    `test_every_linkable_block_carries_a_link_to_itself`.
+    Every block carries one,
+    and a test about what a block contains is not about the link to it.
+    The links themselves are checked
+    in `test_every_linkable_block_carries_a_link_to_itself`.
     """
     return MARK.sub("", html)
 
@@ -79,8 +79,8 @@ def without_marks(html: str) -> str:
 def sections_and_headings(out: str) -> list[str]:
     """The ids the table of contents is allowed to point at, in page order.
 
-    The back matter's id is on its `section`, not on its heading: the whole
-    section is the thing being linked to."""
+    The back matter's id is on its `section`, not on its heading:
+    the whole section is the thing being linked to."""
     return [
         m.group(1) or m.group(2)
         for m in re.finditer(r'<h\d id="([^"]+)"|<section class="[^"]*" id="([^"]+)"', out)
@@ -162,19 +162,19 @@ def test_inline_css_is_optional(doc: Document) -> None:
     assert not HtmlEmitter(inline_css=False).emit(doc).startswith("<style>")
 
 
-# Determinism across runs is covered by `test_snapshots.py`. Comparing an
-# emitter with itself in one process cannot see it: hash randomization is
-# fixed for the life of an interpreter, so order-dependent output matches
-# itself perfectly and still differs from run to run.
+# Determinism across runs is covered by `test_snapshots.py`.
+# Comparing an emitter with itself in one process cannot see it:
+# hash randomization is fixed for the life of an interpreter,
+# so order-dependent output matches itself perfectly and still differs from run to run.
 
 
 def test_tables_scroll_rather_than_overflow(out: str) -> None:
-    """Wide comparison tables are common in these reports, and a page that
-    scrolls sideways on a phone is worse than a table that does."""
+    """Wide comparison tables are common in these reports,
+    and a page that scrolls sideways on a phone is worse than a table that does."""
     marked = without_marks(out)
     assert re.search(r'<div class="table-scroll" id="table-[0-9a-f]{8}"><table>', marked)
-    # A cell's paragraphs are numbered within the table, not within the
-    # section the table sits in.
+    # A cell's paragraphs are numbered within the table,
+    # not within the section the table sits in.
     assert re.search(r'<td><p id="table-[0-9a-f]{8}-p\d+">Grand Paris Express</p></td>', marked)
 
 
@@ -214,17 +214,18 @@ def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
 def test_every_block_can_be_linked_to(out: str) -> None:
     """A report is quoted a paragraph at a time, so every block is a target.
 
-    Paragraphs, figures, and tables, wherever they sit, footnote bodies and
-    table cells included. A list nested inside a list item is not a block of
-    its own and is reached through the list that holds it."""
+    Paragraphs, figures, and tables, wherever they sit,
+    footnote bodies and table cells included.
+    A list nested inside a list item is not a block of its own
+    and is reached through the list that holds it."""
     for opening in ("<p", "<figure", '<div class="table-scroll"'):
         for tag in re.findall(rf"{re.escape(opening)}[ >][^>]*>?", out):
             assert "id=" in tag, f"{tag} cannot be linked to"
 
 
 def test_a_paragraph_is_named_by_its_section_and_its_place_in_it(out: str) -> None:
-    """`#ground-conditions-p2` says where it is, which is what someone
-    reading the link before following it wants to know."""
+    """`#ground-conditions-p2` says where it is,
+    which is what someone reading the link before following it wants to know."""
     assert '<p id="ground-conditions-p1">' in out
     assert re.search(r'<p id="the-elephants-in-the-room-p\d+">', out)
 
@@ -241,8 +242,9 @@ def test_editing_a_paragraph_does_not_move_its_id(doc: Document) -> None:
 def test_inserting_a_paragraph_moves_only_what_follows_it_in_that_section(
     doc: Document,
 ) -> None:
-    """The cost of counting, stated as a test. A new paragraph renumbers the
-    rest of its own section and nothing else, where hashing moved nothing
+    """The cost of counting, stated as a test.
+    A new paragraph renumbers the rest of its own section and nothing else,
+    where hashing moved nothing
     and a page-wide count would have moved everything after it."""
     headings = [b for b in doc.blocks if isinstance(b, Heading)]
     at = doc.blocks.index(headings[-1]) + 1
@@ -270,8 +272,9 @@ def test_emitting_twice_gives_the_same_ids(doc: Document) -> None:
 
 
 def test_the_backlink_sits_inside_the_first_paragraph(out: str) -> None:
-    """A paragraph is a block, so an arrow placed before one lands on a line
-    of its own with the note starting underneath it."""
+    """A paragraph is a block,
+    so an arrow placed before one lands on a line of its own
+    with the note starting underneath it."""
     for note in re.findall(r'<li id="fn\d+">.*?</li>', out, re.S):
         assert re.match(
             r'<li id="fn\d+"><a class="link-mark"[^>]*></a><p[^>]*><a href="#fnref\d+"', note
@@ -281,18 +284,19 @@ def test_the_backlink_sits_inside_the_first_paragraph(out: str) -> None:
 def test_a_figure_carries_the_shape_of_its_image(doc: Document) -> None:
     """The ratio a row divides a line by is the written file's own.
 
-    Not the document's: Docs says how large an image is placed rather than
-    how large it is, and the crop this pipeline applies has already changed
-    the shape by the time anything is emitted.
+    Not the document's:
+    Docs says how large an image is placed rather than how large it is,
+    and the crop this pipeline applies
+    has already changed the shape by the time anything is emitted.
     """
     doc.image_shapes["io.1"] = (400, 250)
     assert 'style="--aspect: 1.600"' in HtmlEmitter(inline_css=False).emit(doc)
 
 
 def test_a_figure_of_unrecorded_size_says_nothing_about_its_shape(doc: Document) -> None:
-    """A build that skipped the images, and the SVG originals that have no
-    pixel size at all. The stylesheet's own default stands in, so a row of
-    them is still a row."""
+    """A build that skipped the images,
+    and the SVG originals that have no pixel size at all.
+    The stylesheet's own default stands in, so a row of them is still a row."""
     assert "--aspect" not in HtmlEmitter(inline_css=False).emit(doc)
 
 
@@ -300,9 +304,10 @@ def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
     """Anything with an id is something a reader may want to send someone,
     so the link to it is on the page rather than in its source.
 
-    Except inside the back matter and inside a table, where the paragraphs
-    are not passages of the report: a footnote is reached from the reference
-    citing it and left by the arrow back, and a cell is part of its table.
+    Except inside the back matter and inside a table,
+    where the paragraphs are not passages of the report:
+    a footnote is reached from the reference citing it and left by the arrow back,
+    and a cell is part of its table.
     """
     report = re.sub(r'<section class="footnotes".*?</section>', "", out, flags=re.S)
     report = re.sub(r"<td>.*?</td>", "", report, flags=re.S)
@@ -314,29 +319,30 @@ def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
 
 
 def test_a_footnotes_mark_sits_outside_its_number(out: str) -> None:
-    """Beside the arrow back it crowded the one control that was already
-    there, so it hangs outside the list's own numbering instead."""
+    """Beside the arrow back it crowded the one control that was already there,
+    so it hangs outside the list's own numbering instead."""
     footnote = re.findall(r'<li id="fn1">.*?</li>', out, re.S)[0]
     assert footnote.index("link-mark") < footnote.index("footnote-back")
 
 
 def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:
-    """The `#` is drawn by the stylesheet. Selecting a section title to
-    quote it must not pick up a character nobody wrote, and a reader who
-    cannot see the mark is given the label instead."""
+    """The `#` is drawn by the stylesheet.
+    Selecting a section title to quote it must not pick up a character nobody wrote,
+    and a reader who cannot see the mark is given the label instead."""
     assert 'aria-label="Link to this section"></a>' in out
     assert "#</a>" not in out
 
 
 def test_paragraphs_are_numbered_from_one_in_each_section(out: str) -> None:
-    """Within the section rather than across the page: a paragraph added to
-    the first section would otherwise renumber the last one."""
+    """Within the section rather than across the page:
+    a paragraph added to the first section would otherwise renumber the last one."""
     for section in ("ground-conditions", "the-elephants-in-the-room"):
         numbers = [int(n) for n in re.findall(rf'<p id="{section}-p(\d+)"', out)]
         assert numbers == list(range(1, len(numbers) + 1))
 
 
 def test_a_footnote_numbers_its_own_paragraphs(out: str) -> None:
-    """Numbering a footnote's paragraphs along with the report would put 43
-    between 12 and 13, and nobody could do anything with that number."""
+    """Numbering a footnote's paragraphs along with the report
+    would put 43 between 12 and 13,
+    and nobody could do anything with that number."""
     assert '<p id="fn1-p1">' in out

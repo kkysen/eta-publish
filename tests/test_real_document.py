@@ -1,35 +1,43 @@
 """Snapshot of the real SAS West report, end to end.
 
-`site/` is literally a publish of the real report, at the top level
-because it is the site this project publishes rather than a test fixture:
+`site/` is literally a publish of the real report,
+at the top level because it is the site this project publishes
+rather than a test fixture:
 
     uv run eta-publish
 
-A publish is a site, so the report lands under the path its own front
-matter names, `reports/digging-out-deep-hole-sas-west/`, next to the index
-listing it. That directory holds `doc.json`, the four outputs, `images/`,
-and `report.pdf`, and this test asserts the committed outputs still match
-what the code produces from the committed response.
+A publish is a site,
+so the report lands under the path its own front matter names,
+`reports/digging-out-deep-hole-sas-west/`, next to the index listing it.
+That directory holds `doc.json`, the four outputs, `images/`, and `report.pdf`,
+and this test asserts the committed outputs
+still match what the code produces from the committed response.
 
-`tests/fixture/` is the same directory in miniature, built from a document
-nobody fetched, and the two are told apart by that and nothing else. Either
-rebuilds from its own `doc.json` by passing the report directory back to
-`eta-publish`. It is the only test that runs against a
-document nobody wrote to make a point, and every bug that mattered so far
+`tests/fixture/` is the same directory in miniature,
+built from a document nobody fetched,
+and the two are told apart by that and nothing else.
+Either rebuilds from its own `doc.json`
+by passing the report directory back to `eta-publish`.
+It is the only test that runs against a document nobody wrote to make a point,
+and every bug that mattered so far
 came from this document's shape rather than from a hand-built fixture.
 
-Only the text is committed. The images are 18 MB and the PDF 19 MB, and
-because a re-fetch rewrites every image, each one would add another copy to
-history permanently. They are ignored, so the command above is safe to rerun.
+Only the text is committed.
+The images are 18 MB and the PDF 19 MB,
+and because a re-fetch rewrites every image,
+each one would add another copy to history permanently.
+They are ignored, so the command above is safe to rerun.
 
-`images.json` is the one derived thing kept: a Docs `inlineObject` carries a
-`contentUri` with no extension and no mime type, so the only way to learn an
-image is a JPEG is to fetch it, and this test does not use the network. It
-records the filename actually written for each image, and is refreshed from
-`images/` whenever that directory is present.
+`images.json` is the one derived thing kept:
+a Docs `inlineObject` carries a `contentUri` with no extension and no mime type,
+so the only way to learn an image is a JPEG is to fetch it,
+and this test does not use the network.
+It records the filename actually written for each image,
+and is refreshed from `images/` whenever that directory is present.
 
-When a snapshot changes, read the diff: it is exactly what the change does
-to a real published report. Accept it with `pytest --regenerate-snapshots`.
+When a snapshot changes, read the diff:
+it is exactly what the change does to a real published report.
+Accept it with `pytest --regenerate-snapshots`.
 """
 
 import json
@@ -50,21 +58,23 @@ FILENAMES_PATH = REAL / "images.json"
 DOWNLOADED = REAL / "images"
 DOC_JSON = json.loads((REAL / "doc.json").read_text())
 
-# The snapshots are a plain publish, so no `--image-base`: where images are
-# hosted is still undecided, and pinning a placeholder into them would make
-# every snapshot line depend on a value nobody has chosen yet. That the flag
-# is applied when given is covered in `test_preview.py`.
+# The snapshots are a plain publish, so no `--image-base`:
+# where images are hosted is still undecided,
+# and pinning a placeholder into them
+# would make every snapshot line depend on a value nobody has chosen yet.
+# That the flag is applied when given is covered in `test_preview.py`.
 
 
 def image_index(regenerate: bool) -> dict[str, JsonObject]:
     """What a real run wrote for each image, read from `images.json`.
 
-    Written by a build rather than by this test, because it is a record of
-    what was published rather than of what was asserted. The filename and
-    the pixel size are both facts only a fetch can learn, and the committed
-    page is laid out from the size, so a test with no network reads them
-    from here. The hash beside them is what lets CI check that a rebuild
-    fetched the same pictures, and is not needed here.
+    Written by a build rather than by this test,
+    because it is a record of what was published rather than of what was asserted.
+    The filename and the pixel size are both facts only a fetch can learn,
+    and the committed page is laid out from the size,
+    so a test with no network reads them from here.
+    The hash beside them is what lets CI check that a rebuild fetched the same pictures,
+    and is not needed here.
     """
     return json.loads(FILENAMES_PATH.read_text())
 
@@ -135,8 +145,9 @@ def test_the_shape_of_the_report(doc: Document) -> None:
 
 
 def test_smart_chips_resolve(doc: Document) -> None:
-    """Person and date chips are not text runs. Reading only text runs left
-    every one of these empty, including the publication date."""
+    """Person and date chips are not text runs.
+    Reading only text runs left every one of these empty,
+    including the publication date."""
     assert doc.meta["project manager"] == "Khyber Sen"
     assert doc.meta["final due date"] == "Aug 19, 2026"
     assert doc.meta["public contributors"].startswith("Khyber Sen, Darius Jankauskas")
@@ -155,9 +166,9 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
 
 
 def test_no_editorial_note_reaches_a_published_output(doc: Document) -> None:
-    """`Source:`, `Uncropped Source:`, `Image Source`, and `SVG:` name assets
-    for whoever assembles the page. Each appears zero times on the live
-    report, against 26 occurrences of `Credit:`."""
+    """`Source:`, `Uncropped Source:`, `Image Source`, and `SVG:`
+    name assets for whoever assembles the page.
+    Each appears zero times on the live report, against 26 occurrences of `Credit:`."""
     for emitted in (HtmlEmitter().emit(doc), TypstEmitter().emit(doc)):
         for note in ("Source:", "Image Source", "SVG:", "drive.google.com"):
             assert note not in emitted, note
@@ -189,8 +200,9 @@ def test_html_ids_are_unique_and_every_link_resolves(doc: Document) -> None:
 
 
 def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
-    """Squarespace allows 400 KB. This is the number the one-paste claim
-    rests on, so it is asserted rather than estimated."""
+    """Squarespace allows 400 KB.
+    This is the number the one-paste claim rests on,
+    so it is asserted rather than estimated."""
     from eta_publish.emit.html import CODE_BLOCK_LIMIT
 
     size = len(HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc).encode())
@@ -201,8 +213,8 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
 def test_every_image_has_something_describing_it(doc: Document) -> None:
     """Every figure in the report carries alt text or a caption.
 
-    The one image that had neither is the share card, which is not a figure
-    and is not in the body at all."""
+    The one image that had neither is the share card,
+    which is not a figure and is not in the body at all."""
     undescribed = [
         b.image.object_id
         for b in doc.blocks
@@ -229,10 +241,10 @@ def test_the_report_opens_with_its_hero(doc: Document) -> None:
 
 
 def test_no_chip_email_reaches_any_output(doc: Document) -> None:
-    """A person chip carries an email beside the name. The name is what the
-    document displays and what belongs in a report; the address is contact
-    information the document happens to hold, and publishing it would put a
-    contributor's address on a public page.
+    """A person chip carries an email beside the name.
+    The name is what the document displays and what belongs in a report;
+    the address is contact information the document happens to hold,
+    and publishing it would put a contributor's address on a public page.
 
     The fixture keeps the real addresses so this tests something.
     """
@@ -249,9 +261,10 @@ def test_no_chip_email_reaches_any_output(doc: Document) -> None:
 
 
 def test_the_chart_publishes_as_a_vector(doc: Document) -> None:
-    """Docs cannot place an SVG, so `project_cost_comparison.svg` is pasted
-    into the report as a raster and linked beside it. All three outputs can
-    show the vector, so all three should."""
+    """Docs cannot place an SVG,
+    so `project_cost_comparison.svg` is pasted into the report as a raster
+    and linked beside it.
+    All three outputs can show the vector, so all three should."""
     vectors = [i for i in doc.images if i.vector is not None]
     assert [v.vector.title for v in vectors if v.vector] == ["project_cost_comparison.svg"]
 

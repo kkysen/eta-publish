@@ -44,8 +44,8 @@ def test_it_opens_the_way_the_page_does(out: str) -> None:
 
 
 def test_the_header_block_is_not_in_the_archive(out: str) -> None:
-    """It is production scaffolding, and `doc.json` beside this file keeps
-    every field of it verbatim."""
+    """It is production scaffolding,
+    and `doc.json` beside this file keeps every field of it verbatim."""
     assert not out.startswith("---")
     assert "draft due date" not in out.lower()
     assert "url: /reports/" not in out
@@ -53,8 +53,9 @@ def test_the_header_block_is_not_in_the_archive(out: str) -> None:
 
 
 def test_a_paragraph_is_one_line_per_sentence() -> None:
-    """The whole reason this file exists: a one-word fix must be a one-line
-    diff, not a whole paragraph reported as changed."""
+    """The whole reason this file exists:
+    a one-word fix must be a one-line diff,
+    not a whole paragraph reported as changed."""
     text = "First sentence here. Second sentence here. Third sentence here."
     out = MarkdownEmitter().emit(with_paragraph(text))
     assert "First sentence here.\nSecond sentence here.\nThird sentence here." in out
@@ -70,16 +71,17 @@ def test_editing_one_sentence_changes_one_line() -> None:
 
 
 def test_headings_carry_no_explicit_anchor(out: str) -> None:
-    """Pandoc's `{#anchor}` syntax renders as literal text inside the
-    heading on GitHub, which is where this file is read, and the anchor is a
-    property of the HTML rather than of the archive."""
+    """Pandoc's `{#anchor}` syntax renders as literal text inside the heading on GitHub,
+    which is where this file is read,
+    and the anchor is a property of the HTML rather than of the archive."""
     assert "## The Elephants in the Room\n" in out
     assert "{#" not in out
 
 
 def test_superscript_uses_html_that_both_renderers_accept(out: str) -> None:
     """GitHub renders Pandoc's `^x^` literally and `~x~` as strikethrough,
-    which is wrong rather than merely ugly. Both accept the HTML."""
+    which is wrong rather than merely ugly.
+    Both accept the HTML."""
     from eta_publish.emit.markdown import MarkdownEmitter
     from eta_publish.nodes import Document, Paragraph, Text
 
@@ -95,8 +97,9 @@ def test_footnotes_use_pandoc_syntax(out: str) -> None:
 
 
 def test_the_archive_keeps_the_source_line_as_a_comment(out: str) -> None:
-    """Unlike the published outputs: it records which file in Drive an image
-    came from, which is provenance worth keeping in a durable record."""
+    """Unlike the published outputs:
+    it records which file in Drive an image came from,
+    which is provenance worth keeping in a durable record."""
     assert "<!-- Source: sas-west-036.jpg -->" in out
 
 
@@ -144,8 +147,8 @@ def test_a_pipe_in_prose_is_escaped() -> None:
 
 
 def test_tables_render_with_a_header_row(out: str) -> None:
-    """Markdown requires one, so the first row serves whether or not the doc
-    meant it as a header."""
+    """Markdown requires one,
+    so the first row serves whether or not the doc meant it as a header."""
     assert "| **Project** | **Cost per mile** |" in out
     assert "| --- | --- |" in out
     assert "| Grand Paris Express | $530M |" in out

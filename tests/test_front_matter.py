@@ -1,9 +1,10 @@
 """The top of the document, shaped the way the real report is.
 
-In the real doc `Header` is an `h2` while the body sections are `h1`, and
-between them sit the headline, a hero image with caption and credit, and an
-addendum. A scan that runs "until the next heading of the same or higher
-level" swallows all of it.
+In the real doc `Header` is an `h2` while the body sections are `h1`,
+and between them sit the headline,
+a hero image with caption and credit, and an addendum.
+A scan that runs "until the next heading of the same or higher level"
+swallows all of it.
 """
 
 import pytest
@@ -82,8 +83,8 @@ def test_the_headline_is_the_title(doc: Document) -> None:
 
 
 def test_the_hero_image_survives(doc: Document) -> None:
-    """A paragraph holding only an image has no text, so a front-matter scan
-    that overruns drops it without anything to warn about."""
+    """A paragraph holding only an image has no text,
+    so a front-matter scan that overruns drops it without anything to warn about."""
     figures = [b for b in doc.blocks if isinstance(b, Figure)]
     assert len(figures) == 1
     assert figures[0].image.object_id == "io.hero"
@@ -125,10 +126,11 @@ def test_prose_ends_the_header_section_even_without_a_headline() -> None:
 
 
 def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
-    """If the headline is not TITLE-styled, it matches `Key: value` and is
-    filed as metadata, which `title` reports as a fallback. What must not
-    also happen is the image after it disappearing without a word, which is
-    what a scan that runs to the next same-or-higher heading does."""
+    """If the headline is not TITLE-styled,
+    it matches `Key: value` and is filed as metadata,
+    which `title` reports as a fallback.
+    What must not also happen is the image after it disappearing without a word,
+    which is what a scan that runs to the next same-or-higher heading does."""
     unstyled = {
         **REAL_SHAPE,
         "body": {
@@ -148,8 +150,8 @@ def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
 
 def test_scaffolding_before_the_header_does_not_hide_it() -> None:
     """The real doc opens with a `Draft 2` line before its `Header` heading.
-    Bailing on the first text meant no front matter was found at all, and
-    `URL:` and the rest landed in the body as prose."""
+    Bailing on the first text meant no front matter was found at all,
+    and `URL:` and the rest landed in the body as prose."""
     doc = parse(
         {
             "title": "SAS West Feasibility Response",
@@ -171,8 +173,8 @@ def test_scaffolding_before_the_header_does_not_hide_it() -> None:
 
 
 def test_dropped_scaffolding_is_reported() -> None:
-    """It is production notes rather than the report, so dropping it is
-    right, but it must not leave silently."""
+    """It is production notes rather than the report, so dropping it is right,
+    but it must not leave silently."""
     doc = parse(
         {
             "title": "x",
@@ -190,8 +192,8 @@ def test_dropped_scaffolding_is_reported() -> None:
 
 
 def test_a_document_with_no_header_section_is_left_intact() -> None:
-    """The preamble scan must not eat a whole document a paragraph at a
-    time when there is no `Header` heading to find."""
+    """The preamble scan must not eat a whole document a paragraph at a time
+    when there is no `Header` heading to find."""
     doc = parse(
         {
             "title": "x",
@@ -206,8 +208,8 @@ def test_a_document_with_no_header_section_is_left_intact() -> None:
 
 
 def test_a_headline_before_the_header_stops_the_search() -> None:
-    """Past the headline the report has started, so there is no header to
-    look for and nothing may be consumed."""
+    """Past the headline the report has started,
+    so there is no header to look for and nothing may be consumed."""
     doc = parse(
         {
             "title": "x",
@@ -226,8 +228,8 @@ def test_a_headline_before_the_header_stops_the_search() -> None:
 
 
 def test_contributors_are_sorted_by_surname() -> None:
-    """etany.org credits contributors alphabetically, and the field they are
-    typed into is in whatever order people were added."""
+    """etany.org credits contributors alphabetically,
+    and the field they are typed into is in whatever order people were added."""
     doc = Document(meta={"public contributors": "Khyber Sen, Alon Levy, Robert Hale"})
     assert doc.contributors == ["Robert Hale", "Alon Levy", "Khyber Sen"]
 
