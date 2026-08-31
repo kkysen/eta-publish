@@ -1,5 +1,5 @@
-# `pre-commit install` installs both, so a clone that follows the README
-# gets the push check as well as the commit checks.
+# `pre-commit install` installs both,
+# so a clone that follows the README gets the push check as well as the commit checks.
 default_install_hook_types: [pre-commit, pre-push]
 
 repos:
@@ -39,10 +39,11 @@ repos:
         pass_filenames: false
         always_run: true
 
-      # On push rather than on commit: it fetches every document, which is
-      # slow and needs credentials. On every branch, though only `main`
-      # deploys: a branch whose site is already stale is a merge that will
-      # fail, and the point is not to find that out at the merge.
+      # On push rather than on commit:
+      # it fetches every document, which is slow and needs credentials.
+      # On every branch, though only `main` deploys:
+      # a branch whose site is already stale is a merge that will fail,
+      # and the point is not to find that out at the merge.
       - id: committed-site
         name: the committed site is what a fresh build writes
         entry: scripts/check-committed-site.sh

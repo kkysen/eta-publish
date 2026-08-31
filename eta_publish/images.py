@@ -1,17 +1,20 @@
 """Download the doc's inline images so they can be hosted somewhere stable.
 
-The Docs API hands back short-lived `contentUri` values, so they can never
-be the published `src`. We fetch each once at build time and write it under
-the deterministic filename the parser assigned.
+The Docs API hands back short-lived `contentUri` values,
+so they can never be the published `src`.
+We fetch each once at build time
+and write it under the deterministic filename the parser assigned.
 
-Crops are applied here, to the file. A Docs crop is stored as fractions of
-the original and the API serves the uncropped image, so every output would
-otherwise show the untrimmed picture. Doing it here rather than in the HTML
-is what makes it reach all three: Markdown cannot express a crop at all, and
-a CSS one would never reach the PDF.
+Crops are applied here, to the file.
+A Docs crop is stored as fractions of the original
+and the API serves the uncropped image,
+so every output would otherwise show the untrimmed picture.
+Doing it here rather than in the HTML is what makes it reach all three:
+Markdown cannot express a crop at all, and a CSS one would never reach the PDF.
 
-These same files are what the PDF needs, so one download serves both the
-web and the print output, and one upload to whatever host serves both.
+These same files are what the PDF needs,
+so one download serves both the web and the print output,
+and one upload to whatever host serves both.
 """
 
 from pathlib import Path
@@ -34,17 +37,18 @@ def download(
 ) -> dict[str, Path]:
     """Fetch every image in `doc`, returning object id to written path.
 
-    Images already on disk are left alone. The filename depends only on the
-    Docs object id, so a re-run after an unrelated edit re-downloads nothing.
+    Images already on disk are left alone.
+    The filename depends only on the Docs object id,
+    so a re-run after an unrelated edit re-downloads nothing.
     """
     outdir.mkdir(parents=True, exist_ok=True)
     http = session or requests.Session()
     written: dict[str, Path] = {}
 
-    # A saved response carries no URIs at all, because they expire and are
-    # not committed. That is the ordinary shape of a rebuild rather than a
-    # defect in any one image, so it is said once here instead of 29 times
-    # below, and the remedy is a fetch rather than an edit to the document.
+    # A saved response carries no URIs at all, because they expire and are not committed.
+    # That is the ordinary shape of a rebuild rather than a defect in any one image,
+    # so it is said once here instead of 29 times below,
+    # and the remedy is a fetch rather than an edit to the document.
     no_uris = bool(doc.images) and not any(image.source_uri for image in doc.images)
     if no_uris:
         doc.warn(
@@ -88,9 +92,9 @@ def download(
 def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, Path]) -> bool:
     """Write the vector original, returning whether it is what gets used.
 
-    A failure here falls back to the raster rather than to nothing: the
-    document still holds a perfectly good picture, and a chart that renders
-    slightly softer beats a report with a hole in it.
+    A failure here falls back to the raster rather than to nothing:
+    the document still holds a perfectly good picture,
+    and a chart that renders slightly softer beats a report with a hole in it.
     """
     vector = image.vector
     if vector is None:

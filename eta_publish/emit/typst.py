@@ -1,18 +1,19 @@
 """Typst source, compiled to the report PDF.
 
-Typst rather than HTML-to-PDF because footnotes belong at the bottom of the
-page. HTML can only place them at the end of the document, and with 21 of
-them carrying real argument, that is the difference between a report and a
-printout of a web page.
+Typst rather than HTML-to-PDF because footnotes belong at the bottom of the page.
+HTML can only place them at the end of the document,
+and with 21 of them carrying real argument,
+that is the difference between a report and a printout of a web page.
 
-A footnote's body is therefore inlined at the reference site, which is how
-Typst wants it: `#footnote[...]` both marks the spot and carries the text,
-and Typst does the numbering and the placement. Nothing here maintains a
-separate list to keep in sync, which is the failure the HTML output has to
-guard against explicitly.
+A footnote's body is therefore inlined at the reference site,
+which is how Typst wants it:
+`#footnote[...]` both marks the spot and carries the text,
+and Typst does the numbering and the placement.
+Nothing here maintains a separate list to keep in sync,
+which is the failure the HTML output has to guard against explicitly.
 
-The emitted file is a document body that imports `template.typ`, so the ETA
-house style lives in one place rather than being regenerated per report.
+The emitted file is a document body that imports `template.typ`,
+so the ETA house style lives in one place rather than being regenerated per report.
 """
 
 import re
@@ -36,8 +37,9 @@ from ..nodes import (
 from ..sentences import split
 from .base import CONTRIBUTORS_NOTE, Emitter
 
-# Typst's markup characters. `#` and `@` start code and references, and the
-# rest delimit markup, so any of them in prose has to be escaped.
+# Typst's markup characters.
+# `#` and `@` start code and references, and the rest delimit markup,
+# so any of them in prose has to be escaped.
 ESCAPE = re.compile(r"([\\#$*_`<>@\[\]])")
 
 
@@ -62,11 +64,11 @@ class TypstEmitter(Emitter):
     def document(self, doc: Document) -> str:
         """The header block as written, plus what the page publishes.
 
-        `doc.meta` is the fields as typed, which is what the template shows
-        for everything nobody has an opinion about. Two of them the page
-        does have an opinion about, so they are passed separately rather
-        than silently rewritten: the date written out, and the contributors
-        in the order they are credited in.
+        `doc.meta` is the fields as typed,
+        which is what the template shows for everything nobody has an opinion about.
+        Two of them the page does have an opinion about,
+        so they are passed separately rather than silently rewritten:
+        the date written out, and the contributors in the order they are credited in.
         """
         meta = "\n".join(
             f"  {key.replace(' ', '_')}: {string(value)}," for key, value in doc.meta.items()
@@ -87,8 +89,8 @@ class TypstEmitter(Emitter):
     def hero(self, doc: Document) -> str:
         """The opening figure, passed to the template rather than emitted.
 
-        It belongs above the outline, with the title, and the template is
-        what knows where the outline goes.
+        It belongs above the outline, with the title,
+        and the template is what knows where the outline goes.
         """
         if doc.hero is None:
             return ""
@@ -106,8 +108,8 @@ class TypstEmitter(Emitter):
 
     @override
     def heading(self, node: Heading) -> str:
-        # Typst counts heading depth from 1, where the tree counts the title
-        # as level 1 and the first section as 2.
+        # Typst counts heading depth from 1,
+        # where the tree counts the title as level 1 and the first section as 2.
         return f"{'=' * (node.level - 1)} {self.inlines(node.content)}"
 
     @override
@@ -129,10 +131,12 @@ class TypstEmitter(Emitter):
 
     @override
     def figure(self, node: Figure) -> str:
-        # As in the HTML, `Figure.source` is not emitted: it names a file in
-        # Drive for whoever assembles the report, and is not part of it.
-        # Not emphasized: the published report styles the credit exactly like
-        # the caption, and the template decides how a caption looks.
+        # As in the HTML, `Figure.source` is not emitted:
+        # it names a file in Drive for whoever assembles the report,
+        # and is not part of it.
+        # Not emphasized:
+        # the published report styles the credit exactly like the caption,
+        # and the template decides how a caption looks.
         caption_parts = []
         if node.caption:
             caption_parts.append(self.inlines(node.caption))
@@ -183,9 +187,9 @@ class TypstEmitter(Emitter):
     def footnote_ref(self, node: FootnoteRef) -> str:
         """Typst places and numbers footnotes itself, so the body goes here.
 
-        This is the whole reason for a PDF path of its own: the note lands at
-        the bottom of the page it is cited on, which no HTML-to-PDF route can
-        do.
+        This is the whole reason for a PDF path of its own:
+        the note lands at the bottom of the page it is cited on,
+        which no HTML-to-PDF route can do.
         """
         note = next((f for f in self.doc.footnotes if f.number == node.number), None)
         if note is None:
@@ -201,10 +205,11 @@ class TypstEmitter(Emitter):
     def image_call(self, node: Image) -> str:
         """The `image` call, which a figure wraps and a bare image does not.
 
-        Written once so the two cannot drift: the alt text was added here
-        and reached inline images only, because the figure built its own
-        call. A PDF carries alt text the way a page does, and it is the
-        same sentence in both.
+        Written once so the two cannot drift:
+        the alt text was added here and reached inline images only,
+        because the figure built its own call.
+        A PDF carries alt text the way a page does,
+        and it is the same sentence in both.
         """
         path = f"{self.image_dir}/{self.doc.image_href(node)}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""

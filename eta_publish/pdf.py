@@ -1,9 +1,9 @@
 """Compile the emitted Typst source into the report PDF.
 
-Typst is an external binary rather than a Python dependency, so this is
-best-effort: if it is not installed the `.typ` is still written and the
-build reports what to install, instead of failing everything for the sake
-of one output.
+Typst is an external binary rather than a Python dependency, so this is best-effort:
+if it is not installed the `.typ` is still written
+and the build reports what to install,
+instead of failing everything for the sake of one output.
 """
 
 import shutil
@@ -21,16 +21,15 @@ class TypstMissing(RuntimeError):
 def install_template(outdir: Path) -> Path:
     """Write the house style next to the emitted source, every build.
 
-    It is a package asset rather than something the emitter writes, so that
-    editing how reports look means editing Typst rather than a Python
-    string.
+    It is a package asset rather than something the emitter writes,
+    so that editing how reports look means editing Typst rather than a Python string.
 
-    Overwritten rather than kept, because an output directory is build
-    output: it is rebuilt from the document on every run, and `site/` is
-    gitignored precisely because nothing in it is edited by hand. Keeping
-    an existing copy meant a change to the house style reached a directory
-    that had ever been built once, never, and the PDF was compiled against
-    a template several versions old without saying so.
+    Overwritten rather than kept, because an output directory is build output:
+    it is rebuilt from the document on every run,
+    and `site/` is gitignored precisely because nothing in it is edited by hand.
+    Keeping an existing copy meant a change to the house style
+    reached a directory that had ever been built once, never,
+    and the PDF was compiled against a template several versions old without saying so.
     """
     dest = outdir / TEMPLATE
     source = resources.files("eta_publish.assets").joinpath(TEMPLATE)

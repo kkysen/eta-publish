@@ -1,7 +1,7 @@
 """Tab selection, which is where a silent wrong-document bug would hide.
 
-By default `documents.get` fills `body` from the first tab only, so a
-report drafted in a later tab would parse cleanly and be wrong.
+By default `documents.get` fills `body` from the first tab only,
+so a report drafted in a later tab would parse cleanly and be wrong.
 """
 
 from collections.abc import Sequence
@@ -87,8 +87,8 @@ def test_a_document_with_no_tabs_is_passed_through():
 def test_service_account_credentials_are_used_when_the_environment_names_them(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    """CI has no browser to open and nobody to click, so the interactive
-    flow must not be what runs there."""
+    """CI has no browser to open and nobody to click,
+    so the interactive flow must not be what runs there."""
     import google.auth
 
     from eta_publish import fetch as fetch_module

@@ -26,10 +26,11 @@ CASES: list[tuple[str, list[str]]] = [
     ("(See below.) The rest follows.", ["(See below.)", "The rest follows."]),
     # A lowercase continuation is not a new sentence.
     ("Ended. mid-word continues.", ["Ended. mid-word continues."]),
-    # Genuinely ambiguous, and resolved by not breaking. `125 St. It` reads
-    # as a sentence end; `125 St. station` does not, and the two are
-    # indistinguishable here. A merged line is a coarser diff; a wrong break
-    # splits a sentence and churns on every run.
+    # Genuinely ambiguous, and resolved by not breaking.
+    # `125 St. It` reads as a sentence end; `125 St. station` does not,
+    # and the two are indistinguishable here.
+    # A merged line is a coarser diff;
+    # a wrong break splits a sentence and churns on every run.
     (
         "It runs under 125 St. It would cost more.",
         ["It runs under 125 St. It would cost more."],

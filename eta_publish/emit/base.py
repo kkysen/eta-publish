@@ -1,8 +1,8 @@
 """The shape every emitter shares.
 
-Emitters are pure: tree in, string out. Nothing here touches the network
-or the filesystem, so an emitter can be tested against a fixture tree
-without credentials.
+Emitters are pure: tree in, string out.
+Nothing here touches the network or the filesystem,
+so an emitter can be tested against a fixture tree without credentials.
 """
 
 from abc import ABC, abstractmethod
@@ -22,9 +22,10 @@ from ..nodes import (
     Text,
 )
 
-# The line a report introduces its contributors with. It is not in the
-# document: the header block names who they are, and this says what naming
-# them means. Every report says it the same way, and every output says it,
+# The line a report introduces its contributors with.
+# It is not in the document:
+# the header block names who they are, and this says what naming them means.
+# Every report says it the same way, and every output says it,
 # so it lives here rather than in one emitter or in each document.
 CONTRIBUTORS_NOTE = (
     "We wish to acknowledge the following ETA members who contributed to "
@@ -35,20 +36,22 @@ CONTRIBUTORS_NOTE = (
 class Emitter(ABC):
     """Walks a `Document` and returns source in one output format.
 
-    Subclasses implement the per-node methods. The dispatch and the
-    traversal live here so that adding a node type fails loudly in every
-    emitter at once rather than being silently skipped by one of them.
+    Subclasses implement the per-node methods.
+    The dispatch and the traversal live here
+    so that adding a node type fails loudly in every emitter at once
+    rather than being silently skipped by one of them.
 
-    Note the trailing underscore on `list_`. A method named `list` would
-    shadow the builtin throughout the class body, so every `list[...]`
-    annotation in this file would resolve to the method instead.
+    Note the trailing underscore on `list_`.
+    A method named `list` would shadow the builtin throughout the class body,
+    so every `list[...]` annotation in this file would resolve to the method instead.
     """
 
     extension: str = ""
 
     def __init__(self) -> None:
-        # Set by `emit`, which is the only entry point. Node methods read it
-        # for document-wide context, so calling one directly will fail.
+        # Set by `emit`, which is the only entry point.
+        # Node methods read it for document-wide context,
+        # so calling one directly will fail.
         self.doc = Document()
 
     def emit(self, doc: Document) -> str:

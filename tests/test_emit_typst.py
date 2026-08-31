@@ -33,8 +33,8 @@ def out(doc: Document) -> str:
 
 
 def test_footnote_bodies_are_inlined_at_the_reference(out: str) -> None:
-    """Typst numbers and places footnotes itself, so there is no separate
-    list that can fall out of sync with the references."""
+    """Typst numbers and places footnotes itself,
+    so there is no separate list that can fall out of sync with the references."""
     assert "#footnote[Inflation-adjusted from the 2024 capital plan.]" in out
     assert "#footnote[Measured from street level to platform.]" in out
 
@@ -88,8 +88,9 @@ def test_tables_declare_their_column_count(out: str) -> None:
 
 
 def test_the_template_is_rewritten_every_build(tmp_path: Path) -> None:
-    """An output directory is build output, so a change to the house style
-    has to reach one that has been built before, which is all of them."""
+    """An output directory is build output,
+    so a change to the house style has to reach one that has been built before,
+    which is all of them."""
     stale = tmp_path / "template.typ"
     stale.write_text("#let report(..) = none  // an old house style\n")
 

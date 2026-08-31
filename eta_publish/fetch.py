@@ -1,23 +1,27 @@
 """Fetch a Google Doc as raw Docs API JSON.
 
 We use the Docs API (`documents.get`) rather than Drive's HTML export.
-The export is `<span class="c12">` soup with no semantics; the API JSON
-carries real named paragraph styles, first-class `footnotes`, and
-`inlineObjects`.
+The export is `<span class="c12">` soup with no semantics;
+the API JSON carries real named paragraph styles,
+first-class `footnotes`, and `inlineObjects`.
 
-Tabs are the subtle part. ETA reports live in multi-tab documents, and by
-default `documents.get` fills `document.body` from the *first tab only* and
-leaves `document.tabs` empty. A report drafted in the third tab would
-therefore parse silently and produce a plausible, wrong document. So we
-always request `includeTabsContent` and select a tab explicitly, honoring
-the `?tab=` id in the URL that was handed to us.
+Tabs are the subtle part.
+ETA reports live in multi-tab documents,
+and by default `documents.get` fills `document.body` from the *first tab only*
+and leaves `document.tabs` empty.
+A report drafted in the third tab would therefore parse silently
+and produce a plausible, wrong document.
+So we always request `includeTabsContent` and select a tab explicitly,
+honoring the `?tab=` id in the URL that was handed to us.
 
-Suggestions matter for the same reason. The API's default,
-`DEFAULT_FOR_CURRENT_ACCESS`, resolves to `SUGGESTIONS_INLINE` for anyone
-with edit access, which mixes suggested text into the content as though it
-were part of the document. ETA reports are drafted with suggestions open,
-so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`: what the report says with
-every open suggestion rejected, which is what the doc reads as today.
+Suggestions matter for the same reason.
+The API's default, `DEFAULT_FOR_CURRENT_ACCESS`,
+resolves to `SUGGESTIONS_INLINE` for anyone with edit access,
+which mixes suggested text into the content as though it were part of the document.
+ETA reports are drafted with suggestions open,
+so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`:
+what the report says with every open suggestion rejected,
+which is what the doc reads as today.
 """
 
 import json
@@ -30,16 +34,17 @@ from .docs_json import JsonObject
 
 SCOPES = [
     "https://www.googleapis.com/auth/documents.readonly",
-    # Charts are linked as Drive files rather than embedded: Docs cannot
-    # place an SVG, so the vector lives in Drive and a raster stands in for
-    # it in the document. Downloading it needs Drive read access, which is
-    # broader than we would like, but Drive offers nothing narrower for a
-    # file this application did not create.
+    # Charts are linked as Drive files rather than embedded:
+    # Docs cannot place an SVG,
+    # so the vector lives in Drive and a raster stands in for it in the document.
+    # Downloading it needs Drive read access, which is broader than we would like,
+    # but Drive offers nothing narrower for a file this application did not create.
     "https://www.googleapis.com/auth/drive.readonly",
 ]
 
-# Rejecting is the safe default: it publishes what the document currently
-# says, rather than silently adopting whatever anyone has proposed.
+# Rejecting is the safe default:
+# it publishes what the document currently says,
+# rather than silently adopting whatever anyone has proposed.
 SUGGESTIONS = {
     "rejected": "PREVIEW_WITHOUT_SUGGESTIONS",
     "accepted": "PREVIEW_SUGGESTIONS_ACCEPTED",
@@ -62,9 +67,8 @@ class FetchFailed(RuntimeError):
 def _explain(error: object) -> str:
     """Turn a Google API error into something with a next step in it.
 
-    `HttpError`'s own string is a wall of JSON with the useful sentence
-    buried in it, and the failures worth naming here have a specific fix
-    rather than a general one.
+    `HttpError`'s own string is a wall of JSON with the useful sentence buried in it,
+    and the failures worth naming here have a specific fix rather than a general one.
     """
     from googleapiclient.errors import HttpError
 
@@ -75,10 +79,10 @@ def _explain(error: object) -> str:
     reasons = {str(d.get("reason", "")) for d in details}
     messages = [str(d.get("message", "")) for d in details if d.get("message")]
 
-    # An API that is not switched on for the project. Docs reports this as
-    # `SERVICE_DISABLED` and Drive as `accessNotConfigured`, and both put the
-    # console URL in the message, so Google's own wording is the clearest
-    # thing to pass along.
+    # An API that is not switched on for the project.
+    # Docs reports this as `SERVICE_DISABLED` and Drive as `accessNotConfigured`,
+    # and both put the console URL in the message,
+    # so Google's own wording is the clearest thing to pass along.
     if reasons & {"SERVICE_DISABLED", "accessNotConfigured"}:
         enable = next((m for m in messages if "has not been used in project" in m), "")
         return enable or "an API this needs is not enabled for the OAuth project."
@@ -142,8 +146,8 @@ def describe_tabs(document: JsonObject) -> str:
 def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
     """Return one tab's content, shaped like a single-tab document.
 
-    The parser only ever sees `body`, `footnotes`, `inlineObjects`, and
-    `lists`, so a tab and a document are interchangeable to it.
+    The parser only ever sees `body`, `footnotes`, `inlineObjects`, and `lists`,
+    so a tab and a document are interchangeable to it.
     """
     tabs = list(iter_tabs(document.get("tabs", [])))
     if not tabs:
@@ -183,15 +187,17 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 def _credentials():
     """The credentials to call the API with, interactive or not.
 
-    Two ways in. On a person's machine it is the installed-app flow: a
-    browser opens once, and the token caches. Anywhere unattended, notably
-    CI, there is no browser to open and no one to click, so a service
-    account is used instead through `google.auth.default`, which reads
-    `$GOOGLE_APPLICATION_CREDENTIALS`.
+    Two ways in.
+    On a person's machine it is the installed-app flow:
+    a browser opens once, and the token caches.
+    Anywhere unattended, notably CI,
+    there is no browser to open and no one to click,
+    so a service account is used instead through `google.auth.default`,
+    which reads `$GOOGLE_APPLICATION_CREDENTIALS`.
 
-    Application default credentials are checked first, because a machine
-    that has them has them deliberately: they are set by an environment
-    variable naming a key file, not found by accident.
+    Application default credentials are checked first,
+    because a machine that has them has them deliberately:
+    they are set by an environment variable naming a key file, not found by accident.
     """
     ambient = _ambient_credentials()
     if ambient is not None:
@@ -223,12 +229,14 @@ def _credentials():
 def _ambient_credentials():
     """Service account credentials, when the environment supplies them.
 
-    Returns `None` when it does not, so the interactive flow stays the
-    default and nothing changes for someone running this by hand.
+    Returns `None` when it does not,
+    so the interactive flow stays the default
+    and nothing changes for someone running this by hand.
 
-    A service account reaches only what has been shared with it, which is
-    why CI can be given one at all: its Drive is empty, so the key grants
-    read access to the report and to nothing else in anybody's Drive.
+    A service account reaches only what has been shared with it,
+    which is why CI can be given one at all:
+    its Drive is empty,
+    so the key grants read access to the report and to nothing else in anybody's Drive.
     """
     if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
         return None
@@ -249,10 +257,11 @@ def _ambient_credentials():
 def _granted_scopes() -> set[str]:
     """What the saved token was actually granted.
 
-    Read from the file rather than from `Credentials`, whose `scopes` are
-    whatever was passed to the loader rather than what the user consented
-    to. Adding a scope must trigger a new consent, and asking the object
-    would always answer yes.
+    Read from the file rather than from `Credentials`,
+    whose `scopes` are whatever was passed to the loader
+    rather than what the user consented to.
+    Adding a scope must trigger a new consent,
+    and asking the object would always answer yes.
     """
     try:
         return set(json.loads(TOKEN_PATH.read_text()).get("scopes") or ())
@@ -265,8 +274,9 @@ def fetch_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
     from googleapiclient.discovery import build
 
     service = build("docs", "v1", credentials=_credentials())
-    # `build` returns a `Resource` whose methods are generated at runtime from
-    # the API's discovery document, so no static type can know about `documents`.
+    # `build` returns a `Resource` whose methods are generated at runtime
+    # from the API's discovery document,
+    # so no static type can know about `documents`.
     documents = service.documents()  # pyrefly: ignore[missing-attribute]
     request = documents.get(
         documentId=doc_id,

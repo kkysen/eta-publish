@@ -1,17 +1,17 @@
 """Build a `Document` tree from Google Docs API JSON.
 
-This is the only module that knows the shape of the Docs API. Everything
-downstream sees the tree in `nodes.py`.
+This is the only module that knows the shape of the Docs API.
+Everything downstream sees the tree in `nodes.py`.
 
-Several pieces of ETA house style are recognized here rather than in the
-emitters, because they are facts about how the docs are written:
+Several pieces of ETA house style are recognized here rather than in the emitters,
+because they are facts about how the docs are written:
 
 - a leading `Header` section carrying `Key: value` front matter
 - the report headline living in the body as a TITLE-styled paragraph,
-  since the Drive filename is a working name (`SAS West Feasibility
-  Response`) and not what gets published
-- a figure's `Source:` line between the image and its caption, with the
-  caption and `Credit:` lines after that
+  since the Drive filename is a working name (`SAS West Feasibility Response`)
+  and not what gets published
+- a figure's `Source:` line between the image and its caption,
+  with the caption and `Credit:` lines after that
 """
 
 import re
@@ -59,37 +59,40 @@ RESERVED_ANCHORS = frozenset({"footnotes", "contributors"})
 SOFT_BREAK = "\v"
 
 KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
-# A trailing note to whoever fills the field in, not part of its name. The
-# real doc writes `SEO Description (300 char limit):`, and a lookup for
-# `seo description` finds nothing unless the note is stripped.
+# A trailing note to whoever fills the field in, not part of its name.
+# The real doc writes `SEO Description (300 char limit):`,
+# and a lookup for `seo description` finds nothing unless the note is stripped.
 KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
-# Editorial notes naming where an image came from. The real report uses
-# four spellings: `Source:` under an image, `Uncropped Source:` for one
-# that was trimmed, and, after a caption, either `[Image Source](<url>)` or
-# a bare `Image Source` whose whole text is the link. The first two name a
-# file, and the published image is named after it. One optional
-# qualifying word covers all of them and whatever the next one is.
-# None of them appears on the published page, which is what makes them notes
-# rather than content: the live SAS West report contains zero occurrences of
-# each, against 26 of `Credit:`.
+# Editorial notes naming where an image came from.
+# The real report uses four spellings:
+# `Source:` under an image, `Uncropped Source:` for one that was trimmed,
+# and, after a caption,
+# either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
+# The first two name a file, and the published image is named after it.
+# One optional qualifying word covers all of them and whatever the next one is.
+# None of them appears on the published page,
+# which is what makes them notes rather than content:
+# the live SAS West report contains zero occurrences of each, against 26 of `Credit:`.
 #
-# The trailing `$` is what admits the bare spelling, and it is why the
-# alternative before it is anchored rather than merely a prefix: a paragraph
-# beginning "Source of the estimate is ..." is prose, and only one that says
-# nothing but "Image Source" is a note.
+# The trailing `$` is what admits the bare spelling,
+# and it is why the alternative before it is anchored rather than merely a prefix:
+# a paragraph beginning "Source of the estimate is ..." is prose,
+# and only one that says nothing but "Image Source" is a note.
 SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*(?:[:\]]|$)", re.IGNORECASE)
 
 # A Drive file id, from either shape of link Docs produces.
 DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
 
-# The same idea for chart assets: `SVG:` and `PNG:` name the file to link
-# beside a figure. They are notes to whoever assembles the page, and the
-# published report carries real links instead.
+# The same idea for chart assets:
+# `SVG:` and `PNG:` name the file to link beside a figure.
+# They are notes to whoever assembles the page,
+# and the published report carries real links instead.
 ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
 
-# Anything still marked as unfinished. The real doc has `Source: TODO` and
-# `SVG: TODO` in it, which are fine while drafting and not fine on a
-# published page, so they are worth one loud line before publishing.
+# Anything still marked as unfinished.
+# The real doc has `Source: TODO` and `SVG: TODO` in it,
+# which are fine while drafting and not fine on a published page,
+# so they are worth one loud line before publishing.
 TODO_RE = re.compile(r"\bTODO\b|\bTK\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
@@ -97,10 +100,12 @@ CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 def source_name(source: list[Inline]) -> str:
     """The file a `Source:` line names, or nothing if it names no file.
 
-    The value after the colon, which is a Drive chip's title where the line
-    links the file and plain text where it was typed. `Source: TODO` is a
-    note to whoever is assembling the report rather than a name, and a bare
-    URL names a page rather than a file, so neither becomes a filename.
+    The value after the colon,
+    which is a Drive chip's title where the line links the file
+    and plain text where it was typed.
+    `Source: TODO` is a note to whoever is assembling the report rather than a name,
+    and a bare URL names a page rather than a file,
+    so neither becomes a filename.
     """
     text = "".join(i.text for i in source if isinstance(i, Text))
     _, colon, value = text.partition(":")
@@ -124,9 +129,10 @@ def date_text(chip: JsonObject) -> str:
 def element_text(el: JsonObject) -> str:
     """The text an inline element contributes, smart chips included.
 
-    Reading only `textRun` loses every chip. In the real report that emptied
-    `Project Manager:` and all three date fields, and dropped the first name
-    from `Public Contributors:`, leaving it starting with a comma.
+    Reading only `textRun` loses every chip.
+    In the real report that emptied `Project Manager:` and all three date fields,
+    and dropped the first name from `Public Contributors:`,
+    leaving it starting with a comma.
     """
     if "textRun" in el:
         # A soft break is a line break, so it reads as one here too.
@@ -144,9 +150,10 @@ def element_text(el: JsonObject) -> str:
 def strip_leading_space(blocks: list[Block]) -> list[Block]:
     """Drop the space Docs puts after a footnote's marker.
 
-    Every footnote body in the real report begins with one, which is how the
-    marker and the text are separated in the document rather than part of
-    what the note says. Left in, it doubles the space after the number.
+    Every footnote body in the real report begins with one,
+    which is how the marker and the text are separated in the document
+    rather than part of what the note says.
+    Left in, it doubles the space after the number.
     """
     for block in blocks:
         if not isinstance(block, Paragraph) or not block.content:
@@ -172,8 +179,8 @@ def split_lines(content: list[Inline]) -> list[list[Inline]]:
 def _normalized(text: str) -> str:
     """A section name as written, for matching a reference to it.
 
-    Case and spacing vary between the heading and the sentence referring to
-    it; anything more forgiving than that starts matching prose."""
+    Case and spacing vary between the heading and the sentence referring to it;
+    anything more forgiving than that starts matching prose."""
     return " ".join(text.split()).casefold()
 
 
@@ -224,9 +231,9 @@ class Parser:
             elif not (IGNORED_ELEMENTS & el.keys()):
                 kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
                 self.doc.warn(f"unhandled document element {kinds}, dropped")
-        # A soft break at either end is spacing in the document rather than
-        # part of what the paragraph says, and it renders as a stray line
-        # break with nothing on one side of it.
+        # A soft break at either end is spacing in the document
+        # rather than part of what the paragraph says,
+        # and it renders as a stray line break with nothing on one side of it.
         while out and isinstance(out[0], LineBreak):
             out.pop(0)
         while out and isinstance(out[-1], LineBreak):
@@ -238,17 +245,19 @@ class Parser:
 
         Google Docs cannot write a link to a heading in the same document,
         so ETA writes the section's name in italics and means a link by it.
-        The live report has these all through it, `See Station Depth`, and
-        every one of them is a dead end for the reader: a name, italicized,
-        pointing nowhere. One was linked by hand.
+        The live report has these all through it, `See Station Depth`,
+        and every one of them is a dead end for the reader:
+        a name, italicized, pointing nowhere.
+        One was linked by hand.
 
-        So the italics are the convention, and it is read here rather than
-        in an emitter, because it is a fact about how the documents are
-        written and all three outputs want the link.
+        So the italics are the convention,
+        and it is read here rather than in an emitter,
+        because it is a fact about how the documents are written
+        and all three outputs want the link.
 
-        Matching is on the whole italic run, not on each styled piece of
-        one, so a section name with a bold word in it still resolves. The
-        italics come off: they stood in for the link, and now there is one.
+        Matching is on the whole italic run, not on each styled piece of one,
+        so a section name with a bold word in it still resolves.
+        The italics come off: they stood in for the link, and now there is one.
         """
         if not self._heading_anchors:
             return content
@@ -275,9 +284,10 @@ class Parser:
     def _person(self, chip: JsonObject) -> Text:
         """A person smart chip renders as the person's name.
 
-        The chip also carries their email address. That is contact
-        information the document happens to hold, not something the report
-        says, so it is deliberately not emitted.
+        The chip also carries their email address.
+        That is contact information the document happens to hold,
+        not something the report says,
+        so it is deliberately not emitted.
         """
         props = chip.get("personProperties", {})
         return Text(text=props.get("name") or props.get("email", ""))
@@ -326,8 +336,8 @@ class Parser:
 
     def _footnote_ref(self, ref: JsonObject) -> FootnoteRef:
         fid = ref["footnoteId"]
-        # Numbered in document order, so a reference and its definition
-        # cannot disagree the way hand-written anchors did.
+        # Numbered in document order,
+        # so a reference and its definition cannot disagree the way hand-written anchors did.
         if fid not in self._footnote_numbers:
             self._footnote_numbers[fid] = len(self._footnote_numbers) + 1
         return FootnoteRef(footnote_id=fid, number=self._footnote_numbers[fid])
@@ -344,10 +354,10 @@ class Parser:
             return None
         image_props = embedded["imageProperties"]
         # `contentUri` says where to fetch this image, not whether it is one.
-        # A saved response has none: they expire within the hour, so they are
-        # dropped rather than committed. The image is still an image, and its
-        # filename comes from the object id, so everything but the download
-        # works from a response with no URIs in it.
+        # A saved response has none:
+        # they expire within the hour, so they are dropped rather than committed.
+        # The image is still an image, and its filename comes from the object id,
+        # so everything but the download works from a response with no URIs in it.
         uri = image_props.get("contentUri")
         crop = self._crop(object_id, image_props.get("cropProperties", {}))
         return Image(
@@ -361,8 +371,9 @@ class Parser:
     def _vector(self, para: JsonObject) -> Vector | None:
         """The vector original a `SVG:` line links, if it links one.
 
-        Only a link to Drive counts. `SVG: TODO` is a note to whoever is
-        assembling the report, and there is nothing to publish for it.
+        Only a link to Drive counts.
+        `SVG: TODO` is a note to whoever is assembling the report,
+        and there is nothing to publish for it.
         """
         for el in para.get("elements", []):
             props = el.get("richLink", {}).get("richLinkProperties", {})
@@ -377,10 +388,12 @@ class Parser:
             title = props.get("title", "")
             return Vector(
                 file_id=file_id,
-                # The `SVG:` line links the file, so Drive's name for it is
-                # the document naming this picture, the same as a `Source:`
-                # line does. A vector is never cropped: the crop is applied
-                # to pixels, and an image that has both is refused above.
+                # The `SVG:` line links the file,
+                # so Drive's name for it is the document naming this picture,
+                # the same as a `Source:` line does.
+                # A vector is never cropped:
+                # the crop is applied to pixels,
+                # and an image that has both is refused above.
                 filename=image_filename(file_id, extension=".svg", name=title),
                 title=title,
                 uri=uri,
@@ -419,8 +432,8 @@ class Parser:
     def _consume_list(self, content: list[JsonObject], start: int) -> tuple[List, int]:
         """Absorb the run of consecutive bulleted paragraphs starting at `start`.
 
-        Docs gives each paragraph a flat `nestingLevel` rather than nesting
-        them, so the tree is rebuilt here with a stack of sibling lists.
+        Docs gives each paragraph a flat `nestingLevel` rather than nesting them,
+        so the tree is rebuilt here with a stack of sibling lists.
         """
         list_id = content[start]["paragraph"]["bullet"].get("listId", "")
         root: list[ListItem] = []
@@ -496,8 +509,9 @@ class Parser:
 
             if style in HEADING_LEVELS and not text and has_image(para):
                 # An image inserted while a heading style was still active.
-                # Treating it as a heading yields an empty one, whose anchor
-                # is a published URL, and buries the image inside it.
+                # Treating it as a heading yields an empty one,
+                # whose anchor is a published URL,
+                # and buries the image inside it.
                 self.doc.warn(
                     "an image is styled as a heading; treating it as a figure. "
                     "Set that paragraph to normal text in the doc."
@@ -523,8 +537,8 @@ class Parser:
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # The `[Image Source](...)` spelling follows its figure,
-                    # and so, in this report, does every `Source:` line: the
-                    # note sits between the image and its caption.
+                    # and so, in this report, does every `Source:` line:
+                    # the note sits between the image and its caption.
                     note = self.inlines(para)
                     last.source = last.source + note
                     self._claim_name(last, note)
@@ -543,14 +557,14 @@ class Parser:
                 caption_slot = 1
                 continue
 
-            # A caption is the one paragraph directly after a figure; `Credit:`
-            # lines keep attaching after that. Matching on length instead would
-            # silently swallow short body paragraphs, and a report with 50-odd
-            # figures has a great many of those.
+            # A caption is the one paragraph directly after a figure;
+            # `Credit:` lines keep attaching after that.
+            # Matching on length instead would silently swallow short body paragraphs,
+            # and a report with 50-odd figures has a great many of those.
             last = out[-1] if out else None
             if isinstance(last, Figure):
-                # A caption and its credit are often one paragraph split by a
-                # soft line break, so each line is classified separately.
+                # A caption and its credit are often one paragraph split by a soft line break,
+                # so each line is classified separately.
                 claimed = False
                 for line in split_lines(self.inlines(para)):
                     line_text = "".join(i.text for i in line if isinstance(i, Text)).strip()
@@ -576,31 +590,30 @@ class Parser:
         drop_pending()
         for block in out:
             if isinstance(block, Figure) and not block.image.alt and not block.caption:
-                # Nothing to describe it with: no alt text in Docs and no
-                # caption to borrow. Screen readers get an unlabelled image.
+                # Nothing to describe it with: no alt text in Docs and no caption to borrow.
+                # Screen readers get an unlabelled image.
                 self.doc.warn(
                     f"image {block.image.object_id} has no alt text and no caption; "
                     "add a description to it in the doc"
                 )
             if isinstance(block, Figure) and not block.image.alt and block.caption:
-                # The published page uses the caption as alt text as well as
-                # showing it, so an image with no description in Docs is not
-                # left unlabelled.
+                # The published page uses the caption as alt text as well as showing it,
+                # so an image with no description in Docs is not left unlabelled.
                 caption = "".join(i.text for i in block.caption if isinstance(i, Text))
                 block.image = replace(block.image, alt=caption.strip())
         return out
 
     def _claim_name(self, figure: Figure, source: list[Inline]) -> None:
-        """Note what a source line calls this figure's image, if it calls it
-        anything.
+        """Note what a source line calls this figure's image, if it calls it anything.
 
-        Kept until the whole document has been read rather than applied
-        here: what an image ends up called depends on whether another one
-        further down names the same file.
+        Kept until the whole document has been read rather than applied here:
+        what an image ends up called
+        depends on whether another one further down names the same file.
 
-        The first line to name a file wins. A figure with both a `Source:`
-        and an `Image Source` link is naming the file once and linking to
-        where it came from once, and only the first of those is a name.
+        The first line to name a file wins.
+        A figure with both a `Source:` and an `Image Source` link
+        is naming the file once and linking to where it came from once,
+        and only the first of those is a name.
         """
         name = source_name(source)
         if name:
@@ -646,9 +659,9 @@ class Parser:
     ) -> tuple[list[JsonObject], list[JsonObject]]:
         """What sits above the headline, and the report itself below it.
 
-        A document with no headline has nothing above it: everything is the
-        report, which is what happened before anything was read from up
-        there and is what should keep happening.
+        A document with no headline has nothing above it: everything is the report,
+        which is what happened before anything was read from up there
+        and is what should keep happening.
         """
         for i, item in enumerate(content):
             if "paragraph" in item and style_of(item["paragraph"]) == "TITLE":
@@ -658,19 +671,19 @@ class Parser:
     def card(self, above: list[JsonObject]) -> Image | None:
         """The share card, which is an image the document puts above the headline.
 
-        ETA reports open with a wide image with the title set into it, for
-        whatever is linking to the report to show as a thumbnail. It is not
-        part of the report: the published page does not show it, and a
-        reader who is already reading does not need to be told the title
-        again in a picture.
+        ETA reports open with a wide image with the title set into it,
+        for whatever is linking to the report to show as a thumbnail.
+        It is not part of the report: the published page does not show it,
+        and a reader who is already reading
+        does not need to be told the title again in a picture.
 
-        So it is metadata, and it publishes as `og:image` rather than as a
-        figure. Recognized by position, because that is what the document
-        already says: an image above the headline is not in the report.
+        So it is metadata, and it publishes as `og:image` rather than as a figure.
+        Recognized by position, because that is what the document already says:
+        an image above the headline is not in the report.
 
-        Nothing warns about it lacking alt text or a caption. It has no
-        business having either, and both warnings were only ever about
-        figures.
+        Nothing warns about it lacking alt text or a caption.
+        It has no business having either,
+        and both warnings were only ever about figures.
         """
         for item in above:
             para = item.get("paragraph")
@@ -687,29 +700,31 @@ class Parser:
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
-        Front matter is the run of `Key: value` paragraphs following the
-        `Header` heading. It ends at the first paragraph that is not one:
-        a heading of any level, the TITLE-styled headline, a paragraph
-        holding an image, or ordinary prose.
+        Front matter is the run of `Key: value` paragraphs following the `Header` heading.
+        It ends at the first paragraph that is not one:
+        a heading of any level, the TITLE-styled headline,
+        a paragraph holding an image, or ordinary prose.
 
-        Deliberately not "until the next heading of the same or higher
-        level". In the real doc `Header` is an `h2` while the body sections
-        are `h1`, so that rule runs past the headline, the hero image, its
-        caption and credit, and the addendum, all the way to the first body
-        section. The image would vanish without a warning, since a paragraph
-        holding only an image has no text to report.
+        Deliberately not "until the next heading of the same or higher level".
+        In the real doc `Header` is an `h2` while the body sections are `h1`,
+        so that rule runs past the headline, the hero image,
+        its caption and credit, and the addendum,
+        all the way to the first body section.
+        The image would vanish without a warning,
+        since a paragraph holding only an image has no text to report.
 
-        Unrecognized keys are kept rather than ending the scan, so adding a
-        header field to a future report cannot leak that line into the body.
+        Unrecognized keys are kept rather than ending the scan,
+        so adding a header field to a future report cannot leak that line into the body.
         The real doc already has one such line
         (`MTA SAS West Feasibility Study:`).
 
-        Anything before `Header` is production scaffolding rather than the
-        report. It is dropped, but each dropped line is reported, so nothing
-        leaves the document without saying so. The SAS West tabs happen to
-        open with `Header` directly, so this is defensive rather than load
-        bearing; what is load bearing is that a document with no `Header` at
-        all is left untouched instead of being eaten a paragraph at a time.
+        Anything before `Header` is production scaffolding rather than the report.
+        It is dropped, but each dropped line is reported,
+        so nothing leaves the document without saying so.
+        The SAS West tabs happen to open with `Header` directly,
+        so this is defensive rather than load bearing;
+        what is load bearing is that a document with no `Header` at all
+        is left untouched instead of being eaten a paragraph at a time.
         """
         start = self._header_index(content)
         if start is None:
@@ -759,10 +774,11 @@ class Parser:
     def _header_index(self, content: list[JsonObject]) -> int | None:
         """Where the `Header` heading is, if the report has one.
 
-        Found before anything is consumed, so a document without one is left
-        untouched rather than being eaten a paragraph at a time. The search
-        stops at the headline or the first figure, since past either of those
-        the report has already started.
+        Found before anything is consumed,
+        so a document without one is left untouched
+        rather than being eaten a paragraph at a time.
+        The search stops at the headline or the first figure,
+        since past either of those the report has already started.
         """
         for i, item in enumerate(content):
             para = item.get("paragraph")
@@ -778,8 +794,9 @@ class Parser:
     def title(self, content: list[JsonObject]) -> str:
         """Prefer a TITLE-styled paragraph over the Drive filename.
 
-        The filename is a working name: the SAS West report lives in a doc
-        called `SAS West Feasibility Response`, which is not what publishes.
+        The filename is a working name:
+        the SAS West report lives in a doc called `SAS West Feasibility Response`,
+        which is not what publishes.
         """
         for item in content:
             para = item.get("paragraph")
@@ -798,8 +815,8 @@ class Parser:
     def footnotes(self) -> list[Footnote]:
         """Only footnotes the body actually references, in reference order.
 
-        A definition with no reference cannot be numbered, so it is reported
-        rather than emitted with a number that means nothing.
+        A definition with no reference cannot be numbered,
+        so it is reported rather than emitted with a number that means nothing.
         """
         for fid in self.footnote_defs:
             if fid not in self._footnote_numbers:
@@ -822,17 +839,18 @@ class Parser:
         content = self.front_matter(content)
         self.doc.title = self.title(content)
 
-        # Allocated knowing every heading up front, so that two headings which
-        # slugify alike keep their anchors when the document is reordered.
+        # Allocated knowing every heading up front,
+        # so that two headings which slugify alike
+        # keep their anchors when the document is reordered.
         heading_texts = [
             plain(item["paragraph"])
             for item in content
             if "paragraph" in item and style_of(item["paragraph"]) in HEADING_LEVELS
         ]
         self.anchors = AnchorAllocator(heading_texts, reserved=RESERVED_ANCHORS)
-        # Built before the body is walked, because a section can be referred
-        # to from above itself: the report links to `Station Depth` long
-        # before reaching it.
+        # Built before the body is walked,
+        # because a section can be referred to from above itself:
+        # the report links to `Station Depth` long before reaching it.
         self._heading_anchors = {}
         for text in heading_texts:
             if not text:
@@ -840,10 +858,10 @@ class Parser:
             anchor = self.anchors.allocate(text)
             self._heading_anchors.setdefault(_normalized(text), anchor)
             # `Appendix A: Freedom Tunnel` is referred to as `Appendix A`,
-            # and `Ruling Grade: The Wrong Place to Scale Back` as `Ruling
-            # Grade`. The part before the colon names the section and the
-            # part after it describes the section, so a reference that uses
-            # only the name is naming this heading.
+            # and `Ruling Grade: The Wrong Place to Scale Back` as `Ruling Grade`.
+            # The part before the colon names the section
+            # and the part after it describes the section,
+            # so a reference that uses only the name is naming this heading.
             name, colon, _ = text.partition(":")
             if colon and name.strip():
                 self._heading_anchors.setdefault(_normalized(name), anchor)
@@ -853,8 +871,8 @@ class Parser:
         self.doc.blocks = self.blocks(below)
         # After the body, so that every reference has been numbered.
         self.doc.footnotes = self.footnotes()
-        # Last, because a name is only known to be unambiguous once every
-        # image in the document has claimed one.
+        # Last, because a name is only known to be unambiguous
+        # once every image in the document has claimed one.
         self._name_images()
         return self.doc
 
@@ -862,12 +880,12 @@ class Parser:
         """Rename every figure the document named a source file for.
 
         The names are settled here rather than where the images are read,
-        because an image's name depends on what the other images are
-        called, and the report goes on naming them for several pages after
-        the first one is built.
+        because an image's name depends on what the other images are called,
+        and the report goes on naming them for several pages
+        after the first one is built.
 
-        Only figures: a source line is written above a figure, so an image
-        inside a paragraph is never named and keeps the name it was given.
+        Only figures: a source line is written above a figure,
+        so an image inside a paragraph is never named and keeps the name it was given.
         """
         names = image_filenames(
             (image.object_id, image.crop.key, self._source_names.get(image.object_id, ""))

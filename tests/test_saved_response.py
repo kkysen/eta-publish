@@ -1,13 +1,13 @@
 """What a saved `doc.json` keeps, and what it deliberately drops.
 
-A `contentUri` is a signed URL that expires within the hour. Saving one
-commits a value that is dead on arrival and that changes on every fetch, so
-a re-publish of an unedited document showed up as a diff. They are dropped
-on the way to disk, which makes a re-fetch of an unchanged document a
-byte-identical file.
+A `contentUri` is a signed URL that expires within the hour.
+Saving one commits a value that is dead on arrival and that changes on every fetch,
+so a re-publish of an unedited document showed up as a diff.
+They are dropped on the way to disk,
+which makes a re-fetch of an unchanged document a byte-identical file.
 
-Everything but the download has to keep working from a response with no
-URIs in it, because that is the only kind of response the repository holds.
+Everything but the download has to keep working from a response with no URIs in it,
+because that is the only kind of response the repository holds.
 """
 
 import json
@@ -120,8 +120,9 @@ def test_images_already_downloaded_are_still_found(saved: JsonObject, tmp_path: 
 def _offline() -> requests.Session:
     """A session that fails the test rather than the request.
 
-    A saved response has nothing to fetch from, so reaching the network at
-    all is the defect being guarded against, not a condition to handle.
+    A saved response has nothing to fetch from,
+    so reaching the network at all is the defect being guarded against,
+    not a condition to handle.
     """
 
     class Offline(requests.Session):

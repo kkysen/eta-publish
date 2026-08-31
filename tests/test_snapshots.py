@@ -1,13 +1,15 @@
 """Byte-for-byte comparison against committed output.
 
-`emit(doc) == emit(doc)` in one process proves nothing: hash randomization
-is per-interpreter, so anything order- or hash-dependent still matches
-itself. A committed file compares across runs, and doubles as the diff that
-shows what a parser change actually did to the output.
+`emit(doc) == emit(doc)` in one process proves nothing:
+hash randomization is per-interpreter,
+so anything order- or hash-dependent still matches itself.
+A committed file compares across runs,
+and doubles as the diff that shows what a parser change actually did to the output.
 
-The snapshots sit in `tests/fixture/reports/<slug>/`, beside the `doc.json`
-they are emitted from, which is the same shape as `site/`: a report
-directory holding a document and what it produces.
+The snapshots sit in `tests/fixture/reports/<slug>/`,
+beside the `doc.json` they are emitted from,
+which is the same shape as `site/`:
+a report directory holding a document and what it produces.
 
 Regenerate with `pytest --regenerate-snapshots` after checking the diff.
 """
@@ -47,9 +49,10 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 
 
 def test_html_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    # The emitter's defaults, so the snapshot is what a build of this
-    # document writes rather than a shape only this test produces. Pointing
-    # the images somewhere else is covered in `test_emit_html.py`.
+    # The emitter's defaults,
+    # so the snapshot is what a build of this document writes
+    # rather than a shape only this test produces.
+    # Pointing the images somewhere else is covered in `test_emit_html.py`.
     check("report.html", HtmlEmitter(image_base=IMAGE_DIR).emit(doc), regenerate_snapshots)
 
 
@@ -62,7 +65,7 @@ def test_typst_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> No
 
 
 def test_page_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    """Snapshotted for the same reason as the rest: it is one of the four
-    files a build writes, and leaving it out would make this directory
-    something a build cannot reproduce."""
+    """Snapshotted for the same reason as the rest:
+    it is one of the four files a build writes,
+    and leaving it out would make this directory something a build cannot reproduce."""
     check("index.html", report_page(doc), regenerate_snapshots)

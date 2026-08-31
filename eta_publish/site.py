@@ -1,22 +1,24 @@
 """What makes a set of reports a site: the list, the paths, and the index.
 
-The per-document build lives in `build.py`. What is here is everything that
-only exists once there is more than one report, which is the case the
-project is actually in: ETA has published several and will publish more, so
-nothing may be written in terms of *the* doc.
+The per-document build lives in `build.py`.
+What is here is everything that only exists once there is more than one report,
+which is the case the project is actually in:
+ETA has published several and will publish more,
+so nothing may be written in terms of *the* doc.
 
-Each report lands under its own published path, taken from the `URL:` line
-in its front matter, so a preview of
-`/reports/digging-out-deep-hole-sas-west` sits at that path on the site too
-and the preview URL is the published URL with a different host in front of
-it. A report whose header names no URL falls back to a slug of its title,
-with a warning: that is a missing front matter line to fix in the document,
+Each report lands under its own published path,
+taken from the `URL:` line in its front matter,
+so a preview of `/reports/digging-out-deep-hole-sas-west`
+sits at that path on the site too
+and the preview URL is the published URL with a different host in front of it.
+A report whose header names no URL falls back to a slug of its title, with a warning:
+that is a missing front matter line to fix in the document,
 not a reason to fail the build for the reports either side of it.
 
-One failing report does not stop the others, for the same reason. A fetch
-can fail for reasons that have nothing to do with the other documents, and
-a site missing one report beats no site at all. The exit status still
-reports it.
+One failing report does not stop the others, for the same reason.
+A fetch can fail for reasons that have nothing to do with the other documents,
+and a site missing one report beats no site at all.
+The exit status still reports it.
 """
 
 import sys
@@ -32,10 +34,11 @@ from .nodes import Document
 REPORTS = Path("reports.toml")
 """Which documents the site is built from, committed beside the code.
 
-A list in the repository rather than a workflow input: what the site
-publishes is a fact about the project, it belongs in review and in history,
-and adding the next report should be a pull request rather than something
-typed into a form and forgotten.
+A list in the repository rather than a workflow input:
+what the site publishes is a fact about the project,
+it belongs in review and in history,
+and adding the next report should be a pull request
+rather than something typed into a form and forgotten.
 """
 
 
@@ -75,8 +78,9 @@ class Site:
 def load_reports(path: Path = REPORTS) -> list[Report]:
     """Read the report list, which is TOML so it can carry comments.
 
-    Comments matter here: a list of documents is exactly the place someone
-    needs to say "this one is the 2025 rewrite, not the original".
+    Comments matter here:
+    a list of documents is exactly the place someone needs to say
+    "this one is the 2025 rewrite, not the original".
     """
     data = tomllib.loads(path.read_text())
     entries = data.get("report", [])
@@ -94,11 +98,13 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
 def reports_from(ref: str) -> list[Report]:
     """What one command line argument means: a document, or a list of them.
 
-    A URL is always a document. Only a local path can be a list, and only
-    when it is named like one: `reports.toml` is TOML, a saved Docs response
-    is `.json`, and a document reference is a URL or a bare id. Nothing has
-    to be opened to tell them apart, so a typo in a filename is a missing
-    file rather than a confident wrong answer about what it was.
+    A URL is always a document.
+    Only a local path can be a list, and only when it is named like one:
+    `reports.toml` is TOML, a saved Docs response is `.json`,
+    and a document reference is a URL or a bare id.
+    Nothing has to be opened to tell them apart,
+    so a typo in a filename is a missing file
+    rather than a confident wrong answer about what it was.
     """
     if ref.startswith(("http://", "https://")):
         return [Report(url=ref)]
@@ -110,9 +116,9 @@ def reports_from(ref: str) -> list[Report]:
 def report_path(doc: Document) -> str:
     """Where this report goes on the site, from its own front matter.
 
-    The leading slash is dropped because the site is a directory tree, and
-    a report published at the root of a domain would otherwise write to the
-    root of the filesystem.
+    The leading slash is dropped because the site is a directory tree,
+    and a report published at the root of a domain
+    would otherwise write to the root of the filesystem.
     """
     slug = doc.slug.strip("/")
     if slug:
@@ -128,11 +134,12 @@ def report_path(doc: Document) -> str:
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
     """Build every report, keeping going when one of them cannot be built.
 
-    Failing late rather than at the first error is the only behavior that
-    makes sense for a list: a document that cannot be fetched says nothing
-    about the next one, and a site missing one report beats no site at all.
-    With a single report it costs nothing, since there is nothing after it
-    to salvage.
+    Failing late rather than at the first error
+    is the only behavior that makes sense for a list:
+    a document that cannot be fetched says nothing about the next one,
+    and a site missing one report beats no site at all.
+    With a single report it costs nothing,
+    since there is nothing after it to salvage.
     """
     site = Site()
     for report in reports:
@@ -141,9 +148,10 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
         try:
             doc, path = build_one(report.url, outdir, options)
         except Exception as e:  # noqa: BLE001
-            # Deliberately broad: a fetch failure, a parse failure, and a
-            # disk failure are all the same decision here, which is to keep
-            # going and say which report did not make it.
+            # Deliberately broad:
+            # a fetch failure, a parse failure, and a disk failure
+            # are all the same decision here,
+            # which is to keep going and say which report did not make it.
             print(f"failed: {label}: {e}", file=sys.stderr)
             site.failed.append(Failed(report=report, error=str(e)))
             continue
@@ -172,9 +180,10 @@ a { color: inherit; }
 def index_page(site: Site) -> str:
     """The site's front page: every report, and anything that did not build.
 
-    Failures are on the page rather than only in the log because the page is
-    what someone looks at. A report quietly missing from a list of four is
-    hard to notice; a line saying which one failed and why is not.
+    Failures are on the page rather than only in the log
+    because the page is what someone looks at.
+    A report quietly missing from a list of four is hard to notice;
+    a line saying which one failed and why is not.
     """
     items = []
     for built in site.built:
