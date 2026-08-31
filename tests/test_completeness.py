@@ -1,9 +1,8 @@
 """Nothing may vanish between the Google Doc and an output.
 
-This is the failure the whole tool exists to prevent, and the one it has actually hit:
+The failure the whole tool exists to prevent, and the one it has actually hit:
 an early front-matter bug dropped the hero image and its caption with nothing reported.
-Structure tests did not catch it,
-because the structure that remained was perfectly well-formed.
+Structure tests missed it, because the structure that remained was well-formed.
 
 There are two separate halves to check, and only together do they cover it:
 
@@ -11,10 +10,9 @@ There are two separate halves to check, and only together do they cover it:
   This is the half that catches a bug like the front-matter overrun.
 - **tree to output**, that no emitter loses what the parser produced.
 
-The second cannot substitute for the first.
-If the parser drops something,
-it is absent from both sides of a tree-to-output comparison,
-and that check passes while the content is gone.
+The second cannot substitute for the first:
+what the parser drops is absent from both sides of a tree-to-output comparison,
+so that check passes while the content is gone.
 """
 
 import html
@@ -93,7 +91,7 @@ def normalize(text: str) -> str:
     Each emitter escapes differently, and differently again per character:
     HTML turns `MTA's` into `MTA&#x27;s`, Typst backslash-escapes `$`,
     and the Markdown emitter re-breaks lines at sentences.
-    Anything finer than words would be comparing formatting rather than content.
+    Anything finer than words compares formatting rather than content.
     """
     unescaped = html.unescape(re.sub(r"\\(.)", r"\1", text))
     return " ".join(unescaped.split())
@@ -144,11 +142,9 @@ def test_the_check_can_actually_fail(doc: Document) -> None:
 def source_text(doc_json: JsonObject) -> list[str]:
     """Every piece of text in the raw API response, body and footnotes alike.
 
-    Deliberately every inline element kind, not just `textRun`.
-    Walking only text runs is what let the parser
-    drop every smart chip in the real report unnoticed:
-    two person chips, three date chips, and eleven linked Drive files,
-    none of which is a text run.
+    Every inline element kind, not just `textRun`.
+    Walking only text runs let the parser drop every smart chip in the real report:
+    two person chips, three date chips, and eleven linked Drive files.
     """
     out: list[str] = []
 
@@ -177,10 +173,8 @@ CONSUMED = {"header"}
 def tree_text(doc: Document) -> str:
     """Everything the parser kept, including what it moved into metadata.
 
-    Front-matter lines are reassembled as `key: value`,
-    since that is how they appear in the document,
+    Front-matter lines are reassembled as `key: value`, as they appear in the document,
     and folded to lowercase because the parser lowercases keys on the way in.
-    Case is not what this check is about.
     """
     parts = document_text(doc) + [doc.title]
     parts += [f"{key}: {value}" for key, value in doc.meta.items()]
@@ -213,7 +207,7 @@ def test_anything_the_parser_drops_is_reported() -> None:
     """The weaker but more honest invariant.
     Some things are dropped on purpose,
     such as the `Draft 2` scaffolding the real doc opens with,
-    but nothing may leave the document without saying so."""
+    but nothing may leave without saying so."""
     scaffolded: JsonObject = json.loads(json.dumps(REAL_SHAPE))
     scaffolded["body"]["content"].insert(
         0,

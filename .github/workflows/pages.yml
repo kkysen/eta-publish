@@ -1,17 +1,14 @@
 # Publish the site to GitHub Pages, built from the live Google Doc.
 #
-# On every push to `main`, so that what is published is what the repository says.
-# Publishing was manual,
-# on the reasoning that a report goes out when someone decides it is ready;
-# merging to `main` is that decision,
-# and a deploy that has to be remembered separately is one that gets forgotten.
+# On every push to `main`, so what is published is what the repository says.
+# Publishing was manual, on the reasoning that a report goes out
+# when someone decides it is ready; merging to `main` is that decision,
+# and a deploy remembered separately is one that gets forgotten.
 #
-# Note what this means:
-# the deploy is built by fetching the documents, not from the committed `site/`,
-# so a push republishes whatever the Google Doc says at that moment
-# rather than whatever was committed.
-# It has to be that way,
-# because the images are not in the repository (18 MB, and every fetch rewrites them),
+# Note what this means: the deploy fetches the documents rather than serving
+# the committed `site/`, so a push republishes whatever the Google Doc says
+# at that moment. It has to be:
+# the images are not in the repository (18 MB, and every fetch rewrites them),
 # so a checkout alone is not a site.
 name: Pages
 
@@ -19,11 +16,9 @@ on:
   push:
     branches: [main]
   # A redeploy on demand, of the same reports a push deploys.
-  # It takes no document to build on its own:
-  # a report that is not in `reports.toml`
+  # It takes no document of its own: a report not in `reports.toml`
   # has nothing committed for the build check to compare against,
   # so publishing one from here would publish what nobody had reviewed.
-  # Building a report before it goes on the list is a local `eta-publish <url> -o out`.
   workflow_dispatch:
 
 # Read-only on the repository.
@@ -90,22 +85,17 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/key.json
         run: scripts/check-committed-site.sh
 
-      # The deploy is a copy of `site/`:
-      # a build already writes each report as `index.html` in its own directory,
-      # with the site index beside them.
-      # One file is removed rather than served.
+      # The deploy is a copy of `site/`, minus one file.
       #
       # `doc.json` is the API response as fetched,
       # so it carries the email address behind every person chip,
       # and `Public Contributors:` is made of person chips.
       # The report publishes the names;
-      # publishing the response would publish the addresses too, at a stable URL,
-      # which is not something a report does.
-      # It is also 441 KB of raw JSON and signed image URLs that nothing on the site reads.
+      # publishing the response would publish the addresses at a stable URL.
+      # It is also 441 KB of raw JSON and signed image URLs that nothing reads.
       #
-      # `template.typ` stays.
-      # `report.typ` imports it,
-      # so serving the Typst source without it would be serving source that does not compile.
+      # `template.typ` stays: `report.typ` imports it,
+      # and serving the Typst source without it would be serving source that cannot compile.
       - name: Drop the API response
         run: find site -name doc.json -delete
 

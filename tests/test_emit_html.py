@@ -68,10 +68,9 @@ MARK = re.compile(r'<a class="link-mark"[^>]*></a>')
 def without_marks(html: str) -> str:
     """`html` with the self-links stripped.
 
-    Every block carries one,
-    and a test about what a block contains is not about the link to it.
-    The links themselves are checked
-    in `test_every_linkable_block_carries_a_link_to_itself`.
+    Every block carries one, and a test about what a block contains
+    is not about the link to it.
+    The links are checked in `test_every_linkable_block_carries_a_link_to_itself`.
     """
     return MARK.sub("", html)
 
@@ -162,10 +161,10 @@ def test_inline_css_is_optional(doc: Document) -> None:
     assert not HtmlEmitter(inline_css=False).emit(doc).startswith("<style>")
 
 
-# Determinism across runs is covered by `test_snapshots.py`.
+# Determinism across runs is `test_snapshots.py`'s.
 # Comparing an emitter with itself in one process cannot see it:
 # hash randomization is fixed for the life of an interpreter,
-# so order-dependent output matches itself perfectly and still differs from run to run.
+# so order-dependent output matches itself and still differs from run to run.
 
 
 def test_tables_scroll_rather_than_overflow(out: str) -> None:
@@ -214,10 +213,9 @@ def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
 def test_every_block_can_be_linked_to(out: str) -> None:
     """A report is quoted a paragraph at a time, so every block is a target.
 
-    Paragraphs, figures, and tables, wherever they sit,
+    Paragraphs, figures, and tables wherever they sit,
     footnote bodies and table cells included.
-    A list nested inside a list item is not a block of its own
-    and is reached through the list that holds it."""
+    A list nested inside a list item is reached through the list that holds it."""
     for opening in ("<p", "<figure", '<div class="table-scroll"'):
         for tag in re.findall(rf"{re.escape(opening)}[ >][^>]*>?", out):
             assert "id=" in tag, f"{tag} cannot be linked to"
@@ -244,8 +242,7 @@ def test_inserting_a_paragraph_moves_only_what_follows_it_in_that_section(
 ) -> None:
     """The cost of counting, stated as a test.
     A new paragraph renumbers the rest of its own section and nothing else,
-    where hashing moved nothing
-    and a page-wide count would have moved everything after it."""
+    where hashing moved nothing and a page-wide count would have moved everything below."""
     headings = [b for b in doc.blocks if isinstance(b, Heading)]
     at = doc.blocks.index(headings[-1]) + 1
     before = re.findall(r'<p id="([^"]+)"', HtmlEmitter(inline_css=False).emit(doc))
@@ -286,8 +283,7 @@ def test_a_figure_carries_the_shape_of_its_image(doc: Document) -> None:
 
     Not the document's:
     Docs says how large an image is placed rather than how large it is,
-    and the crop this pipeline applies
-    has already changed the shape by the time anything is emitted.
+    and the crop has already changed the shape by the time anything is emitted.
     """
     doc.image_shapes["io.1"] = (400, 250)
     assert 'style="--aspect: 1.600"' in HtmlEmitter(inline_css=False).emit(doc)
@@ -304,9 +300,9 @@ def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
     """Anything with an id is something a reader may want to send someone,
     so the link to it is on the page rather than in its source.
 
-    Except inside the back matter and inside a table,
+    Except in the back matter and in a table,
     where the paragraphs are not passages of the report:
-    a footnote is reached from the reference citing it and left by the arrow back,
+    a footnote is reached from its reference and left by the arrow back,
     and a cell is part of its table.
     """
     report = re.sub(r'<section class="footnotes".*?</section>', "", out, flags=re.S)
@@ -326,8 +322,8 @@ def test_a_footnotes_mark_sits_outside_its_number(out: str) -> None:
 
 
 def test_the_link_is_not_part_of_the_heading_text(out: str) -> None:
-    """The `#` is drawn by the stylesheet.
-    Selecting a section title to quote it must not pick up a character nobody wrote,
+    """The `#` is drawn by the stylesheet:
+    quoting a section title must not pick up a character nobody wrote,
     and a reader who cannot see the mark is given the label instead."""
     assert 'aria-label="Link to this section"></a>' in out
     assert "#</a>" not in out

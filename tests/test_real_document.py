@@ -6,34 +6,30 @@ rather than a test fixture:
 
     uv run eta-publish
 
-A publish is a site,
-so the report lands under the path its own front matter names,
+The report lands under the path its own front matter names,
 `reports/digging-out-deep-hole-sas-west/`, next to the index listing it.
 That directory holds `doc.json`, the four outputs, `images/`, and `report.pdf`,
 and this test asserts the committed outputs
 still match what the code produces from the committed response.
 
 `tests/fixture/` is the same directory in miniature,
-built from a document nobody fetched,
-and the two are told apart by that and nothing else.
-Either rebuilds from its own `doc.json`
-by passing the report directory back to `eta-publish`.
-It is the only test that runs against a document nobody wrote to make a point,
+built from a document nobody fetched, and the two differ by that and nothing else.
+Either rebuilds from its own `doc.json` by passing the report directory back.
+This is the only test running against a document nobody wrote to make a point,
 and every bug that mattered so far
 came from this document's shape rather than from a hand-built fixture.
 
 Only the text is committed.
 The images are 18 MB and the PDF 19 MB,
-and because a re-fetch rewrites every image,
-each one would add another copy to history permanently.
+and a re-fetch rewrites every image, adding another copy to history permanently.
 They are ignored, so the command above is safe to rerun.
 
 `images.json` is the one derived thing kept:
 a Docs `inlineObject` carries a `contentUri` with no extension and no mime type,
 so the only way to learn an image is a JPEG is to fetch it,
 and this test does not use the network.
-It records the filename actually written for each image,
-and is refreshed from `images/` whenever that directory is present.
+It records the filename written for each image,
+refreshed from `images/` whenever that directory is present.
 
 When a snapshot changes, read the diff:
 it is exactly what the change does to a real published report.
@@ -60,21 +56,19 @@ DOC_JSON = json.loads((REAL / "doc.json").read_text())
 
 # The snapshots are a plain publish, so no `--image-base`:
 # where images are hosted is still undecided,
-# and pinning a placeholder into them
-# would make every snapshot line depend on a value nobody has chosen yet.
+# and pinning a placeholder in would make every snapshot line depend on it.
 # That the flag is applied when given is covered in `test_preview.py`.
 
 
 def image_index(regenerate: bool) -> dict[str, JsonObject]:
     """What a real run wrote for each image, read from `images.json`.
 
-    Written by a build rather than by this test,
-    because it is a record of what was published rather than of what was asserted.
-    The filename and the pixel size are both facts only a fetch can learn,
+    Written by a build rather than by this test:
+    a record of what was published rather than of what was asserted.
+    The filename and the pixel size are facts only a fetch can learn,
     and the committed page is laid out from the size,
     so a test with no network reads them from here.
-    The hash beside them is what lets CI check that a rebuild fetched the same pictures,
-    and is not needed here.
+    The hash beside them lets CI check that a rebuild fetched the same pictures.
     """
     return json.loads(FILENAMES_PATH.read_text())
 

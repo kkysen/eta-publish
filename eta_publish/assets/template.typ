@@ -82,8 +82,8 @@
 
   v(1.2em)
 
-  // The report is long enough that finding a section by turning pages is not reasonable,
-  // which is the same reason the page has a table of contents.
+  // The report is too long to find a section by turning pages,
+  // the same reason the page has a table of contents.
   // Typst builds it from the headings, so it cannot disagree with them.
   outline(title: [Table of Contents], depth: 3, indent: auto)
   v(1.2em)
@@ -92,7 +92,7 @@
 
   // Credited at the end, not under the title:
   // a report is the work of most of a chapter,
-  // and nine names above the first paragraph read as a masthead rather than as a credit.
+  // and nine names above the first paragraph read as a masthead rather than a credit.
   if contributors.len() > 0 {
     heading(level: 1, [Contributors])
     if contributors_note != none [#contributors_note]

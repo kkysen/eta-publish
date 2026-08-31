@@ -40,12 +40,11 @@ because where a difference sits says who fixes it:
 
 A report is compared by normalizing live and `index.html`
 to a tagged stream
-(headings, paragraphs, list items, captions, alt text, cells)
-and diffing that in both directions,
-then settling every hit against `doc.json`:
-footnote references and bodies, figure captions, credits, heading styles.
-Anything the three agree on is not listed.
-Today that includes every figure caption, every image credit,
+(headings, paragraphs, list items, captions, alt text, cells),
+diffing that in both directions,
+then settling every hit against `doc.json`.
+Anything the three agree on is not listed:
+today that is every figure caption, every image credit,
 and the text of every footnote body.
 
 ## All reports
@@ -82,22 +81,21 @@ Hand assembly.
 Live gives ids to headings and to the footnote anchors someone typed by hand,
 and to nothing else,
 so there is no way to link to a paragraph, a figure, or a table.
-`index.html` gives an id to the title, the standfirst, the table of contents,
+`index.html` gives one to the title, the standfirst, the table of contents,
 the date, every heading, every paragraph, list, figure, and table,
-each footnote,
-and the footnotes and contributors sections themselves.
+each footnote, and the back matter sections themselves.
 
 A paragraph is named by the section it is in and its place in that section:
 `#ground-conditions-p2`.
 That is a name a reader can read before following it,
-and it survives the copy edits that are most of what happens to a report
-after it publishes, which a hash of the text does not.
+and it survives the copy edits that are most of what happens to a report,
+which a hash of the text does not.
 The cost is the other direction:
 inserting a paragraph renumbers the ones after it in its own section,
 and links to those land one paragraph early.
 Numbering across the whole page would have spread that cost
-to every paragraph below the insertion instead.
-Figures and tables are still named by what they hold rather than by where they sit.
+to every paragraph below the insertion.
+Figures and tables are still named by what they hold rather than where they sit.
 
 ### Section references are links (intended)
 
@@ -111,13 +109,12 @@ each of them a name pointing nowhere.
 One of the three was linked by hand, to `#phase2-tail-tracks`.
 
 The parser reads the convention,
-so all three resolve to the heading they name,
-in the HTML, the Markdown, and the PDF alike.
+so all three resolve to the heading they name, in every output.
 All four references the live page links resolve,
 `Appendix A` among them, by the name a heading gives before its colon.
-Live italicizes exactly two other things, `and` and `tens of billions`,
+Live italicizes two other things, `and` and `tens of billions`,
 and both stay italic here: they name no section.
-This is a defect the live page and the generated page shared,
+The live page and the generated page shared this defect,
 which is why comparing the two could not surface it.
 
 ### The back matter headings are `h2` (intended)
@@ -126,15 +123,13 @@ Hand assembly.
 Every output credits the same nine people the live page credits,
 in the same order, in a `Contributors` section after the footnotes,
 under the sentence the live page introduces them with.
-The PDF has a table of contents for the same reason the page does.
-The names come from `Public Contributors:` in the header block
-and are sorted by surname, which is how etany.org credits contributors
+The names come from `Public Contributors:` in the header block,
+sorted by surname, which is how etany.org credits contributors
 and is not the order that field happens to be typed in.
 
 What differs is the level.
 `Footnotes` and `Contributors` are `h2` here and `h3` live,
-which makes them sections of the report rather than
-subsections of whatever came last.
+making them sections of the report rather than subsections of whatever came last.
 
 ### Footnote markers are bare superscripts after the punctuation (intended)
 
@@ -156,12 +151,11 @@ Hand assembly, and the clearest case of it.
 `doc.json` holds 20 footnotes and 20 references,
 and `index.html` emits 20 references, 20 bodies, and 20 backlinks, 1:1.
 Live carries 21 markers and 21 `id="fnN"` anchors against 20 rendered bodies:
-an extra marker sits on
-`...has space for more tracks than it needs`,
+an extra marker sits on `...has space for more tracks than it needs`,
 so every marker after it resolves one footnote too far.
 Live `[14]`, on the steep-tracks sentence, lands on the soft-costs note,
-and live `[21]` lands on nothing at all.
-Live also still carries the debris the `README.md` describes,
+and live `[21]` lands on nothing.
+Live also carries the debris `README.md` describes,
 an `id="#fn3-return"` and a duplicated `fn18-return`.
 
 Nothing to do. This is the discrepancy the project exists to produce.
@@ -182,7 +176,7 @@ which the document puts above the headline,
 publishes as `og:image` and nowhere else,
 the same image live serves as `saswest.jpg`.
 `og:image:alt` is written when the image has alt text, and this one has none,
-so a link preview that is read aloud says nothing.
+so a link preview read aloud says nothing.
 Describe it in the document.
 
 ### The images the document names no source for are named by hash (todo)
@@ -194,11 +188,11 @@ Seventeen of the 28 figures have no such line,
 and those are still `images/img-8827f5de.jpg`, from the Docs object id.
 Live serves `saswest.jpg`, named by a person.
 Naming an image also names the figure's anchor,
-so the eleven that have a source line moved:
+so the eleven with a source line moved:
 `#img-af4262b6` is now `#sas-west-tunnel-profile-pg-18-screenshot-af4262b6`.
 The rest of the names belong in the document too, next to the image,
 the way `Credit:` and `Source:` are,
-and until they are there a hash is the only thing that is stable across edits.
+and until they are there a hash is the only thing stable across edits.
 
 ### Four wordings the live page predates (intended)
 

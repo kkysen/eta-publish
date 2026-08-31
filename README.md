@@ -4,7 +4,7 @@ Convert an [ETA](https://www.etany.org/) report Google Doc
 into publish-ready HTML, Markdown, and PDF.
 
 Reports are drafted in Google Docs and published on Squarespace.
-Today that hand-off is entirely manual,
+That hand-off is entirely manual today,
 and it is the source of both the tedium and the mistakes.
 
 ## Why this exists
@@ -79,22 +79,21 @@ Unchanged input must produce byte-identical output.
 The `.md` is committed to git, so every accidental difference
 becomes noise in a diff that someone has to read.
 
-This is why image filenames are keyed on what the document says about an image
+So image filenames are keyed on what the document says about an image
 rather than on a counter:
 the file its `Source:` line names,
 and the stable Docs object id where there is no such line.
 Inserting one image into a 54-image report
-must not rename the other 53, or change their published URLs.
-The same reasoning applies to heading anchors,
-which are published URLs that must not move when an unrelated section is added.
+must not rename the other 53 or move their published URLs.
+The same applies to heading anchors.
 
 A paragraph has no name of its own,
 so it is named by the section it is in and its place in that section:
 `#ground-conditions-p2`.
 That is a link worth reading before following it,
 and it survives the copy edits that are most of what happens to a published report.
-What it does not survive is an insertion above it in the same section,
-which is a smaller blast radius than numbering the page as a whole
+It does not survive an insertion above it in the same section,
+a smaller blast radius than numbering the page as a whole
 and a larger one than hashing the text,
 which moved the id of every paragraph anyone corrected.
 
@@ -102,16 +101,15 @@ which moved the id of every paragraph anyone corrected.
 
 The `.md` breaks lines at sentence and clause boundaries
 rather than wrapping to a fixed width.
-Without this, a paragraph is a single line,
-and correcting one word shows up as the entire paragraph changing.
-With it, the August 21 addendum to the SAS West report
-is a three-line diff and nothing else moves.
+Wrapped, a paragraph is a single line
+and correcting one word shows up as the whole paragraph changing.
+Broken at sentences, the August 21 addendum to the SAS West report
+is a three-line diff.
 
-The sentence splitter is deliberately conservative,
+The splitter is conservative,
 because the text is full of `125 St.`, `Phase 2.`, and `$7.7 billion.`,
-and an over-eager splitter would churn the diff on every regeneration.
-Its behavior is pinned: changing it reflows every file,
-and should be its own commit.
+and an over-eager one would churn the diff on every regeneration.
+Changing it reflows every file, and should be its own commit.
 
 ## Squarespace constraints
 
@@ -156,10 +154,10 @@ uv run eta-publish drafts.toml -o preview
 
 The argument is a document or a list of them, told apart without opening either:
 a URL is always a document, and only a local `.toml` path is a list.
-A document can also be a directory that a previous build wrote,
+A document can also be a directory a previous build wrote,
 which holds the API response as `doc.json` beside its outputs,
-so anything built once can be rebuilt with no network and no credentials.
-One at a time: building several documents in one run is what a list is for,
+so anything built once rebuilds with no network and no credentials.
+One at a time: building several in one run is what a list is for,
 and a list is a file that can be committed and reviewed
 rather than a shell line that was right once.
 
@@ -171,16 +169,12 @@ the run exits non-zero and the index names what failed.
 
 Pass the full URL including its `?tab=` id.
 ETA reports live in multi-tab documents,
-and the Docs API defaults to the first tab, which is usually an earlier draft.
+and the Docs API defaults to the first tab, usually an earlier draft.
 A multi-tab document with no tab specified refuses to guess and lists its tabs.
-
-The URL is the only way to name a tab,
-on the command line and in `reports.toml` alike,
-so the same reference means the same document wherever it is written.
+The URL is the only way to name a tab, on the command line and in `reports.toml` alike.
 
 Outputs land in `out/<the report's path>/`,
-each report's images in an `images/` directory beside its pages,
-which is how every output refers to them.
+each report's images in an `images/` directory beside its pages.
 Add `--split` for a report over the code block limit,
 and `--no-images` to skip the download while iterating on the text.
 
@@ -188,7 +182,7 @@ and `--no-images` to skip the download while iterating on the text.
 
 The Docs API needs an OAuth client, which is free and takes a few minutes.
 It is per-person: the token identifies you,
-and only grants read access to documents you can already open.
+and grants read access only to documents you can already open.
 
 1. Open the [Google Cloud console](https://console.cloud.google.com/)
    and create a project, or reuse one.
@@ -204,8 +198,8 @@ and only grants read access to documents you can already open.
    or point `$ETA_CLIENT_SECRETS` at it.
 
 The first run opens a browser to approve read-only access.
-The resulting token is cached at `~/.config/eta-publish/token.json`
-and refreshes itself, so this happens once.
+The token is cached at `~/.config/eta-publish/token.json` and refreshes itself,
+so this happens once.
 Both files are secrets;
 the repository ignores them by name, but they belong outside it anyway.
 
@@ -246,8 +240,8 @@ Putting it on the list is the act that says it is ready.
 It runs on a push to `main`,
 and on `workflow_dispatch` to redeploy the same list on demand:
 a report publishes when someone decides it is ready,
-and a schedule would put whatever the doc said at 3 a.m.
-onto a public URL with nobody looking at it.
+where a schedule would put whatever the doc said at 3 a.m.
+onto a public URL with nobody looking.
 
 The job fetches the document rather than deploying the committed
 `site/`, because the images are not in the repository
@@ -328,12 +322,11 @@ Not a concern at this scale.
 The Docs API allows
 [3,000 read requests per minute per project, and 300 per minute per user](https://developers.google.com/workspace/docs/api/limits).
 One publish is one request,
-so an afternoon of re-running the build sits several orders of magnitude under the limit.
-Exceeding it returns HTTP 429 rather than costing anything.
+so an afternoon of rebuilding sits orders of magnitude under the limit,
+and exceeding it returns HTTP 429 rather than costing anything.
 
 Every build saves the response as `doc.json` in the report's own directory,
-so the pipeline can be re-run against the last fetch
-without touching the network at all: pass the directory.
+so the pipeline re-runs against the last fetch with no network: pass the directory.
 That is what the tests do,
 and `tests/fixture/` is a document folder with nothing else in it.
 
@@ -385,9 +378,9 @@ Add `--no-images` and it needs no network at all.
 The one thing a no-network rebuild cannot reproduce is the image extensions:
 a Docs `inlineObject` says nothing about what kind of file it is,
 so `.jpg` and `.png` are learned by fetching, and without that the links lose them.
-The names themselves come from the document,
-and the shape each image turned out to be is read from the committed `images.json`,
-so the page a build without images writes is otherwise the page that publishes.
+The names come from the document,
+and each image's shape is read from the committed `images.json`,
+so the page is otherwise the page that publishes.
 
 When a snapshot changes, read the diff before accepting it:
 it is exactly what the change does to a real published report.
@@ -396,21 +389,18 @@ Regenerate with `uv run pytest --regenerate-snapshots`.
 ## Document conventions
 
 The converter reads structure, so the doc has to carry it.
-Anything it cannot classify is reported as a warning
-rather than silently dropped.
+Anything it cannot classify is reported as a warning rather than silently dropped.
 
 None of this is fixed. If a convention is awkward to write,
-it is easier to change the converter than to fight it in every report,
-so say so.
+it is easier to change the converter than to fight it in every report, so say so.
 
 ### Front matter
 
 "Front matter" is the block of `Key: value` lines at the top of a document
 that describes it rather than being part of it:
 where it publishes, what its summary is, who wrote it.
-The name comes from printing,
-where the front matter is the title page and copyright notice,
-as distinct from the body.
+The name comes from printing, where the front matter is the title page
+and copyright notice, as distinct from the body.
 
 ETA reports already have one, under the `Header` heading:
 
@@ -439,17 +429,15 @@ Two rules matter, because both are load-bearing:
 Any heading, the headline, a paragraph containing an image, or ordinary prose.
 Keep the header lines together, with nothing between them.
 
-Lines *before* the `Header` heading are treated as production scaffolding and dropped,
-with each one reported so nothing leaves silently.
+Lines *before* the `Header` heading are production scaffolding and are dropped,
+each one reported so nothing leaves silently.
 The SAS West tabs open with `Header` directly, so this is defensive.
 
 **The headline must be styled `Title`.**
-Otherwise it is
-`Digging Out of a Very Deep Hole: Saving Billions on 125th Street`,
-which looks exactly like a `Key: value` line and gets filed as metadata.
-The converter warns when this happens,
-and falls back to the document's Drive filename,
-which is a working name (`SAS West Feasibility Response`) and not what should publish.
+Otherwise `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
+looks exactly like a `Key: value` line and gets filed as metadata.
+The converter warns, and falls back to the Drive filename,
+a working name (`SAS West Feasibility Response`) and not what should publish.
 Alternatively, put `Title:` in the header block.
 
 Unrecognized keys are kept rather than treated as body text,
@@ -499,7 +487,7 @@ That needs OAuth credentials, and it is the next thing worth doing:
 every finding so far that mattered came from the real document's shape
 rather than from the fixture, and there are almost certainly more.
 It will also settle the code block size estimate,
-which is currently the one unmeasured number here.
+the one unmeasured number here.
 
 ## TODO
 

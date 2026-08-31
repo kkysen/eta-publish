@@ -11,11 +11,9 @@ it is the published site, at the top level, and the tests read it there.
 It is a corpus because it is the real thing, not the other way around.
 
 Each holds its emitted output beside its `doc.json`,
-which is what `eta-publish <that directory>` produces,
 so a corpus can be rebuilt from what it already contains.
 Only the image filenames need the network:
-their extensions come from fetching the images,
-which is why `images.json` records them for the real one.
+their extensions come from fetching, which is why `images.json` records them.
 """
 
 from pathlib import Path

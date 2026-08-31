@@ -5,15 +5,14 @@ HTML can only place them at the end of the document,
 and with 21 of them carrying real argument,
 that is the difference between a report and a printout of a web page.
 
-A footnote's body is therefore inlined at the reference site,
-which is how Typst wants it:
-`#footnote[...]` both marks the spot and carries the text,
+A footnote's body is inlined at the reference site, which is how Typst wants it:
+`#footnote[...]` marks the spot and carries the text,
 and Typst does the numbering and the placement.
-Nothing here maintains a separate list to keep in sync,
+Nothing here keeps a separate list in sync,
 which is the failure the HTML output has to guard against explicitly.
 
 The emitted file is a document body that imports `template.typ`,
-so the ETA house style lives in one place rather than being regenerated per report.
+so the house style lives in one place rather than being regenerated per report.
 """
 
 import re
@@ -65,10 +64,10 @@ class TypstEmitter(Emitter):
         """The header block as written, plus what the page publishes.
 
         `doc.meta` is the fields as typed,
-        which is what the template shows for everything nobody has an opinion about.
-        Two of them the page does have an opinion about,
-        so they are passed separately rather than silently rewritten:
-        the date written out, and the contributors in the order they are credited in.
+        which the template shows for everything nobody has an opinion about.
+        The page has an opinion about two, so they are passed separately
+        rather than silently rewritten:
+        the date written out, and the contributors in credited order.
         """
         meta = "\n".join(
             f"  {key.replace(' ', '_')}: {string(value)}," for key, value in doc.meta.items()
@@ -90,7 +89,7 @@ class TypstEmitter(Emitter):
         """The opening figure, passed to the template rather than emitted.
 
         It belongs above the outline, with the title,
-        and the template is what knows where the outline goes.
+        and the template knows where the outline goes.
         """
         if doc.hero is None:
             return ""
@@ -132,10 +131,8 @@ class TypstEmitter(Emitter):
     @override
     def figure(self, node: Figure) -> str:
         # As in the HTML, `Figure.source` is not emitted:
-        # it names a file in Drive for whoever assembles the report,
-        # and is not part of it.
-        # Not emphasized:
-        # the published report styles the credit exactly like the caption,
+        # it names a file in Drive for whoever assembles the report.
+        # Not emphasized: the published report styles the credit like the caption,
         # and the template decides how a caption looks.
         caption_parts = []
         if node.caption:
@@ -187,7 +184,7 @@ class TypstEmitter(Emitter):
     def footnote_ref(self, node: FootnoteRef) -> str:
         """Typst places and numbers footnotes itself, so the body goes here.
 
-        This is the whole reason for a PDF path of its own:
+        The whole reason for a PDF path of its own:
         the note lands at the bottom of the page it is cited on,
         which no HTML-to-PDF route can do.
         """
@@ -206,10 +203,9 @@ class TypstEmitter(Emitter):
         """The `image` call, which a figure wraps and a bare image does not.
 
         Written once so the two cannot drift:
-        the alt text was added here and reached inline images only,
+        alt text added here once reached inline images only,
         because the figure built its own call.
-        A PDF carries alt text the way a page does,
-        and it is the same sentence in both.
+        A PDF carries alt text the way a page does, and it is the same sentence in both.
         """
         path = f"{self.image_dir}/{self.doc.image_href(node)}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""

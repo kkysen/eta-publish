@@ -1,18 +1,14 @@
 """The document tree every emitter renders from.
 
-This is the only intermediate representation.
-The Docs parser builds it,
-and the HTML, Markdown, and Typst emitters each walk it independently.
-Notably the HTML is not rendered from the Markdown:
-chaining them would lose the figure source/caption/credit distinction,
+The only intermediate representation:
+the parser builds it, and each emitter walks it independently.
+The HTML is not rendered from the Markdown,
+which would lose the figure source/caption/credit distinction,
 superscripts, and exact link targets,
-and would create a second source of truth as soon as anyone hand-edited the `.md`.
+and would create a second source of truth the moment anyone edited the `.md`.
 
-The tree is deliberately small.
-It carries what ETA reports actually use,
-not a general model of what a Google Doc can express.
-Anything the parser meets and cannot place here
-becomes a warning rather than a silent drop.
+It carries what ETA reports use, not what a Google Doc can express.
+Anything the parser cannot place here becomes a warning rather than a silent drop.
 """
 
 from dataclasses import dataclass, field
@@ -26,8 +22,8 @@ from enum import Enum
 class Text:
     """A run of text sharing one style.
 
-    `sup` and `sub` are kept separate from bold/italic
-    because footnote references and units both rely on them,
+    `sup` and `sub` are separate from bold/italic
+    because footnote references and units rely on them,
     and Typst spells them differently from HTML.
     """
 
@@ -47,7 +43,7 @@ class LineBreak:
     Docs encodes these as a vertical tab inside the text run
     rather than as a paragraph boundary.
     Left alone they reach the published page as a raw control character,
-    and they hide the convention that a `Credit:` line following one
+    and they hide that a `Credit:` line following one
     is a credit rather than part of the caption.
     """
 
@@ -56,8 +52,8 @@ class LineBreak:
 class FootnoteRef:
     """A reference to a footnote, identified by the Docs footnote id.
 
-    Display numbering is assigned by the parser in document order,
-    so it can never disagree between the reference and the definition.
+    The parser numbers these in document order,
+    so a reference and its definition cannot disagree.
     """
 
     footnote_id: str
@@ -69,12 +65,11 @@ class Crop:
     """How much of an image the document trims from each side.
 
     Docs stores a crop as fractions of the original,
-    so the image file it serves is always the uncropped one.
+    so the file it serves is always the uncropped one.
     Nothing downstream can express this:
     Markdown has no way to crop, and a CSS crop would not reach the PDF.
     So the crop is applied to the file,
-    which is also what the document's own `Uncropped Source:` lines imply
-    is the published form.
+    which is what the document's own `Uncropped Source:` lines imply anyway.
     """
 
     left: float = 0.0
@@ -88,7 +83,7 @@ class Crop:
 
     @property
     def key(self) -> str:
-        """Identifies this crop, so changing it renames the file."""
+        """Changing this renames the file."""
         if not self.trims:
             return ""
         return f"|{self.left:.6f},{self.right:.6f},{self.top:.6f},{self.bottom:.6f}"
@@ -108,9 +103,9 @@ class Vector:
     """A vector original the document names beside a rasterized copy.
 
     Google Docs cannot place an SVG,
-    so a chart is pasted as a PNG and the real file is linked next to it on a `SVG:` line.
+    so a chart is pasted as a PNG and the real file linked beside it on an `SVG:` line.
     Every output here can show the vector,
-    so the raster is only ever a stand-in for the editor.
+    so the raster is only a stand-in for the editor.
     """
 
     file_id: str
@@ -128,7 +123,7 @@ class Image:
     `object_id` is the Docs `inlineObjectId`, which is stable across edits.
     Filenames derive from it rather than from a counter,
     so inserting one image into a 54-image report
-    does not rename the other 53 or change their published URLs.
+    does not rename the other 53 or move their published URLs.
     """
 
     object_id: str
@@ -153,12 +148,11 @@ class Paragraph:
 @dataclass
 class Heading:
     level: int
-    """2 through 6. The document title is not a heading; it is `Document.title`."""
+    """2 through 6. The title is not a heading; it is `Document.title`."""
 
     anchor: str
-    """Stable slug.
-    This is a published URL,
-    so it must not move when an unrelated section is added elsewhere."""
+    """A published URL, so it must not move
+    when an unrelated section is added elsewhere."""
 
     content: list[Inline] = field(default_factory=list)
 
@@ -184,7 +178,7 @@ class List:
 class Figure:
     """An image together with the lines the doc attaches to it.
 
-    ETA reports consistently write an optional `Source:` line before the image
+    ETA reports write an optional `Source:` line before the image,
     and a caption and `Credit:` line after it.
     Keeping the three distinct lets HTML class them separately
     and lets Typst place the credit differently from the caption.
@@ -229,32 +223,29 @@ class Document:
     warnings: list[str] = field(default_factory=list)
 
     card: Image | None = None
-    """The share card: a wide image with the title set into it,
+    """A wide image with the title set into it,
     placed above the headline for whatever links to the report to show as a thumbnail.
 
-    Not part of the report, so it is not in `blocks`.
-    It publishes as `og:image` and nowhere else."""
+    Not part of the report, so not in `blocks`: it publishes as `og:image` and nowhere else."""
 
     image_files: dict[str, str] = field(default_factory=dict)
     """Docs object id to the filename actually written, extension included.
 
-    Filled in by `images.download`, which is the only step that can know it.
-    The Docs API describes an inline object without saying what kind of file it is,
-    so the extension comes from the response;
-    and where the document names a vector alongside a raster,
-    the file written is the vector, under a different name entirely.
+    Only `images.download` can know it.
+    A Docs `inlineObject` says nothing about what kind of file it is,
+    so the extension comes from the response,
+    and a vector named alongside a raster is written under a different name entirely.
     Empty when images were skipped,
-    in which case `image_href` falls back to the raster's name without an extension.
+    where `image_href` falls back to the raster's name without an extension.
     """
 
     image_shapes: dict[str, tuple[int, int]] = field(default_factory=dict)
     """Docs object id to the pixel size of the file actually written.
 
-    Filled in from the same record as `image_files`, and for the same reason:
+    From the same record as `image_files`, and for the same reason:
     Docs says how large an image is placed, not how large it is,
-    and the crop this pipeline applies changes the shape of the file
-    without the document knowing.
-    An SVG has no pixel size to read, so it is one of the images this is empty for.
+    and the crop applied here changes the shape of the file without the document knowing.
+    An SVG has no pixel size to read, so it is one this is empty for.
     """
 
     @property
@@ -262,13 +253,12 @@ class Document:
         """The figure a report opens with, if it opens with one.
 
         The document puts it under the headline,
-        so it belongs with the headline
-        rather than after a table of contents it should be introducing.
+        so it belongs there rather than after a table of contents it should be introducing.
         This is the title page, and a title page is a title and a picture.
 
         Recognized by position, which is what the document already says.
-        Nothing else in these reports leads with a figure,
-        and if one ever does and does not mean it,
+        Nothing else in these reports leads with a figure;
+        when one does and does not mean it,
         that is when a `Hero:` line earns its place beside `Source:` and `Credit:`.
         """
         first = self.blocks[0] if self.blocks else None
@@ -283,19 +273,17 @@ class Document:
     def contributors(self) -> list[str]:
         """The people credited on the published page, by surname.
 
-        Read from `Public Contributors:` and from nothing else.
+        Read from `Public Contributors:` and nothing else.
         The document carries a separate `Private Contributors:` field
-        precisely so that some names do not publish,
-        so no fallback to it belongs here.
+        so that some names do not publish, so no fallback to it belongs here.
 
-        The names come from person chips, which resolve to a chip's display name,
-        so this is a list of names and not of addresses.
+        The names come from person chips, which resolve to a display name,
+        so this is names and not addresses.
 
         Sorted, because etany.org credits contributors alphabetically
-        and the field they are typed into has no order worth publishing:
-        it is whoever was added when.
+        and the field they are typed into is in whoever-was-added-when order.
         Sorting here rather than in one emitter
-        is what keeps the report and the site index naming them the same way.
+        keeps the report and the site index naming them the same way.
         """
         names = self.meta.get("public contributors", "")
         listed = [name.strip() for name in names.split(",") if name.strip()]
@@ -305,15 +293,13 @@ class Document:
     def dateline(self) -> str:
         """The publication date, written out, e.g. `August 19, 2026`.
 
-        `Final Due Date:` is the date a report publishes on, and it is a date chip,
-        so what the document holds is whatever short form Docs renders, `Aug 19, 2026`.
+        `Final Due Date:` is a date chip,
+        so the document holds whatever short form Docs renders, `Aug 19, 2026`.
         etany.org writes the month out,
         and a published date is not the place to abbreviate three letters.
 
-        A date the chip writes some other way,
-        or a field holding something that is not a date at all,
-        is published exactly as it was written.
-        Guessing at it would be worse than showing what the header says.
+        Anything that does not parse as a date is published exactly as written:
+        guessing would be worse than showing what the header says.
         """
         return _long_date(self.meta.get("final due date", ""))
 
@@ -326,7 +312,7 @@ class Document:
         """Every heading in order, or only those at one level.
 
         The title is not among them: it is `Document.title`, not a block,
-        so a table of contents over all of these never lists the report itself.
+        so a table of contents over these never lists the report itself.
         """
         return [
             b for b in self.blocks if isinstance(b, Heading) and (level is None or b.level == level)
@@ -338,9 +324,8 @@ class Document:
 
         Deduplicated by `object_id`: the same image used twice is one file.
 
-        The share card is one of them even though it is not in `blocks`.
-        It is published as `og:image`,
-        which is a URL like any other and needs the file to be there.
+        The share card is among them even though it is not in `blocks`:
+        `og:image` is a URL like any other and needs the file to be there.
         """
         seen: dict[str, Image] = {}
         if self.card is not None:
@@ -359,8 +344,7 @@ class Document:
         """Every figure in the document, in order, footnotes included.
 
         Unlike `images`, not the share card:
-        the card is a picture of the title rather than a figure of the report,
-        and it is not in `blocks` at all.
+        it is a picture of the title rather than a figure of the report.
         """
         blocks = list(_walk(self.blocks))
         blocks += [b for note in self.footnotes for b in _walk(note.content)]
@@ -382,9 +366,8 @@ class Document:
 
 
 # What a Docs date chip can render, most likely first.
-# A chip is a real date,
-# so this is a short list of ways to write one rather than an attempt
-# at parsing dates in general.
+# A chip is a real date, so this is a short list of ways to write one
+# rather than an attempt at parsing dates in general.
 DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%Y-%m-%d", "%m/%d/%Y")
 
 
@@ -403,10 +386,9 @@ def _by_surname(name: str) -> tuple[str, str]:
     """Sort key for a person's name: last word first, then the whole name.
 
     The last word is the surname for every name these reports have carried,
-    and a display name is all the document gives us to work with.
-    It is a guess for a surname written in more than one word,
-    `van der Berg` sorting under `Berg`,
-    which is wrong but wrong quietly and in one place.
+    and a display name is all the document gives us.
+    It guesses wrong for a surname written in more than one word,
+    `van der Berg` sorting under `Berg`, which is wrong quietly and in one place.
     Casefolded so `de Vries` and `De Vries` land together.
     """
     return (name.split()[-1].casefold(), name.casefold())
