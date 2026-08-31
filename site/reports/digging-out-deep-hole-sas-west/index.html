@@ -15,7 +15,7 @@ h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25; }
    hang a mark beside a block do not reach them. These two do. */
 #title, #short { position: relative; }
 #title > .link-mark, #short > .link-mark {
-  position: absolute; left: -1.15em; top: 0; text-decoration: none;
+  position: absolute; left: -1.15em; text-decoration: none;
   font-weight: normal; font-size: 1rem; opacity: 0; }
 #title > .link-mark::before, #short > .link-mark::before { content: "#"; }
 #title:hover > .link-mark, #short:hover > .link-mark,
@@ -62,7 +62,12 @@ a { color: inherit; }
    knows where to look. Shown on hover, and on focus as well, or it would be
    a control only a mouse can reach. */
 .eta-report :has(> .link-mark) { position: relative; }
-.eta-report .link-mark { position: absolute; left: -1.15em; top: 0;
+/* No `top`: an absolutely positioned box with `top: auto` stays at the
+   vertical position it would have had in the line, which is beside the
+   first line of the block. Pinning it to the top of the box instead put
+   the mark of a heading with a rule above it up in the padding between the
+   rule and the words. */
+.eta-report .link-mark { position: absolute; left: -1.15em;
                          text-decoration: none; font-weight: normal;
                          opacity: 0; }
 .eta-report .link-mark::before { content: "#"; }
