@@ -15,10 +15,6 @@ name: Pages
 on:
   push:
     branches: [main]
-  # A redeploy on demand, of the same reports a push deploys.
-  # It takes no document of its own: a report not in `reports.toml`
-  # has nothing committed for the build check to compare against,
-  # so publishing one from here would publish what nobody had reviewed.
   workflow_dispatch:
 
 # Read-only on the repository.
