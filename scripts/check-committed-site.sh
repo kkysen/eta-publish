@@ -41,7 +41,9 @@ fail() {
 
 # The build writes into `site/`, so anything uncommitted there is about to
 # be written over, and the check is about what is committed either way.
-if ! git diff --quiet -- site || ! git diff --cached --quiet -- site; then
+# Against `HEAD` rather than against the index, so that staged-but-not-
+# committed counts as uncommitted, which it is.
+if ! git diff --quiet HEAD -- site; then
     fail "site/ has uncommitted changes and this rebuilds into it; commit or stash them first"
 fi
 
@@ -51,10 +53,14 @@ else
     uv run eta-publish -o site
 fi
 
-if ! git diff --quiet -- site; then
-    git diff --stat -- site >&2
+# The whole diff, not a summary of it: it is the change to a published
+# report, and reading it is the review that the commit stands for. `--quiet`
+# is only the test, and it is asked separately from the answer.
+if ! git diff --quiet HEAD -- site; then
+    git diff --stat HEAD -- site >&2
+    git diff HEAD -- site >&2
     fail "the documents have changed since site/ was committed; \
-review the rebuilt files now in the working tree and commit them"
+read the diff above, and commit the rebuilt files now in the working tree"
 fi
 
 echo "site/ is what a fresh build writes"
