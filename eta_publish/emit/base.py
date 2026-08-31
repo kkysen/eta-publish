@@ -24,8 +24,6 @@ from ..nodes import (
 
 # The line a report introduces its contributors with.
 # The header block names who they are; this says what naming them means.
-# Every report and every output says it the same way,
-# so it lives here rather than in one emitter or in each document.
 CONTRIBUTORS_NOTE = (
     "We wish to acknowledge the following ETA members who contributed to "
     "this report, and without whose hard work it would not be possible:"
@@ -35,9 +33,8 @@ CONTRIBUTORS_NOTE = (
 class Emitter(ABC):
     """Walks a `Document` and returns source in one output format.
 
-    Subclasses implement the per-node methods.
-    Dispatch and traversal live here so that adding a node type
-    fails loudly in every emitter at once rather than being skipped by one.
+    Every node kind is an abstract method, so adding one
+    fails loudly in every emitter rather than being skipped by one.
 
     `list_` carries a trailing underscore because a method named `list`
     would shadow the builtin throughout the class body,

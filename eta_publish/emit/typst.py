@@ -12,7 +12,7 @@ Nothing here keeps a separate list in sync,
 which is the failure the HTML output has to guard against explicitly.
 
 The emitted file is a document body that imports `template.typ`,
-so the house style lives in one place rather than being regenerated per report.
+which carries the house style.
 """
 
 import re

@@ -13,18 +13,6 @@
 # byte for byte and there is no diff.
 # `doc.json` covers the text and `images.json` covers the pictures,
 # which are not committed themselves but whose hashes are.
-#
-# One script rather than a workflow step and a hook that agree,
-# because two copies of a rule about what may be published is one too many.
-# The workflow runs it before deploying,
-# where failing publishes nothing and keeps the previous deploy up.
-# The pre-push hook runs it on the way out,
-# where failing costs a minute instead of a red workflow.
-#
-# It builds the list in `reports.toml` and nothing else.
-# A report that is not on the list has nothing committed to compare against,
-# so this could only ever wave it through.
-# Building one document on its own is a local `eta-publish <url> -o out`.
 
 set -euo pipefail
 

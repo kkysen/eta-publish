@@ -282,8 +282,6 @@ class Document:
 
         Sorted, because etany.org credits contributors alphabetically
         and the field they are typed into is in whoever-was-added-when order.
-        Sorting here rather than in one emitter
-        keeps the report and the site index naming them the same way.
         """
         names = self.meta.get("public contributors", "")
         listed = [name.strip() for name in names.split(",") if name.strip()]
