@@ -223,13 +223,19 @@ url = "https://docs.google.com/document/d/<id>/edit?tab=<tab>"
 Nothing else in the repository or the workflow names a document,
 and one report failing to build does not take the others with it;
 the run still exits non-zero, and the failure is on the front page.
-Building one document on its own, before it is on the list,
-is what the dispatch form's optional URL is for.
 
-It runs on `workflow_dispatch` only:
-a report publishes when someone decides it is ready,
-and a schedule would put whatever the doc said at 3 a.m. onto a public URL
-with nobody looking at it.
+Nothing published is built from anything but that list.
+Building one document on its own, before it is on the list,
+is a local `uv run eta-publish <url> -o out`:
+a report the list does not name has nothing committed
+for the build check to compare against,
+so publishing it from CI would publish what nobody had reviewed.
+Putting it on the list is the act that says it is ready.
+
+It runs on a push to `main`, and on `workflow_dispatch` to redeploy the same
+list on demand: a report publishes when someone decides it is ready, and a
+schedule would put whatever the doc said at 3 a.m. onto a public URL with
+nobody looking at it.
 
 The job fetches the document rather than deploying the committed
 `site/`, because the images are not in the repository
