@@ -1,3 +1,7 @@
+# `pre-commit install` installs both, so a clone that follows the README
+# gets the push check as well as the commit checks.
+default_install_hook_types: [pre-commit, pre-push]
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.2
@@ -34,3 +38,14 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+      # On push rather than on commit: it fetches every document, which is
+      # slow and needs credentials, and what it guards against is a push to
+      # `main` that the Pages workflow would refuse to deploy.
+      - id: committed-site
+        name: the committed site is what a fresh build writes
+        entry: scripts/check-committed-site.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
