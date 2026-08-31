@@ -75,39 +75,19 @@ jobs:
       # report is a pull request rather than an edit to this file. The
       # dispatch input builds one document on its own, for a report that is
       # not on the list yet.
-      - name: Build the reports
+      #
+      # Building and checking are one script, which is also what the pre-push
+      # hook runs, so what may be published is decided in one place rather
+      # than by a workflow step and a hook that have to be kept in step.
+      # Failing here publishes nothing and keeps the previous deploy up,
+      # which is the safe direction.
+      - name: Build the reports, and check they are what was committed
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/key.json
+          # Through the environment rather than interpolated into the command,
+          # which would run whatever the dispatch input said as shell.
           DOC: ${{ inputs.doc }}
-        run: |
-          if [ -n "$DOC" ]; then
-            uv run eta-publish "$DOC" -o site
-          else
-            uv run eta-publish -o site
-          fi
-
-      # What is deployed has to be what was reviewed. A push deploys by
-      # fetching the documents, so without this it would publish whatever
-      # Google Docs said at that moment: a sentence someone was still
-      # editing, or a paragraph deleted an hour ago and not yet restored.
-      #
-      # A build is deterministic, so if the documents have not changed since
-      # they were committed, it rewrites the committed files byte for byte
-      # and there is no diff. `doc.json` covers the text and `images.json`
-      # covers the pictures, which are not committed themselves but whose
-      # hashes are.
-      #
-      # Failing here publishes nothing and keeps the previous deploy up,
-      # which is the safe direction: the fix is to re-run the build locally
-      # and commit what it produces, which is the same act as reviewing it.
-      - name: Check the build matches what was committed
-        run: |
-          if ! git diff --quiet -- site; then
-            git diff --stat -- site >&2
-            echo '::error::the documents have changed since site/ was committed; run' \
-                 '"uv run eta-publish" locally, review the diff, and commit the result' >&2
-            exit 1
-          fi
+        run: scripts/check-committed-site.sh "$DOC"
 
       # The deploy is a copy of `site/`: a build already writes each report
       # as `index.html` in its own directory, with the site index beside

@@ -329,14 +329,17 @@ run as pre-commit hooks and again in CI.
 Tests run against checked-in Docs API responses,
 so neither ever needs Google credentials or the network.
 
-One more hook runs on push rather than on commit, and only when the branch
-being pushed is `main`: it rebuilds `site/` by fetching the documents and
-fails if that differs from what is committed. This is the check the Pages
-workflow makes before it deploys, so failing it here is finding out now
-rather than from a red workflow after the push. It needs credentials and
-the network, unlike everything else here; `git push --no-verify` skips it
-when those are what is missing. When it fails, the rebuilt files are left
-in the working tree, which is what to read and commit.
+One more hook runs on push rather than on commit: `scripts/check-committed-site.sh`
+rebuilds `site/` by fetching the documents and fails if that differs from
+what is committed. The Pages workflow runs the same script before it
+deploys, so this is the deploy's own check, run on the way out rather than
+after the push. It runs on every branch, not only `main`: a branch whose
+site is already stale is a merge that will fail.
+
+It needs credentials and the network, unlike everything else here, and
+`git push --no-verify` skips it when those are what is missing. When it
+fails, the rebuilt files are left in the working tree, which is what to
+read and commit.
 
 `site/` is the published site, committed: a report at its published path
 with its `doc.json` and everything emitted from it. It doubles as the
