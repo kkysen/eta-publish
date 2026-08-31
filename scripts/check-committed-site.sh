@@ -1,55 +1,60 @@
 #!/usr/bin/env bash
 #
-# Fail a push that would fail the deploy.
+# Build the site from the documents and refuse the result if it differs from
+# what is committed.
 #
-# A push to `main` republishes the site by fetching the documents, and the
-# workflow then refuses to deploy unless what it built matches the committed
-# `site/`. That check is the whole reason the built site is in the
-# repository: it is how a deploy is reviewed before it happens. Finding out
-# from a red workflow ten minutes later is the same check, later and further
-# away, so this runs it here.
+# What is deployed has to be what was reviewed. A push to `main` republishes
+# the site by fetching the documents, so without this it would publish
+# whatever Google Docs said at that moment: a sentence someone was still
+# editing, or a paragraph deleted an hour ago and not yet restored.
 #
-# It builds into `site/` rather than somewhere else, for two reasons: the
-# images are cached there, so a rebuild that changes nothing downloads
-# nothing, and if the check does fail, the tree is left holding exactly the
-# files to read and commit.
+# A build is deterministic, so if the documents have not changed since they
+# were committed, it rewrites the committed files byte for byte and there is
+# no diff. `doc.json` covers the text and `images.json` covers the pictures,
+# which are not committed themselves but whose hashes are.
 #
-# `git push --no-verify` skips it, which is the right move when the network
-# or the credentials are the thing that is missing rather than the build.
+# This is one script rather than a workflow step and a hook that agree,
+# because two copies of a rule about what may be published is one copy too
+# many. The workflow runs it before deploying, where failing publishes
+# nothing and keeps the previous deploy up. The pre-push hook runs it on the
+# way out, where failing costs a minute instead of a red workflow.
+#
+# Usage: check-committed-site.sh [DOC]
+#
+# `DOC` builds one document on its own, for a report that is not in
+# `reports.toml` yet. Without it, every report on the list is built.
 
 set -euo pipefail
 
-# `pre-commit` sets this on a pre-push hook. Only `main` deploys, so only a
-# push to `main` can fail the deploy. Unset means this was run by hand.
-remote_branch="${PRE_COMMIT_REMOTE_BRANCH:-}"
-if [[ -n $remote_branch && ${remote_branch##*/} != main ]]; then
-    echo "not pushing to main; the published build is not checked"
-    exit 0
-fi
+doc="${1:-}"
 
+# GitHub renders this as an annotation on the run; a terminal renders it as
+# what it says.
+fail() {
+    if [[ -n ${GITHUB_ACTIONS:-} ]]; then
+        echo "::error::$1" >&2
+    else
+        echo "$1" >&2
+    fi
+    exit 1
+}
+
+# The build writes into `site/`, so anything uncommitted there is about to
+# be written over, and the check is about what is committed either way.
 if ! git diff --quiet -- site || ! git diff --cached --quiet -- site; then
-    echo "site/ has uncommitted changes, and the check rebuilds into it." >&2
-    echo "Commit or stash them first." >&2
-    exit 1
+    fail "site/ has uncommitted changes and this rebuilds into it; commit or stash them first"
 fi
 
-echo "rebuilding site/ from the documents, the way the deploy will..."
-if ! uv run eta-publish -o site; then
-    echo >&2
-    echo "the build failed, so the deploy would too." >&2
-    echo "If the network or the credentials are what is missing rather than" >&2
-    echo "the build, push with --no-verify." >&2
-    exit 1
+if [[ -n $doc ]]; then
+    uv run eta-publish "$doc" -o site
+else
+    uv run eta-publish -o site
 fi
 
 if ! git diff --quiet -- site; then
     git diff --stat -- site >&2
-    echo >&2
-    echo "the documents have changed since site/ was committed, so the" >&2
-    echo "deploy would publish something that was never reviewed." >&2
-    echo "The rebuilt files are in the working tree: read the diff and" >&2
-    echo "commit it, which is the same act as reviewing it." >&2
-    exit 1
+    fail "the documents have changed since site/ was committed; \
+review the rebuilt files now in the working tree and commit them"
 fi
 
 echo "site/ is what a fresh build writes"
