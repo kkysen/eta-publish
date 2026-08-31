@@ -243,10 +243,6 @@ class Parser:
         The live report has these all through it, `See Station Depth`,
         each a dead end: a name, italicized, pointing nowhere. One was linked by hand.
 
-        Read here rather than in an emitter,
-        because it is a fact about how the documents are written
-        and all three outputs want the link.
-
         Matching is on the whole italic run, not on each styled piece of one,
         so a section name with a bold word in it still resolves.
         The italics come off: they stood in for the link, and now there is one.

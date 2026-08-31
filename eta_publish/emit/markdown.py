@@ -195,9 +195,7 @@ class MarkdownEmitter(Emitter):
     def figure(self, node: Figure) -> str:
         """Unlike the published outputs, the archive keeps the `Source:` line.
 
-        It records which file in Drive an image came from,
-        which is the provenance worth having in a durable record,
-        and nothing here is published.
+        It records which file in Drive an image came from, and nothing here is published.
         """
         # Caption and credit are their own lines rather than emphasized:
         # the published report italicizes neither,

@@ -162,7 +162,7 @@ class HtmlEmitter(Emitter):
         Two blocks saying exactly the same thing hash the same,
         and the second gets a counted suffix.
         That suffix is positional, which nothing else here is,
-        and it is the least bad option: the blocks are indistinguishable,
+        but the blocks are indistinguishable,
         so there is nothing else to tell them apart with.
         It applies only to the duplicates.
         """

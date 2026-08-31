@@ -1,10 +1,4 @@
-"""The build itself: fetch, emit, compile, and the checks around them.
-
-Separate from `__main__` so that what a build does
-is not tangled up with how a command line describes it,
-and so one document and a whole list of them run the same code
-rather than two copies of one order of operations that drift apart.
-"""
+"""The build itself: fetch, emit, compile, and the checks around them."""
 
 import hashlib
 import json

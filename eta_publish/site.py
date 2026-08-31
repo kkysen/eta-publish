@@ -14,8 +14,6 @@ that is a line to fix in the document,
 not a reason to fail the build for the reports either side of it.
 
 One failing report does not stop the others, for the same reason.
-A fetch can fail for reasons that have nothing to do with the other documents,
-and a site missing one report beats no site at all.
 The exit status still reports it.
 """
 
@@ -30,13 +28,7 @@ from .naming import slugify
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
-"""Which documents the site is built from, committed beside the code.
-
-A list in the repository rather than a workflow input:
-what the site publishes is a fact about the project, so it belongs in review and history,
-and adding the next report should be a pull request
-rather than something typed into a form and forgotten.
-"""
+"""Which documents the site is built from, committed beside the code."""
 
 
 @dataclass(frozen=True)
@@ -130,9 +122,8 @@ def report_path(doc: Document) -> str:
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
     """Build every report, keeping going when one of them cannot be built.
 
-    Failing late rather than at the first error is the only sense a list makes:
-    a document that cannot be fetched says nothing about the next one.
-    With a single report it costs nothing, since there is nothing after it to salvage.
+    A document that cannot be fetched says nothing about the next one,
+    and a site missing one report beats no site at all.
     """
     site = Site()
     for report in reports:
