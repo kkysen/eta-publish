@@ -15,12 +15,12 @@ name: Pages
 on:
   push:
     branches: [main]
+  # A redeploy on demand, of the same reports a push deploys. It takes no
+  # document to build on its own: a report that is not in `reports.toml` has
+  # nothing committed for the build check to compare against, so publishing
+  # one from here would publish what nobody had reviewed. Building a report
+  # before it goes on the list is a local `eta-publish <url> -o out`.
   workflow_dispatch:
-    inputs:
-      doc:
-        description: "Doc URL to build on its own; defaults to every entry in reports.toml"
-        required: false
-        type: string
 
 # Read-only on the repository. `pages` and `id-token` are what the deploy
 # needs, and nothing here writes a commit.
@@ -72,9 +72,7 @@ jobs:
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
       # Which documents to build lives in `reports.toml`, so adding the next
-      # report is a pull request rather than an edit to this file. The
-      # dispatch input builds one document on its own, for a report that is
-      # not on the list yet.
+      # report is a pull request rather than an edit to this file.
       #
       # Building and checking are one script, which is also what the pre-push
       # hook runs, so what may be published is decided in one place rather
@@ -84,10 +82,7 @@ jobs:
       - name: Build the reports, and check they are what was committed
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/key.json
-          # Through the environment rather than interpolated into the command,
-          # which would run whatever the dispatch input said as shell.
-          DOC: ${{ inputs.doc }}
-        run: scripts/check-committed-site.sh "$DOC"
+        run: scripts/check-committed-site.sh
 
       # The deploy is a copy of `site/`: a build already writes each report
       # as `index.html` in its own directory, with the site index beside

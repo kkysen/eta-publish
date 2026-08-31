@@ -19,14 +19,13 @@
 # nothing and keeps the previous deploy up. The pre-push hook runs it on the
 # way out, where failing costs a minute instead of a red workflow.
 #
-# Usage: check-committed-site.sh [DOC]
-#
-# `DOC` builds one document on its own, for a report that is not in
-# `reports.toml` yet. Without it, every report on the list is built.
+# It builds the list in `reports.toml` and nothing else. Building one
+# document on its own is a thing to do locally, with `eta-publish <url> -o
+# out`: a report that is not on the list has nothing committed to compare a
+# build of it against, so this could only ever wave it through, and the list
+# is the file that says what this site publishes.
 
 set -euo pipefail
-
-doc="${1:-}"
 
 # GitHub renders this as an annotation on the run; a terminal renders it as
 # what it says.
@@ -47,11 +46,7 @@ if ! git diff --quiet HEAD -- site; then
     fail "site/ has uncommitted changes and this rebuilds into it; commit or stash them first"
 fi
 
-if [[ -n $doc ]]; then
-    uv run eta-publish "$doc" -o site
-else
-    uv run eta-publish -o site
-fi
+uv run eta-publish -o site
 
 # The whole diff, not a summary of it: it is the change to a published
 # report, and reading it is the review that the commit stands for. `--quiet`
