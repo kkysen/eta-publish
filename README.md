@@ -43,7 +43,7 @@ Reads the Google Doc, builds a document tree, and emits from that tree:
 | `report.html` | One fragment to paste into a single Squarespace code block |
 | `report.md` | Human-readable, diffable archive committed to git |
 | `report.typ` / `report.pdf` | [Typst](https://typst.app/) source, and the compiled PDF |
-| `preview.html` | Standalone page for review, including any warnings |
+| `index.html` | Standalone page for review, including any warnings |
 | `images/` | The doc's inline images, for hosting outside Squarespace |
 
 Headings, anchors, the table of contents, footnote numbering,
@@ -211,7 +211,7 @@ from its live document and deploys them as one site.
 Each lands at the path its own front matter names,
 so `/reports/digging-out-deep-hole-sas-west` in the header
 becomes `kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/`,
-carrying `preview.html` as its index
+serving `index.html` there
 alongside `report.html`, `report.pdf`, and its images.
 The site's front page lists them,
 with each report's date, byline, and warning count,
