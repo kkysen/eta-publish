@@ -1,27 +1,21 @@
 """Break prose into lines at sentence boundaries.
 
-The Markdown archive is committed to git,
-so line breaks decide what a diff looks like.
+The Markdown archive is committed to git, so line breaks decide what a diff looks like.
 Wrapped to a fixed width, a paragraph is one long line
 and correcting a single word reports the whole paragraph as changed.
 Broken at sentences,
-the August 21 addendum to the SAS West report is a three-line diff
-and nothing else moves.
+the August 21 addendum to the SAS West report is a three-line diff.
 
-The rule is deliberately narrow,
-because it has to be *stable* far more than it has to be clever.
+The rule is narrow because it has to be *stable* more than clever.
 Report prose is full of `125 St.`, `Phase 2.`, `$7.7 billion.`, and `Nov. 2026`,
 and a splitter that changes its mind between runs churns every file it touches.
 
 Where a case is genuinely ambiguous, it does not break.
-A sentence ending in a street abbreviation
-(`...runs under 125 St. It would cost...`)
-is indistinguishable from one continuing (`...the 125 St. station...`)
+`...runs under 125 St. It would cost...`
+is indistinguishable from `...the 125 St. station...`
 without understanding the sentence.
-Not breaking merges two sentences onto one line,
-which makes a diff slightly coarser;
-breaking wrongly splits a sentence in half,
-which looks broken and churns on every regeneration.
+Not breaking merges two sentences onto one line, a slightly coarser diff;
+breaking wrongly splits a sentence in half and churns on every regeneration.
 The coarser diff is the better failure.
 
 Changing anything here reflows every archived report,
@@ -31,8 +25,7 @@ so it should be its own commit, reviewed as a reflow rather than as content.
 import re
 
 # Words that end in a period without ending a sentence.
-# Kept explicit and short:
-# a general abbreviation detector is exactly the kind of cleverness
+# Explicit and short: a general abbreviation detector is the kind of cleverness
 # that makes the output unstable.
 ABBREVIATIONS = frozenset(
     {

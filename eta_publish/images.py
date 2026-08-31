@@ -2,19 +2,17 @@
 
 The Docs API hands back short-lived `contentUri` values,
 so they can never be the published `src`.
-We fetch each once at build time
-and write it under the deterministic filename the parser assigned.
+Each is fetched once at build time
+and written under the deterministic filename the parser assigned.
 
 Crops are applied here, to the file.
-A Docs crop is stored as fractions of the original
-and the API serves the uncropped image,
+A Docs crop is fractions of the original and the API serves the uncropped image,
 so every output would otherwise show the untrimmed picture.
-Doing it here rather than in the HTML is what makes it reach all three:
-Markdown cannot express a crop at all, and a CSS one would never reach the PDF.
+Here rather than in the HTML is what makes it reach all three:
+Markdown cannot express a crop, and a CSS one would never reach the PDF.
 
-These same files are what the PDF needs,
-so one download serves both the web and the print output,
-and one upload to whatever host serves both.
+The PDF needs these same files,
+so one download serves both the web and the print output.
 """
 
 from pathlib import Path
@@ -45,7 +43,7 @@ def download(
     http = session or requests.Session()
     written: dict[str, Path] = {}
 
-    # A saved response carries no URIs at all, because they expire and are not committed.
+    # A saved response carries no URIs, because they expire and are not committed.
     # That is the ordinary shape of a rebuild rather than a defect in any one image,
     # so it is said once here instead of 29 times below,
     # and the remedy is a fetch rather than an edit to the document.
@@ -92,9 +90,8 @@ def download(
 def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, Path]) -> bool:
     """Write the vector original, returning whether it is what gets used.
 
-    A failure here falls back to the raster rather than to nothing:
-    the document still holds a perfectly good picture,
-    and a chart that renders slightly softer beats a report with a hole in it.
+    A failure falls back to the raster rather than to nothing:
+    a chart that renders slightly softer beats a report with a hole in it.
     """
     vector = image.vector
     if vector is None:

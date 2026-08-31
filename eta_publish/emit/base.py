@@ -23,9 +23,8 @@ from ..nodes import (
 )
 
 # The line a report introduces its contributors with.
-# It is not in the document:
-# the header block names who they are, and this says what naming them means.
-# Every report says it the same way, and every output says it,
+# The header block names who they are; this says what naming them means.
+# Every report and every output says it the same way,
 # so it lives here rather than in one emitter or in each document.
 CONTRIBUTORS_NOTE = (
     "We wish to acknowledge the following ETA members who contributed to "
@@ -37,21 +36,19 @@ class Emitter(ABC):
     """Walks a `Document` and returns source in one output format.
 
     Subclasses implement the per-node methods.
-    The dispatch and the traversal live here
-    so that adding a node type fails loudly in every emitter at once
-    rather than being silently skipped by one of them.
+    Dispatch and traversal live here so that adding a node type
+    fails loudly in every emitter at once rather than being skipped by one.
 
-    Note the trailing underscore on `list_`.
-    A method named `list` would shadow the builtin throughout the class body,
-    so every `list[...]` annotation in this file would resolve to the method instead.
+    `list_` carries a trailing underscore because a method named `list`
+    would shadow the builtin throughout the class body,
+    and every `list[...]` annotation in this file would resolve to the method.
     """
 
     extension: str = ""
 
     def __init__(self) -> None:
-        # Set by `emit`, which is the only entry point.
-        # Node methods read it for document-wide context,
-        # so calling one directly will fail.
+        # Set by `emit`, the only entry point.
+        # Node methods read it for document-wide context, so calling one directly fails.
         self.doc = Document()
 
     def emit(self, doc: Document) -> str:

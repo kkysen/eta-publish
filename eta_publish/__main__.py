@@ -3,13 +3,11 @@
 One document or the whole list of them, the same way.
 The single argument is either a document
 (a Docs URL, an id, or a saved response)
-or a `.toml` list of them, and it defaults to `reports.toml`.
+or a `.toml` list of them, defaulting to `reports.toml`.
 Each report lands under the path its own front matter gives it,
 with an index listing them.
 
-Both defaults name the committed thing:
-`reports.toml` is the list this site publishes
-and `site/` is where it publishes from,
+Both defaults name the committed thing,
 so `eta-publish` with no arguments rebuilds the site as it ships.
 
 One argument rather than many:
@@ -18,8 +16,8 @@ and a list is a file that can be committed, reviewed, and commented
 rather than a shell line that is right once.
 
 There is no separate single-document mode.
-A publish of one report is a publish of a list with one entry in it,
-and keeping that true means the common case and the real case run the same code.
+A publish of one report is a publish of a list with one entry,
+which keeps the common case and the real case on the same code.
 """
 
 import sys
@@ -27,8 +25,8 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-# `Option` and `Argument` stay qualified as `typer.Option` and `typer.Argument`:
-# both are ordinary words that a document tool can expect to want for its own things.
+# `Option` and `Argument` stay qualified:
+# both are ordinary words a document tool can expect to want for its own things.
 # The rest are distinctive enough to import.
 import typer
 from typer import BadParameter, Exit, Typer
@@ -40,9 +38,7 @@ from .site import build_site, index_page, reports_from
 class Suggestions(StrEnum):
     """How to resolve the document's open suggestions.
 
-    An enum rather than a pair of strings,
-    so the choices are the type
-    and `--suggestions` cannot be handed a mode the API does not have.
+    An enum, so `--suggestions` cannot be handed a mode the API does not have.
     """
 
     REJECTED = "rejected"

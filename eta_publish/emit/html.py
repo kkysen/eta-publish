@@ -32,8 +32,8 @@ from ..nodes import (
 )
 from .base import CONTRIBUTORS_NOTE, Emitter
 
-# Only styles what the emitter produces, and inherits everything else from the theme,
-# so a report does not fight the rest of the site.
+# Only styles what the emitter produces, inheriting the rest from the theme,
+# so a report does not fight the site around it.
 REPORT_CSS = """
 .eta-report figure { margin: 2.5em 0; }
 /* Figures the document puts next to each other sit next to each other, if
@@ -113,9 +113,8 @@ REPORT_CSS = """
 
 
 # A Squarespace code block holds 400 KB.
-# Warn well before that,
-# because the limit is what the editor accepts, not what it is pleasant to paste:
-# a 200 KB paste into a browser textarea is already slow to save.
+# Warn well before that: the limit is what the editor accepts,
+# not what is pleasant to paste, and 200 KB into a textarea is already slow to save.
 CODE_BLOCK_LIMIT = 400_000
 CODE_BLOCK_WARN = 250_000
 
@@ -128,7 +127,7 @@ def split_at_headings(fragment: str) -> list[str]:
     """Cut a fragment into pieces at `h2` boundaries, for oversized reports.
 
     Each piece is a standalone `.eta-report` div,
-    so they can be pasted into consecutive code blocks and still pick up the same CSS.
+    so consecutive code blocks still pick up the same CSS.
     """
     opening = '<div class="eta-report">'
     body = fragment
@@ -151,8 +150,6 @@ class HtmlEmitter(Emitter):
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
         self._taken: set[str] = set()
-        # The section paragraphs are being numbered within,
-        # and how many of them have been written.
         # A paragraph's id is its section's id and its place in that section,
         # so both reset at every heading.
         self._scope = ""
@@ -163,10 +160,10 @@ class HtmlEmitter(Emitter):
         """An id for a block, unique within the page.
 
         Two blocks saying exactly the same thing hash the same,
-        and the second one gets a counted suffix.
+        and the second gets a counted suffix.
         That suffix is positional, which nothing else here is,
-        and it is the least bad option available:
-        the blocks are indistinguishable, so there is nothing else to tell them apart with.
+        and it is the least bad option: the blocks are indistinguishable,
+        so there is nothing else to tell them apart with.
         It applies only to the duplicates.
         """
         return self.take(content_anchor(prefix, text))
@@ -184,8 +181,7 @@ class HtmlEmitter(Emitter):
     @override
     def document(self, doc: Document) -> str:
         # Every id on the page is allocated here,
-        # so a second `emit` of the same document produces the same ids
-        # rather than suffixed ones.
+        # so a second `emit` of the same document produces the same ids, not suffixed ones.
         self._taken = {"title", "short", "table-of-contents", "footnotes", "contributors"}
         self._scope = ""
         self._paragraphs = 0
@@ -209,18 +205,15 @@ class HtmlEmitter(Emitter):
 
         Not a byline under the title.
         A report is the work of most of a chapter, nine people here,
-        and a line of nine names above the first paragraph
-        reads as a masthead rather than as a credit.
-        The published report puts them at the bottom, after the footnotes,
-        and says what they did.
+        and nine names above the first paragraph read as a masthead rather than a credit.
+        The published report puts them at the bottom, after the footnotes.
 
-        The names come from `Public Contributors:`
-        and are listed in the order the document lists them:
+        The names come from `Public Contributors:`, in the order the document lists them:
         the header block is the one place the credits are maintained,
-        so reordering them here would publish something no one wrote.
+        so reordering here would publish something no one wrote.
 
-        A report with no `Public Contributors:` gets no section at all,
-        the way `slug` is simply empty when the header names no URL.
+        No `Public Contributors:` means no section at all,
+        the way `slug` is empty when the header names no URL.
         """
         names = doc.contributors
         if not names:
@@ -237,11 +230,10 @@ class HtmlEmitter(Emitter):
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.
 
-        Absent entirely when the header names no date.
-        Plain text rather than a `<time>`:
-        that element only carries machine-readable meaning with an ISO stamp,
-        and `date_text` keeps the formatted string the chip displays
-        and drops the timestamp behind it.
+        Absent when the header names no date.
+        Plain text rather than a `<time>`,
+        which only carries machine-readable meaning with an ISO stamp:
+        `date_text` keeps the string the chip displays and drops the timestamp behind it.
         """
         date = doc.dateline
         if not date:
@@ -252,28 +244,24 @@ class HtmlEmitter(Emitter):
         """The sections, as a list rather than a run of separated links.
 
         A list is what a table of contents is: one entry per line,
-        which leaves room for the entries to be indented under the section they belong to.
+        leaving room to indent entries under the section they belong to.
         The published report runs them together separated by pipes,
         which reads as a sentence and has nowhere to put a subsection.
 
         Every heading is listed, not just the top level.
-        A reader who wants `Station Depth` should be able to see that it is there,
-        and a document that bothered to write a subsection
-        is a document that thinks it worth finding.
+        A document that bothered to write a subsection thinks it worth finding.
         The published report lists two levels and stops,
         which is why `Ground Conditions` appears nowhere.
 
-        The back matter is listed too,
-        though the emitter writes those two headings rather than the document.
+        The back matter is listed too, though the emitter writes those two headings.
         They are sections of the page like any other,
         and "at the end" is not an address in a report this long:
-        the only other way to the footnotes is to click a reference,
-        which means finding one first.
-        So every heading the page shows is in here,
-        which is a simpler promise than every heading but two.
+        the only other way to the footnotes is to find a reference and click it.
+        Every heading the page shows is in here,
+        a simpler promise than every heading but two.
 
-        A document with no headings of its own still gets no table of contents.
-        A table listing only the footnotes is not a table of contents, it is a link.
+        A document with no headings of its own gets no table of contents:
+        a table listing only the footnotes is a link.
         """
         headings = doc.headings()
         if not headings:
@@ -292,7 +280,7 @@ class HtmlEmitter(Emitter):
 
         At the top level, so they close the appendices rather than joining them:
         the footnotes are not part of the last section,
-        whatever level the document happens to give that section's neighbours.
+        whatever level the document gives that section's neighbours.
         """
         sections = []
         if doc.footnotes:
@@ -306,7 +294,7 @@ class HtmlEmitter(Emitter):
 
         A heading that skips a level, an `h4` directly under an `h2`,
         opens one list rather than two:
-        the empty list a strict reading would emit renders as an indent with nothing in it,
+        the empty list a strict reading emits is an indent with nothing in it,
         and the document meant a subsection either way.
         """
         out: list[str] = []
@@ -348,16 +336,14 @@ class HtmlEmitter(Emitter):
         )
         # Immediately after the number the list renders, rather than after the note.
         # Several of these run to a paragraph,
-        # and the way back should be where the eye already is
-        # instead of at the end of the reading.
+        # and the way back should be where the eye already is.
         #
         # Inside that first paragraph, not before it: a paragraph is a block,
-        # so an arrow placed ahead of one sits on a line of its own
-        # with the note beginning underneath it.
-        # Matched as a tag rather than as the literal `<p>`,
-        # because the paragraph carries an id.
+        # so an arrow ahead of one sits on a line of its own
+        # with the note beginning underneath.
+        # Matched as a tag rather than the literal `<p>`, because the paragraph has an id.
         # The mark hangs outside the footnote's own number
-        # rather than sitting beside the arrow, which it crowded.
+        # rather than beside the arrow, which it crowded.
         mark = self.mark(f"fn{note.number}", "footnote")
         opening = re.match(r"<p\b[^>]*>", body)
         if opening:
@@ -372,13 +358,13 @@ class HtmlEmitter(Emitter):
         """Blocks in order, with runs of figures kept together in a row.
 
         The document has no way to say "these two go side by side",
-        but it does say they belong together
+        but it says they belong together
         by putting them one after another with nothing in between.
-        That is the whole signal, and it is what the row is built from.
+        That is the whole signal.
 
-        A lone figure is left as it was.
-        Wrapping one in a row would change every figure in the report
-        to say something about a run of one.
+        A lone figure is left alone:
+        wrapping one in a row would make every figure in the report
+        say something about a run of one.
         """
         out: list[str] = []
         i = 0
@@ -399,14 +385,14 @@ class HtmlEmitter(Emitter):
         """`emit()`, with the paragraphs inside it numbered from `scope`.
 
         A footnote and a table cell are made of paragraphs,
-        and they are not passages of the report:
+        but they are not passages of the report:
         numbering them along with it would put 43 between 12 and 13.
-        They are numbered within the footnote or the table that holds them instead,
+        They are numbered within whatever holds them,
         which is where anyone would count them from anyway.
         """
         was = self._scope, self._paragraphs, self._marked
         # And unmarked:
-        # a footnote already carries a mark of its own and an arrow back to the text,
+        # a footnote already has a mark and an arrow back to the text,
         # and a table cell has no margin to hang one in.
         # The ids are still there, for a link written by hand.
         self._scope, self._paragraphs, self._marked = scope, 0, False
@@ -418,12 +404,11 @@ class HtmlEmitter(Emitter):
     def mark(self, anchor: str, what: str = "section") -> str:
         """The link a block carries to itself.
 
-        Written ahead of the block's own content rather than after it,
-        so that every mark on the page hangs in one column:
-        a reader looking for the link to a figure
-        looks where the link to the paragraph above it was.
+        Ahead of the block's own content rather than after it,
+        so every mark on the page hangs in one column:
+        the link to a figure is where the link to the paragraph above it was.
         The `#` is the stylesheet's,
-        so that quoting a heading does not copy a character nobody wrote.
+        so quoting a heading does not copy a character nobody wrote.
         """
         return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
 
@@ -432,10 +417,9 @@ class HtmlEmitter(Emitter):
         """Every heading carries a link to itself.
 
         A section of a report this long is what people send each other,
-        and the anchor it is sent by is already there:
+        and the anchor is already there:
         this only gives the reader something to copy it from,
-        rather than reading the id out of the page source
-        or scrolling and hoping the address bar caught up.
+        rather than reading the id out of the page source.
         """
         # The section every paragraph after this one is numbered within,
         # until the next heading opens the next one.
@@ -447,10 +431,9 @@ class HtmlEmitter(Emitter):
 
     @override
     def paragraph(self, node: Paragraph) -> str:
-        """A paragraph is linkable,
-        because a report this long gets quoted a paragraph at a time.
-        One holding no text is not:
-        there is nothing to hash and nothing anyone would link to."""
+        """A paragraph is linkable, because a report this long gets quoted
+        a paragraph at a time.
+        One holding no text is not: nothing to hash, and nothing anyone would link to."""
         if not plain(node.content):
             return f"<p>{self.inlines(node.content)}</p>"
         self._paragraphs += 1
@@ -464,8 +447,7 @@ class HtmlEmitter(Emitter):
         """The list is linkable; its items are not.
 
         An item is a line rather than a passage,
-        and every one of them would want an id
-        derived from a few words that a copy edit moves around.
+        and each would want an id derived from a few words a copy edit moves around.
         The list is the unit someone links to."""
         tag = "ol" if node.kind is ListKind.NUMBER else "ul"
         text = " ".join(plain(item.content) for item in node.items)
@@ -474,8 +456,7 @@ class HtmlEmitter(Emitter):
             return items
         # Wrapped, because a list may hold only list items:
         # the mark cannot be a child of the `ul` the way it is a child of a `p`,
-        # and putting it inside the first item
-        # would hang it beside that item's bullet rather than beside the list.
+        # and inside the first item it would hang beside that item's bullet.
         anchor = self.anchor("list", text)
         return f'<div class="list-block" id="{anchor}">{self.mark(anchor, "list")}{items}</div>'
 
@@ -490,8 +471,8 @@ class HtmlEmitter(Emitter):
 
     @override
     def figure(self, node: Figure) -> str:
-        # `Figure.source` is deliberately not emitted.
-        # It names the original file in Drive, for whoever is assembling the report,
+        # `Figure.source` is not emitted:
+        # it names the original file in Drive, for whoever assembles the report,
         # and does not appear on the published page.
         parts = [self.image(node.image)]
         if node.caption:
@@ -504,7 +485,7 @@ class HtmlEmitter(Emitter):
             )
         # Named for the image it holds, so the anchor is whatever the image is called:
         # the file its `Source:` line names,
-        # or `img-` and a hash of the Docs object id for a figure the document names none for.
+        # or `img-` and a hash of the object id where there is no such line.
         # `--aspect` is a fact about the picture, written wherever it is known.
         # Only `.figure-row` reads it,
         # and only when the row has more than one figure to divide a line between.
@@ -526,7 +507,7 @@ class HtmlEmitter(Emitter):
         )
         # The anchor first,
         # because the paragraphs in the cells are numbered within the table
-        # rather than within the section it sits in:
+        # rather than the section it sits in:
         # a comparison table's cells are not passages of the report.
         anchor = self.anchor("table", text) if text else ""
         rows = self.within(
@@ -623,10 +604,10 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     """The whole report as a page,
     which is what a build writes as `index.html` and what the site serves.
 
-    Deliberately not the fragment with a wrapper bolted on.
+    Not the fragment with a wrapper bolted on.
     `report.html` is the fragment: a `div` to paste into a Squarespace code block,
     which inherits the site's typography and has nowhere to put a warning.
-    This is a document, with its own head, its own type,
+    This is a document, with its own head and type,
     and the parser's warnings where whoever is about to publish will see them.
     """
     body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
@@ -635,11 +616,9 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         items = "\n".join(f"<li>{escape(w)}</li>" for w in doc.warnings)
         warnings = f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
     short = doc.meta.get("short", "")
-    # The share card is what a link to the report unfurls as,
-    # and the only place it appears:
-    # it is a picture of the title, which a reader who has arrived does not need.
-    # `og:image` is read by everything that unfurls a link, Slack and Twitter included,
-    # so it is the one tag worth writing.
+    # The share card is what a link to the report unfurls as, and the only place it appears:
+    # a picture of the title, which a reader who has arrived does not need.
+    # `og:image` is read by everything that unfurls a link, so it is the one tag worth writing.
     card = ""
     if doc.card is not None:
         href = doc.image_href(doc.card)
