@@ -2,20 +2,7 @@
 
 #show: report.with(
   title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street",
-  meta: (
-    "project manager": "Khyber Sen",
-    "phase": "published",
-    "discussion channel": "#prj-sas",
-    "draft due date": "Jul 17, 2026",
-    "press due date": "Jul 21, 2026",
-    "final due date": "Aug 19, 2026",
-    "public contributors": "Khyber Sen, Darius Jankauskas, Robert Hale, Franklin Tang, Blair Lorenzo, Madison Feinberg, Tim Lazaroff, William Meehan, Alon Levy",
-    "private contributors": "",
-    "url": "/reports/digging-out-deep-hole-sas-west",
-    "short": "A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices and building a more shallow route, however, New York would not only be able to build more transit for less money, but would also save riders significant time every single day.",
-    "seo description": "A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, however, NY would not only be able to build more for less, but would also save riders time every day.",
-    "mta sas west feasibility study": "https://www.mta.info/document/196361",
-  ),
+  short: "A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices and building a more shallow route, however, New York would not only be able to build more transit for less money, but would also save riders significant time every single day.",
   dateline: "August 19, 2026",
   contributors: ("Madison Feinberg", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "William Meehan", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",

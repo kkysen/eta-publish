@@ -71,28 +71,21 @@ class TypstEmitter(Emitter):
     def document(self, doc: Document) -> str:
         """The header block as written, plus what the page publishes.
 
-        `doc.meta` is the fields as typed, handed over whole.
-        The page has an opinion about two, so they are passed separately
+        Only the fields something renders are passed, one argument each.
+        The header carries a private contributor list and the project's
+        internal dates and channels, and this file is committed:
+        handing the template everything put all of that in the repository
+        for the sake of the one field it reads.
+
+        The two the page has an opinion about are passed as it wants them
         rather than silently rewritten:
         the date written out, and the contributors in credited order.
         """
-        # One dictionary rather than one named argument each.
-        # A field name is whatever someone typed in the document,
-        # and as an argument name it was Typst code:
-        # a field called `x:read("/etc/hostname"),y` ran when the PDF was built.
-        # As a key it is a string, and a string cannot be anything but itself.
-        # One field per line, and `(:)` for none:
-        # this file is committed, so a changed field should be a one-line diff,
-        # and `()` is an empty array in Typst rather than an empty dictionary.
-        fields = "".join(
-            f"    {string(key)}: {string(value)},\n" for key, value in doc.meta.items()
-        )
-        meta = f"  meta: (\n{fields}  )," if fields else "  meta: (:),"
         header = (
             f"#import {string(self.template)}: capped_image, report\n\n"
             f"#show: report.with(\n"
             f"  title: {string(doc.title)},\n"
-            f"{meta}\n"
+            f"  short: {string(doc.meta.get('short', ''))},\n"
             f"  dateline: {string(doc.dateline)},\n"
             f"  contributors: ({self.contributors(doc)}),\n"
             f"  contributors_note: {string(CONTRIBUTORS_NOTE)},\n"
