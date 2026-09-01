@@ -13,7 +13,7 @@ from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .naming import IMAGE_DIR
 from .nodes import Document
-from .parse import parse
+from .parse import parse, read_review
 
 
 @dataclass(frozen=True)
@@ -61,6 +61,37 @@ def load(ref: str, suggestions: str = "rejected") -> JsonObject:
     from .fetch import fetch
 
     return fetch(ref, suggestions=suggestions)
+
+
+REVIEW_KEYS = ("openSuggestions", "openComments", "openCommentsAreThisTab")
+"""What the fetch records about the editing still open on a document.
+
+Left out of the response entirely when the account could not read it,
+which is not the same as there being none.
+"""
+
+
+def carry_over_review(document: JsonObject, saved: Path) -> None:
+    """Keep the last answer about suggestions and comments where this run has none.
+
+    Reading suggestions needs edit access and reading comments needs Drive,
+    and the service account that rebuilds the site in CI has neither.
+    Without this it would write a page saying nothing is open,
+    differ from the committed one, and fail the check that the two match
+    over something no document changed.
+
+    A stale count beats a wrong one:
+    it is what was true when somebody with access last looked.
+    """
+    if all(key in document for key in REVIEW_KEYS) or not saved.is_file():
+        return
+    try:
+        previous = json.loads(saved.read_text())
+    except OSError, ValueError:
+        return
+    for key in REVIEW_KEYS:
+        if key not in document and key in previous:
+            document[key] = previous[key]
 
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:
@@ -280,10 +311,18 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     options = options or BuildOptions()
     document = load(ref, options.suggestions)
     doc = parse(document)
-    check(doc)
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)
+
+    # Before the checks, which warn about what it says,
+    # and before the response is written, which is what the next build reads.
+    # Where the report goes is the document's own to say,
+    # so the saved response cannot be found until it has been read once.
+    carry_over_review(document, dest / DOC_JSON)
+    read_review(doc, document)
+    check(doc)
+
     (dest / DOC_JSON).write_text(json.dumps(without_content_uris(document), indent=2))
 
     if doc.images and options.images:

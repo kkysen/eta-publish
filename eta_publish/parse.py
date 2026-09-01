@@ -816,9 +816,7 @@ class Parser:
         self.doc.title = self.title(content)
         self.doc.file_title = self.json.get("title", "")
         self.doc.tab_title = self.json.get("tabTitle", "")
-        self.doc.open_suggestions = int(self.json.get("openSuggestions", 0))
-        self.doc.open_comments = int(self.json.get("openComments", 0))
-        self.doc.open_comments_are_this_tab = bool(self.json.get("openCommentsAreThisTab"))
+        read_review(self.doc, self.json)
 
         # Allocated knowing every heading up front,
         # so two headings that slugify alike keep their anchors when the document reorders.
@@ -876,6 +874,19 @@ class Parser:
                 filename=names[figure.image.object_id],
                 named=not names_nothing(claimed),
             )
+
+
+def read_review(doc: Document, document: JsonObject) -> None:
+    """Tell `doc` what the fetch recorded about the editing still open on it.
+
+    Its own function because it is read twice:
+    once when the response is parsed,
+    and again once a run that could not read it
+    has carried the last answer over from the saved one.
+    """
+    doc.open_suggestions = int(document.get("openSuggestions", 0))
+    doc.open_comments = int(document.get("openComments", 0))
+    doc.open_comments_are_this_tab = bool(document.get("openCommentsAreThisTab"))
 
 
 def parse(doc_json: JsonObject) -> Document:
