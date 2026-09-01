@@ -6,7 +6,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.checks import REQUIRED_FIELDS, check
-from eta_publish.nodes import Document
+from eta_publish.nodes import Document, Figure, Image, Text
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -73,3 +73,37 @@ def test_an_seo_description_at_the_limit_is_fine(doc: Document) -> None:
     doc.meta["seo description"] = "x" * 300
     check(doc)
     assert doc.warnings == []
+
+
+def figure(*, caption: bool = True, credit: bool = True) -> Figure:
+    return Figure(
+        image=Image(object_id="io.9", filename="a-diagram"),
+        caption=[Text(text="What it shows.")] if caption else [],
+        credit=[Text(text="Credit: MTA")] if credit else [],
+    )
+
+
+def test_a_figure_with_both_is_not_warned_about(doc: Document) -> None:
+    doc.blocks = [figure()]
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_an_uncaptioned_figure_is_named_by_its_file(doc: Document) -> None:
+    """The Docs object id is not something the document shows anybody."""
+    doc.blocks = [figure(caption=False)]
+    check(doc)
+    assert doc.warnings == ["the image a-diagram has no caption"]
+
+
+def test_an_unattributed_figure_is_flagged(doc: Document) -> None:
+    """These reports run other people's diagrams on nearly every page."""
+    doc.blocks = [figure(credit=False)]
+    check(doc)
+    assert doc.warnings == ["the image a-diagram has no `Credit:` line"]
+
+
+def test_a_figure_missing_both_says_both(doc: Document) -> None:
+    doc.blocks = [figure(caption=False, credit=False)]
+    check(doc)
+    assert len(doc.warnings) == 2

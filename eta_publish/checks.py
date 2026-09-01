@@ -10,7 +10,7 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import Document
+from .nodes import Document, Figure
 
 REQUIRED_FIELDS = (
     "project manager",
@@ -50,6 +50,8 @@ Every other field empty is a line somebody meant to come back to.
 
 def check(doc: Document) -> None:
     """Warn about everything a published report should not be missing."""
+    _check_figures(doc)
+
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
         # Nine more warnings saying the same thing would bury it.
@@ -84,3 +86,22 @@ def _titled(field: str) -> str:
     return " ".join(
         word.upper() if word in ACRONYMS else word.capitalize() for word in field.split()
     )
+
+
+def _check_figures(doc: Document) -> None:
+    """Every picture is described and attributed, or says which one is not.
+
+    A caption is what the picture is for: uncaptioned, it is decoration
+    in a report that does not decorate.
+    A credit is whose it is, and these reports run other people's diagrams
+    on nearly every page.
+
+    Named by the file it is written as rather than by its Docs object id,
+    which nothing in the document shows anybody.
+    """
+    for block in doc.blocks:
+        if not isinstance(block, Figure):
+            continue
+        for what, content in (("caption", block.caption), ("`Credit:` line", block.credit)):
+            if not content:
+                doc.warn(f"the image {block.image.filename} has no {what}")
