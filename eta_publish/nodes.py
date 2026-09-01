@@ -299,14 +299,6 @@ class Document:
         listed = [name.strip() for name in names.split(",") if name.strip()]
         return sorted(listed, key=_by_surname)
 
-    DATE_FIELDS = ("publish due date", "final due date")
-    """What the header has called the publication date, newest name first.
-
-    The field was renamed in the document and the rename was silent:
-    the date simply stopped appearing, because nothing here reads a name it
-    was not told. Both are accepted so that neither a document that has been
-    renamed nor a response saved before the rename loses its date."""
-
     @property
     def dateline(self) -> str:
         """The publication date, written out, e.g. `August 19, 2026`.
@@ -319,10 +311,7 @@ class Document:
         Anything that does not parse as a date is published exactly as written:
         guessing would be worse than showing what the header says.
         """
-        for name in self.DATE_FIELDS:
-            if self.meta.get(name):
-                return _long_date(self.meta[name])
-        return ""
+        return _long_date(self.meta.get("publish due date", ""))
 
     @property
     def phase(self) -> str:
