@@ -158,27 +158,41 @@ def test_smart_chips_resolve(doc: Document) -> None:
 
 def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     """Each of these is something to fix in the document, not in the code.
-    A new warning appearing here means the report changed or the parser did."""
-    assert sorted(doc.warnings) == [
-        "17 images are unnamed, so each publishes under a hash; give each a "
-        "`Source:` line naming its file:\n> "
-        + ", ".join(
-            f"`{b.image.filename}`"
-            for b in doc.blocks
-            if isinstance(b, Figure) and not b.image.named
-        ),
+    A new warning appearing here means the report changed or the parser did.
+
+    The opening line of each: the two that carry a list or a quotation
+    are checked for what they list below.
+    """
+    assert sorted(w.split("\n")[0] for w in doc.warnings) == [
+        "17 images are unnamed, so each publishes under a hash; "
+        "give each a `Source:` line naming its file:",
         "17 suggestions still open on this tab; "
         "the build publishes the document without them, as it reads today",
         "3 comment threads still open on this tab",
-        "`SEO Description:` is 398 characters, over the 300 a search result shows:\n> "
-        + doc.meta["seo description"][:300]
-        + "~~"
-        + doc.meta["seo description"][300:]
-        + "~~",
+        "`SEO Description:` is 398 characters, over the 300 a search result shows:",
         "the image `img-44bf278f` has no `Credit:` line",
         "the image `project_cost_comparison` has no `Credit:` line",
         "unfinished text in the document: `SVG: TODO`",
     ]
+
+
+def test_every_unnamed_image_is_listed_with_what_it_shows(doc: Document) -> None:
+    """A hash names nothing, so the work of fixing these
+    is working out which picture `img-6fb0f9c4` is."""
+    warning = next(w for w in doc.warnings if "unnamed" in w)
+    listed = [line for line in warning.split("\n") if line.startswith("- ")]
+    unnamed = [b for b in doc.blocks if isinstance(b, Figure) and not b.image.named]
+    assert len(listed) == len(unnamed) == 17
+    assert listed[0].startswith("- `img-6fb0f9c4`: Composite image of the MTA")
+    # Every one says which picture it is, from its caption or its alt text.
+    assert all(": " in line for line in listed)
+
+
+def test_the_seo_warning_quotes_the_description(doc: Document) -> None:
+    warning = next(w for w in doc.warnings if "SEO Description" in w)
+    quoted = warning.split("\n")[1]
+    assert quoted.startswith("> A 125 St subway should be a slam dunk")
+    assert quoted.endswith("~~")
 
 
 # ---- properties that must hold for any published report -------------

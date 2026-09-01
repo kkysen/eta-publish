@@ -670,6 +670,7 @@ def _marked_up(warning: str) -> str:
         cut=lambda c: f"<s>{escape(c)}</s>",
         text=escape,
         quote=lambda q: f"<blockquote>{q}</blockquote>",
+        bullets=lambda items: "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>",
     )
 
 

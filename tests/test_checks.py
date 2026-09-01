@@ -154,8 +154,18 @@ def test_an_unnamed_image_is_flagged(doc: Document) -> None:
     check(doc)
     assert doc.warnings == [
         "1 image is unnamed, so each publishes under a hash; "
-        "give each a `Source:` line naming its file:\n> `a-diagram`"
+        "give each a `Source:` line naming its file:\n- `a-diagram`: What it shows."
     ]
+
+
+def test_an_unnamed_image_falls_back_to_its_alt_text(doc: Document) -> None:
+    """A picture with no caption still has to be told apart from the others."""
+    bare = figure(caption=False, named=False)
+    bare.image = replace(bare.image, alt="A cross-section of the station box")
+    doc.blocks = [bare]
+    check(doc)
+    listed = doc.warnings[-1].split("\n")[-1]
+    assert listed == "- `a-diagram`: A cross-section of the station box"
 
 
 def test_an_image_a_human_named_img_is_not_unnamed(doc: Document) -> None:
