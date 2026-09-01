@@ -3,12 +3,13 @@
 // The emitted `.typ` is a document body that imports this,
 // so a change to how reports look is a change to one file rather than to every report.
 
-// No image is taller than this.
+// No image in the body is taller than this.
 // The reports are illustrated at whatever size someone dropped the picture in at,
-// and a tall one pushed the title page's own picture onto page two.
-// 4.5in is what leaves the headline, the standfirst, the hero and its caption
-// together on page one, which is the page the cap is for.
-#let max_image_height = 4.5in
+// and a tall one filled the page on its own.
+// Two thirds of the text height leaves room for a caption
+// and for something else to share the page.
+// The title picture is not capped here: it is sized to the page it has, below.
+#let max_image_height = 5.7in
 
 // An image at the width it is given, unless that makes it too tall,
 // in which case the height is what is set and the width follows from it.
@@ -80,36 +81,63 @@
   show figure.caption: set text(size: 9pt, fill: luma(35%))
   show figure: set block(above: 1.6em, below: 1.6em)
 
-  // Title block.
-  block(width: 100%)[
-    #set align(left)
-    #text(size: 21pt, weight: "bold")[#title]
-    #if short != none [
-      #v(0.6em)
-      #text(size: 11.5pt, fill: luma(35%), style: "italic")[#short]
-    ]
-    #if dateline not in (none, "") [
-      #v(0.6em)
-      #text(size: 10pt, fill: luma(35%))[#dateline]
-    ]
-    #v(0.4em)
-    #line(length: 100%, stroke: 0.8pt)
-  ]
-  // With the title rather than after the contents:
-  // the document puts it under the headline,
-  // and it introduces the report
-  // rather than the section that happens to follow the outline.
-  if hero != none {
-    hero
-  }
+  // The title page: a title and a picture, and nothing else on it.
+  // The picture is with the title rather than after the contents,
+  // because the document puts it under the headline
+  // and it introduces the report rather than the section
+  // that happens to follow the outline.
+  //
+  // Its height is whatever the title leaves, rather than a number tuned to one report:
+  // a `block(height: 1fr)` is the rest of the page,
+  // `layout` inside one is told how much that came to,
+  // and a headline that runs to three lines takes its space out of the picture
+  // instead of pushing it onto the next page.
+  block(height: 100%, width: 100%, stack(
+    dir: ttb,
+    block(width: 100%)[
+      #set align(left)
+      #text(size: 21pt, weight: "bold")[#title]
+      #if short != none [
+        #v(0.6em)
+        #text(size: 11.5pt, fill: luma(35%), style: "italic")[#short]
+      ]
+      #if dateline not in (none, "") [
+        #v(0.6em)
+        #text(size: 10pt, fill: luma(35%))[#dateline]
+      ]
+      #v(0.4em)
+      #line(length: 100%, stroke: 0.8pt)
+    ],
+    if hero != none {
+      block(height: 1fr, width: 100%, layout(size => {
+        let placed = block(width: size.width, hero)
+        let height = measure(placed).height
+        if height <= size.height or height == 0pt {
+          placed
+        } else {
+          // Caption and all: shrinking only the picture
+          // would leave the caption at a size the rest of the report does not use.
+          let factor = size.height / height * 100%
+          scale(placed, x: factor, y: factor, origin: top + center, reflow: true)
+        }
+      }))
+    },
+  ))
 
-  v(1.2em)
+  // A page each for the cover and the contents, whatever their length.
+  // The title page is a title and a picture, and the contents are a way in;
+  // neither is helped by whatever happens to follow it up the page,
+  // and a report that opened mid-outline read as though it had already started.
+  // Explicit rather than `weak`: the break is wanted even when the page is short,
+  // which is the case for every one of these reports.
+  pagebreak()
 
   // The report is too long to find a section by turning pages,
   // the same reason the page has a table of contents.
   // Typst builds it from the headings, so it cannot disagree with them.
   outline(title: [Table of Contents], depth: 3, indent: auto)
-  v(1.2em)
+
+  pagebreak()
 
   body
 
