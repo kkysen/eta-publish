@@ -125,8 +125,11 @@ def _check_review(doc: Document) -> None:
     so what publishes from a document under review looks finished
     and is a snapshot of an argument nobody has finished having.
 
-    `document` rather than `report` for the comments:
-    Drive knows nothing about tabs, so a comment on another tab is counted here too.
+    The comment count is this tab's where the export would give it,
+    and the whole document's where it would not,
+    which is a difference worth saying rather than glossing:
+    the document these reports live in has eight tabs
+    and 46 comments open across them, against three on the one that publishes.
     """
     if doc.open_suggestions:
         doc.warn(
@@ -134,7 +137,8 @@ def _check_review(doc: Document) -> None:
             "the build publishes the document without them, as it reads today"
         )
     if doc.open_comments:
-        doc.warn(f"{_plural(doc.open_comments, 'comment thread')} still open on this document")
+        where = "on this tab" if doc.open_comments_are_this_tab else "on this document"
+        doc.warn(f"{_plural(doc.open_comments, 'comment thread')} still open {where}")
 
 
 def _plural(count: int, thing: str) -> str:

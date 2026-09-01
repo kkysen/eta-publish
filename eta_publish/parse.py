@@ -818,6 +818,7 @@ class Parser:
         self.doc.tab_title = self.json.get("tabTitle", "")
         self.doc.open_suggestions = int(self.json.get("openSuggestions", 0))
         self.doc.open_comments = int(self.json.get("openComments", 0))
+        self.doc.open_comments_are_this_tab = bool(self.json.get("openCommentsAreThisTab"))
 
         # Allocated knowing every heading up front,
         # so two headings that slugify alike keep their anchors when the document reorders.

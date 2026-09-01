@@ -14360,5 +14360,6 @@
     }
   },
   "openSuggestions": 17,
-  "openComments": 46
+  "openComments": 3,
+  "openCommentsAreThisTab": true
 }

@@ -229,7 +229,16 @@ class Document:
     the count is not in the file to be read."""
 
     open_comments: int = 0
-    """Comment threads still open on the document, every tab of it."""
+    """Comment threads still open, on this tab where that could be read."""
+
+    open_comments_are_this_tab: bool = False
+    """Whether that count is this tab's or the whole document's.
+
+    The count comes from the document's text export, which is per tab
+    and which sometimes answers with a sign-in page instead.
+    When it does, the fallback is Drive's count for the whole file,
+    which counts every stale draft beside this one,
+    and the warning says so rather than overstating what it knows."""
 
     tab_title: str = ""
     """What the tab this was read from is called.
