@@ -77,6 +77,11 @@
   show footnote.entry: set text(size: 8.5pt)
 
   show figure.caption: set text(size: 9pt, fill: luma(35%))
+  // Ranged left, as the page sets it.
+  // Typst centres a caption by default, which reads as a title under the picture
+  // rather than as the sentence about it that it is,
+  // and centring a two-line caption leaves a short second line hanging in the middle.
+  show figure.caption: it => block(width: 100%, align(left, it))
   show figure: set block(above: 1.6em, below: 1.6em)
 
   // The title page: a title and a picture, and nothing else on it.
