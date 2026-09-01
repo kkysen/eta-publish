@@ -9,6 +9,8 @@ August 19, 2026
 - unfinished text in the document: `SVG: TODO`
 - the image `img-44bf278f` has no `Credit:` line
 - the image `project_cost_comparison` has no `Credit:` line
+- 17 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
+  > `img-6fb0f9c4`, `img-4b8ff8de`, `img-f5b8dae7`, `img-6a139fa2`, `img-6c3ad309`, `img-a5e93aab`, `img-60a0a749`, `img-a718beb8`, `img-44bf278f`, `img-2a097531`, `img-d4ca00ff`, `img-dff7e45d`, `img-3230dd0e`, `img-e47b1bdb`, `img-d4734d4b`, `img-0fb4cdcf`, `img-ed748d24`
 - 17 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 3 comment threads still open on this tab
 - `SEO Description:` is 398 characters, over the 300 a search result shows:

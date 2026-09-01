@@ -128,6 +128,14 @@ class Image:
 
     object_id: str
     filename: str
+
+    named: bool = False
+    """Whether the document said which file this is, in a `Source:` line.
+
+    Not a question the filename can answer: an image with no name publishes
+    under `img-` and a hash, and a `Source:` line is free to name a file
+    called `img-something.jpg`."""
+
     alt: str = ""
     source_uri: str | None = None
     crop: Crop = field(default_factory=lambda: Crop())
