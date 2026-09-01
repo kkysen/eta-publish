@@ -149,23 +149,6 @@ def test_only_one_document_or_list_at_a_time() -> None:
     assert result.exit_code != 0
 
 
-def unboxed(output: str) -> str:
-    """A Rich panel's text, with its border and its line breaks taken back out.
-
-    Errors are drawn in a box, and a path longer than the box is broken
-    wherever the box ends, mid-word: `absent.tom` on one line and `l` on the next.
-    That is Rich wrapping a token with nowhere to wrap it, not a bad message,
-    so a test about what the message says reads it back the way an eye does.
-
-    The lines are joined with nothing between them,
-    which puts a split token back together and runs two words together.
-    That suits looking for one token, which is what this is for,
-    and not looking for a sentence.
-    """
-    lines = [line.strip("│").strip() for line in output.splitlines() if line.startswith("│")]
-    return "".join(lines)
-
-
 def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
     """Not a traceback:
     naming a file that is not there is a typo, and the message should read like one."""
@@ -176,7 +159,7 @@ def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
     absent = tmp_path / "absent.toml"
     result = CliRunner().invoke(app, [str(absent)])
     assert result.exit_code != 0
-    assert str(absent) in unboxed(result.output)
+    assert str(absent) in result.output
 
 
 def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
