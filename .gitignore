@@ -13,7 +13,7 @@ token.json
 # Scratch output directories from ad-hoc runs.
 /out*/
 
-# `site/` is the published site, written by `eta-publish -o site`, and
+# `site/` is the published site, written by `eta-publish`, and
 # `tests/fixture/` is the same shape built from a hand-written document.
 # Only the text is committed: the images are 18 MB and the PDF 19 MB, and
 # every re-fetch would add another copy to history forever. Both are
