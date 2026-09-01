@@ -61,18 +61,20 @@ def test_markup_characters_in_prose_are_escaped(out: str) -> None:
     assert r"\$7.7 billion" in out
 
 
-def test_metadata_is_one_dictionary_of_strings(out: str) -> None:
-    """A field name is typed in the document, so it is data, not an argument name."""
-    assert '"seo description":' in out
-    assert "seo_description:" not in out
+def test_only_the_fields_something_renders_are_passed(out: str) -> None:
+    """The header carries the private contributor list and the internal dates,
+    and this file is committed."""
+    assert "short: " in out
+    for private in ("private contributors", "discussion channel", "draft due date"):
+        assert private not in out
+        assert private.replace(" ", "_") not in out
 
 
 def test_a_field_name_cannot_be_typst_code(doc: Document) -> None:
-    """A name emitted as an argument name ran when the PDF was built:
-    `x:read("/etc/hostname"),y` was a call, not a field."""
+    """A field name is written in the document, and was emitted as an argument name:
+    `x:read("/etc/hostname"),y` was a call, not a field, and ran at build time."""
     doc.meta['x:read("/etc/hostname"),y'] = "z"
-    out = TypstEmitter().emit(doc)
-    assert '"x:read(\\"/etc/hostname\\"),y": "z"' in out
+    assert "read(" not in TypstEmitter().emit(doc)
 
 
 @pytest.mark.skipif(shutil.which("typst") is None, reason="typst is not installed")

@@ -31,19 +31,14 @@
   contributors: (),
   contributors_note: none,
   hero: none,
-  // The header fields as typed, `short` among them.
-  // A dictionary rather than one argument each,
-  // because a field name is written in the document by whoever drafts it,
-  // and an argument name is Typst code:
-  // a field called `x:read("/etc/hostname"),y` ran when the PDF was built.
-  //
-  // `Public Contributors:` is what reaches the page.
-  // The header block keeps the private list under its own key,
-  // and nothing here reads it, so those names stay off a published page.
-  meta: (:),
+  // The standfirst, and the only header field this reads.
+  // Named rather than handed the header whole:
+  // the header also carries a private contributor list
+  // and the project's internal dates and channels,
+  // and the emitted file is committed.
+  short: none,
   body,
 ) = {
-  let short = meta.at("short", default: none)
   set document(title: title)
   set page(
     paper: "us-letter",
