@@ -262,3 +262,12 @@ def test_an_entry_that_names_neither_is_not_warned_about(
     saved.write_text(json.dumps(FIXTURE))
     build_site([Report(url=str(saved))], tmp_path / "site", BuildOptions(images=False))
     assert "reports.toml" not in capsys.readouterr().err
+
+
+def test_a_url_that_climbs_out_of_the_site_is_refused(doc: Document) -> None:
+    """The build writes wherever this says, and the committed-site check
+    only ever looks inside `site/`, so a climb would leave no trace there."""
+    doc.title = "Digging Out of a Very Deep Hole"
+    doc.meta["url"] = "/../../../../tmp/pwned"
+    assert report_path(doc) == "digging-out-of-a-very-deep-hole"
+    assert any("climbs out of the site" in w for w in doc.warnings)
