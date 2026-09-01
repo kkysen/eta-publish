@@ -52,6 +52,7 @@ Every other field empty is a line somebody meant to come back to.
 def check(doc: Document) -> None:
     """Warn about everything a published report should not be missing."""
     _check_figures(doc)
+    _check_named(doc)
     _check_review(doc)
 
     if not doc.meta:
@@ -116,6 +117,37 @@ def _check_figures(doc: Document) -> None:
         for what, content in (("caption", block.caption), ("`Credit:` line", block.credit)):
             if not content:
                 doc.warn(f"the image `{block.image.filename}` has no {what}")
+
+
+def _check_named(doc: Document) -> None:
+    """Which pictures the document never said what they are.
+
+    A `Source:` line is what names an image, and the name is the published URL.
+    Without one the URL is a hash of a Docs object id:
+    it says nothing about the picture,
+    and it moves if the image is ever replaced.
+
+    A line that names no file leaves the image as unnamed as no line at all.
+    `Image Source` and `SVG: TODO` are both `Source:` lines in SAS West,
+    and neither says which file the picture is.
+
+    One warning for all of them rather than one each.
+    They are one fix repeated, seventeen times in SAS West,
+    and seventeen lines saying the same thing is a paragraph nobody reads twice.
+    """
+    unnamed = [
+        block.image.filename
+        for block in doc.blocks
+        if isinstance(block, Figure) and not block.image.named
+    ]
+    if not unnamed:
+        return
+    listed = ", ".join(f"`{name}`" for name in unnamed)
+    are = "is" if len(unnamed) == 1 else "are"
+    doc.warn(
+        f"{_plural(len(unnamed), 'image')} {are} unnamed, so each publishes under a "
+        f"hash; give each a `Source:` line naming its file:\n> {listed}"
+    )
 
 
 def _check_review(doc: Document) -> None:

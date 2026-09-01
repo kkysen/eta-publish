@@ -1,6 +1,7 @@
 """What a report has to have before it is published."""
 
 import json
+from dataclasses import replace
 
 import pytest
 from paths import FIXTURE_DIR
@@ -77,9 +78,9 @@ def test_an_seo_description_at_the_limit_is_fine(doc: Document) -> None:
     assert doc.warnings == []
 
 
-def figure(*, caption: bool = True, credit: bool = True) -> Figure:
+def figure(*, caption: bool = True, credit: bool = True, named: bool = True) -> Figure:
     return Figure(
-        image=Image(object_id="io.9", filename="a-diagram"),
+        image=Image(object_id="io.9", filename="a-diagram", named=named),
         caption=[Text(text="What it shows.")] if caption else [],
         credit=[Text(text="Credit: MTA")] if credit else [],
     )
@@ -143,5 +144,25 @@ def test_a_count_that_is_the_whole_document_says_so(doc: Document) -> None:
 
 
 def test_a_document_under_no_review_says_nothing(doc: Document) -> None:
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_an_unnamed_image_is_flagged(doc: Document) -> None:
+    """Without a `Source:` line the published URL is a hash of a Docs object id."""
+    doc.blocks = [figure(named=False)]
+    check(doc)
+    assert doc.warnings == [
+        "1 image is unnamed, so each publishes under a hash; "
+        "give each a `Source:` line naming its file:\n> `a-diagram`"
+    ]
+
+
+def test_an_image_a_human_named_img_is_not_unnamed(doc: Document) -> None:
+    """`img-` is what an unnamed image is called,
+    and also a name a `Source:` line is free to give one."""
+    named = figure()
+    named.image = replace(named.image, filename="img-of-the-tunnel", named=True)
+    doc.blocks = [named]
     check(doc)
     assert doc.warnings == []

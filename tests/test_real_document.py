@@ -160,6 +160,13 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     """Each of these is something to fix in the document, not in the code.
     A new warning appearing here means the report changed or the parser did."""
     assert sorted(doc.warnings) == [
+        "17 images are unnamed, so each publishes under a hash; give each a "
+        "`Source:` line naming its file:\n> "
+        + ", ".join(
+            f"`{b.image.filename}`"
+            for b in doc.blocks
+            if isinstance(b, Figure) and not b.image.named
+        ),
         "17 suggestions still open on this tab; "
         "the build publishes the document without them, as it reads today",
         "3 comment threads still open on this tab",

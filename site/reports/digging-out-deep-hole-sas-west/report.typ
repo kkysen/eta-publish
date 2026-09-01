@@ -11,6 +11,7 @@
     [unfinished text in the document: #raw("SVG: TODO")],
     [the image #raw("img-44bf278f") has no #raw("Credit:") line],
     [the image #raw("project_cost_comparison") has no #raw("Credit:") line],
+    [17 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#quote(block: true)[#raw("img-6fb0f9c4"), #raw("img-4b8ff8de"), #raw("img-f5b8dae7"), #raw("img-6a139fa2"), #raw("img-6c3ad309"), #raw("img-a5e93aab"), #raw("img-60a0a749"), #raw("img-a718beb8"), #raw("img-44bf278f"), #raw("img-2a097531"), #raw("img-d4ca00ff"), #raw("img-dff7e45d"), #raw("img-3230dd0e"), #raw("img-e47b1bdb"), #raw("img-d4734d4b"), #raw("img-0fb4cdcf"), #raw("img-ed748d24")]],
     [17 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [3 comment threads still open on this tab],
     [#raw("SEO Description:") is 398 characters, over the 300 a search result shows:#quote(block: true)[A 125 St subway should be a slam dunk. But at \$7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how#strike[ever, NY would not only be able to build more for less, but would also save riders time every day.]]],

@@ -137,6 +137,28 @@ def content_anchor(prefix: str, text: str) -> str:
     return f"{prefix}-{_short_hash(text)}"
 
 
+UNNAMED_PREFIX = "img-"
+"""What an image is called when the document did not say what it is.
+
+A name of its own comes from a `Source:` line; without one there is nothing
+to use but a hash of the object id, and the prefix is what says so.
+
+Not a test for one: a `Source:` line may itself name `img-something.jpg`,
+which is a named image whose name happens to start this way.
+`names_nothing` is the question worth asking.
+"""
+
+
+def names_nothing(name: str) -> bool:
+    """Whether `name` leaves nothing to name a file with.
+
+    The empty string, and anything that survives `_ascii_name` as only
+    separators. `Image Source` and `SVG: TODO` are `Source:` lines
+    that name no file, and an image under one is as unnamed as an image under none.
+    """
+    return not _ascii_name(name).strip("_.-")
+
+
 def image_filename(object_id: str, extension: str = "", crop_key: str = "", name: str = "") -> str:
     """Name an image after the file the document says it came from.
 
@@ -161,9 +183,8 @@ def image_filename(object_id: str, extension: str = "", crop_key: str = "", name
     The extension is filled in once the download settles the real content type.
     """
     base = _ascii_name(name)
-    # A name of nothing but separators names nothing.
-    if not base.strip("_.-"):
-        return f"img-{_short_hash(object_id + crop_key)}{extension}"
+    if names_nothing(name):
+        return f"{UNNAMED_PREFIX}{_short_hash(object_id + crop_key)}{extension}"
     if crop_key:
         base = f"{base}-{_short_hash(object_id + crop_key)}"
     return f"{base}{extension}"

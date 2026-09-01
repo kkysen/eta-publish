@@ -19,7 +19,7 @@ from dataclasses import replace
 from datetime import datetime
 
 from .docs_json import JsonObject
-from .naming import AnchorAllocator, image_filename, image_filenames
+from .naming import AnchorAllocator, image_filename, image_filenames, names_nothing
 from .nodes import (
     Block,
     Crop,
@@ -870,7 +870,12 @@ class Parser:
             for image in self.doc.images
         )
         for figure in self.doc.figures:
-            figure.image = replace(figure.image, filename=names[figure.image.object_id])
+            claimed = self._source_names.get(figure.image.object_id, "")
+            figure.image = replace(
+                figure.image,
+                filename=names[figure.image.object_id],
+                named=not names_nothing(claimed),
+            )
 
 
 def parse(doc_json: JsonObject) -> Document:
