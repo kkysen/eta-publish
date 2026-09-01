@@ -2,10 +2,12 @@
 
 #show: report.with(
   title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street",
-  url: "/reports/digging-out-deep-hole-sas-west",
-  short: "A 125 St subway should be a slam dunk.",
-  seo_description: "Cheaper, shallower, faster.",
-  mta_sas_west_feasibility_study: "https://www.mta.info/document/196361",
+  meta: (
+    "url": "/reports/digging-out-deep-hole-sas-west",
+    "short": "A 125 St subway should be a slam dunk.",
+    "seo description": "Cheaper, shallower, faster.",
+    "mta sas west feasibility study": "https://www.mta.info/document/196361",
+  ),
   dateline: "",
   contributors: (),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
