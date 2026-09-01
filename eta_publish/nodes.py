@@ -299,11 +299,19 @@ class Document:
         listed = [name.strip() for name in names.split(",") if name.strip()]
         return sorted(listed, key=_by_surname)
 
+    DATE_FIELDS = ("publish due date", "final due date")
+    """What the header has called the publication date, newest name first.
+
+    The field was renamed in the document and the rename was silent:
+    the date simply stopped appearing, because nothing here reads a name it
+    was not told. Both are accepted so that neither a document that has been
+    renamed nor a response saved before the rename loses its date."""
+
     @property
     def dateline(self) -> str:
         """The publication date, written out, e.g. `August 19, 2026`.
 
-        `Final Due Date:` is a date chip,
+        The field is a date chip,
         so the document holds whatever short form Docs renders, `Aug 19, 2026`.
         etany.org writes the month out,
         and a published date is not the place to abbreviate three letters.
@@ -311,7 +319,10 @@ class Document:
         Anything that does not parse as a date is published exactly as written:
         guessing would be worse than showing what the header says.
         """
-        return _long_date(self.meta.get("final due date", ""))
+        for name in self.DATE_FIELDS:
+            if self.meta.get(name):
+                return _long_date(self.meta[name])
+        return ""
 
     @property
     def slug(self) -> str:
