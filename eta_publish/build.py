@@ -6,6 +6,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from .checks import check
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
@@ -279,6 +280,7 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     options = options or BuildOptions()
     document = load(ref, options.suggestions)
     doc = parse(document)
+    check(doc)
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)
