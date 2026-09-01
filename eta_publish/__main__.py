@@ -45,12 +45,7 @@ class Suggestions(StrEnum):
     ACCEPTED = "accepted"
 
 
-app = Typer(
-    add_completion=False,
-    context_settings={"help_option_names": ["-h", "--help"]},
-    # The help is prose, not markup to be reinterpreted on the way out.
-    rich_markup_mode=None,
-)
+app = Typer(context_settings={"help_option_names": ["-h", "--help"]})
 
 
 @app.command(help=__doc__)
