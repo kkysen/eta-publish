@@ -30,7 +30,7 @@ from ..nodes import (
     Table,
     Text,
 )
-from .base import CONTRIBUTORS_NOTE, Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
 # Only styles what the emitter produces, inheriting the rest from the theme,
 # so a report does not fight the site around it.
@@ -111,6 +111,15 @@ REPORT_CSS = """
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
+/* The build's own notes about this report, not part of it, and never in the
+   fragment that is pasted into the live site. A colour of its own, because it
+   is the one thing on the page that is not the report and should not be read
+   as though it were, and sans-serif for the same reason. */
+.eta-report .warnings { border-left: 3px solid #c60; padding: .4em 1em;
+                        margin: 2em 0; font-size: .9rem;
+                        font-family: system-ui, sans-serif; }
+.eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
+.eta-report .warnings code { font-size: .95em; }
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */
@@ -166,9 +175,16 @@ def split_at_headings(fragment: str) -> list[str]:
 class HtmlEmitter(Emitter):
     extension = ".html"
 
-    def __init__(self, image_base: str = "", inline_css: bool = True) -> None:
+    def __init__(
+        self, image_base: str = "", inline_css: bool = True, warnings: bool = False
+    ) -> None:
         super().__init__()
         self.image_base = image_base.rstrip("/")
+        # Off for the fragment, which is pasted into the live site.
+        # A warning is the build talking to whoever is publishing,
+        # and quotes the document, editorial notes and all;
+        # neither belongs on the page a reader gets.
+        self.warnings = warnings
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
         self._taken: set[str] = set()
@@ -215,6 +231,11 @@ class HtmlEmitter(Emitter):
         parts.append('<div class="eta-report">')
         parts.append(self.phase(doc))
         parts.append(self.dateline(doc))
+        # Below the dateline and above the hero,
+        # because the hero fills the screen
+        # and a warning under it is a warning nobody scrolls to.
+        if self.warnings:
+            parts.append(warnings_block(doc))
         parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.body))
@@ -622,8 +643,6 @@ h1 { font-size: 2.1rem; margin-bottom: .2em; }
 h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
 a { color: inherit; }
 .standfirst { font-size: 1.15rem; opacity: .75; margin-top: 0; }
-.warnings { border-left: 3px solid #c60; padding: .4em 1em; margin: 2em 0;
-            font-family: system-ui, sans-serif; font-size: .9rem; }
 """
 
 
@@ -633,6 +652,30 @@ def _page_mark(what: str) -> str:
     so they are built here and not walked to."""
     anchor = "title" if what == "title" else "short"
     return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
+
+
+def _marked_up(warning: str) -> str:
+    """One warning as HTML: names as code, and what gets cut struck through."""
+    return warning_markup(
+        warning,
+        code=lambda c: f"<code>{escape(c)}</code>",
+        cut=lambda c: f"<s>{escape(c)}</s>",
+        text=escape,
+    )
+
+
+def warnings_block(doc: Document) -> str:
+    """Everything the build has to say about this report, where it will be read.
+
+    A warning names a field, a file, or a line, and marks it with backticks
+    the way this project writes prose everywhere else.
+    Rendered as code rather than shown with the backticks in it,
+    which is what a reader of the page would otherwise see.
+    """
+    if not doc.warnings:
+        return ""
+    items = "\n".join(f"<li>{_marked_up(w)}</li>" for w in doc.warnings)
+    return f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
 
 
 def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
@@ -645,11 +688,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     This is a document, with its own head and type,
     and the parser's warnings where whoever is about to publish will see them.
     """
-    body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
-    warnings = ""
-    if doc.warnings:
-        items = "\n".join(f"<li>{escape(w)}</li>" for w in doc.warnings)
-        warnings = f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
+    body = HtmlEmitter(image_base=image_base, inline_css=False, warnings=True).emit(doc)
     short = doc.meta.get("short", "")
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
@@ -671,6 +710,5 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
         f'<h1 id="title">{_page_mark("title")}{escape(doc.title)}</h1>\n'
         f'<p class="standfirst" id="short">{_page_mark("standfirst")}{escape(short)}</p>\n'
-        f"{warnings}\n"
         f"{body}\n"
     )

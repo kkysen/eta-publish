@@ -5,7 +5,9 @@ Nothing here touches the network or the filesystem,
 so an emitter can be tested against a fixture tree without credentials.
 """
 
+import re
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 
 from ..nodes import (
     Block,
@@ -21,6 +23,39 @@ from ..nodes import (
     Table,
     Text,
 )
+
+WARNING_MARKUP = re.compile(r"`(?P<code>[^`]+)`|~~(?P<cut>[^~]+)~~")
+"""The little markup a warning is written in, spelled as Markdown spells it.
+
+A warning names a field, a file, or a line, and marks it with backticks
+the way the rest of this project writes prose.
+It strikes through the part of a value that will not survive,
+which is the difference between telling somebody a string is too long
+and showing them where it stops.
+
+Each output renders both the way that output spells them,
+rather than showing a reader a stray backtick or a pair of tildes.
+"""
+
+
+def warning_markup(
+    message: str,
+    *,
+    code: Callable[[str], str],
+    cut: Callable[[str], str],
+    text: Callable[[str], str],
+) -> str:
+    """`message` with its marked spans rendered and everything else through `text`."""
+    out = []
+    position = 0
+    for match in WARNING_MARKUP.finditer(message):
+        out.append(text(message[position : match.start()]))
+        marked = match.group("code")
+        out.append(code(marked) if marked is not None else cut(match.group("cut")))
+        position = match.end()
+    out.append(text(message[position:]))
+    return "".join(out)
+
 
 # The line a report introduces its contributors with.
 # The header block names who they are; this says what naming them means.

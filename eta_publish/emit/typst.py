@@ -35,7 +35,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
 # Typst's markup characters.
 # `#` and `@` start code and references, and the rest delimit markup,
@@ -90,6 +90,7 @@ class TypstEmitter(Emitter):
             f"  dateline: {string(doc.dateline)},\n"
             f"  contributors: ({self.contributors(doc)}),\n"
             f"  contributors_note: {string(CONTRIBUTORS_NOTE)},\n"
+            f"{self.warnings(doc)}"
             f"{self.hero(doc)}"
             f")\n"
         )
@@ -104,6 +105,26 @@ class TypstEmitter(Emitter):
         if doc.hero is None:
             return ""
         return f"  hero: [\n{self.blocks([doc.hero])}\n  ],\n"
+
+    def warnings(self, doc: Document) -> str:
+        """The build's notes about this report, for the template to place.
+
+        A warning marks a name with backticks, which Typst also spells with backticks,
+        so the message is escaped around them and its names come out as raw.
+        """
+        if not doc.warnings:
+            return ""
+        notes = "".join(f"    [{self.marked_up(w)}],\n" for w in doc.warnings)
+        return f"  warnings: (\n{notes}  ),\n"
+
+    def marked_up(self, warning: str) -> str:
+        """One warning as Typst content: names as raw, and what gets cut struck through."""
+        return warning_markup(
+            warning,
+            code=lambda c: f"#raw({string(c)})",
+            cut=lambda c: f"#strike[{escape(c)}]",
+            text=escape,
+        )
 
     def contributors(self, doc: Document) -> str:
         """The credited names as a Typst array, so the template can list them."""

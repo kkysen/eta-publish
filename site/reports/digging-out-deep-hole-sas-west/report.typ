@@ -7,6 +7,14 @@
   dateline: "August 19, 2026",
   contributors: ("Madison Feinberg", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "William Meehan", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
+  warnings: (
+    [unfinished text in the document: SVG: TODO],
+    [the image #raw("img-44bf278f") has no #raw("Credit:") line],
+    [the image #raw("project_cost_comparison") has no #raw("Credit:") line],
+    [17 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [46 comment threads still open on this document],
+    [#raw("SEO Description:") is 398 characters, over the 300 a search result shows; the end of it will not be read],
+  ),
   hero: [
 #figure(
   capped_image("images/img-6fb0f9c4.jpg", alt: "Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator."),

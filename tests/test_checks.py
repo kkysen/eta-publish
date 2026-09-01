@@ -93,14 +93,14 @@ def test_an_uncaptioned_figure_is_named_by_its_file(doc: Document) -> None:
     """The Docs object id is not something the document shows anybody."""
     doc.blocks = [figure(caption=False)]
     check(doc)
-    assert doc.warnings == ["the image a-diagram has no caption"]
+    assert doc.warnings == ["the image `a-diagram` has no caption"]
 
 
 def test_an_unattributed_figure_is_flagged(doc: Document) -> None:
     """These reports run other people's diagrams on nearly every page."""
     doc.blocks = [figure(credit=False)]
     check(doc)
-    assert doc.warnings == ["the image a-diagram has no `Credit:` line"]
+    assert doc.warnings == ["the image `a-diagram` has no `Credit:` line"]
 
 
 def test_a_figure_missing_both_says_both(doc: Document) -> None:

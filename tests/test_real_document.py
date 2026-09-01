@@ -165,8 +165,8 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
         "46 comment threads still open on this document",
         "`SEO Description:` is 398 characters, over the 300 a search result shows; "
         "the end of it will not be read",
-        "the image img-44bf278f has no `Credit:` line",
-        "the image project_cost_comparison has no `Credit:` line",
+        "the image `img-44bf278f` has no `Credit:` line",
+        "the image `project_cost_comparison` has no `Credit:` line",
         "unfinished text in the document: SVG: TODO",
     ]
 
@@ -177,8 +177,16 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
 def test_no_editorial_note_reaches_a_published_output(doc: Document) -> None:
     """`Source:`, `Uncropped Source:`, `Image Source`, and `SVG:`
     name assets for whoever assembles the page.
-    Each appears zero times on the live report, against 26 occurrences of `Credit:`."""
-    for emitted in (HtmlEmitter().emit(doc), TypstEmitter().emit(doc)):
+    Each appears zero times on the live report, against 26 occurrences of `Credit:`.
+
+    The report, not the warnings: a warning quotes the line it is about,
+    so `unfinished text in the document: SVG: TODO` says `SVG:` on purpose.
+    The fragment carries no warnings at all, and the Typst body begins after them.
+    """
+    typst = TypstEmitter().emit(doc)
+    # Everything after the `#show: report.with(...)` call, which is the report itself.
+    body = re.split(r"^\)$", typst, maxsplit=1, flags=re.MULTILINE)[-1]
+    for emitted in (HtmlEmitter().emit(doc), body):
         for note in ("Source:", "Image Source", "SVG:", "drive.google.com"):
             assert note not in emitted, note
         assert "Credit: MTA" in emitted

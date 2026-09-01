@@ -112,7 +112,7 @@ def _check_figures(doc: Document) -> None:
             continue
         for what, content in (("caption", block.caption), ("`Credit:` line", block.credit)):
             if not content:
-                doc.warn(f"the image {block.image.filename} has no {what}")
+                doc.warn(f"the image `{block.image.filename}` has no {what}")
 
 
 def _check_review(doc: Document) -> None:
