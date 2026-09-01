@@ -23,6 +23,7 @@ so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`: what the doc reads as today.
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -342,17 +343,60 @@ def _suggestion_ids(node: object) -> set[str]:
     return found
 
 
+EXPORT_ATTEMPTS = 3
+"""How many times to ask for a tab's text before giving up on it.
+
+The export answers an ordinary request with a sign-in page often enough
+that one failure says nothing about the next.
+"""
+
+
+def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
+    """How many comment threads are open on `tab`, or `None` if that cannot be read.
+
+    Neither API carries this.
+    Drive holds the comments but knows nothing about tabs,
+    and its anchors are opaque ids that appear nowhere in the Docs response,
+    so there is nothing to join the two on.
+    The document's own text export takes a `tab` parameter and lists,
+    after the text, the comments left on that tab, which is the answer.
+
+    It is not an API, and it does not always answer:
+    often enough it returns a sign-in page instead, with a 200 beside it.
+    That page has no comments in it, so a run that took it at its word
+    would report a document under review as clean,
+    which is worse than reporting nothing. Hence the shape check, the retries,
+    and `None` rather than a zero this cannot stand behind.
+    """
+    from google.auth.transport.requests import AuthorizedSession
+
+    session = AuthorizedSession(_credentials())
+    url = f"https://docs.google.com/document/d/{doc_id}/export"
+    params = {"format": "txt"}
+    if tab:
+        params["tab"] = tab
+
+    for _ in range(EXPORT_ATTEMPTS):
+        response = session.get(url, params=params, timeout=180)
+        text = response.text
+        # The export writes a byte order mark and then the document.
+        # Anything else is not the document, whatever the status says.
+        if response.status_code == 200 and text.startswith("\ufeff"):
+            # Each comment on the tab is listed after the text as `[a] what it says`.
+            return len(re.findall(r"^\[[a-z]+\]", text, re.MULTILINE))
+    return None
+
+
 def open_comments(doc_id: str) -> int:
-    """How many comment threads are open on the document.
+    """How many comment threads are open on the whole document, every tab of it.
 
     Drive rather than Docs: the Docs API does not carry comments at all.
     Every page is read, because the count is the point
     and Drive returns them 100 at a time.
 
-    A count for the whole file rather than for one tab.
-    Drive knows nothing about tabs,
-    so a comment on a stale draft in another tab is counted here too,
-    which is a reason to say `document` rather than `report` when reporting it.
+    The fallback for when the export will not answer:
+    a number that is too large beats no number,
+    as long as what it counts is said plainly.
     """
     from googleapiclient.discovery import build
 
@@ -379,7 +423,9 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     # has to write the same page as the build that fetched it,
     # and neither the suggestions nor the comments survive in what is saved.
     document["openSuggestions"] = open_suggestions(doc_id, wanted)
-    document["openComments"] = open_comments(doc_id)
+    on_tab = open_comments_on_tab(doc_id, wanted)
+    document["openComments"] = on_tab if on_tab is not None else open_comments(doc_id)
+    document["openCommentsAreThisTab"] = on_tab is not None
     return document
 
 

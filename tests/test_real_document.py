@@ -162,7 +162,7 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     assert sorted(doc.warnings) == [
         "17 suggestions still open on this tab; "
         "the build publishes the document without them, as it reads today",
-        "46 comment threads still open on this document",
+        "3 comment threads still open on this tab",
         "`SEO Description:` is 398 characters, over the 300 a search result shows:\n> "
         + doc.meta["seo description"][:300]
         + "~~"
