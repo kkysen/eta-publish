@@ -163,8 +163,11 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
         "17 suggestions still open on this tab; "
         "the build publishes the document without them, as it reads today",
         "46 comment threads still open on this document",
-        "`SEO Description:` is 398 characters, over the 300 a search result shows; "
-        "the end of it will not be read",
+        "`SEO Description:` is 398 characters, over the 300 a search result shows: "
+        + doc.meta["seo description"][:300]
+        + "~~"
+        + doc.meta["seo description"][300:]
+        + "~~",
         "the image `img-44bf278f` has no `Credit:` line",
         "the image `project_cost_comparison` has no `Credit:` line",
         "unfinished text in the document: SVG: TODO",
