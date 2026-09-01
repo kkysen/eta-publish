@@ -38,22 +38,49 @@ rather than showing a reader a stray backtick or a pair of tildes.
 """
 
 
+QUOTED_LINE = "> "
+"""How a warning quotes the document, which is how Markdown quotes anything.
+
+A value the warning is about is shown rather than described,
+and shown as a quotation so that it is not read as more of the sentence.
+"""
+
+
 def warning_markup(
     message: str,
     *,
     code: Callable[[str], str],
     cut: Callable[[str], str],
     text: Callable[[str], str],
+    quote: Callable[[str], str] | None = None,
 ) -> str:
-    """`message` with its marked spans rendered and everything else through `text`."""
+    """`message` rendered: its marked spans, its quoted lines, and the rest as `text`.
+
+    A quoted line is rendered whole, after its spans are,
+    so that a quotation of a value keeps whatever is marked inside it.
+    """
+    lines = []
+    for line in message.split("\n"):
+        quoted = quote is not None and line.startswith(QUOTED_LINE)
+        rendered = _spans(line.removeprefix(QUOTED_LINE) if quoted else line, code, cut, text)
+        lines.append(quote(rendered) if quoted and quote is not None else rendered)
+    return "".join(lines)
+
+
+def _spans(
+    line: str,
+    code: Callable[[str], str],
+    cut: Callable[[str], str],
+    text: Callable[[str], str],
+) -> str:
     out = []
     position = 0
-    for match in WARNING_MARKUP.finditer(message):
-        out.append(text(message[position : match.start()]))
+    for match in WARNING_MARKUP.finditer(line):
+        out.append(text(line[position : match.start()]))
         marked = match.group("code")
         out.append(code(marked) if marked is not None else cut(match.group("cut")))
         position = match.end()
-    out.append(text(message[position:]))
+    out.append(text(line[position:]))
     return "".join(out)
 
 

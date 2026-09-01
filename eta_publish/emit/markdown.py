@@ -137,7 +137,9 @@ class MarkdownEmitter(Emitter):
         """
         if not doc.warnings:
             return ""
-        notes = "\n".join(f"- {w}" for w in doc.warnings)
+        # A warning quotes with `> `, which Markdown reads as a quotation
+        # only when the line is indented into the item it belongs to.
+        notes = "\n".join(f"- {w}".replace("\n", "\n  ") for w in doc.warnings)
         return f"**Warnings**\n\n{notes}"
 
     def dateline(self, doc: Document) -> str:

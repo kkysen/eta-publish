@@ -124,6 +124,7 @@ class TypstEmitter(Emitter):
             code=lambda c: f"#raw({string(c)})",
             cut=lambda c: f"#strike[{escape(c)}]",
             text=escape,
+            quote=lambda q: f"#quote(block: true)[{q}]",
         )
 
     def contributors(self, doc: Document) -> str:

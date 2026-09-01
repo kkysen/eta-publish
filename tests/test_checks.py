@@ -65,7 +65,7 @@ def test_an_seo_description_over_the_limit_shows_what_is_cut(doc: Document) -> N
     doc.meta["seo description"] = "x" * 300 + " and this is lost"
     check(doc)
     assert doc.warnings == [
-        "`SEO Description:` is 317 characters, over the 300 a search result shows: "
+        "`SEO Description:` is 317 characters, over the 300 a search result shows:\n> "
         + "x" * 300
         + "~~ and this is lost~~"
     ]
