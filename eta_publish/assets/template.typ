@@ -120,6 +120,10 @@
       #v(0.4em)
       #line(length: 100%, stroke: 0.8pt)
     ],
+    // A figure's own spacing above it is dropped at the top of a block,
+    // which put the rule under the dateline flush against the top of the picture
+    // and made it read as a line drawn across the image.
+    v(1.2em),
     if hero != none {
       block(height: 1fr, width: 100%, layout(size => {
         let placed = block(width: size.width, hero)
