@@ -135,19 +135,39 @@ def _check_named(doc: Document) -> None:
     They are one fix repeated, seventeen times in SAS West,
     and seventeen lines saying the same thing is a paragraph nobody reads twice.
     """
-    unnamed = [
-        block.image.filename
-        for block in doc.blocks
-        if isinstance(block, Figure) and not block.image.named
-    ]
+    unnamed = [block for block in doc.blocks if isinstance(block, Figure) and not block.image.named]
     if not unnamed:
         return
-    listed = ", ".join(f"`{name}`" for name in unnamed)
+    # One to a line, each with what the report says the picture is:
+    # a hash names nothing, and the whole difficulty of fixing these
+    # is working out which picture `img-6fb0f9c4` is.
+    listed = "".join(f"\n- `{block.image.filename}`{_describe(block)}" for block in unnamed)
     are = "is" if len(unnamed) == 1 else "are"
     doc.warn(
         f"{_plural(len(unnamed), 'image')} {are} unnamed, so each publishes under a "
-        f"hash; give each a `Source:` line naming its file:\n> {listed}"
+        f"hash; give each a `Source:` line naming its file:{listed}"
     )
+
+
+DESCRIPTION_LIMIT = 70
+"""How much of a caption is enough to tell one picture from another."""
+
+
+def _describe(block: Figure) -> str:
+    """What the report says this picture is, for telling it from the others.
+
+    The caption, because that is what a reader is told the picture is.
+    Its alt text where there is no caption,
+    which is what a reader who cannot see it is told instead.
+    """
+    from .emit.markdown import plain
+
+    description = plain(block.caption).strip() or block.image.alt.strip()
+    if not description:
+        return ""
+    if len(description) > DESCRIPTION_LIMIT:
+        description = description[:DESCRIPTION_LIMIT].rstrip() + "..."
+    return f": {description}"
 
 
 def _check_review(doc: Document) -> None:

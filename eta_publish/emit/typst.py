@@ -125,6 +125,7 @@ class TypstEmitter(Emitter):
             cut=lambda c: f"#strike[{escape(c)}]",
             text=escape,
             quote=lambda q: f"#quote(block: true)[{q}]",
+            bullets=lambda items: "#list(" + "".join(f"[{i}], " for i in items) + ")",
         )
 
     def contributors(self, doc: Document) -> str:

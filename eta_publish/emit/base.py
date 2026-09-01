@@ -46,6 +46,15 @@ and shown as a quotation so that it is not read as more of the sentence.
 """
 
 
+BULLET_LINE = "- "
+"""How a warning lists the things it is about, which is how Markdown lists anything.
+
+A warning naming one thing says it in the sentence.
+A warning naming seventeen lists them,
+because seventeen names run together are not a list anybody reads.
+"""
+
+
 def warning_markup(
     message: str,
     *,
@@ -53,18 +62,33 @@ def warning_markup(
     cut: Callable[[str], str],
     text: Callable[[str], str],
     quote: Callable[[str], str] | None = None,
+    bullets: Callable[[list[str]], str] | None = None,
 ) -> str:
-    """`message` rendered: its marked spans, its quoted lines, and the rest as `text`.
+    """`message` rendered: its marked spans, its quoted and listed lines, the rest as `text`.
 
-    A quoted line is rendered whole, after its spans are,
+    A quoted or listed line is rendered whole, after its spans are,
     so that a quotation of a value keeps whatever is marked inside it.
+    Consecutive listed lines are handed over together,
+    because a list is one thing rather than a run of them.
     """
-    lines = []
+    out: list[str] = []
+    pending: list[str] = []
+
+    def flush() -> None:
+        if pending and bullets is not None:
+            out.append(bullets(pending.copy()))
+        pending.clear()
+
     for line in message.split("\n"):
+        if bullets is not None and line.startswith(BULLET_LINE):
+            pending.append(_spans(line.removeprefix(BULLET_LINE), code, cut, text))
+            continue
+        flush()
         quoted = quote is not None and line.startswith(QUOTED_LINE)
         rendered = _spans(line.removeprefix(QUOTED_LINE) if quoted else line, code, cut, text)
-        lines.append(quote(rendered) if quoted and quote is not None else rendered)
-    return "".join(lines)
+        out.append(quote(rendered) if quoted and quote is not None else rendered)
+    flush()
+    return "".join(out)
 
 
 def _spans(
