@@ -208,7 +208,12 @@ class MarkdownEmitter(Emitter):
             lines.append(self.inlines(node.credit))
         if node.source:
             lines.append(f"<!-- {self.inlines(node.source)} -->")
-        return "\n".join(lines)
+        # A bare newline is a soft break, which is a space:
+        # the picture, its caption and its credit rendered as one running line.
+        # The trailing backslash is the hard break that is visible in the source,
+        # rather than the two trailing spaces that mean the same
+        # and that any editor is entitled to strip.
+        return "\\\n".join(lines)
 
     @override
     def table(self, node: Table) -> str:
