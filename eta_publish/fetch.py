@@ -202,7 +202,20 @@ def _credentials():
     if TOKEN_PATH.exists() and _granted_scopes() >= set(SCOPES):
         creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
     if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
+        from google.auth.exceptions import RefreshError
+
+        try:
+            creds.refresh(Request())
+        except RefreshError as e:
+            # A refresh token that Google has expired or revoked
+            # is exactly the case consent has to be given again,
+            # so fall through to the flow below rather than failing the build.
+            reason = e.args[0] if e.args else e
+            print(
+                f"the saved sign-in is no longer valid ({reason}); asking for it again",
+                file=sys.stderr,
+            )
+            creds = None
     if not creds or not creds.valid:
         missing = set(SCOPES) - _granted_scopes()
         if TOKEN_PATH.exists() and missing:
