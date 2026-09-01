@@ -325,6 +325,19 @@ class Document:
         return ""
 
     @property
+    def phase(self) -> str:
+        """Where the report is in its own process, when that is worth saying.
+
+        `published` is the state every reader of a published report is looking at,
+        so it is the one phase that goes unmentioned:
+        a banner saying `published` on a published page tells nobody anything.
+        Anything else is a draft of some kind reaching someone,
+        and that is exactly what they need to be told.
+        """
+        phase = self.meta.get("phase", "").strip()
+        return "" if phase.casefold() == "published" else phase
+
+    @property
     def slug(self) -> str:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
         return self.meta.get("url", "")

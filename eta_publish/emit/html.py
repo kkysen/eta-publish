@@ -111,6 +111,13 @@ REPORT_CSS = """
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
+/* A draft says so, in the one place nobody scrolls past. Bordered rather than
+   coloured: the page is read on a site whose palette this does not know, and
+   a rule in the current text colour is legible whatever that turns out to be. */
+.eta-report .phase { font-size: .8rem; letter-spacing: .08em;
+                     text-transform: uppercase; font-weight: bold;
+                     border: 1px solid currentColor; border-radius: .2em;
+                     display: inline-block; padding: .15em .5em; margin: 0 0 1em; }
 .eta-report .toc { font-size: .95rem; line-height: 1.9; }
 .eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
 .eta-report .toc > ul { padding-left: 0; }
@@ -206,6 +213,7 @@ class HtmlEmitter(Emitter):
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
         parts.append('<div class="eta-report">')
+        parts.append(self.phase(doc))
         parts.append(self.dateline(doc))
         parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
@@ -241,6 +249,17 @@ class HtmlEmitter(Emitter):
             f"<ul>\n{items}\n</ul>\n"
             "</section>"
         )
+
+    def phase(self, doc: Document) -> str:
+        """What a reader of a draft has to be told before reading it.
+
+        Above the dateline rather than below it, because it qualifies the whole page:
+        the date a draft is due says nothing useful
+        until you know it is a draft you are holding.
+        """
+        if not doc.phase:
+            return ""
+        return f'<p class="phase">{escape(doc.phase)}</p>'
 
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.

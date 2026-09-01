@@ -86,6 +86,7 @@ class TypstEmitter(Emitter):
             f"#show: report.with(\n"
             f"  title: {string(doc.title)},\n"
             f"  short: {string(doc.meta.get('short', ''))},\n"
+            f"  phase: {string(doc.phase)},\n"
             f"  dateline: {string(doc.dateline)},\n"
             f"  contributors: ({self.contributors(doc)}),\n"
             f"  contributors_note: {string(CONTRIBUTORS_NOTE)},\n"
