@@ -43,6 +43,10 @@ SCOPES = [
 SUGGESTIONS = {
     "rejected": "PREVIEW_WITHOUT_SUGGESTIONS",
     "accepted": "PREVIEW_SUGGESTIONS_ACCEPTED",
+    # Not a mode the command line offers: nothing publishes a document
+    # with the suggestion marks still in it.
+    # It is how they are counted, which is the only way to know there are any.
+    "inline": "SUGGESTIONS_INLINE",
 }
 
 CLIENT_SECRETS = Path(
@@ -288,9 +292,95 @@ def fetch_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
         raise FetchFailed(_explain(e)) from e
 
 
+SUGGESTION_KEYS = (
+    "suggestedInsertionIds",
+    "suggestedDeletionIds",
+    "suggestedTextStyleChanges",
+    "suggestedParagraphStyleChanges",
+    "suggestedBulletChanges",
+    "suggestedPositionedObjectPropertiesChanges",
+    "suggestedInlineObjectPropertiesChanges",
+)
+"""Where a suggestion leaves its id, whatever kind of change it is.
+
+The insertion and deletion keys hold a list of ids;
+the rest hold an object keyed by id.
+Both are read for their ids and not for what they say,
+because the question is how many suggestions are open rather than what they propose.
+"""
+
+
+def open_suggestions(doc_id: str, tab: str | None = None) -> int:
+    """How many suggestions are still open on `tab`.
+
+    A second request, because the first cannot answer it:
+    the build asks for `PREVIEW_WITHOUT_SUGGESTIONS`, which resolves them away
+    and leaves nothing behind to count.
+
+    Counted by id rather than by occurrence.
+    One suggestion touching a sentence marks every run in it,
+    which is 240 insertion marks for a document with far fewer suggestions in it.
+    """
+    document = fetch_document(doc_id, suggestions="inline")
+    return len(_suggestion_ids(select_tab(document, tab)))
+
+
+def _suggestion_ids(node: object) -> set[str]:
+    """Every suggestion id anywhere under `node`."""
+    found: set[str] = set()
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key not in SUGGESTION_KEYS:
+                found |= _suggestion_ids(value)
+            elif isinstance(value, (list, dict)):
+                # A list of ids, or an object keyed by them:
+                # iterating either yields the ids, which is all that is wanted.
+                found.update(str(i) for i in value)
+    elif isinstance(node, list):
+        for item in node:
+            found |= _suggestion_ids(item)
+    return found
+
+
+def open_comments(doc_id: str) -> int:
+    """How many comment threads are open on the document.
+
+    Drive rather than Docs: the Docs API does not carry comments at all.
+    Every page is read, because the count is the point
+    and Drive returns them 100 at a time.
+
+    A count for the whole file rather than for one tab.
+    Drive knows nothing about tabs,
+    so a comment on a stale draft in another tab is counted here too,
+    which is a reason to say `document` rather than `report` when reporting it.
+    """
+    from googleapiclient.discovery import build
+
+    service = build("drive", "v3", credentials=_credentials())
+    comments = service.comments()  # pyrefly: ignore[missing-attribute]
+    request = comments.list(fileId=doc_id, fields="comments(resolved),nextPageToken", pageSize=100)
+    open_threads = 0
+    while request is not None:
+        try:
+            response = request.execute()
+        except Exception as e:  # noqa: BLE001
+            raise FetchFailed(_explain(e)) from e
+        open_threads += sum(1 for c in response.get("comments", []) if not c.get("resolved"))
+        request = comments.list_next(request, response)
+    return open_threads
+
+
 def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
-    return select_tab(fetch_document(doc_id, suggestions), tab or url_tab)
+    wanted = tab or url_tab
+    document = select_tab(fetch_document(doc_id, suggestions), wanted)
+    # Recorded into the response rather than warned about here,
+    # for the reason `tabTitle` is: a build from a saved response
+    # has to write the same page as the build that fetched it,
+    # and neither the suggestions nor the comments survive in what is saved.
+    document["openSuggestions"] = open_suggestions(doc_id, wanted)
+    document["openComments"] = open_comments(doc_id)
+    return document
 
 
 def download_drive_file(file_id: str) -> bytes:

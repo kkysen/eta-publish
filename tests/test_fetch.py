@@ -111,3 +111,33 @@ def test_without_the_environment_variable_nothing_is_ambient(
 
     monkeypatch.delenv("GOOGLE_APPLICATION_CREDENTIALS", raising=False)
     assert fetch_module._ambient_credentials() is None
+
+
+def test_a_suggestion_is_counted_once_however_much_it_touches() -> None:
+    """One suggestion over a sentence marks every run in it:
+    the real document carries 240 insertion marks and far fewer suggestions."""
+    from eta_publish.fetch import _suggestion_ids
+
+    document = {
+        "body": {
+            "content": [
+                {
+                    "paragraph": {
+                        "elements": [
+                            {"textRun": {"suggestedInsertionIds": ["s.1"]}},
+                            {"textRun": {"suggestedInsertionIds": ["s.1"]}},
+                            {"textRun": {"suggestedDeletionIds": ["s.2"]}},
+                        ]
+                    }
+                },
+                {"paragraph": {"suggestedParagraphStyleChanges": {"s.3": {"bold": True}}}},
+            ]
+        }
+    }
+    assert _suggestion_ids(document) == {"s.1", "s.2", "s.3"}
+
+
+def test_a_document_with_nothing_suggested_counts_none() -> None:
+    from eta_publish.fetch import _suggestion_ids
+
+    assert _suggestion_ids({"body": {"content": [{"paragraph": {"elements": []}}]}}) == set()

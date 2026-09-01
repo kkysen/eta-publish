@@ -221,6 +221,16 @@ class Document:
     The headline is the report's title; this is the working name it is filed under,
     and the only thing `reports.toml` can be checked against."""
 
+    open_suggestions: int = 0
+    """Suggestions still open on the tab this was read from.
+
+    Recorded by the fetch, because the response a build reads has them resolved away.
+    Zero for a response saved before the fetch counted them, which cannot be helped:
+    the count is not in the file to be read."""
+
+    open_comments: int = 0
+    """Comment threads still open on the document, every tab of it."""
+
     tab_title: str = ""
     """What the tab this was read from is called.
 
