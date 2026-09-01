@@ -41,9 +41,11 @@
   // Empty for a published report, which is the state a reader assumes.
   phase: "",
   // What the build has to say about this report.
-  // On a page of its own at the end:
-  // the first three pages are the cover, the contents and the report,
-  // and a note to whoever is publishing does not belong in front of a reader.
+  // On a page of its own in front of everything,
+  // because it is read by whoever is about to publish
+  // and a page at the back is a page they will not turn to.
+  // A report with nothing wrong with it has no such page,
+  // so what publishes still opens on its cover.
   warnings: (),
   body,
 ) = {
@@ -88,6 +90,15 @@
   // and centring a two-line caption leaves a short second line hanging in the middle.
   show figure.caption: it => block(width: 100%, align(left, it))
   show figure: set block(above: 1.6em, below: 1.6em)
+
+  if warnings.len() > 0 {
+    // Not in the outline: the contents list what the report contains,
+    // and this page is the build talking about it rather than part of it.
+    heading(level: 1, outlined: false, [Warnings])
+    [Each of these is something to fix in the document before it is published.]
+    list(..warnings)
+    pagebreak()
+  }
 
   // The title page: a title and a picture, and nothing else on it.
   // The picture is with the title rather than after the contents,
@@ -171,10 +182,4 @@
     list(..contributors)
   }
 
-  if warnings.len() > 0 {
-    pagebreak()
-    heading(level: 1, [Warnings])
-    [Each of these is something to fix in the document before it is published.]
-    list(..warnings)
-  }
 }
