@@ -1,4 +1,4 @@
-#import "template.typ": report
+#import "template.typ": capped_image, report
 
 #show: report.with(
   title: "Digging Out of a Very Deep Hole: Saving Billions on 125th Street",
@@ -16,7 +16,7 @@
 SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inflation-adjusted from the 2024 capital plan.], per the #link("https://www.mta.info/document/196361")[MTA study].
 
 #figure(
-  image("images/sas-west-036.png", width: 100%, alt: "SAS West alignment map"),
+  capped_image("images/sas-west-036.png", alt: "SAS West alignment map"),
   caption: [The SAS West and Phase 2 alignments. Credit: MTA],
 )
 

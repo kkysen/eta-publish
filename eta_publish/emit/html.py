@@ -58,6 +58,21 @@ REPORT_CSS = """
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
+/* No figure is taller than this. The pictures arrive at whatever size
+   someone dropped them into the document at, and a tall one filled the
+   screen on its own before a word of the report was read. The cap is a
+   `max-width` on the figure derived from the picture's own shape rather
+   than a `max-height` on the image, because `max-height` against the
+   `width: 100%` above would squash the picture, and because two figures
+   sharing a row have to come out the same height, which capping their
+   widths in proportion to `--aspect` keeps true. An image whose shape a
+   build did not learn, which is any SVG, falls back to the 1.4 the row
+   assumes and so caps at roughly the same place. The 34rem is the PDF's
+   4.5in cap scaled to this column, so that a picture cut down in one is
+   cut down in the other. Centred, because a capped figure is narrower
+   than the column it sits in. */
+.eta-report figure { max-width: calc(var(--aspect, 1.4) * 34rem);
+                     margin-left: auto; margin-right: auto; }
 /* Everything with an id carries a link to itself, because everything with
    an id is something a reader may want to send someone: a section, a
    figure, a paragraph they are quoting. The `#` is written by the
@@ -487,8 +502,9 @@ class HtmlEmitter(Emitter):
         # the file its `Source:` line names,
         # or `img-` and a hash of the object id where there is no such line.
         # `--aspect` is a fact about the picture, written wherever it is known.
-        # Only `.figure-row` reads it,
-        # and only when the row has more than one figure to divide a line between.
+        # The stylesheet reads it twice:
+        # to divide a line between the figures of a row,
+        # and to cap how tall any one figure gets.
         aspect = self.doc.image_aspect(node.image)
         shape = f' style="--aspect: {aspect:.3f}"' if aspect is not None else ""
         anchor = self.take(node.image.filename)

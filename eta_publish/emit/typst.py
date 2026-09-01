@@ -73,7 +73,7 @@ class TypstEmitter(Emitter):
             f"  {key.replace(' ', '_')}: {string(value)}," for key, value in doc.meta.items()
         )
         header = (
-            f"#import {string(self.template)}: report\n\n"
+            f"#import {string(self.template)}: capped_image, report\n\n"
             f"#show: report.with(\n"
             f"  title: {string(doc.title)},\n"
             f"{meta}\n"
@@ -209,4 +209,6 @@ class TypstEmitter(Emitter):
         """
         path = f"{self.image_dir}/{self.doc.image_href(node)}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""
-        return f"image({string(path)}, width: 100%{alt})"
+        # `capped_image` rather than `image`: the width is the column's,
+        # except for a picture tall enough to break the page it opens.
+        return f"capped_image({string(path)}{alt})"
