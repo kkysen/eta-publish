@@ -3,6 +3,27 @@
 // The emitted `.typ` is a document body that imports this,
 // so a change to how reports look is a change to one file rather than to every report.
 
+// No image is taller than this.
+// The reports are illustrated at whatever size someone dropped the picture in at,
+// and a tall one pushed the title page's own picture onto page two.
+// 4.5in is what leaves the headline, the standfirst, the hero and its caption
+// together on page one, which is the page the cap is for.
+#let max_image_height = 4.5in
+
+// An image at the width it is given, unless that makes it too tall,
+// in which case the height is what is set and the width follows from it.
+// `layout` is what supplies the width to measure against:
+// a figure in the body and one in the title block have different widths available,
+// and neither is known here.
+#let capped_image(path, ..args) = layout(size => {
+  let full = image(path, width: size.width, ..args)
+  if measure(full).height <= max_image_height {
+    full
+  } else {
+    align(center, image(path, height: max_image_height, ..args))
+  }
+})
+
 #let report(
   title: "",
   url: none,

@@ -50,7 +50,7 @@ def test_the_source_line_is_not_emitted(out: str) -> None:
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert 'image("images/sas-west-036.png", width: 100%, alt: "SAS West alignment map")' in out
+    assert 'capped_image("images/sas-west-036.png", alt: "SAS West alignment map")' in out
     assert "The SAS West and Phase 2 alignments." in out
     assert "Credit: MTA" in out
     assert "#emph[Credit: MTA]" not in out
