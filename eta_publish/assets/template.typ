@@ -26,21 +26,23 @@
 
 #let report(
   title: "",
-  url: none,
-  short: none,
-  // `Public Contributors:` only.
-  // The header block keeps the private list under its own key
-  // so that those names do not reach a published page.
-  public_contributors: none,
   dateline: none,
   contributors: (),
   contributors_note: none,
   hero: none,
-  // The date the report publishes on, as the document shows it.
-  final_due_date: none,
-  ..rest,
+  // The header fields as typed, `short` among them.
+  // A dictionary rather than one argument each,
+  // because a field name is written in the document by whoever drafts it,
+  // and an argument name is Typst code:
+  // a field called `x:read("/etc/hostname"),y` ran when the PDF was built.
+  //
+  // `Public Contributors:` is what reaches the page.
+  // The header block keeps the private list under its own key,
+  // and nothing here reads it, so those names stay off a published page.
+  meta: (:),
   body,
 ) = {
+  let short = meta.at("short", default: none)
   set document(title: title)
   set page(
     paper: "us-letter",

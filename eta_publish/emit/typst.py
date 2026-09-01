@@ -15,6 +15,7 @@ The emitted file is a document body that imports `template.typ`,
 which carries the house style.
 """
 
+import json
 import re
 from typing import override
 
@@ -47,8 +48,15 @@ def escape(text: str) -> str:
 
 
 def string(value: str) -> str:
-    """A Typst string literal."""
-    return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+    """A Typst string literal.
+
+    `json.dumps` rather than a pair of `replace` calls:
+    a JSON string and a Typst one are quoted and escaped the same way,
+    and this one has been tested by more people than we will ever test ours.
+    `ensure_ascii=False` keeps the text readable and avoids `\\uXXXX`,
+    which JSON writes and Typst does not spell that way.
+    """
+    return json.dumps(value, ensure_ascii=False)
 
 
 class TypstEmitter(Emitter):
@@ -63,15 +71,23 @@ class TypstEmitter(Emitter):
     def document(self, doc: Document) -> str:
         """The header block as written, plus what the page publishes.
 
-        `doc.meta` is the fields as typed,
-        which the template shows for everything nobody has an opinion about.
+        `doc.meta` is the fields as typed, handed over whole.
         The page has an opinion about two, so they are passed separately
         rather than silently rewritten:
         the date written out, and the contributors in credited order.
         """
-        meta = "\n".join(
-            f"  {key.replace(' ', '_')}: {string(value)}," for key, value in doc.meta.items()
+        # One dictionary rather than one named argument each.
+        # A field name is whatever someone typed in the document,
+        # and as an argument name it was Typst code:
+        # a field called `x:read("/etc/hostname"),y` ran when the PDF was built.
+        # As a key it is a string, and a string cannot be anything but itself.
+        # One field per line, and `(:)` for none:
+        # this file is committed, so a changed field should be a one-line diff,
+        # and `()` is an empty array in Typst rather than an empty dictionary.
+        fields = "".join(
+            f"    {string(key)}: {string(value)},\n" for key, value in doc.meta.items()
         )
+        meta = f"  meta: (\n{fields}  )," if fields else "  meta: (:),"
         header = (
             f"#import {string(self.template)}: capped_image, report\n\n"
             f"#show: report.with(\n"

@@ -61,9 +61,18 @@ def test_markup_characters_in_prose_are_escaped(out: str) -> None:
     assert r"\$7.7 billion" in out
 
 
-def test_metadata_keys_become_valid_identifiers(out: str) -> None:
-    assert "seo_description:" in out
-    assert "seo description:" not in out
+def test_metadata_is_one_dictionary_of_strings(out: str) -> None:
+    """A field name is typed in the document, so it is data, not an argument name."""
+    assert '"seo description":' in out
+    assert "seo_description:" not in out
+
+
+def test_a_field_name_cannot_be_typst_code(doc: Document) -> None:
+    """A name emitted as an argument name ran when the PDF was built:
+    `x:read("/etc/hostname"),y` was a call, not a field."""
+    doc.meta['x:read("/etc/hostname"),y'] = "z"
+    out = TypstEmitter().emit(doc)
+    assert '"x:read(\\"/etc/hostname\\"),y": "z"' in out
 
 
 @pytest.mark.skipif(shutil.which("typst") is None, reason="typst is not installed")
