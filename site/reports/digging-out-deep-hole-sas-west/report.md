@@ -20,7 +20,7 @@ It will also be the only crosstown rail route north of Midtown, connecting ten d
 
 ![The SAS West and Phase 2 alignments.](<images/sas-west-036-afb00c85.jpg>)\
 The SAS West and Phase 2 alignments.\
-[Credit: MTA](<https://www.mta.info/document/196361#page=5>)\
+[Credit: MTA](<https://www.mta.info/document/196361#page=5>)
 <!-- Source: [sas-west-036.jpg](<https://drive.google.com/file/d/1pypAppcW1gOYpSMYkTWWUn4jEgE0cai-/view>) -->
 
 All these potential benefits, however, are overshadowed by a pair of massive elephants in the room, both of which paint the project in a completely different light.
@@ -41,7 +41,7 @@ Just as many travellers today would rather walk than take a painfully slow bus, 
 
 ![The proposed design for Broadway station, with transfers to the 1 train. The 100 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/sas-west-217.jpg>)\
 The proposed design for Broadway station, with transfers to the 1 train. The 100 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.\
-[Credit: MTA](<https://www.mta.info/document/196361#page=30>)\
+[Credit: MTA](<https://www.mta.info/document/196361#page=30>)
 <!-- Source: [sas-west-217.jpg](<https://drive.google.com/file/d/1sUVj1RTPdDY_gXMN8e_6IYskemIYPPEU/view>) -->
 
 None of this means that a 125 St subway should not be built.
@@ -90,7 +90,7 @@ In part as a result of this cost, what was originally envisioned in 1929 as a si
 
 ![The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.](<images/96st_station-52b19425.jpg>)\
 The station box of 96 St/2 Av shown on the MTA app. Dark gray is the whole station box, while light gray is the platform length.\
-[Credit: MTA app](<https://www.mta.info/guides/apps>)\
+[Credit: MTA app](<https://www.mta.info/guides/apps>)
 <!-- Uncropped Source: [96st\_station](<https://drive.google.com/file/d/1KZ-jpq7zdbweHRoO5cz3BiHwFbMv9Rhe/view>) -->
 
 [Many decisions created this mammoth price tag](<https://www.masstransitmag.com/rail/article/12227191/project-update-second-avenue-subway>), a number of which have a direct impact on plans for a 125 St extension:
@@ -108,7 +108,7 @@ While the MTA [initially envisioned the LIRR using Grand Central Terminal (GCT)�
 
 ![One of the two massive caverns blasted out of bedrock 140 ft below Grand Central Terminal.](<images/img-4b8ff8de.jpg>)\
 One of the two massive caverns blasted out of bedrock 140 ft below Grand Central Terminal.\
-[Credit: MTA](<https://www.flickr.com/photos/mtaphotos/8475914281/in/album-72157632775809340>)\
+[Credit: MTA](<https://www.flickr.com/photos/mtaphotos/8475914281/in/album-72157632775809340>)
 <!-- [Image Source](<https://www.flickr.com/photo_download.gne?id=8475914281&secret=4efa092c06&size=o&source=photoPageEngagement>) -->
 
 In no small part because of this complex, deep design, GCM wound up wildly over budget, exploding from [$4.3 to $11 billion and more than 14 years behind schedule](<https://web.archive.org/web/20180415065109/https://www.newsday.com/long-island/east-side-access-tour-1.18020231>).
@@ -139,7 +139,7 @@ To understand how to achieve that, however, it is important to understand the fo
 
 ![The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.](<images/sas-west-207.png>)\
 The proposed design for St Nicholas Av station, with transfers to the A/B/C/D trains. The 130 ft depth of the station and switchback escalators raise escalator transfer times over 5 minutes.\
-[Credit: MTA](<https://www.mta.info/document/196361#page=28>) \
+[Credit: MTA](<https://www.mta.info/document/196361#page=28>)
 <!-- Source: [sas-west-207.jpg](<https://drive.google.com/file/d/1NWYQi_JwuV-Yv2OU8dR3LuDms1f-MhNy/view>) -->
 
 For the non-civil engineers among us, there are three primary causes of station depth:
@@ -203,7 +203,7 @@ With underpinning, this separation can be reduced even further to mere feet belo
 
 ![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/SAS_West_-_Tunnel_Profile_-_pg_18.screenshot-af4262b6.png>)\
 The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.\
-[Credit: MTA](<https://www.mta.info/document/196361#page=18>)\
+[Credit: MTA](<https://www.mta.info/document/196361#page=18>)
 <!-- Source: [SAS West - Tunnel Profile - pg 18.screenshot.png](<https://drive.google.com/file/d/1mMpIVzR8WSHexUaNgyqP-MxSn9k9Gd_U/view>) -->
 
 Examples from subways in China’s Yangtze Delta, full of soft and fertile alluvial soils, are helpful comparisons.
@@ -214,12 +214,12 @@ Similarly, the city-center Yuyuan Garden station on Shanghai Line 14 was built o
 
 ![Cross-section of Zhongsheng station.](<images/img-f5b8dae7.jpg>)\
 Cross-section of Zhongsheng station.\
-[Credit: China Railway Sixth Survey and Design Institute Group Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>)\
+[Credit: China Railway Sixth Survey and Design Institute Group Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>)
 <!-- [Image Source](<https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/>) -->
 
 ![Cross-section of the pipe-jacking at Jing’an Temple station.](<images/img-6a139fa2.png>)\
 Cross-section of the pipe-jacking at Jing’an Temple station.\
-[Credit: Wu Liecheng et al., Shanghai Tunnel Engineering Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>)\
+[Credit: Wu Liecheng et al., Shanghai Tunnel Engineering Co., Ltd.](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>)
 <!-- [Image Source](<https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/>) -->
 
 Underpinning to cut station depth does add complexity and risk, but it also massively reduces the cost of the station and drastically shortens transfer times, speeding up trips in perpetuity.
@@ -229,12 +229,12 @@ Conversely, St Nicholas Av (A/B/C/D) already has a mezzanine, so the new SAS sta
 
 ![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/img-6c3ad309.jpg>)\
 The existing elevated 125 St/Broadway station with a wide, 172 ft arch.\
-[Credit: Jim Henderson](<https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG>)\
+[Credit: Jim Henderson](<https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG>)
 <!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/d/d9/W125irtjeh.JPG>) -->
 
 ![The 72 St headhouse in the Broadway median.](<images/img-a5e93aab.jpg>)\
 The 72 St headhouse in the Broadway median.\
-[Credit: Gryffindor](<https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG>)\
+[Credit: Gryffindor](<https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG>)
 <!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/2/27/72nd_Street_IRT_Broadway_013.JPG>) -->
 
 Underpinning should be much less of a concern at Broadway (1), as a [172 ft-wide](<https://en.wikipedia.org/wiki/125th_Street_station_(IRT_Broadway%E2%80%93Seventh_Avenue_Line)#:~:text=The%20arch%20measures-,172%20feet,-(52%C2%A0m)%20long>) [viaduct arch](<https://www.google.com/maps/@40.8155549,-73.9580419,3a,75y,303.51h,90.96t/data=!3m7!1e1!3m5!1s435DcOmetEdoxLraSju-2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.9596236859238161%26panoid%3D435DcOmetEdoxLraSju-2Q%26yaw%3D303.5128416340331!7i16384!8i8192!5m1!1e2?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D>) spans 125 St, 2–3x the width of the station box.
@@ -248,7 +248,7 @@ Seoul Line 9’s underground Express Bus Terminal station combined CAM and TRCM,
 
 ![Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.](<images/Express_Bus_Terminal_Station_-_Seoul_Line_9_-_Seungho_Kang.png>)\
 Interior of the Express Bus Terminal station on Seoul’s Line 9, which is mere feet beneath an existing metro station.\
-Credit: Seungho Kang, Joint Transit Association\
+Credit: Seungho Kang, Joint Transit Association
 <!-- Source: [Express Bus Terminal Station - Seoul Line 9 - Seungho Kang.jpg](<https://drive.google.com/open?id=1ZK5KLfWUF5A5UXlw2LIWEGtUkB8TUECo&authuser=0>) -->
 
 Techniques like these can all be combined depending on exact site specifics.
@@ -257,7 +257,7 @@ There, engineers mixed traditional cut-and-cover with a [pipe roof method called
 
 ![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/img-60a0a749.png>)\
 Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.\
-[Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)\
+[Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)
 <!-- [Image Source](<https://ars.els-cdn.com/content/image/1-s2.0-S2214509525014135-gr2_lrg.jpg>) -->
 
 Some combination of one or all of these methods could be used along SAS West to not only massively reduce cost, but make the stations far more useful once completed.
@@ -274,7 +274,7 @@ See [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>) for more information o
 
 ![A video rendering of the 125 St/Lexington Av station.](<images/Screenshot_2026-07-18_100636-4392a78e.png>)\
 A video rendering of the 125 St/Lexington Av station.\
-[Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)\
+[Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)
 <!-- Uncropped Source: [Screenshot 2026-07-18 100636.png](<https://drive.google.com/file/d/1_UuQs5LygSlFd62nZK6yndl0gDIPlxyq/view>) -->
 
 Coming closer to the surface would save considerable sums of money for the stations on SAS West: if for example, the stations can be built an average of 60-70 ft deep based on the international precedents, then the cost can follow the [A Better Billion model](<https://transitcosts.com/a-better-billion.html>) based on SAS costs, $770 million per station and a total of $3.4 billion for SAS West in 2025 prices.
@@ -292,12 +292,12 @@ All on its own, narrowing the station on SAS West from 75 ft to the already larg
 
 ![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-a718beb8.png>)\
 Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>) that switched the mezzanine from above to below the platform.\
-Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)\
+Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)
 <!-- [Image Source](<https://storage.ghost.io/c/19/31/1931222a-d1c5-42ac-8932-2ee3ac1f8927/content/images/old-theurbanist-org/wp-content/uploads/2026/01/nyc-mta-116th-station-design.png>) -->
 
 ![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/sas-2-029-3ec53fb1.jpg>)\
 A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.\
-[Credit: MTA](<https://www.mta.info/document/114626#page=5>)\
+[Credit: MTA](<https://www.mta.info/document/114626#page=5>)
 <!-- Source: [sas-2-029.jpg](<https://drive.google.com/file/d/1L5XwcbIAWiqnp15ALHRJ9xpRNK4GWQhB/view>) -->
 
 Narrowing the station boxes should be a high priority to keep costs reasonable.
@@ -319,7 +319,7 @@ None of this extra space is accessible to passengers.
 Instead, as a general rule, most of it is deeply underutilized back-of-house space for MTA employees.
 
 ![Station length as a percentage of platform length.](<images/img-44bf278f.png>)\
-Station length as a percentage of platform length.\
+Station length as a percentage of platform length.
 <!-- SVG: TODO -->
 
 Here, the MTA and its consultants have learned at least a little from the cost explosion of SAS Phase 1—but nowhere near enough.
@@ -341,7 +341,7 @@ Other metro systems around the world, such as Milan Line 4, build ventilation sy
 
 ![A ventilation and daylight structure from Milan’s M1 line.](<images/italian-case-study-139.jpg>)\
 A ventilation and daylight structure from Milan’s M1 line.\
-[Credit: Transit Costs Report](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>)\
+[Credit: Transit Costs Report](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>)
 <!-- Uncropped Source: [italian-case-study-139.jpg](<https://drive.google.com/file/d/1SpTWO0qh8Ak3r3SW32aIn12RSqa16fBy/view>) -->
 
 ![The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Phase 1.](<images/img-2a097531.jpg>)\
@@ -422,7 +422,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 
 ![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/Screenshot_2026-04-27_160823-e68e5d52.png>)\
 The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.\
-[Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)\
+[Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)
 <!-- Uncropped Source: [Screenshot 2026-04-27 160823.png](<https://drive.google.com/file/d/1wP8kC13_147MWx12IOlPU0jtMU0VOw1f/view>) -->
 
 In the feasibility study, the MTA's consultants proposed [tail tracks](<https://www.mta.info/document/196361#page=23>) west of Broadway long enough to [store 6 trainsets](<https://www.mta.info/document/196361#page=23>).
@@ -489,7 +489,7 @@ Third-party design costs are usually 7-8%, which is common in Spain, France, and
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.[^17]
 
 ![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/project_cost_comparison.svg>)\
-A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.\
+A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.
 <!-- SVG: [project\_cost\_comparison.svg](<https://drive.google.com/open?id=1BP66CGI9ioIx570isLn4ppS1qfJmBafA>)  -->
 
 A significant chunk of this comes from guidelines by the Federal Transit Administration (FTA), which recommend a whopping [40% contingency](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62>) at this stage in the project (15% design[^18]).
