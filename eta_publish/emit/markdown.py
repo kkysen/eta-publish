@@ -99,6 +99,7 @@ class MarkdownEmitter(Emitter):
             self.title(doc),
             self.phase(doc),
             self.dateline(doc),
+            self.warnings(doc),
             self.blocks([doc.hero] if doc.hero is not None else []),
             self.blocks(doc.body),
             self.footnotes(doc),
@@ -126,6 +127,18 @@ class MarkdownEmitter(Emitter):
     def phase(self, doc: Document) -> str:
         """Bold, because the archive has no styling to give it and it is a warning."""
         return f"**{escape(doc.phase)}**" if doc.phase else ""
+
+    def warnings(self, doc: Document) -> str:
+        """The build's notes about this report, above it and below the dateline.
+
+        Written as a list, and not escaped:
+        a warning is written with backticks around a name,
+        which is already how Markdown spells code.
+        """
+        if not doc.warnings:
+            return ""
+        notes = "\n".join(f"- {w}" for w in doc.warnings)
+        return f"**Warnings**\n\n{notes}"
 
     def dateline(self, doc: Document) -> str:
         """When the report published, as the page and the PDF date it."""

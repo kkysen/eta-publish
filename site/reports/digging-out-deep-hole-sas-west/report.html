@@ -75,6 +75,15 @@
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
+/* The build's own notes about this report, not part of it, and never in the
+   fragment that is pasted into the live site. A colour of its own, because it
+   is the one thing on the page that is not the report and should not be read
+   as though it were, and sans-serif for the same reason. */
+.eta-report .warnings { border-left: 3px solid #c60; padding: .4em 1em;
+                        margin: 2em 0; font-size: .9rem;
+                        font-family: system-ui, sans-serif; }
+.eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
+.eta-report .warnings code { font-size: .95em; }
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */

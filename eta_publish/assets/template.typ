@@ -40,6 +40,11 @@
   // What a reader of a draft has to be told before reading it.
   // Empty for a published report, which is the state a reader assumes.
   phase: "",
+  // What the build has to say about this report.
+  // On a page of its own at the end:
+  // the first three pages are the cover, the contents and the report,
+  // and a note to whoever is publishing does not belong in front of a reader.
+  warnings: (),
   body,
 ) = {
   set document(title: title)
@@ -164,5 +169,12 @@
     heading(level: 1, [Contributors])
     if contributors_note != none [#contributors_note]
     list(..contributors)
+  }
+
+  if warnings.len() > 0 {
+    pagebreak()
+    heading(level: 1, [Warnings])
+    [Each of these is something to fix in the document before it is published.]
+    list(..warnings)
   }
 }

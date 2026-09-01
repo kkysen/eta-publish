@@ -23,8 +23,6 @@ h1 { font-size: 2.1rem; margin-bottom: .2em; }
 h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
 a { color: inherit; }
 .standfirst { font-size: 1.15rem; opacity: .75; margin-top: 0; }
-.warnings { border-left: 3px solid #c60; padding: .4em 1em; margin: 2em 0;
-            font-family: system-ui, sans-serif; font-size: .9rem; }
 
 .eta-report figure { margin: 2.5em 0; }
 /* Figures the document puts next to each other sit next to each other, if
@@ -102,6 +100,15 @@ a { color: inherit; }
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
+/* The build's own notes about this report, not part of it, and never in the
+   fragment that is pasted into the live site. A colour of its own, because it
+   is the one thing on the page that is not the report and should not be read
+   as though it were, and sans-serif for the same reason. */
+.eta-report .warnings { border-left: 3px solid #c60; padding: .4em 1em;
+                        margin: 2em 0; font-size: .9rem;
+                        font-family: system-ui, sans-serif; }
+.eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
+.eta-report .warnings code { font-size: .95em; }
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */
@@ -125,7 +132,6 @@ a { color: inherit; }
 </style>
 <h1 id="title"><a class="link-mark" href="#title" aria-label="Link to this title"></a>Digging Out of a Very Deep Hole: Saving Billions on 125th Street</h1>
 <p class="standfirst" id="short"><a class="link-mark" href="#short" aria-label="Link to this standfirst"></a>A 125 St subway should be a slam dunk.</p>
-
 <div class="eta-report">
 <nav class="toc" id="table-of-contents" aria-label="Table of contents">
 <a class="link-mark" href="#table-of-contents" aria-label="Link to this table of contents"></a>

@@ -4,6 +4,15 @@ A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 
 
 August 19, 2026
 
+**Warnings**
+
+- unfinished text in the document: SVG: TODO
+- the image `img-44bf278f` has no `Credit:` line
+- the image `project_cost_comparison` has no `Credit:` line
+- 17 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 46 comment threads still open on this document
+- `SEO Description:` is 398 characters, over the 300 a search result shows; the end of it will not be read
+
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)\
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.\
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>), ETA (Blair Lorenzo)
