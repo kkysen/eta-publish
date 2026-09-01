@@ -20,7 +20,7 @@ The exit status still reports it.
 import sys
 import tomllib
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from .build import BuildOptions, build_one
 from .emit.html import escape
@@ -120,10 +120,23 @@ def report_path(doc: Document) -> str:
     The leading slash is dropped because the site is a directory tree,
     and a report published at the root of a domain
     would otherwise write to the root of the filesystem.
+
+    A path that climbs is refused for the same reason and a stronger one.
+    The build writes wherever this says,
+    so `URL: /../../etc` is a document choosing a directory outside the site,
+    and the check that the committed site is what a build writes
+    only ever looks inside `site/`, so it would not notice.
     """
     slug = doc.slug.strip("/")
     if slug:
-        return slug
+        parts = PurePosixPath(slug).parts
+        if ".." not in parts and not PurePosixPath(slug).is_absolute():
+            return slug
+        doc.warn(
+            f"the `URL:` line is {doc.slug!r}, which climbs out of the site; "
+            "publishing under the headline instead"
+        )
+
     fallback = slugify(doc.title) if doc.title else "report"
     doc.warn(
         f"no `URL:` in the header, so this is published at /{fallback}, "
