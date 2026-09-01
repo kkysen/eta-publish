@@ -16,7 +16,7 @@ which is the one place its name is written:
    `url` in `reports.toml`, committed next to the outputs it produced.
    This is the source: everything published comes from here.
 3. `site/reports/$report/index.html`,
-   written from that `doc.json` by `uv run eta-publish -o site`,
+   written from that `doc.json` by `uv run eta-publish`,
    or offline by `uv run eta-publish site/reports/$report --no-images`.
 
 Below, `doc.json` and `index.html` are those two files

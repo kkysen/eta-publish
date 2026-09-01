@@ -34,7 +34,7 @@ if ! git diff --quiet HEAD -- site; then
     fail "site/ has uncommitted changes and this rebuilds into it; commit or stash them first"
 fi
 
-uv run eta-publish -o site
+uv run eta-publish
 
 # The whole diff, not a summary:
 # it is the change to a published report,
