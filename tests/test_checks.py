@@ -57,3 +57,19 @@ def test_a_document_with_no_header_is_left_to_the_parser(doc: Document) -> None:
     doc.meta.clear()
     check(doc)
     assert doc.warnings == []
+
+
+def test_an_seo_description_over_the_limit_says_how_long_it_is(doc: Document) -> None:
+    """Where it was cut is what the writer needs, and a search result never shows it."""
+    doc.meta["seo description"] = "x" * 301
+    check(doc)
+    assert doc.warnings == [
+        "`SEO Description:` is 301 characters, over the 300 a search result shows; "
+        "the end of it will not be read"
+    ]
+
+
+def test_an_seo_description_at_the_limit_is_fine(doc: Document) -> None:
+    doc.meta["seo description"] = "x" * 300
+    check(doc)
+    assert doc.warnings == []

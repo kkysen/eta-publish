@@ -31,6 +31,14 @@ and a warning naming nine is a paragraph nobody reads twice.
 """
 
 
+SEO_LIMIT = 300
+"""How long a `SEO Description:` may be.
+
+Past this a search engine truncates it,
+so the sentence that decides whether anyone clicks ends mid-word,
+and the writer never sees where it was cut.
+"""
+
 MAY_BE_EMPTY = frozenset({"private contributors"})
 """Fields whose emptiness says something rather than being an omission.
 
@@ -52,6 +60,13 @@ def check(doc: Document) -> None:
             doc.warn(f"the `Header` section has no `{_titled(field)}:` line")
         elif field not in MAY_BE_EMPTY and not doc.meta[field].strip():
             doc.warn(f"the `Header` section leaves `{_titled(field)}:` empty")
+
+    seo = doc.meta.get("seo description", "")
+    if len(seo) > SEO_LIMIT:
+        doc.warn(
+            f"`SEO Description:` is {len(seo)} characters, over the {SEO_LIMIT} "
+            f"a search result shows; the end of it will not be read"
+        )
 
 
 ACRONYMS = frozenset({"seo", "url"})
