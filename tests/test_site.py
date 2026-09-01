@@ -216,3 +216,48 @@ def test_the_documents_own_name_is_not_warned_about(
         BuildOptions(images=False),
     )
     assert "reports.toml calls this" not in capsys.readouterr().err
+
+
+def test_a_tab_that_is_not_the_documents_is_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A `?tab=` id says nothing a reader can check, so the title is what is checked."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE | {"tabTitle": "Draft 2"}))
+    build_site(
+        [Report(url=str(saved), tab="Draft 1")],
+        tmp_path / "site",
+        BuildOptions(images=False),
+    )
+    warning = capsys.readouterr().err
+    assert "reports.toml expects the tab 'Draft 1'" in warning
+    assert "'Draft 2'" in warning
+
+
+def test_a_response_saved_before_tabs_were_recorded_is_not_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A response with no `tabTitle` cannot disagree, and must not be said to.
+
+    Every response saved before the fetch started recording one is such a file,
+    and they are what an offline build reads.
+    """
+    saved = tmp_path / "doc.json"
+    assert "tabTitle" not in FIXTURE
+    saved.write_text(json.dumps(FIXTURE))
+    build_site(
+        [Report(url=str(saved), tab="Draft 1")],
+        tmp_path / "site",
+        BuildOptions(images=False),
+    )
+    assert "reports.toml" not in capsys.readouterr().err
+
+
+def test_an_entry_that_names_neither_is_not_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Both fields are optional: an entry says as much as whoever wrote it wanted."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE))
+    build_site([Report(url=str(saved))], tmp_path / "site", BuildOptions(images=False))
+    assert "reports.toml" not in capsys.readouterr().err
