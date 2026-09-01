@@ -90,7 +90,10 @@ ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
 # The real doc has `Source: TODO` and `SVG: TODO`,
 # fine while drafting and not fine on a published page,
 # so they are worth one loud line before publishing.
-TODO_RE = re.compile(r"\bTODO\b|\bTK\b|\bFIXME\b|\bXXX\b")
+# Not `TK`: it is a newsroom's mark for copy still owed,
+# and it is not one these reports are written with,
+# so here it would only ever match a word that happened to be spelled that way.
+TODO_RE = re.compile(r"\bTODO\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
