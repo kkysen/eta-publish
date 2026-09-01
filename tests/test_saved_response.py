@@ -131,3 +131,46 @@ def _offline() -> requests.Session:
             raise AssertionError("a saved response has nothing to fetch from")
 
     return Offline()
+
+
+def test_a_run_that_cannot_read_the_review_keeps_the_last_answer(tmp_path: Path) -> None:
+    """CI rebuilds with a service account, which may read neither suggestions nor comments.
+    Writing a page that says nothing is open would differ from the committed one
+    and fail the check that the two match, over something no document changed."""
+    from eta_publish.build import carry_over_review
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(
+        json.dumps({"openSuggestions": 17, "openComments": 3, "openCommentsAreThisTab": True})
+    )
+    fresh: dict[str, object] = {"body": {}}
+    carry_over_review(fresh, saved)
+    assert fresh == {
+        "body": {},
+        "openSuggestions": 17,
+        "openComments": 3,
+        "openCommentsAreThisTab": True,
+    }
+
+
+def test_a_run_that_could_read_the_review_keeps_what_it_read(tmp_path: Path) -> None:
+    from eta_publish.build import carry_over_review
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({"openSuggestions": 17, "openComments": 3}))
+    fresh: dict[str, object] = {
+        "openSuggestions": 0,
+        "openComments": 0,
+        "openCommentsAreThisTab": True,
+    }
+    carry_over_review(fresh, saved)
+    assert fresh["openSuggestions"] == 0
+    assert fresh["openComments"] == 0
+
+
+def test_a_first_build_has_no_last_answer_to_keep(tmp_path: Path) -> None:
+    from eta_publish.build import carry_over_review
+
+    fresh: dict[str, object] = {"body": {}}
+    carry_over_review(fresh, tmp_path / "absent.json")
+    assert fresh == {"body": {}}

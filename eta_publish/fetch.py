@@ -311,7 +311,7 @@ because the question is how many suggestions are open rather than what they prop
 """
 
 
-def open_suggestions(doc_id: str, tab: str | None = None) -> int:
+def open_suggestions(doc_id: str, tab: str | None = None) -> int | None:
     """How many suggestions are still open on `tab`.
 
     A second request, because the first cannot answer it:
@@ -321,8 +321,17 @@ def open_suggestions(doc_id: str, tab: str | None = None) -> int:
     Counted by id rather than by occurrence.
     One suggestion touching a sentence marks every run in it,
     which is 240 insertion marks for a document with far fewer suggestions in it.
+
+    Reading them needs more than reading the document does:
+    an account with view access is told it does not have permission,
+    which is what CI's service account is.
+    That is a question this cannot answer rather than a build that cannot run,
+    so it is `None` and the caller keeps whatever the last answer was.
     """
-    document = fetch_document(doc_id, suggestions="inline")
+    try:
+        document = fetch_document(doc_id, suggestions="inline")
+    except FetchFailed:
+        return None
     return len(_suggestion_ids(select_tab(document, tab)))
 
 
@@ -387,7 +396,7 @@ def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
     return None
 
 
-def open_comments(doc_id: str) -> int:
+def open_comments(doc_id: str) -> int | None:
     """How many comment threads are open on the whole document, every tab of it.
 
     Drive rather than Docs: the Docs API does not carry comments at all.
@@ -407,8 +416,10 @@ def open_comments(doc_id: str) -> int:
     while request is not None:
         try:
             response = request.execute()
-        except Exception as e:  # noqa: BLE001
-            raise FetchFailed(_explain(e)) from e
+        except Exception:  # noqa: BLE001
+            # As with the suggestions: an account that cannot read these
+            # is a question left unanswered, not a build that cannot run.
+            return None
         open_threads += sum(1 for c in response.get("comments", []) if not c.get("resolved"))
         request = comments.list_next(request, response)
     return open_threads
@@ -422,10 +433,17 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     # for the reason `tabTitle` is: a build from a saved response
     # has to write the same page as the build that fetched it,
     # and neither the suggestions nor the comments survive in what is saved.
-    document["openSuggestions"] = open_suggestions(doc_id, wanted)
+    # Only what could actually be read.
+    # A key left out is one the last answer stands for,
+    # which `build_one` carries over from the saved response.
+    suggested = open_suggestions(doc_id, wanted)
+    if suggested is not None:
+        document["openSuggestions"] = suggested
     on_tab = open_comments_on_tab(doc_id, wanted)
-    document["openComments"] = on_tab if on_tab is not None else open_comments(doc_id)
-    document["openCommentsAreThisTab"] = on_tab is not None
+    comments = on_tab if on_tab is not None else open_comments(doc_id)
+    if comments is not None:
+        document["openComments"] = comments
+        document["openCommentsAreThisTab"] = on_tab is not None
     return document
 
 
