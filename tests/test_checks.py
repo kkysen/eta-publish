@@ -107,3 +107,10 @@ def test_a_figure_missing_both_says_both(doc: Document) -> None:
     doc.blocks = [figure(caption=False, credit=False)]
     check(doc)
     assert len(doc.warnings) == 2
+
+
+def test_an_unfinished_header_line_is_flagged(doc: Document) -> None:
+    """The body walk never sees the header: it is consumed before that walk begins."""
+    doc.meta["short"] = "TODO write this"
+    check(doc)
+    assert doc.warnings == ["`Short:` is still marked unfinished"]

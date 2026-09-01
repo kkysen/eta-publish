@@ -11,6 +11,7 @@ and appear both in the build log and on the site's index page.
 """
 
 from .nodes import Document, Figure
+from .parse import TODO_RE
 
 REQUIRED_FIELDS = (
     "project manager",
@@ -62,6 +63,12 @@ def check(doc: Document) -> None:
             doc.warn(f"the `Header` section has no `{_titled(field)}:` line")
         elif field not in MAY_BE_EMPTY and not doc.meta[field].strip():
             doc.warn(f"the `Header` section leaves `{_titled(field)}:` empty")
+
+        if TODO_RE.search(doc.meta.get(field, "")):
+            # The body walk flags an unfinished line wherever it finds one,
+            # but the header is consumed before that walk begins,
+            # so `Short: TODO` reached the page with nothing said about it.
+            doc.warn(f"`{_titled(field)}:` is still marked unfinished")
 
     seo = doc.meta.get("seo description", "")
     if len(seo) > SEO_LIMIT:
