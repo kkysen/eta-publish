@@ -214,6 +214,12 @@ class Footnote:
 @dataclass
 class Document:
     title: str = ""
+
+    file_title: str = ""
+    """What the document is called in Drive, which is not what it is called here.
+
+    The headline is the report's title; this is the working name it is filed under,
+    and the only thing `reports.toml` can be checked against."""
     meta: dict[str, str] = field(default_factory=dict)
     """The doc's leading `Header` section, lowercased keys.
     Unrecognized keys are kept rather than dropped."""

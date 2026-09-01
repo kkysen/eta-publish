@@ -4,11 +4,16 @@
 # the site path comes from the document's own `URL:` line,
 # so nothing in this file or in the workflow names a report twice.
 #
+# `name` is what the document is called in Drive, not the report's headline:
+# it is what you search for to find the doc this entry points at.
+# A build says so when the two have drifted apart,
+# which it can only know once it has fetched the document.
+#
 # `url` is the Docs URL including its `?tab=` id.
 # ETA documents have many tabs, several of them obsolete drafts,
 # and the API returns the first tab unless told otherwise,
 # so a URL without one publishes the wrong draft.
 
 [[report]]
-name = "SAS West"
+name = "SAS West Feasibility Response"
 url = "https://docs.google.com/document/d/1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg/edit?tab=t.ul3yzv5xed4w"

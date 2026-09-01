@@ -187,3 +187,32 @@ def test_a_directory_without_a_saved_response_says_so(tmp_path: Path) -> None:
     result = CliRunner().invoke(app, [str(tmp_path / "empty"), "-o", str(tmp_path / "site")])
     assert result.exit_code != 0
     assert "doc.json" in result.output
+
+
+def test_a_name_that_is_not_the_documents_is_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """`reports.toml` names each report, and only the fetch knows if it is right."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE))
+    build_site(
+        [Report(url=str(saved), name="SAS West")],
+        tmp_path / "site",
+        BuildOptions(images=False),
+    )
+    warning = capsys.readouterr().err
+    assert "reports.toml calls this 'SAS West'" in warning
+    assert repr(FIXTURE["title"]) in warning
+
+
+def test_the_documents_own_name_is_not_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE))
+    build_site(
+        [Report(url=str(saved), name=str(FIXTURE["title"]))],
+        tmp_path / "site",
+        BuildOptions(images=False),
+    )
+    assert "reports.toml calls this" not in capsys.readouterr().err

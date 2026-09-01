@@ -811,6 +811,7 @@ class Parser:
         content: list[JsonObject] = self.json.get("body", {}).get("content", [])
         content = self.front_matter(content)
         self.doc.title = self.title(content)
+        self.doc.file_title = self.json.get("title", "")
 
         # Allocated knowing every heading up front,
         # so two headings that slugify alike keep their anchors when the document reorders.

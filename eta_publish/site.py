@@ -139,6 +139,16 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
             continue
         for warning in doc.warnings:
             print(f"  warning: {warning}", file=sys.stderr)
+        # Not one of `doc.warnings`: the document is fine, this file is wrong about it.
+        # Only checkable here, after the fetch:
+        # nothing in `reports.toml` says what the document is called,
+        # which is the whole reason the two can disagree.
+        if report.name and doc.file_title and report.name != doc.file_title:
+            print(
+                f"  warning: reports.toml calls this {report.name!r}, "
+                f"but the document is named {doc.file_title!r}",
+                file=sys.stderr,
+            )
         site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
