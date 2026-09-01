@@ -41,6 +41,13 @@ class Report:
     name: str = ""
     """Only for messages; the site path comes from the document itself."""
 
+    tab: str = ""
+    """What the tab in `url` is expected to be called, if the entry says.
+
+    The `?tab=` id is opaque, so nothing about the URL says which draft it points at.
+    Writing the title beside it is what turns the wrong tab into a warning
+    rather than into a published draft nobody meant to publish."""
+
 
 @dataclass
 class Built:
@@ -77,7 +84,13 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
         url = str(entry.get("url", "")).strip()
         if not url:
             raise ValueError(f"{path}: a [[report]] entry has no `url`")
-        reports.append(Report(url=url, name=str(entry.get("name", "")).strip()))
+        reports.append(
+            Report(
+                url=url,
+                name=str(entry.get("name", "")).strip(),
+                tab=str(entry.get("tab", "")).strip(),
+            )
+        )
     if not reports:
         raise ValueError(f"{path}: no [[report]] entries")
     return reports
@@ -139,18 +152,34 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
             continue
         for warning in doc.warnings:
             print(f"  warning: {warning}", file=sys.stderr)
-        # Not one of `doc.warnings`: the document is fine, this file is wrong about it.
-        # Only checkable here, after the fetch:
-        # nothing in `reports.toml` says what the document is called,
-        # which is the whole reason the two can disagree.
-        if report.name and doc.file_title and report.name != doc.file_title:
-            print(
-                f"  warning: reports.toml calls this {report.name!r}, "
-                f"but the document is named {doc.file_title!r}",
-                file=sys.stderr,
-            )
+        for warning in disagreements(report, doc):
+            print(f"  warning: {warning}", file=sys.stderr)
         site.built.append(Built(report=report, doc=doc, path=path))
     return site
+
+
+def disagreements(report: Report, doc: Document) -> list[str]:
+    """Where `reports.toml` and the document it points at do not match.
+
+    Not `doc.warnings`: the document is fine, this file is wrong about it,
+    and the count on the index page is a count of what the writers have to fix.
+
+    Only checkable here, after the fetch.
+    Nothing in `reports.toml` says what the document is called
+    or which of its tabs a `?tab=` id picks out,
+    which is the whole reason the two can drift apart.
+    Each field is checked only when the entry fills it in,
+    so an entry stays as brief as whoever wrote it wanted.
+    """
+    checks = (
+        ("calls this", report.name, "the document is named", doc.file_title),
+        ("expects the tab", report.tab, "the tab is named", doc.tab_title),
+    )
+    return [
+        f"reports.toml {said} {expected!r}, but {found_label} {found!r}"
+        for said, expected, found_label, found in checks
+        if expected and found and expected != found
+    ]
 
 
 INDEX_CSS = """

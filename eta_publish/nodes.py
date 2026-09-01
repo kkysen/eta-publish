@@ -220,6 +220,12 @@ class Document:
 
     The headline is the report's title; this is the working name it is filed under,
     and the only thing `reports.toml` can be checked against."""
+
+    tab_title: str = ""
+    """What the tab this was read from is called.
+
+    A `?tab=` id is opaque, so it is not something a person can check by reading it.
+    This is the same choice written in words."""
     meta: dict[str, str] = field(default_factory=dict)
     """The doc's leading `Header` section, lowercased keys.
     Unrecognized keys are kept rather than dropped."""

@@ -9,6 +9,10 @@
 # A build says so when the two have drifted apart,
 # which it can only know once it has fetched the document.
 #
+# `tab` is what that tab is called, checked the same way and for the same reason:
+# a `?tab=` id is opaque, so nothing about the URL says which draft it points at,
+# and picking up last year's draft is a mistake the URL cannot show you.
+#
 # `url` is the Docs URL including its `?tab=` id.
 # ETA documents have many tabs, several of them obsolete drafts,
 # and the API returns the first tab unless told otherwise,
@@ -16,4 +20,5 @@
 
 [[report]]
 name = "SAS West Feasibility Response"
+tab = "Draft 2"
 url = "https://docs.google.com/document/d/1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg/edit?tab=t.ul3yzv5xed4w"
