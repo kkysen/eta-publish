@@ -160,6 +160,9 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     """Each of these is something to fix in the document, not in the code.
     A new warning appearing here means the report changed or the parser did."""
     assert sorted(doc.warnings) == [
+        "17 suggestions still open on this tab; "
+        "the build publishes the document without them, as it reads today",
+        "46 comment threads still open on this document",
         "`SEO Description:` is 398 characters, over the 300 a search result shows; "
         "the end of it will not be read",
         "the image img-44bf278f has no `Credit:` line",

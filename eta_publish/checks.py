@@ -52,6 +52,7 @@ Every other field empty is a line somebody meant to come back to.
 def check(doc: Document) -> None:
     """Warn about everything a published report should not be missing."""
     _check_figures(doc)
+    _check_review(doc)
 
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
@@ -112,3 +113,26 @@ def _check_figures(doc: Document) -> None:
         for what, content in (("caption", block.caption), ("`Credit:` line", block.credit)):
             if not content:
                 doc.warn(f"the image {block.image.filename} has no {what}")
+
+
+def _check_review(doc: Document) -> None:
+    """Nothing is published with the editing still going on in it.
+
+    A build resolves suggestions away and never sees comments,
+    so what publishes from a document under review looks finished
+    and is a snapshot of an argument nobody has finished having.
+
+    `document` rather than `report` for the comments:
+    Drive knows nothing about tabs, so a comment on another tab is counted here too.
+    """
+    if doc.open_suggestions:
+        doc.warn(
+            f"{_plural(doc.open_suggestions, 'suggestion')} still open on this tab; "
+            "the build publishes the document without them, as it reads today"
+        )
+    if doc.open_comments:
+        doc.warn(f"{_plural(doc.open_comments, 'comment thread')} still open on this document")
+
+
+def _plural(count: int, thing: str) -> str:
+    return f"{count} {thing}" if count == 1 else f"{count} {thing}s"

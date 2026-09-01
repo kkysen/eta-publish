@@ -114,3 +114,24 @@ def test_an_unfinished_header_line_is_flagged(doc: Document) -> None:
     doc.meta["short"] = "TODO write this"
     check(doc)
     assert doc.warnings == ["`Short:` is still marked unfinished"]
+
+
+def test_open_suggestions_are_flagged(doc: Document) -> None:
+    """A build resolves them away, so what publishes looks finished and is not."""
+    doc.open_suggestions = 3
+    check(doc)
+    assert doc.warnings == [
+        "3 suggestions still open on this tab; "
+        "the build publishes the document without them, as it reads today"
+    ]
+
+
+def test_one_open_comment_is_not_called_comments(doc: Document) -> None:
+    doc.open_comments = 1
+    check(doc)
+    assert doc.warnings == ["1 comment thread still open on this document"]
+
+
+def test_a_document_under_no_review_says_nothing(doc: Document) -> None:
+    check(doc)
+    assert doc.warnings == []
