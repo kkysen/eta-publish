@@ -97,6 +97,7 @@ class MarkdownEmitter(Emitter):
     def document(self, doc: Document) -> str:
         parts = [
             self.title(doc),
+            self.phase(doc),
             self.dateline(doc),
             self.blocks([doc.hero] if doc.hero is not None else []),
             self.blocks(doc.body),
@@ -121,6 +122,10 @@ class MarkdownEmitter(Emitter):
         short = doc.meta.get("short", "")
         heading = f"# {escape(doc.title)}"
         return f"{heading}\n\n{escape(short)}" if short else heading
+
+    def phase(self, doc: Document) -> str:
+        """Bold, because the archive has no styling to give it and it is a warning."""
+        return f"**{escape(doc.phase)}**" if doc.phase else ""
 
     def dateline(self, doc: Document) -> str:
         """When the report published, as the page and the PDF date it."""
@@ -206,6 +211,7 @@ class MarkdownEmitter(Emitter):
             lines.append(caption)
         if node.credit:
             lines.append(self.inlines(node.credit))
+
         # A bare newline is a soft break, which is a space:
         # the picture, its caption and its credit rendered as one running line.
         # The trailing backslash is the hard break that is visible in the source,

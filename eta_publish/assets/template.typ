@@ -37,6 +37,9 @@
   // and the project's internal dates and channels,
   // and the emitted file is committed.
   short: none,
+  // What a reader of a draft has to be told before reading it.
+  // Empty for a published report, which is the state a reader assumes.
+  phase: "",
   body,
 ) = {
   set document(title: title)
@@ -91,6 +94,15 @@
     dir: ttb,
     block(width: 100%)[
       #set align(left)
+      #if phase != "" [
+        #block(
+          stroke: 0.6pt,
+          radius: 2pt,
+          inset: (x: 5pt, y: 3pt),
+          below: 0.8em,
+          text(size: 8pt, weight: "bold", tracking: 0.08em)[#upper(phase)],
+        )
+      ]
       #text(size: 21pt, weight: "bold")[#title]
       #if short != none [
         #v(0.6em)
