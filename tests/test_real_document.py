@@ -42,6 +42,7 @@ import re
 import pytest
 from paths import REAL_DIR as REAL
 
+from eta_publish.checks import check as run_checks
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.emit.markdown import MarkdownEmitter
@@ -90,6 +91,10 @@ def doc(regenerate_snapshots: bool) -> Document:
     parsed = parse(DOC_JSON)
     parsed.image_files.update(image_files(regenerate_snapshots))
     parsed.image_shapes.update(image_shapes(regenerate_snapshots))
+    # As a build does it, because the page carries the warnings
+    # and these snapshots are the pages a build writes.
+    # `run_checks` rather than `check`, which is this module's snapshot comparison.
+    run_checks(parsed)
     return parsed
 
 
@@ -155,6 +160,10 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     """Each of these is something to fix in the document, not in the code.
     A new warning appearing here means the report changed or the parser did."""
     assert sorted(doc.warnings) == [
+        "`SEO Description:` is 398 characters, over the 300 a search result shows; "
+        "the end of it will not be read",
+        "the image img-44bf278f has no `Credit:` line",
+        "the image project_cost_comparison has no `Credit:` line",
         "unfinished text in the document: SVG: TODO",
     ]
 
