@@ -25,11 +25,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-# `Option` and `Argument` stay qualified:
-# both are ordinary words a document tool can expect to want for its own things.
-# The rest are distinctive enough to import.
-import typer
-from typer import BadParameter, Exit, Typer
+from typer import Argument, BadParameter, Exit, Option, Typer
 
 from .build import BuildOptions
 from .site import build_site, index_page, reports_from
@@ -52,7 +48,7 @@ app = Typer(context_settings={"help_option_names": ["-h", "--help"]})
 def publish(
     doc: Annotated[
         str,
-        typer.Argument(
+        Argument(
             metavar="DOC",
             help="a Google Doc URL (including its `?tab=` id), an id, saved "
             "Docs API JSON, or a `.toml` list of reports",
@@ -60,18 +56,18 @@ def publish(
     ] = "reports.toml",
     outdir: Annotated[
         Path,
-        typer.Option("-o", "--outdir", help="where the site is written; `site/` is published"),
+        Option("-o", "--outdir", help="where the site is written; `site/` is published"),
     ] = Path("site"),
     suggestions: Annotated[
         Suggestions,
-        typer.Option(help="how to resolve open suggestions; rejected is what the doc says now"),
+        Option(help="how to resolve open suggestions; rejected is what the doc says now"),
     ] = Suggestions.REJECTED,
     split: Annotated[
         bool,
-        typer.Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
+        Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
     ] = False,
     images: Annotated[
-        bool, typer.Option(help="download the images; the output references them either way")
+        bool, Option(help="download the images; the output references them either way")
     ] = True,
 ) -> None:
     try:
