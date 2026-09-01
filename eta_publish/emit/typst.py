@@ -155,7 +155,10 @@ class TypstEmitter(Emitter):
             caption_parts.append(self.inlines(node.caption))
         if node.credit:
             caption_parts.append(self.inlines(node.credit))
-        caption = " ".join(caption_parts)
+        # On its own line, as the document writes it and as the page shows it.
+        # Joined with a space the credit ran on from the last sentence of the caption,
+        # which read as part of it.
+        caption = " \\\n  ".join(caption_parts)
         body = f"  {self.image_call(node.image)},"
         if caption:
             return f"#figure(\n{body}\n  caption: [{caption}],\n)"

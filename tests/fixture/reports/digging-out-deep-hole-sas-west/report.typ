@@ -19,7 +19,8 @@ SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inf
 
 #figure(
   capped_image("images/sas-west-036.png", alt: "SAS West alignment map"),
-  caption: [The SAS West and Phase 2 alignments. Credit: MTA],
+  caption: [The SAS West and Phase 2 alignments. \
+  Credit: MTA],
 )
 
 That is a lot of money.
