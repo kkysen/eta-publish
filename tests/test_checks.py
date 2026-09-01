@@ -59,13 +59,15 @@ def test_a_document_with_no_header_is_left_to_the_parser(doc: Document) -> None:
     assert doc.warnings == []
 
 
-def test_an_seo_description_over_the_limit_says_how_long_it_is(doc: Document) -> None:
-    """Where it was cut is what the writer needs, and a search result never shows it."""
-    doc.meta["seo description"] = "x" * 301
+def test_an_seo_description_over_the_limit_shows_what_is_cut(doc: Document) -> None:
+    """Which words are lost is the thing to fix,
+    and a count of characters over does not say which they are."""
+    doc.meta["seo description"] = "x" * 300 + " and this is lost"
     check(doc)
     assert doc.warnings == [
-        "`SEO Description:` is 301 characters, over the 300 a search result shows; "
-        "the end of it will not be read"
+        "`SEO Description:` is 317 characters, over the 300 a search result shows: "
+        + "x" * 300
+        + "~~ and this is lost~~"
     ]
 
 

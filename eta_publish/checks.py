@@ -73,9 +73,12 @@ def check(doc: Document) -> None:
 
     seo = doc.meta.get("seo description", "")
     if len(seo) > SEO_LIMIT:
+        # The whole description, with the part that will not survive struck through.
+        # Which words are lost is the thing to fix,
+        # and a count of characters over does not say which they are.
         doc.warn(
             f"`SEO Description:` is {len(seo)} characters, over the {SEO_LIMIT} "
-            f"a search result shows; the end of it will not be read"
+            f"a search result shows: {seo[:SEO_LIMIT]}~~{seo[SEO_LIMIT:]}~~"
         )
 
 
