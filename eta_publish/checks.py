@@ -78,7 +78,7 @@ def check(doc: Document) -> None:
         # and a count of characters over does not say which they are.
         doc.warn(
             f"`SEO Description:` is {len(seo)} characters, over the {SEO_LIMIT} "
-            f"a search result shows: {seo[:SEO_LIMIT]}~~{seo[SEO_LIMIT:]}~~"
+            f"a search result shows:\n> {seo[:SEO_LIMIT]}~~{seo[SEO_LIMIT:]}~~"
         )
 
 

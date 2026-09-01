@@ -119,7 +119,18 @@ REPORT_CSS = """
                         margin: 2em 0; font-size: .9rem;
                         font-family: system-ui, sans-serif; }
 .eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
-.eta-report .warnings code { font-size: .95em; }
+/* Marked the way a code span is marked anywhere else, because a warning
+   naming a field or a file is naming something exact and the eye should be
+   able to find it. A grey of no hue at 15%, which is a tint on a light page
+   and a lift on a dark one, so one rule serves both. */
+.eta-report code { background: rgba(127, 127, 127, .15); border-radius: .25em;
+                   padding: .1em .3em; font-size: .9em; }
+/* A value the warning is about, shown rather than described. Indented and
+   ranged left so that a long one is read as the quotation it is and not as
+   more of the sentence above it. */
+.eta-report .warnings blockquote { margin: .5em 0 .5em 1em; padding-left: .8em;
+                                   border-left: 2px solid currentColor;
+                                   opacity: .8; }
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */
@@ -175,16 +186,9 @@ def split_at_headings(fragment: str) -> list[str]:
 class HtmlEmitter(Emitter):
     extension = ".html"
 
-    def __init__(
-        self, image_base: str = "", inline_css: bool = True, warnings: bool = False
-    ) -> None:
+    def __init__(self, image_base: str = "", inline_css: bool = True) -> None:
         super().__init__()
         self.image_base = image_base.rstrip("/")
-        # Off for the fragment, which is pasted into the live site.
-        # A warning is the build talking to whoever is publishing,
-        # and quotes the document, editorial notes and all;
-        # neither belongs on the page a reader gets.
-        self.warnings = warnings
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
         self._taken: set[str] = set()
@@ -234,8 +238,12 @@ class HtmlEmitter(Emitter):
         # Below the dateline and above the hero,
         # because the hero fills the screen
         # and a warning under it is a warning nobody scrolls to.
-        if self.warnings:
-            parts.append(warnings_block(doc))
+        #
+        # In the fragment as well as the page, though the fragment is what gets
+        # pasted into the live site. That is the point: a report pasted with
+        # warnings still on it says so at the top, where `Phase:` says it too,
+        # which is what makes an accidental publish obvious rather than quiet.
+        parts.append(warnings_block(doc))
         parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.body))
@@ -661,6 +669,7 @@ def _marked_up(warning: str) -> str:
         code=lambda c: f"<code>{escape(c)}</code>",
         cut=lambda c: f"<s>{escape(c)}</s>",
         text=escape,
+        quote=lambda q: f"<blockquote>{q}</blockquote>",
     )
 
 
@@ -688,7 +697,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     This is a document, with its own head and type,
     and the parser's warnings where whoever is about to publish will see them.
     """
-    body = HtmlEmitter(image_base=image_base, inline_css=False, warnings=True).emit(doc)
+    body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
     short = doc.meta.get("short", "")
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.

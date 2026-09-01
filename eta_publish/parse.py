@@ -517,7 +517,7 @@ class Parser:
                 continue
 
             if TODO_RE.search(text):
-                self.doc.warn(f"unfinished text in the document: {text[:80]}")
+                self.doc.warn(f"unfinished text in the document: `{text[:80]}`")
 
             if SOURCE_RE.match(text) or ASSET_RE.match(text):
                 last = out[-1] if out else None

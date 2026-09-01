@@ -6,12 +6,13 @@ August 19, 2026
 
 **Warnings**
 
-- unfinished text in the document: SVG: TODO
+- unfinished text in the document: `SVG: TODO`
 - the image `img-44bf278f` has no `Credit:` line
 - the image `project_cost_comparison` has no `Credit:` line
 - 17 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 46 comment threads still open on this document
-- `SEO Description:` is 398 characters, over the 300 a search result shows: A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
+- `SEO Description:` is 398 characters, over the 300 a search result shows:
+  > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
 
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)\
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>) and a Grand Central Madison escalator.\

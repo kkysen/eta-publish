@@ -83,7 +83,18 @@
                         margin: 2em 0; font-size: .9rem;
                         font-family: system-ui, sans-serif; }
 .eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
-.eta-report .warnings code { font-size: .95em; }
+/* Marked the way a code span is marked anywhere else, because a warning
+   naming a field or a file is naming something exact and the eye should be
+   able to find it. A grey of no hue at 15%, which is a tint on a light page
+   and a lift on a dark one, so one rule serves both. */
+.eta-report code { background: rgba(127, 127, 127, .15); border-radius: .25em;
+                   padding: .1em .3em; font-size: .9em; }
+/* A value the warning is about, shown rather than described. Indented and
+   ranged left so that a long one is read as the quotation it is and not as
+   more of the sentence above it. */
+.eta-report .warnings blockquote { margin: .5em 0 .5em 1em; padding-left: .8em;
+                                   border-left: 2px solid currentColor;
+                                   opacity: .8; }
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */
@@ -107,6 +118,12 @@
 </style>
 <div class="eta-report">
 <p class="dateline" id="date"><a class="link-mark" href="#date" aria-label="Link to this date"></a>August 19, 2026</p>
+<div class="warnings"><strong>Warnings</strong><ul><li>unfinished text in the document: <code>SVG: TODO</code></li>
+<li>the image <code>img-44bf278f</code> has no <code>Credit:</code> line</li>
+<li>the image <code>project_cost_comparison</code> has no <code>Credit:</code> line</li>
+<li>17 suggestions still open on this tab; the build publishes the document without them, as it reads today</li>
+<li>46 comment threads still open on this document</li>
+<li><code>SEO Description:</code> is 398 characters, over the 300 a search result shows:<blockquote>A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices &amp; building more shallowly, how<s>ever, NY would not only be able to build more for less, but would also save riders time every day.</s></blockquote></li></ul></div>
 <figure id="img-6fb0f9c4" style="--aspect: 0.750"><a class="link-mark" href="#img-6fb0f9c4" aria-label="Link to this figure"></a><img src="images/img-6fb0f9c4.jpg" alt="Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator." loading="lazy"><figcaption class="figure-caption">Composite image of the MTA’s <a href="https://www.mta.info/document/196361#page=28">SAS West St Nicholas Av station diagram</a> and a Grand Central Madison escalator.</figcaption><figcaption class="figure-credit"><a href="https://www.mta.info/document/196361#page=28">Credit: MTA</a>, ETA (Blair Lorenzo)</figcaption></figure>
 <nav class="toc" id="table-of-contents" aria-label="Table of contents">
 <a class="link-mark" href="#table-of-contents" aria-label="Link to this table of contents"></a>
