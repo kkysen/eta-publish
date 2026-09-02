@@ -415,6 +415,17 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
         # renders a document with no comments in it because it cannot see any,
         # and returns a confident nought that no retry would catch.
         # So it is not asked, and the last answer stands.
+        #
+        # Said out loud, because otherwise it is silent.
+        # `google.auth.default` finds a key named by the environment,
+        # and it finds `gcloud auth application-default login` too,
+        # so a machine that acquires one stops counting these
+        # and goes on publishing the last numbers as though it had checked.
+        print(
+            "not asking about suggestions or comments: this is a service account, "
+            "which cannot see either; keeping the counts from the last build that could",
+            file=sys.stderr,
+        )
         return document
 
     suggested = open_suggestions(doc_id, wanted)
