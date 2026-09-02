@@ -167,3 +167,24 @@ def test_a_service_account_is_not_asked_about_the_review(monkeypatch: pytest.Mon
     document = fetch.fetch("https://docs.google.com/document/d/abc/edit")
     assert "openSuggestions" not in document
     assert "openComments" not in document
+
+
+def test_keeping_the_last_counts_is_said_out_loud(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """`gcloud auth application-default login` is enough to stop these being counted,
+    and a build that quietly republishes the last numbers looks like one that checked."""
+    import eta_publish.fetch as fetch
+
+    def whole_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
+        return {"tabs": []}
+
+    def one_tab(document: JsonObject, wanted: str | None) -> JsonObject:
+        return {"body": {}}
+
+    monkeypatch.setattr(fetch, "_ambient_credentials", lambda: object())
+    monkeypatch.setattr(fetch, "fetch_document", whole_document)
+    monkeypatch.setattr(fetch, "select_tab", one_tab)
+
+    fetch.fetch("https://docs.google.com/document/d/abc/edit")
+    assert "not asking about suggestions or comments" in capsys.readouterr().err
