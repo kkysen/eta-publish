@@ -163,3 +163,18 @@ def test_a_first_build_has_no_last_answer_to_keep(tmp_path: Path) -> None:
     fresh: dict[str, object] = {"body": {}}
     carry_over_review(fresh, tmp_path / "absent.json")
     assert fresh == {"body": {}}
+
+
+def test_the_review_keys_are_written_in_one_order(tmp_path: Path) -> None:
+    """A run that carries one over appends it; a run that read it has it where
+    the fetch put it. Two spellings of one answer is a diff between builds that agree."""
+    from eta_publish.build import carry_over_review
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({"openSuggestions": 17, "openComments": 3}))
+
+    read_both: dict[str, object] = {"openComments": 3, "openSuggestions": 17}
+    carried: dict[str, object] = {}
+    carry_over_review(read_both, saved)
+    carry_over_review(carried, saved)
+    assert list(read_both) == list(carried) == ["openSuggestions", "openComments"]
