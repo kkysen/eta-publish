@@ -131,16 +131,8 @@ def test_open_suggestions_are_flagged(doc: Document) -> None:
 
 def test_one_open_comment_is_not_called_comments(doc: Document) -> None:
     doc.open_comments = 1
-    doc.open_comments_are_this_tab = True
     check(doc)
     assert doc.warnings == ["1 comment thread still open on this tab"]
-
-
-def test_a_count_that_is_the_whole_document_says_so(doc: Document) -> None:
-    """The per-tab export does not always answer, and Drive counts every tab."""
-    doc.open_comments = 46
-    check(doc)
-    assert doc.warnings == ["46 comment threads still open on this document"]
 
 
 def test_a_document_under_no_review_says_nothing(doc: Document) -> None:

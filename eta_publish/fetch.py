@@ -396,35 +396,6 @@ def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
     return None
 
 
-def open_comments(doc_id: str) -> int | None:
-    """How many comment threads are open on the whole document, every tab of it.
-
-    Drive rather than Docs: the Docs API does not carry comments at all.
-    Every page is read, because the count is the point
-    and Drive returns them 100 at a time.
-
-    The fallback for when the export will not answer:
-    a number that is too large beats no number,
-    as long as what it counts is said plainly.
-    """
-    from googleapiclient.discovery import build
-
-    service = build("drive", "v3", credentials=_credentials())
-    comments = service.comments()  # pyrefly: ignore[missing-attribute]
-    request = comments.list(fileId=doc_id, fields="comments(resolved),nextPageToken", pageSize=100)
-    open_threads = 0
-    while request is not None:
-        try:
-            response = request.execute()
-        except Exception:  # noqa: BLE001
-            # As with the suggestions: an account that cannot read these
-            # is a question left unanswered, not a build that cannot run.
-            return None
-        open_threads += sum(1 for c in response.get("comments", []) if not c.get("resolved"))
-        request = comments.list_next(request, response)
-    return open_threads
-
-
 def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     wanted = tab or url_tab
@@ -439,11 +410,9 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     suggested = open_suggestions(doc_id, wanted)
     if suggested is not None:
         document["openSuggestions"] = suggested
-    on_tab = open_comments_on_tab(doc_id, wanted)
-    comments = on_tab if on_tab is not None else open_comments(doc_id)
+    comments = open_comments_on_tab(doc_id, wanted)
     if comments is not None:
         document["openComments"] = comments
-        document["openCommentsAreThisTab"] = on_tab is not None
     return document
 
 

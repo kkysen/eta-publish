@@ -886,7 +886,6 @@ def read_review(doc: Document, document: JsonObject) -> None:
     """
     doc.open_suggestions = int(document.get("openSuggestions", 0))
     doc.open_comments = int(document.get("openComments", 0))
-    doc.open_comments_are_this_tab = bool(document.get("openCommentsAreThisTab"))
 
 
 def parse(doc_json: JsonObject) -> Document:
