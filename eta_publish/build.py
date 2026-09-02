@@ -84,15 +84,20 @@ def carry_over_review(document: JsonObject, saved: Path) -> None:
     A stale count beats a wrong one:
     it is what was true when somebody with access last looked.
     """
-    if all(key in document for key in REVIEW_KEYS) or not saved.is_file():
-        return
-    try:
-        previous = json.loads(saved.read_text())
-    except OSError, ValueError:
-        return
-    for key in REVIEW_KEYS:
-        if key not in document and key in previous:
-            document[key] = previous[key]
+    previous: JsonObject = {}
+    if saved.is_file():
+        try:
+            previous = json.loads(saved.read_text())
+        except OSError, ValueError:
+            previous = {}
+    # Written in a fixed order rather than in the order they were filled in.
+    # A run that carries one over appends it, and a run that read it for itself
+    # has it where the fetch put it, which is two spellings of one answer
+    # and a diff between two builds that agree.
+    carried = {key: document.pop(key, previous.get(key)) for key in REVIEW_KEYS}
+    for key, value in carried.items():
+        if value is not None:
+            document[key] = value
 
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:

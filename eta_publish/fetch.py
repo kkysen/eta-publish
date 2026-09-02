@@ -407,6 +407,16 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     # Only what could actually be read.
     # A key left out is one the last answer stands for,
     # which `build_one` carries over from the saved response.
+    if _ambient_credentials() is not None:
+        # A service account is not a person with the document open,
+        # and neither question has an answer it can give.
+        # Suggestions it is refused outright.
+        # Comments it is not refused: the export answers,
+        # renders a document with no comments in it because it cannot see any,
+        # and returns a confident nought that no retry would catch.
+        # So it is not asked, and the last answer stands.
+        return document
+
     suggested = open_suggestions(doc_id, wanted)
     if suggested is not None:
         document["openSuggestions"] = suggested

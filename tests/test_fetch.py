@@ -141,3 +141,29 @@ def test_a_document_with_nothing_suggested_counts_none() -> None:
     from eta_publish.fetch import _suggestion_ids
 
     assert _suggestion_ids({"body": {"content": [{"paragraph": {"elements": []}}]}}) == set()
+
+
+def test_a_service_account_is_not_asked_about_the_review(monkeypatch: pytest.MonkeyPatch) -> None:
+    """It is refused the suggestions outright,
+    and for the comments the export answers, renders a document with none in it
+    because it cannot see any, and returns a nought no retry would catch."""
+    import eta_publish.fetch as fetch
+
+    def boom(*args: object, **kwargs: object) -> object:
+        raise AssertionError("a service account must not be asked this")
+
+    def whole_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
+        return {"tabs": []}
+
+    def one_tab(document: JsonObject, wanted: str | None) -> JsonObject:
+        return {"body": {}}
+
+    monkeypatch.setattr(fetch, "_ambient_credentials", lambda: object())
+    monkeypatch.setattr(fetch, "fetch_document", whole_document)
+    monkeypatch.setattr(fetch, "select_tab", one_tab)
+    monkeypatch.setattr(fetch, "open_suggestions", boom)
+    monkeypatch.setattr(fetch, "open_comments_on_tab", boom)
+
+    document = fetch.fetch("https://docs.google.com/document/d/abc/edit")
+    assert "openSuggestions" not in document
+    assert "openComments" not in document
