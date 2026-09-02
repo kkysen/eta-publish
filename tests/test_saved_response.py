@@ -165,16 +165,21 @@ def test_a_first_build_has_no_last_answer_to_keep(tmp_path: Path) -> None:
     assert fresh == {"body": {}}
 
 
-def test_the_review_keys_are_written_in_one_order(tmp_path: Path) -> None:
-    """A run that carries one over appends it; a run that read it has it where
-    the fetch put it. Two spellings of one answer is a diff between builds that agree."""
-    from eta_publish.build import carry_over_review
+def test_two_builds_that_agree_write_the_same_bytes(tmp_path: Path) -> None:
+    """One build reads the counts and another carries them over,
+    so they land in different places in the dictionary.
+    The file is sorted, so that is not a difference anybody has to keep in step."""
+    from eta_publish.build import DOC_JSON, carry_over_review, without_content_uris
 
-    saved = tmp_path / "doc.json"
+    saved = tmp_path / DOC_JSON
     saved.write_text(json.dumps({"openSuggestions": 17, "openComments": 3}))
 
-    read_both: dict[str, object] = {"openComments": 3, "openSuggestions": 17}
-    carried: dict[str, object] = {}
-    carry_over_review(read_both, saved)
-    carry_over_review(carried, saved)
-    assert list(read_both) == list(carried) == ["openSuggestions", "openComments"]
+    read_for_itself: dict[str, object] = {"body": {}, "openComments": 3, "openSuggestions": 17}
+    carried_over: dict[str, object] = {"body": {}}
+    carry_over_review(read_for_itself, saved)
+    carry_over_review(carried_over, saved)
+
+    assert list(read_for_itself) != list(carried_over), "the orders really do differ"
+    assert json.dumps(
+        without_content_uris(read_for_itself), indent=2, sort_keys=True
+    ) == json.dumps(without_content_uris(carried_over), indent=2, sort_keys=True)

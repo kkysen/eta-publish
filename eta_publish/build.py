@@ -90,14 +90,9 @@ def carry_over_review(document: JsonObject, saved: Path) -> None:
             previous = json.loads(saved.read_text())
         except OSError, ValueError:
             previous = {}
-    # Written in a fixed order rather than in the order they were filled in.
-    # A run that carries one over appends it, and a run that read it for itself
-    # has it where the fetch put it, which is two spellings of one answer
-    # and a diff between two builds that agree.
-    carried = {key: document.pop(key, previous.get(key)) for key in REVIEW_KEYS}
-    for key, value in carried.items():
-        if value is not None:
-            document[key] = value
+    for key in REVIEW_KEYS:
+        if key not in document and key in previous:
+            document[key] = previous[key]
 
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:
@@ -329,7 +324,15 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     read_review(doc, document)
     check(doc)
 
-    (dest / DOC_JSON).write_text(json.dumps(without_content_uris(document), indent=2))
+    # Sorted, as `images.json` is, and for the same reason.
+    # This file is committed and compared against a fresh build,
+    # so any two runs that agree about the document have to write the same bytes.
+    # Insertion order is not something to keep in step by hand:
+    # a key read from the response lands where the response put it,
+    # and one carried over from the last build lands at the end.
+    (dest / DOC_JSON).write_text(
+        json.dumps(without_content_uris(document), indent=2, sort_keys=True)
+    )
 
     if doc.images and options.images:
         from .images import download
