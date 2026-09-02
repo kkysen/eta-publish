@@ -82,16 +82,34 @@ def carry_over_review(document: JsonObject, saved: Path) -> None:
 
     A stale count beats a wrong one:
     it is what was true when somebody with access last looked.
+
+    The comment count comes in two qualities,
+    and the worse one is as much a reason to keep the last answer as none at all.
+    A count for this tab is the answer;
+    a count for the whole document is every stale draft beside it,
+    which is 46 against 3 in SAS West.
+    So the coarse one stands in only where nothing better was ever recorded.
     """
-    if all(key in document for key in REVIEW_KEYS) or not saved.is_file():
+    if not saved.is_file():
         return
     try:
         previous = json.loads(saved.read_text())
     except OSError, ValueError:
         return
+
+    if _coarser_than_saved(document, previous):
+        for key in ("openComments", "openCommentsAreThisTab"):
+            document.pop(key, None)
     for key in REVIEW_KEYS:
         if key not in document and key in previous:
             document[key] = previous[key]
+
+
+def _coarser_than_saved(document: JsonObject, previous: JsonObject) -> bool:
+    """Whether this run counted the whole document where the last counted this tab."""
+    return not document.get("openCommentsAreThisTab", True) and bool(
+        previous.get("openCommentsAreThisTab")
+    )
 
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:
