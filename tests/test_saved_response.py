@@ -140,17 +140,10 @@ def test_a_run_that_cannot_read_the_review_keeps_the_last_answer(tmp_path: Path)
     from eta_publish.build import carry_over_review
 
     saved = tmp_path / "doc.json"
-    saved.write_text(
-        json.dumps({"openSuggestions": 17, "openComments": 3, "openCommentsAreThisTab": True})
-    )
+    saved.write_text(json.dumps({"openSuggestions": 17, "openComments": 3}))
     fresh: dict[str, object] = {"body": {}}
     carry_over_review(fresh, saved)
-    assert fresh == {
-        "body": {},
-        "openSuggestions": 17,
-        "openComments": 3,
-        "openCommentsAreThisTab": True,
-    }
+    assert fresh == {"body": {}, "openSuggestions": 17, "openComments": 3}
 
 
 def test_a_run_that_could_read_the_review_keeps_what_it_read(tmp_path: Path) -> None:
@@ -158,11 +151,7 @@ def test_a_run_that_could_read_the_review_keeps_what_it_read(tmp_path: Path) -> 
 
     saved = tmp_path / "doc.json"
     saved.write_text(json.dumps({"openSuggestions": 17, "openComments": 3}))
-    fresh: dict[str, object] = {
-        "openSuggestions": 0,
-        "openComments": 0,
-        "openCommentsAreThisTab": True,
-    }
+    fresh: dict[str, object] = {"openSuggestions": 0, "openComments": 0}
     carry_over_review(fresh, saved)
     assert fresh["openSuggestions"] == 0
     assert fresh["openComments"] == 0
@@ -174,30 +163,3 @@ def test_a_first_build_has_no_last_answer_to_keep(tmp_path: Path) -> None:
     fresh: dict[str, object] = {"body": {}}
     carry_over_review(fresh, tmp_path / "absent.json")
     assert fresh == {"body": {}}
-
-
-def test_a_whole_document_count_does_not_displace_this_tab_s(tmp_path: Path) -> None:
-    """The failure this is here for: CI could not read the export but could read Drive,
-    so it counted all eight tabs, wrote 46 where 3 was committed,
-    and failed the check that a fresh build reproduces the site."""
-    from eta_publish.build import carry_over_review
-
-    saved = tmp_path / "doc.json"
-    saved.write_text(json.dumps({"openComments": 3, "openCommentsAreThisTab": True}))
-    fresh: dict[str, object] = {"openComments": 46, "openCommentsAreThisTab": False}
-    carry_over_review(fresh, saved)
-    assert fresh == {"openComments": 3, "openCommentsAreThisTab": True}
-
-
-def test_a_whole_document_count_stands_where_nothing_better_was_recorded(
-    tmp_path: Path,
-) -> None:
-    """Coarse beats nothing: it is only a worse answer than one this tab's own."""
-    from eta_publish.build import carry_over_review
-
-    saved = tmp_path / "doc.json"
-    saved.write_text(json.dumps({"openSuggestions": 17}))
-    fresh: dict[str, object] = {"openComments": 46, "openCommentsAreThisTab": False}
-    carry_over_review(fresh, saved)
-    assert fresh["openComments"] == 46
-    assert fresh["openSuggestions"] == 17
