@@ -78,6 +78,9 @@ def strip_trailing_space(text: str) -> str:
 class MarkdownEmitter(Emitter):
     extension = ".md"
 
+    # A blank line between blocks, which is Markdown's block separator.
+    separator = "\n\n"
+
     def __init__(self, image_dir: str = IMAGE_DIR) -> None:
         """`image_dir` is relative to the `.md`, which sits beside it.
 
@@ -105,11 +108,6 @@ class MarkdownEmitter(Emitter):
             self.contributors(doc),
         ]
         return strip_trailing_space(self.join(parts)) + "\n"
-
-    @override
-    def join(self, parts: list[str]) -> str:
-        # A blank line between blocks, which is Markdown's block separator.
-        return "\n\n".join(p for p in parts if p)
 
     def title(self, doc: Document) -> str:
         """The headline, and the standfirst under it, as the page has them.
