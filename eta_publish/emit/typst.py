@@ -62,6 +62,9 @@ def string(value: str) -> str:
 class TypstEmitter(Emitter):
     extension = ".typ"
 
+    # A blank line between blocks, as Typst separates them.
+    separator = "\n\n"
+
     def __init__(self, template: str = "template.typ", image_dir: str = IMAGE_DIR) -> None:
         super().__init__()
         self.template = template
@@ -131,10 +134,6 @@ class TypstEmitter(Emitter):
     def contributors(self, doc: Document) -> str:
         """The credited names as a Typst array, so the template can list them."""
         return "".join(f"{string(name)}, " for name in doc.contributors)
-
-    @override
-    def join(self, parts: list[str]) -> str:
-        return "\n\n".join(p for p in parts if p)
 
     # ---- blocks -----------------------------------------------------
 

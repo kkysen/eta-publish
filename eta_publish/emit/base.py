@@ -129,6 +129,14 @@ class Emitter(ABC):
 
     extension: str = ""
 
+    separator: str = "\n"
+    """What `join` puts between blocks.
+
+    A newline is enough for HTML, where the tags say where a block ends.
+    A format whose blocks are separated by a blank line says so here,
+    rather than by writing `join` again.
+    """
+
     def __init__(self) -> None:
         # Set by `emit`, the only entry point.
         # Node methods read it for document-wide context, so calling one directly fails.
@@ -173,7 +181,7 @@ class Emitter(ABC):
     # ---- overridable ------------------------------------------------
 
     def join(self, parts: list[str]) -> str:
-        return "\n".join(p for p in parts if p)
+        return self.separator.join(p for p in parts if p)
 
     @abstractmethod
     def document(self, doc: Document) -> str: ...
