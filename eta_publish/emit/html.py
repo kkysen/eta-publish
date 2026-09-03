@@ -190,10 +190,22 @@ REPORT_CSS = """
       font-size: .85rem; font-style: normal; font-weight: normal;
       line-height: 1.5; text-align: left; vertical-align: baseline;
       white-space: normal;
-      /* It is a preview, not a target: it never takes a click meant for the
-         reference underneath it, and it is not part of the sentence a reader
-         drags across to copy. */
-      pointer-events: none; user-select: none; }
+      /* The box is the note, links and all, so it takes the pointer: a
+         reader who sees a source cited in it can go to that source without
+         first finding the note at the bottom of the page. */
+      pointer-events: auto; }
+  /* The gap between the reference and the box is a gap in the hover as well,
+     and a box that closes when the pointer sets out for it cannot be reached.
+     This is the gap, made part of the box, on both sides because the script
+     puts the box above the reference as readily as below it. Behind the box,
+     so it covers the space and not the page. */
+  .eta-report .footnote-tip::before {
+      content: ""; position: absolute; left: 0; right: 0;
+      top: -.9rem; bottom: -.9rem; z-index: -1; }
+  /* Every link in the note is in the box too, and none of them is a stop on
+     the way through the page: the note itself is reachable from the reference,
+     and its links are reachable there. */
+  .eta-report .footnote-tip a { text-decoration: underline; }
 }
 @media print { .eta-report .footnote-tip { display: none; } }
 .eta-report .contributors { font-size: .95rem; }
@@ -223,6 +235,10 @@ REPORT_CSS = """
 REPORT_JS = """
 (() => {
   const GAP = 8;
+  // Long enough to cross the gap into the box, short enough that a box left
+  // behind is gone before the reader wonders why it is still there.
+  const HOLD = 200;
+  const closing = new WeakMap();
   const tipOf = (e) =>
     e.target.closest?.(".eta-report .footnote-ref")?.querySelector(".footnote-tip");
   const place = (event) => {
@@ -232,6 +248,11 @@ REPORT_JS = """
     if (!matchMedia("(hover: hover)").matches) return;
     const tip = tipOf(event);
     if (!tip) return;
+    clearTimeout(closing.get(tip));
+    // Already open, and the pointer has only moved within it or back onto the
+    // reference. Measuring again would answer the same, so this leaves the box
+    // exactly where the reader is reading it.
+    if (tip.style.position === "fixed") return;
     // Laid out where it can be measured, and not yet shown there. The event
     // handler runs before the frame is painted, so nothing is drawn in this
     // position.
@@ -250,10 +271,17 @@ REPORT_JS = """
     tip.style.cssText = `display:block;position:fixed;left:${left}px;top:${top}px;transform:none`;
   };
   // Handed back to the stylesheet, so that a box measured against one scroll
-  // position is not still carrying those numbers at the next one.
-  const clear = (event) => { const tip = tipOf(event); if (tip) tip.style.cssText = ""; };
+  // position is not still carrying those numbers at the next one. After a
+  // pause, because the pointer leaves the reference on its way into the box,
+  // and a box that closes on the way to it is a box nobody can reach or read.
+  const release = (event) => {
+    const tip = tipOf(event);
+    if (!tip) return;
+    clearTimeout(closing.get(tip));
+    closing.set(tip, setTimeout(() => { tip.style.cssText = ""; }, HOLD));
+  };
   for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
-  for (const name of ["pointerout", "focusout"]) document.addEventListener(name, clear);
+  for (const name of ["pointerout", "focusout"]) document.addEventListener(name, release);
 })();
 """
 
@@ -295,12 +323,16 @@ class HtmlEmitter(Emitter):
         self.image_base = image_base.rstrip("/")
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
+        self._in_tip = False
+        """Whether what is being emitted is the box a reference carries,
+        which is a copy of a note and so cannot carry boxes of its own."""
         self._taken: set[str] = set()
         # A paragraph's id is its section's id and its place in that section,
         # so both reset at every heading.
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
+        self._in_tip = False
 
     def anchor(self, prefix: str, text: str) -> str:
         """An id for a block, unique within the page.
@@ -522,6 +554,40 @@ class HtmlEmitter(Emitter):
             return f'<li id="fn{note.number}">{mark}{opening.group()}{back} {rest}</li>'
         return f'<li id="fn{note.number}">{mark}{back} {body}</li>'
 
+    def tip(self, blocks: list[Block]) -> str:
+        """A footnote as it reads, for the box its reference carries.
+
+        The same markup the note itself is written in, links included:
+        a note that cites a source is citing it here too,
+        and a reader who can see the citation should be able to follow it.
+
+        Inline markup only, though the note is made of blocks.
+        The box lives inside a `sup` inside a paragraph,
+        where a `p` of its own would end the paragraph around it,
+        so each block becomes a line and the lines are separated by breaks.
+        A list keeps its bullets, which are what its items are;
+        a figure or a table has nothing to say in a line and says nothing.
+        """
+        lines: list[str] = []
+        self._in_tip = True
+        for block in blocks:
+            match block:
+                case Paragraph():
+                    lines.append(self.inlines(block.content))
+                case List():
+                    lines.extend(
+                        f"{'•' if block.kind is ListKind.BULLET else f'{n}.'} "
+                        f"{self.inlines(item.content)}"
+                        for n, item in enumerate(block.items, 1)
+                    )
+                case _:
+                    continue
+        self._in_tip = False
+        # The note is already a link away, and so is every link inside it.
+        # This copy is hidden from a screen reader,
+        # and a hidden link is one the keyboard should not stop at on the way past.
+        return "<br>".join(line for line in lines if line).replace("<a ", '<a tabindex="-1" ')
+
     # ---- blocks -----------------------------------------------------
 
     @override
@@ -719,18 +785,22 @@ class HtmlEmitter(Emitter):
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:
+        # A footnote can itself carry a reference to another one.
+        # Inside a box there is nothing to hover, and a note that reaches
+        # itself would build a box out of a box without end,
+        # so a reference in a box is only the number it is.
+        if self._in_tip:
+            return f'<sup class="footnote-ref"><a href="#fn{node.number}">{node.number}</a></sup>'
         # Matched by the Docs id rather than by the number,
         # which is the identity the parser guarantees on both sides.
         note = next(
             (f for f in self.doc.footnotes if f.footnote_id == node.footnote_id),
             None,
         )
-        tip = tip_text(note.content) if note else ""
-        # A footnote that is a table or a figure has no sentence to preview,
+        # A footnote that is a table or a figure has no sentence to show,
         # and an empty box hovering over the text is worse than none.
-        preview = (
-            f'<span class="footnote-tip" aria-hidden="true">{escape(tip)}</span>' if tip else ""
-        )
+        tip = self.tip(note.content) if note and tip_text(note.content) else ""
+        preview = f'<span class="footnote-tip" aria-hidden="true">{tip}</span>' if tip else ""
         return (
             f'<sup id="fnref{node.number}" class="footnote-ref">'
             f'<a href="#fn{node.number}">{node.number}</a>{preview}</sup>'
