@@ -145,6 +145,18 @@ class Image:
 Inline = Text | LineBreak | FootnoteRef | Image
 
 
+def plain_text(content: list[Inline]) -> str:
+    """Inline content with every mark dropped, for reading rather than rendering.
+
+    A table of contents entry, the file a `Source:` line names,
+    the caption an image borrows when Docs gave it no description:
+    each wants what the run says, not how it is set.
+    A break, a footnote reference, and an image say nothing in a line,
+    so each contributes nothing.
+    """
+    return "".join(i.text for i in content if isinstance(i, Text))
+
+
 # ---- block content -------------------------------------------------
 
 

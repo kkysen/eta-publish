@@ -10,7 +10,7 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import Document, Figure
+from .nodes import Document, Figure, plain_text
 from .parse import TODO_RE
 
 REQUIRED_FIELDS = (
@@ -160,9 +160,7 @@ def _describe(block: Figure) -> str:
     Its alt text where there is no caption,
     which is what a reader who cannot see it is told instead.
     """
-    from .emit.markdown import plain
-
-    description = plain(block.caption).strip() or block.image.alt.strip()
+    description = plain_text(block.caption).strip() or block.image.alt.strip()
     if not description:
         return ""
     if len(description) > DESCRIPTION_LIMIT:
