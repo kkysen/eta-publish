@@ -251,7 +251,7 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
 
     size = len(HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc).encode())
     assert size < CODE_BLOCK_LIMIT
-    assert size < 120_000, f"grown to {size:,} bytes; still fits, worth a look"
+    assert size < 130_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:

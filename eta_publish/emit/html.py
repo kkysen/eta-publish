@@ -144,6 +144,52 @@ REPORT_CSS = """
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
+/* The note itself, shown where the reference is, so that reading a sentence
+   does not mean leaving it. The link stays exactly what it was: this is a
+   preview for a reader who has a pointer, and the way to the note at the
+   bottom is still a click.
+
+   Only where hovering is a thing the device does. On a touch screen the
+   first tap on a link raises `:hover` instead of following it, which would
+   turn every footnote reference into a two-tap link to buy a tooltip nobody
+   asked for. That gate also keeps the box off the narrow screens it has the
+   least room on.
+
+   `display` rather than `opacity`, so the duplicated text is out of the
+   layout, out of print, and out of what a screen reader reads. The note is
+   already reachable as a link, and `aria-hidden` keeps this copy from being
+   read a second time in the middle of the sentence. */
+@media (hover: hover) {
+  .eta-report .footnote-ref { position: relative; }
+  .eta-report .footnote-tip { display: none; }
+  .eta-report .footnote-ref:hover .footnote-tip,
+  .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
+  /* Positioned from the bottom, because a `sup` is already lifted off the
+     baseline, and centred on the reference with a width that gives way to
+     the viewport before it overhangs it. */
+  .eta-report .footnote-tip {
+      position: absolute; bottom: 1.6em; left: 50%; transform: translateX(-50%);
+      z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
+      padding: .5em .7em; border-radius: .3em;
+      /* The page names these two, and a site pasted into does not, where the
+         system pair is the one thing known to be legible against itself. A
+         tooltip is the one place here that needs an opaque surface: it is
+         over text. */
+      background: var(--bg, Canvas); color: var(--fg, CanvasText);
+      border: 1px solid currentColor;
+      /* `rem`, not `em`: this is inside a `sup`, and an `em` size would be a
+         fraction of an already smaller font, twice over in the footnotes
+         section. The rest is set back to running text because a reference can
+         sit inside a heading or an emphasized run. */
+      font-size: .85rem; font-style: normal; font-weight: normal;
+      line-height: 1.5; text-align: left; vertical-align: baseline;
+      white-space: normal;
+      /* It is a preview, not a target: it never takes a click meant for the
+         reference underneath it, and it is not part of the sentence a reader
+         drags across to copy. */
+      pointer-events: none; user-select: none; }
+}
+@media print { .eta-report .footnote-tip { display: none; } }
 .eta-report .contributors { font-size: .95rem; }
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
@@ -611,9 +657,21 @@ class HtmlEmitter(Emitter):
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:
+        # Matched by the Docs id rather than by the number,
+        # which is the identity the parser guarantees on both sides.
+        note = next(
+            (f for f in self.doc.footnotes if f.footnote_id == node.footnote_id),
+            None,
+        )
+        tip = tip_text(note.content) if note else ""
+        # A footnote that is a table or a figure has no sentence to preview,
+        # and an empty box hovering over the text is worse than none.
+        preview = (
+            f'<span class="footnote-tip" aria-hidden="true">{escape(tip)}</span>' if tip else ""
+        )
         return (
             f'<sup id="fnref{node.number}" class="footnote-ref">'
-            f'<a href="#fn{node.number}">{node.number}</a></sup>'
+            f'<a href="#fn{node.number}">{node.number}</a>{preview}</sup>'
         )
 
     @override
@@ -626,6 +684,31 @@ class HtmlEmitter(Emitter):
 def plain(content: list[Inline]) -> str:
     """Inline content with all markup dropped, for the table of contents."""
     return "".join(i.text for i in content if isinstance(i, Text))
+
+
+def tip_text(blocks: list[Block]) -> str:
+    """A footnote as one line of text, for the tooltip its reference carries.
+
+    Every kind of markup is dropped, links included:
+    a preview is read, not clicked,
+    and the note at the bottom of the page is where the link still lives.
+    A line break inside a paragraph becomes a space,
+    so that the words on either side of it do not run together.
+    """
+    words: list[str] = []
+    for block in blocks:
+        content: list[Inline] = []
+        if isinstance(block, Paragraph):
+            content = block.content
+        elif isinstance(block, List):
+            content = [i for item in block.items for i in item.content]
+        for node in content:
+            if isinstance(node, Text):
+                words.append(node.text)
+            elif isinstance(node, LineBreak):
+                words.append(" ")
+        words.append(" ")
+    return " ".join("".join(words).split())
 
 
 # Enough to read the report as it will look, and nothing more.
