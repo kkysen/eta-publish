@@ -164,11 +164,17 @@ REPORT_CSS = """
   .eta-report .footnote-tip { display: none; }
   .eta-report .footnote-ref:hover .footnote-tip,
   .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
-  /* Positioned from the bottom, because a `sup` is already lifted off the
-     baseline, and centred on the reference with a width that gives way to
-     the viewport before it overhangs it. */
+  /* Under the reference rather than over it, which is where the script
+     below will usually put it too, and where it goes when there is no
+     script: over it is outside the window whenever the reader arrived by a
+     backlink, which scrolls the reference to the top of the page. Under it
+     there is at least the rest of the paragraph.
+
+     Which edge has room is a question about the window, and CSS cannot ask
+     it. So this is the placement to fall back to and not the one to rely
+     on; the script measures. */
   .eta-report .footnote-tip {
-      position: absolute; bottom: 1.6em; left: 50%; transform: translateX(-50%);
+      position: absolute; top: 1.6em; left: 50%; transform: translateX(-50%);
       z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
       padding: .5em .7em; border-radius: .3em;
       /* The page names these two, and a site pasted into does not, where the
@@ -197,6 +203,58 @@ REPORT_CSS = """
 .eta-report .table-scroll { overflow-x: auto; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
+"""
+
+
+# Placement is the one thing about this tooltip that CSS cannot decide.
+# Whether there is room under the reference is a question about the window,
+# and the answer changes with the scroll position, so the stylesheet can only
+# guess and be wrong at the top and bottom of the screen, which is exactly
+# where a footnote reference the reader just jumped to tends to sit.
+#
+# So the box is measured and placed: under the reference when it fits there,
+# over it when it does not, and never past either side. `fixed` rather than
+# `absolute`, because the question was about the window and this is the
+# coordinate system that answers in the window's terms.
+#
+# Everything else stays in the stylesheet. Without this script the tooltip
+# still appears on hover, under the reference, and only near an edge of the
+# screen is it in the wrong place. This positions it; it does not enable it.
+REPORT_JS = """
+(() => {
+  const GAP = 8;
+  const tipOf = (e) =>
+    e.target.closest?.(".eta-report .footnote-ref")?.querySelector(".footnote-tip");
+  const place = (event) => {
+    // The stylesheet shows this on hover only where the device hovers, and a
+    // tap raises hover on a touch screen. Asking the same question here keeps
+    // the two from disagreeing.
+    if (!matchMedia("(hover: hover)").matches) return;
+    const tip = tipOf(event);
+    if (!tip) return;
+    // Laid out where it can be measured, and not yet shown there. The event
+    // handler runs before the frame is painted, so nothing is drawn in this
+    // position.
+    tip.style.cssText =
+      "display:block;visibility:hidden;position:fixed;left:0;top:0;transform:none";
+    const box = tip.getBoundingClientRect();
+    const ref = tip.parentElement.getBoundingClientRect();
+    const below = ref.bottom + GAP;
+    const above = ref.top - GAP - box.height;
+    // Under it unless that runs off the bottom, and over it only if that is
+    // somewhere the box actually fits: when neither edge has room, under is
+    // the one the reader can scroll to.
+    const top = below + box.height <= innerHeight - GAP || above < GAP ? below : above;
+    const middle = ref.left + ref.width / 2 - box.width / 2;
+    const left = Math.min(Math.max(middle, GAP), innerWidth - box.width - GAP);
+    tip.style.cssText = `display:block;position:fixed;left:${left}px;top:${top}px;transform:none`;
+  };
+  // Handed back to the stylesheet, so that a box measured against one scroll
+  // position is not still carrying those numbers at the next one.
+  const clear = (event) => { const tip = tipOf(event); if (tip) tip.style.cssText = ""; };
+  for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
+  for (const name of ["pointerout", "focusout"]) document.addEventListener(name, clear);
+})();
 """
 
 
@@ -278,6 +336,10 @@ class HtmlEmitter(Emitter):
         parts = []
         if self.inline_css:
             parts.append(f"<style>{REPORT_CSS}</style>")
+        # Unlike the stylesheet, which a site can carry once under Custom CSS,
+        # this travels with the report: it is small, and a fragment pasted
+        # without it puts a tooltip off the edge of the screen.
+        parts.append(f"<script>{REPORT_JS}</script>")
         parts.append('<div class="eta-report">')
         parts.append(self.phase(doc))
         parts.append(self.dateline(doc))

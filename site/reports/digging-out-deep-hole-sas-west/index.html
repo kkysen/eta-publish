@@ -154,11 +154,17 @@ a { color: inherit; }
   .eta-report .footnote-tip { display: none; }
   .eta-report .footnote-ref:hover .footnote-tip,
   .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
-  /* Positioned from the bottom, because a `sup` is already lifted off the
-     baseline, and centred on the reference with a width that gives way to
-     the viewport before it overhangs it. */
+  /* Under the reference rather than over it, which is where the script
+     below will usually put it too, and where it goes when there is no
+     script: over it is outside the window whenever the reader arrived by a
+     backlink, which scrolls the reference to the top of the page. Under it
+     there is at least the rest of the paragraph.
+
+     Which edge has room is a question about the window, and CSS cannot ask
+     it. So this is the placement to fall back to and not the one to rely
+     on; the script measures. */
   .eta-report .footnote-tip {
-      position: absolute; bottom: 1.6em; left: 50%; transform: translateX(-50%);
+      position: absolute; top: 1.6em; left: 50%; transform: translateX(-50%);
       z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
       padding: .5em .7em; border-radius: .3em;
       /* The page names these two, and a site pasted into does not, where the
@@ -190,6 +196,42 @@ a { color: inherit; }
 </style>
 <h1 id="title"><a class="link-mark" href="#title" aria-label="Link to this title"></a>Digging Out of a Very Deep Hole: Saving Billions on 125th Street</h1>
 <p class="standfirst" id="short"><a class="link-mark" href="#short" aria-label="Link to this standfirst"></a>A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices and building a more shallow route, however, New York would not only be able to build more transit for less money, but would also save riders significant time every single day.</p>
+<script>
+(() => {
+  const GAP = 8;
+  const tipOf = (e) =>
+    e.target.closest?.(".eta-report .footnote-ref")?.querySelector(".footnote-tip");
+  const place = (event) => {
+    // The stylesheet shows this on hover only where the device hovers, and a
+    // tap raises hover on a touch screen. Asking the same question here keeps
+    // the two from disagreeing.
+    if (!matchMedia("(hover: hover)").matches) return;
+    const tip = tipOf(event);
+    if (!tip) return;
+    // Laid out where it can be measured, and not yet shown there. The event
+    // handler runs before the frame is painted, so nothing is drawn in this
+    // position.
+    tip.style.cssText =
+      "display:block;visibility:hidden;position:fixed;left:0;top:0;transform:none";
+    const box = tip.getBoundingClientRect();
+    const ref = tip.parentElement.getBoundingClientRect();
+    const below = ref.bottom + GAP;
+    const above = ref.top - GAP - box.height;
+    // Under it unless that runs off the bottom, and over it only if that is
+    // somewhere the box actually fits: when neither edge has room, under is
+    // the one the reader can scroll to.
+    const top = below + box.height <= innerHeight - GAP || above < GAP ? below : above;
+    const middle = ref.left + ref.width / 2 - box.width / 2;
+    const left = Math.min(Math.max(middle, GAP), innerWidth - box.width - GAP);
+    tip.style.cssText = `display:block;position:fixed;left:${left}px;top:${top}px;transform:none`;
+  };
+  // Handed back to the stylesheet, so that a box measured against one scroll
+  // position is not still carrying those numbers at the next one.
+  const clear = (event) => { const tip = tipOf(event); if (tip) tip.style.cssText = ""; };
+  for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
+  for (const name of ["pointerout", "focusout"]) document.addEventListener(name, clear);
+})();
+</script>
 <div class="eta-report">
 <p class="dateline" id="date"><a class="link-mark" href="#date" aria-label="Link to this date"></a>August 19, 2026</p>
 <div class="warnings"><strong>Warnings</strong><ul><li>unfinished text in the document: <code>SVG: TODO</code></li>
