@@ -332,7 +332,6 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
-        self._in_tip = False
 
     def anchor(self, prefix: str, text: str) -> str:
         """An id for a block, unique within the page.
