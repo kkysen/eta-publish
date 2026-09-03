@@ -97,7 +97,7 @@ def carry_over_review(document: JsonObject, saved: Path) -> None:
 
 def write_split(doc: Document, outdir: Path) -> list[Path]:
     """One file per piece, named so paste order is obvious."""
-    from .emit.html import HtmlEmitter, split_at_headings
+    from .emit.html import split_at_headings
 
     fragment = HtmlEmitter(image_base=IMAGE_DIR).emit(doc)
     pieces = split_at_headings(fragment)
