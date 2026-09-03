@@ -29,7 +29,6 @@ from ..nodes import (
     FootnoteRef,
     Heading,
     Image,
-    Inline,
     LineBreak,
     List,
     ListItem,
@@ -289,7 +288,3 @@ class MarkdownEmitter(Emitter):
     @override
     def image(self, node: Image) -> str:
         return f"![{escape(node.alt)}]({url(self.href(node))})"
-
-
-def plain(content: list[Inline]) -> str:
-    return "".join(i.text for i in content if isinstance(i, Text))

@@ -29,6 +29,7 @@ from ..nodes import (
     Paragraph,
     Table,
     Text,
+    plain_text,
 )
 from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
@@ -510,7 +511,7 @@ class HtmlEmitter(Emitter):
                 while len(open_levels) > 1 and heading.level < open_levels[-1]:
                     out.append("</ul></li>")
                     open_levels.pop()
-            link = f'<a href="#{heading.anchor}">{escape(plain(heading.content))}</a>'
+            link = f'<a href="#{heading.anchor}">{escape(plain_text(heading.content))}</a>'
             # An entry with subsections stays open until its own list closes.
             nests = i + 1 < len(headings) and headings[i + 1].level > heading.level
             out.append(f"<li>{link}" if nests else f"<li>{link}</li>")
@@ -670,7 +671,7 @@ class HtmlEmitter(Emitter):
         """A paragraph is linkable, because a report this long gets quoted
         a paragraph at a time.
         One holding no text is not: nothing to hash, and nothing anyone would link to."""
-        if not plain(node.content):
+        if not plain_text(node.content):
             return f"<p>{self.inlines(node.content)}</p>"
         self._paragraphs += 1
         counted = f"{self._scope}-p{self._paragraphs}" if self._scope else f"p{self._paragraphs}"
@@ -686,7 +687,7 @@ class HtmlEmitter(Emitter):
         and each would want an id derived from a few words a copy edit moves around.
         The list is the unit someone links to."""
         tag = "ol" if node.kind is ListKind.NUMBER else "ul"
-        text = " ".join(plain(item.content) for item in node.items)
+        text = " ".join(plain_text(item.content) for item in node.items)
         items = f"<{tag}>{self.items(node.items, tag)}</{tag}>"
         if not text:
             return items
@@ -736,7 +737,7 @@ class HtmlEmitter(Emitter):
     @override
     def table(self, node: Table) -> str:
         text = " ".join(
-            plain(block.content)
+            plain_text(block.content)
             for row in node.rows
             for cell in row
             for block in cell
@@ -810,11 +811,6 @@ class HtmlEmitter(Emitter):
         href = self.doc.image_href(node)
         src = f"{self.image_base}/{href}" if self.image_base else href
         return f'<img src="{escape(src)}" alt="{escape(node.alt)}" loading="lazy">'
-
-
-def plain(content: list[Inline]) -> str:
-    """Inline content with all markup dropped, for the table of contents."""
-    return "".join(i.text for i in content if isinstance(i, Text))
 
 
 def tip_text(blocks: list[Block]) -> str:

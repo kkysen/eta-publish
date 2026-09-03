@@ -38,6 +38,7 @@ from .nodes import (
     Table,
     Text,
     Vector,
+    plain_text,
 )
 
 HEADING_LEVELS = {
@@ -106,7 +107,7 @@ def source_name(source: list[Inline]) -> str:
     and a bare URL names a page rather than a file,
     so neither becomes a filename.
     """
-    text = "".join(i.text for i in source if isinstance(i, Text))
+    text = plain_text(source)
     _, colon, value = text.partition(":")
     value = value.strip() if colon else ""
     if not value or TODO_RE.search(value) or value.startswith(("http:", "https:", "//")):
@@ -459,7 +460,7 @@ class Parser:
         def drop_pending() -> None:
             nonlocal pending_source
             if pending_source is not None:
-                text = "".join(i.text for i in pending_source if isinstance(i, Text))
+                text = plain_text(pending_source)
                 self.doc.warn(f"`Source:` line not followed by an image, dropped: {text[:80]}")
                 pending_source = None
 
@@ -553,7 +554,7 @@ class Parser:
                 # so each line is classified separately.
                 claimed = False
                 for line in split_lines(self.inlines(para)):
-                    line_text = "".join(i.text for i in line if isinstance(i, Text)).strip()
+                    line_text = plain_text(line).strip()
                     if not line_text:
                         continue
                     if CREDIT_RE.match(line_text):
@@ -585,7 +586,7 @@ class Parser:
             if isinstance(block, Figure) and not block.image.alt and block.caption:
                 # The published page uses the caption as alt text as well as showing it,
                 # so an image with no description in Docs is not left unlabelled.
-                caption = "".join(i.text for i in block.caption if isinstance(i, Text))
+                caption = plain_text(block.caption)
                 block.image = replace(block.image, alt=caption.strip())
         return out
 
@@ -625,7 +626,7 @@ class Parser:
             self.doc.warn(
                 f"{len(images)} images share one paragraph; only the first becomes a figure"
             )
-        prose = "".join(i.text for i in inlines if isinstance(i, Text)).strip()
+        prose = plain_text(inlines).strip()
         if prose:
             self.doc.warn(f"text sharing a paragraph with an image was dropped: {prose[:80]}")
         return images[0]
