@@ -133,6 +133,52 @@ a { color: inherit; }
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
+/* The note itself, shown where the reference is, so that reading a sentence
+   does not mean leaving it. The link stays exactly what it was: this is a
+   preview for a reader who has a pointer, and the way to the note at the
+   bottom is still a click.
+
+   Only where hovering is a thing the device does. On a touch screen the
+   first tap on a link raises `:hover` instead of following it, which would
+   turn every footnote reference into a two-tap link to buy a tooltip nobody
+   asked for. That gate also keeps the box off the narrow screens it has the
+   least room on.
+
+   `display` rather than `opacity`, so the duplicated text is out of the
+   layout, out of print, and out of what a screen reader reads. The note is
+   already reachable as a link, and `aria-hidden` keeps this copy from being
+   read a second time in the middle of the sentence. */
+@media (hover: hover) {
+  .eta-report .footnote-ref { position: relative; }
+  .eta-report .footnote-tip { display: none; }
+  .eta-report .footnote-ref:hover .footnote-tip,
+  .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
+  /* Positioned from the bottom, because a `sup` is already lifted off the
+     baseline, and centred on the reference with a width that gives way to
+     the viewport before it overhangs it. */
+  .eta-report .footnote-tip {
+      position: absolute; bottom: 1.6em; left: 50%; transform: translateX(-50%);
+      z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
+      padding: .5em .7em; border-radius: .3em;
+      /* The page names these two, and a site pasted into does not, where the
+         system pair is the one thing known to be legible against itself. A
+         tooltip is the one place here that needs an opaque surface: it is
+         over text. */
+      background: var(--bg, Canvas); color: var(--fg, CanvasText);
+      border: 1px solid currentColor;
+      /* `rem`, not `em`: this is inside a `sup`, and an `em` size would be a
+         fraction of an already smaller font, twice over in the footnotes
+         section. The rest is set back to running text because a reference can
+         sit inside a heading or an emphasized run. */
+      font-size: .85rem; font-style: normal; font-weight: normal;
+      line-height: 1.5; text-align: left; vertical-align: baseline;
+      white-space: normal;
+      /* It is a preview, not a target: it never takes a click meant for the
+         reference underneath it, and it is not part of the sentence a reader
+         drags across to copy. */
+      pointer-events: none; user-select: none; }
+}
+@media print { .eta-report .footnote-tip { display: none; } }
 .eta-report .contributors { font-size: .95rem; }
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
@@ -156,13 +202,13 @@ a { color: inherit; }
 </ul>
 </nav>
 <h2 id="the-elephants-in-the-room"><a class="link-mark" href="#the-elephants-in-the-room" aria-label="Link to this section"></a>The Elephants in the Room</h2>
-<p id="the-elephants-in-the-room-p1"><a class="link-mark" href="#the-elephants-in-the-room-p1" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
+<p id="the-elephants-in-the-room-p1"><a class="link-mark" href="#the-elephants-in-the-room-p1" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a><span class="footnote-tip" aria-hidden="true">Inflation-adjusted from the 2024 capital plan.</span></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
 <figure id="sas-west-036"><a class="link-mark" href="#sas-west-036" aria-label="Link to this figure"></a><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
 <p id="the-elephants-in-the-room-p2"><a class="link-mark" href="#the-elephants-in-the-room-p2" aria-label="Link to this paragraph"></a>That is a lot of money.</p>
 <div class="table-scroll" id="table-943f5817"><a class="link-mark" href="#table-943f5817" aria-label="Link to this table"></a><table><tr><td><p id="table-943f5817-p1"><strong>Project</strong></p></td><td><p id="table-943f5817-p2"><strong>Cost per mile</strong></p></td></tr><tr><td><p id="table-943f5817-p3">SAS West</p></td><td><p id="table-943f5817-p4">$6.2B</p></td></tr><tr><td><p id="table-943f5817-p5">Grand Paris Express</p></td><td><p id="table-943f5817-p6">$530M</p></td></tr></table></div>
 <h3 id="ground-conditions"><a class="link-mark" href="#ground-conditions" aria-label="Link to this section"></a>Ground Conditions</h3>
 <div class="list-block" id="list-231d1d6f"><a class="link-mark" href="#list-231d1d6f" aria-label="Link to this list"></a><ul><li>First point<ul><li>Nested point</li></ul></li><li>Second point</li></ul></div>
-<p id="ground-conditions-p1"><a class="link-mark" href="#ground-conditions-p1" aria-label="Link to this paragraph"></a>Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a></sup></p>
+<p id="ground-conditions-p1"><a class="link-mark" href="#ground-conditions-p1" aria-label="Link to this paragraph"></a>Stations are over 100 ft deep.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a><span class="footnote-tip" aria-hidden="true">Measured from street level to platform.</span></sup></p>
 <section class="footnotes" id="footnotes">
 <h2><a class="link-mark" href="#footnotes" aria-label="Link to this section"></a>Footnotes</h2>
 <ol>
