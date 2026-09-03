@@ -151,7 +151,10 @@ def test_text_and_urls_are_escaped() -> None:
         }
     )
     emitted = HtmlEmitter().emit(parse(hostile))
-    assert "<script>" not in emitted
+    # The page carries one script of its own, the one that places the footnote
+    # tooltips, so the check is that nothing from the document became a second
+    # one, rather than that the page has none.
+    assert "<script>alert(1)</script>" not in emitted
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in emitted
     assert 'href="https://x.test/?a=&quot;b"' in emitted
 
