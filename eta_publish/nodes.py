@@ -386,13 +386,9 @@ class Document:
         seen: dict[str, Image] = {}
         if self.card is not None:
             seen[self.card.object_id] = self.card
-        for block in _walk(self.blocks):
+        for block in self._every_block():
             for image in _images_in(block):
                 seen.setdefault(image.object_id, image)
-        for footnote in self.footnotes:
-            for block in _walk(footnote.content):
-                for image in _images_in(block):
-                    seen.setdefault(image.object_id, image)
         return list(seen.values())
 
     @property
@@ -402,9 +398,18 @@ class Document:
         Unlike `images`, not the share card:
         it is a picture of the title rather than a figure of the report.
         """
-        blocks = list(_walk(self.blocks))
-        blocks += [b for note in self.footnotes for b in _walk(note.content)]
-        return [b for b in blocks if isinstance(b, Figure)]
+        return [b for b in self._every_block() if isinstance(b, Figure)]
+
+    def _every_block(self):
+        """Every block of the report, then every block of its footnotes.
+
+        The body first, because that is the order the document is read in.
+        Descends into lists and table cells,
+        so nothing is missed for sitting inside something else.
+        """
+        yield from _walk(self.blocks)
+        for footnote in self.footnotes:
+            yield from _walk(footnote.content)
 
     def image_href(self, image: Image) -> str:
         """The filename as emitted, once a download has settled what it is."""
