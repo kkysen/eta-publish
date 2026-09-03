@@ -316,6 +316,23 @@ def split_at_headings(fragment: str) -> list[str]:
     return [f"{prefix}{opening}\n{piece.strip()}\n</div>" for piece in pieces if piece.strip()]
 
 
+def link_mark(anchor: str, what: str = "section") -> str:
+    """The link a block carries to itself.
+
+    Ahead of the block's own content rather than after it,
+    so every mark on the page hangs in one column:
+    the link to a figure is where the link to the paragraph above it was.
+    The `#` is the stylesheet's,
+    so quoting a heading does not copy a character nobody wrote.
+
+    A function rather than only a method,
+    because the headline and the standfirst are the page's rather than the report's:
+    `report_page` writes those two itself and never walks to them,
+    and the mark they carry has to be the same mark.
+    """
+    return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
+
+
 class HtmlEmitter(Emitter):
     extension = ".html"
 
@@ -639,15 +656,7 @@ class HtmlEmitter(Emitter):
             self._scope, self._paragraphs, self._marked = was
 
     def mark(self, anchor: str, what: str = "section") -> str:
-        """The link a block carries to itself.
-
-        Ahead of the block's own content rather than after it,
-        so every mark on the page hangs in one column:
-        the link to a figure is where the link to the paragraph above it was.
-        The `#` is the stylesheet's,
-        so quoting a heading does not copy a character nobody wrote.
-        """
-        return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
+        return link_mark(anchor, what)
 
     @override
     def heading(self, node: Heading) -> str:
@@ -864,14 +873,6 @@ a { color: inherit; }
 """
 
 
-def _page_mark(what: str) -> str:
-    """The same self-link the emitter writes, for the two blocks the page writes itself.
-    The headline and the standfirst are the page's rather than the report's,
-    so they are built here and not walked to."""
-    anchor = "title" if what == "title" else "short"
-    return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
-
-
 def _marked_up(warning: str) -> str:
     """One warning as HTML: names as code, and what gets cut struck through."""
     return warning_markup(
@@ -928,7 +929,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
         f"{card}"
         f"<style>{PAGE_CSS}{REPORT_CSS}</style>\n"
-        f'<h1 id="title">{_page_mark("title")}{escape(doc.title)}</h1>\n'
-        f'<p class="standfirst" id="short">{_page_mark("standfirst")}{escape(short)}</p>\n'
+        f'<h1 id="title">{link_mark("title", "title")}{escape(doc.title)}</h1>\n'
+        f'<p class="standfirst" id="short">{link_mark("short", "standfirst")}{escape(short)}</p>\n'
         f"{body}\n"
     )
