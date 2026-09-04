@@ -27,9 +27,13 @@ import re
 import sys
 from collections.abc import Iterator
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.parse import parse_qs, urlparse
 
 from .docs_json import JsonObject
+
+if TYPE_CHECKING:
+    from google.auth.credentials import Credentials
 
 SCOPES = [
     "https://www.googleapis.com/auth/documents.readonly",
@@ -184,7 +188,7 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 # ---- api -----------------------------------------------------------
 
 
-def _credentials():
+def _credentials() -> Credentials:
     """The credentials to call the API with, interactive or not.
 
     On a person's machine, the installed-app flow: a browser opens once, the token caches.
@@ -236,7 +240,7 @@ def _credentials():
     return creds
 
 
-def _ambient_credentials():
+def _ambient_credentials() -> Credentials | None:
     """Service account credentials, when the environment supplies them.
 
     `None` when it does not,
