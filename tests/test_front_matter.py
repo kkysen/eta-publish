@@ -228,7 +228,7 @@ def test_a_headline_before_the_header_stops_the_search() -> None:
 
 
 def test_contributors_are_sorted_by_surname() -> None:
-    """etany.org credits contributors alphabetically,
+    """`etany.org` credits contributors alphabetically,
     and the field they are typed into is in whatever order people were added."""
     doc = Document(meta={"public contributors": "Khyber Sen, Alon Levy, Robert Hale"})
     assert doc.contributors == ["Robert Hale", "Alon Levy", "Khyber Sen"]
@@ -240,7 +240,7 @@ def test_a_one_word_name_sorts_on_itself() -> None:
 
 
 def test_the_date_is_written_out() -> None:
-    """etany.org writes the month out; a Docs chip renders it short."""
+    """`etany.org` writes the month out; a Docs chip renders it short."""
     assert Document(meta={"publish due date": "Aug 19, 2026"}).dateline == "August 19, 2026"
 
 

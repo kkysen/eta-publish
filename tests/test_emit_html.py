@@ -181,7 +181,7 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
 
 
 def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
-    """Alphabetically by surname, which is how etany.org credits them."""
+    """Alphabetically by surname, which is how `etany.org` credits them."""
     doc.meta["public contributors"] = "Khyber Sen, Alon Levy"
     doc.meta["private contributors"] = "Someone Unnamed"
     out = HtmlEmitter(inline_css=False).emit(doc)
@@ -202,7 +202,7 @@ def test_a_report_with_no_public_contributors_has_no_contributors(doc: Document)
 
 
 def test_the_dateline_is_the_final_due_date(doc: Document) -> None:
-    """Written out, which is how etany.org dates a report."""
+    """Written out, which is how `etany.org` dates a report."""
     doc.meta["publish due date"] = "Aug 19, 2026"
     out = HtmlEmitter(inline_css=False).emit(doc)
     assert '<p class="dateline" id="date">August 19, 2026</p>' in without_marks(out)

@@ -326,7 +326,7 @@ class Document:
         The names come from person chips, which resolve to a display name,
         so this is names and not addresses.
 
-        Sorted, because etany.org credits contributors alphabetically
+        Sorted, because `etany.org` credits contributors alphabetically
         and the field they are typed into is in whoever-was-added-when order.
         """
         names = self.meta.get("public contributors", "")
@@ -339,7 +339,7 @@ class Document:
 
         The field is a date chip,
         so the document holds whatever short form Docs renders, `Aug 19, 2026`.
-        etany.org writes the month out,
+        `etany.org` writes the month out,
         and a published date is not the place to abbreviate three letters.
 
         Anything that does not parse as a date is published exactly as written:
