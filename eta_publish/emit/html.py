@@ -400,7 +400,7 @@ class HtmlEmitter(Emitter):
         # pasted into the live site. That is the point: a report pasted with
         # warnings still on it says so at the top, where `Phase:` says it too,
         # which is what makes an accidental publish obvious rather than quiet.
-        parts.append(warnings_block(doc))
+        parts.append(self.warnings(doc))
         parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
         parts.append(self.blocks(doc.body))
@@ -459,6 +459,33 @@ class HtmlEmitter(Emitter):
         if not date:
             return ""
         return f'<p class="dateline" id="date">{self.mark("date", "date")}{escape(date)}</p>'
+
+    def warnings(self, doc: Document) -> str:
+        """Everything the build has to say about this report, where it will be read.
+
+        Named as the Markdown and Typst emitters name theirs,
+        because it is the same section of the same report in a third format.
+
+        A warning names a field, a file, or a line, and marks it with backticks
+        the way this project writes prose everywhere else.
+        Rendered as code rather than shown with the backticks in it,
+        which is what a reader of the page would otherwise see.
+        """
+        if not doc.warnings:
+            return ""
+        items = "\n".join(f"<li>{self.marked_up(w)}</li>" for w in doc.warnings)
+        return f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
+
+    def marked_up(self, warning: str) -> str:
+        """One warning as HTML: names as code, and what gets cut struck through."""
+        return warning_markup(
+            warning,
+            code=lambda c: f"<code>{escape(c)}</code>",
+            cut=lambda c: f"<s>{escape(c)}</s>",
+            text=escape,
+            quote=lambda q: f"<blockquote>{q}</blockquote>",
+            bullets=lambda items: "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>",
+        )
 
     def toc(self, doc: Document) -> str:
         """The sections, as a list rather than a run of separated links.
@@ -604,6 +631,30 @@ class HtmlEmitter(Emitter):
         # This copy is hidden from a screen reader,
         # and a hidden link is one the keyboard should not stop at on the way past.
         return "<br>".join(line for line in lines if line).replace("<a ", '<a tabindex="-1" ')
+
+    def tip_text(self, blocks: list[Block]) -> str:
+        """A footnote as one line of text, for deciding whether it has a box to show.
+
+        Every kind of markup is dropped, links included:
+        what is being asked is whether the note says anything,
+        and `tip` is what renders it once the answer is yes.
+        A line break inside a paragraph becomes a space,
+        so that the words on either side of it do not run together.
+        """
+        words: list[str] = []
+        for block in blocks:
+            content: list[Inline] = []
+            if isinstance(block, Paragraph):
+                content = block.content
+            elif isinstance(block, List):
+                content = [i for item in block.items for i in item.content]
+            for node in content:
+                if isinstance(node, Text):
+                    words.append(node.text)
+                elif isinstance(node, LineBreak):
+                    words.append(" ")
+            words.append(" ")
+        return " ".join("".join(words).split())
 
     # ---- blocks -----------------------------------------------------
 
@@ -808,7 +859,7 @@ class HtmlEmitter(Emitter):
         )
         # A footnote that is a table or a figure has no sentence to show,
         # and an empty box hovering over the text is worse than none.
-        tip = self.tip(note.content) if note and tip_text(note.content) else ""
+        tip = self.tip(note.content) if note and self.tip_text(note.content) else ""
         preview = f'<span class="footnote-tip" aria-hidden="true">{tip}</span>' if tip else ""
         return (
             f'<sup id="fnref{node.number}" class="footnote-ref">'
@@ -820,31 +871,6 @@ class HtmlEmitter(Emitter):
         href = self.doc.image_href(node)
         src = f"{self.image_base}/{href}" if self.image_base else href
         return f'<img src="{escape(src)}" alt="{escape(node.alt)}" loading="lazy">'
-
-
-def tip_text(blocks: list[Block]) -> str:
-    """A footnote as one line of text, for the tooltip its reference carries.
-
-    Every kind of markup is dropped, links included:
-    a preview is read, not clicked,
-    and the note at the bottom of the page is where the link still lives.
-    A line break inside a paragraph becomes a space,
-    so that the words on either side of it do not run together.
-    """
-    words: list[str] = []
-    for block in blocks:
-        content: list[Inline] = []
-        if isinstance(block, Paragraph):
-            content = block.content
-        elif isinstance(block, List):
-            content = [i for item in block.items for i in item.content]
-        for node in content:
-            if isinstance(node, Text):
-                words.append(node.text)
-            elif isinstance(node, LineBreak):
-                words.append(" ")
-        words.append(" ")
-    return " ".join("".join(words).split())
 
 
 # Enough to read the report as it will look, and nothing more.
@@ -871,32 +897,6 @@ h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
 a { color: inherit; }
 .standfirst { font-size: 1.15rem; opacity: .75; margin-top: 0; }
 """
-
-
-def _marked_up(warning: str) -> str:
-    """One warning as HTML: names as code, and what gets cut struck through."""
-    return warning_markup(
-        warning,
-        code=lambda c: f"<code>{escape(c)}</code>",
-        cut=lambda c: f"<s>{escape(c)}</s>",
-        text=escape,
-        quote=lambda q: f"<blockquote>{q}</blockquote>",
-        bullets=lambda items: "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>",
-    )
-
-
-def warnings_block(doc: Document) -> str:
-    """Everything the build has to say about this report, where it will be read.
-
-    A warning names a field, a file, or a line, and marks it with backticks
-    the way this project writes prose everywhere else.
-    Rendered as code rather than shown with the backticks in it,
-    which is what a reader of the page would otherwise see.
-    """
-    if not doc.warnings:
-        return ""
-    items = "\n".join(f"<li>{_marked_up(w)}</li>" for w in doc.warnings)
-    return f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
 
 
 def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
