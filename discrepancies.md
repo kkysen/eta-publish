@@ -124,7 +124,7 @@ Every output credits the same nine people the live page credits,
 in the same order, in a `Contributors` section after the footnotes,
 under the sentence the live page introduces them with.
 The names come from `Public Contributors:` in the header block,
-sorted by surname, which is how etany.org credits contributors
+sorted by surname, which is how `etany.org` credits contributors
 and is not the order that field happens to be typed in.
 
 What differs is the level.
