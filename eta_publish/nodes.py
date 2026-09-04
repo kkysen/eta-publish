@@ -11,6 +11,7 @@ It carries what ETA reports use, not what a Google Doc can express.
 Anything the parser cannot place here becomes a warning rather than a silent drop.
 """
 
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -400,7 +401,7 @@ class Document:
         """
         return [b for b in self._every_block() if isinstance(b, Figure)]
 
-    def _every_block(self):
+    def _every_block(self) -> Iterator[Block]:
         """Every block of the report, then every block of its footnotes.
 
         The body first, because that is the order the document is read in.
@@ -458,7 +459,7 @@ def _by_surname(name: str) -> tuple[str, str]:
 # ---- traversal -----------------------------------------------------
 
 
-def _walk(blocks: list[Block]):
+def _walk(blocks: list[Block]) -> Iterator[Block]:
     """Yield every block, descending into lists and table cells."""
     for block in blocks:
         yield block
@@ -479,7 +480,7 @@ def _images_in(block: Block) -> list[Image]:
     return []
 
 
-def _items(items: list[ListItem]):
+def _items(items: list[ListItem]) -> Iterator[ListItem]:
     for item in items:
         yield item
         yield from _items(item.children)
