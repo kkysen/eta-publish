@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -120,7 +121,7 @@ def parse_ref(ref: str) -> tuple[str, str | None]:
 # ---- tabs ----------------------------------------------------------
 
 
-def iter_tabs(tabs: list[JsonObject], depth: int = 0):
+def iter_tabs(tabs: list[JsonObject], depth: int = 0) -> Iterator[tuple[int, JsonObject]]:
     """Yield `(depth, tab)` for every tab, descending into child tabs."""
     for tab in tabs:
         yield depth, tab
