@@ -188,6 +188,10 @@ build apart from asking Google for the text. Offline cannot notice a document
 that changed, so it is for a change to this code rather than to a document,
 and it is not what the workflow runs.
 
+Reports are built several at a time, since a build is nearly all waiting,
+so a list takes about as long as its slowest document rather than as long as
+all of them. They are still reported in the order the list gives them.
+
 A publish is always a site, whether it holds one report or four:
 each lands under the path its own front matter names,
 alongside an `index.html` listing them.

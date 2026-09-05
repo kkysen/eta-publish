@@ -262,6 +262,35 @@ def test_offline_says_which_report_it_has_nothing_saved_for(tmp_path: Path) -> N
     assert "nothing saved" in site.failed[0].error
 
 
+def test_reports_are_built_at_once_and_reported_in_order(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, doc: Document
+) -> None:
+    """A list of reports reads as the list it is, whatever order Google answers in,
+    and the whole point is that one report's wait is not another's."""
+    import time
+
+    import eta_publish.site as site_module
+
+    order = ["slow", "quick"]
+
+    def build(ref: str, *args: object, **kwargs: object) -> tuple[Document, str]:
+        if ref.endswith("slow"):
+            time.sleep(0.3)
+        return doc, f"reports/{ref.rsplit('/', 1)[-1]}"
+
+    monkeypatch.setattr(site_module, "build_one", build)
+    reports = [Report(url=f"https://example.invalid/{name}") for name in order]
+
+    started = time.perf_counter()
+    site = build_site(reports, tmp_path / "site")
+    elapsed = time.perf_counter() - started
+
+    assert [b.path for b in site.built] == ["reports/slow", "reports/quick"]
+    # The quick one did not wait its turn behind the slow one:
+    # sequentially this is 0.3s plus the quick one, and one sleep is the floor.
+    assert elapsed < 0.6
+
+
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
     site = Site(
         built=[Built(report=Report(url="u", name="SAS West"), doc=doc, path="reports/sas-west")],
