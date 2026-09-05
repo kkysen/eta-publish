@@ -159,10 +159,16 @@ REPORT_CSS = """
    `display` rather than `opacity`, so the duplicated text is out of the
    layout, out of print, and out of what a screen reader reads. The note is
    already reachable as a link, and `aria-hidden` keeps this copy from being
-   read a second time in the middle of the sentence. */
+   read a second time in the middle of the sentence.
+
+   Hidden outside the query and shown inside it, not hidden inside it.
+   The span is in the markup on every device, so a rule that only reaches
+   the ones that hover leaves the rest displaying the note inline, in the
+   middle of the sentence it belongs to, which is worse than no preview at
+   all: a phone got every footnote spliced into the running text. */
+.eta-report .footnote-tip { display: none; }
 @media (hover: hover) {
   .eta-report .footnote-ref { position: relative; }
-  .eta-report .footnote-tip { display: none; }
   .eta-report .footnote-ref:hover .footnote-tip,
   .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
   /* Under the reference rather than over it, which is where the script
