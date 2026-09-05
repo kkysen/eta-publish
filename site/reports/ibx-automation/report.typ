@@ -5,7 +5,7 @@
   short: "",
   phase: "Composition",
   dateline: "",
-  contributors: ("Franklin Tang Madison Feinberg", "Robert Hale", "Alon Levy", "Khyber Sen", ),
+  contributors: ("Madison Feinberg", "Robert Hale", "Alon Levy", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
     [dropped a line before the #raw("Header") section: IBX Automation],
@@ -14,7 +14,6 @@
     [unfinished text in the document: #raw("TODO didn’t finish")],
     [3 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [1 comment thread still open on this tab],
-    [the #raw("Public Contributors:") line reads 'Franklin Tang (zt2339\@nyu.edu) Madison Feinberg' as one contributor; a comma is missing after the address],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
