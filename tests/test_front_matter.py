@@ -145,7 +145,7 @@ def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
     }
     doc = parse(unstyled)
     assert [i.object_id for i in doc.images] == ["io.hero"]
-    assert any("TITLE-styled" in w for w in doc.warnings)
+    assert any("`Title`-styled" in w for w in doc.warnings)
 
 
 def test_scaffolding_before_the_header_does_not_hide_it() -> None:

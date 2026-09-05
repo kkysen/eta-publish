@@ -9,7 +9,7 @@
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
     [dropped a line before the #raw("Header") section: IBX Automation],
-    [no TITLE-styled paragraph and no #raw("Title:") header field, so the document name 'IBX Automation' is being used as the headline; style the headline as Title in the doc to fix this],
+    [no #raw("Title")-styled paragraph and no #raw("Title:") header field, so the document name 'IBX Automation' is being used as the headline; style the headline as #raw("Title") in the doc to fix this],
     [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
     [unfinished text in the document: #raw("TODO didn’t finish")],
     [3 suggestions still open on this tab; the build publishes the document without them, as it reads today],

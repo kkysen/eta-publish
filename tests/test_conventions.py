@@ -193,7 +193,7 @@ def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
     )
     assert [b.anchor for b in doc.blocks if isinstance(b, Heading)] == ["tail-tracks"]
     assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 1
-    assert any("styled as a heading" in w for w in doc.warnings)
+    assert any("styled as a `Heading`" in w for w in doc.warnings)
 
 
 def test_unfinished_text_is_reported() -> None:
