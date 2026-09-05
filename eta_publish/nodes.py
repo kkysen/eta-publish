@@ -11,6 +11,7 @@ It carries what ETA reports use, not what a Google Doc can express.
 Anything the parser cannot place here becomes a warning rather than a silent drop.
 """
 
+import re
 from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -323,15 +324,20 @@ class Document:
         The document carries a separate `Private Contributors:` field
         so that some names do not publish, so no fallback to it belongs here.
 
-        The names come from person chips, which resolve to a display name,
-        so this is names and not addresses.
+        The names come from person chips, which resolve to a display name
+        where Docs can resolve one, so this is mostly names and not addresses.
+
+        Where it cannot, the chip renders as the address,
+        and the field is written `Alon Levy (alon@example.org)`
+        with the name typed and the chip beside it.
+        A byline is names: the address is dropped and the name kept.
 
         Sorted, because `etany.org` credits contributors alphabetically
         and the field they are typed into is in whoever-was-added-when order.
         """
         names = self.meta.get("public contributors", "")
-        listed = [name.strip() for name in names.split(",") if name.strip()]
-        return sorted(listed, key=_by_surname)
+        listed = [_named(name) for name in names.split(",")]
+        return sorted((name for name in listed if name), key=_by_surname)
 
     @property
     def dateline(self) -> str:
@@ -442,6 +448,20 @@ def _long_date(text: str) -> str:
             continue
         return f"{date:%B} {date.day}, {date.year}"
     return text
+
+
+EMAILED = re.compile(r"\s*\(\s*[^()\s]+@[^()\s]+\s*\)")
+"""An address in brackets after a name, which a byline does not carry.
+
+Written that way when Docs cannot resolve a person chip to a display name:
+the chip renders as the address, so the name is typed and the chip put beside it.
+The name is the half worth publishing, and `etany.org` credits names.
+"""
+
+
+def _named(entry: str) -> str:
+    """One listed contributor, as a byline writes them."""
+    return EMAILED.sub("", entry).strip()
 
 
 def _by_surname(name: str) -> tuple[str, str]:
