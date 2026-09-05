@@ -424,7 +424,9 @@ SEO Description: A 125 St subway should be a slam dunk ...
 ```
 
 The converter reads that block into metadata and keeps it out of the body.
-`URL:` becomes the published path, `Short:` becomes the standfirst,
+`URL:` becomes the published path, and a document without one is refused
+rather than published under a guess at it.
+`Short:` becomes the standfirst,
 `SEO Description:` becomes the page description,
 `Public Contributors:` becomes the byline,
 named the way the header lists them,

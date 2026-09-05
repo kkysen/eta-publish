@@ -9,12 +9,13 @@ so nothing may be written in terms of *the* doc.
 Each report lands under its own published path,
 taken from the `URL:` line in its front matter,
 so the preview URL is the published URL with a different host in front of it.
-A report whose header names no URL falls back to a slug of its title, with a warning:
-that is a line to fix in the document,
-not a reason to fail the build for the reports either side of it.
+A report whose header names no URL is not published at all.
+A slug of its headline would be a plausible path and not the published one,
+which is a report at the wrong URL rather than a report nobody forgot.
 
-One failing report does not stop the others, for the same reason.
-The exit status still reports it.
+That is one report failing, not the site:
+a document that cannot be built says nothing about the next one,
+so the others are still built and the exit status still reports it.
 """
 
 import json
@@ -25,7 +26,6 @@ from pathlib import Path, PurePosixPath
 
 from .build import BuildOptions, build_one
 from .emit.html import escape
-from .naming import slugify
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
@@ -208,23 +208,23 @@ def report_path(doc: Document) -> str:
     so `URL: /../../etc` is a document choosing a directory outside the site,
     and the check that the committed site is what a build writes
     only ever looks inside `site/`, so it would not notice.
+
+    A document that names no URL at all is refused rather than guessed at.
+    A slug of the headline is a plausible path and not the published one,
+    and the difference only shows up as a report sitting at the wrong URL,
+    quietly, next to the ones that got theirs right.
+    Both refusals are this one report's, not the site's:
+    `build_site` goes on to the next.
     """
     slug = doc.slug.strip("/")
-    if slug:
-        parts = PurePosixPath(slug).parts
-        if ".." not in parts and not PurePosixPath(slug).is_absolute():
-            return slug
-        doc.warn(
-            f"the `URL:` line is {doc.slug!r}, which climbs out of the site; "
-            "publishing under the headline instead"
+    if not slug:
+        raise ValueError(
+            "no `URL:` line in the `Header` section, so nothing says where this publishes; "
+            "add one, as the other reports have"
         )
-
-    fallback = slugify(doc.title) if doc.title else "report"
-    doc.warn(
-        f"no `URL:` in the header, so this is published at /{fallback}, "
-        "which is a guess; add the line to the document"
-    )
-    return fallback
+    if ".." in PurePosixPath(slug).parts or PurePosixPath(slug).is_absolute():
+        raise ValueError(f"the `URL:` line is {doc.slug!r}, which climbs out of the site")
+    return slug
 
 
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:

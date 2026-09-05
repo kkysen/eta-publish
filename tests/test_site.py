@@ -42,13 +42,13 @@ def test_a_report_is_published_at_the_path_its_header_names(doc: Document) -> No
     assert report_path(doc) == "reports/digging-out-deep-hole-sas-west"
 
 
-def test_a_report_with_no_url_falls_back_to_its_title_and_says_so(doc: Document) -> None:
-    """A missing `URL:` is a line to add to the document.
-    It must not take the other reports down, and it must not pass unmentioned."""
+def test_a_report_with_no_url_is_refused(doc: Document) -> None:
+    """A slug of the headline is a plausible path and not the published one,
+    so guessing one publishes the report at the wrong URL, quietly."""
     doc.meta.pop("url", None)
     doc.title = "Digging Out of a Very Deep Hole"
-    assert report_path(doc) == "digging-out-of-a-very-deep-hole"
-    assert any("no `URL:`" in w for w in doc.warnings)
+    with pytest.raises(ValueError, match="no `URL:` line"):
+        report_path(doc)
 
 
 def test_an_absolute_url_cannot_escape_the_site_root(doc: Document) -> None:
@@ -349,5 +349,5 @@ def test_a_url_that_climbs_out_of_the_site_is_refused(doc: Document) -> None:
     only ever looks inside `site/`, so a climb would leave no trace there."""
     doc.title = "Digging Out of a Very Deep Hole"
     doc.meta["url"] = "/../../../../tmp/pwned"
-    assert report_path(doc) == "digging-out-of-a-very-deep-hole"
-    assert any("climbs out of the site" in w for w in doc.warnings)
+    with pytest.raises(ValueError, match="climbs out of the site"):
+        report_path(doc)
