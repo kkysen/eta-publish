@@ -248,7 +248,7 @@ def verifier(report: Report) -> Callable[[Document], None]:
     return verify
 
 
-def source(report: Report, saved: dict[tuple[str, str], Path], options: BuildOptions) -> str:
+def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
     """What to build this report from: the document, or the last response saved for it.
 
     Offline is a rebuild of what is already committed,
@@ -259,13 +259,12 @@ def source(report: Report, saved: dict[tuple[str, str], Path], options: BuildOpt
     """
     if not options.offline:
         return report.url
-    directory = saved_for(report, saved)
-    if directory is None:
+    if previous is None:
         raise ValueError(
             f"nothing saved under the output directory for {report.url}; "
             "build it once with a fetch before building it offline"
         )
-    return str(directory)
+    return str(previous)
 
 
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
@@ -275,14 +274,21 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
     and a site missing one report beats no site at all.
     """
     options = options or BuildOptions()
-    saved = saved_responses(outdir) if options.offline else {}
+    # Always, not only offline: a fetch reuses one too, when Drive says
+    # the document behind it has not been edited since it was written.
+    saved = saved_responses(outdir)
     site = Site()
     for report in reports:
         label = report.name or report.url
         print(f"building {label}", file=sys.stderr)
         try:
+            previous = saved_for(report, saved)
             doc, path = build_one(
-                source(report, saved, options), outdir, options, verify=verifier(report)
+                source(report, previous, options),
+                outdir,
+                options,
+                verify=verifier(report),
+                cached=previous / DOC_JSON if previous is not None else None,
             )
         except Exception as e:  # noqa: BLE001
             # Broad on purpose: a fetch, parse, disagreement, or disk failure

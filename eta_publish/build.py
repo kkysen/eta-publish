@@ -51,7 +51,12 @@ IMAGES_JSON = "images.json"
 """The saved API response, written by every build beside its outputs."""
 
 
-def load(ref: str, suggestions: str = "rejected", comments: bool = True) -> JsonObject:
+def load(
+    ref: str,
+    suggestions: str = "rejected",
+    comments: bool = True,
+    cached: Path | None = None,
+) -> JsonObject:
     """Resolve a reference to the document it names.
 
     A saved response can be the file itself or the directory holding it,
@@ -76,7 +81,7 @@ def load(ref: str, suggestions: str = "rejected", comments: bool = True) -> Json
 
     from .fetch import fetch
 
-    return fetch(ref, suggestions=suggestions, comments=comments)
+    return fetch(ref, suggestions=suggestions, comments=comments, cached=cached)
 
 
 REVIEW_KEYS = ("openSuggestions", "openComments")
@@ -314,6 +319,7 @@ def build_one(
     outdir: Path,
     options: BuildOptions | None = None,
     verify: Callable[[Document], None] | None = None,
+    cached: Path | None = None,
 ) -> tuple[Document, str]:
     """Build one report, returning it and the site-relative path it went to.
 
@@ -330,11 +336,15 @@ def build_one(
 
     `verify` is the caller's chance to say this is not the document it meant,
     given the parsed document and called before anything is written.
+
+    `cached` is the response the last build of this report saved, if there is one.
+    It is not read unless Drive says the document has not been edited since,
+    which is a cheaper question than any of the ones it saves asking.
     """
     from .site import report_path
 
     options = options or BuildOptions()
-    document = load(ref, options.suggestions, options.comments)
+    document = load(ref, options.suggestions, options.comments, cached)
     doc = parse(document)
     if verify is not None:
         # Before the first directory is made.
