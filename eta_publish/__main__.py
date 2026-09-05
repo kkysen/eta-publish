@@ -120,7 +120,14 @@ def add(
     """
     try:
         added = add_report(url, reports)
-    except (OSError, ValueError) as e:
+    except (OSError, ValueError, LookupError, RuntimeError) as e:
+        # `LookupError` and `RuntimeError` are `TabNotFound` and `FetchFailed`,
+        # which only this command can raise:
+        # a publish resolves its argument without fetching anything,
+        # and a fetch that fails inside `build_site` is one report's failure there.
+        # A URL pasted without its `?tab=` id is the mistake this command exists
+        # to survive, and `TabNotFound` carries the list of tabs to pick from,
+        # which is the answer rather than the traceback it used to be printed as.
         raise BadParameter(str(e), param_hint="URL") from e
     print(f"{reports}: added {added.name!r}, tab {added.tab!r}")
 

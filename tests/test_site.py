@@ -127,6 +127,31 @@ def test_add_refuses_a_document_that_names_no_tab(tmp_path: Path) -> None:
     assert len(load_reports(path)) == 1
 
 
+def test_add_says_which_tabs_there_are_when_the_url_names_none(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A URL pasted without its `?tab=` id is the mistake this command exists
+    to survive, and the answer is the list of tabs `TabNotFound` carries,
+    not the traceback it used to be printed as."""
+    from typer.testing import CliRunner
+
+    from eta_publish import build
+    from eta_publish.__main__ import add_app
+    from eta_publish.fetch import TabNotFound
+
+    def no_tab(ref: str, suggestions: str = "rejected") -> object:
+        raise TabNotFound("this document has 2 tabs; pass the URL including\n  t.a  Live version")
+
+    monkeypatch.setattr(build, "load", no_tab)
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+
+    result = CliRunner().invoke(add_app, ["https://example.invalid/d/x", "-r", str(path)])
+    assert result.exit_code != 0
+    assert "t.a  Live version" in result.output
+    assert len(load_reports(path)) == 1
+
+
 def test_a_title_with_a_quotation_mark_stays_one_string(tmp_path: Path) -> None:
     saved = tmp_path / "doc.json"
     saved.write_text(json.dumps({**FIXTURE, "title": 'The "Deep Hole" Report', "tabTitle": "D2"}))
