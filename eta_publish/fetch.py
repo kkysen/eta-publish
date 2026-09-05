@@ -26,6 +26,7 @@ import os
 import re
 import sys
 from collections.abc import Iterator
+from functools import cache
 from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import parse_qs, urlparse
@@ -188,8 +189,16 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 # ---- api -----------------------------------------------------------
 
 
+@cache
 def _credentials() -> Credentials:
     """The credentials to call the API with, interactive or not.
+
+    Worked out once per process rather than once per call.
+    A build of two reports asks six times, and each answer read the token
+    file, checked its scopes, and refreshed it if it had expired,
+    which is half a second of a thirteen second build spent
+    re-deciding something that cannot change while a build runs.
+    `cache_clear` is what a test uses to be given a different answer.
 
     On a person's machine, the installed-app flow: a browser opens once, the token caches.
     Unattended, notably CI, there is no browser to open and no one to click,

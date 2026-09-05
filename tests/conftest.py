@@ -23,3 +23,15 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 @pytest.fixture
 def regenerate_snapshots(request: pytest.FixtureRequest) -> bool:
     return bool(request.config.getoption("--regenerate-snapshots"))
+
+
+@pytest.fixture(autouse=True)
+def _forget_credentials() -> None:
+    """`_credentials` is worked out once per process, and a test is not a process.
+
+    Two tests that set up different credentials would otherwise get whichever
+    ran first, in whichever order the suite happened to run them.
+    """
+    from eta_publish.fetch import _credentials
+
+    _credentials.cache_clear()
