@@ -770,23 +770,39 @@ class Parser:
         return None
 
     def title(self, content: list[JsonObject]) -> str:
-        """Prefer a `Title`-styled paragraph over the Drive filename.
+        """The headline, which is the `Title`-styled paragraph and only that.
 
-        The filename is a working name:
-        the SAS West report lives in a doc called `SAS West Feasibility Response`.
+        One way of saying it, so there is one place to read it and one place
+        to change it. A `Title:` line in the `Header` section was a second,
+        and a second is worse than either alone: a document carrying both
+        publishes one of them, and which one is a fact about this function.
+
+        The style is also the one that shows. A headline set in the header
+        is a headline nobody reading the document sees at the top of it,
+        which is where a wrong one goes unnoticed.
+
+        The Drive filename is the last resort and a warning, not a third way:
+        it is a working name, and the SAS West report lives in a doc called
+        `SAS West Feasibility Response`.
         """
         for item in content:
             para = item.get("paragraph")
             if para is not None and style_of(para) == "TITLE" and plain(para):
                 return plain(para)
-        if self.doc.meta.get("title"):
-            return self.doc.meta["title"]
+
         filename = self.json.get("title", "")
         self.doc.warn(
-            "no `Title`-styled paragraph and no `Title:` header field, so the "
-            f"document name {filename!r} is being used as the headline; "
-            "style the headline as `Title` in the doc to fix this"
+            f"no `Title`-styled paragraph, so the document name {filename!r} "
+            "is being used as the headline; style the headline as `Title` in the doc"
         )
+        if self.doc.meta.get("title"):
+            # Said separately, because it is a different thing to fix:
+            # the headline is written down, in a line that does not set it.
+            self.doc.warn(
+                f"the `Header` section has `Title: {self.doc.meta['title']}`, "
+                "which is not what the headline comes from; "
+                "style that line as `Title` in the body instead"
+            )
         return filename
 
     def footnotes(self) -> list[Footnote]:

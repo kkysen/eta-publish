@@ -259,3 +259,38 @@ def test_something_that_is_not_a_date_is_published_as_written() -> None:
 
 def test_no_date_is_still_no_dateline() -> None:
     assert Document().dateline == ""
+
+
+def test_a_title_header_field_does_not_set_the_headline() -> None:
+    """One way of saying it. A document carrying both publishes one of them,
+    and which one should not be a fact about the parser."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Title: A Headline Nobody Sees"),
+                para("Ordinary prose."),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.title == "SAS West Feasibility Response"
+    assert any("no `Title`-styled paragraph" in w for w in doc.warnings)
+    assert any("not what the headline comes from" in w for w in doc.warnings)
+
+
+def test_a_title_styled_paragraph_wins_and_says_nothing() -> None:
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Title: A Headline Nobody Sees"),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.title == "The Real Headline"
+    assert not any("Title" in w for w in doc.warnings)
