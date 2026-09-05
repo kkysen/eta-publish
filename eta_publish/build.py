@@ -29,6 +29,14 @@ class BuildOptions:
     suggestions: str = "rejected"
     split: bool = False
     images: bool = True
+    comments: bool = True
+    """Whether to ask how many comment threads are open.
+
+    The one expensive question a build asks: it is a text export of the whole
+    document rather than an API call, and it costs more than fetching the
+    document does. Left unasked, the last answer stands, the way it already
+    does for the service account that cannot ask it at all.
+    """
 
 
 DOC_JSON = "doc.json"
@@ -36,7 +44,7 @@ IMAGES_JSON = "images.json"
 """The saved API response, written by every build beside its outputs."""
 
 
-def load(ref: str, suggestions: str = "rejected") -> JsonObject:
+def load(ref: str, suggestions: str = "rejected", comments: bool = True) -> JsonObject:
     """Resolve a reference to the document it names.
 
     A saved response can be the file itself or the directory holding it,
@@ -61,7 +69,7 @@ def load(ref: str, suggestions: str = "rejected") -> JsonObject:
 
     from .fetch import fetch
 
-    return fetch(ref, suggestions=suggestions)
+    return fetch(ref, suggestions=suggestions, comments=comments)
 
 
 REVIEW_KEYS = ("openSuggestions", "openComments")
@@ -319,7 +327,7 @@ def build_one(
     from .site import report_path
 
     options = options or BuildOptions()
-    document = load(ref, options.suggestions)
+    document = load(ref, options.suggestions, options.comments)
     doc = parse(document)
     if verify is not None:
         # Before the first directory is made.

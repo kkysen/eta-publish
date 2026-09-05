@@ -188,3 +188,31 @@ def test_keeping_the_last_counts_is_said_out_loud(
 
     fetch.fetch("https://docs.google.com/document/d/abc/edit")
     assert "not asking about suggestions or comments" in capsys.readouterr().err
+
+
+def test_comments_can_be_left_unasked(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The export is the slowest thing a build does, and the key it would set
+    is one `carry_over_review` fills in from the last build that did ask."""
+    import eta_publish.fetch as fetch
+
+    def boom(*args: object, **kwargs: object) -> None:
+        raise AssertionError("the comment export was asked for anyway")
+
+    def whole_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
+        return {"tabs": []}
+
+    def one_tab(document: JsonObject, wanted: str | None) -> JsonObject:
+        return {"body": {}}
+
+    def three_open(doc_id: str, tab: str | None = None) -> int:
+        return 3
+
+    monkeypatch.setattr(fetch, "_ambient_credentials", lambda: None)
+    monkeypatch.setattr(fetch, "fetch_document", whole_document)
+    monkeypatch.setattr(fetch, "select_tab", one_tab)
+    monkeypatch.setattr(fetch, "open_suggestions", three_open)
+    monkeypatch.setattr(fetch, "open_comments_on_tab", boom)
+
+    document = fetch.fetch("https://docs.google.com/document/d/abc/edit", comments=False)
+    assert document["openSuggestions"] == 3
+    assert "openComments" not in document

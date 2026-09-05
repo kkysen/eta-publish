@@ -410,7 +410,12 @@ def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
     return None
 
 
-def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> JsonObject:
+def fetch(
+    ref: str,
+    tab: str | None = None,
+    suggestions: str = "rejected",
+    comments: bool = True,
+) -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     wanted = tab or url_tab
     document = select_tab(fetch_document(doc_id, suggestions), wanted)
@@ -445,9 +450,13 @@ def fetch(ref: str, tab: str | None = None, suggestions: str = "rejected") -> Js
     suggested = open_suggestions(doc_id, wanted)
     if suggested is not None:
         document["openSuggestions"] = suggested
-    comments = open_comments_on_tab(doc_id, wanted)
-    if comments is not None:
-        document["openComments"] = comments
+    # Not asked when the caller said not to, and a key left out is a key
+    # `carry_over_review` fills in from the last build that did ask,
+    # which is the same shape as being unable to ask.
+    if comments:
+        open_threads = open_comments_on_tab(doc_id, wanted)
+        if open_threads is not None:
+            document["openComments"] = open_threads
     return document
 
 
