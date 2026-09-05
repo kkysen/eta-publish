@@ -317,6 +317,29 @@ def test_every_linkable_block_carries_a_link_to_itself(out: str) -> None:
         assert anchor in marked, f"nothing links to {anchor}"
 
 
+def test_the_footnote_preview_is_hidden_where_nothing_hovers() -> None:
+    """The span is in the markup on every device, so hiding it only inside
+    `@media (hover: hover)` left a phone displaying every note inline,
+    in the middle of the sentence it belongs to."""
+    from eta_publish.emit.html import REPORT_CSS
+
+    # Everything the hovering devices are told, dropped.
+    # What is left is what a phone reads, and it has to hide the box.
+    without_hover = re.sub(r"@media \(hover: hover\) \{.*?\n\}", "", REPORT_CSS, flags=re.S)
+    assert ".footnote-ref:hover" not in without_hover
+    assert ".eta-report .footnote-tip { display: none; }" in without_hover
+
+
+def test_the_footnote_preview_is_shown_where_something_does(out: str) -> None:
+    """Hidden by default is only right if hovering still brings it back."""
+    from eta_publish.emit.html import REPORT_CSS
+
+    hovering = re.search(r"@media \(hover: hover\) \{.*?\n\}", REPORT_CSS, re.S)
+    assert hovering is not None
+    assert ".footnote-ref:hover .footnote-tip" in hovering.group()
+    assert ".footnote-ref:focus-within .footnote-tip { display: block; }" in hovering.group()
+
+
 def test_a_footnotes_mark_sits_outside_its_number(out: str) -> None:
     """Beside the arrow back it crowded the one control that was already there,
     so it hangs outside the list's own numbering instead."""
