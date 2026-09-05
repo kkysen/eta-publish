@@ -1,29 +1,4 @@
-<!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IBX Automation</title>
-<meta name="description" content="">
 <style>
-:root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fff; }
-@media (prefers-color-scheme: dark) { :root { --fg: #eaeaea; --bg: #141414; } }
-body { background: var(--bg); color: var(--fg); max-width: 46rem;
-       margin: 0 auto; padding: 3rem 1.25rem 6rem;
-       font: 17px/1.65 Georgia, "Times New Roman", serif; }
-h1, h2, h3, h4 { font-family: system-ui, sans-serif; line-height: 1.25; }
-/* The headline and standfirst sit outside `.eta-report`, so the rules that
-   hang a mark beside a block do not reach them. These two do. */
-#title, #short { position: relative; }
-#title > .link-mark, #short > .link-mark {
-  position: absolute; left: -1.15em; text-decoration: none;
-  font-weight: normal; font-size: 1rem; opacity: 0; }
-#title > .link-mark::before, #short > .link-mark::before { content: "#"; }
-#title:hover > .link-mark, #short:hover > .link-mark,
-#title > .link-mark:focus-visible, #short > .link-mark:focus-visible { opacity: .45; }
-h1 { font-size: 2.1rem; margin-bottom: .2em; }
-h2 { margin-top: 2.5em; border-top: 1px solid currentColor; padding-top: .8em; }
-a { color: inherit; }
-.standfirst { font-size: 1.15rem; opacity: .75; margin-top: 0; }
-
 .eta-report figure { margin: 2.5em 0; }
 /* Figures the document puts next to each other sit next to each other, if
    the reader's screen has room for them. `flex-basis` is what decides: two
@@ -205,8 +180,6 @@ a { color: inherit; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
 </style>
-<h1 id="title"><a class="link-mark" href="#title" aria-label="Link to this title"></a>IBX Automation</h1>
-<p class="standfirst" id="short"><a class="link-mark" href="#short" aria-label="Link to this standfirst"></a></p>
 <script>
 (() => {
   const GAP = 8;
@@ -265,11 +238,9 @@ a { color: inherit; }
 <li>no TITLE-styled paragraph and no <code>Title:</code> header field, so the document name &#x27;IBX Automation&#x27; is being used as the headline; style the headline as Title in the doc to fix this</li>
 <li>unfinished text in the document: <code>But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl</code></li>
 <li>unfinished text in the document: <code>TODO didn’t finish</code></li>
-<li>no <code>URL:</code> in the header, so this is published at /ibx-automation, which is a guess; add the line to the document</li>
 <li>3 suggestions still open on this tab; the build publishes the document without them, as it reads today</li>
 <li>1 comment thread still open on this tab</li>
 <li>the <code>Header</code> section has no <code>Publish Due Date:</code> line</li>
-<li>the <code>Header</code> section has no <code>URL:</code> line</li>
 <li>the <code>Header</code> section has no <code>Short:</code> line</li>
 <li>the <code>Header</code> section has no <code>SEO Description:</code> line</li></ul></div>
 <nav class="toc" id="table-of-contents" aria-label="Table of contents">
