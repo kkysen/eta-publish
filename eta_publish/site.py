@@ -84,16 +84,44 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
         url = str(entry.get("url", "")).strip()
         if not url:
             raise ValueError(f"{path}: a [[report]] entry has no `url`")
-        reports.append(
-            Report(
-                url=url,
-                name=str(entry.get("name", "")).strip(),
-                tab=str(entry.get("tab", "")).strip(),
-            )
+        report = Report(
+            url=url,
+            name=str(entry.get("name", "")).strip(),
+            tab=str(entry.get("tab", "")).strip(),
         )
+        for blank in blanks(entry, report):
+            print(f"warning: {path}: {blank}", file=sys.stderr)
+        reports.append(report)
     if not reports:
         raise ValueError(f"{path}: no [[report]] entries")
     return reports
+
+
+def blanks(entry: dict[str, object], report: Report) -> list[str]:
+    """Fields of an entry that are written down and left empty.
+
+    Omitting `name` is how a one-line entry is written, and `disagreements`
+    checks a field only when the entry fills it in, so both stay silent.
+    Writing `name = ""` is not that: it is a placeholder somebody meant
+    to come back to, and nothing else in a build would ever mention it again.
+
+    A `?tab=` id with no `tab` beside it is the one case worth warning about
+    even when the field was left out entirely.
+    The id is opaque, so nothing about the URL says which draft it points at,
+    and publishing last year's draft is the mistake the field exists to catch.
+
+    Warnings rather than errors, and on stderr rather than on the document:
+    a blank line here is not a reason to publish no site at all,
+    and the index page's warning count is what the writers have to fix,
+    which a wrong `reports.toml` is not.
+    """
+    said = []
+    for field_name in ("name", "tab"):
+        if field_name in entry and not getattr(report, field_name):
+            said.append(f"{report.url}: `{field_name}` is written down and left empty")
+    if "tab=" in report.url and not report.tab and "tab" not in entry:
+        said.append(f"{report.url}: the URL picks a tab, but no `tab` says which draft that is")
+    return said
 
 
 def reports_from(ref: str) -> list[Report]:
