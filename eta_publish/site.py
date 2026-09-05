@@ -22,6 +22,7 @@ import json
 import sys
 import tomllib
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
@@ -267,39 +268,69 @@ def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
     return str(previous)
 
 
+MAX_AT_ONCE = 8
+"""How many reports to build at once.
+
+A build is almost entirely waiting on Google, so these overlap well,
+and a list of four takes about as long as its slowest document
+rather than as long as all four.
+A ceiling rather than one thread a report, because the calls are rate limited
+at the other end and thirty asking at once is a way to be told to wait.
+"""
+
+
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
     """Build every report, keeping going when one of them cannot be built.
 
     A document that cannot be fetched says nothing about the next one,
     and a site missing one report beats no site at all.
+
+    Several at a time, because nearly all of a build is waiting for a reply
+    and one report's wait is not another's.
+    Each carries its own HTTP client the whole way down, which is not tidiness
+    but a requirement: the client under the Google libraries is `httplib2`,
+    and one shared across threads takes the interpreter down in the allocator
+    rather than raising anything. Every call here builds its own.
+
+    Reported in the order the list gives rather than the order they finish.
+    A build of four reports is read as a list of four reports,
+    and which one Google answered first is not something to sort by.
+    Waiting on each in turn also means the first one's warnings are printed
+    while the rest are still running.
     """
     options = options or BuildOptions()
     # Always, not only offline: a fetch reuses one too, when Drive says
     # the document behind it has not been edited since it was written.
     saved = saved_responses(outdir)
     site = Site()
-    for report in reports:
-        label = report.name or report.url
-        print(f"building {label}", file=sys.stderr)
-        try:
-            previous = saved_for(report, saved)
-            doc, path = build_one(
-                source(report, previous, options),
-                outdir,
-                options,
-                verify=verifier(report),
-                cached=previous / DOC_JSON if previous is not None else None,
-            )
-        except Exception as e:  # noqa: BLE001
-            # Broad on purpose: a fetch, parse, disagreement, or disk failure
-            # is the same decision here,
-            # which is to keep going and say which report did not make it.
-            print(f"failed: {label}: {e}", file=sys.stderr)
-            site.failed.append(Failed(report=report, error=str(e)))
-            continue
-        for warning in doc.warnings:
-            print(f"  warning: {warning}", file=sys.stderr)
-        site.built.append(Built(report=report, doc=doc, path=path))
+
+    def build(report: Report) -> tuple[Document, str]:
+        previous = saved_for(report, saved)
+        return build_one(
+            source(report, previous, options),
+            outdir,
+            options,
+            verify=verifier(report),
+            cached=previous / DOC_JSON if previous is not None else None,
+        )
+
+    with ThreadPoolExecutor(max_workers=max(1, min(len(reports), MAX_AT_ONCE))) as pool:
+        started = [(report, pool.submit(build, report)) for report in reports]
+        for report, building in started:
+            label = report.name or report.url
+            try:
+                doc, path = building.result()
+            except Exception as e:  # noqa: BLE001
+                # Broad on purpose: a fetch, parse, disagreement, or disk failure
+                # is the same decision here,
+                # which is to keep going and say which report did not make it.
+                print(f"failed: {label}: {e}", file=sys.stderr)
+                site.failed.append(Failed(report=report, error=str(e)))
+                continue
+            print(f"built {label}", file=sys.stderr)
+            for warning in doc.warnings:
+                print(f"  warning: {warning}", file=sys.stderr)
+            site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
 

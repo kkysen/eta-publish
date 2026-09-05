@@ -32,6 +32,6 @@ def _forget_credentials() -> None:
     Two tests that set up different credentials would otherwise get whichever
     ran first, in whichever order the suite happened to run them.
     """
-    from eta_publish.fetch import _credentials
+    from eta_publish.fetch import _sign_in
 
-    _credentials.cache_clear()
+    _sign_in.cache_clear()

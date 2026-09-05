@@ -28,6 +28,7 @@ import sys
 from collections.abc import Iterator
 from functools import cache
 from pathlib import Path
+from threading import Lock
 from typing import TYPE_CHECKING
 from urllib.parse import parse_qs, urlparse
 
@@ -194,11 +195,28 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 # ---- api -----------------------------------------------------------
 
 
-@cache
-def _credentials() -> Credentials:
-    """The credentials to call the API with, interactive or not.
+_SIGNING_IN = Lock()
+"""Held while the answer is being worked out, and not while it is being used.
 
-    Worked out once per process rather than once per call.
+Reports are built in parallel, and the cache alone does not stop two threads
+that both miss it from both running the flow: on a machine with no saved token
+that is two browser windows asking for the same consent, and the second
+overwrites what the first wrote. One at a time through here, and the second
+finds it cached.
+"""
+
+
+def _credentials() -> Credentials:
+    """The credentials to call the API with, worked out once per process."""
+    with _SIGNING_IN:
+        return _sign_in()
+
+
+@cache
+def _sign_in() -> Credentials:
+    """Whatever this machine has to offer, interactive or not.
+
+    Cached rather than worked out per call.
     A build of two reports asks six times, and each answer read the token
     file, checked its scopes, and refreshed it if it had expired,
     which is half a second of a thirteen second build spent
