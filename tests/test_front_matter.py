@@ -294,3 +294,63 @@ def test_a_title_styled_paragraph_wins_and_says_nothing() -> None:
     doc = parse(document)
     assert doc.title == "The Real Headline"
     assert not any("Title" in w for w in doc.warnings)
+
+
+def test_a_field_written_twice_says_which_one_won() -> None:
+    """A corrected line pasted below the original and a duplicate nobody meant
+    look identical, and neither is visible in what gets published."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Short: The first answer."),
+                para("Short: The second answer."),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta["short"] == "The second answer."
+    assert any(
+        "more than one `Short:` line" in w
+        and "'The second answer.'" in w
+        and "'The first answer.'" in w
+        for w in doc.warnings
+    )
+
+
+def test_a_note_in_the_key_does_not_hide_a_repeat() -> None:
+    """`SEO Description (300 char limit):` and `SEO Description:` are one field,
+    which is the whole reason the note is stripped before the lookup."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("SEO Description (300 char limit): First."),
+                para("SEO Description: Second."),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta["seo description"] == "Second."
+    assert any("more than one `SEO Description:` line" in w for w in doc.warnings)
+
+
+def test_distinct_fields_are_not_a_repeat() -> None:
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Draft Due Date: Jul 17, 2026"),
+                para("Press Due Date: Jul 21, 2026"),
+                para("Publish Due Date: Aug 19, 2026"),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert not any("more than one" in w for w in doc.warnings)

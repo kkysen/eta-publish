@@ -740,8 +740,23 @@ class Parser:
             if match is None:
                 break  # prose: the header section is over
 
-            key = KEY_NOTE_RE.sub("", match.group("key").strip()).lower()
-            self.doc.meta[key] = match.group("value").strip()
+            written = KEY_NOTE_RE.sub("", match.group("key").strip())
+            key = written.lower()
+            value = match.group("value").strip()
+            if key in self.doc.meta:
+                # The later line wins, as it always has, and now says so.
+                # Silently keeping one of two answers is the failure here:
+                # a corrected line pasted below the original and a duplicate
+                # nobody meant look identical, and neither is visible in
+                # what gets published.
+                #
+                # Matched on the key as it is read, so a `Short:` and a
+                # `Short (60 char limit):` count as the two they are.
+                self.doc.warn(
+                    f"the `Header` section has more than one `{written}:` line; "
+                    f"using {value!r} and ignoring {self.doc.meta[key]!r}"
+                )
+            self.doc.meta[key] = value
             end = i + 1
 
         if not self.doc.meta:
