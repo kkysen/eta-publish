@@ -150,6 +150,9 @@ uv run eta-publish <google-doc-url> -o out
 
 # Or a different list.
 uv run eta-publish drafts.toml -o preview
+
+# Add a document to the list, named as the document names itself.
+uv run eta-publish add <google-doc-url>
 ```
 
 The argument is a document or a list of them, told apart without opening either:
@@ -217,13 +220,20 @@ The site's front page lists them,
 with each report's date, byline, and warning count,
 and names any report that failed to build.
 
-Adding the next report is an entry in `reports.toml` and nothing else:
+Adding the next report is an entry in `reports.toml` and nothing else,
+which `eta-publish add <url>` writes:
 
 ```toml
 [[report]]
 name = "Next Report"
+tab = "Draft 2"
 url = "https://docs.google.com/document/d/<id>/edit?tab=<tab>"
 ```
+
+`name` and `tab` are what the document and its tab are called in Drive,
+which is why the command writes them rather than asking anyone to type them:
+a `?tab=` id is opaque, so nothing but the document itself
+says which of its drafts an entry points at.
 
 Nothing else in the repository or the workflow names a document,
 and one report failing to build does not take the others with it;

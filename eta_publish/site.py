@@ -17,6 +17,7 @@ One failing report does not stop the others, for the same reason.
 The exit status still reports it.
 """
 
+import json
 import sys
 import tomllib
 from dataclasses import dataclass, field
@@ -122,6 +123,59 @@ def blanks(entry: dict[str, object], report: Report) -> list[str]:
     if "tab=" in report.url and not report.tab and "tab" not in entry:
         said.append(f"{report.url}: the URL picks a tab, but no `tab` says which draft that is")
     return said
+
+
+def entry_text(url: str, name: str, tab: str) -> str:
+    """One `[[report]]` block, as `reports.toml` writes them.
+
+    Built as text rather than dumped from a table
+    because the file is mostly comments:
+    "this one is the 2025 rewrite, not the original" is the reason it is TOML
+    at all, and a round trip through `tomllib` would drop every line of it.
+
+    The values go through `json.dumps`, which is a TOML basic string
+    for anything a Drive title can hold: the same quoting, the same escapes.
+    A title with a quotation mark in it is a title, not a syntax error.
+    """
+    return (
+        "\n[[report]]\n"
+        f"name = {json.dumps(name)}\n"
+        f"tab = {json.dumps(tab)}\n"
+        f"url = {json.dumps(url)}\n"
+    )
+
+
+def add_report(url: str, path: Path = REPORTS) -> Report:
+    """Append the document at `url` to the report list, named as it names itself.
+
+    `name` and `tab` are the document's own `title` and `tabTitle`,
+    which is the only reason this command exists:
+    they are required and required to be right,
+    and a person copying two titles out of Drive by hand
+    is the step that gets them wrong.
+    Fetched rather than guessed from the URL,
+    which carries an opaque `?tab=` id and nothing else.
+
+    An entry whose `url` is already listed is refused rather than duplicated:
+    two entries for one document publish it twice to the same path,
+    and the second build silently overwrites the first.
+    """
+    from .build import load
+
+    if any(report.url == url for report in load_reports(path)):
+        raise ValueError(f"{path}: already lists {url}")
+
+    document = load(url)
+    name = str(document.get("title", ""))
+    tab = str(document.get("tabTitle", ""))
+    for field_name, value in (("name", name), ("tab", tab)):
+        if not value:
+            # Nothing to write down, and writing an empty one down is what
+            # `load_reports` refuses. Better to say the document has no answer.
+            raise ValueError(f"{url}: the document says no `{field_name}`")
+
+    path.write_text(path.read_text().rstrip("\n") + "\n" + entry_text(url, name, tab))
+    return Report(url=url, name=name, tab=tab)
 
 
 def reports_from(ref: str) -> list[Report]:
