@@ -255,8 +255,10 @@ def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
     Offline is a rebuild of what is already committed,
     which is the whole of what a build does apart from asking Google for the text.
     A report with no saved response cannot be built that way,
-    and saying so is better than fetching one document
-    in a run that was asked not to fetch anything.
+    and neither can one saved with its suggestions resolved the other way.
+    Saying so is better than fetching one document
+    in a run that was asked not to fetch anything,
+    and better than publishing a document nobody asked for.
     """
     if not options.offline:
         return report.url
@@ -264,6 +266,16 @@ def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
         raise ValueError(
             f"nothing saved under the output directory for {report.url}; "
             "build it once with a fetch before building it offline"
+        )
+    # A fetch would notice this and go and get the other one.
+    # Offline cannot, so it says so rather than publishing the document
+    # read the way the last build happened to read it.
+    saved_as = str(json.loads((previous / DOC_JSON).read_text()).get("suggestions", ""))
+    if saved_as != options.suggestions:
+        raise ValueError(
+            f"what is saved for {report.url} has its suggestions {saved_as or 'unrecorded'}, "
+            f"and this build wants them {options.suggestions}; "
+            "reading the document the other way needs a fetch"
         )
     return str(previous)
 

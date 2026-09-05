@@ -233,7 +233,15 @@ def test_offline_builds_from_the_saved_response(tmp_path: Path) -> None:
     written = out / "reports" / "digging-out-deep-hole-sas-west"
     written.mkdir(parents=True)
     (written / "doc.json").write_text(
-        json.dumps({**FIXTURE, "documentId": "abc", "tabId": "t.1", "tabTitle": "Draft 2"})
+        json.dumps(
+            {
+                **FIXTURE,
+                "documentId": "abc",
+                "tabId": "t.1",
+                "tabTitle": "Draft 2",
+                "suggestions": "rejected",
+            }
+        )
     )
     report = Report(
         url="https://docs.google.com/document/d/abc/edit?tab=t.1",
@@ -249,6 +257,24 @@ def test_offline_builds_from_the_saved_response(tmp_path: Path) -> None:
     site = build_site([report], out, BuildOptions(images=False, offline=True, comments=False))
     monkeypatch.undo()
     assert [b.path for b in site.built] == ["reports/digging-out-deep-hole-sas-west"]
+
+
+def test_offline_refuses_a_response_read_the_other_way(tmp_path: Path) -> None:
+    """A fetch would go and get the other one. Offline cannot, so it says so
+    rather than publishing the document the last build happened to read."""
+    out = tmp_path / "site"
+    written = out / "reports" / "digging-out-deep-hole-sas-west"
+    written.mkdir(parents=True)
+    (written / "doc.json").write_text(
+        json.dumps({**FIXTURE, "documentId": "abc", "tabId": "t.1", "suggestions": "rejected"})
+    )
+    site = build_site(
+        [Report(url="https://docs.google.com/document/d/abc/edit?tab=t.1", name="A", tab="B")],
+        out,
+        BuildOptions(offline=True, suggestions="accepted"),
+    )
+    assert not site.built
+    assert "needs a fetch" in site.failed[0].error
 
 
 def test_offline_says_which_report_it_has_nothing_saved_for(tmp_path: Path) -> None:
@@ -271,11 +297,12 @@ def test_reports_are_built_at_once_and_reported_in_order(
 
     import eta_publish.site as site_module
 
+    SLOW = 0.3
     order = ["slow", "quick"]
 
     def build(ref: str, *args: object, **kwargs: object) -> tuple[Document, str]:
         if ref.endswith("slow"):
-            time.sleep(0.3)
+            time.sleep(SLOW)
         return doc, f"reports/{ref.rsplit('/', 1)[-1]}"
 
     monkeypatch.setattr(site_module, "build_one", build)
@@ -286,9 +313,11 @@ def test_reports_are_built_at_once_and_reported_in_order(
     elapsed = time.perf_counter() - started
 
     assert [b.path for b in site.built] == ["reports/slow", "reports/quick"]
-    # The quick one did not wait its turn behind the slow one:
-    # sequentially this is 0.3s plus the quick one, and one sleep is the floor.
-    assert elapsed < 0.6
+    # The quick one did not wait its turn behind the slow one.
+    # Two sleeps is what sequential costs, one is the floor, and the bound is
+    # nearer the floor than the ceiling without being a stopwatch:
+    # a loaded runner may be slow, but it cannot make two waits into one.
+    assert elapsed < 2 * SLOW
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:

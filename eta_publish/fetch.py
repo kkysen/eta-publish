@@ -461,12 +461,20 @@ def modified_time(doc_id: str) -> str | None:
         return None
 
 
-def unchanged(doc_id: str, cached: Path) -> JsonObject | None:
-    """The saved response, if Drive says the document has not been edited since.
+def unchanged(doc_id: str, cached: Path, suggestions: str) -> JsonObject | None:
+    """The saved response, if it is of this document as this build wants it.
 
-    `None` whenever that cannot be established,
+    Two questions, and a no to either is a fetch.
+    Whether the document has been edited since, which Drive answers;
+    and whether it was saved with the suggestions resolved the way
+    this run resolves them, which the response itself says.
+    A response saved with them rejected is a different document
+    from the same file with them accepted, and no edit has to happen
+    for the two to differ, so `modifiedTime` cannot see the difference.
+
+    `None` whenever neither can be established,
     which is a saved response that is missing, unreadable, or was written
-    before a build recorded what it was current as of.
+    before a build recorded what it is of.
     Every one of those is a reason to fetch rather than a reason to guess.
     """
     try:
@@ -476,7 +484,7 @@ def unchanged(doc_id: str, cached: Path) -> JsonObject | None:
     if not isinstance(document, dict):
         return None
     was = document.get("modifiedTime")
-    if not was:
+    if not was or document.get("suggestions") != suggestions:
         return None
     return document if was == modified_time(doc_id) else None
 
@@ -490,7 +498,7 @@ def fetch(
 ) -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     wanted = tab or url_tab
-    document = unchanged(doc_id, cached) if cached is not None else None
+    document = unchanged(doc_id, cached, suggestions) if cached is not None else None
     reused = document is not None
     if document is None:
         document = select_tab(fetch_document(doc_id, suggestions), wanted)
@@ -498,6 +506,9 @@ def fetch(
         # so the next build has something to compare against.
         # After the fetch, so a document edited while it was in flight
         # reads as changed next time rather than as already current.
+        # What this response is of, so the next build can tell whether it is
+        # the one it wants: which document, when, and read which way.
+        document["suggestions"] = suggestions
         current = modified_time(doc_id)
         if current:
             document["modifiedTime"] = current
