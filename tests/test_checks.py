@@ -168,3 +168,26 @@ def test_an_image_a_human_named_img_is_not_unnamed(doc: Document) -> None:
     doc.blocks = [named]
     check(doc)
     assert doc.warnings == []
+
+
+def test_an_address_beside_a_name_is_not_published(doc: Document) -> None:
+    """A byline is names. Docs writes the address when it cannot resolve
+    a person chip to a display name, and the name is typed beside it."""
+    doc.meta["public contributors"] = "Alon Levy (alon@example.org), Khyber Sen"
+    assert doc.contributors == ["Alon Levy", "Khyber Sen"]
+
+
+def test_a_missing_comma_after_an_address_is_warned_about(doc: Document) -> None:
+    """It reads as one contributor, sorted under a surname belonging to neither."""
+    doc.meta["public contributors"] = "Franklin Tang (ft@example.org) Madison Feinberg, Khyber Sen"
+    check(doc)
+    assert any("a comma is missing after the address" in w for w in doc.warnings)
+
+
+def test_names_without_addresses_are_left_alone(doc: Document) -> None:
+    """Two bare names run together are two words,
+    and nothing here can tell those from a double-barrelled surname."""
+    doc.meta["public contributors"] = "Ada Lovelace, Grace Hopper"
+    check(doc)
+    assert doc.contributors == ["Grace Hopper", "Ada Lovelace"]
+    assert not any("comma is missing" in w for w in doc.warnings)

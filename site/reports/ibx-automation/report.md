@@ -10,6 +10,7 @@
 - unfinished text in the document: `TODO didn’t finish`
 - 3 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 1 comment thread still open on this tab
+- the `Public Contributors:` line reads 'Franklin Tang (zt2339@nyu.edu) Madison Feinberg' as one contributor; a comma is missing after the address
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
@@ -273,6 +274,7 @@ seating: longitudinal
 
 We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:
 
-- Alon Levy (al2495@gmail.com)
-- Franklin Tang (zt2339@nyu.edu) Madison Feinberg (Madison Feinberg) Robert Hale (Robert Hale)
-- Khyber Sen (Khyber Sen)
+- Franklin Tang Madison Feinberg
+- Robert Hale
+- Alon Levy
+- Khyber Sen
