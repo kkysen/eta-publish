@@ -1,26 +1,23 @@
 """`eta-publish`: Google Docs in, a publishable site out.
 
-One document or the whole list of them, the same way.
-The single argument is either a document
-(a Docs URL, an id, or a saved response)
-or a `.toml` list of them, defaulting to `reports.toml`.
-Each report lands under the path its own front matter gives it,
-with an index listing them.
+Three commands, because there are three things to do:
 
-Both defaults name the committed thing,
-so `eta-publish` with no arguments rebuilds the site as it ships.
+    eta-publish all             every report in `reports.toml`, into `site/`
+    eta-publish one <doc>       one document, wherever you point it
+    eta-publish add <url>       write that document's entry into the list
 
-`eta-publish add <url>` writes the next entry of that list,
-reading the two names it has to carry off the document itself.
+`all` is what the workflow runs and what the committed site is built from.
+`one` is for a document before it is on the list,
+and takes a Docs URL, a bare id, or a saved Docs response.
 
-One argument rather than many:
-building several documents at once is what a list is for,
-and a list is a file that can be committed, reviewed, and commented
-rather than a shell line that is right once.
+Which of the two a reference is used to be worked out from how it was spelled,
+a `.toml` being a list and anything else a document.
+The command name says it instead, which is shorter to explain
+and cannot be surprised by a document whose URL ends in `.toml`.
 
-There is no separate single-document mode.
-A publish of one report is a publish of a list with one entry,
-which keeps the common case and the real case on the same code.
+Both build the same way and write the same index,
+so the common case and the real case stay on the same code.
+Each report lands under the path its own front matter gives it.
 """
 
 import sys
@@ -31,7 +28,7 @@ from typing import Annotated
 from typer import Argument, BadParameter, Exit, Option, Typer
 
 from .build import BuildOptions
-from .site import REPORTS, add_report, build_site, index_page, reports_from
+from .site import REPORTS, Report, Site, add_report, build_site, index_page, load_reports
 
 
 class Suggestions(StrEnum):
@@ -44,41 +41,91 @@ class Suggestions(StrEnum):
     ACCEPTED = "accepted"
 
 
-app = Typer(context_settings={"help_option_names": ["-h", "--help"]})
+app = Typer(context_settings={"help_option_names": ["-h", "--help"]}, help=__doc__)
+
+Outdir = Annotated[
+    Path,
+    Option("-o", "--outdir", help="where the site is written; `site/` is published"),
+]
+Suggested = Annotated[
+    Suggestions,
+    Option("--suggestions", help="how to resolve open suggestions; rejected is what the doc says"),
+]
+Split = Annotated[
+    bool,
+    Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
+]
+Images = Annotated[
+    bool,
+    Option(help="download the images; the output references them either way"),
+]
+"""The options `all` and `one` share, spelled once.
+
+Two commands that build the same way have to offer the same switches,
+and a `--split` that worked on one of them and not the other
+would be a difference nothing in the code meant to make.
+"""
 
 
-@app.command(help=__doc__)
-def publish(
+@app.command(name="all")
+def build_all(
+    reports: Annotated[
+        Path,
+        Argument(metavar="LIST", help="a `.toml` list of reports"),
+    ] = REPORTS,
+    outdir: Outdir = Path("site"),
+    suggestions: Suggested = Suggestions.REJECTED,
+    split: Split = False,
+    images: Images = True,
+) -> None:
+    """Build every report in a list, into a site with an index.
+
+    Both defaults name the committed thing,
+    so `eta-publish all` with no arguments rebuilds the site as it ships.
+    """
+    try:
+        listed = load_reports(reports)
+    except (OSError, ValueError) as e:
+        # Typer's own wording for a bad argument, because that is what it is.
+        raise BadParameter(str(e), param_hint="LIST") from e
+    publish(listed, outdir, suggestions, split, images)
+
+
+@app.command(name="one")
+def build_one_report(
     doc: Annotated[
         str,
         Argument(
             metavar="DOC",
-            help="a Google Doc URL (including its `?tab=` id), an id, saved "
-            "Docs API JSON, or a `.toml` list of reports",
+            help="a Google Doc URL (including its `?tab=` id), an id, or saved Docs API JSON",
         ),
-    ] = "reports.toml",
-    outdir: Annotated[
-        Path,
-        Option("-o", "--outdir", help="where the site is written; `site/` is published"),
-    ] = Path("site"),
-    suggestions: Annotated[
-        Suggestions,
-        Option(help="how to resolve open suggestions; rejected is what the doc says now"),
-    ] = Suggestions.REJECTED,
-    split: Annotated[
-        bool,
-        Option(help="write the HTML as numbered pieces cut at h2, for oversized reports"),
-    ] = False,
-    images: Annotated[
-        bool, Option(help="download the images; the output references them either way")
-    ] = True,
+    ],
+    outdir: Outdir = Path("site"),
+    suggestions: Suggested = Suggestions.REJECTED,
+    split: Split = False,
+    images: Images = True,
 ) -> None:
-    try:
-        reports = reports_from(doc)
-    except (OSError, ValueError) as e:
-        # Typer's own wording for a bad argument, because that is what it is.
-        raise BadParameter(str(e), param_hint="DOC") from e
+    """Build one document, before it is on the list or instead of it.
 
+    The report has no entry, so there is nothing saying what it should be called
+    and nothing to hold it up against: what the document says, it publishes as.
+    """
+    publish([Report(url=doc)], outdir, suggestions, split, images)
+
+
+def publish(
+    reports: list[Report],
+    outdir: Path,
+    suggestions: Suggestions,
+    split: bool,
+    images: bool,
+) -> None:
+    """Build these reports and write the index over them.
+
+    One document and a whole list end here alike.
+    A publish of one report is a publish of a list with one entry,
+    down to the index page, which is the page that says what failed.
+    """
     site = build_site(
         reports,
         outdir,
@@ -88,6 +135,10 @@ def publish(
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "index.html").write_text(index_page(site))
 
+    report_outcome(site)
+
+
+def report_outcome(site: Site) -> None:
     for built in site.built:
         print(f"  {built.path}  {built.doc.title}")
     for failure in site.failed:
@@ -98,10 +149,7 @@ def publish(
         raise Exit(code=1)
 
 
-add_app = Typer(context_settings={"help_option_names": ["-h", "--help"]})
-
-
-@add_app.command()
+@app.command()
 def add(
     url: Annotated[
         str,
@@ -114,16 +162,15 @@ def add(
 ) -> None:
     """Append a document to `reports.toml`, named as the document names itself.
 
-    `name` and `tab` are required and required to be right,
-    and copying two titles out of Drive by hand is the step that gets them wrong,
-    so they are read off the document rather than typed.
+    `name` and `tab` have to be right, and copying two titles out of Drive by hand
+    is the step that gets them wrong, so they are read off the document rather than typed.
     """
     try:
         added = add_report(url, reports)
     except (OSError, ValueError, LookupError, RuntimeError) as e:
         # `LookupError` and `RuntimeError` are `TabNotFound` and `FetchFailed`,
         # which only this command can raise:
-        # a publish resolves its argument without fetching anything,
+        # neither `all` nor `one` fetches anything to resolve its argument,
         # and a fetch that fails inside `build_site` is one report's failure there.
         # A URL pasted without its `?tab=` id is the mistake this command exists
         # to survive, and `TabNotFound` carries the list of tabs to pick from,
@@ -133,17 +180,6 @@ def add(
 
 
 def main() -> None:
-    """`add` is the one subcommand; anything else is a publish.
-
-    Not two commands on one Typer app,
-    which would make every publish say `publish` first:
-    `eta-publish <url>` is what the README documents
-    and `eta-publish` alone is what the workflow runs,
-    and neither is worth breaking to give `add` a tidier home.
-    """
-    if sys.argv[1:2] == ["add"]:
-        add_app(sys.argv[2:], prog_name="eta-publish add")
-        return
     app()
 
 

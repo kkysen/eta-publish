@@ -26,7 +26,6 @@ from eta_publish.site import (
     index_page,
     load_reports,
     report_path,
-    reports_from,
 )
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -136,7 +135,7 @@ def test_add_says_which_tabs_there_are_when_the_url_names_none(
     from typer.testing import CliRunner
 
     from eta_publish import build
-    from eta_publish.__main__ import add_app
+    from eta_publish.__main__ import app
     from eta_publish.fetch import TabNotFound
 
     def no_tab(ref: str, suggestions: str = "rejected") -> object:
@@ -146,7 +145,7 @@ def test_add_says_which_tabs_there_are_when_the_url_names_none(
     path = tmp_path / "reports.toml"
     path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
 
-    result = CliRunner().invoke(add_app, ["https://example.invalid/d/x", "-r", str(path)])
+    result = CliRunner().invoke(app, ["add", "https://example.invalid/d/x", "-r", str(path)])
     assert result.exit_code != 0
     assert "t.a  Live version" in result.output
     assert len(load_reports(path)) == 1
@@ -217,29 +216,6 @@ def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
     assert "Next: not found" in page
 
 
-def test_a_url_is_a_document_even_when_it_ends_in_toml() -> None:
-    """Only a local path can name a list.
-    A URL is a document, whatever it is spelled like,
-    so a Drive link can never be mistaken for a roster."""
-    ref = "https://docs.google.com/document/d/abc/edit?tab=t.1"
-    assert reports_from(ref) == [Report(url=ref)]
-    assert reports_from("https://example.invalid/reports.toml") == [
-        Report(url="https://example.invalid/reports.toml")
-    ]
-
-
-def test_a_toml_path_is_a_list(tmp_path: Path) -> None:
-    path = tmp_path / "more.toml"
-    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "https://example.invalid/a"\n')
-    assert reports_from(str(path)) == [Report(url="https://example.invalid/a", name="A", tab="B")]
-
-
-def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
-    saved = tmp_path / "doc.json"
-    saved.write_text("{}")
-    assert reports_from(str(saved)) == [Report(url=str(saved))]
-
-
 def test_only_one_document_or_list_at_a_time() -> None:
     """Building several at once is what a list is for,
     and a list is a file that can be reviewed
@@ -248,8 +224,18 @@ def test_only_one_document_or_list_at_a_time() -> None:
 
     from eta_publish.__main__ import app
 
-    result = CliRunner().invoke(app, ["one.toml", "two.toml"])
-    assert result.exit_code != 0
+    assert CliRunner().invoke(app, ["all", "one.toml", "two.toml"]).exit_code != 0
+    assert CliRunner().invoke(app, ["one", "a.json", "b.json"]).exit_code != 0
+
+
+def test_one_needs_a_document_to_build() -> None:
+    """`all` has a list to fall back on and `one` has nothing:
+    a document is the whole of what it was asked."""
+    from typer.testing import CliRunner
+
+    from eta_publish.__main__ import app
+
+    assert CliRunner().invoke(app, ["one"]).exit_code != 0
 
 
 def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
@@ -260,7 +246,7 @@ def test_a_missing_list_is_reported_as_a_bad_argument(tmp_path: Path) -> None:
     from eta_publish.__main__ import app
 
     absent = tmp_path / "absent.toml"
-    result = CliRunner().invoke(app, [str(absent)])
+    result = CliRunner().invoke(app, ["all", str(absent)])
     assert result.exit_code != 0
     assert str(absent) in result.output
 
@@ -274,7 +260,7 @@ def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
     from eta_publish.__main__ import app
 
     result = CliRunner().invoke(
-        app, [str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images"]
+        app, ["one", str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images"]
     )
     assert result.exit_code == 0, result.output
     built = tmp_path / "site" / "reports" / "digging-out-deep-hole-sas-west"
@@ -288,7 +274,7 @@ def test_a_directory_without_a_saved_response_says_so(tmp_path: Path) -> None:
     from eta_publish.__main__ import app
 
     (tmp_path / "empty").mkdir()
-    result = CliRunner().invoke(app, [str(tmp_path / "empty"), "-o", str(tmp_path / "site")])
+    result = CliRunner().invoke(app, ["one", str(tmp_path / "empty"), "-o", str(tmp_path / "site")])
     assert result.exit_code != 0
     assert "doc.json" in result.output
 

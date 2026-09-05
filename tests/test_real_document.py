@@ -4,7 +4,7 @@
 at the top level because it is the site this project publishes
 rather than a test fixture:
 
-    uv run eta-publish
+    uv run eta-publish all
 
 The report lands under the path its own front matter names,
 `reports/digging-out-deep-hole-sas-west/`, next to the index listing it.
