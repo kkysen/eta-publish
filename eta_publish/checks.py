@@ -10,7 +10,7 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import Document, Figure, plain_text
+from .nodes import EMAILED, Document, Figure, plain_text
 from .parse import TODO_RE
 
 REQUIRED_FIELDS = (
@@ -54,6 +54,7 @@ def check(doc: Document) -> None:
     _check_figures(doc)
     _check_named(doc)
     _check_review(doc)
+    _check_contributors(doc)
 
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
@@ -98,6 +99,28 @@ def _titled(field: str) -> str:
     return " ".join(
         word.upper() if word in ACRONYMS else word.capitalize() for word in field.split()
     )
+
+
+def _check_contributors(doc: Document) -> None:
+    """Two contributors with no comma between them, which reads as one person.
+
+    Only detectable where an address was written beside a name,
+    because the address is what says the name before it has ended:
+    text after the closing bracket and before the next comma
+    is somebody else, run into the person in front of them.
+    Two bare names run together are two words, and nothing here can tell
+    those from a double-barrelled surname.
+
+    Worth a line because the byline is where it shows,
+    sorted under a surname that belongs to neither of them.
+    """
+    for entry in doc.meta.get("public contributors", "").split(","):
+        emailed = EMAILED.search(entry)
+        if emailed is not None and entry[emailed.end() :].strip():
+            doc.warn(
+                f"the `Public Contributors:` line reads {entry.strip()!r} as one "
+                "contributor; a comma is missing after the address"
+            )
 
 
 def _check_figures(doc: Document) -> None:
