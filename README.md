@@ -178,6 +178,10 @@ the document and two more for its suggestions, and reuses the response saved
 beside the last build when the answer has not moved. Editing is what moves it,
 and proposing or resolving a suggestion is editing, so both are safe to reuse.
 Commenting is not, so comments are counted every time.
+A saved response also records how it read the document's suggestions
+and which shape a build wrote it in, and a build reuses only what it would
+have written itself: changing either is a change Drive cannot see,
+since the document did not move, the code did.
 
 Beyond that, a rebuild that has to be quicker still has two ways to be:
 `--no-comments` skips the text export, which costs more than fetching the
