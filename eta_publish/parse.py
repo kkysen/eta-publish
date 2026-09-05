@@ -7,7 +7,7 @@ Several pieces of ETA house style are recognized here rather than in the emitter
 because they are facts about how the docs are written:
 
 - a leading `Header` section carrying `Key: value` front matter
-- the report headline living in the body as a TITLE-styled paragraph,
+- the report headline living in the body as a `Title`-styled paragraph,
   since the Drive filename is a working name (`SAS West Feasibility Response`)
   and not what gets published
 - a figure's `Source:` line between the image and its caption,
@@ -500,8 +500,8 @@ class Parser:
                 # Treating it as a heading yields an empty one
                 # whose anchor is a published URL, and buries the image inside it.
                 self.doc.warn(
-                    "an image is styled as a heading; treating it as a figure. "
-                    "Set that paragraph to normal text in the doc."
+                    "an image is styled as a `Heading`; treating it as a figure. "
+                    "Set that paragraph to `Normal text` in the doc."
                 )
                 style = "NORMAL_TEXT"
 
@@ -686,7 +686,7 @@ class Parser:
 
         Front matter is the run of `Key: value` paragraphs following the `Header` heading.
         It ends at the first paragraph that is not one:
-        a heading of any level, the TITLE-styled headline,
+        a heading of any level, the `Title`-styled headline,
         a paragraph holding an image, or ordinary prose.
 
         Not "until the next heading of the same or higher level".
@@ -770,7 +770,7 @@ class Parser:
         return None
 
     def title(self, content: list[JsonObject]) -> str:
-        """Prefer a TITLE-styled paragraph over the Drive filename.
+        """Prefer a `Title`-styled paragraph over the Drive filename.
 
         The filename is a working name:
         the SAS West report lives in a doc called `SAS West Feasibility Response`.
@@ -783,9 +783,9 @@ class Parser:
             return self.doc.meta["title"]
         filename = self.json.get("title", "")
         self.doc.warn(
-            "no TITLE-styled paragraph and no `Title:` header field, so the "
+            "no `Title`-styled paragraph and no `Title:` header field, so the "
             f"document name {filename!r} is being used as the headline; "
-            "style the headline as Title in the doc to fix this"
+            "style the headline as `Title` in the doc to fix this"
         )
         return filename
 
