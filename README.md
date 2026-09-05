@@ -234,6 +234,9 @@ url = "https://docs.google.com/document/d/<id>/edit?tab=<tab>"
 which is why the command writes them rather than asking anyone to type them:
 a `?tab=` id is opaque, so nothing but the document itself
 says which of its drafts an entry points at.
+A build holds both up against the document it fetched
+and refuses the report when they disagree,
+a blank one included: no document is called nothing.
 
 Nothing else in the repository or the workflow names a document,
 and one report failing to build does not take the others with it;
