@@ -232,7 +232,14 @@ def test_a_document_drive_says_is_unmoved_is_not_fetched_again(
 
     saved = tmp_path / "doc.json"
     saved.write_text(
-        json.dumps({"body": {}, "modifiedTime": "2026-09-01T01:10:14.243Z", "openSuggestions": 17})
+        json.dumps(
+            {
+                "body": {},
+                "modifiedTime": "2026-09-01T01:10:14.243Z",
+                "suggestions": "rejected",
+                "openSuggestions": 17,
+            }
+        )
     )
     monkeypatch.setattr(fetch, "_ambient_credentials", lambda: None)
 
@@ -252,20 +259,32 @@ def test_a_document_drive_says_is_unmoved_is_not_fetched_again(
     assert document["openComments"] == 4
 
 
+MATCHING = '{"modifiedTime": "now", "suggestions": "rejected"}'
+
+
 @pytest.mark.parametrize(
     ("saved_text", "current"),
     [
-        ('{"modifiedTime": "then"}', "now"),
-        ('{"body": {}}', "now"),
+        ('{"modifiedTime": "then", "suggestions": "rejected"}', "now"),
+        ('{"body": {}, "suggestions": "rejected"}', "now"),
+        ('{"modifiedTime": "now", "suggestions": "accepted"}', "now"),
+        ('{"modifiedTime": "now"}', "now"),
         ("{not json", "now"),
-        ('{"modifiedTime": "then"}', None),
+        ('{"modifiedTime": "then", "suggestions": "rejected"}', None),
     ],
-    ids=["edited since", "saved before this was recorded", "unreadable", "drive would not say"],
+    ids=[
+        "edited since",
+        "saved before the time was recorded",
+        "read the other way",
+        "saved before the mode was recorded",
+        "unreadable",
+        "drive would not say",
+    ],
 )
 def test_anything_short_of_a_match_is_a_reason_to_fetch(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, saved_text: str, current: str | None
 ) -> None:
-    """Not knowing whether a document changed is a reason to fetch it,
+    """Not knowing whether this is the document this run wants is a reason to fetch it,
     which is what this was trying to avoid and not something it may decide against."""
     import eta_publish.fetch as fetch
 
@@ -276,10 +295,24 @@ def test_anything_short_of_a_match_is_a_reason_to_fetch(
         return current
 
     monkeypatch.setattr(fetch, "modified_time", says)
-    assert fetch.unchanged("abc", saved) is None
+    assert fetch.unchanged("abc", saved, "rejected") is None
+
+
+def test_a_match_on_both_is_reused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The one case that does not fetch, beside the six that do."""
+    import eta_publish.fetch as fetch
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(MATCHING)
+
+    def now(doc_id: str) -> str:
+        return "now"
+
+    monkeypatch.setattr(fetch, "modified_time", now)
+    assert fetch.unchanged("abc", saved, "rejected") is not None
 
 
 def test_a_missing_saved_response_is_a_reason_to_fetch(tmp_path: Path) -> None:
     import eta_publish.fetch as fetch
 
-    assert fetch.unchanged("abc", tmp_path / "absent.json") is None
+    assert fetch.unchanged("abc", tmp_path / "absent.json", "rejected") is None
