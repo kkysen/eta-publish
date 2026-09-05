@@ -59,6 +59,10 @@ Images = Annotated[
     bool,
     Option(help="download the images; the output references them either way"),
 ]
+Comments = Annotated[
+    bool,
+    Option(help="ask how many comment threads are open; the slowest thing a build does"),
+]
 """The options `all` and `one` share, spelled once.
 
 Two commands that build the same way have to offer the same switches,
@@ -77,6 +81,7 @@ def build_all(
     suggestions: Suggested = Suggestions.REJECTED,
     split: Split = False,
     images: Images = True,
+    comments: Comments = True,
 ) -> None:
     """Build every report in a list, into a site with an index.
 
@@ -88,7 +93,7 @@ def build_all(
     except (OSError, ValueError) as e:
         # Typer's own wording for a bad argument, because that is what it is.
         raise BadParameter(str(e), param_hint="LIST") from e
-    publish(listed, outdir, suggestions, split, images)
+    publish(listed, outdir, suggestions, split, images, comments)
 
 
 @app.command(name="one")
@@ -104,13 +109,14 @@ def build_one_report(
     suggestions: Suggested = Suggestions.REJECTED,
     split: Split = False,
     images: Images = True,
+    comments: Comments = True,
 ) -> None:
     """Build one document, before it is on the list or instead of it.
 
     The report has no entry, so there is nothing saying what it should be called
     and nothing to hold it up against: what the document says, it publishes as.
     """
-    publish([Report(url=doc)], outdir, suggestions, split, images)
+    publish([Report(url=doc)], outdir, suggestions, split, images, comments)
 
 
 def publish(
@@ -119,6 +125,7 @@ def publish(
     suggestions: Suggestions,
     split: bool,
     images: bool,
+    comments: bool,
 ) -> None:
     """Build these reports and write the index over them.
 
@@ -129,7 +136,7 @@ def publish(
     site = build_site(
         reports,
         outdir,
-        BuildOptions(suggestions=str(suggestions), split=split, images=images),
+        BuildOptions(suggestions=str(suggestions), split=split, images=images, comments=comments),
     )
 
     outdir.mkdir(parents=True, exist_ok=True)

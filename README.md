@@ -153,6 +153,9 @@ uv run eta-publish all drafts.toml -o preview
 
 # Add a document to the list, named as the document names itself.
 uv run eta-publish add <google-doc-url>
+
+# Without the slowest question a build asks, when the counts can wait.
+uv run eta-publish all --no-comments
 ```
 
 `all` takes a list and `one` takes a document, so nothing has to be told apart:
