@@ -4,6 +4,7 @@ By default `documents.get` fills `body` from the first tab only,
 so a report drafted in a later tab would parse cleanly and be wrong.
 """
 
+import json
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -216,3 +217,69 @@ def test_comments_can_be_left_unasked(monkeypatch: pytest.MonkeyPatch) -> None:
     document = fetch.fetch("https://docs.google.com/document/d/abc/edit", comments=False)
     assert document["openSuggestions"] == 3
     assert "openComments" not in document
+
+
+def test_a_document_drive_says_is_unmoved_is_not_fetched_again(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Editing a document moves `modifiedTime`, and proposing, accepting, or
+    rejecting a suggestion is editing it, so neither is asked for again.
+    Commenting is not, so comments are counted every time."""
+    import eta_publish.fetch as fetch
+
+    def boom(*args: object, **kwargs: object) -> None:
+        raise AssertionError("a document Drive called unmoved was fetched anyway")
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(
+        json.dumps({"body": {}, "modifiedTime": "2026-09-01T01:10:14.243Z", "openSuggestions": 17})
+    )
+    monkeypatch.setattr(fetch, "_ambient_credentials", lambda: None)
+
+    def unmoved(doc_id: str) -> str:
+        return "2026-09-01T01:10:14.243Z"
+
+    def four_threads(doc_id: str, tab: str | None) -> int:
+        return 4
+
+    monkeypatch.setattr(fetch, "modified_time", unmoved)
+    monkeypatch.setattr(fetch, "fetch_document", boom)
+    monkeypatch.setattr(fetch, "open_suggestions", boom)
+    monkeypatch.setattr(fetch, "open_comments_on_tab", four_threads)
+
+    document = fetch.fetch("https://docs.google.com/document/d/abc/edit", cached=saved)
+    assert document["openSuggestions"] == 17
+    assert document["openComments"] == 4
+
+
+@pytest.mark.parametrize(
+    ("saved_text", "current"),
+    [
+        ('{"modifiedTime": "then"}', "now"),
+        ('{"body": {}}', "now"),
+        ("{not json", "now"),
+        ('{"modifiedTime": "then"}', None),
+    ],
+    ids=["edited since", "saved before this was recorded", "unreadable", "drive would not say"],
+)
+def test_anything_short_of_a_match_is_a_reason_to_fetch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, saved_text: str, current: str | None
+) -> None:
+    """Not knowing whether a document changed is a reason to fetch it,
+    which is what this was trying to avoid and not something it may decide against."""
+    import eta_publish.fetch as fetch
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(saved_text)
+
+    def says(doc_id: str) -> str | None:
+        return current
+
+    monkeypatch.setattr(fetch, "modified_time", says)
+    assert fetch.unchanged("abc", saved) is None
+
+
+def test_a_missing_saved_response_is_a_reason_to_fetch(tmp_path: Path) -> None:
+    import eta_publish.fetch as fetch
+
+    assert fetch.unchanged("abc", tmp_path / "absent.json") is None

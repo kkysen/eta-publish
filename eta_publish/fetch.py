@@ -415,15 +415,74 @@ def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
     return None
 
 
+def modified_time(doc_id: str) -> str | None:
+    """When Drive last saw this document edited, or `None` if it will not say.
+
+    The cheapest question there is about a document: half a second,
+    against two for the document itself and another two for its suggestions.
+    Editing a document is what moves this, and proposing, accepting, or
+    rejecting a suggestion is editing it, so a document that has not moved
+    has the same text and the same suggestions as the last build saw.
+
+    Comments are not editing, and do not move it. They are counted every time.
+
+    `None` rather than a raised error: not knowing whether a document changed
+    is a reason to fetch it, which is what this was trying to avoid
+    and not something it may decide against.
+    """
+    from googleapiclient.discovery import build
+
+    try:
+        service = build("drive", "v3", credentials=_credentials())
+        files = service.files()  # pyrefly: ignore[missing-attribute]
+        return files.get(fileId=doc_id, fields="modifiedTime").execute().get("modifiedTime")
+    except Exception:  # noqa: BLE001
+        # Broad on purpose, and building the client is inside it:
+        # every way of not getting an answer is the same answer here,
+        # which is that this build does not know and will fetch.
+        return None
+
+
+def unchanged(doc_id: str, cached: Path) -> JsonObject | None:
+    """The saved response, if Drive says the document has not been edited since.
+
+    `None` whenever that cannot be established,
+    which is a saved response that is missing, unreadable, or was written
+    before a build recorded what it was current as of.
+    Every one of those is a reason to fetch rather than a reason to guess.
+    """
+    try:
+        document = json.loads(cached.read_text())
+    except OSError, ValueError:
+        return None
+    if not isinstance(document, dict):
+        return None
+    was = document.get("modifiedTime")
+    if not was:
+        return None
+    return document if was == modified_time(doc_id) else None
+
+
 def fetch(
     ref: str,
     tab: str | None = None,
     suggestions: str = "rejected",
     comments: bool = True,
+    cached: Path | None = None,
 ) -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     wanted = tab or url_tab
-    document = select_tab(fetch_document(doc_id, suggestions), wanted)
+    document = unchanged(doc_id, cached) if cached is not None else None
+    reused = document is not None
+    if document is None:
+        document = select_tab(fetch_document(doc_id, suggestions), wanted)
+        # Recorded on the way out rather than asked for on the way in,
+        # so the next build has something to compare against.
+        # After the fetch, so a document edited while it was in flight
+        # reads as changed next time rather than as already current.
+        current = modified_time(doc_id)
+        if current:
+            document["modifiedTime"] = current
     # Recorded into the response rather than warned about here,
     # for the reason `tabTitle` is: a build from a saved response
     # has to write the same page as the build that fetched it,
@@ -452,9 +511,13 @@ def fetch(
         )
         return document
 
-    suggested = open_suggestions(doc_id, wanted)
-    if suggested is not None:
-        document["openSuggestions"] = suggested
+    # Not asked again about a document that has not been edited:
+    # proposing, accepting, or rejecting a suggestion is editing it,
+    # so the count in the response being reused is still the count.
+    if not reused:
+        suggested = open_suggestions(doc_id, wanted)
+        if suggested is not None:
+            document["openSuggestions"] = suggested
     # Not asked when the caller said not to, and a key left out is a key
     # `carry_over_review` fills in from the last build that did ask,
     # which is the same shape as being unable to ask.

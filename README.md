@@ -171,8 +171,15 @@ One at a time either way: building several in one run is what a list is for,
 and a list is a file that can be committed and reviewed
 rather than a shell line that was right once.
 
-A build spends nearly all its time waiting on Google,
-so a rebuild that has to be quick has two ways to be:
+A build spends nearly all its time waiting on Google.
+Most of that it now skips on its own: before fetching a document it asks Drive
+when the document was last edited, which takes half a second against two for
+the document and two more for its suggestions, and reuses the response saved
+beside the last build when the answer has not moved. Editing is what moves it,
+and proposing or resolving a suggestion is editing, so both are safe to reuse.
+Commenting is not, so comments are counted every time.
+
+Beyond that, a rebuild that has to be quicker still has two ways to be:
 `--no-comments` skips the text export, which costs more than fetching the
 document does and answers a question that changes slowly, leaving the last
 count standing; `--offline` skips the network altogether and rebuilds each
