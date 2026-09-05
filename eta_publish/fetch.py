@@ -149,6 +149,24 @@ def describe_tabs(document: JsonObject) -> str:
     )
 
 
+def document_url(doc_id: str, tab: str = "") -> str:
+    """The URL of a document, or of one of its tabs, spelled one way.
+
+    Built from the ids rather than kept from whatever was passed in.
+    A reference reaching a build can be a bare document id or a local path
+    to a saved response, neither of which is a URL,
+    and a URL that was one can be spelled several ways:
+    `/edit`, `/view`, and whatever else was in the address bar when it was copied.
+    None of that belongs in a committed file, and a link written once here
+    is one that reads the same beside every report.
+
+    Not what a saved response is matched by, which is the pair of ids:
+    this is for whoever opens `doc.json` and wants the document it came from.
+    """
+    url = f"https://docs.google.com/document/d/{doc_id}/edit"
+    return f"{url}?tab={tab}" if tab else url
+
+
 def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
     """Return one tab's content, shaped like a single-tab document.
 
@@ -176,14 +194,19 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
         chosen = matches[0]
 
     content = chosen.get("documentTab", {})
+    doc_id = str(document.get("documentId", ""))
     return {
         # Which document and which tab this was, so a saved response says what
         # it is. Nothing else does: the outputs beside it are named after the
         # report's own `URL:` line, which is a path and not an id, and a
         # `?tab=` id in `reports.toml` has nothing to match against without this.
-        "documentId": document.get("documentId", ""),
-        "title": document.get("title", ""),
+        "documentId": doc_id,
         "tabId": tab_id(chosen),
+        # The same two, as the link that opens them.
+        # Derived and not kept, so it says the same thing for every report
+        # however the entry that reached this build was spelled.
+        "url": document_url(doc_id, tab_id(chosen)),
+        "title": document.get("title", ""),
         "tabTitle": tab_title(chosen),
         "body": content.get("body", {}),
         "footnotes": content.get("footnotes", {}),
