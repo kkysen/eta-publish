@@ -176,6 +176,11 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 
     content = chosen.get("documentTab", {})
     return {
+        # Which document and which tab this was, so a saved response says what
+        # it is. Nothing else does: the outputs beside it are named after the
+        # report's own `URL:` line, which is a path and not an id, and a
+        # `?tab=` id in `reports.toml` has nothing to match against without this.
+        "documentId": document.get("documentId", ""),
         "title": document.get("title", ""),
         "tabId": tab_id(chosen),
         "tabTitle": tab_title(chosen),
