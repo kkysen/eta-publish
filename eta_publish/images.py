@@ -45,14 +45,14 @@ def download(
 
     # A saved response carries no URIs, because they expire and are not committed.
     # That is the ordinary shape of a rebuild rather than a defect in any one image,
-    # so it is said once here instead of 29 times below,
+    # so it is said once below instead of 29 times,
     # and the remedy is a fetch rather than an edit to the document.
     no_uris = bool(doc.images) and not any(image.source_uri for image in doc.images)
-    if no_uris:
-        doc.warn(
-            "this response carries no image URIs, because they expire and are "
-            "not saved; re-fetch the document to download its images"
-        )
+    # Said afterwards rather than here, because a URI is only missed by an image
+    # that needed one. A rebuild of a site whose images are already on disk
+    # downloads nothing and wants nothing, and telling it to re-fetch a document
+    # to collect files it already has is advice to ignore.
+    missing: list[str] = []
 
     for image in doc.images:
         if image.vector is not None and _fetch_vector(image, outdir, doc, written):
@@ -64,8 +64,7 @@ def download(
             doc.image_files[image.object_id] = existing.name
             continue
         if not image.source_uri:
-            if not no_uris:
-                doc.warn(f"image {image.object_id} has no source URI; not downloaded")
+            missing.append(image.object_id)
             continue
 
         response = http.get(image.source_uri, timeout=60)
@@ -83,6 +82,16 @@ def download(
         dest.write_bytes(crop_to(image, response.content, doc))
         written[image.object_id] = dest
         doc.image_files[image.object_id] = dest.name
+
+    if missing:
+        if no_uris:
+            doc.warn(
+                "this response carries no image URIs, because they expire and are "
+                "not saved; re-fetch the document to download its images"
+            )
+        else:
+            for object_id in missing:
+                doc.warn(f"image {object_id} has no source URI; not downloaded")
 
     return written
 
