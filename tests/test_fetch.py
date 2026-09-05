@@ -316,3 +316,25 @@ def test_a_missing_saved_response_is_a_reason_to_fetch(tmp_path: Path) -> None:
     import eta_publish.fetch as fetch
 
     assert fetch.unchanged("abc", tmp_path / "absent.json", "rejected") is None
+
+
+def test_a_selected_tab_says_where_it_came_from() -> None:
+    """A saved response is read by whoever wants the document behind it,
+    and a link is what they want, not two ids to assemble one from."""
+    tab: JsonObject = {
+        "tabProperties": {"tabId": "t.1", "title": "Live version"},
+        "documentTab": {},
+    }
+    document: JsonObject = {"documentId": "abc", "title": "IBX Automation", "tabs": [tab]}
+    chosen = select_tab(document, "t.1")
+    assert chosen["url"] == "https://docs.google.com/document/d/abc/edit?tab=t.1"
+    assert parse_ref(chosen["url"]) == ("abc", "t.1")
+
+
+def test_a_document_url_is_spelled_one_way() -> None:
+    """However the reference that reached the build was spelled,
+    including as a bare id or a path, which are not URLs at all."""
+    from eta_publish.fetch import document_url
+
+    assert document_url("abc") == "https://docs.google.com/document/d/abc/edit"
+    assert document_url("abc", "t.1") == "https://docs.google.com/document/d/abc/edit?tab=t.1"
