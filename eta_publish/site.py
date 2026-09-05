@@ -25,7 +25,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
-from .build import BuildOptions, build_one
+from .build import DOC_JSON, BuildOptions, build_one
 from .emit.html import escape
 from .nodes import Document
 
@@ -165,6 +165,38 @@ def add_report(url: str, path: Path = REPORTS) -> Report:
     return Report(url=url, name=name, tab=tab)
 
 
+def saved_responses(outdir: Path) -> dict[tuple[str, str], Path]:
+    """Every response a previous build wrote under `outdir`, by document and tab.
+
+    A report's directory is named after its own `URL:` line, which is a path
+    and not an id, so nothing about `reports.toml` says where a given entry's
+    last response was written. Reading the responses is what joins the two,
+    which is why each records the `documentId` and `tabId` it came from.
+
+    Scanned once for a whole build rather than per report:
+    a site is a directory of them, and each answer is the same walk.
+    """
+    found: dict[tuple[str, str], Path] = {}
+    for saved in sorted(outdir.glob(f"*/*/{DOC_JSON}")) + sorted(outdir.glob(f"*/{DOC_JSON}")):
+        try:
+            document = json.loads(saved.read_text())
+        except OSError, ValueError:
+            # Not a saved response, whatever else it is.
+            continue
+        key = (str(document.get("documentId", "")), str(document.get("tabId", "")))
+        if all(key):
+            found.setdefault(key, saved.parent)
+    return found
+
+
+def saved_for(report: Report, saved: dict[tuple[str, str], Path]) -> Path | None:
+    """Where the last build of `report` wrote its response, if it is still there."""
+    from .fetch import parse_ref
+
+    doc_id, tab = parse_ref(report.url)
+    return saved.get((doc_id, tab or ""))
+
+
 def report_path(doc: Document) -> str:
     """Where this report goes on the site, from its own front matter.
 
@@ -216,18 +248,42 @@ def verifier(report: Report) -> Callable[[Document], None]:
     return verify
 
 
+def source(report: Report, saved: dict[tuple[str, str], Path], options: BuildOptions) -> str:
+    """What to build this report from: the document, or the last response saved for it.
+
+    Offline is a rebuild of what is already committed,
+    which is the whole of what a build does apart from asking Google for the text.
+    A report with no saved response cannot be built that way,
+    and saying so is better than fetching one document
+    in a run that was asked not to fetch anything.
+    """
+    if not options.offline:
+        return report.url
+    directory = saved_for(report, saved)
+    if directory is None:
+        raise ValueError(
+            f"nothing saved under the output directory for {report.url}; "
+            "build it once with a fetch before building it offline"
+        )
+    return str(directory)
+
+
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
     """Build every report, keeping going when one of them cannot be built.
 
     A document that cannot be fetched says nothing about the next one,
     and a site missing one report beats no site at all.
     """
+    options = options or BuildOptions()
+    saved = saved_responses(outdir) if options.offline else {}
     site = Site()
     for report in reports:
         label = report.name or report.url
         print(f"building {label}", file=sys.stderr)
         try:
-            doc, path = build_one(report.url, outdir, options, verify=verifier(report))
+            doc, path = build_one(
+                source(report, saved, options), outdir, options, verify=verifier(report)
+            )
         except Exception as e:  # noqa: BLE001
             # Broad on purpose: a fetch, parse, disagreement, or disk failure
             # is the same decision here,

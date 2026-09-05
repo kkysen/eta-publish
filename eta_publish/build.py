@@ -29,6 +29,13 @@ class BuildOptions:
     suggestions: str = "rejected"
     split: bool = False
     images: bool = True
+    offline: bool = False
+    """Whether to rebuild from the responses a previous build saved.
+
+    No credentials, no network, and no way to notice a document that changed.
+    A rebuild of what is committed, for a change to this code rather than to a doc.
+    """
+
     comments: bool = True
     """Whether to ask how many comment threads are open.
 
