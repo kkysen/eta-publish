@@ -10,6 +10,9 @@ with an index listing them.
 Both defaults name the committed thing,
 so `eta-publish` with no arguments rebuilds the site as it ships.
 
+`eta-publish add <url>` writes the next entry of that list,
+reading the two names it has to carry off the document itself.
+
 One argument rather than many:
 building several documents at once is what a list is for,
 and a list is a file that can be committed, reviewed, and commented
@@ -28,7 +31,7 @@ from typing import Annotated
 from typer import Argument, BadParameter, Exit, Option, Typer
 
 from .build import BuildOptions
-from .site import build_site, index_page, reports_from
+from .site import REPORTS, add_report, build_site, index_page, reports_from
 
 
 class Suggestions(StrEnum):
@@ -95,7 +98,45 @@ def publish(
         raise Exit(code=1)
 
 
+add_app = Typer(context_settings={"help_option_names": ["-h", "--help"]})
+
+
+@add_app.command()
+def add(
+    url: Annotated[
+        str,
+        Argument(metavar="URL", help="a Google Doc URL, including the `?tab=` id to publish"),
+    ],
+    reports: Annotated[
+        Path,
+        Option("-r", "--reports", help="the list to append to"),
+    ] = REPORTS,
+) -> None:
+    """Append a document to `reports.toml`, named as the document names itself.
+
+    `name` and `tab` are required and required to be right,
+    and copying two titles out of Drive by hand is the step that gets them wrong,
+    so they are read off the document rather than typed.
+    """
+    try:
+        added = add_report(url, reports)
+    except (OSError, ValueError) as e:
+        raise BadParameter(str(e), param_hint="URL") from e
+    print(f"{reports}: added {added.name!r}, tab {added.tab!r}")
+
+
 def main() -> None:
+    """`add` is the one subcommand; anything else is a publish.
+
+    Not two commands on one Typer app,
+    which would make every publish say `publish` first:
+    `eta-publish <url>` is what the README documents
+    and `eta-publish` alone is what the workflow runs,
+    and neither is worth breaking to give `add` a tidier home.
+    """
+    if sys.argv[1:2] == ["add"]:
+        add_app(sys.argv[2:], prog_name="eta-publish add")
+        return
     app()
 
 

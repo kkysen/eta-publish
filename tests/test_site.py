@@ -21,6 +21,7 @@ from eta_publish.site import (
     Failed,
     Report,
     Site,
+    add_report,
     build_site,
     index_page,
     load_reports,
@@ -74,6 +75,50 @@ def test_an_entry_without_a_url_is_an_error(tmp_path: Path) -> None:
     path.write_text('[[report]]\nname = "Nameless"\n')
     with pytest.raises(ValueError, match="no `url`"):
         load_reports(path)
+
+
+def test_add_names_an_entry_from_the_document(tmp_path: Path) -> None:
+    """The whole point of the command: the two names come off the document,
+    not off a person reading them out of Drive."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "title": "IBX Automation", "tabTitle": "Live version"}))
+    path = tmp_path / "reports.toml"
+    path.write_text('# a comment worth keeping\n\n[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+
+    added = add_report(str(saved), path)
+    assert added == Report(url=str(saved), name="IBX Automation", tab="Live version")
+    assert "# a comment worth keeping" in path.read_text()
+    assert load_reports(path)[-1] == added
+
+
+def test_add_refuses_a_document_already_listed(tmp_path: Path) -> None:
+    """Two entries for one document publish it twice to one path,
+    and the second build overwrites the first."""
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+    with pytest.raises(ValueError, match="already lists"):
+        add_report("u", path)
+
+
+def test_add_refuses_a_document_that_names_no_tab(tmp_path: Path) -> None:
+    """It cannot write down an answer the document does not give,
+    and writing an empty one down is what `load_reports` refuses."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "title": "Titled", "tabTitle": ""}))
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+    with pytest.raises(ValueError, match="no `tab`"):
+        add_report(str(saved), path)
+    assert len(load_reports(path)) == 1
+
+
+def test_a_title_with_a_quotation_mark_stays_one_string(tmp_path: Path) -> None:
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "title": 'The "Deep Hole" Report', "tabTitle": "D2"}))
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+    add_report(str(saved), path)
+    assert load_reports(path)[-1].name == 'The "Deep Hole" Report'
 
 
 def test_a_field_written_down_and_left_empty_is_warned_about(
