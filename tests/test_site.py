@@ -76,6 +76,41 @@ def test_an_entry_without_a_url_is_an_error(tmp_path: Path) -> None:
         load_reports(path)
 
 
+def test_a_field_written_down_and_left_empty_is_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A blank `name = ""` is a placeholder somebody meant to come back to.
+    Left out entirely it is a short entry, which is allowed, so only the blank warns."""
+    path = tmp_path / "reports.toml"
+    path.write_text(
+        '[[report]]\nname = ""\ntab = ""\nurl = "https://example.invalid/a?tab=t.x"\n'
+        '\n[[report]]\nname = "Fine"\ntab = "Draft 2"\nurl = "https://example.invalid/b?tab=t.y"\n'
+    )
+    load_reports(path)
+    err = capsys.readouterr().err
+    assert "`name` is written down and left empty" in err
+    assert "`tab` is written down and left empty" in err
+    assert "example.invalid/b" not in err
+
+
+def test_a_tab_id_with_no_tab_name_is_warned_about(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The one field worth warning about when it was left out:
+    a `?tab=` id says nothing about which draft it points at."""
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nurl = "https://example.invalid/a?tab=t.x"\n')
+    load_reports(path)
+    assert "no `tab` says which draft that is" in capsys.readouterr().err
+
+
+def test_a_blank_field_still_publishes(tmp_path: Path) -> None:
+    """It is a line to fix in `reports.toml`, not a reason to publish no site."""
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = ""\nurl = "https://example.invalid/a"\n')
+    assert load_reports(path) == [Report(url="https://example.invalid/a")]
+
+
 def test_the_project_list_parses() -> None:
     """The committed one, so a typo in it fails here rather than in CI."""
     reports = load_reports()
