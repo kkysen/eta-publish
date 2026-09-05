@@ -156,6 +156,9 @@ uv run eta-publish add <google-doc-url>
 
 # Without the slowest question a build asks, when the counts can wait.
 uv run eta-publish all --no-comments
+
+# Rebuild what is committed, from the responses saved beside it. No network.
+uv run eta-publish all --offline
 ```
 
 `all` takes a list and `one` takes a document, so nothing has to be told apart:
@@ -167,6 +170,16 @@ so anything built once rebuilds with no network and no credentials.
 One at a time either way: building several in one run is what a list is for,
 and a list is a file that can be committed and reviewed
 rather than a shell line that was right once.
+
+A build spends nearly all its time waiting on Google,
+so a rebuild that has to be quick has two ways to be:
+`--no-comments` skips the text export, which costs more than fetching the
+document does and answers a question that changes slowly, leaving the last
+count standing; `--offline` skips the network altogether and rebuilds each
+report from the `doc.json` saved beside its outputs, which is the whole of a
+build apart from asking Google for the text. Offline cannot notice a document
+that changed, so it is for a change to this code rather than to a document,
+and it is not what the workflow runs.
 
 A publish is always a site, whether it holds one report or four:
 each lands under the path its own front matter names,

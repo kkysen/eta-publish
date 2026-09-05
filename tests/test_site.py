@@ -26,6 +26,7 @@ from eta_publish.site import (
     index_page,
     load_reports,
     report_path,
+    saved_responses,
 )
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -203,6 +204,62 @@ def test_a_wrong_entry_leaves_no_files_behind(tmp_path: Path) -> None:
     assert not site.built
     assert "the document is named" in site.failed[0].error
     assert not list(out.rglob("report.html"))
+
+
+def test_a_saved_response_is_found_by_the_document_it_came_from(tmp_path: Path) -> None:
+    """A report's directory is named after its `URL:` line, which is a path and
+    not an id, so the response's own `documentId` is what joins it to an entry."""
+    written = tmp_path / "reports" / "a-report"
+    written.mkdir(parents=True)
+    (written / "doc.json").write_text(json.dumps({**FIXTURE, "documentId": "abc", "tabId": "t.1"}))
+    assert saved_responses(tmp_path) == {("abc", "t.1"): written}
+
+
+def test_a_directory_that_is_not_a_saved_response_is_passed_over(tmp_path: Path) -> None:
+    """Unreadable, or readable and saying nothing about which document it is."""
+    for name, text in (("broken", "{not json"), ("anonymous", "{}")):
+        d = tmp_path / "reports" / name
+        d.mkdir(parents=True)
+        (d / "doc.json").write_text(text)
+    assert saved_responses(tmp_path) == {}
+
+
+def test_offline_builds_from_the_saved_response(tmp_path: Path) -> None:
+    """The same bytes as the build that fetched it, without fetching anything:
+    a `fetch` reached for here would be a network call in a run asked for none."""
+    import eta_publish.build as build_module
+
+    out = tmp_path / "site"
+    written = out / "reports" / "digging-out-deep-hole-sas-west"
+    written.mkdir(parents=True)
+    (written / "doc.json").write_text(
+        json.dumps({**FIXTURE, "documentId": "abc", "tabId": "t.1", "tabTitle": "Draft 2"})
+    )
+    report = Report(
+        url="https://docs.google.com/document/d/abc/edit?tab=t.1",
+        name="Digging Out of a Very Deep Hole",
+        tab="Draft 2",
+    )
+
+    def boom(*args: object, **kwargs: object) -> None:
+        raise AssertionError("offline reached for the network")
+
+    monkeypatch = pytest.MonkeyPatch()
+    monkeypatch.setattr(build_module, "fetch", boom, raising=False)
+    site = build_site([report], out, BuildOptions(images=False, offline=True, comments=False))
+    monkeypatch.undo()
+    assert [b.path for b in site.built] == ["reports/digging-out-deep-hole-sas-west"]
+
+
+def test_offline_says_which_report_it_has_nothing_saved_for(tmp_path: Path) -> None:
+    """Fetching one document in a run asked to fetch nothing is worse than saying so."""
+    site = build_site(
+        [Report(url="https://docs.google.com/document/d/abc/edit?tab=t.1", name="A", tab="B")],
+        tmp_path / "site",
+        BuildOptions(offline=True),
+    )
+    assert not site.built
+    assert "nothing saved" in site.failed[0].error
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:

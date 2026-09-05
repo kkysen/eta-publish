@@ -59,6 +59,10 @@ Images = Annotated[
     bool,
     Option(help="download the images; the output references them either way"),
 ]
+Offline = Annotated[
+    bool,
+    Option(help="rebuild from the responses saved by the last build; no network"),
+]
 Comments = Annotated[
     bool,
     Option(help="ask how many comment threads are open; the slowest thing a build does"),
@@ -82,6 +86,7 @@ def build_all(
     split: Split = False,
     images: Images = True,
     comments: Comments = True,
+    offline: Offline = False,
 ) -> None:
     """Build every report in a list, into a site with an index.
 
@@ -93,7 +98,7 @@ def build_all(
     except (OSError, ValueError) as e:
         # Typer's own wording for a bad argument, because that is what it is.
         raise BadParameter(str(e), param_hint="LIST") from e
-    publish(listed, outdir, suggestions, split, images, comments)
+    publish(listed, outdir, suggestions, split, images, comments, offline)
 
 
 @app.command(name="one")
@@ -126,6 +131,7 @@ def publish(
     split: bool,
     images: bool,
     comments: bool,
+    offline: bool = False,
 ) -> None:
     """Build these reports and write the index over them.
 
@@ -136,7 +142,13 @@ def publish(
     site = build_site(
         reports,
         outdir,
-        BuildOptions(suggestions=str(suggestions), split=split, images=images, comments=comments),
+        BuildOptions(
+            suggestions=str(suggestions),
+            split=split,
+            images=images,
+            comments=comments,
+            offline=offline,
+        ),
     )
 
     outdir.mkdir(parents=True, exist_ok=True)
