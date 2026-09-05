@@ -143,24 +143,25 @@ the one estimate below is marked as such.
 
 ```sh
 # Every report in `reports.toml`, into `site/`.
-uv run eta-publish
+uv run eta-publish all
 
 # Or one document, before it is on the list, somewhere scratch.
-uv run eta-publish <google-doc-url> -o out
+uv run eta-publish one <google-doc-url> -o out
 
 # Or a different list.
-uv run eta-publish drafts.toml -o preview
+uv run eta-publish all drafts.toml -o preview
 
 # Add a document to the list, named as the document names itself.
 uv run eta-publish add <google-doc-url>
 ```
 
-The argument is a document or a list of them, told apart without opening either:
-a URL is always a document, and only a local `.toml` path is a list.
+`all` takes a list and `one` takes a document, so nothing has to be told apart:
+which of the two a reference is used to be worked out from how it was spelled,
+and the command name says it instead.
 A document can also be a directory a previous build wrote,
 which holds the API response as `doc.json` beside its outputs,
 so anything built once rebuilds with no network and no credentials.
-One at a time: building several in one run is what a list is for,
+One at a time either way: building several in one run is what a list is for,
 and a list is a file that can be committed and reviewed
 rather than a shell line that was right once.
 
@@ -208,7 +209,7 @@ the repository ignores them by name, but they belong outside it anyway.
 
 ### Publishing the preview to GitHub Pages
 
-`.github/workflows/pages.yml` runs `eta-publish`,
+`.github/workflows/pages.yml` runs `eta-publish all`,
 which builds **every report in `reports.toml`**
 from its live document and deploys them as one site.
 Each lands at the path its own front matter names,
@@ -244,7 +245,7 @@ the run still exits non-zero, and the failure is on the front page.
 
 Nothing published is built from anything but that list.
 Building one document on its own, before it is on the list,
-is a local `uv run eta-publish <url> -o out`:
+is a local `uv run eta-publish one <url> -o out`:
 a report the list does not name has nothing committed
 for the build check to compare against,
 so publishing it from CI would publish what nobody had reviewed.
@@ -384,7 +385,7 @@ Either can be rebuilt by passing its report directory back,
 which reads the saved response and needs no credentials:
 
 ```sh
-uv run eta-publish site/reports/digging-out-deep-hole-sas-west
+uv run eta-publish one site/reports/digging-out-deep-hole-sas-west
 ```
 
 Add `--no-images` and it needs no network at all.
