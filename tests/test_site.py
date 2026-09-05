@@ -61,13 +61,28 @@ def test_an_absolute_url_cannot_escape_the_site_root(doc: Document) -> None:
 def test_reports_are_read_from_the_list(tmp_path: Path) -> None:
     path = tmp_path / "reports.toml"
     path.write_text(
-        '[[report]]\nname = "SAS West"\nurl = "https://example.invalid/a"\n'
-        '\n[[report]]\nurl = "https://example.invalid/b"\n'
+        '[[report]]\nname = "SAS West"\ntab = "Draft 2"\nurl = "https://example.invalid/a"\n'
+        '\n[[report]]\nname = "IBX"\ntab = "Live version"\nurl = "https://example.invalid/b"\n'
     )
     assert load_reports(path) == [
-        Report(url="https://example.invalid/a", name="SAS West"),
-        Report(url="https://example.invalid/b"),
+        Report(url="https://example.invalid/a", name="SAS West", tab="Draft 2"),
+        Report(url="https://example.invalid/b", name="IBX", tab="Live version"),
     ]
+
+
+@pytest.mark.parametrize("blank", ["name", "tab"])
+def test_an_entry_that_names_nothing_disagrees_like_any_other(tmp_path: Path, blank: str) -> None:
+    """A blank field needs no rule of its own: no document is named nothing,
+    so the comparison that catches a wrong name catches a missing one."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "tabTitle": "Draft 2"}))
+    fields = {"name": "Digging Out of a Very Deep Hole", "tab": "Draft 2"}
+    fields[blank] = ""
+    site = build_site(
+        [Report(url=str(saved), **fields)], tmp_path / "site", BuildOptions(images=False)
+    )
+    assert not site.built
+    assert "''" in site.failed[0].error
 
 
 def test_an_entry_without_a_url_is_an_error(tmp_path: Path) -> None:
@@ -121,41 +136,6 @@ def test_a_title_with_a_quotation_mark_stays_one_string(tmp_path: Path) -> None:
     assert load_reports(path)[-1].name == 'The "Deep Hole" Report'
 
 
-def test_a_field_written_down_and_left_empty_is_warned_about(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """A blank `name = ""` is a placeholder somebody meant to come back to.
-    Left out entirely it is a short entry, which is allowed, so only the blank warns."""
-    path = tmp_path / "reports.toml"
-    path.write_text(
-        '[[report]]\nname = ""\ntab = ""\nurl = "https://example.invalid/a?tab=t.x"\n'
-        '\n[[report]]\nname = "Fine"\ntab = "Draft 2"\nurl = "https://example.invalid/b?tab=t.y"\n'
-    )
-    load_reports(path)
-    err = capsys.readouterr().err
-    assert "`name` is written down and left empty" in err
-    assert "`tab` is written down and left empty" in err
-    assert "example.invalid/b" not in err
-
-
-def test_a_tab_id_with_no_tab_name_is_warned_about(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """The one field worth warning about when it was left out:
-    a `?tab=` id says nothing about which draft it points at."""
-    path = tmp_path / "reports.toml"
-    path.write_text('[[report]]\nurl = "https://example.invalid/a?tab=t.x"\n')
-    load_reports(path)
-    assert "no `tab` says which draft that is" in capsys.readouterr().err
-
-
-def test_a_blank_field_still_publishes(tmp_path: Path) -> None:
-    """It is a line to fix in `reports.toml`, not a reason to publish no site."""
-    path = tmp_path / "reports.toml"
-    path.write_text('[[report]]\nname = ""\nurl = "https://example.invalid/a"\n')
-    assert load_reports(path) == [Report(url="https://example.invalid/a")]
-
-
 def test_the_project_list_parses() -> None:
     """The committed one, so a typo in it fails here rather than in CI."""
     reports = load_reports()
@@ -166,21 +146,39 @@ def test_the_project_list_parses() -> None:
 
 
 def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
+    # Named as the entry below names it, and with a tab title to confirm:
+    # this test is about a fetch failure, not about a wrong entry.
     good = tmp_path / "good.json"
-    good.write_text(json.dumps(FIXTURE))
+    good.write_text(json.dumps({**FIXTURE, "tabTitle": "Draft 2"}))
     # Unreadable rather than absent:
     # a path that does not exist is taken for a document reference
     # and would reach for the network, and the test suite never does that.
     broken = tmp_path / "broken.json"
     broken.write_text("{not json")
     reports = [
-        Report(url=str(broken), name="gone"),
-        Report(url=str(good), name="fine"),
+        Report(url=str(broken), name="gone", tab="Draft 2"),
+        Report(url=str(good), name="Digging Out of a Very Deep Hole", tab="Draft 2"),
     ]
     site = build_site(reports, tmp_path / "site", BuildOptions(images=False))
     assert [f.report.name for f in site.failed] == ["gone"]
-    assert [b.report.name for b in site.built] == ["fine"]
+    assert [b.report.name for b in site.built] == ["Digging Out of a Very Deep Hole"]
     assert (tmp_path / "site" / site.built[0].path / "index.html").exists()
+
+
+def test_a_wrong_entry_leaves_no_files_behind(tmp_path: Path) -> None:
+    """A report that failed its own check must not leave a published directory:
+    the next run compares against it and finds nothing wrong."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "tabTitle": "Draft 2"}))
+    out = tmp_path / "site"
+    site = build_site(
+        [Report(url=str(saved), name="Some Other Document", tab="Draft 2")],
+        out,
+        BuildOptions(images=False),
+    )
+    assert not site.built
+    assert "the document is named" in site.failed[0].error
+    assert not list(out.rglob("report.html"))
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
@@ -207,8 +205,8 @@ def test_a_url_is_a_document_even_when_it_ends_in_toml() -> None:
 
 def test_a_toml_path_is_a_list(tmp_path: Path) -> None:
     path = tmp_path / "more.toml"
-    path.write_text('[[report]]\nurl = "https://example.invalid/a"\n')
-    assert reports_from(str(path)) == [Report(url="https://example.invalid/a")]
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "https://example.invalid/a"\n')
+    assert reports_from(str(path)) == [Report(url="https://example.invalid/a", name="A", tab="B")]
 
 
 def test_a_saved_response_is_a_document(tmp_path: Path) -> None:
@@ -315,23 +313,20 @@ def test_a_tab_that_is_not_the_documents_is_warned_about(
     assert "'Draft 2'" in warning
 
 
-def test_a_response_saved_before_tabs_were_recorded_is_not_warned_about(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """A response with no `tabTitle` cannot disagree, and must not be said to.
-
-    Every response saved before the fetch started recording one is such a file,
-    and they are what an offline build reads.
-    """
+def test_a_response_that_names_no_tab_cannot_confirm_one(tmp_path: Path) -> None:
+    """A `?tab=` id names a draft and says nothing about which,
+    so a response with no `tabTitle` leaves the entry's one question unanswered,
+    and an unanswered question is not a passed check."""
     saved = tmp_path / "doc.json"
     assert "tabTitle" not in FIXTURE
     saved.write_text(json.dumps(FIXTURE))
-    build_site(
-        [Report(url=str(saved), tab="Draft 1")],
+    site = build_site(
+        [Report(url=str(saved), name="Digging Out of a Very Deep Hole", tab="Draft 1")],
         tmp_path / "site",
         BuildOptions(images=False),
     )
-    assert "reports.toml" not in capsys.readouterr().err
+    assert not site.built
+    assert "the tab is named ''" in site.failed[0].error
 
 
 def test_an_entry_that_names_neither_is_not_warned_about(

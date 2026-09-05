@@ -3,6 +3,7 @@
 import hashlib
 import json
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -293,7 +294,12 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     return None
 
 
-def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tuple[Document, str]:
+def build_one(
+    ref: str,
+    outdir: Path,
+    options: BuildOptions | None = None,
+    verify: Callable[[Document], None] | None = None,
+) -> tuple[Document, str]:
     """Build one report, returning it and the site-relative path it went to.
 
     The whole per-document order of operations lives here, and only here.
@@ -306,12 +312,21 @@ def build_one(ref: str, outdir: Path, options: BuildOptions | None = None) -> tu
     it is saved into the report's directory afterwards,
     whether it came from the API or from a previous build,
     so what one run wrote is what the next can be handed.
+
+    `verify` is the caller's chance to say this is not the document it meant,
+    given the parsed document and called before anything is written.
     """
     from .site import report_path
 
     options = options or BuildOptions()
     document = load(ref, options.suggestions)
     doc = parse(document)
+    if verify is not None:
+        # Before the first directory is made.
+        # Whether this is the document the caller asked for
+        # can only be answered once it has been read,
+        # and a wrong answer must not leave a report's worth of files behind.
+        verify(doc)
     path = report_path(doc)
     dest = outdir / path
     dest.mkdir(parents=True, exist_ok=True)

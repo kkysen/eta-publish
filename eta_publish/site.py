@@ -21,6 +21,7 @@ so the others are still built and the exit status still reports it.
 import json
 import sys
 import tomllib
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
@@ -39,15 +40,25 @@ class Report:
     url: str
     """A Docs URL including its `?tab=` id, or a path to saved JSON."""
 
-    name: str = ""
-    """Only for messages; the site path comes from the document itself."""
+    name: str | None = None
+    """What the document is called in Drive, which is what a build checks it against.
 
-    tab: str = ""
-    """What the tab in `url` is expected to be called, if the entry says.
+    Not where the report goes: that is the document's own to say.
+    An entry pointing at the wrong document fails
+    rather than publishing it under the heading of the one somebody meant.
 
-    The `?tab=` id is opaque, so nothing about the URL says which draft it points at.
-    Writing the title beside it is what turns the wrong tab into a warning
-    rather than into a published draft nobody meant to publish."""
+    `None` is a document named on the command line, which states no expectation.
+    An entry always states one, `""` included:
+    a field left empty says the document is called nothing, which no document is,
+    so a blank needs no rule of its own to be caught."""
+
+    tab: str | None = None
+    """What the tab in `url` is called, checked the same way.
+
+    The `?tab=` id is opaque, so nothing about the URL says which draft it points at,
+    and publishing last year's draft is the mistake nothing else can catch.
+
+    `None` on the same terms as `name`."""
 
 
 @dataclass
@@ -85,44 +96,20 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
         url = str(entry.get("url", "")).strip()
         if not url:
             raise ValueError(f"{path}: a [[report]] entry has no `url`")
-        report = Report(
-            url=url,
-            name=str(entry.get("name", "")).strip(),
-            tab=str(entry.get("tab", "")).strip(),
+        # A string either way, never `None`: an entry states an expectation
+        # whatever it says, and one that says nothing says the document is named
+        # nothing, which is a disagreement like any other and needs no rule of its own.
+        # `eta-publish add` is what fills these in without anyone typing them.
+        reports.append(
+            Report(
+                url=url,
+                name=str(entry.get("name", "")).strip(),
+                tab=str(entry.get("tab", "")).strip(),
+            )
         )
-        for blank in blanks(entry, report):
-            print(f"warning: {path}: {blank}", file=sys.stderr)
-        reports.append(report)
     if not reports:
         raise ValueError(f"{path}: no [[report]] entries")
     return reports
-
-
-def blanks(entry: dict[str, object], report: Report) -> list[str]:
-    """Fields of an entry that are written down and left empty.
-
-    Omitting `name` is how a one-line entry is written, and `disagreements`
-    checks a field only when the entry fills it in, so both stay silent.
-    Writing `name = ""` is not that: it is a placeholder somebody meant
-    to come back to, and nothing else in a build would ever mention it again.
-
-    A `?tab=` id with no `tab` beside it is the one case worth warning about
-    even when the field was left out entirely.
-    The id is opaque, so nothing about the URL says which draft it points at,
-    and publishing last year's draft is the mistake the field exists to catch.
-
-    Warnings rather than errors, and on stderr rather than on the document:
-    a blank line here is not a reason to publish no site at all,
-    and the index page's warning count is what the writers have to fix,
-    which a wrong `reports.toml` is not.
-    """
-    said = []
-    for field_name in ("name", "tab"):
-        if field_name in entry and not getattr(report, field_name):
-            said.append(f"{report.url}: `{field_name}` is written down and left empty")
-    if "tab=" in report.url and not report.tab and "tab" not in entry:
-        said.append(f"{report.url}: the URL picks a tab, but no `tab` says which draft that is")
-    return said
 
 
 def entry_text(url: str, name: str, tab: str) -> str:
@@ -227,6 +214,26 @@ def report_path(doc: Document) -> str:
     return slug
 
 
+def verifier(report: Report) -> Callable[[Document], None]:
+    """What `build_one` calls once the document is parsed and before it is written.
+
+    A disagreement is found after the fetch and has to stop the build before the emit,
+    or a report that failed its own check leaves a directory of published files behind,
+    which the next run compares against and finds nothing wrong with.
+
+    A callback rather than the `Report` itself,
+    because which entry a document was supposed to be
+    is a question about `reports.toml` and not about building a document.
+    """
+
+    def verify(doc: Document) -> None:
+        said = disagreements(report, doc)
+        if said:
+            raise ValueError("; ".join(said))
+
+    return verify
+
+
 def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None = None) -> Site:
     """Build every report, keeping going when one of them cannot be built.
 
@@ -238,16 +245,15 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
         label = report.name or report.url
         print(f"building {label}", file=sys.stderr)
         try:
-            doc, path = build_one(report.url, outdir, options)
+            doc, path = build_one(report.url, outdir, options, verify=verifier(report))
         except Exception as e:  # noqa: BLE001
-            # Broad on purpose: a fetch, parse, or disk failure is the same decision here,
+            # Broad on purpose: a fetch, parse, disagreement, or disk failure
+            # is the same decision here,
             # which is to keep going and say which report did not make it.
             print(f"failed: {label}: {e}", file=sys.stderr)
             site.failed.append(Failed(report=report, error=str(e)))
             continue
         for warning in doc.warnings:
-            print(f"  warning: {warning}", file=sys.stderr)
-        for warning in disagreements(report, doc):
             print(f"  warning: {warning}", file=sys.stderr)
         site.built.append(Built(report=report, doc=doc, path=path))
     return site
@@ -256,15 +262,27 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
 def disagreements(report: Report, doc: Document) -> list[str]:
     """Where `reports.toml` and the document it points at do not match.
 
-    Not `doc.warnings`: the document is fine, this file is wrong about it,
-    and the count on the index page is a count of what the writers have to fix.
-
     Only checkable here, after the fetch.
     Nothing in `reports.toml` says what the document is called
     or which of its tabs a `?tab=` id picks out,
     which is the whole reason the two can drift apart.
-    Each field is checked only when the entry fills it in,
-    so an entry stays as brief as whoever wrote it wanted.
+
+    Every expectation is compared, and nothing about a value exempts it.
+    An entry with a blank `tab` disagrees with a document that has one,
+    and an entry with a `tab` disagrees with a response that has none,
+    for the same reason and by the same line of code:
+    an unanswered question is not a passed check,
+    and a blank is not a shorter entry.
+
+    Only a document named straight on the command line is skipped,
+    which is not an entry and holds no expectation to compare.
+
+    Not `doc.warnings`, and not warnings at all.
+    The document is fine and this file is wrong about it,
+    which is nothing for the writers to fix
+    and not something to publish past either:
+    an entry pointing at the wrong document publishes that document
+    under the heading of the one somebody meant.
     """
     checks = (
         ("calls this", report.name, "the document is named", doc.file_title),
@@ -273,7 +291,7 @@ def disagreements(report: Report, doc: Document) -> list[str]:
     return [
         f"reports.toml {said} {expected!r}, but {found_label} {found!r}"
         for said, expected, found_label, found in checks
-        if expected and found and expected != found
+        if expected is not None and expected != found
     ]
 
 
