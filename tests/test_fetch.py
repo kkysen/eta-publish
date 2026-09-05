@@ -11,7 +11,14 @@ from pathlib import Path
 import pytest
 
 from eta_publish.docs_json import JsonObject
-from eta_publish.fetch import SCOPES, TabNotFound, parse_ref, select_tab
+from eta_publish.fetch import (
+    RESPONSE_FORMAT,
+    RESPONSE_KEYS,
+    SCOPES,
+    TabNotFound,
+    parse_ref,
+    select_tab,
+)
 
 URL = (
     "https://docs.google.com/document/d/1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg"
@@ -235,6 +242,7 @@ def test_a_document_drive_says_is_unmoved_is_not_fetched_again(
         json.dumps(
             {
                 "body": {},
+                "format": RESPONSE_FORMAT,
                 "modifiedTime": "2026-09-01T01:10:14.243Z",
                 "suggestions": "rejected",
                 "openSuggestions": 17,
@@ -259,7 +267,7 @@ def test_a_document_drive_says_is_unmoved_is_not_fetched_again(
     assert document["openComments"] == 4
 
 
-MATCHING = '{"modifiedTime": "now", "suggestions": "rejected"}'
+MATCHING = json.dumps({"modifiedTime": "now", "suggestions": "rejected", "format": RESPONSE_FORMAT})
 
 
 @pytest.mark.parametrize(
@@ -268,7 +276,7 @@ MATCHING = '{"modifiedTime": "now", "suggestions": "rejected"}'
         ('{"modifiedTime": "then", "suggestions": "rejected"}', "now"),
         ('{"body": {}, "suggestions": "rejected"}', "now"),
         ('{"modifiedTime": "now", "suggestions": "accepted"}', "now"),
-        ('{"modifiedTime": "now"}', "now"),
+        ('{"modifiedTime": "now", "suggestions": "rejected"}', "now"),
         ("{not json", "now"),
         ('{"modifiedTime": "then", "suggestions": "rejected"}', None),
     ],
@@ -276,7 +284,7 @@ MATCHING = '{"modifiedTime": "now", "suggestions": "rejected"}'
         "edited since",
         "saved before the time was recorded",
         "read the other way",
-        "saved before the mode was recorded",
+        "saved in an older shape",
         "unreadable",
         "drive would not say",
     ],
@@ -338,3 +346,21 @@ def test_a_document_url_is_spelled_one_way() -> None:
 
     assert document_url("abc") == "https://docs.google.com/document/d/abc/edit"
     assert document_url("abc", "t.1") == "https://docs.google.com/document/d/abc/edit?tab=t.1"
+
+
+def test_a_saved_response_says_what_shape_it_is() -> None:
+    """The list `RESPONSE_FORMAT` is computed from has to be the list
+    `select_tab` actually writes, or the marker marks the wrong thing.
+
+    This failing means a key was added or dropped: update `RESPONSE_KEYS`,
+    which changes the marker, which is what makes every response saved
+    in the old shape be fetched again instead of reused.
+    """
+    tab: JsonObject = {
+        "tabProperties": {"tabId": "t.1", "title": "Live version"},
+        "documentTab": {},
+    }
+    document: JsonObject = {"documentId": "abc", "title": "IBX Automation", "tabs": [tab]}
+    written = select_tab(document, "t.1")
+    assert set(written) == {*RESPONSE_KEYS, "format"}
+    assert written["format"] == RESPONSE_FORMAT

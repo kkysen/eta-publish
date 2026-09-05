@@ -21,6 +21,7 @@ ETA reports are drafted with suggestions open,
 so we ask for `PREVIEW_WITHOUT_SUGGESTIONS`: what the doc reads as today.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -149,6 +150,40 @@ def describe_tabs(document: JsonObject) -> str:
     )
 
 
+RESPONSE_KEYS = (
+    "body",
+    "documentId",
+    "footnotes",
+    "inlineObjects",
+    "lists",
+    "tabId",
+    "tabTitle",
+    "title",
+    "url",
+)
+"""Every key `select_tab` writes, which is what a saved response is made of.
+
+Kept here rather than read off one, because the point is to notice
+when it changes: `test_a_saved_response_says_what_shape_it_is`
+fails the moment `select_tab` writes a key this does not list,
+and updating this is what invalidates the responses saved in the old shape.
+
+Not the keys added afterwards. `modifiedTime`, `suggestions`, `openComments`,
+and `openSuggestions` are written by `fetch` and some of them only sometimes,
+so a `--no-comments` run would otherwise look like a different shape.
+"""
+
+RESPONSE_FORMAT = hashlib.sha256(",".join(RESPONSE_KEYS).encode()).hexdigest()[:8]
+"""What the shape above comes to, recorded in every response written in it.
+
+A saved response in an older shape is missing whatever was added since,
+and reusing it publishes a report built from half a document.
+That is not something Drive can be asked about: the document did not change,
+the code did. So the response says which shape it is,
+and a build reuses only what it would have written itself.
+"""
+
+
 def document_url(doc_id: str, tab: str = "") -> str:
     """The URL of a document, or of one of its tabs, spelled one way.
 
@@ -196,6 +231,9 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
     content = chosen.get("documentTab", {})
     doc_id = str(document.get("documentId", ""))
     return {
+        # Which shape this is, so a build that writes a different one
+        # fetches rather than reusing a response missing what it now needs.
+        "format": RESPONSE_FORMAT,
         # Which document and which tab this was, so a saved response says what
         # it is. Nothing else does: the outputs beside it are named after the
         # report's own `URL:` line, which is a path and not an id, and a
@@ -487,10 +525,14 @@ def modified_time(doc_id: str) -> str | None:
 def unchanged(doc_id: str, cached: Path, suggestions: str) -> JsonObject | None:
     """The saved response, if it is of this document as this build wants it.
 
-    Two questions, and a no to either is a fetch.
-    Whether the document has been edited since, which Drive answers;
-    and whether it was saved with the suggestions resolved the way
-    this run resolves them, which the response itself says.
+    Three questions, and a no to any of them is a fetch.
+    Whether the document has been edited since, which Drive answers.
+    Whether it was saved with the suggestions resolved the way this run
+    resolves them, which the response itself says.
+    And whether it is the shape a build writes today,
+    because a response saved before a key was added is missing that key,
+    and no amount of asking Drive would turn that up:
+    the document did not change, the code did.
     A response saved with them rejected is a different document
     from the same file with them accepted, and no edit has to happen
     for the two to differ, so `modifiedTime` cannot see the difference.
@@ -508,6 +550,10 @@ def unchanged(doc_id: str, cached: Path, suggestions: str) -> JsonObject | None:
         return None
     was = document.get("modifiedTime")
     if not was or document.get("suggestions") != suggestions:
+        return None
+    if document.get("format") != RESPONSE_FORMAT:
+        # Written by an older version of this code, in a shape it no longer
+        # writes. The document did not change; what a build makes of it did.
         return None
     return document if was == modified_time(doc_id) else None
 
