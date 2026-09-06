@@ -195,7 +195,7 @@ def add(
         # to survive, and `TabNotFound` carries the list of tabs to pick from,
         # which is the answer rather than the traceback it used to be printed as.
         raise BadParameter(str(e), param_hint="URL") from e
-    print(f"{reports}: added {added.name!r}, tab {added.tab!r}")
+    print(f"{reports}: added `{added.name}`, tab `{added.tab}`")
 
 
 def main() -> None:
