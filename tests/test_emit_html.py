@@ -2,11 +2,13 @@
 
 import json
 import re
+from html.parser import HTMLParser
+from typing import override
 
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.emit.html import HtmlEmitter, report_page
+from eta_publish.emit.html import HtmlEmitter, attributes, link_mark, report_page
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 
@@ -385,11 +387,89 @@ def test_a_footnote_numbers_its_own_paragraphs(out: str) -> None:
 EVIL = '"><script>alert(1)</script><x y="'
 
 
+class Read(HTMLParser):
+    """The emitted markup as a reader of HTML sees it, rather than as a string.
+
+    An assertion about a substring is written in the same terms the emitter is,
+    so a quoting mistake that both make is a mistake neither one shows.
+    This is the standard library's parser, which is not the thing under test:
+    it undoes the escaping, and what comes back out is compared to what went in.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.attrs: list[dict[str, str | None]] = []
+        self.tags: list[str] = []
+        self.text: list[str] = []
+
+    @override
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.tags.append(tag)
+        self.attrs.append(dict(attrs))
+
+    @override
+    def handle_data(self, data: str) -> None:
+        self.text.append(data)
+
+
+def read(markup: str) -> Read:
+    parser = Read()
+    parser.feed(markup)
+    parser.close()
+    return parser
+
+
+def test_an_attribute_value_comes_back_out_as_it_went_in() -> None:
+    """Escaping is wrong in two directions, and a substring check sees neither.
+
+    A value that escapes too little closes its own quotes,
+    and a value that escapes too much reaches the page as `&amp;amp;`
+    or as an apostrophe nobody typed.
+    Both are the same failure to a reader: the attribute does not say
+    what the document said. So it is read back and compared.
+    """
+    values = [EVIL, "a & b", "&amp;", "it's", 'say "hi"', "<>", "\u00e9 \u2014 \u00b7", ""]
+    for value in values:
+        parsed = read(f"<a{attributes(id=value, title=value)}></a>")
+        assert parsed.attrs == [{"id": value, "title": value}], value
+
+
+def test_a_link_to_a_block_says_where_it_points() -> None:
+    """`link_mark` builds its own tag, so what that tag says is worth reading back."""
+    parsed = read(link_mark(EVIL, EVIL))
+    assert parsed.tags == ["a"]
+    assert parsed.attrs == [
+        {"class": "link-mark", "href": f"#{EVIL}", "aria-label": f"Link to this {EVIL}"}
+    ]
+
+
+def test_a_hostile_document_opens_no_tag_of_its_own(doc: Document) -> None:
+    """The round trip over a whole report, not over one primitive.
+
+    A bug in `attributes` is the small half of this worry
+    and the reviewed half; the larger half is a call site
+    that wrote a value into an f-string and forgot to escape it.
+    Reading the finished page back finds either.
+    """
+    doc.title = EVIL
+    doc.meta["short"] = EVIL
+    doc.meta["seo description"] = EVIL
+    doc.meta["public contributors"] = EVIL
+    doc.warn("a warning about {}", Shown(EVIL))
+    # Alt text is the document's too, and it reaches the page inside an attribute.
+    # An image is frozen, and this is the one place anything writes to one.
+    for image in doc.images:
+        object.__setattr__(image, "alt", EVIL)
+    for output in (HtmlEmitter().emit(doc), report_page(doc)):
+        parsed = read(output)
+        assert parsed.tags.count("script") == 1, "only the page's own script"
+        assert parsed.tags.count("x") == 0, "the document opened no tag"
+        assert EVIL in "".join(parsed.text), "the text itself survives, as text"
+
+
 def test_attributes_are_quoted_by_the_thing_that_writes_them() -> None:
     """Every attribute value ends up inside a pair of quotes, and a value that
     closes them early is the whole of how markup gets injected."""
-    from eta_publish.emit.html import attributes, link_mark
-
     written = attributes(id=EVIL)
     assert written.startswith(' id="') and written.endswith('"')
     assert "<script>" not in written
