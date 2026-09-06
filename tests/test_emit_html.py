@@ -7,7 +7,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.emit.html import HtmlEmitter
-from eta_publish.nodes import Document, Heading, Paragraph, Text
+from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -345,7 +345,6 @@ def test_an_empty_shown_value_is_still_marked(doc: Document) -> None:
     An empty code span carries the same background and padding as any other,
     so it renders as a small box with nothing in it: measured at 8x18 against
     62x18 for one holding `Draft 2`."""
-    from eta_publish.nodes import Shown
 
     doc.warn("the tab is named {}", Shown(""))
     out = HtmlEmitter().emit(doc)

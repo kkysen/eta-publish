@@ -73,22 +73,12 @@ def escape(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def split_at_headings(fragment: str) -> list[str]:
-    """Cut a fragment into pieces at `h2` boundaries, for oversized reports.
+HTML_H2 = 2
+"""The heading level a piece is cut at.
 
-    Each piece is a standalone `.eta-report` div,
-    so consecutive code blocks still pick up the same CSS.
-    """
-    opening = '<div class="eta-report">'
-    body = fragment
-    prefix = ""
-    if opening in body:
-        head, _, body = body.partition(opening)
-        prefix = head
-    body = body.removesuffix("</div>")
-
-    pieces = re.split(r"(?=<h2 id=)", body)
-    return [f"{prefix}{opening}\n{piece.strip()}\n</div>" for piece in pieces if piece.strip()]
+`h2` is what a report's sections are: `Heading 1` in the document,
+which publishes one level down because the headline is the `h1`.
+"""
 
 
 def link_mark(anchor: str, what: str = "section") -> str:
@@ -150,21 +140,65 @@ class HtmlEmitter(Emitter):
 
     @override
     def document(self, doc: Document) -> str:
-        # Every id on the page is allocated here,
-        # so a second `emit` of the same document produces the same ids, not suffixed ones.
+        return self.join(self.wrapped(self.whole(doc)))
+
+    def restart(self, doc: Document) -> None:
+        """Forget what the last document allocated.
+
+        Every id on the page is allocated while walking it,
+        so a second walk of the same document has to start where the first did
+        or it produces the same ids suffixed to avoid themselves.
+
+        Called by `groups`, which is the walk. A report emitted whole and the
+        same report emitted in pieces are two walks of one document,
+        and the pieces have to carry the ids the whole one published.
+
+        The document is set here as well as by `emit`, because a walk needs it:
+        a footnote reference carries a copy of its note, which is read off the
+        document rather than passed down the tree. Without this a piece keeps
+        its references and loses every preview behind them, which is a
+        difference nothing about the piece would show.
+        """
+        self.doc = doc
         self._taken = {"title", "short", "table-of-contents", "footnotes", "contributors"}
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
         self._taken.update(b.anchor for b in doc.blocks if isinstance(b, Heading))
-        parts = []
+
+    def whole(self, doc: Document) -> list[str]:
+        """Everything in the report, in one group."""
+        return [part for group in self.groups(doc) for part in group]
+
+    def wrapped(self, group: list[str]) -> list[str]:
+        """One group as a standalone fragment: what a piece is, and what a report is.
+
+        The stylesheet and the script ride on each, and each is its own
+        `.eta-report` div, so consecutive code blocks still pick up the same CSS.
+        """
+        shell = []
         if self.inline_css:
-            parts.append(f"<style>\n{REPORT_CSS}</style>")
+            shell.append(f"<style>\n{REPORT_CSS}</style>")
         # Unlike the stylesheet, which a site can carry once under Custom CSS,
         # this travels with the report: it is small, and a fragment pasted
         # without it puts a tooltip off the edge of the screen.
-        parts.append(f"<script>\n{REPORT_JS}</script>")
-        parts.append('<div class="eta-report">')
+        shell.append(f"<script>\n{REPORT_JS}</script>")
+        return [*shell, '<div class="eta-report">', *group, "</div>"]
+
+    def groups(self, doc: Document) -> list[list[str]]:
+        """The report in the groups a split cuts it into: one per `h2` in the body.
+
+        Everything ahead of the first heading goes with the first group,
+        and the back matter with the last, which is where they read.
+
+        Cut here rather than out of the finished markup.
+        The emitter knows which block is a second-level heading;
+        the markup only knows that some line starts with `<h2 id=`,
+        which is the same fact told worse and read back out of a string
+        this very method wrote.
+        """
+        self.restart(doc)
+        parts = []
         parts.append(self.phase(doc))
         parts.append(self.dateline(doc))
         # Below the dateline and above the hero,
@@ -178,11 +212,17 @@ class HtmlEmitter(Emitter):
         parts.append(self.warnings(doc))
         parts.append(self.blocks([doc.hero] if doc.hero is not None else []))
         parts.append(self.toc(doc))
-        parts.append(self.blocks(doc.body))
-        parts.append(self.footnotes(doc))
-        parts.append(self.contributors(doc))
-        parts.append("</div>")
-        return self.join(parts)
+
+        groups: list[list[str]] = [[part for part in parts if part]]
+        for block, markup in self.chunks(doc.body):
+            if isinstance(block, Heading) and block.level == HTML_H2:
+                groups.append([])
+            if markup:
+                groups[-1].append(markup)
+
+        back = [part for part in (self.footnotes(doc), self.contributors(doc)) if part]
+        groups[-1].extend(back)
+        return [group for group in groups if group]
 
     def contributors(self, doc: Document) -> str:
         """Who is credited, in a section at the end, the way ETA credits them.
@@ -446,7 +486,21 @@ class HtmlEmitter(Emitter):
         wrapping one in a row would make every figure in the report
         say something about a run of one.
         """
-        out: list[str] = []
+        return self.join([markup for _, markup in self.chunks(blocks)])
+
+    def chunks(self, blocks: list[Block]) -> list[tuple[Block, str]]:
+        """The same markup, each piece paired with the block it starts at.
+
+        What `blocks` joins, and what a split cuts between.
+        A run of figures is one chunk paired with the first of them,
+        because a row of pictures is one thing and cutting into it
+        would leave half a row at the end of a piece.
+
+        Nothing here reads the markup back:
+        which chunk begins a section is a question about the blocks,
+        and the blocks are right here.
+        """
+        out: list[tuple[Block, str]] = []
         i = 0
         while i < len(blocks):
             run = i
@@ -454,12 +508,12 @@ class HtmlEmitter(Emitter):
                 run += 1
             if run - i > 1:
                 figures = "\n".join(self.block(b) for b in blocks[i:run])
-                out.append(f'<div class="figure-row">\n{figures}\n</div>')
+                out.append((blocks[i], f'<div class="figure-row">\n{figures}\n</div>'))
                 i = run
             else:
-                out.append(self.block(blocks[i]))
+                out.append((blocks[i], self.block(blocks[i])))
                 i += 1
-        return self.join(out)
+        return out
 
     def within(self, scope: str, emit: Callable[[], str]) -> str:
         """`emit()`, with the paragraphs inside it numbered from `scope`.
