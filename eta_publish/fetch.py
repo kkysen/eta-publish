@@ -224,7 +224,7 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
         matches = [tab for _, tab in tabs if tab_id(tab) == wanted]
         if not matches:
             raise TabNotFound(
-                f"no tab {wanted!r} in this document; available tabs:\n{describe_tabs(document)}"
+                f"no tab `{wanted}` in this document; available tabs:\n{describe_tabs(document)}"
             )
         chosen = matches[0]
 

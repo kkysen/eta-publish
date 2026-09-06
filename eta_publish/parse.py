@@ -807,7 +807,7 @@ class Parser:
 
         filename = self.json.get("title", "")
         self.doc.warn(
-            f"no `Title`-styled paragraph, so the document name {filename!r} "
+            f"no `Title`-styled paragraph, so the document name `{filename}` "
             "is being used as the headline; style the headline as `Title` in the doc"
         )
         if self.doc.meta.get("title"):

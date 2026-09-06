@@ -82,7 +82,7 @@ def test_an_entry_that_names_nothing_disagrees_like_any_other(tmp_path: Path, bl
         [Report(url=str(saved), **fields)], tmp_path / "site", BuildOptions(images=False)
     )
     assert not site.built
-    assert "''" in site.failed[0].error
+    assert "nothing" in site.failed[0].error
 
 
 def test_an_entry_without_a_url_is_an_error(tmp_path: Path) -> None:
@@ -406,8 +406,8 @@ def test_a_name_that_is_not_the_documents_is_warned_about(
         BuildOptions(images=False),
     )
     warning = capsys.readouterr().err
-    assert "reports.toml calls this 'SAS West'" in warning
-    assert repr(FIXTURE["title"]) in warning
+    assert "reports.toml calls this `SAS West`" in warning
+    assert f"`{FIXTURE['title']}`" in warning
 
 
 def test_the_documents_own_name_is_not_warned_about(
@@ -435,8 +435,8 @@ def test_a_tab_that_is_not_the_documents_is_warned_about(
         BuildOptions(images=False),
     )
     warning = capsys.readouterr().err
-    assert "reports.toml expects the tab 'Draft 1'" in warning
-    assert "'Draft 2'" in warning
+    assert "reports.toml expects the tab `Draft 1`" in warning
+    assert "`Draft 2`" in warning
 
 
 def test_a_response_that_names_no_tab_cannot_confirm_one(tmp_path: Path) -> None:
@@ -452,7 +452,7 @@ def test_a_response_that_names_no_tab_cannot_confirm_one(tmp_path: Path) -> None
         BuildOptions(images=False),
     )
     assert not site.built
-    assert "the tab is named ''" in site.failed[0].error
+    assert "the tab is named nothing" in site.failed[0].error
 
 
 def test_an_entry_that_names_neither_is_not_warned_about(

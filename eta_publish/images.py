@@ -73,7 +73,7 @@ def download(
         extension = EXTENSIONS.get(content_type)
         if extension is None:
             doc.warn(
-                f"image {image.object_id} has unexpected content type {content_type!r}; "
+                f"image {image.object_id} has unexpected content type `{content_type}`; "
                 "saved without an extension"
             )
             extension = ""
