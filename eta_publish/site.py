@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
+from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one
 from .emit.html import escape
 from .nodes import Document
@@ -382,20 +383,7 @@ def disagreements(report: Report, doc: Document) -> list[str]:
     ]
 
 
-INDEX_CSS = """
-:root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fff; }
-@media (prefers-color-scheme: dark) { :root { --fg: #eaeaea; --bg: #141414; } }
-body { background: var(--bg); color: var(--fg); max-width: 46rem;
-       margin: 0 auto; padding: 3rem 1.25rem 6rem;
-       font: 17px/1.6 system-ui, sans-serif; }
-h1 { font-size: 1.6rem; }
-ul { list-style: none; padding: 0; }
-li { margin: 2em 0; }
-a { color: inherit; }
-.short { opacity: .75; font-size: .95rem; }
-.meta { opacity: .6; font-size: .85rem; }
-.failed { border-left: 3px solid #c60; padding: .4em 1em; font-size: .9rem; }
-"""
+INDEX_CSS = read("index.css")
 
 
 def index_page(site: Site) -> str:
@@ -424,7 +412,7 @@ def index_page(site: Site) -> str:
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         "<title>ETA report previews</title>\n"
-        f"<style>{INDEX_CSS}</style>\n"
+        f"<style>\n{INDEX_CSS}</style>\n"
         "<h1>ETA report previews</h1>\n"
         "<p>Built from the Google Docs, warnings included. "
         "Not the published pages.</p>\n"
