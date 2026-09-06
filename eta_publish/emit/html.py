@@ -7,9 +7,12 @@ so without this the captions, table of contents, and footnotes
 render as undifferentiated body text.
 """
 
-import html
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from typing import override
+
+import htpy
+from htpy import Element, Node
+from markupsafe import Markup
 
 from ..assets import read
 from ..naming import IMAGE_DIR, content_anchor
@@ -68,8 +71,41 @@ CODE_BLOCK_LIMIT = 400_000
 CODE_BLOCK_WARN = 250_000
 
 
-def escape(text: str) -> str:
-    return html.escape(text, quote=True)
+def joined(separator: Node, parts: Iterable[Node]) -> Node:
+    """`parts` with `separator` between them, still as nodes.
+
+    The string equivalent would flatten each part on the way past,
+    which is where escaping gets lost: what comes back is markup again
+    and the next element to hold it cannot tell that it already is.
+    """
+    out: list[Node] = []
+    for i, part in enumerate(parts):
+        if i:
+            out.append(separator)
+        out.append(part)
+    return out
+
+
+def lines(parts: Iterable[Node]) -> Node:
+    """One part per line.
+
+    A newline between two blocks is whitespace HTML collapses,
+    and it is what makes a diff of a rebuilt report readable:
+    a changed sentence is a changed line rather than a changed file.
+    """
+    return joined("\n", parts)
+
+
+def markup(node: Node) -> Markup:
+    """A tree of `htpy` nodes as the string the rest of the emitter passes around.
+
+    `Markup` rather than a bare `str` because the difference matters on the way
+    back in: a value that has already been escaped must not be escaped again
+    when it is placed inside the next element, and `Markup` is what says so.
+    The emitters share one signature, returning `str`, and `Markup` is a `str`,
+    so this satisfies it without weakening it.
+    """
+    return Markup(htpy.fragment[node])
 
 
 HTML_H2 = 2
@@ -80,30 +116,7 @@ which publishes one level down because the headline is the `h1`.
 """
 
 
-def attributes(**named: str | None) -> str:
-    """Attributes for a tag, escaped because they are attributes.
-
-    Written this way rather than into an f-string so that quoting is the
-    function's job and not the caller's. Every value here ends up inside
-    a pair of quotes, and a value that closes them early is the whole of
-    how markup gets injected: one `escape` here covers each of them
-    rather than each call site remembering.
-
-    A `None` leaves the attribute out, which is the difference between
-    an attribute that is absent and one that is empty.
-    Underscores become hyphens, so `aria_label` is written `aria-label`,
-    and a trailing one is dropped, so `class_` is written `class`:
-    Python will not take `class` as an argument name and HTML will not take
-    anything else.
-    """
-    return "".join(
-        f' {name.rstrip("_").replace("_", "-")}="{escape(value)}"'
-        for name, value in named.items()
-        if value is not None
-    )
-
-
-def link_mark(anchor: str, what: str = "section") -> str:
+def link_mark(anchor: str, what: str = "section") -> Element:
     """The link a block carries to itself.
 
     Ahead of the block's own content rather than after it,
@@ -117,8 +130,7 @@ def link_mark(anchor: str, what: str = "section") -> str:
     `report_page` writes those two itself and never walks to them,
     and the mark they carry has to be the same mark.
     """
-    marked = attributes(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
-    return f"<a{marked}></a>"
+    return htpy.a(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
 
 
 class HtmlEmitter(Emitter):
@@ -138,7 +150,7 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
-        self._lead = ""
+        self._lead: Node = None
         """Markup for the next paragraph to open with, inside its own tag.
 
         A footnote's way back into the text belongs in the first line of the
@@ -146,6 +158,21 @@ class HtmlEmitter(Emitter):
         line begins is a fact about the tree.
         The paragraph that takes it clears it, so it is placed once.
         """
+
+    @override
+    def join(self, parts: list[str]) -> str:
+        """The base class joins with a separator, which flattens to a plain string.
+
+        Every part here is already markup, and a plain string is exactly what
+        the next element would escape on the way in. Joined as nodes and
+        marked as markup, the fact survives the join.
+        """
+        return markup(joined(self.separator, [part for part in parts if part]))
+
+    @override
+    def inlines(self, content: list[Inline]) -> str:
+        """As `join`, for the run of inline nodes inside a block."""
+        return markup([self.inline(node) for node in content])
 
     def anchor(self, prefix: str, text: str) -> str:
         """An id for a block, unique within the page.
@@ -195,7 +222,7 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
-        self._lead = ""
+        self._lead = None
         self._taken.update(b.anchor for b in doc.blocks if isinstance(b, Heading))
 
     def whole(self, doc: Document) -> list[str]:
@@ -210,12 +237,20 @@ class HtmlEmitter(Emitter):
         """
         shell = []
         if self.inline_css:
-            shell.append(f"<style>\n{REPORT_CSS}</style>")
+            shell.append(markup(htpy.style[Markup(f"\n{REPORT_CSS}")]))
         # Unlike the stylesheet, which a site can carry once under Custom CSS,
         # this travels with the report: it is small, and a fragment pasted
         # without it puts a tooltip off the edge of the screen.
-        shell.append(f"<script>\n{REPORT_JS}</script>")
-        return [*shell, '<div class="eta-report">', *group, "</div>"]
+        shell.append(markup(htpy.script[Markup(f"\n{REPORT_JS}")]))
+        # The wrapper is opened and closed around lines this does not hold,
+        # so it is the one tag written rather than built: a `div` whose
+        # children are joined by the caller cannot also be a `div` object.
+        # The one pair of tags written out rather than built.
+        # A group is a list of lines the caller joins, and the wrapper opens
+        # before the first and closes after the last, so there is no element
+        # here whose children they are. Both are constants holding nothing
+        # from the document, which is what makes writing them safe.
+        return [*shell, Markup('<div class="eta-report">'), *group, Markup("</div>")]
 
     def groups(self, doc: Document) -> list[list[str]]:
         """The report in the groups a split cuts it into: one per `h2` in the body.
@@ -274,13 +309,16 @@ class HtmlEmitter(Emitter):
         names = doc.contributors
         if not names:
             return ""
-        items = "\n".join(f"<li>{escape(name)}</li>" for name in names)
-        return (
-            '<section class="contributors" id="contributors">\n'
-            f"<h2>{self.mark('contributors')}Contributors</h2>\n"
-            f"<p>{CONTRIBUTORS_NOTE}</p>\n"
-            f"<ul>\n{items}\n</ul>\n"
-            "</section>"
+        return markup(
+            htpy.section(class_="contributors", id="contributors")[
+                "\n",
+                htpy.h2[self.mark("contributors"), "Contributors"],
+                "\n",
+                htpy.p[CONTRIBUTORS_NOTE],
+                "\n",
+                htpy.ul["\n", lines(htpy.li[name] for name in names), "\n"],
+                "\n",
+            ]
         )
 
     def phase(self, doc: Document) -> str:
@@ -292,7 +330,7 @@ class HtmlEmitter(Emitter):
         """
         if not doc.phase:
             return ""
-        return f'<p class="phase">{escape(doc.phase)}</p>'
+        return markup(htpy.p(class_="phase")[doc.phase])
 
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.
@@ -305,7 +343,7 @@ class HtmlEmitter(Emitter):
         date = doc.dateline
         if not date:
             return ""
-        return f'<p class="dateline" id="date">{self.mark("date", "date")}{escape(date)}</p>'
+        return markup(htpy.p(class_="dateline", id="date")[self.mark("date", "date"), date])
 
     def warnings(self, doc: Document) -> str:
         """Everything the build has to say about this report, where it will be read.
@@ -320,18 +358,24 @@ class HtmlEmitter(Emitter):
         """
         if not doc.warnings:
             return ""
-        items = "\n".join(f"<li>{self.marked_up(w)}</li>" for w in doc.warnings)
-        return f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
+        return markup(
+            htpy.div(class_="warnings")[
+                htpy.strong["Warnings"],
+                htpy.ul[lines(htpy.li[self.marked_up(w)] for w in doc.warnings)],
+            ]
+        )
 
     def marked_up(self, warning: Notice) -> str:
         """One warning as HTML: names as code, and what gets cut struck through."""
-        return warning_markup(
-            warning,
-            code=lambda c: f"<code>{escape(c)}</code>",
-            cut=lambda c: f"<s>{escape(c)}</s>",
-            text=escape,
-            quote=lambda q: f"<blockquote>{q}</blockquote>",
-            bullets=lambda items: "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>",
+        return Markup(
+            warning_markup(
+                warning,
+                code=lambda c: markup(htpy.code[c]),
+                cut=lambda c: markup(htpy.s[c]),
+                text=lambda t: markup(t),
+                quote=lambda q: markup(htpy.blockquote[Markup(q)]),
+                bullets=lambda items: markup(htpy.ul[[htpy.li[Markup(i)] for i in items]]),
+            )
         )
 
     def toc(self, doc: Document) -> str:
@@ -361,12 +405,16 @@ class HtmlEmitter(Emitter):
         if not headings:
             return ""
         headings = headings + self.back_matter(doc)
-        return (
-            '<nav class="toc" id="table-of-contents" aria-label="Table of contents">\n'
-            f"{self.mark('table-of-contents', 'table of contents')}\n"
-            "<strong>Table of Contents</strong>\n"
-            f"{self.toc_list(headings)}\n"
-            "</nav>"
+        return markup(
+            htpy.nav(class_="toc", id="table-of-contents", aria_label="Table of contents")[
+                "\n",
+                self.mark("table-of-contents", "table of contents"),
+                "\n",
+                htpy.strong["Table of Contents"],
+                "\n",
+                self.toc_list(headings),
+                "\n",
+            ]
         )
 
     def back_matter(self, doc: Document) -> list[Heading]:
@@ -383,52 +431,68 @@ class HtmlEmitter(Emitter):
             sections.append(Heading(level=2, anchor="contributors", content=[Text("Contributors")]))
         return sections
 
-    def toc_list(self, headings: list[Heading]) -> str:
+    def toc_list(self, headings: list[Heading]) -> Element:
         """The headings as nested lists, one level of nesting per level.
 
         A heading that skips a level, an `h4` directly under an `h2`,
         opens one list rather than two:
         the empty list a strict reading emits is an indent with nothing in it,
         and the document meant a subsection either way.
+
+        Built as the nesting it is rather than as a run of opening and closing
+        tags counted onto a stack. Nothing here can leave a list unclosed,
+        because nothing here closes one.
         """
-        out: list[str] = []
-        # The level each open `<ul>` holds, outermost first.
-        open_levels: list[int] = []
-        for i, heading in enumerate(headings):
-            if not open_levels or heading.level > open_levels[-1]:
-                out.append("<ul>")
-                open_levels.append(heading.level)
+        # The shallowest level rather than the first heading's:
+        # a document may open with a subsection, and the outermost list has to
+        # hold every heading or the ones above it are left with nowhere to go.
+        entries, rest = self.toc_level(headings, min(h.level for h in headings))
+        assert not rest, "the outermost list holds every heading"
+        return entries
+
+    def toc_level(self, headings: list[Heading], depth: int) -> tuple[Element, list[Heading]]:
+        """A list of everything at `depth` or below, and the headings left over.
+
+        A heading deeper than the one before it opens a list under that entry,
+        which this calls itself to build;
+        one shallower than `depth` ends this list and is handed back
+        to whichever call has a level shallow enough to hold it.
+        """
+        items: list[Node] = []
+        while headings and headings[0].level >= depth:
+            heading, headings = headings[0], headings[1:]
+            link = htpy.a(href=f"#{heading.anchor}")[plain_text(heading.content)]
+            if headings and headings[0].level > heading.level:
+                nested, headings = self.toc_level(headings, headings[0].level)
+                items.append(htpy.li[link, "\n", nested])
             else:
-                while len(open_levels) > 1 and heading.level < open_levels[-1]:
-                    out.append("</ul></li>")
-                    open_levels.pop()
-            link = f'<a href="#{heading.anchor}">{escape(plain_text(heading.content))}</a>'
-            # An entry with subsections stays open until its own list closes.
-            nests = i + 1 < len(headings) and headings[i + 1].level > heading.level
-            out.append(f"<li>{link}" if nests else f"<li>{link}</li>")
-        while open_levels:
-            open_levels.pop()
-            out.append("</ul></li>" if open_levels else "</ul>")
-        return "\n".join(out)
+                items.append(htpy.li[link])
+        return htpy.ul["\n", lines(items), "\n"], headings
 
     def footnotes(self, doc: Document) -> str:
         if not doc.footnotes:
             return ""
-        items = "\n".join(self.footnote(f) for f in doc.footnotes)
-        return (
-            '<section class="footnotes" id="footnotes">\n'
-            f"<h2>{self.mark('footnotes')}Footnotes</h2>\n"
-            f"<ol>\n{items}\n</ol>\n"
-            "</section>"
+        return markup(
+            htpy.section(class_="footnotes", id="footnotes")[
+                "\n",
+                htpy.h2[self.mark("footnotes"), "Footnotes"],
+                "\n",
+                htpy.ol["\n", lines(self.footnote(f) for f in doc.footnotes), "\n"],
+                "\n",
+            ]
         )
 
     def footnote(self, note: Footnote) -> str:
-        marked = attributes(
-            href=f"#fnref{note.number}",
-            class_="footnote-back",
-            aria_label=f"Back to footnote {note.number} in the text",
+        back = markup(
+            htpy.fragment[
+                htpy.a(
+                    href=f"#fnref{note.number}",
+                    class_="footnote-back",
+                    aria_label=f"Back to footnote {note.number} in the text",
+                )["↑"],
+                " ",
+            ]
         )
-        back = f"<a{marked}>↑</a> "
         # Immediately after the number the list renders, rather than after the note.
         # Several of these run to a paragraph,
         # and the way back should be where the eye already is.
@@ -446,7 +510,7 @@ class HtmlEmitter(Emitter):
         # The mark hangs outside the footnote's own number
         # rather than beside the arrow, which it crowded.
         mark = self.mark(f"fn{note.number}", "footnote")
-        return f'<li id="fn{note.number}">{mark}{"" if leads else back}{body}</li>'
+        return markup(htpy.li(id=f"fn{note.number}")[mark, None if leads else back, body])
 
     def tip(self, blocks: list[Block]) -> str:
         """A footnote as it reads, for the box its reference carries.
@@ -462,14 +526,14 @@ class HtmlEmitter(Emitter):
         A list keeps its bullets, which are what its items are;
         a figure or a table has nothing to say in a line and says nothing.
         """
-        lines: list[str] = []
+        shown: list[str] = []
         self._in_tip = True
         for block in blocks:
             match block:
                 case Paragraph():
-                    lines.append(self.inlines(block.content))
+                    shown.append(self.inlines(block.content))
                 case List():
-                    lines.extend(
+                    shown.extend(
                         f"{'•' if block.kind is ListKind.BULLET else f'{n}.'} "
                         f"{self.inlines(item.content)}"
                         for n, item in enumerate(block.items, 1)
@@ -477,7 +541,7 @@ class HtmlEmitter(Emitter):
                 case _:
                     continue
         self._in_tip = False
-        return "<br>".join(line for line in lines if line)
+        return markup(htpy.fragment[joined(htpy.br, [line for line in shown if line])])
 
     def tip_text(self, blocks: list[Block]) -> str:
         """A footnote as one line of text, for deciding whether it has a box to show.
@@ -539,8 +603,8 @@ class HtmlEmitter(Emitter):
             while run < len(blocks) and isinstance(blocks[run], Figure):
                 run += 1
             if run - i > 1:
-                figures = "\n".join(self.block(b) for b in blocks[i:run])
-                out.append((blocks[i], f'<div class="figure-row">\n{figures}\n</div>'))
+                row = lines(self.block(b) for b in blocks[i:run])
+                out.append((blocks[i], markup(htpy.div(class_="figure-row")["\n", row, "\n"])))
                 i = run
             else:
                 out.append((blocks[i], self.block(blocks[i])))
@@ -567,11 +631,11 @@ class HtmlEmitter(Emitter):
         finally:
             self._scope, self._paragraphs, self._marked = was
 
-    def mark(self, anchor: str, what: str = "section") -> str:
+    def mark(self, anchor: str, what: str = "section") -> Element:
         return link_mark(anchor, what)
 
-    def link(self, href: str) -> str:
-        """Attributes for a link in the prose.
+    def link(self, href: str) -> Element:
+        """An `a` for the prose, opened but not yet given what it holds.
 
         Inside the box a reference carries, every link is a copy of one the
         note already has, and the note is a jump away: the keyboard should
@@ -580,7 +644,7 @@ class HtmlEmitter(Emitter):
         of the two it is writing, rather than by rewriting `<a ` afterwards
         in the finished markup.
         """
-        return attributes(tabindex="-1" if self._in_tip else None, href=href)
+        return htpy.a(tabindex="-1" if self._in_tip else None, href=href)
 
     @override
     def heading(self, node: Heading) -> str:
@@ -594,24 +658,25 @@ class HtmlEmitter(Emitter):
         # The section every paragraph after this one is numbered within,
         # until the next heading opens the next one.
         self._scope, self._paragraphs = node.anchor, 0
-        mark = self.mark(node.anchor)
-        return (
-            f'<h{node.level} id="{node.anchor}">{mark}{self.inlines(node.content)}</h{node.level}>'
-        )
+        # The level is a number the document chose, so the element is looked up
+        # by name. `htpy` answers for any tag, which is the one place here
+        # a tag is not written down.
+        heading = getattr(htpy, f"h{node.level}")
+        return markup(heading(id=node.anchor)[self.mark(node.anchor), self.inlines(node.content)])
 
     @override
     def paragraph(self, node: Paragraph) -> str:
         """A paragraph is linkable, because a report this long gets quoted
         a paragraph at a time.
         One holding no text is not: nothing to hash, and nothing anyone would link to."""
-        lead, self._lead = self._lead, ""
+        lead, self._lead = self._lead, None
         if not plain_text(node.content):
-            return f"<p>{lead}{self.inlines(node.content)}</p>"
+            return markup(htpy.p[lead, self.inlines(node.content)])
         self._paragraphs += 1
         counted = f"{self._scope}-p{self._paragraphs}" if self._scope else f"p{self._paragraphs}"
         anchor = self.take(counted)
-        mark = self.mark(anchor, "paragraph") if self._marked else ""
-        return f'<p id="{anchor}">{lead}{mark}{self.inlines(node.content)}</p>'
+        mark = self.mark(anchor, "paragraph") if self._marked else None
+        return markup(htpy.p(id=anchor)[lead, mark, self.inlines(node.content)])
 
     @override
     def list_(self, node: List) -> str:
@@ -620,40 +685,34 @@ class HtmlEmitter(Emitter):
         An item is a line rather than a passage,
         and each would want an id derived from a few words a copy edit moves around.
         The list is the unit someone links to."""
-        tag = "ol" if node.kind is ListKind.NUMBER else "ul"
+        listing = htpy.ol if node.kind is ListKind.NUMBER else htpy.ul
         text = " ".join(plain_text(item.content) for item in node.items)
-        items = f"<{tag}>{self.items(node.items, tag)}</{tag}>"
+        items = listing[self.items(node.items, listing)]
         if not text:
-            return items
+            return markup(items)
         # Wrapped, because a list may hold only list items:
         # the mark cannot be a child of the `ul` the way it is a child of a `p`,
         # and inside the first item it would hang beside that item's bullet.
         anchor = self.anchor("list", text)
-        return f'<div class="list-block" id="{anchor}">{self.mark(anchor, "list")}{items}</div>'
+        return markup(htpy.div(class_="list-block", id=anchor)[self.mark(anchor, "list"), items])
 
-    def items(self, items: list[ListItem], tag: str) -> str:
-        out = []
+    def items(self, items: list[ListItem], listing: Element) -> Node:
+        out: list[Node] = []
         for item in items:
-            inner = self.inlines(item.content)
-            if item.children:
-                inner += f"<{tag}>{self.items(item.children, tag)}</{tag}>"
-            out.append(f"<li>{inner}</li>")
-        return "".join(out)
+            nested = listing[self.items(item.children, listing)] if item.children else None
+            out.append(htpy.li[self.inlines(item.content), nested])
+        return out
 
     @override
     def figure(self, node: Figure) -> str:
         # `Figure.source` is not emitted:
         # it names the original file in Drive, for whoever assembles the report,
         # and does not appear on the published page.
-        parts = [self.image(node.image)]
+        parts: list[Node] = [self.image(node.image)]
         if node.caption:
-            parts.append(
-                f'<figcaption class="figure-caption">{self.inlines(node.caption)}</figcaption>'
-            )
+            parts.append(htpy.figcaption(class_="figure-caption")[self.inlines(node.caption)])
         if node.credit:
-            parts.append(
-                f'<figcaption class="figure-credit">{self.inlines(node.credit)}</figcaption>'
-            )
+            parts.append(htpy.figcaption(class_="figure-credit")[self.inlines(node.credit)])
         # Named for the image it holds, so the anchor is whatever the image is called:
         # the file its `Source:` line names,
         # or `img-` and a hash of the object id where there is no such line.
@@ -662,11 +721,9 @@ class HtmlEmitter(Emitter):
         # to divide a line between the figures of a row,
         # and to cap how tall any one figure gets.
         aspect = self.doc.image_aspect(node.image)
-        shape = f' style="--aspect: {aspect:.3f}"' if aspect is not None else ""
+        shape = f"--aspect: {aspect:.3f}" if aspect is not None else None
         anchor = self.take(node.image.filename)
-        return (
-            f'<figure id="{anchor}"{shape}>{self.mark(anchor, "figure")}{"".join(parts)}</figure>'
-        )
+        return markup(htpy.figure(id=anchor, style=shape)[self.mark(anchor, "figure"), parts])
 
     @override
     def table(self, node: Table) -> str:
@@ -684,38 +741,38 @@ class HtmlEmitter(Emitter):
         anchor = self.anchor("table", text) if text else ""
         rows = self.within(
             anchor,
-            lambda: "".join(
-                "<tr>" + "".join(f"<td>{self.blocks(cell)}</td>" for cell in row) + "</tr>"
-                for row in node.rows
+            lambda: markup(
+                [htpy.tr[[htpy.td[self.blocks(cell)] for cell in row]] for row in node.rows]
             ),
         )
         if not anchor:
-            return f'<div class="table-scroll"><table>{rows}</table></div>'
-        mark = self.mark(anchor, "table")
-        return f'<div class="table-scroll" id="{anchor}">{mark}<table>{rows}</table></div>'
+            return markup(htpy.div(class_="table-scroll")[htpy.table[rows]])
+        return markup(
+            htpy.div(class_="table-scroll", id=anchor)[self.mark(anchor, "table"), htpy.table[rows]]
+        )
 
     # ---- inline -----------------------------------------------------
 
     @override
     def text(self, node: Text) -> str:
-        out = escape(node.text)
+        out: Node = node.text
         if node.sup:
-            out = f"<sup>{out}</sup>"
+            out = htpy.sup[out]
         elif node.sub:
-            out = f"<sub>{out}</sub>"
+            out = htpy.sub_[out]
         if node.bold:
-            out = f"<strong>{out}</strong>"
+            out = htpy.strong[out]
         if node.italic:
-            out = f"<em>{out}</em>"
+            out = htpy.em[out]
         if node.underline:
-            out = f"<u>{out}</u>"
+            out = htpy.u[out]
         if node.href:
-            out = f"<a{self.link(node.href)}>{out}</a>"
-        return out
+            out = self.link(node.href)[out]
+        return markup(out)
 
     @override
     def line_break(self, node: LineBreak) -> str:
-        return "<br>"
+        return markup(htpy.br)
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:
@@ -724,8 +781,9 @@ class HtmlEmitter(Emitter):
         # itself would build a box out of a box without end,
         # so a reference in a box is only the number it is.
         if self._in_tip:
-            link = self.link(f"#fn{node.number}")
-            return f'<sup class="footnote-ref"><a{link}>{node.number}</a></sup>'
+            return markup(
+                htpy.sup(class_="footnote-ref")[self.link(f"#fn{node.number}")[node.number]]
+            )
         # Matched by the Docs id rather than by the number,
         # which is the identity the parser guarantees on both sides.
         note = next(
@@ -735,17 +793,18 @@ class HtmlEmitter(Emitter):
         # A footnote that is a table or a figure has no sentence to show,
         # and an empty box hovering over the text is worse than none.
         tip = self.tip(note.content) if note and self.tip_text(note.content) else ""
-        preview = f'<span class="footnote-tip" aria-hidden="true">{tip}</span>' if tip else ""
-        return (
-            f'<sup id="fnref{node.number}" class="footnote-ref">'
-            f'<a href="#fn{node.number}">{node.number}</a>{preview}</sup>'
+        preview = htpy.span(class_="footnote-tip", aria_hidden="true")[tip] if tip else None
+        return markup(
+            htpy.sup(id=f"fnref{node.number}", class_="footnote-ref")[
+                htpy.a(href=f"#fn{node.number}")[node.number], preview
+            ]
         )
 
     @override
     def image(self, node: Image) -> str:
         href = self.doc.image_href(node)
         src = f"{self.image_base}/{href}" if self.image_base else href
-        return f'<img src="{escape(src)}" alt="{escape(node.alt)}" loading="lazy">'
+        return markup(htpy.img(src=src, alt=node.alt, loading="lazy"))
 
 
 # Enough to read the report as it will look, and nothing more.
@@ -769,22 +828,22 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
     # `og:image` is read by everything that unfurls a link, so it is the one tag worth writing.
-    card = ""
+    card: list[Node] = []
     if doc.card is not None:
         href = doc.image_href(doc.card)
         src = f"{image_base}/{href}" if image_base else href
-        card = f'<meta property="og:image" content="{escape(src)}">\n'
+        card.append(htpy.meta(property="og:image", content=src))
         if doc.card.alt:
-            card += f'<meta property="og:image:alt" content="{escape(doc.card.alt)}">\n'
-    return (
-        "<!doctype html>\n"
-        '<meta charset="utf-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        f"<title>{escape(doc.title)}</title>\n"
-        f'<meta name="description" content="{escape(doc.meta.get("seo description", ""))}">\n'
-        f"{card}"
-        f"<style>\n{PAGE_CSS}\n{REPORT_CSS}</style>\n"
-        f'<h1 id="title">{link_mark("title", "title")}{escape(doc.title)}</h1>\n'
-        f'<p class="standfirst" id="short">{link_mark("short", "standfirst")}{escape(short)}</p>\n'
-        f"{body}\n"
-    )
+            card.append(htpy.meta(property="og:image:alt", content=doc.card.alt))
+    head: list[Node] = [
+        htpy.meta(charset="utf-8"),
+        htpy.meta(name="viewport", content="width=device-width, initial-scale=1"),
+        htpy.title[doc.title],
+        htpy.meta(name="description", content=doc.meta.get("seo description", "")),
+        *card,
+        htpy.style[Markup(f"\n{PAGE_CSS}\n{REPORT_CSS}")],
+        htpy.h1(id="title")[link_mark("title", "title"), doc.title],
+        htpy.p(class_="standfirst", id="short")[link_mark("short", "standfirst"), short],
+    ]
+    # `<!doctype html>` is not an element and no builder emits one.
+    return markup([Markup("<!doctype html>"), "\n", lines(head), "\n", Markup(body), "\n"])
