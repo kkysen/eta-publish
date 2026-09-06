@@ -6,9 +6,10 @@ from html.parser import HTMLParser
 from typing import override
 
 import pytest
+from htpy import a
 from paths import FIXTURE_DIR
 
-from eta_publish.emit.html import HtmlEmitter, attributes, link_mark, report_page
+from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 
@@ -134,6 +135,38 @@ def test_nested_lists_nest(out: str) -> None:
     )
 
 
+class Read(HTMLParser):
+    """The emitted markup as a reader of HTML sees it, rather than as a string.
+
+    An assertion about a substring is written in the same terms the emitter is,
+    so a quoting mistake that both make is a mistake neither one shows.
+    This is the standard library's parser, which is not the thing under test:
+    it undoes the escaping, and what comes back out is compared to what went in.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.attrs: list[dict[str, str | None]] = []
+        self.tags: list[str] = []
+        self.text: list[str] = []
+
+    @override
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.tags.append(tag)
+        self.attrs.append(dict(attrs))
+
+    @override
+    def handle_data(self, data: str) -> None:
+        self.text.append(data)
+
+
+def read(markup: str) -> Read:
+    parser = Read()
+    parser.feed(markup)
+    parser.close()
+    return parser
+
+
 def test_text_and_urls_are_escaped() -> None:
     """Doc text is prose, but it reaches a published page verbatim."""
     hostile = json.loads(json.dumps(FIXTURE))
@@ -153,12 +186,15 @@ def test_text_and_urls_are_escaped() -> None:
         }
     )
     emitted = HtmlEmitter().emit(parse(hostile))
+    parsed = read(emitted)
     # The page carries one script of its own, the one that places the footnote
     # tooltips, so the check is that nothing from the document became a second
     # one, rather than that the page has none.
-    assert "<script>alert(1)</script>" not in emitted
-    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in emitted
-    assert 'href="https://x.test/?a=&quot;b"' in emitted
+    assert parsed.tags.count("script") == 1
+    assert "<script>alert(1)</script>" in "".join(parsed.text), "as text, not as a tag"
+    # Which characters the escaping spells out is the builder's business.
+    # What has to hold is that the link points where the document pointed.
+    assert {"href": 'https://x.test/?a="b'} in parsed.attrs
 
 
 def test_inline_css_is_optional(doc: Document) -> None:
@@ -387,38 +423,6 @@ def test_a_footnote_numbers_its_own_paragraphs(out: str) -> None:
 EVIL = '"><script>alert(1)</script><x y="'
 
 
-class Read(HTMLParser):
-    """The emitted markup as a reader of HTML sees it, rather than as a string.
-
-    An assertion about a substring is written in the same terms the emitter is,
-    so a quoting mistake that both make is a mistake neither one shows.
-    This is the standard library's parser, which is not the thing under test:
-    it undoes the escaping, and what comes back out is compared to what went in.
-    """
-
-    def __init__(self) -> None:
-        super().__init__(convert_charrefs=True)
-        self.attrs: list[dict[str, str | None]] = []
-        self.tags: list[str] = []
-        self.text: list[str] = []
-
-    @override
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        self.tags.append(tag)
-        self.attrs.append(dict(attrs))
-
-    @override
-    def handle_data(self, data: str) -> None:
-        self.text.append(data)
-
-
-def read(markup: str) -> Read:
-    parser = Read()
-    parser.feed(markup)
-    parser.close()
-    return parser
-
-
 def test_an_attribute_value_comes_back_out_as_it_went_in() -> None:
     """Escaping is wrong in two directions, and a substring check sees neither.
 
@@ -428,15 +432,15 @@ def test_an_attribute_value_comes_back_out_as_it_went_in() -> None:
     Both are the same failure to a reader: the attribute does not say
     what the document said. So it is read back and compared.
     """
-    values = [EVIL, "a & b", "&amp;", "it's", 'say "hi"', "<>", "\u00e9 \u2014 \u00b7", ""]
+    values = [EVIL, "a & b", "&amp;", "it's", 'say "hi"', "<>", "\u00e9 \u00a3 \u00b7", ""]
     for value in values:
-        parsed = read(f"<a{attributes(id=value, title=value)}></a>")
+        parsed = read(markup(a(id=value, title=value)))
         assert parsed.attrs == [{"id": value, "title": value}], value
 
 
 def test_a_link_to_a_block_says_where_it_points() -> None:
     """`link_mark` builds its own tag, so what that tag says is worth reading back."""
-    parsed = read(link_mark(EVIL, EVIL))
+    parsed = read(markup(link_mark(EVIL, EVIL)))
     assert parsed.tags == ["a"]
     assert parsed.attrs == [
         {"class": "link-mark", "href": f"#{EVIL}", "aria-label": f"Link to this {EVIL}"}
@@ -467,20 +471,19 @@ def test_a_hostile_document_opens_no_tag_of_its_own(doc: Document) -> None:
         assert EVIL in "".join(parsed.text), "the text itself survives, as text"
 
 
-def test_attributes_are_quoted_by_the_thing_that_writes_them() -> None:
-    """Every attribute value ends up inside a pair of quotes, and a value that
-    closes them early is the whole of how markup gets injected."""
-    written = attributes(id=EVIL)
-    assert written.startswith(' id="') and written.endswith('"')
-    assert "<script>" not in written
-    assert '"' not in written[5:-1], "a value cannot close the quotes around it"
-    assert "<script>" not in link_mark(EVIL, EVIL)
-    # An attribute that is absent is not an attribute that is empty.
-    assert attributes(title=None) == ""
-    assert attributes(title="") == ' title=""'
+def test_an_absent_attribute_is_not_an_empty_one() -> None:
+    """`None` leaves the attribute out, which is a different page.
+
+    The distinction is the builder's rather than this emitter's,
+    and every conditional attribute here is written as one:
+    a `tabindex` that is `None` has to be no `tabindex` at all
+    rather than `tabindex=""`, which is a real value meaning something else.
+    """
+    assert markup(a(title=None)) == "<a></a>"
+    assert markup(a(title="")) == '<a title=""></a>'
     # Python will not take `class` as an argument name, and HTML will not take
     # anything else.
-    assert attributes(class_="x", aria_label="y") == ' class="x" aria-label="y"'
+    assert markup(a(class_="x", aria_label="y")) == '<a class="x" aria-label="y"></a>'
 
 
 def test_nothing_a_document_says_becomes_markup(doc: Document) -> None:

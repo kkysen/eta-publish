@@ -26,6 +26,7 @@ repos:
             "google-auth-oauthlib>=1.2",
             "requests>=2.32",
             "types-requests>=2.32",
+            "markupsafe>=3.0",
             "pytest>=9.1.1",
             "typer>=0.27",
           ]
