@@ -145,7 +145,7 @@ def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
     }
     doc = parse(unstyled)
     assert [i.object_id for i in doc.images] == ["io.hero"]
-    assert any("`Title`-styled" in w for w in doc.warnings)
+    assert any("`Title`-styled" in w for w in map(str, doc.warnings))
 
 
 def test_scaffolding_before_the_header_does_not_hide_it() -> None:
@@ -188,7 +188,7 @@ def test_dropped_scaffolding_is_reported() -> None:
             },
         }
     )
-    assert any("Draft 2" in w for w in doc.warnings)
+    assert any("Draft 2" in w for w in map(str, doc.warnings))
 
 
 def test_a_document_with_no_header_section_is_left_intact() -> None:
@@ -204,7 +204,7 @@ def test_a_document_with_no_header_section_is_left_intact() -> None:
     )
     assert len([b for b in doc.blocks if isinstance(b, Paragraph)]) == 2
     assert doc.meta == {}
-    assert any("no front matter found" in w for w in doc.warnings)
+    assert any("no front matter found" in w for w in map(str, doc.warnings))
 
 
 def test_a_headline_before_the_header_stops_the_search() -> None:
@@ -276,8 +276,8 @@ def test_a_title_header_field_does_not_set_the_headline() -> None:
     }
     doc = parse(document)
     assert doc.title == "SAS West Feasibility Response"
-    assert any("no `Title`-styled paragraph" in w for w in doc.warnings)
-    assert any("not what the headline comes from" in w for w in doc.warnings)
+    assert any("no `Title`-styled paragraph" in w for w in map(str, doc.warnings))
+    assert any("not what the headline comes from" in w for w in map(str, doc.warnings))
 
 
 def test_a_title_styled_paragraph_wins_and_says_nothing() -> None:
@@ -293,7 +293,7 @@ def test_a_title_styled_paragraph_wins_and_says_nothing() -> None:
     }
     doc = parse(document)
     assert doc.title == "The Real Headline"
-    assert not any("Title" in w for w in doc.warnings)
+    assert not any("Title" in w for w in map(str, doc.warnings))
 
 
 def test_a_field_written_twice_says_which_one_won() -> None:
@@ -316,7 +316,7 @@ def test_a_field_written_twice_says_which_one_won() -> None:
         "more than one `Short:` line" in w
         and "`The second answer.`" in w
         and "`The first answer.`" in w
-        for w in doc.warnings
+        for w in map(str, doc.warnings)
     )
 
 
@@ -336,7 +336,7 @@ def test_a_note_in_the_key_does_not_hide_a_repeat() -> None:
     }
     doc = parse(document)
     assert doc.meta["seo description"] == "Second."
-    assert any("more than one `SEO Description:` line" in w for w in doc.warnings)
+    assert any("more than one `SEO Description:` line" in w for w in map(str, doc.warnings))
 
 
 def test_distinct_fields_are_not_a_repeat() -> None:
@@ -353,4 +353,4 @@ def test_distinct_fields_are_not_a_repeat() -> None:
         },
     }
     doc = parse(document)
-    assert not any("more than one" in w for w in doc.warnings)
+    assert not any("more than one" in w for w in map(str, doc.warnings))

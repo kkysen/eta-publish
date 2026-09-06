@@ -140,7 +140,7 @@ def test_an_unreferenced_footnote_is_reported_rather_than_numbered() -> None:
     doc_json["footnotes"]["fn.orphan"] = orphan
     doc = parse(doc_json)
     assert [f.footnote_id for f in doc.footnotes] == ["fn.a", "fn.b"]
-    assert any("fn.orphan" in w for w in doc.warnings)
+    assert any("fn.orphan" in w for w in map(str, doc.warnings))
 
 
 # ---- images --------------------------------------------------------
@@ -174,7 +174,7 @@ def test_a_source_line_with_no_image_is_reported_not_dropped_silently() -> None:
         }
     )
     doc = parse(doc_json)
-    assert any("orphan.jpg" in w for w in doc.warnings)
+    assert any("orphan.jpg" in w for w in map(str, doc.warnings))
 
 
 def _text_para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:

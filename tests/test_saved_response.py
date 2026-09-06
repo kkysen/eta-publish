@@ -89,7 +89,9 @@ def test_an_image_is_still_an_image_without_its_uri(saved: JsonObject) -> None:
     assert [image.object_id for image in doc.images] == ["io.1"]
     assert doc.images[0].alt == "A map."
     assert doc.images[0].source_uri is None
-    assert not [w for w in doc.warnings if "image" in w], "a URI-less image is not a defect"
+    assert not [w for w in map(str, doc.warnings) if "image" in w], (
+        "a URI-less image is not a defect"
+    )
 
 
 def test_a_download_from_a_saved_response_says_to_re_fetch(
@@ -99,7 +101,7 @@ def test_a_download_from_a_saved_response_says_to_re_fetch(
     session = _offline()
 
     assert download(doc, tmp_path, session=session) == {}
-    about_images = [w for w in doc.warnings if "image" in w]
+    about_images = [w for w in map(str, doc.warnings) if "image" in w]
     assert about_images == [
         "this response carries no image URIs, because they expire and are "
         "not saved; re-fetch the document to download its images"

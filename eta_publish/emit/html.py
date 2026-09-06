@@ -26,6 +26,7 @@ from ..nodes import (
     List,
     ListItem,
     ListKind,
+    Notice,
     Paragraph,
     Table,
     Text,
@@ -482,7 +483,7 @@ class HtmlEmitter(Emitter):
         items = "\n".join(f"<li>{self.marked_up(w)}</li>" for w in doc.warnings)
         return f'<div class="warnings"><strong>Warnings</strong><ul>{items}</ul></div>'
 
-    def marked_up(self, warning: str) -> str:
+    def marked_up(self, warning: Notice) -> str:
         """One warning as HTML: names as code, and what gets cut struck through."""
         return warning_markup(
             warning,

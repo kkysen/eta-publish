@@ -162,3 +162,17 @@ def test_a_caption_is_a_line_of_its_own() -> None:
     out = MarkdownEmitter().emit(doc)
     picture = next(line for line in out.splitlines() if line.startswith("!["))
     assert picture.endswith("\\")
+
+
+def test_a_value_holding_a_backtick_is_still_one_span() -> None:
+    """The failure the pieces exist to prevent: marked-up text put through a
+    parser re-paired its spans around a value it did not control."""
+    from eta_publish.emit.markdown import fence
+    from eta_publish.nodes import Document, Shown
+
+    doc = Document()
+    doc.warn("using {} and ignoring {}", Shown("a ` b"), Shown("c"))
+    rendered = MarkdownEmitter().warnings(doc)
+    assert "using ``a ` b`` and ignoring `c`" in rendered
+    assert fence("`leading") == "`` `leading ``"
+    assert fence("plain") == "`plain`"

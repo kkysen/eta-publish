@@ -35,6 +35,7 @@ from .nodes import (
     ListItem,
     ListKind,
     Paragraph,
+    Shown,
     Table,
     Text,
     Vector,
@@ -230,7 +231,7 @@ class Parser:
                 out.append(self._rich_link(el["richLink"]))
             elif not (IGNORED_ELEMENTS & el.keys()):
                 kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
-                self.doc.warn(f"unhandled document element `{kinds}`, dropped")
+                self.doc.warn("unhandled document element {}, dropped", Shown(", ".join(kinds)))
         # A soft break at either end is spacing rather than part of what the paragraph says,
         # and renders as a stray line break with nothing on one side of it.
         while out and isinstance(out[0], LineBreak):
@@ -341,7 +342,7 @@ class Parser:
             .get("embeddedObject", {})
         )
         if "imageProperties" not in embedded:
-            self.doc.warn(f"inline object `{object_id}` has no image; skipped")
+            self.doc.warn("inline object {} has no image; skipped", Shown(object_id))
             return None
         image_props = embedded["imageProperties"]
         # `contentUri` says where to fetch this image, not whether it is one.
@@ -371,7 +372,7 @@ class Parser:
                 continue
             match = DRIVE_ID_RE.search(uri)
             if match is None:
-                self.doc.warn(f"cannot read a Drive file id from `{uri}`; the raster is used")
+                self.doc.warn("cannot read a Drive file id from {}; the raster is used", Shown(uri))
                 continue
             file_id = match.group(1) or match.group(2)
             title = props.get("title", "")
@@ -396,7 +397,8 @@ class Parser:
         """
         if props.get("angle"):
             self.doc.warn(
-                f"image `{object_id}` is rotated in the document; the rotation is not applied"
+                "image {} is rotated in the document; the rotation is not applied",
+                Shown(object_id),
             )
 
         def side(name: str) -> float:
@@ -461,7 +463,11 @@ class Parser:
             nonlocal pending_source
             if pending_source is not None:
                 text = plain_text(pending_source)
-                self.doc.warn(f"`Source:` line not followed by an image, dropped: `{text[:80]}`")
+                self.doc.warn(
+                    "{} line not followed by an image, dropped: {}",
+                    Shown("Source:"),
+                    Shown(text[:80]),
+                )
                 pending_source = None
 
         i = 0
@@ -500,8 +506,10 @@ class Parser:
                 # Treating it as a heading yields an empty one
                 # whose anchor is a published URL, and buries the image inside it.
                 self.doc.warn(
-                    "an image is styled as a `Heading`; treating it as a figure. "
-                    "Set that paragraph to `Normal text` in the doc."
+                    "an image is styled as a {}; treating it as a figure. "
+                    "Set that paragraph to {} in the doc.",
+                    Shown("Heading"),
+                    Shown("Normal text"),
                 )
                 style = "NORMAL_TEXT"
 
@@ -518,7 +526,7 @@ class Parser:
                 continue
 
             if TODO_RE.search(text):
-                self.doc.warn(f"unfinished text in the document: `{text[:80]}`")
+                self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
             if SOURCE_RE.match(text) or ASSET_RE.match(text):
                 last = out[-1] if out else None
@@ -580,8 +588,8 @@ class Parser:
                 # No alt text in Docs and no caption to borrow,
                 # so screen readers get an unlabelled image.
                 self.doc.warn(
-                    f"image `{block.image.object_id}` has no alt text and no caption; "
-                    "add a description to it in the doc"
+                    "image {} has no alt text and no caption; add a description to it in the doc",
+                    Shown(block.image.object_id),
                 )
             if isinstance(block, Figure) and not block.image.alt and block.caption:
                 # The published page uses the caption as alt text as well as showing it,
@@ -613,8 +621,9 @@ class Parser:
             return
         if figure.image.crop.trims:
             self.doc.warn(
-                f"image `{figure.image.object_id}` is both cropped and given a vector "
-                "original; the crop cannot be applied to it, so the raster is used"
+                "image {} is both cropped and given a vector original; "
+                "the crop cannot be applied to it, so the raster is used",
+                Shown(figure.image.object_id),
             )
             return
         figure.image = replace(figure.image, vector=vector)
@@ -628,7 +637,9 @@ class Parser:
             )
         prose = plain_text(inlines).strip()
         if prose:
-            self.doc.warn(f"text sharing a paragraph with an image was dropped: `{prose[:80]}`")
+            self.doc.warn(
+                "text sharing a paragraph with an image was dropped: {}", Shown(prose[:80])
+            )
         return images[0]
 
     def table(self, table: JsonObject) -> Table:
@@ -709,8 +720,11 @@ class Parser:
         start = self._header_index(content)
         if start is None:
             self.doc.warn(
-                "no front matter found; expected a leading `Header` section with "
-                "`URL:`, `Short:`, and `SEO Description:` lines"
+                "no front matter found; expected a leading {} section with {}, {}, and {} lines",
+                Shown("Header"),
+                Shown("URL:"),
+                Shown("Short:"),
+                Shown("SEO Description:"),
             )
             return content
 
@@ -718,7 +732,11 @@ class Parser:
             para = item.get("paragraph")
             text = plain(para) if para is not None else ""
             if text:
-                self.doc.warn(f"dropped a line before the `Header` section: `{text[:80]}`")
+                self.doc.warn(
+                    "dropped a line before the {} section: {}",
+                    Shown("Header"),
+                    Shown(text[:80]),
+                )
 
         end = start + 1
         for i in range(start + 1, len(content)):
@@ -757,16 +775,23 @@ class Parser:
                 # A header line can hold a backtick of its own and come out
                 # reading oddly, which is a worse message and not a wrong one.
                 self.doc.warn(
-                    f"the `Header` section has more than one `{written}:` line; "
-                    f"using `{value}` and ignoring `{self.doc.meta[key]}`"
+                    "the {} section has more than one {} line; using {} and ignoring {}",
+                    Shown("Header"),
+                    Shown(f"{written}:"),
+                    Shown(value),
+                    Shown(self.doc.meta[key]),
                 )
             self.doc.meta[key] = value
             end = i + 1
 
         if not self.doc.meta:
             self.doc.warn(
-                "the `Header` section holds no `Key: value` lines; expected "
-                "`URL:`, `Short:`, and `SEO Description:`"
+                "the {} section holds no {} lines; expected {}, {}, and {}",
+                Shown("Header"),
+                Shown("Key: value"),
+                Shown("URL:"),
+                Shown("Short:"),
+                Shown("SEO Description:"),
             )
         return content[end:]
 
@@ -811,16 +836,21 @@ class Parser:
 
         filename = self.json.get("title", "")
         self.doc.warn(
-            f"no `Title`-styled paragraph, so the document name `{filename}` "
-            "is being used as the headline; style the headline as `Title` in the doc"
+            "no {}-styled paragraph, so the document name {} is being used as the "
+            "headline; style the headline as {} in the doc",
+            Shown("Title"),
+            Shown(filename),
+            Shown("Title"),
         )
         if self.doc.meta.get("title"):
             # Said separately, because it is a different thing to fix:
             # the headline is written down, in a line that does not set it.
             self.doc.warn(
-                f"the `Header` section has `Title: {self.doc.meta['title']}`, "
-                "which is not what the headline comes from; "
-                "style that line as `Title` in the body instead"
+                "the {} section has {}, which is not what the headline comes from; "
+                "style that line as {} in the body instead",
+                Shown("Header"),
+                Shown(f"Title: {self.doc.meta['title']}"),
+                Shown("Title"),
             )
         return filename
 
@@ -832,7 +862,7 @@ class Parser:
         """
         for fid in self.footnote_defs:
             if fid not in self._footnote_numbers:
-                self.doc.warn(f"footnote `{fid}` is defined but never referenced; omitted")
+                self.doc.warn("footnote {} is defined but never referenced; omitted", Shown(fid))
         return [
             Footnote(
                 footnote_id=fid,

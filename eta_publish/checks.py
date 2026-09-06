@@ -10,7 +10,7 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import EMAILED, Document, Figure, plain_text
+from .nodes import EMAILED, Cut, Document, Figure, Listed, Quoted, Shown, plain_text
 from .parse import TODO_RE
 
 REQUIRED_FIELDS = (
@@ -63,15 +63,15 @@ def check(doc: Document) -> None:
 
     for field in REQUIRED_FIELDS:
         if field not in doc.meta:
-            doc.warn(f"the `Header` section has no `{_titled(field)}:` line")
+            doc.warn("the {} section has no {} line", Shown("Header"), Shown(f"{_titled(field)}:"))
         elif field not in MAY_BE_EMPTY and not doc.meta[field].strip():
-            doc.warn(f"the `Header` section leaves `{_titled(field)}:` empty")
+            doc.warn("the {} section leaves {} empty", Shown("Header"), Shown(f"{_titled(field)}:"))
 
         if TODO_RE.search(doc.meta.get(field, "")):
             # The body walk flags an unfinished line wherever it finds one,
             # but the header is consumed before that walk begins,
             # so `Short: TODO` reached the page with nothing said about it.
-            doc.warn(f"`{_titled(field)}:` is still marked unfinished")
+            doc.warn("{} is still marked unfinished", Shown(f"{_titled(field)}:"))
 
     seo = doc.meta.get("seo description", "")
     if len(seo) > SEO_LIMIT:
@@ -79,8 +79,9 @@ def check(doc: Document) -> None:
         # Which words are lost is the thing to fix,
         # and a count of characters over does not say which they are.
         doc.warn(
-            f"`SEO Description:` is {len(seo)} characters, over the {SEO_LIMIT} "
-            f"a search result shows:\n> {seo[:SEO_LIMIT]}~~{seo[SEO_LIMIT:]}~~"
+            f"{{}} is {len(seo)} characters, over the {SEO_LIMIT} a search result shows:{{}}",
+            Shown("SEO Description:"),
+            Quoted(seo[:SEO_LIMIT], Cut(seo[SEO_LIMIT:])),
         )
 
 
@@ -118,8 +119,9 @@ def _check_contributors(doc: Document) -> None:
         emailed = EMAILED.search(entry)
         if emailed is not None and entry[emailed.end() :].strip():
             doc.warn(
-                f"the `Public Contributors:` line reads `{entry.strip()}` as one "
-                "contributor; a comma is missing after the address"
+                "the {} line reads {} as one contributor; a comma is missing after the address",
+                Shown("Public Contributors:"),
+                Shown(entry.strip()),
             )
 
 
@@ -137,9 +139,15 @@ def _check_figures(doc: Document) -> None:
     for block in doc.blocks:
         if not isinstance(block, Figure):
             continue
-        for what, content in (("caption", block.caption), ("`Credit:` line", block.credit)):
+        named = Shown(block.image.filename)
+        # The template and its values together, because the two warnings differ
+        # in both: one names a `Credit:` line and the other names nothing.
+        for template, values, content in (
+            ("the image {} has no caption", (named,), block.caption),
+            ("the image {} has no {} line", (named, Shown("Credit:")), block.credit),
+        ):
             if not content:
-                doc.warn(f"the image `{block.image.filename}` has no {what}")
+                doc.warn(template, *values)
 
 
 def _check_named(doc: Document) -> None:
@@ -164,11 +172,13 @@ def _check_named(doc: Document) -> None:
     # One to a line, each with what the report says the picture is:
     # a hash names nothing, and the whole difficulty of fixing these
     # is working out which picture `img-6fb0f9c4` is.
-    listed = "".join(f"\n- `{block.image.filename}`{_describe(block)}" for block in unnamed)
+    listed = Listed(*((Shown(block.image.filename), _describe(block)) for block in unnamed))
     are = "is" if len(unnamed) == 1 else "are"
     doc.warn(
         f"{_plural(len(unnamed), 'image')} {are} unnamed, so each publishes under a "
-        f"hash; give each a `Source:` line naming its file:{listed}"
+        f"hash; give each a {{}} line naming its file:{{}}",
+        Shown("Source:"),
+        listed,
     )
 
 

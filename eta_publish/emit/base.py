@@ -5,12 +5,12 @@ Nothing here touches the network or the filesystem,
 so an emitter can be tested against a fixture tree without credentials.
 """
 
-import re
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 
 from ..nodes import (
     Block,
+    Cut,
     Document,
     Figure,
     FootnoteRef,
@@ -19,50 +19,19 @@ from ..nodes import (
     Inline,
     LineBreak,
     List,
+    Listed,
+    Notice,
     Paragraph,
+    Quoted,
+    Shown,
+    Span,
     Table,
     Text,
 )
 
-WARNING_MARKUP = re.compile(r"`(?P<code>[^`]*)`|~~(?P<cut>[^~]+)~~")
-# `*` and not `+` for the code span, so an empty one is a span and not two
-# stray backticks. A warning about a value that is not there has to show that
-# it is not there, and an empty marked span is what that looks like:
-# on a page a code span carries a background and a little padding,
-# so an empty one is a small box with nothing in it,
-# which reads as the empty string it is reporting.
-"""The little markup a warning is written in, spelled as Markdown spells it.
-
-A warning names a field, a file, or a line, and marks it with backticks
-the way the rest of this project writes prose.
-It strikes through the part of a value that will not survive,
-which is the difference between telling somebody a string is too long
-and showing them where it stops.
-
-Each output renders both the way that output spells them,
-rather than showing a reader a stray backtick or a pair of tildes.
-"""
-
-
-QUOTED_LINE = "> "
-"""How a warning quotes the document, which is how Markdown quotes anything.
-
-A value the warning is about is shown rather than described,
-and shown as a quotation so that it is not read as more of the sentence.
-"""
-
-
-BULLET_LINE = "- "
-"""How a warning lists the things it is about, which is how Markdown lists anything.
-
-A warning naming one thing says it in the sentence.
-A warning naming seventeen lists them,
-because seventeen names run together are not a list anybody reads.
-"""
-
 
 def warning_markup(
-    message: str,
+    notice: Notice,
     *,
     code: Callable[[str], str],
     cut: Callable[[str], str],
@@ -70,47 +39,50 @@ def warning_markup(
     quote: Callable[[str], str] | None = None,
     bullets: Callable[[list[str]], str] | None = None,
 ) -> str:
-    """`message` rendered: its marked spans, its quoted and listed lines, the rest as `text`.
+    """`notice` rendered: its shown values, its quoted and listed lines, the rest as `text`.
 
-    A quoted or listed line is rendered whole, after its spans are,
-    so that a quotation of a value keeps whatever is marked inside it.
-    Consecutive listed lines are handed over together,
-    because a list is one thing rather than a run of them.
+    A walk over the pieces a warning is made of, not a parse of a string.
+    The marking is decided where the warning is written and carried here intact,
+    so a value holding a backtick is a value holding a backtick
+    rather than the end of one span and the start of another.
+
+    An emitter that cannot set a quotation or a list apart passes neither,
+    and gets the lines run together as the text they are.
     """
     out: list[str] = []
-    pending: list[str] = []
-
-    def flush() -> None:
-        if pending and bullets is not None:
-            out.append(bullets(pending.copy()))
-        pending.clear()
-
-    for line in message.split("\n"):
-        if bullets is not None and line.startswith(BULLET_LINE):
-            pending.append(_spans(line.removeprefix(BULLET_LINE), code, cut, text))
-            continue
-        flush()
-        quoted = quote is not None and line.startswith(QUOTED_LINE)
-        rendered = _spans(line.removeprefix(QUOTED_LINE) if quoted else line, code, cut, text)
-        out.append(quote(rendered) if quoted and quote is not None else rendered)
-    flush()
+    for part in notice.parts:
+        match part:
+            case Shown(value):
+                out.append(code(value))
+            case Cut(value):
+                out.append(cut(value))
+            case Quoted(spans):
+                rendered = _spans(spans, code, cut, text)
+                out.append(quote(rendered) if quote is not None else rendered)
+            case Listed(items):
+                lines = [_spans(item, code, cut, text) for item in items]
+                out.append(bullets(lines) if bullets is not None else "".join(lines))
+            case _:
+                out.append(text(part))
     return "".join(out)
 
 
 def _spans(
-    line: str,
+    spans: tuple[Span, ...],
     code: Callable[[str], str],
     cut: Callable[[str], str],
     text: Callable[[str], str],
 ) -> str:
+    """The spans of one line, which hold no lines of their own."""
     out = []
-    position = 0
-    for match in WARNING_MARKUP.finditer(line):
-        out.append(text(line[position : match.start()]))
-        marked = match.group("code")
-        out.append(code(marked) if marked is not None else cut(match.group("cut")))
-        position = match.end()
-    out.append(text(line[position:]))
+    for span in spans:
+        match span:
+            case Shown(value):
+                out.append(code(value))
+            case Cut(value):
+                out.append(cut(value))
+            case _:
+                out.append(text(span))
     return "".join(out)
 
 

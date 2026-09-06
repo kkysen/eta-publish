@@ -13,7 +13,7 @@ from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .naming import IMAGE_DIR
-from .nodes import Document
+from .nodes import Document, Shown
 from .parse import parse, read_review
 
 
@@ -278,7 +278,8 @@ def check_code_block_size(doc: Document, report: Path) -> None:
         doc.warn(
             f"{report.name} is {size:,} bytes, over Squarespace's "
             f"{CODE_BLOCK_LIMIT:,} byte code block limit; "
-            "split it at h2 boundaries with `--split`"
+            "split it at h2 boundaries with {}",
+            Shown("--split"),
         )
     elif size > CODE_BLOCK_WARN:
         doc.warn(

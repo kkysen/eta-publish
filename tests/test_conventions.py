@@ -193,7 +193,7 @@ def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
     )
     assert [b.anchor for b in doc.blocks if isinstance(b, Heading)] == ["tail-tracks"]
     assert len([b for b in doc.blocks if isinstance(b, Figure)]) == 1
-    assert any("styled as a `Heading`" in w for w in doc.warnings)
+    assert any("styled as a `Heading`" in w for w in map(str, doc.warnings))
 
 
 def test_unfinished_text_is_reported() -> None:
@@ -208,7 +208,7 @@ def test_unfinished_text_is_reported() -> None:
             para("TODO insert PSD image, maybe JFK AirTrain?"),
         ]
     )
-    assert any("unfinished text" in w for w in doc.warnings)
+    assert any("unfinished text" in w for w in map(str, doc.warnings))
 
 
 def test_chart_asset_placeholders_are_editorial() -> None:
@@ -237,7 +237,7 @@ def test_an_undescribed_image_is_reported() -> None:
             image(),
         ]
     )
-    assert any("no alt text and no caption" in w for w in doc.warnings)
+    assert any("no alt text and no caption" in w for w in map(str, doc.warnings))
 
 
 def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
