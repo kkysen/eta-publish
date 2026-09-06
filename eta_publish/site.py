@@ -25,10 +25,11 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
+from string import Template
 
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one
-from .emit.html import escape
+from .emit.html import attributes, escape
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
@@ -385,6 +386,28 @@ def disagreements(report: Report, doc: Document) -> list[str]:
 
 INDEX_CSS = read("index.css")
 
+INDEX_HTML = Template(
+    """<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ETA report previews</title>
+<style>
+$css</style>
+<h1>ETA report previews</h1>
+<p>Built from the Google Docs, warnings included. Not the published pages.</p>
+<ul>
+$items</ul>
+$failures"""
+)
+"""The page around the list, as the page rather than as a run of joined pieces.
+
+A `string.Template` because the substitution is the whole of what is wanted here:
+a value is placed and never rescanned, so a `$` reaching one of these slots
+is a `$` on the page rather than the start of another placeholder.
+Everything put in is escaped by whoever builds it, which is the same rule
+`attributes` keeps for the values inside a tag.
+"""
+
 
 def index_page(site: Site) -> str:
     """The site's front page: every report, and anything that did not build.
@@ -399,7 +422,7 @@ def index_page(site: Site) -> str:
         meta = [m for m in (doc.dateline, ", ".join(doc.contributors)) if m]
         warned = f" · {len(doc.warnings)} warning(s)" if doc.warnings else ""
         items.append(
-            f'<li><a href="{escape(built.path)}/"><strong>{escape(doc.title)}</strong></a>'
+            f"<li><a{attributes(href=f'{built.path}/')}><strong>{escape(doc.title)}</strong></a>"
             f'<div class="short">{escape(doc.meta.get("short", ""))}</div>'
             f'<div class="meta">{escape(" · ".join(meta))}{warned}</div></li>'
         )
@@ -407,15 +430,4 @@ def index_page(site: Site) -> str:
         f'<p class="failed">{escape(f.report.name or f.report.url)}: {escape(f.error)}</p>'
         for f in site.failed
     )
-    return (
-        "<!doctype html>\n"
-        '<meta charset="utf-8">\n'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        "<title>ETA report previews</title>\n"
-        f"<style>\n{INDEX_CSS}</style>\n"
-        "<h1>ETA report previews</h1>\n"
-        "<p>Built from the Google Docs, warnings included. "
-        "Not the published pages.</p>\n"
-        f"<ul>\n{''.join(items)}\n</ul>\n"
-        f"{failures}"
-    )
+    return INDEX_HTML.substitute(css=INDEX_CSS, items="".join(items) + "\n", failures=failures)
