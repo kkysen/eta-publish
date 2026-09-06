@@ -81,6 +81,29 @@ which publishes one level down because the headline is the `h1`.
 """
 
 
+def attributes(**named: str | None) -> str:
+    """Attributes for a tag, escaped because they are attributes.
+
+    Written this way rather than into an f-string so that quoting is the
+    function's job and not the caller's. Every value here ends up inside
+    a pair of quotes, and a value that closes them early is the whole of
+    how markup gets injected: one `escape` here covers each of them
+    rather than each call site remembering.
+
+    A `None` leaves the attribute out, which is the difference between
+    an attribute that is absent and one that is empty.
+    Underscores become hyphens, so `aria_label` is written `aria-label`,
+    and a trailing one is dropped, so `class_` is written `class`:
+    Python will not take `class` as an argument name and HTML will not take
+    anything else.
+    """
+    return "".join(
+        f' {name.rstrip("_").replace("_", "-")}="{escape(value)}"'
+        for name, value in named.items()
+        if value is not None
+    )
+
+
 def link_mark(anchor: str, what: str = "section") -> str:
     """The link a block carries to itself.
 
@@ -95,7 +118,8 @@ def link_mark(anchor: str, what: str = "section") -> str:
     `report_page` writes those two itself and never walks to them,
     and the mark they carry has to be the same mark.
     """
-    return f'<a class="link-mark" href="#{anchor}" aria-label="Link to this {what}"></a>'
+    marked = attributes(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
+    return f"<a{marked}></a>"
 
 
 class HtmlEmitter(Emitter):

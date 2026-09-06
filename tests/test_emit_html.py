@@ -6,7 +6,7 @@ import re
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.emit.html import HtmlEmitter
+from eta_publish.emit.html import HtmlEmitter, report_page
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 
@@ -345,6 +345,7 @@ def test_an_empty_shown_value_is_still_marked(doc: Document) -> None:
     An empty code span carries the same background and padding as any other,
     so it renders as a small box with nothing in it: measured at 8x18 against
     62x18 for one holding `Draft 2`."""
+    from eta_publish.nodes import Shown
 
     doc.warn("the tab is named {}", Shown(""))
     out = HtmlEmitter().emit(doc)
@@ -379,3 +380,36 @@ def test_a_footnote_numbers_its_own_paragraphs(out: str) -> None:
     would put 43 between 12 and 13,
     and nobody could do anything with that number."""
     assert '<p id="fn1-p1">' in out
+
+
+EVIL = '"><script>alert(1)</script><x y="'
+
+
+def test_attributes_are_quoted_by_the_thing_that_writes_them() -> None:
+    """Every attribute value ends up inside a pair of quotes, and a value that
+    closes them early is the whole of how markup gets injected."""
+    from eta_publish.emit.html import attributes, link_mark
+
+    written = attributes(id=EVIL)
+    assert written.startswith(' id="') and written.endswith('"')
+    assert "<script>" not in written
+    assert '"' not in written[5:-1], "a value cannot close the quotes around it"
+    assert "<script>" not in link_mark(EVIL, EVIL)
+    # An attribute that is absent is not an attribute that is empty.
+    assert attributes(title=None) == ""
+    assert attributes(title="") == ' title=""'
+    # Python will not take `class` as an argument name, and HTML will not take
+    # anything else.
+    assert attributes(class_="x", aria_label="y") == ' class="x" aria-label="y"'
+
+
+def test_nothing_a_document_says_becomes_markup(doc: Document) -> None:
+    """The document is the untrusted half of every page this builds."""
+    doc.title = EVIL
+    doc.meta["short"] = EVIL
+    doc.meta["seo description"] = EVIL
+    doc.meta["public contributors"] = EVIL
+    doc.warn("a warning about {}", Shown(EVIL))
+    for output in (HtmlEmitter().emit(doc), report_page(doc)):
+        assert "<script>alert(1)</script>" not in output
+        assert "alert(1)" in output, "the text itself should survive, escaped"
