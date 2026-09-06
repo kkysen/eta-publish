@@ -7,8 +7,9 @@ rather than failing everything for the sake of one output.
 
 import shutil
 import subprocess
-from importlib import resources
 from pathlib import Path
+
+from .assets import read
 
 TEMPLATE = "template.typ"
 
@@ -29,8 +30,7 @@ def install_template(outdir: Path) -> Path:
     and the PDF compiled against a template several versions old without saying so.
     """
     dest = outdir / TEMPLATE
-    source = resources.files("eta_publish.assets").joinpath(TEMPLATE)
-    dest.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    dest.write_text(read(TEMPLATE), encoding="utf-8")
     return dest
 
 
