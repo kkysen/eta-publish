@@ -120,7 +120,8 @@ def date_text(chip: JsonObject) -> str:
     """A date smart chip as the document shows it, e.g. `Aug 19, 2026`."""
     stamp = chip.get("dateElementProperties", {}).get("timestamp", "")
     try:
-        moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        # Docs writes the `Z` form, which `fromisoformat` has read since 3.11.
+        moment = datetime.fromisoformat(stamp)
     except ValueError:
         return stamp
     # `%-d` avoids the zero padding Docs does not show.
