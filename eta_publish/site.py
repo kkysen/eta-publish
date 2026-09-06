@@ -346,18 +346,6 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
     return site
 
 
-def named(value: str) -> str:
-    """A document or tab name, as a message refers to one.
-
-    Backticks, because it is the name of a thing to go and find,
-    not a phrase being quoted.
-    Except when there is no name, where backticks around nothing
-    read as a typo rather than as the emptiness they are reporting,
-    and that emptiness is one of the things this has to report.
-    """
-    return f"`{value}`" if value else "nothing"
-
-
 def disagreements(report: Report, doc: Document) -> list[str]:
     """Where `reports.toml` and the document it points at do not match.
 
@@ -388,7 +376,7 @@ def disagreements(report: Report, doc: Document) -> list[str]:
         ("expects the tab", report.tab, "the tab is named", doc.tab_title),
     )
     return [
-        f"reports.toml {said} {named(expected)}, but {found_label} {named(found)}"
+        f"reports.toml {said} `{expected}`, but {found_label} `{found}`"
         for said, expected, found_label, found in checks
         if expected is not None and expected != found
     ]

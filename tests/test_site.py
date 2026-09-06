@@ -82,7 +82,8 @@ def test_an_entry_that_names_nothing_disagrees_like_any_other(tmp_path: Path, bl
         [Report(url=str(saved), **fields)], tmp_path / "site", BuildOptions(images=False)
     )
     assert not site.built
-    assert "nothing" in site.failed[0].error
+    # An empty marked span, which is what a name that is not there looks like.
+    assert "``" in site.failed[0].error
 
 
 def test_an_entry_without_a_url_is_an_error(tmp_path: Path) -> None:
@@ -452,7 +453,7 @@ def test_a_response_that_names_no_tab_cannot_confirm_one(tmp_path: Path) -> None
         BuildOptions(images=False),
     )
     assert not site.built
-    assert "the tab is named nothing" in site.failed[0].error
+    assert "the tab is named ``" in site.failed[0].error
 
 
 def test_an_entry_that_names_neither_is_not_warned_about(
