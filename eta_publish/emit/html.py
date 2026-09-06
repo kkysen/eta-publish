@@ -8,7 +8,6 @@ render as undifferentiated body text.
 """
 
 import html
-import re
 from collections.abc import Callable
 from typing import override
 
@@ -139,6 +138,14 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
+        self._lead = ""
+        """Markup for the next paragraph to open with, inside its own tag.
+
+        A footnote's way back into the text belongs in the first line of the
+        note rather than on a line of its own above it, and where the first
+        line begins is a fact about the tree.
+        The paragraph that takes it clears it, so it is placed once.
+        """
 
     def anchor(self, prefix: str, text: str) -> str:
         """An id for a block, unique within the page.
@@ -188,6 +195,7 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
+        self._lead = ""
         self._taken.update(b.anchor for b in doc.blocks if isinstance(b, Heading))
 
     def whole(self, doc: Document) -> list[str]:
@@ -415,11 +423,12 @@ class HtmlEmitter(Emitter):
         )
 
     def footnote(self, note: Footnote) -> str:
-        body = self.within(f"fn{note.number}", lambda: self.blocks(note.content))
-        back = (
-            f'<a href="#fnref{note.number}" class="footnote-back" '
-            f'aria-label="Back to footnote {note.number} in the text">↑</a>'
+        marked = attributes(
+            href=f"#fnref{note.number}",
+            class_="footnote-back",
+            aria_label=f"Back to footnote {note.number} in the text",
         )
+        back = f"<a{marked}>↑</a> "
         # Immediately after the number the list renders, rather than after the note.
         # Several of these run to a paragraph,
         # and the way back should be where the eye already is.
@@ -427,15 +436,17 @@ class HtmlEmitter(Emitter):
         # Inside that first paragraph, not before it: a paragraph is a block,
         # so an arrow ahead of one sits on a line of its own
         # with the note beginning underneath.
-        # Matched as a tag rather than the literal `<p>`, because the paragraph has an id.
+        # Handed to the paragraph to open with rather than spliced into the
+        # markup afterwards: whether the note starts with a paragraph is a
+        # question about the tree, and the tree is here to answer it.
+        leads = bool(note.content) and isinstance(note.content[0], Paragraph)
+        if leads:
+            self._lead = back
+        body = self.within(f"fn{note.number}", lambda: self.blocks(note.content))
         # The mark hangs outside the footnote's own number
         # rather than beside the arrow, which it crowded.
         mark = self.mark(f"fn{note.number}", "footnote")
-        opening = re.match(r"<p\b[^>]*>", body)
-        if opening:
-            rest = body[opening.end() :]
-            return f'<li id="fn{note.number}">{mark}{opening.group()}{back} {rest}</li>'
-        return f'<li id="fn{note.number}">{mark}{back} {body}</li>'
+        return f'<li id="fn{note.number}">{mark}{"" if leads else back}{body}</li>'
 
     def tip(self, blocks: list[Block]) -> str:
         """A footnote as it reads, for the box its reference carries.
@@ -584,13 +595,14 @@ class HtmlEmitter(Emitter):
         """A paragraph is linkable, because a report this long gets quoted
         a paragraph at a time.
         One holding no text is not: nothing to hash, and nothing anyone would link to."""
+        lead, self._lead = self._lead, ""
         if not plain_text(node.content):
-            return f"<p>{self.inlines(node.content)}</p>"
+            return f"<p>{lead}{self.inlines(node.content)}</p>"
         self._paragraphs += 1
         counted = f"{self._scope}-p{self._paragraphs}" if self._scope else f"p{self._paragraphs}"
         anchor = self.take(counted)
         mark = self.mark(anchor, "paragraph") if self._marked else ""
-        return f'<p id="{anchor}">{mark}{self.inlines(node.content)}</p>'
+        return f'<p id="{anchor}">{lead}{mark}{self.inlines(node.content)}</p>'
 
     @override
     def list_(self, node: List) -> str:
