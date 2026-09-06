@@ -340,6 +340,17 @@ def test_the_footnote_preview_is_shown_where_something_does(out: str) -> None:
     assert ".footnote-ref:focus-within .footnote-tip { display: block; }" in hovering.group()
 
 
+def test_an_empty_marked_span_is_still_a_span(doc: Document) -> None:
+    """A warning about a value that is not there has to show that it is not there.
+    An empty code span carries the same background and padding as any other,
+    so it renders as a small box with nothing in it: measured at 8x18 against
+    62x18 for one holding `Draft 2`."""
+    doc.warnings = ["the tab is named ``"]
+    out = HtmlEmitter().emit(doc)
+    assert "the tab is named <code></code>" in out
+    assert "``" not in out
+
+
 def test_a_footnotes_mark_sits_outside_its_number(out: str) -> None:
     """Beside the arrow back it crowded the one control that was already there,
     so it hangs outside the list's own numbering instead."""

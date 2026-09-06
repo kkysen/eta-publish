@@ -24,7 +24,13 @@ from ..nodes import (
     Text,
 )
 
-WARNING_MARKUP = re.compile(r"`(?P<code>[^`]+)`|~~(?P<cut>[^~]+)~~")
+WARNING_MARKUP = re.compile(r"`(?P<code>[^`]*)`|~~(?P<cut>[^~]+)~~")
+# `*` and not `+` for the code span, so an empty one is a span and not two
+# stray backticks. A warning about a value that is not there has to show that
+# it is not there, and an empty marked span is what that looks like:
+# on a page a code span carries a background and a little padding,
+# so an empty one is a small box with nothing in it,
+# which reads as the empty string it is reporting.
 """The little markup a warning is written in, spelled as Markdown spells it.
 
 A warning names a field, a file, or a line, and marks it with backticks
