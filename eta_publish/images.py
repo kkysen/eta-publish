@@ -73,7 +73,7 @@ def download(
         extension = EXTENSIONS.get(content_type)
         if extension is None:
             doc.warn(
-                f"image {image.object_id} has unexpected content type `{content_type}`; "
+                f"image `{image.object_id}` has unexpected content type `{content_type}`; "
                 "saved without an extension"
             )
             extension = ""
@@ -91,7 +91,7 @@ def download(
             )
         else:
             for object_id in missing:
-                doc.warn(f"image {object_id} has no source URI; not downloaded")
+                doc.warn(f"image `{object_id}` has no source URI; not downloaded")
 
     return written
 
@@ -114,7 +114,7 @@ def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, 
             dest.write_bytes(download_drive_file(vector.file_id))
         except (FetchFailed, OSError) as e:
             doc.warn(
-                f"could not download the vector {vector.title or vector.file_id} "
+                f"could not download the vector `{vector.title or vector.file_id}` "
                 f"({e}); using the image from the document instead"
             )
             return False
@@ -137,7 +137,7 @@ def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
         with Pillow.open(io.BytesIO(data)) as opened:
             box = image.crop.box(opened.width, opened.height)
             if box[2] <= box[0] or box[3] <= box[1]:
-                doc.warn(f"image {image.object_id} crops to nothing; left uncropped")
+                doc.warn(f"image `{image.object_id}` crops to nothing; left uncropped")
                 return data
             trimmed = opened.crop(box)
             buffer = io.BytesIO()
@@ -145,5 +145,5 @@ def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
             trimmed.save(buffer, format=opened.format)
             return buffer.getvalue()
     except OSError as e:
-        doc.warn(f"could not crop image {image.object_id} ({e}); left uncropped")
+        doc.warn(f"could not crop image `{image.object_id}` ({e}); left uncropped")
         return data

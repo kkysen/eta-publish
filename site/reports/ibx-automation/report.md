@@ -4,7 +4,7 @@
 
 **Warnings**
 
-- dropped a line before the `Header` section: IBX Automation
+- dropped a line before the `Header` section: `IBX Automation`
 - no `Title`-styled paragraph, so the document name `IBX Automation` is being used as the headline; style the headline as `Title` in the doc
 - unfinished text in the document: `But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl`
 - unfinished text in the document: `TODO didn’t finish`

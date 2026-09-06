@@ -230,7 +230,7 @@ class Parser:
                 out.append(self._rich_link(el["richLink"]))
             elif not (IGNORED_ELEMENTS & el.keys()):
                 kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
-                self.doc.warn(f"unhandled document element {kinds}, dropped")
+                self.doc.warn(f"unhandled document element `{kinds}`, dropped")
         # A soft break at either end is spacing rather than part of what the paragraph says,
         # and renders as a stray line break with nothing on one side of it.
         while out and isinstance(out[0], LineBreak):
@@ -341,7 +341,7 @@ class Parser:
             .get("embeddedObject", {})
         )
         if "imageProperties" not in embedded:
-            self.doc.warn(f"inline object {object_id} has no image; skipped")
+            self.doc.warn(f"inline object `{object_id}` has no image; skipped")
             return None
         image_props = embedded["imageProperties"]
         # `contentUri` says where to fetch this image, not whether it is one.
@@ -371,7 +371,7 @@ class Parser:
                 continue
             match = DRIVE_ID_RE.search(uri)
             if match is None:
-                self.doc.warn(f"cannot read a Drive file id from {uri}; the raster is used")
+                self.doc.warn(f"cannot read a Drive file id from `{uri}`; the raster is used")
                 continue
             file_id = match.group(1) or match.group(2)
             title = props.get("title", "")
@@ -396,7 +396,7 @@ class Parser:
         """
         if props.get("angle"):
             self.doc.warn(
-                f"image {object_id} is rotated in the document; the rotation is not applied"
+                f"image `{object_id}` is rotated in the document; the rotation is not applied"
             )
 
         def side(name: str) -> float:
@@ -461,7 +461,7 @@ class Parser:
             nonlocal pending_source
             if pending_source is not None:
                 text = plain_text(pending_source)
-                self.doc.warn(f"`Source:` line not followed by an image, dropped: {text[:80]}")
+                self.doc.warn(f"`Source:` line not followed by an image, dropped: `{text[:80]}`")
                 pending_source = None
 
         i = 0
@@ -580,7 +580,7 @@ class Parser:
                 # No alt text in Docs and no caption to borrow,
                 # so screen readers get an unlabelled image.
                 self.doc.warn(
-                    f"image {block.image.object_id} has no alt text and no caption; "
+                    f"image `{block.image.object_id}` has no alt text and no caption; "
                     "add a description to it in the doc"
                 )
             if isinstance(block, Figure) and not block.image.alt and block.caption:
@@ -613,7 +613,7 @@ class Parser:
             return
         if figure.image.crop.trims:
             self.doc.warn(
-                f"image {figure.image.object_id} is both cropped and given a vector "
+                f"image `{figure.image.object_id}` is both cropped and given a vector "
                 "original; the crop cannot be applied to it, so the raster is used"
             )
             return
@@ -628,7 +628,7 @@ class Parser:
             )
         prose = plain_text(inlines).strip()
         if prose:
-            self.doc.warn(f"text sharing a paragraph with an image was dropped: {prose[:80]}")
+            self.doc.warn(f"text sharing a paragraph with an image was dropped: `{prose[:80]}`")
         return images[0]
 
     def table(self, table: JsonObject) -> Table:
@@ -718,7 +718,7 @@ class Parser:
             para = item.get("paragraph")
             text = plain(para) if para is not None else ""
             if text:
-                self.doc.warn(f"dropped a line before the `Header` section: {text[:80]}")
+                self.doc.warn(f"dropped a line before the `Header` section: `{text[:80]}`")
 
         end = start + 1
         for i in range(start + 1, len(content)):
@@ -832,7 +832,7 @@ class Parser:
         """
         for fid in self.footnote_defs:
             if fid not in self._footnote_numbers:
-                self.doc.warn(f"footnote {fid} is defined but never referenced; omitted")
+                self.doc.warn(f"footnote `{fid}` is defined but never referenced; omitted")
         return [
             Footnote(
                 footnote_id=fid,
