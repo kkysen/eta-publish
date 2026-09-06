@@ -477,10 +477,7 @@ class HtmlEmitter(Emitter):
                 case _:
                     continue
         self._in_tip = False
-        # The note is already a link away, and so is every link inside it.
-        # This copy is hidden from a screen reader,
-        # and a hidden link is one the keyboard should not stop at on the way past.
-        return "<br>".join(line for line in lines if line).replace("<a ", '<a tabindex="-1" ')
+        return "<br>".join(line for line in lines if line)
 
     def tip_text(self, blocks: list[Block]) -> str:
         """A footnote as one line of text, for deciding whether it has a box to show.
@@ -572,6 +569,18 @@ class HtmlEmitter(Emitter):
 
     def mark(self, anchor: str, what: str = "section") -> str:
         return link_mark(anchor, what)
+
+    def link(self, href: str) -> str:
+        """Attributes for a link in the prose.
+
+        Inside the box a reference carries, every link is a copy of one the
+        note already has, and the note is a jump away: the keyboard should
+        walk past the copy rather than stop at it.
+        Decided here, where the link is written and the emitter knows which
+        of the two it is writing, rather than by rewriting `<a ` afterwards
+        in the finished markup.
+        """
+        return attributes(tabindex="-1" if self._in_tip else None, href=href)
 
     @override
     def heading(self, node: Heading) -> str:
@@ -701,7 +710,7 @@ class HtmlEmitter(Emitter):
         if node.underline:
             out = f"<u>{out}</u>"
         if node.href:
-            out = f'<a href="{escape(node.href)}">{out}</a>'
+            out = f"<a{self.link(node.href)}>{out}</a>"
         return out
 
     @override
@@ -715,7 +724,8 @@ class HtmlEmitter(Emitter):
         # itself would build a box out of a box without end,
         # so a reference in a box is only the number it is.
         if self._in_tip:
-            return f'<sup class="footnote-ref"><a href="#fn{node.number}">{node.number}</a></sup>'
+            link = self.link(f"#fn{node.number}")
+            return f'<sup class="footnote-ref"><a{link}>{node.number}</a></sup>'
         # Matched by the Docs id rather than by the number,
         # which is the identity the parser guarantees on both sides.
         note = next(
