@@ -118,7 +118,7 @@ def _check_contributors(doc: Document) -> None:
         emailed = EMAILED.search(entry)
         if emailed is not None and entry[emailed.end() :].strip():
             doc.warn(
-                f"the `Public Contributors:` line reads {entry.strip()!r} as one "
+                f"the `Public Contributors:` line reads `{entry.strip()}` as one "
                 "contributor; a comma is missing after the address"
             )
 

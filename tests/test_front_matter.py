@@ -314,8 +314,8 @@ def test_a_field_written_twice_says_which_one_won() -> None:
     assert doc.meta["short"] == "The second answer."
     assert any(
         "more than one `Short:` line" in w
-        and "'The second answer.'" in w
-        and "'The first answer.'" in w
+        and "`The second answer.`" in w
+        and "`The first answer.`" in w
         for w in doc.warnings
     )
 

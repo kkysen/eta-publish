@@ -752,9 +752,13 @@ class Parser:
                 #
                 # Matched on the key as it is read, so a `Short:` and a
                 # `Short (60 char limit):` count as the two they are.
+                #
+                # Both values in backticks, as every other value here is.
+                # A header line can hold a backtick of its own and come out
+                # reading oddly, which is a worse message and not a wrong one.
                 self.doc.warn(
                     f"the `Header` section has more than one `{written}:` line; "
-                    f"using {value!r} and ignoring {self.doc.meta[key]!r}"
+                    f"using `{value}` and ignoring `{self.doc.meta[key]}`"
                 )
             self.doc.meta[key] = value
             end = i + 1
