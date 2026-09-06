@@ -8,7 +8,7 @@
   contributors: ("Madison Feinberg", "Robert Hale", "Alon Levy", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
-    [dropped a line before the #raw("Header") section: IBX Automation],
+    [dropped a line before the #raw("Header") section: #raw("IBX Automation")],
     [no #raw("Title")-styled paragraph, so the document name #raw("IBX Automation") is being used as the headline; style the headline as #raw("Title") in the doc],
     [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
     [unfinished text in the document: #raw("TODO didn’t finish")],
