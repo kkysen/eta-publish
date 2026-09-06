@@ -163,7 +163,7 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     The opening line of each: the two that carry a list or a quotation
     are checked for what they list below.
     """
-    assert sorted(w.split("\n")[0] for w in doc.warnings) == [
+    assert sorted(w.split("\n")[0] for w in map(str, doc.warnings)) == [
         "17 images are unnamed, so each publishes under a hash; "
         "give each a `Source:` line naming its file:",
         "17 suggestions still open on this tab; "
@@ -179,7 +179,7 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
 def test_every_unnamed_image_is_listed_with_what_it_shows(doc: Document) -> None:
     """A hash names nothing, so the work of fixing these
     is working out which picture `img-6fb0f9c4` is."""
-    warning = next(w for w in doc.warnings if "unnamed" in w)
+    warning = next(w for w in map(str, doc.warnings) if "unnamed" in w)
     listed = [line for line in warning.split("\n") if line.startswith("- ")]
     unnamed = [b for b in doc.blocks if isinstance(b, Figure) and not b.image.named]
     assert len(listed) == len(unnamed) == 17
@@ -189,7 +189,7 @@ def test_every_unnamed_image_is_listed_with_what_it_shows(doc: Document) -> None
 
 
 def test_the_seo_warning_quotes_the_description(doc: Document) -> None:
-    warning = next(w for w in doc.warnings if "SEO Description" in w)
+    warning = next(w for w in map(str, doc.warnings) if "SEO Description" in w)
     quoted = warning.split("\n")[1]
     assert quoted.startswith("> A 125 St subway should be a slam dunk")
     assert quoted.endswith("~~")

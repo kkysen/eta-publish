@@ -46,14 +46,14 @@ def test_a_crop_that_leaves_nothing_is_reported_not_applied() -> None:
     image = Image(object_id="io.1", filename="img-x", crop=Crop(left=0.6, right=0.6))
     data = png(100, 100)
     assert crop_to(image, data, doc) is data
-    assert any("crops to nothing" in w for w in doc.warnings)
+    assert any("crops to nothing" in w for w in map(str, doc.warnings))
 
 
 def test_unreadable_data_is_reported_not_raised() -> None:
     doc = Document()
     image = Image(object_id="io.1", filename="img-x", crop=Crop(top=0.1))
     assert crop_to(image, b"not an image", doc) == b"not an image"
-    assert any("could not crop" in w for w in doc.warnings)
+    assert any("could not crop" in w for w in map(str, doc.warnings))
 
 
 @pytest.mark.parametrize(

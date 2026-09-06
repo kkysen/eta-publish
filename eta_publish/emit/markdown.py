@@ -33,17 +33,32 @@ from ..nodes import (
     List,
     ListItem,
     ListKind,
+    Notice,
     Paragraph,
     Table,
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter
+from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
 # Characters that would otherwise be read as Markdown syntax.
 # Escaping is minimal: over-escaping makes the archive harder to read by hand,
 # which is most of the point of having it.
 ESCAPE = re.compile(r"([\\`*_\[\]|])")
+
+
+def fence(value: str) -> str:
+    """`value` as a Markdown code span, whatever backticks it holds.
+
+    A span is delimited by a run of backticks longer than any run inside it,
+    which is what lets a value carrying one be shown rather than escaped.
+    A value starting or ending with a backtick takes a space either side,
+    which Markdown strips back off.
+    """
+    longest = max((len(run) for run in re.findall(r"`+", value)), default=0)
+    ticks = "`" * (longest + 1)
+    padding = " " if value.startswith("`") or value.endswith("`") else ""
+    return f"{ticks}{padding}{value}{padding}{ticks}"
 
 
 def escape(text: str) -> str:
@@ -128,16 +143,29 @@ class MarkdownEmitter(Emitter):
     def warnings(self, doc: Document) -> str:
         """The build's notes about this report, above it and below the dateline.
 
-        Written as a list, and not escaped:
-        a warning is written with backticks around a name,
-        which is already how Markdown spells code.
+        Written as a list, and rendered from the warning's pieces
+        rather than from what `str` makes of them, for the reason the other
+        two emitters are: a value is marked because it is a value,
+        not because of what it happens to contain.
         """
         if not doc.warnings:
             return ""
-        # A warning quotes with `> `, which Markdown reads as a quotation
-        # only when the line is indented into the item it belongs to.
-        notes = "\n".join(f"- {w}".replace("\n", "\n  ") for w in doc.warnings)
+        # A warning quotes with `> ` and lists with `- `, which Markdown reads
+        # as a quotation and a list only when indented into the item they
+        # belong to.
+        notes = "\n".join(f"- {self.marked_up(w)}".replace("\n", "\n  ") for w in doc.warnings)
         return f"**Warnings**\n\n{notes}"
+
+    def marked_up(self, warning: Notice) -> str:
+        """One warning as Markdown: names as code, and what gets cut struck through."""
+        return warning_markup(
+            warning,
+            code=fence,
+            cut=lambda c: f"~~{escape(c)}~~",
+            text=escape,
+            quote=lambda q: f"\n> {q}",
+            bullets=lambda items: "".join(f"\n- {item}" for item in items),
+        )
 
     def dateline(self, doc: Document) -> str:
         """When the report published, as the page and the PDF date it."""

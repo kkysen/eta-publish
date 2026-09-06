@@ -16,6 +16,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import override
 
 # ---- inline content ------------------------------------------------
 
@@ -233,6 +234,110 @@ class Footnote:
     content: list[Block] = field(default_factory=list)
 
 
+SLOT = "{}"
+"""Where a warning's template takes a value.
+
+The only thing a template means, and templates are written here rather than
+read from a document, so nothing a report says can be mistaken for one.
+That is the whole point of the split: the sentence is ours and the values
+are the document's, and neither is ever parsed out of the other.
+"""
+
+
+@dataclass(frozen=True)
+class Shown:
+    """A value a warning shows rather than says.
+
+    A field name, a filename, a line quoted back.
+    Emitters mark it the way they mark code, because it is something exact
+    to go and find rather than words being spoken.
+    """
+
+    value: str
+
+
+@dataclass(frozen=True)
+class Cut:
+    """The part of a value that will not survive.
+
+    Struck through, which is the difference between telling somebody
+    a string is too long and showing them where it stops.
+    """
+
+    value: str
+
+
+@dataclass(frozen=True)
+class Quoted:
+    """A value given a line of its own.
+
+    Long enough that running it into the sentence would leave the reader
+    unsure where the sentence ended and the document began.
+    """
+
+    spans: tuple[Span, ...]
+
+    def __init__(self, *spans: Span) -> None:
+        object.__setattr__(self, "spans", spans)
+
+
+@dataclass(frozen=True)
+class Listed:
+    """One line for each of the things a warning is about.
+
+    A warning naming one thing says it in the sentence.
+    A warning naming seventeen lists them,
+    because seventeen names run together are not a list anybody reads.
+    """
+
+    items: tuple[tuple[Span, ...], ...]
+
+    def __init__(self, *items: tuple[Span, ...]) -> None:
+        object.__setattr__(self, "items", items)
+
+
+type Span = str | Shown | Cut
+type Part = Span | Quoted | Listed
+
+
+@dataclass(frozen=True)
+class Notice:
+    """One warning, in the pieces it is made of.
+
+    Not a marked-up string. A warning is built here and rendered by three
+    emitters, so the marking was written into a string at one end
+    and recovered by a parser at the other, which is a round trip through
+    a language this project both speaks and listens to.
+    Values it does not control travel that way too, and a filename with a
+    backtick in it came out the far end having re-paired the spans around it.
+
+    So the pieces stay pieces. `str` writes the markup and nothing reads it:
+    it is what the log prints and what a test asserts against,
+    generated from the structure rather than the structure's source.
+    """
+
+    parts: tuple[Part, ...]
+
+    @override
+    def __str__(self) -> str:
+        return "".join(_written(part) for part in self.parts)
+
+
+def _written(part: Part) -> str:
+    """One part as the log writes it, which is how this project writes prose."""
+    match part:
+        case Shown(value):
+            return f"`{value}`"
+        case Cut(value):
+            return f"~~{value}~~"
+        case Quoted(spans):
+            return "\n> " + "".join(_written(span) for span in spans)
+        case Listed(items):
+            return "".join("\n- " + "".join(_written(span) for span in item) for item in items)
+        case _:
+            return part
+
+
 @dataclass
 class Document:
     title: str = ""
@@ -267,7 +372,7 @@ class Document:
 
     blocks: list[Block] = field(default_factory=list)
     footnotes: list[Footnote] = field(default_factory=list)
-    warnings: list[str] = field(default_factory=list)
+    warnings: list[Notice] = field(default_factory=list)
 
     card: Image | None = None
     """A wide image with the title set into it,
@@ -429,8 +534,21 @@ class Document:
             return None
         return size[0] / size[1]
 
-    def warn(self, message: str) -> None:
-        self.warnings.append(message)
+    def warn(self, template: str, *values: Part) -> None:
+        """Warn, with `{}` in `template` wherever a value goes.
+
+        The template is written here and the values come from the document,
+        which is why they are handed over separately rather than formatted in:
+        a value is never read as markup, whatever it happens to contain.
+        """
+        said = template.split(SLOT)
+        if len(said) != len(values) + 1:
+            raise ValueError(f"{template!r} has {len(said) - 1} {SLOT} for {len(values)} values")
+        parts: list[Part] = [said[0]]
+        for value, rest in zip(values, said[1:], strict=True):
+            parts.append(value)
+            parts.append(rest)
+        self.warnings.append(Notice(tuple(part for part in parts if part != "")))
 
 
 # What a Docs date chip can render, most likely first.

@@ -222,7 +222,9 @@ def test_anything_the_parser_drops_is_reported() -> None:
     losses = parser_losses(scaffolded, doc)
     assert losses == ["Draft 2"]
     for lost in losses:
-        assert any(lost in w for w in doc.warnings), f"{lost} was dropped without a warning"
+        assert any(lost in w for w in map(str, doc.warnings)), (
+            f"{lost} was dropped without a warning"
+        )
 
 
 def test_the_parser_check_catches_the_front_matter_overrun() -> None:

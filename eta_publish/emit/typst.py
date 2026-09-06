@@ -30,6 +30,7 @@ from ..nodes import (
     List,
     ListItem,
     ListKind,
+    Notice,
     Paragraph,
     Table,
     Text,
@@ -120,7 +121,7 @@ class TypstEmitter(Emitter):
         notes = "".join(f"    [{self.marked_up(w)}],\n" for w in doc.warnings)
         return f"  warnings: (\n{notes}  ),\n"
 
-    def marked_up(self, warning: str) -> str:
+    def marked_up(self, warning: Notice) -> str:
         """One warning as Typst content: names as raw, and what gets cut struck through."""
         return warning_markup(
             warning,
