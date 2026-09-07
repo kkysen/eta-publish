@@ -471,6 +471,72 @@ def test_a_hostile_document_opens_no_tag_of_its_own(doc: Document) -> None:
         assert EVIL in "".join(parsed.text), "the text itself survives, as text"
 
 
+def two_sentences() -> Document:
+    """A document whose one paragraph holds two sentence boundaries.
+
+    The shared fixture is eight blocks of one sentence each,
+    so it has no boundary to break at and would pass either way.
+    One boundary here sits inside a run of text and one falls between two,
+    which are the two cases and they do not behave the same.
+    """
+    doc = Document()
+    doc.blocks = [
+        Paragraph(
+            content=[
+                Text(text="The tunnel is shallow. It cost less. "),
+                Text(text="Which", bold=True),
+                Text(text=" was the point."),
+            ]
+        )
+    ]
+    return doc
+
+
+def test_a_sentence_ends_a_line() -> None:
+    """The output is read in a diff, so it breaks where the archive breaks.
+
+    One long line per paragraph reports a corrected word as a changed
+    paragraph; one line per sentence reports it as a changed sentence.
+    """
+    emitted = HtmlEmitter(inline_css=False).emit(two_sentences())
+    assert "The tunnel is shallow.\nIt cost less." in emitted
+
+
+def test_a_sentence_ending_between_two_runs_is_left_alone() -> None:
+    """The splitter reads one run of text at a time, and says so.
+
+    A sentence that ends where the bold starts has its space in one run
+    and its next word in another, and neither run holds a boundary.
+    That leaves two sentences on a line, which is the coarser diff
+    `sentences` already prefers to a break it is not sure of.
+    """
+    emitted = HtmlEmitter(inline_css=False).emit(two_sentences())
+    assert "It cost less. <strong>Which</strong>" in emitted
+
+
+def test_breaking_a_line_only_ever_moves_a_space(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A line break in HTML is safe exactly when it replaces a space.
+
+    Whitespace between words collapses, so a newline where a space was
+    reads identically. A newline where there was none welds two words
+    together, and a space quietly dropped does the same.
+    So the check is not that the text survives but that it survives
+    character for character, with a newline the only thing a space became.
+    """
+    doc = parse(FIXTURE)
+    doc.blocks = two_sentences().blocks + doc.blocks
+    broken = "".join(read(HtmlEmitter(inline_css=False).emit(doc)).text)
+
+    # The same report with the sentence splitter told to find nothing.
+    def unsplit(text: str) -> list[str]:
+        return [text] if text else []
+
+    monkeypatch.setattr("eta_publish.emit.html.split", unsplit)
+    whole = "".join(read(HtmlEmitter(inline_css=False).emit(doc)).text)
+    assert len(broken) == len(whole)
+    assert {(a, b) for a, b in zip(whole, broken, strict=True) if a != b} <= {(" ", "\n")}
+
+
 def test_an_absent_attribute_is_not_an_empty_one() -> None:
     """`None` leaves the attribute out, which is a different page.
 
