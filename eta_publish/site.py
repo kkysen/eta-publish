@@ -27,12 +27,11 @@ from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
 import htpy
-from htpy import Node
 from markupsafe import Markup
 
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one
-from .emit.html import lines, markup
+from .emit.html import Piece, lines, markup, tag
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
@@ -397,29 +396,29 @@ def index_page(site: Site) -> str:
     A report quietly missing from a list of four is hard to notice;
     a line saying which one failed and why is not.
     """
-    entries: list[Node] = []
+    entries: list[Piece] = []
     for built in site.built:
         doc = built.doc
         meta = [m for m in (doc.dateline, ", ".join(doc.contributors)) if m]
         warned = f" · {len(doc.warnings)} warning(s)" if doc.warnings else ""
         entries.append(
-            htpy.li[
-                htpy.a(href=f"{built.path}/")[htpy.strong[doc.title]],
-                htpy.div(class_="short")[doc.meta.get("short", "")],
-                htpy.div(class_="meta")[" · ".join(meta), warned],
+            tag.li[
+                tag.a(href=f"{built.path}/")[tag.strong[doc.title]],
+                tag.div(class_="short")[doc.meta.get("short", "")],
+                tag.div(class_="meta")[" · ".join(meta), warned],
             ]
         )
     failures = [
-        htpy.p(class_="failed")[f"{f.report.name or f.report.url}: {f.error}"] for f in site.failed
+        tag.p(class_="failed")[f"{f.report.name or f.report.url}: {f.error}"] for f in site.failed
     ]
-    page: list[Node] = [
+    page: list[Piece] = [
         htpy.meta(charset="utf-8"),
         htpy.meta(name="viewport", content="width=device-width, initial-scale=1"),
-        htpy.title["ETA report previews"],
-        htpy.style[Markup(f"\n{INDEX_CSS}")],
-        htpy.h1["ETA report previews"],
-        htpy.p["Built from the Google Docs, warnings included. Not the published pages."],
-        htpy.ul["\n", lines(entries), "\n"],
+        tag.title["ETA report previews"],
+        tag.style[Markup(f"\n{INDEX_CSS}")],
+        tag.h1["ETA report previews"],
+        tag.p["Built from the Google Docs, warnings included. Not the published pages."],
+        tag.ul["\n", lines(entries), "\n"],
         *failures,
     ]
     return markup([Markup("<!doctype html>"), "\n", lines(page), "\n"])
