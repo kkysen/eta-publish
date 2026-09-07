@@ -8,10 +8,11 @@ render as undifferentiated body text.
 """
 
 from collections.abc import Callable, Iterable
-from typing import override
+from typing import cast, override
 
 import htpy
 from htpy import Element, Node
+from htpy._types import Renderable
 from markupsafe import Markup
 
 from ..assets import read
@@ -72,14 +73,55 @@ CODE_BLOCK_LIMIT = 400_000
 CODE_BLOCK_WARN = 250_000
 
 
-def joined(separator: Node, parts: Iterable[Node]) -> Node:
+type Piece = Renderable | str | int | bool | None | Iterable[Piece]
+"""What may go inside an element here: `htpy`'s `Node`, less the callable.
+
+`htpy` will take a function returning children as a child, and nothing on
+this page is one. Leaving it out is what lets `pyrefly` read the file:
+it matches an element against every other member of that union on its own,
+and against the whole union only once the callable is gone. `htpy` is
+annotated throughout and `ty` accepts it either way, so the narrowing is
+this file's, not a doubt about the library.
+"""
+
+
+class Tag(Element):
+    """An element that takes the children this file has to give it.
+
+    One place says the narrowing is deliberate, rather than every tag on
+    the page saying it, and `htpy` keeps its own types either way.
+    """
+
+    @override
+    # A parameter narrowed on purpose, which is worth saying out loud twice
+    # rather than turning either checker off over.
+    # pyrefly: ignore[bad-override]
+    def __getitem__(self, children: Piece) -> Tag:  # ty: ignore[invalid-method-override]
+        return super().__getitem__(cast(Node, children))
+
+
+class Tags:
+    """Every tag, by name, as a `Tag`.
+
+    Void elements are not here: `htpy.br` and `htpy.img` hold nothing,
+    and a `Tag` would offer to put something in them.
+    """
+
+    def __getattr__(self, name: str) -> Tag:
+        return Tag(name.rstrip("_"))
+
+
+tag = Tags()
+
+
+def joined(separator: Piece, parts: Iterable[Piece]) -> Piece:
     """`parts` with `separator` between them, still as nodes.
 
     The string equivalent would flatten each part on the way past,
     which is where escaping gets lost: what comes back is markup again
     and the next element to hold it cannot tell that it already is.
     """
-    out: list[Node] = []
+    out: list[Piece] = []
     for i, part in enumerate(parts):
         if i:
             out.append(separator)
@@ -87,7 +129,7 @@ def joined(separator: Node, parts: Iterable[Node]) -> Node:
     return out
 
 
-def lines(parts: Iterable[Node]) -> Node:
+def lines(parts: Iterable[Piece]) -> Piece:
     """One part per line.
 
     A newline between two blocks is whitespace HTML collapses,
@@ -97,7 +139,7 @@ def lines(parts: Iterable[Node]) -> Node:
     return joined("\n", parts)
 
 
-def markup(node: Node) -> Markup:
+def markup(node: Piece) -> Markup:
     """A tree of `htpy` nodes as the string the rest of the emitter passes around.
 
     `Markup` rather than a bare `str` because the difference matters on the way
@@ -117,7 +159,7 @@ which publishes one level down because the headline is the `h1`.
 """
 
 
-def link_mark(anchor: str, what: str = "section") -> Element:
+def link_mark(anchor: str, what: str = "section") -> Tag:
     """The link a block carries to itself.
 
     Ahead of the block's own content rather than after it,
@@ -131,7 +173,7 @@ def link_mark(anchor: str, what: str = "section") -> Element:
     `report_page` writes those two itself and never walks to them,
     and the mark they carry has to be the same mark.
     """
-    return htpy.a(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
+    return tag.a(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
 
 
 class HtmlEmitter(Emitter):
@@ -151,7 +193,7 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
-        self._lead: Node = None
+        self._lead: Piece = None
         """Markup for the next paragraph to open with, inside its own tag.
 
         A footnote's way back into the text belongs in the first line of the
@@ -238,11 +280,11 @@ class HtmlEmitter(Emitter):
         """
         shell = []
         if self.inline_css:
-            shell.append(markup(htpy.style[Markup(f"\n{REPORT_CSS}")]))
+            shell.append(markup(tag.style[Markup(f"\n{REPORT_CSS}")]))
         # Unlike the stylesheet, which a site can carry once under Custom CSS,
         # this travels with the report: it is small, and a fragment pasted
         # without it puts a tooltip off the edge of the screen.
-        shell.append(markup(htpy.script[Markup(f"\n{REPORT_JS}")]))
+        shell.append(markup(tag.script[Markup(f"\n{REPORT_JS}")]))
         # The wrapper is opened and closed around lines this does not hold,
         # so it is the one tag written rather than built: a `div` whose
         # children are joined by the caller cannot also be a `div` object.
@@ -311,13 +353,13 @@ class HtmlEmitter(Emitter):
         if not names:
             return ""
         return markup(
-            htpy.section(class_="contributors", id="contributors")[
+            tag.section(class_="contributors", id="contributors")[
                 "\n",
-                htpy.h2[self.mark("contributors"), "Contributors"],
+                tag.h2[self.mark("contributors"), "Contributors"],
                 "\n",
-                htpy.p[CONTRIBUTORS_NOTE],
+                tag.p[CONTRIBUTORS_NOTE],
                 "\n",
-                htpy.ul["\n", lines(htpy.li[name] for name in names), "\n"],
+                tag.ul["\n", lines(tag.li[name] for name in names), "\n"],
                 "\n",
             ]
         )
@@ -331,7 +373,7 @@ class HtmlEmitter(Emitter):
         """
         if not doc.phase:
             return ""
-        return markup(htpy.p(class_="phase")[doc.phase])
+        return markup(tag.p(class_="phase")[doc.phase])
 
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.
@@ -344,7 +386,7 @@ class HtmlEmitter(Emitter):
         date = doc.dateline
         if not date:
             return ""
-        return markup(htpy.p(class_="dateline", id="date")[self.mark("date", "date"), date])
+        return markup(tag.p(class_="dateline", id="date")[self.mark("date", "date"), date])
 
     def warnings(self, doc: Document) -> str:
         """Everything the build has to say about this report, where it will be read.
@@ -360,9 +402,9 @@ class HtmlEmitter(Emitter):
         if not doc.warnings:
             return ""
         return markup(
-            htpy.div(class_="warnings")[
-                htpy.strong["Warnings"],
-                htpy.ul[lines(htpy.li[self.marked_up(w)] for w in doc.warnings)],
+            tag.div(class_="warnings")[
+                tag.strong["Warnings"],
+                tag.ul[lines(tag.li[self.marked_up(w)] for w in doc.warnings)],
             ]
         )
 
@@ -371,11 +413,11 @@ class HtmlEmitter(Emitter):
         return Markup(
             warning_markup(
                 warning,
-                code=lambda c: markup(htpy.code[c]),
-                cut=lambda c: markup(htpy.s[c]),
+                code=lambda c: markup(tag.code[c]),
+                cut=lambda c: markup(tag.s[c]),
                 text=lambda t: markup(t),
-                quote=lambda q: markup(htpy.blockquote[Markup(q)]),
-                bullets=lambda items: markup(htpy.ul[[htpy.li[Markup(i)] for i in items]]),
+                quote=lambda q: markup(tag.blockquote[Markup(q)]),
+                bullets=lambda items: markup(tag.ul[[tag.li[Markup(i)] for i in items]]),
             )
         )
 
@@ -407,11 +449,11 @@ class HtmlEmitter(Emitter):
             return ""
         headings = headings + self.back_matter(doc)
         return markup(
-            htpy.nav(class_="toc", id="table-of-contents", aria_label="Table of contents")[
+            tag.nav(class_="toc", id="table-of-contents", aria_label="Table of contents")[
                 "\n",
                 self.mark("table-of-contents", "table of contents"),
                 "\n",
-                htpy.strong["Table of Contents"],
+                tag.strong["Table of Contents"],
                 "\n",
                 self.toc_list(headings),
                 "\n",
@@ -432,7 +474,7 @@ class HtmlEmitter(Emitter):
             sections.append(Heading(level=2, anchor="contributors", content=[Text("Contributors")]))
         return sections
 
-    def toc_list(self, headings: list[Heading]) -> Element:
+    def toc_list(self, headings: list[Heading]) -> Tag:
         """The headings as nested lists, one level of nesting per level.
 
         A heading that skips a level, an `h4` directly under an `h2`,
@@ -451,7 +493,7 @@ class HtmlEmitter(Emitter):
         assert not rest, "the outermost list holds every heading"
         return entries
 
-    def toc_level(self, headings: list[Heading], depth: int) -> tuple[Element, list[Heading]]:
+    def toc_level(self, headings: list[Heading], depth: int) -> tuple[Tag, list[Heading]]:
         """A list of everything at `depth` or below, and the headings left over.
 
         A heading deeper than the one before it opens a list under that entry,
@@ -459,34 +501,34 @@ class HtmlEmitter(Emitter):
         one shallower than `depth` ends this list and is handed back
         to whichever call has a level shallow enough to hold it.
         """
-        items: list[Node] = []
+        items: list[Piece] = []
         while headings and headings[0].level >= depth:
             heading, headings = headings[0], headings[1:]
-            link = htpy.a(href=f"#{heading.anchor}")[plain_text(heading.content)]
+            link = tag.a(href=f"#{heading.anchor}")[plain_text(heading.content)]
             if headings and headings[0].level > heading.level:
                 nested, headings = self.toc_level(headings, headings[0].level)
-                items.append(htpy.li[link, "\n", nested])
+                items.append(tag.li[link, "\n", nested])
             else:
-                items.append(htpy.li[link])
-        return htpy.ul["\n", lines(items), "\n"], headings
+                items.append(tag.li[link])
+        return tag.ul["\n", lines(items), "\n"], headings
 
     def footnotes(self, doc: Document) -> str:
         if not doc.footnotes:
             return ""
         return markup(
-            htpy.section(class_="footnotes", id="footnotes")[
+            tag.section(class_="footnotes", id="footnotes")[
                 "\n",
-                htpy.h2[self.mark("footnotes"), "Footnotes"],
+                tag.h2[self.mark("footnotes"), "Footnotes"],
                 "\n",
-                htpy.ol["\n", lines(self.footnote(f) for f in doc.footnotes), "\n"],
+                tag.ol["\n", lines(self.footnote(f) for f in doc.footnotes), "\n"],
                 "\n",
             ]
         )
 
     def footnote(self, note: Footnote) -> str:
         back = markup(
-            htpy.fragment[
-                htpy.a(
+            [
+                tag.a(
                     href=f"#fnref{note.number}",
                     class_="footnote-back",
                     aria_label=f"Back to footnote {note.number} in the text",
@@ -511,7 +553,7 @@ class HtmlEmitter(Emitter):
         # The mark hangs outside the footnote's own number
         # rather than beside the arrow, which it crowded.
         mark = self.mark(f"fn{note.number}", "footnote")
-        return markup(htpy.li(id=f"fn{note.number}")[mark, None if leads else back, body])
+        return markup(tag.li(id=f"fn{note.number}")[mark, None if leads else back, body])
 
     def tip(self, blocks: list[Block]) -> str:
         """A footnote as it reads, for the box its reference carries.
@@ -605,7 +647,7 @@ class HtmlEmitter(Emitter):
                 run += 1
             if run - i > 1:
                 row = lines(self.block(b) for b in blocks[i:run])
-                out.append((blocks[i], markup(htpy.div(class_="figure-row")["\n", row, "\n"])))
+                out.append((blocks[i], markup(tag.div(class_="figure-row")["\n", row, "\n"])))
                 i = run
             else:
                 out.append((blocks[i], self.block(blocks[i])))
@@ -632,10 +674,10 @@ class HtmlEmitter(Emitter):
         finally:
             self._scope, self._paragraphs, self._marked = was
 
-    def mark(self, anchor: str, what: str = "section") -> Element:
+    def mark(self, anchor: str, what: str = "section") -> Tag:
         return link_mark(anchor, what)
 
-    def link(self, href: str) -> Element:
+    def link(self, href: str) -> Tag:
         """An `a` for the prose, opened but not yet given what it holds.
 
         Inside the box a reference carries, every link is a copy of one the
@@ -645,7 +687,7 @@ class HtmlEmitter(Emitter):
         of the two it is writing, rather than by rewriting `<a ` afterwards
         in the finished markup.
         """
-        return htpy.a(tabindex="-1" if self._in_tip else None, href=href)
+        return tag.a(tabindex="-1" if self._in_tip else None, href=href)
 
     @override
     def heading(self, node: Heading) -> str:
@@ -662,7 +704,7 @@ class HtmlEmitter(Emitter):
         # The level is a number the document chose, so the element is looked up
         # by name. `htpy` answers for any tag, which is the one place here
         # a tag is not written down.
-        heading = getattr(htpy, f"h{node.level}")
+        heading = getattr(tag, f"h{node.level}")
         return markup(heading(id=node.anchor)[self.mark(node.anchor), self.inlines(node.content)])
 
     @override
@@ -672,12 +714,12 @@ class HtmlEmitter(Emitter):
         One holding no text is not: nothing to hash, and nothing anyone would link to."""
         lead, self._lead = self._lead, None
         if not plain_text(node.content):
-            return markup(htpy.p[lead, self.inlines(node.content)])
+            return markup(tag.p[lead, self.inlines(node.content)])
         self._paragraphs += 1
         counted = f"{self._scope}-p{self._paragraphs}" if self._scope else f"p{self._paragraphs}"
         anchor = self.take(counted)
         mark = self.mark(anchor, "paragraph") if self._marked else None
-        return markup(htpy.p(id=anchor)[lead, mark, self.inlines(node.content)])
+        return markup(tag.p(id=anchor)[lead, mark, self.inlines(node.content)])
 
     @override
     def list_(self, node: List) -> str:
@@ -686,7 +728,7 @@ class HtmlEmitter(Emitter):
         An item is a line rather than a passage,
         and each would want an id derived from a few words a copy edit moves around.
         The list is the unit someone links to."""
-        listing = htpy.ol if node.kind is ListKind.NUMBER else htpy.ul
+        listing = tag.ol if node.kind is ListKind.NUMBER else tag.ul
         text = " ".join(plain_text(item.content) for item in node.items)
         items = listing[self.items(node.items, listing)]
         if not text:
@@ -695,13 +737,13 @@ class HtmlEmitter(Emitter):
         # the mark cannot be a child of the `ul` the way it is a child of a `p`,
         # and inside the first item it would hang beside that item's bullet.
         anchor = self.anchor("list", text)
-        return markup(htpy.div(class_="list-block", id=anchor)[self.mark(anchor, "list"), items])
+        return markup(tag.div(class_="list-block", id=anchor)[self.mark(anchor, "list"), items])
 
-    def items(self, items: list[ListItem], listing: Element) -> Node:
-        out: list[Node] = []
+    def items(self, items: list[ListItem], listing: Tag) -> Piece:
+        out: list[Piece] = []
         for item in items:
             nested = listing[self.items(item.children, listing)] if item.children else None
-            out.append(htpy.li[self.inlines(item.content), nested])
+            out.append(tag.li[self.inlines(item.content), nested])
         return out
 
     @override
@@ -709,11 +751,11 @@ class HtmlEmitter(Emitter):
         # `Figure.source` is not emitted:
         # it names the original file in Drive, for whoever assembles the report,
         # and does not appear on the published page.
-        parts: list[Node] = [self.image(node.image)]
+        parts: list[Piece] = [self.image(node.image)]
         if node.caption:
-            parts.append(htpy.figcaption(class_="figure-caption")[self.inlines(node.caption)])
+            parts.append(tag.figcaption(class_="figure-caption")[self.inlines(node.caption)])
         if node.credit:
-            parts.append(htpy.figcaption(class_="figure-credit")[self.inlines(node.credit)])
+            parts.append(tag.figcaption(class_="figure-credit")[self.inlines(node.credit)])
         # Named for the image it holds, so the anchor is whatever the image is called:
         # the file its `Source:` line names,
         # or `img-` and a hash of the object id where there is no such line.
@@ -724,7 +766,7 @@ class HtmlEmitter(Emitter):
         aspect = self.doc.image_aspect(node.image)
         shape = f"--aspect: {aspect:.3f}" if aspect is not None else None
         anchor = self.take(node.image.filename)
-        return markup(htpy.figure(id=anchor, style=shape)[self.mark(anchor, "figure"), parts])
+        return markup(tag.figure(id=anchor, style=shape)[self.mark(anchor, "figure"), parts])
 
     @override
     def table(self, node: Table) -> str:
@@ -743,30 +785,30 @@ class HtmlEmitter(Emitter):
         rows = self.within(
             anchor,
             lambda: markup(
-                [htpy.tr[[htpy.td[self.blocks(cell)] for cell in row]] for row in node.rows]
+                [tag.tr[[tag.td[self.blocks(cell)] for cell in row]] for row in node.rows]
             ),
         )
         if not anchor:
-            return markup(htpy.div(class_="table-scroll")[htpy.table[rows]])
+            return markup(tag.div(class_="table-scroll")[tag.table[rows]])
         return markup(
-            htpy.div(class_="table-scroll", id=anchor)[self.mark(anchor, "table"), htpy.table[rows]]
+            tag.div(class_="table-scroll", id=anchor)[self.mark(anchor, "table"), tag.table[rows]]
         )
 
     # ---- inline -----------------------------------------------------
 
     @override
     def text(self, node: Text) -> str:
-        out: Node = joined("\n", split(node.text))
+        out: Piece = joined("\n", split(node.text))
         if node.sup:
-            out = htpy.sup[out]
+            out = tag.sup[out]
         elif node.sub:
-            out = htpy.sub_[out]
+            out = tag.sub_[out]
         if node.bold:
-            out = htpy.strong[out]
+            out = tag.strong[out]
         if node.italic:
-            out = htpy.em[out]
+            out = tag.em[out]
         if node.underline:
-            out = htpy.u[out]
+            out = tag.u[out]
         if node.href:
             out = self.link(node.href)[out]
         return markup(out)
@@ -783,7 +825,7 @@ class HtmlEmitter(Emitter):
         # so a reference in a box is only the number it is.
         if self._in_tip:
             return markup(
-                htpy.sup(class_="footnote-ref")[self.link(f"#fn{node.number}")[node.number]]
+                tag.sup(class_="footnote-ref")[self.link(f"#fn{node.number}")[node.number]]
             )
         # Matched by the Docs id rather than by the number,
         # which is the identity the parser guarantees on both sides.
@@ -794,10 +836,10 @@ class HtmlEmitter(Emitter):
         # A footnote that is a table or a figure has no sentence to show,
         # and an empty box hovering over the text is worse than none.
         tip = self.tip(note.content) if note and self.tip_text(note.content) else ""
-        preview = htpy.span(class_="footnote-tip", aria_hidden="true")[tip] if tip else None
+        preview = tag.span(class_="footnote-tip", aria_hidden="true")[tip] if tip else None
         return markup(
-            htpy.sup(id=f"fnref{node.number}", class_="footnote-ref")[
-                htpy.a(href=f"#fn{node.number}")[node.number], preview
+            tag.sup(id=f"fnref{node.number}", class_="footnote-ref")[
+                tag.a(href=f"#fn{node.number}")[node.number], preview
             ]
         )
 
@@ -829,22 +871,22 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
     # `og:image` is read by everything that unfurls a link, so it is the one tag worth writing.
-    card: list[Node] = []
+    card: list[Piece] = []
     if doc.card is not None:
         href = doc.image_href(doc.card)
         src = f"{image_base}/{href}" if image_base else href
         card.append(htpy.meta(property="og:image", content=src))
         if doc.card.alt:
             card.append(htpy.meta(property="og:image:alt", content=doc.card.alt))
-    head: list[Node] = [
+    head: list[Piece] = [
         htpy.meta(charset="utf-8"),
         htpy.meta(name="viewport", content="width=device-width, initial-scale=1"),
-        htpy.title[doc.title],
+        tag.title[doc.title],
         htpy.meta(name="description", content=doc.meta.get("seo description", "")),
         *card,
-        htpy.style[Markup(f"\n{PAGE_CSS}\n{REPORT_CSS}")],
-        htpy.h1(id="title")[link_mark("title", "title"), doc.title],
-        htpy.p(class_="standfirst", id="short")[link_mark("short", "standfirst"), short],
+        tag.style[Markup(f"\n{PAGE_CSS}\n{REPORT_CSS}")],
+        tag.h1(id="title")[link_mark("title", "title"), doc.title],
+        tag.p(class_="standfirst", id="short")[link_mark("short", "standfirst"), short],
     ]
     # `<!doctype html>` is not an element and no builder emits one.
     return markup([Markup("<!doctype html>"), "\n", lines(head), "\n", Markup(body), "\n"])
