@@ -86,10 +86,6 @@ def _mise(*args: str) -> str:
     return result.stdout.strip()
 
 
-PASSES = 4
-"""How many times `tree` may run before it gives up on settling."""
-
-
 class LintFailed(RuntimeError):
     pass
 
@@ -102,25 +98,27 @@ def tree(root: Path) -> None:
     It lays out the saved API responses too, which changes how
     they are punctuated and not what they say.
 
-    Repeated until it reports nothing left to fix, for the reason `_format`
-    runs more than once over one page.
+    Once, not until it settles. `biome` 2.3.14 is not idempotent on HTML: run
+    over its own output it breaks a handful of `<a href="...">` tags it had
+    just fitted onto one line, four places in these reports. That is a bug in
+    the formatter, and chasing it costs a whole further invocation to find out
+    nothing is left, on a build where a run of `biome` is mostly the fixed
+    cost of starting one.
+
+    Taking the first result is still reproducible, which is what matters here:
+    every build formats freshly emitted output, and nothing ever formats what
+    is already committed, so one pass over the same input writes the same
+    bytes as it did last time.
     """
-    for _ in range(PASSES):
-        result = subprocess.run(
-            [biome(), "format", "--write", *FLAGS, str(root)],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
-        # What `biome` says it rewrote, rather than a walk of the tree
-        # comparing timestamps: it is the one doing the counting.
-        if "Fixed" not in result.stdout:
-            break
-    else:
-        raise RuntimeError(f"biome format did not settle under {root} in {PASSES} passes")
+    result = subprocess.run(
+        [biome(), "format", "--write", *FLAGS, str(root)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
     result = subprocess.run(
         [biome(), "lint", "--error-on-warnings", str(root)],
         cwd=ROOT,
