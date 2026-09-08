@@ -92,6 +92,14 @@ def test_a_document_with_no_tabs_is_passed_through():
 # ---- credentials ----------------------------------------------------
 
 
+def unasked(doc_id: str) -> str | None:
+    """`modified_time`, for a test that is not about when Drive saw the document.
+
+    Asking is a call to Drive, and every one of these stubs the fetch itself.
+    """
+    return None
+
+
 def test_service_account_credentials_are_used_when_the_environment_names_them(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -169,6 +177,9 @@ def test_a_service_account_is_not_asked_about_the_review(monkeypatch: pytest.Mon
     monkeypatch.setattr(fetch, "_ambient_credentials", lambda: object())
     monkeypatch.setattr(fetch, "fetch_document", whole_document)
     monkeypatch.setattr(fetch, "select_tab", one_tab)
+    # `fetch` asks Drive when the document was last edited,
+    # which is a call to Drive and not what any of this is about.
+    monkeypatch.setattr(fetch, "modified_time", unasked)
     monkeypatch.setattr(fetch, "open_suggestions", boom)
     monkeypatch.setattr(fetch, "open_comments_on_tab", boom)
 
@@ -193,6 +204,9 @@ def test_keeping_the_last_counts_is_said_out_loud(
     monkeypatch.setattr(fetch, "_ambient_credentials", lambda: object())
     monkeypatch.setattr(fetch, "fetch_document", whole_document)
     monkeypatch.setattr(fetch, "select_tab", one_tab)
+    # `fetch` asks Drive when the document was last edited,
+    # which is a call to Drive and not what any of this is about.
+    monkeypatch.setattr(fetch, "modified_time", unasked)
 
     fetch.fetch("https://docs.google.com/document/d/abc/edit")
     assert "not asking about suggestions or comments" in capsys.readouterr().err
@@ -218,6 +232,9 @@ def test_comments_can_be_left_unasked(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(fetch, "_ambient_credentials", lambda: None)
     monkeypatch.setattr(fetch, "fetch_document", whole_document)
     monkeypatch.setattr(fetch, "select_tab", one_tab)
+    # `fetch` asks Drive when the document was last edited,
+    # which is a call to Drive and not what any of this is about.
+    monkeypatch.setattr(fetch, "modified_time", unasked)
     monkeypatch.setattr(fetch, "open_suggestions", three_open)
     monkeypatch.setattr(fetch, "open_comments_on_tab", boom)
 
