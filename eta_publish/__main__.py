@@ -27,7 +27,8 @@ from typing import Annotated
 
 from typer import Argument, BadParameter, Exit, Option, Typer
 
-from .build import BuildOptions
+from . import format
+from .build import BuildOptions, check_code_block_size
 from .site import REPORTS, Report, Site, add_report, build_site, index_page, load_reports
 
 
@@ -153,6 +154,16 @@ def publish(
 
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "index.html").write_text(index_page(site))
+
+    # Once, over everything just written, rather than per file as it was
+    # written: `biome` costs far more to start than to run.
+    format.tree(outdir)
+
+    # After the formatting, which is what decides how big the file to paste is.
+    for built in site.built:
+        report = outdir / built.path / "report.html"
+        if report.exists():
+            check_code_block_size(built.doc, report)
 
     report_outcome(site)
 
