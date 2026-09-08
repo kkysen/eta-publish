@@ -237,10 +237,8 @@ class Footnote:
 SLOT = "{}"
 """Where a warning's template takes a value.
 
-The only thing a template means, and templates are written here rather than
-read from a document, so nothing a report says can be mistaken for one.
-That is the whole point of the split: the sentence is ours and the values
-are the document's, and neither is ever parsed out of the other.
+Templates are written here rather than read from a document,
+so nothing a report says can be mistaken for one.
 """
 
 
@@ -304,16 +302,13 @@ type Part = Span | Quoted | Listed
 class Notice:
     """One warning, in the pieces it is made of.
 
-    Not a marked-up string. A warning is built here and rendered by three
-    emitters, so the marking was written into a string at one end
-    and recovered by a parser at the other, which is a round trip through
-    a language this project both speaks and listens to.
-    Values it does not control travel that way too, and a filename with a
-    backtick in it came out the far end having re-paired the spans around it.
+    Not a marked-up string: a warning is built here and rendered by three
+    emitters, and marking it up at one end to recover it by parser at the
+    other is how a filename with a backtick in it came out the far end
+    having re-paired the spans around it.
 
-    So the pieces stay pieces. `str` writes the markup and nothing reads it:
-    it is what the log prints and what a test asserts against,
-    generated from the structure rather than the structure's source.
+    `str` writes the markup and nothing reads it:
+    it is what the log prints and what a test asserts against.
     """
 
     parts: tuple[Part, ...]
@@ -383,9 +378,8 @@ class Document:
     image_files: dict[str, str] = field(default_factory=dict)
     """Docs object id to the filename actually written, extension included.
 
-    Only `images.download` can know it.
-    A Docs `inlineObject` says nothing about what kind of file it is,
-    so the extension comes from the response,
+    Only `images.download` can know it:
+    a Docs `inlineObject` says nothing about what kind of file it is,
     and a vector named alongside a raster is written under a different name entirely.
     Empty when images were skipped,
     where `image_href` falls back to the raster's name without an extension.
@@ -406,11 +400,9 @@ class Document:
 
         The document puts it under the headline,
         so it belongs there rather than after a table of contents it should be introducing.
-        This is the title page, and a title page is a title and a picture.
 
-        Recognized by position, which is what the document already says.
-        Nothing else in these reports leads with a figure;
-        when one does and does not mean it,
+        Recognized by position: nothing else in these reports leads with a figure,
+        and when one does and does not mean it,
         that is when a `Hero:` line earns its place beside `Source:` and `Credit:`.
         """
         first = self.blocks[0] if self.blocks else None
@@ -425,17 +417,14 @@ class Document:
     def contributors(self) -> list[str]:
         """The people credited on the published page, by surname.
 
-        Read from `Public Contributors:` and nothing else.
-        The document carries a separate `Private Contributors:` field
-        so that some names do not publish, so no fallback to it belongs here.
+        Read from `Public Contributors:` and nothing else:
+        the document carries a separate `Private Contributors:` field
+        so that some names do not publish.
 
-        The names come from person chips, which resolve to a display name
-        where Docs can resolve one, so this is mostly names and not addresses.
-
-        Where it cannot, the chip renders as the address,
-        and the field is written `Alon Levy (alon@example.org)`
+        Where Docs cannot resolve a person chip to a display name it renders
+        as the address, and the field is written `Alon Levy (alon@example.org)`
         with the name typed and the chip beside it.
-        A byline is names: the address is dropped and the name kept.
+        A byline is names, so the address is dropped.
 
         Sorted, because `etany.org` credits contributors alphabetically
         and the field they are typed into is in whoever-was-added-when order.
@@ -449,9 +438,8 @@ class Document:
         """The publication date, written out, e.g. `August 19, 2026`.
 
         The field is a date chip,
-        so the document holds whatever short form Docs renders, `Aug 19, 2026`.
-        `etany.org` writes the month out,
-        and a published date is not the place to abbreviate three letters.
+        so the document holds whatever short form Docs renders, `Aug 19, 2026`,
+        where `etany.org` writes the month out.
 
         Anything that does not parse as a date is published exactly as written:
         guessing would be worse than showing what the header says.
@@ -463,8 +451,7 @@ class Document:
         """Where the report is in its own process, when that is worth saying.
 
         `published` is the state every reader of a published report is looking at,
-        so it is the one phase that goes unmentioned:
-        a banner saying `published` on a published page tells nobody anything.
+        so it is the one phase that goes unmentioned.
         Anything else is a draft of some kind reaching someone,
         and that is exactly what they need to be told.
         """

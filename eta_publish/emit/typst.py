@@ -75,15 +75,9 @@ class TypstEmitter(Emitter):
     def document(self, doc: Document) -> str:
         """The header block as written, plus what the page publishes.
 
-        Only the fields something renders are passed, one argument each.
-        The header carries a private contributor list and the project's
-        internal dates and channels, and this file is committed:
-        handing the template everything put all of that in the repository
-        for the sake of the one field it reads.
-
-        The two the page has an opinion about are passed as it wants them
-        rather than silently rewritten:
-        the date written out, and the contributors in credited order.
+        Only the fields something renders are passed, one argument each:
+        the header also carries a private contributor list and the project's
+        internal dates and channels, and this file is committed.
         """
         header = (
             f"#import {string(self.template)}: capped_image, report\n\n"
@@ -165,16 +159,13 @@ class TypstEmitter(Emitter):
     def figure(self, node: Figure) -> str:
         # As in the HTML, `Figure.source` is not emitted:
         # it names a file in Drive for whoever assembles the report.
-        # Not emphasized: the published report styles the credit like the caption,
-        # and the template decides how a caption looks.
         caption_parts = []
         if node.caption:
             caption_parts.append(self.inlines(node.caption))
         if node.credit:
             caption_parts.append(self.inlines(node.credit))
-        # On its own line, as the document writes it and as the page shows it.
-        # Joined with a space the credit ran on from the last sentence of the caption,
-        # which read as part of it.
+        # The credit on its own line, as the document writes it and the page
+        # shows it. Joined with a space it reads as part of the caption.
         caption = " \\\n  ".join(caption_parts)
         body = f"  {self.image_call(node.image)},"
         if caption:
@@ -218,12 +209,7 @@ class TypstEmitter(Emitter):
 
     @override
     def footnote_ref(self, node: FootnoteRef) -> str:
-        """Typst places and numbers footnotes itself, so the body goes here.
-
-        The whole reason for a PDF path of its own:
-        the note lands at the bottom of the page it is cited on,
-        which no HTML-to-PDF route can do.
-        """
+        """Typst places and numbers footnotes itself, so the body goes here."""
         note = next((f for f in self.doc.footnotes if f.number == node.number), None)
         if note is None:
             self.doc.warn(f"footnote {node.number} has no definition; omitted from the PDF")
@@ -241,7 +227,6 @@ class TypstEmitter(Emitter):
         Written once so the two cannot drift:
         alt text added here once reached inline images only,
         because the figure built its own call.
-        A PDF carries alt text the way a page does, and it is the same sentence in both.
         """
         path = f"{self.image_dir}/{self.doc.image_href(node)}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""

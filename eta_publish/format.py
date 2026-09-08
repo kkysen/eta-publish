@@ -4,9 +4,7 @@ The emitter's job is what the page says; this is where it sits on the line.
 What is emitted is committed and read as a diff, and a paragraph on one line
 reports a corrected word as a changed paragraph.
 
-One entry point, `tree`, over the finished output directory. There is no
-second way to format a page: two of them would have to agree byte for byte,
-and nothing would notice the day they stopped.
+One entry point, `tree`, over the finished output directory.
 
 `biome` rather than a formatter written here: whether a line break is safe
 in HTML is a question about which elements are inline, and getting it wrong
@@ -30,17 +28,12 @@ FLAGS = (
     "--indent-style=space",
     # Every space in the prose is one somebody typed, so none of them move.
     #
-    # The default reads the whitespace the way CSS does and breaks a long
-    # line where the rendering would not notice, which is right for most
-    # tags and wrong for a footnote reference: `biome` 2.3.14 will break
+    # The default breaks a long line where the rendering would not notice,
+    # which is wrong for a footnote reference: `biome` 2.3.14 will break
     # between a sentence and the `<sup>` welded to its full stop, and that
-    # newline renders as a space between the two. It puts the `>` on the
-    # next line to avoid exactly that around a `<span>`, so this is a gap
-    # in which elements it counts as inline rather than a missing idea.
-    #
-    # Under `strict` it uses that same trick everywhere and moves nothing.
-    # The markup is uglier where a line has to wrap mid-tag; the page is
-    # correct, and the page is what publishes.
+    # newline renders as a space between the two.
+    # Under `strict` it moves nothing. The markup is uglier where a line has
+    # to wrap mid-tag; the page is correct, and the page is what publishes.
     "--html-formatter-whitespace-sensitivity=strict",
 )
 
@@ -55,17 +48,14 @@ def biome() -> str:
 
     Through `mise` rather than off `PATH`, so that pin is the only answer to
     which version runs. The output is committed, and a different `biome`
-    would rewrite every report without a report having changed: reading that
-    diff, `check-committed-site.sh` says the documents changed, which would
-    not be true and points at Google Docs instead of at an installed binary.
+    would rewrite every report without a report having changed, which
+    `check-committed-site.sh` would report as the documents changing.
 
     Asked once, and for the path rather than by running `mise x` per call:
-    `mise` re-reads the pin every time it is asked, and the path is then
-    a binary to exec rather than a `mise` to start again.
+    `mise` re-reads the pin every time it is asked.
 
     Installed first if it is not there yet, which is what `mise x` would have
-    done on its own. Nobody should have to be told to run `mise install`
-    before a build that knows perfectly well what it is missing.
+    done on its own.
     """
     try:
         path = _mise("which", "biome")
@@ -108,9 +98,8 @@ def tree(root: Path) -> None:
     """Lay out and check everything under `root` that `biome` reads.
 
     One run over the whole build rather than one per file. `biome` takes
-    about 40ms to start and a few milliseconds to do the work, so a site
-    formatted a file at a time spends nearly all of its time launching
-    processes. It lays out the saved API responses too, which changes how
+    about 40ms to start and a few milliseconds to do the work.
+    It lays out the saved API responses too, which changes how
     they are punctuated and not what they say.
 
     Repeated until it reports nothing left to fix, for the reason `_format`

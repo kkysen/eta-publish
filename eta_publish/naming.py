@@ -25,7 +25,6 @@ Every report page links one copy rather than carrying its own.
 IMAGE_DIR = "images"
 """The directory a build writes images into, relative to the report.
 
-Here rather than spelled out in each of the four places that must agree.
 Serving them from somewhere else is an emitter's `image_base`,
 which is a decision about hosting rather than about a build.
 """
@@ -39,11 +38,9 @@ _NON_FILENAME = re.compile(r"[^\w.-]")
 _ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
 
 
-# GitHub's rule for a heading anchor, from `pymdown-extensions` rather than rewritten here.
-# The two agreeing today is no reason to keep a second copy:
-# they agree until a heading has an accent in it,
+# GitHub's rule for a heading anchor, from `pymdown-extensions` rather than
+# rewritten here: a second copy agrees until a heading has an accent in it,
 # and then whichever copy is wrong is wrong in published URLs.
-# This is what MkDocs Material publishes GitHub-style slugs with.
 #
 # `github-slugger`, the dedicated PyPI port, cannot be imported on a current Python:
 # it carries the JavaScript regex as lone surrogates, a `UnicodeEncodeError` on import.
@@ -59,9 +56,9 @@ def slugify(text: str) -> str:
     lowercase, punctuation dropped, `-` and `_` kept, one hyphen per space,
     non-ASCII letters left alone. That is what GitHub renders an anchor as.
 
-    Not the rule a filename gets.
-    A heading is a sentence, and every separator in its anchor is one we invented;
-    a filename is a name somebody chose, and `_ascii_name` keeps it.
+    Not the rule a filename gets:
+    a heading is a sentence, and a filename is a name somebody chose,
+    which `_ascii_name` keeps.
     """
     return _github_slug(text, "-") or "section"
 
@@ -88,19 +85,15 @@ class AnchorAllocator:
     is still positional:
     if two headings slugify alike and their order changes between drafts,
     both anchors move.
-
     So the constructor takes every heading text up front,
     works out which base slugs more than one distinct heading would claim,
     and suffixes *all* claimants of those.
-    An anchor is then a function of its own text
-    plus the set of headings it collides with, and reordering cannot touch it.
 
     `overrides` maps heading text to an explicit anchor,
     for headings whose published URL already exists and must not change.
 
-    `reserved` holds ids the emitters generate themselves, such as `footnotes`.
-    A heading titled "Footnotes" would otherwise collide with it,
-    producing the duplicate id that is one of the three defects on the live page.
+    `reserved` holds ids the emitters generate themselves, such as `footnotes`,
+    which a heading titled "Footnotes" would otherwise collide with.
     """
 
     def __init__(
@@ -128,10 +121,6 @@ class AnchorAllocator:
 
 def content_anchor(prefix: str, text: str) -> str:
     """An id for a block that has no name of its own, from what it says.
-
-    Paragraphs, tables, and lists carry no identifier and no title to slugify,
-    but they still want to be linkable:
-    a report this long is quoted a paragraph at a time.
 
     Hashing what the block says rather than counting where it sits
     is the difference between two failures.
@@ -169,22 +158,17 @@ def image_filename(object_id: str, extension: str = "", crop_key: str = "", name
     """Name an image after the file the document says it came from.
 
     A `Source:` line is the document saying which file this is,
-    which makes it usable as a name where a caption is not:
-    a caption gets rewritten in copy-editing,
-    and a position changes whenever anything is inserted above it.
+    which makes it usable as a name where a caption is not.
     Editing a source line does move a published URL,
     which is the cost of readable names.
 
-    An image with no source line keeps the name it always had:
-    its Docs object id, hashed.
-    The id is stable across edits, so inserting an image cannot rename its neighbours.
+    An image with no source line is named for its Docs object id, hashed,
+    which is stable across edits, so inserting an image cannot rename its neighbours.
 
-    The crop is part of the name because it is part of the file.
-    Recropping produces a different published image,
-    and without this it would keep the old name and the old cached file.
-    So a named image that is cropped carries the hash too,
-    which is also what tells two crops of one source file apart.
-    An uncropped image is named as it was.
+    A named image that is cropped carries the hash too:
+    recropping produces a different published image,
+    and it would otherwise keep the old name and the old cached file.
+    That is also what tells two crops of one source file apart.
 
     The extension is filled in once the download settles the real content type.
     """
@@ -208,9 +192,6 @@ def image_filenames(claims: Iterable[tuple[str, str, str]]) -> dict[str, str]:
 
     So both keep the name and carry the hash too,
     the same way a crop is told from its original.
-    The name is still the useful half:
-    `96st-station-a1b2c3d4` says what the file is,
-    where `img-a1b2c3d4` says only that it is an image.
     """
     claims = list(claims)
     claimants: dict[str, set[str]] = defaultdict(set)
@@ -221,9 +202,8 @@ def image_filenames(claims: Iterable[tuple[str, str, str]]) -> dict[str, str]:
     names: dict[str, str] = {}
     for object_id, crop_key, name in claims:
         plain = image_filename(object_id, crop_key=crop_key, name=name)
-        # `crop_key` alone would make the name distinct;
-        # asking for it here says why:
-        # the two images claim to be the same file, and only the hash can disagree.
+        # The two images claim to be the same file,
+        # so only the hash can tell them apart.
         names[object_id] = (
             image_filename(object_id, crop_key=crop_key or object_id, name=name)
             if plain in ambiguous

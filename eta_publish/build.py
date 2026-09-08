@@ -60,15 +60,11 @@ def load(
     """Resolve a reference to the document it names.
 
     A saved response can be the file itself or the directory holding it,
-    because a build writes `doc.json` into the report's own directory:
-    whatever a previous run produced can be handed straight back
+    so whatever a previous run produced can be handed straight back
     without knowing the filename inside it.
-    That is what lets a test run the whole pipeline with no network.
 
     Which tab to read is part of the reference, as `?tab=` in the URL,
-    not a separate argument:
-    a tab is named the same way here as in `reports.toml`,
-    which is the only way it can be named there.
+    which is the only way it can be named in `reports.toml`.
     """
     path = Path(ref)
     if path.is_dir():
@@ -101,9 +97,7 @@ def carry_over_review(document: JsonObject, saved: Path) -> None:
     Without this it would write a page saying nothing is open,
     differ from the committed one, and fail the check that the two match
     over something no document changed.
-
-    A stale count beats a wrong one:
-    it is what was true when somebody with access last looked.
+    A stale count beats a wrong one.
     """
     previous: JsonObject = {}
     if saved.is_file():
@@ -133,18 +127,14 @@ def write_image_index(dest: Path, written: dict[str, Path]) -> None:
 
     The images are not committed,
     so without this nothing says whether a rebuild fetched the same pictures.
-    The hash is what makes that checkable:
-    a different image writes a different digest, and the diff says so.
 
-    The filename is here because it cannot be derived.
-    A Docs `inlineObject` says nothing about what kind of file it is,
-    so `.jpg` or `.png` is learned by fetching,
-    and an image with a vector original is written under the vector's name.
+    The filename is here because it cannot be derived:
+    a Docs `inlineObject` says nothing about what kind of file it is,
+    so `.jpg` or `.png` is learned by fetching.
 
-    The pixel size is here for the same reason.
+    The pixel size is here because only the written file knows it:
     Docs says how large an image is placed, not how large it is,
-    and the crop applied on the way down changes the shape of the file,
-    so only the written file knows it.
+    and the crop applied on the way down changes the shape of the file.
     The HTML lays a row of figures out by it,
     and a build without the images has to write the same page.
 
@@ -183,12 +173,8 @@ def read_image_shapes(dest: Path, doc: Document) -> None:
     """Tell `doc` how large the last build's images turned out to be.
 
     A shape is measured from the file, and the files are not committed,
-    so a build that skipped the download
-    would otherwise lay a row of figures out differently
-    from the page beside it in the repository.
-    The record is committed so that it does not have to.
-    A build that just downloaded reads back what it wrote a moment ago,
-    which is the same answer by a shorter route than passing it along.
+    so a build that skipped the download would otherwise lay a row of figures
+    out differently from the page beside it in the repository.
 
     Only the shapes: what each image was written as is `download`'s to say.
     """
@@ -207,11 +193,9 @@ def without_content_uris(document: JsonObject) -> JsonObject:
     so a saved one is dead on arrival and changes on every fetch,
     which made re-publishing an unedited document a diff in a committed file.
 
-    Dropping them is what makes `doc.json` a record of the document.
     The parser treats an inline object with `imageProperties` as an image
     whether or not a URI came with it,
-    so everything but the download works from a saved response;
-    `images.download` says so when asked to fetch from one.
+    so everything but the download works from a saved response.
     """
     inline_objects = document.get("inlineObjects")
     if not inline_objects:
@@ -364,15 +348,12 @@ def build_one(
     """Build one report, returning it and the site-relative path it went to.
 
     The whole per-document order of operations lives here, and only here.
-    It ran twice before, once for a single document and once per report of a site,
-    the kind of duplication that ends with images downloaded in one and not the other.
 
     Where a report goes comes from its own front matter, inside the document,
     so the destination is unknown until the document has been read.
     That is why the response is not written on the way in:
     it is saved into the report's directory afterwards,
-    whether it came from the API or from a previous build,
-    so what one run wrote is what the next can be handed.
+    whether it came from the API or from a previous build.
 
     `verify` is the caller's chance to say this is not the document it meant,
     given the parsed document and called before anything is written.
@@ -387,10 +368,8 @@ def build_one(
     document = load(ref, options.suggestions, options.comments, cached)
     doc = parse(document)
     if verify is not None:
-        # Before the first directory is made.
-        # Whether this is the document the caller asked for
-        # can only be answered once it has been read,
-        # and a wrong answer must not leave a report's worth of files behind.
+        # Before the first directory is made,
+        # so a wrong answer leaves no report's worth of files behind.
         verify(doc)
     path = report_path(doc)
     dest = outdir / path
@@ -398,18 +377,13 @@ def build_one(
 
     # Before the checks, which warn about what it says,
     # and before the response is written, which is what the next build reads.
-    # Where the report goes is the document's own to say,
-    # so the saved response cannot be found until it has been read once.
     carry_over_review(document, dest / DOC_JSON)
     read_review(doc, document)
     check(doc)
 
-    # Sorted, as `images.json` is, and for the same reason.
-    # This file is committed and compared against a fresh build,
-    # so any two runs that agree about the document have to write the same bytes.
-    # Insertion order is not something to keep in step by hand:
-    # a key read from the response lands where the response put it,
-    # and one carried over from the last build lands at the end.
+    # Sorted, as `images.json` is: this file is committed and compared against
+    # a fresh build, so any two runs that agree about the document have to
+    # write the same bytes, which insertion order does not promise.
     (dest / DOC_JSON).write_text(
         json.dumps(without_content_uris(document), indent=2, sort_keys=True)
     )

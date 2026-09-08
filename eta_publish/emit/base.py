@@ -41,8 +41,7 @@ def warning_markup(
 ) -> str:
     """`notice` rendered: its shown values, its quoted and listed lines, the rest as `text`.
 
-    A walk over the pieces a warning is made of, not a parse of a string.
-    The marking is decided where the warning is written and carried here intact,
+    A walk over the pieces a warning is made of, not a parse of a string,
     so a value holding a backtick is a value holding a backtick
     rather than the end of one span and the start of another.
 
@@ -111,8 +110,6 @@ class Emitter(ABC):
     """What `join` puts between blocks.
 
     A newline is enough for HTML, where the tags say where a block ends.
-    A format whose blocks are separated by a blank line says so here,
-    rather than by writing `join` again.
     """
 
     def __init__(self) -> None:
