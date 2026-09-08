@@ -44,6 +44,9 @@ jobs:
         with:
           enable-cache: true
 
+      # `biome` lays out the emitted HTML, so a build without it writes nothing.
+      - uses: jdx/mise-action@v3
+
       # Written to the runner's temp directory rather than the workspace,
       # so it cannot be picked up by a later step that globs the checkout.
       - name: Write the service account key

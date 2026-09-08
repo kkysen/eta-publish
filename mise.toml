@@ -1,0 +1,6 @@
+# `biome` formats the emitted HTML, and the CSS and JavaScript inside it.
+# Pinned here as well as in `format.py`, because the output is committed:
+# a formatter that changes its mind between versions rewrites every report
+# without a report having changed.
+[tools]
+biome = "2.3.14"

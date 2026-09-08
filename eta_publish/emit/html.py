@@ -36,7 +36,6 @@ from ..nodes import (
     Text,
     plain_text,
 )
-from ..sentences import split
 from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
 # Only styles what the emitter produces, inheriting the rest from the theme,
@@ -798,7 +797,7 @@ class HtmlEmitter(Emitter):
 
     @override
     def text(self, node: Text) -> str:
-        out: Piece = joined("\n", split(node.text))
+        out: Piece = node.text
         if node.sup:
             out = tag.sup[out]
         elif node.sub:

@@ -1,5 +1,7 @@
 <style>
-.eta-report figure { margin: 2.5em 0; }
+.eta-report figure {
+  margin: 2.5em 0;
+}
 /* Figures the document puts next to each other sit next to each other, if
    the reader's screen has room for them. `flex-basis` is what decides: two
    fit in the 46rem the page is set at, and one does on a phone, with no
@@ -17,11 +19,22 @@
    The 10rem is the wrap point rather than a width: it is one page's worth
    of column divided by the widest pair the report puts in a row, so the
    pairs that fit on a tablet still do and a phone still stacks them. */
-.eta-report .figure-row { display: flex; flex-wrap: wrap; gap: 1.5em;
-                          align-items: flex-start; margin: 2.5em 0; }
+.eta-report .figure-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  align-items: flex-start;
+  margin: 2.5em 0;
+}
 .eta-report .figure-row > figure {
-  flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
-.eta-report figure img { width: 100%; height: auto; display: block; }
+  flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem);
+  margin: 0;
+}
+.eta-report figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 /* No figure is taller than this. The pictures arrive at whatever size
    someone dropped them into the document at, and a tall one filled the
    screen on its own before a word of the report was read. The cap is a
@@ -35,8 +48,11 @@
    4.5in cap scaled to this column, so that a picture cut down in one is
    cut down in the other. Centred, because a capped figure is narrower
    than the column it sits in. */
-.eta-report figure { max-width: calc(var(--aspect, 1.4) * 34rem);
-                     margin-left: auto; margin-right: auto; }
+.eta-report figure {
+  max-width: calc(var(--aspect, 1.4) * 34rem);
+  margin-left: auto;
+  margin-right: auto;
+}
 /* Everything with an id carries a link to itself, because everything with
    an id is something a reader may want to send someone: a section, a
    figure, a paragraph they are quoting. The `#` is written by the
@@ -48,66 +64,131 @@
    of it, so that every mark on the page is in the same column and the eye
    knows where to look. Shown on hover, and on focus as well, or it would be
    a control only a mouse can reach. */
-.eta-report :has(> .link-mark) { position: relative; }
+.eta-report :has(> .link-mark) {
+  position: relative;
+}
 /* No `top`: an absolutely positioned box with `top: auto` stays at the
    vertical position it would have had in the line, which is beside the
    first line of the block. Pinning it to the top of the box instead put
    the mark of a heading with a rule above it up in the padding between the
    rule and the words. */
-.eta-report .link-mark { position: absolute; left: -1.15em;
-                         text-decoration: none; font-weight: normal;
-                         opacity: 0; }
-.eta-report .link-mark::before { content: "#"; }
+.eta-report .link-mark {
+  position: absolute;
+  left: -1.15em;
+  text-decoration: none;
+  font-weight: normal;
+  opacity: 0;
+}
+.eta-report .link-mark::before {
+  content: "#";
+}
 .eta-report :has(> .link-mark):hover > .link-mark,
-.eta-report .link-mark:focus-visible { opacity: .45; }
-.eta-report .link-mark:hover { opacity: 1; }
+.eta-report .link-mark:focus-visible {
+  opacity: 0.45;
+}
+.eta-report .link-mark:hover {
+  opacity: 1;
+}
 /* Inside a table cell there is no margin to hang a mark in: ahead of a cell
    is the cell before it. Those marks stay in the line instead. */
-.eta-report td .link-mark { position: static; margin-left: .35em; }
+.eta-report td .link-mark {
+  position: static;
+  margin-left: 0.35em;
+}
 /* A footnote's mark goes outside its number rather than after it, where it
    was crowding the arrow back to the text. The list is indented far enough
    to leave room for both. */
-.eta-report .footnotes ol { padding-left: 3.4em; }
-.eta-report .footnotes li > .link-mark { left: -3.4em; }
-@media print { .eta-report .link-mark { display: none; } }
+.eta-report .footnotes ol {
+  padding-left: 3.4em;
+}
+.eta-report .footnotes li > .link-mark {
+  left: -3.4em;
+}
+@media print {
+  .eta-report .link-mark {
+    display: none;
+  }
+}
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
-.eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
-.eta-report .dateline { font-size: .95rem; opacity: .75; }
+.eta-report figcaption {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  margin-top: 0.6em;
+}
+.eta-report .dateline {
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
 /* The build's own notes about this report, not part of it, and never in the
    fragment that is pasted into the live site. A colour of its own, because it
    is the one thing on the page that is not the report and should not be read
    as though it were, and sans-serif for the same reason. */
-.eta-report .warnings { border-left: 3px solid #c60; padding: .4em 1em;
-                        margin: 2em 0; font-size: .9rem;
-                        font-family: system-ui, sans-serif; }
-.eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
+.eta-report .warnings {
+  border-left: 3px solid #c60;
+  padding: 0.4em 1em;
+  margin: 2em 0;
+  font-size: 0.9rem;
+  font-family: system-ui, sans-serif;
+}
+.eta-report .warnings ul {
+  margin: 0.4em 0 0;
+  padding-left: 1.2em;
+}
 /* Marked the way a code span is marked anywhere else, because a warning
    naming a field or a file is naming something exact and the eye should be
    able to find it. A grey of no hue at 15%, which is a tint on a light page
    and a lift on a dark one, so one rule serves both. */
-.eta-report code { background: rgba(127, 127, 127, .15); border-radius: .25em;
-                   padding: .1em .3em; font-size: .9em; }
+.eta-report code {
+  background: rgba(127, 127, 127, 0.15);
+  border-radius: 0.25em;
+  padding: 0.1em 0.3em;
+  font-size: 0.9em;
+}
 /* A value the warning is about, shown rather than described. Indented and
    ranged left so that a long one is read as the quotation it is and not as
    more of the sentence above it. */
-.eta-report .warnings blockquote { margin: .5em 0 .5em 1em; padding-left: .8em;
-                                   border-left: 2px solid currentColor;
-                                   opacity: .8; }
+.eta-report .warnings blockquote {
+  margin: 0.5em 0 0.5em 1em;
+  padding-left: 0.8em;
+  border-left: 2px solid currentColor;
+  opacity: 0.8;
+}
 /* A draft says so, in the one place nobody scrolls past. Bordered rather than
    coloured: the page is read on a site whose palette this does not know, and
    a rule in the current text colour is legible whatever that turns out to be. */
-.eta-report .phase { font-size: .8rem; letter-spacing: .08em;
-                     text-transform: uppercase; font-weight: bold;
-                     border: 1px solid currentColor; border-radius: .2em;
-                     display: inline-block; padding: .15em .5em; margin: 0 0 1em; }
-.eta-report .toc { font-size: .95rem; line-height: 1.9; }
-.eta-report .toc ul { list-style: none; margin: .2em 0 0; padding-left: 1.4em; }
-.eta-report .toc > ul { padding-left: 0; }
-.eta-report .footnotes { font-size: .9rem; opacity: .85; }
+.eta-report .phase {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid currentColor;
+  border-radius: 0.2em;
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  margin: 0 0 1em;
+}
+.eta-report .toc {
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+.eta-report .toc ul {
+  list-style: none;
+  margin: 0.2em 0 0;
+  padding-left: 1.4em;
+}
+.eta-report .toc > ul {
+  padding-left: 0;
+}
+.eta-report .footnotes {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
 .eta-report .footnote-ref a,
-.eta-report .footnote-back { text-decoration: none; }
+.eta-report .footnote-back {
+  text-decoration: none;
+}
 /* The note itself, shown where the reference is, so that reading a sentence
    does not mean leaving it. The link stays exactly what it was: this is a
    preview for a reader who has a pointer, and the way to the note at the
@@ -129,11 +210,17 @@
    the ones that hover leaves the rest displaying the note inline, in the
    middle of the sentence it belongs to, which is worse than no preview at
    all: a phone got every footnote spliced into the running text. */
-.eta-report .footnote-tip { display: none; }
+.eta-report .footnote-tip {
+  display: none;
+}
 @media (hover: hover) {
-  .eta-report .footnote-ref { position: relative; }
+  .eta-report .footnote-ref {
+    position: relative;
+  }
   .eta-report .footnote-ref:hover .footnote-tip,
-  .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
+  .eta-report .footnote-ref:focus-within .footnote-tip {
+    display: block;
+  }
   /* Under the reference rather than over it, which is where the script
      below will usually put it too, and where it goes when there is no
      script: over it is outside the window whenever the reader arrived by a
@@ -144,47 +231,86 @@
      it. So this is the placement to fall back to and not the one to rely
      on; the script measures. */
   .eta-report .footnote-tip {
-      position: absolute; top: 1.6em; left: 50%; transform: translateX(-50%);
-      z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
-      padding: .5em .7em; border-radius: .3em;
-      /* The page names these two, and a site pasted into does not, where the
+    position: absolute;
+    top: 1.6em;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: max-content;
+    max-width: min(24rem, calc(100vw - 2.5rem));
+    padding: 0.5em 0.7em;
+    border-radius: 0.3em;
+    /* The page names these two, and a site pasted into does not, where the
          system pair is the one thing known to be legible against itself. A
          tooltip is the one place here that needs an opaque surface: it is
          over text. */
-      background: var(--bg, Canvas); color: var(--fg, CanvasText);
-      border: 1px solid currentColor;
-      /* `rem`, not `em`: this is inside a `sup`, and an `em` size would be a
+    background: var(--bg, Canvas);
+    color: var(--fg, CanvasText);
+    border: 1px solid currentColor;
+    /* `rem`, not `em`: this is inside a `sup`, and an `em` size would be a
          fraction of an already smaller font, twice over in the footnotes
          section. The rest is set back to running text because a reference can
          sit inside a heading or an emphasized run. */
-      font-size: .85rem; font-style: normal; font-weight: normal;
-      line-height: 1.5; text-align: left; vertical-align: baseline;
-      white-space: normal;
-      /* The box is the note, links and all, so it takes the pointer: a
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.5;
+    text-align: left;
+    vertical-align: baseline;
+    white-space: normal;
+    /* The box is the note, links and all, so it takes the pointer: a
          reader who sees a source cited in it can go to that source without
          first finding the note at the bottom of the page. */
-      pointer-events: auto; }
+    pointer-events: auto;
+  }
   /* The gap between the reference and the box is a gap in the hover as well,
      and a box that closes when the pointer sets out for it cannot be reached.
      This is the gap, made part of the box, on both sides because the script
      puts the box above the reference as readily as below it. Behind the box,
      so it covers the space and not the page. */
   .eta-report .footnote-tip::before {
-      content: ""; position: absolute; left: 0; right: 0;
-      top: -.9rem; bottom: -.9rem; z-index: -1; }
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.9rem;
+    bottom: -0.9rem;
+    z-index: -1;
+  }
   /* Every link in the note is in the box too, and none of them is a stop on
      the way through the page: the note itself is reachable from the reference,
      and its links are reachable there. */
-  .eta-report .footnote-tip a { text-decoration: underline; }
+  .eta-report .footnote-tip a {
+    text-decoration: underline;
+  }
 }
-@media print { .eta-report .footnote-tip { display: none; } }
-.eta-report .contributors { font-size: .95rem; }
+@media print {
+  .eta-report .footnote-tip {
+    display: none;
+  }
+}
+.eta-report .contributors {
+  font-size: 0.95rem;
+}
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
-.eta-report .footnotes, .eta-report .contributors { margin-top: 3em; }
-.eta-report .table-scroll { overflow-x: auto; }
-.eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-.eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
+.eta-report .footnotes,
+.eta-report .contributors {
+  margin-top: 3em;
+}
+.eta-report .table-scroll {
+  overflow-x: auto;
+}
+.eta-report table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+.eta-report td {
+  border: 1px solid currentColor;
+  padding: 0.4em 0.6em;
+  vertical-align: top;
+}
 </style>
 <script>
 (() => {
@@ -194,7 +320,9 @@
   const HOLD = 200;
   const closing = new WeakMap();
   const tipOf = (e) =>
-    e.target.closest?.(".eta-report .footnote-ref")?.querySelector(".footnote-tip");
+    e.target
+      .closest?.(".eta-report .footnote-ref")
+      ?.querySelector(".footnote-tip");
   const place = (event) => {
     // The stylesheet shows this on hover only where the device hovers, and a
     // tap raises hover on a touch screen. Asking the same question here keeps
@@ -219,7 +347,8 @@
     // Under it unless that runs off the bottom, and over it only if that is
     // somewhere the box actually fits: when neither edge has room, under is
     // the one the reader can scroll to.
-    const top = below + box.height <= innerHeight - GAP || above < GAP ? below : above;
+    const top =
+      below + box.height <= innerHeight - GAP || above < GAP ? below : above;
     const middle = ref.left + ref.width / 2 - box.width / 2;
     const left = Math.min(Math.max(middle, GAP), innerWidth - box.width - GAP);
     tip.style.cssText = `display:block;position:fixed;left:${left}px;top:${top}px;transform:none`;
@@ -232,238 +361,1070 @@
     const tip = tipOf(event);
     if (!tip) return;
     clearTimeout(closing.get(tip));
-    closing.set(tip, setTimeout(() => { tip.style.cssText = ""; }, HOLD));
+    closing.set(
+      tip,
+      setTimeout(() => {
+        tip.style.cssText = "";
+      }, HOLD),
+    );
   };
-  for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
-  for (const name of ["pointerout", "focusout"]) document.addEventListener(name, release);
+  for (const name of ["pointerover", "focusin"])
+    document.addEventListener(name, place);
+  for (const name of ["pointerout", "focusout"])
+    document.addEventListener(name, release);
 })();
 </script>
 <div class="eta-report">
-<p class="phase">Composition</p>
-<div class="warnings"><strong>Warnings</strong><ul><li>dropped a line before the <code>Header</code> section: <code>IBX Automation</code></li>
-<li>no <code>Title</code>-styled paragraph, so the document name <code>IBX Automation</code> is being used as the headline; style the headline as <code>Title</code> in the doc</li>
-<li>unfinished text in the document: <code>But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl</code></li>
-<li>unfinished text in the document: <code>TODO didn’t finish</code></li>
-<li>3 suggestions still open on this tab; the build publishes the document without them, as it reads today</li>
-<li>1 comment thread still open on this tab</li>
-<li>the <code>Header</code> section has no <code>Publish Due Date:</code> line</li>
-<li>the <code>Header</code> section has no <code>Short:</code> line</li>
-<li>the <code>Header</code> section has no <code>SEO Description:</code> line</li></ul></div>
-<nav class="toc" id="table-of-contents" aria-label="Table of contents">
-<a class="link-mark" href="#table-of-contents" aria-label="Link to this table of contents"></a>
-<strong>Table of Contents</strong>
-<ul>
-<li><a href="#no-need-to-wait-automated-light-metro-is-right-for-the-ibx">No Need to Wait: Automated Light Metro is Right for the IBX</a>
-<ul>
-<li><a href="#automated-light-metro">Automated Light Metro</a></li>
-<li><a href="#where-alm-is-appropriate">Where ALM is Appropriate</a></li>
-<li><a href="#rising-ridership">Rising Ridership</a></li>
-<li><a href="#light-metro">Light Metro</a></li>
-<li><a href="#automation">Automation</a>
-<ul>
-<li><a href="#automated-light-metro">Automated Light Metro</a></li>
-<li><a href="#off-the-shelf-rolling-stock">Off-the-shelf rolling stock</a></li>
-<li><a href="#high-platforms">High platforms</a></li>
-</ul></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-<li><a href="#footnotes">Footnotes</a></li>
-<li><a href="#contributors">Contributors</a></li>
-</ul>
-</nav>
-<h2 id="no-need-to-wait-automated-light-metro-is-right-for-the-ibx"><a class="link-mark" href="#no-need-to-wait-automated-light-metro-is-right-for-the-ibx" aria-label="Link to this section"></a>No Need to Wait: Automated Light Metro is Right for the IBX</h2>
-<h3 id="automated-light-metro"><a class="link-mark" href="#automated-light-metro" aria-label="Link to this section"></a>Automated Light Metro</h3>
-<p id="automated-light-metro-p1"><a class="link-mark" href="#automated-light-metro-p1" aria-label="Link to this paragraph"></a>[Introduce what the driverless metro is.
-Talk about metro automation as a technology, used on busy main lines like Paris M1/M4/M14, all new Singapore lines, increasingly new Chinese lines, etc.]</p>
-<p id="automated-light-metro-p2"><a class="link-mark" href="#automated-light-metro-p2" aria-label="Link to this paragraph"></a>[Go into ALM.
-Explain that once the metro is driverless, costs can be reduced by shrinking station footprint, and using very high frequency, which would be unaffordable otherwise, to maintain a reasonable capacity.
-Cite Marco’s Italy case study and talk about how small cities in Italy build incredibly cheap metros this way, and also talk about secondary cities in France and the stations on the lower-ridership GPE lines.]</p>
-<p id="automated-light-metro-p3"><a class="link-mark" href="#automated-light-metro-p3" aria-label="Link to this paragraph"></a>[Get into advantages and disadvantages—the latter including scaling up problems.
-Mention that in Vancouver, the Canada Line is having this issue due to its going well over ridership projections, but say that the outer terminals are single-track to save money so it’s capped at 20 trunk tph, whereas the Expo Line is capable of 33 tph and Parisian lines 42.]</p>
-<p id="automated-light-metro-p4"><a class="link-mark" href="#automated-light-metro-p4" aria-label="Link to this paragraph"></a>[possibly mention that IBX should be future proofed for platform extension if it proves necessary, eg through station sitting that does not preclude it.
-Is there a way to cost effectively preserve this option at Atlantic Av?]</p>
-<p id="automated-light-metro-p5"><a class="link-mark" href="#automated-light-metro-p5" aria-label="Link to this paragraph"></a>[Say that multi-line systems in China can pool rolling stock; maybe mention the Expo+Millennium line system.]</p>
-<h3 id="where-alm-is-appropriate"><a class="link-mark" href="#where-alm-is-appropriate" aria-label="Link to this section"></a>Where ALM is Appropriate</h3>
-<p id="where-alm-is-appropriate-p1"><a class="link-mark" href="#where-alm-is-appropriate-p1" aria-label="Link to this paragraph"></a>ALM is an intermediate-capacity system.
-It relies on a combination of short trains to allow for cheap underground construction, and the driverless system to allow for very high frequency to maintain sufficient throughput.
-SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk.
-The VAL systems run every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in contrast, the non-driverless Marseille Metro runs every 10-15 minutes.</p>
-<p id="where-alm-is-appropriate-p2"><a class="link-mark" href="#where-alm-is-appropriate-p2" aria-label="Link to this paragraph"></a>Nevertheless, on the strongest routes in major cities, it is not common.
-On such routes, demand is so high that the city requires both very high frequency and long trains.
-Peak hourly ridership on the 4 and 5 trains from the Upper East Side to Midtown was 30,000 before Second Avenue Subway opened [source: Hub Bound 2015-16 data, and SAS EIS], whereas ALM is typically designed for 15,000-25,000.<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a><span class="footnote-tip" aria-hidden="true"><a tabindex="-1" href="https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity">https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity</a> <a tabindex="-1" href="https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/">https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/</a> [Multiply REM derated to 4/m^2 by design frequency]</span></sup></p>
-<p id="where-alm-is-appropriate-p3"><a class="link-mark" href="#where-alm-is-appropriate-p3" aria-label="Link to this paragraph"></a>Thus, the earliest adopters of the technology have historically been smaller cities, which looked for such capacity at low cost while still maintaining the high speed of a fully grade-separated metro system.
-The first driverless metro system to be deployed as ordinary urban mass transit, as opposed to an airport people mover, was the VAL system for the Lille Metro, opened 1983, from which it rapidly spread across provincial France; Vancouver, at the time a metro region of only 1.5 million people, opened SkyTrain in 1986.</p>
-<p id="where-alm-is-appropriate-p4"><a class="link-mark" href="#where-alm-is-appropriate-p4" aria-label="Link to this paragraph"></a>Larger cities have more recently started applying ALM technology on lines that do not expect to have so much ridership that higher-capacity metro and regional rail solutions are required.
-In all cases, the comparison is not with a conventional subway, but with a light rail system.
-A conventional subway on such routes is usually rejected because it would be overkill for the expected ridership.</p>
-<p id="where-alm-is-appropriate-p5"><a class="link-mark" href="#where-alm-is-appropriate-p5" aria-label="Link to this paragraph"></a>The tradeoff between light rail and ALM is that light rail is cheaper if it can be done on the street in dedicated lanes, but ALM offers the higher speed of a subway, much lower operating costs due to driverless operations, and, because of those low costs, high frequency all day.
-The higher cost of a subway is defrayed through shrinking the footprint of the stations.
-In Italy, where many urban subway lines have been built this century, some driverless and some not, the cost of station construction has been fairly consistent at 500€ per cubic meter outside the most difficult environments (such as Classical Roman sites), producing smaller driverless stations in Turin and Milan at 15 million € per station and larger ones in more modern parts of Rome at 40 million €.<sup id="fnref2" class="footnote-ref"><a href="#fn2">2</a><span class="footnote-tip" aria-hidden="true">All numbers come from the Italian case of the Transit Costs Project. <a tabindex="-1" href="https://transitcosts.com/cases/">https://transitcosts.com/cases/</a></span></sup> Nonetheless, with soft costs included, the construction cost of ALM is about four to five times as high as that of on-street tramways.</p>
-<p id="where-alm-is-appropriate-p6"><a class="link-mark" href="#where-alm-is-appropriate-p6" aria-label="Link to this paragraph"></a>However, when light rail cannot be built on the street, its cost advantage over ALM is greatly reduced.
-ALM costs only 1.5 to 2 times as much as elevated systems, and if light rail has to be tunneled then its cost advantage over heavy rail vanishes.
-In a private right-of-way such as that of IBX, the construction costs of ALM, which would not incur any additional tunneling, are the same as those of light rail or any other non-driverless solution.
-This is the perfect place for New York to experiment with ALM technology, and reduce costs further through shrinking the station footprint.
-Elsewhere, the tradeoff is that ALM has somewhat higher initial costs but lower operating costs.
-But the IBX right-of-way is such that ALM costs less because the stations can be shrunk without any requirement for additional tunnels or elevated guideways.</p>
-<p id="where-alm-is-appropriate-p7"><a class="link-mark" href="#where-alm-is-appropriate-p7" aria-label="Link to this paragraph"></a>Elsewhere in New York, ALM may be appropriate on other lines that have no expectation of more than 15,000-25,000 passengers per hour per direction, and that do not make sense as short extensions of existing subway lines.
-Circumferential routes such as Fordham Road in the Bronx and Main Street in Queens are appropriate to study for this technology, in conjunction with adopting it wholesale for IBX.
-These routes have never been studied as rail routes, because light rail may be too slow for their needs and a full-size subway too expensive.</p>
-<h3 id="rising-ridership"><a class="link-mark" href="#rising-ridership" aria-label="Link to this section"></a>Rising Ridership</h3>
-<p id="rising-ridership-p1"><a class="link-mark" href="#rising-ridership-p1" aria-label="Link to this paragraph"></a>With ridership projections now rising to 160k/day, the IBX has seen a steady rise in ridership as plans materialize and improve.  The initial feasibility study in 2022 estimated only 87k riders.
-The PEL study saw that rise to 115k.
-Then the 20-Year Needs Assessment Comparative Evaluation increased it to 118.7k.
-And now it has risen to 160k.
-This has been driven by a refinement of the ridership model as more details have been decided, as well as improved station locations and a truly impressive reduction in runtime.
-But we have reason to believe it can rise even higher.</p>
-<p id="rising-ridership-p2"><a class="link-mark" href="#rising-ridership-p2" aria-label="Link to this paragraph"></a>An independent study (<a href="https://arxiv.org/abs/2408.01562">https://arxiv.org/abs/2408.01562</a>) by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day.
-Another independent study by Tang at NYU Marron using the FTA’s STOPS open-source ridership modeling software<sup id="fnref3" class="footnote-ref"><a href="#fn3">3</a><span class="footnote-tip" aria-hidden="true">STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
-Thus, there is a limit to its accuracy.
-But the fact that it found a very similar number to the MTA’s closed-source Regional Transit Forecasting Model (RTFM) bodes well, and it also quite accurately predicted SAS Phase 1 ridership.
-Including detailed ridership in open data would enable more accurate independent analyses confirming higher ridership potential.</span></sup> found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways.
-If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k.
-Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway’s Phase 1, which saw about 200k daily riders as well.
-This excludes any future transit-oriented development (TOD), which neither study considered. </p>
-<p id="rising-ridership-p3"><a class="link-mark" href="#rising-ridership-p3" aria-label="Link to this paragraph"></a>With this continuously rising ridership, it is imperative that the IBX be future-proofed for much higher ridership in the future.
-Luckily, there is a cost-effective solution to this that will also deliver unparalleled service to riders.</p>
-<h3 id="light-metro"><a class="link-mark" href="#light-metro" aria-label="Link to this section"></a>Light Metro</h3>
-<p id="light-metro-p1"><a class="link-mark" href="#light-metro-p1" aria-label="Link to this paragraph"></a>The MTA had previously always described the IBX as light rail transit (LRT), but ever since the All Faiths tunnel announcement, they have increasingly begun describing it more as a light metro.
-Jamie Torres-Springer, head of MTA Construction &amp; Development, described the IBX at that press conference as a “light rail metro,” and at IBX Open Houses, MTA staff also said that the IBX will now be a lot closer to a light metro.</p>
-<p id="light-metro-p2"><a class="link-mark" href="#light-metro-p2" aria-label="Link to this paragraph"></a>To begin with, light rail is a fairly expansive concept.
-It is often not fully grade-separated and spans from full street-running to median-running with grade crossings to fully grade-separated, or any mix of those.
-Thus, it also includes light metro.
-Thanks to the All Faiths tunnel, the IBX lands squarely in the category of full grade separation.</p>
-<p id="light-metro-p3"><a class="link-mark" href="#light-metro-p3" aria-label="Link to this paragraph"></a>So what is light metro?
-Light, in contrast to heavy, refers to the capacity of a trainset.
-So it is generally shorter than heavy metro, and often narrower and/or physically lighter as well.
-Metro generally means that it is fully grade-separated.
-So light metro means a grade-separated rapid transit line using smaller trainsets.</p>
-<p id="light-metro-p4"><a class="link-mark" href="#light-metro-p4" aria-label="Link to this paragraph"></a>Low capacity vehicles do not necessarily make for a low capacity line, however.
-A small trainset can allow for smaller stations and tunnels, thereby drastically reducing construction cost.
-But it can often make up capacity by running extremely frequently.
-Lille’s Metro, for example, runs very tiny 26 m long, 2 m wide trains, but it runs them every 66 seconds, and can run up to 60 seconds.
-While a light metro can be as small and limited as an airport’s people mover system, it can also be as large as the <a href="https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/">narrow 6B trains</a> serving Guangzhou Metro Line 3, which carried <a href="http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html">2.76 million riders a day</a> in 2019 and is perhaps the busiest metro line in the world.<sup id="fnref4" class="footnote-ref"><a href="#fn4">4</a><span class="footnote-tip" aria-hidden="true">As far as we are aware, the only rapid transit lines that carry more riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai Suburban Railway’s Western Line (~3 million/day).
-However, both are technically mainline rail lines, and Mumbai’s Western Line is quad-tracked for much of its length.</span></sup> To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy, and has needed multiple relief lines and faces crowding limitations at many stations) and should have been heavy metro for sure, but it is a testament to the potential of light metro that it can carry the busiest metro line in the world.</p>
-<p id="light-metro-p5"><a class="link-mark" href="#light-metro-p5" aria-label="Link to this paragraph"></a>That said, while ridership keeps climbing, the IBX will never be as busy as Guangzhou Metro Line 3.
-With the current 160k daily ridership projection, however, it will already be <a href="https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.">the busiest light rail system (not line, whole system) in the US</a>.
-So it makes perfect sense to future-proof the IBX with the most cost-effective type of operation available: automated light metro (ALM).</p>
-<h3 id="automation"><a class="link-mark" href="#automation" aria-label="Link to this section"></a>Automation</h3>
-<p id="automation-p1"><a class="link-mark" href="#automation-p1" aria-label="Link to this paragraph"></a>Automated light metro simply combines light metro with automation.
-Now, what does automation mean?
-Automation generally refers to a Grade of Automation 4 (GoA4), in which a train is unattended and runs, stops, and opens and closes doors fully automatically.
-Sometimes there is a non-driver attendant, but if the attendant is also a backup driver, then the system is only GoA3.
-The MTA’s existing CBTC lines, like the 7 and L, use GoA2, in which CBTC allows for Automatic Train Operation (ATO).
-With ATO, the train driving is automatic, but there is still a driver/conductor who oversees it and opens and closes doors.</p>
-<p id="automation-p2"><a class="link-mark" href="#automation-p2" aria-label="Link to this paragraph"></a>GoA4 automation generally requires platform screen doors (PSDs) with only a few grandfathered exceptions worldwide (Vancouver and Nuremberg).
-This ensures the train operation is exceptionally safe.
-No one can be pushed or fall into the tracks, and if open-gangways are used, no one can subway surf.
-And crashes are exceedingly rare.
-Of the handful of crashes, all but one were when human drivers took over control.</p>
-<p id="automation-p3"><a class="link-mark" href="#automation-p3" aria-label="Link to this paragraph"></a>But automation and PSDs mean a lot more than safety.
-Runtimes are highly reliable, as there is no operator variability and nothing can fall onto the tracks.
-Precise acceleration and braking curves mean speed is increased, all while the ride is smoother, too.
-And then high reliability means schedule padding can be reduced, further cutting runtimes.
-For example, WMATA estimates that automation would save TODO.</p>
-<p id="automation-p4"><a class="link-mark" href="#automation-p4" aria-label="Link to this paragraph"></a><strong>TODO didn’t finish</strong></p>
-<p id="automation-p5"><a class="link-mark" href="#automation-p5" aria-label="Link to this paragraph"></a>This allows for the highest possible frequencies, like the extreme 1-min headways of Lille to the more normal 1.5-2-min minimum technical headways of ALMs like Montreal’s REM, Honolulu’s Skyline, Copenhagen’s Metro, Vancouver’s SkyTrain, London’s DLR, and all of the many airport people movers in the US, including NYC’s own JFK AirTrain.
-By squeezing capacity out of frequency, expensive fixed infrastructure like stations can be minimized.
-Riders are rewarded by very high frequency, reliability, and speed, and operating costs are reduced by not having to employ train drivers.
-This is especially helpful off-peak, where the large marginal operating cost savings help maintain frequent service all day long.</p>
-<p id="automation-p6"><a class="link-mark" href="#automation-p6" aria-label="Link to this paragraph"></a>This is a perfect fit for the IBX.
-As a circumferential line, most (70%) of trips will involve a transfer to the subway, and many will involve multiple.
-Thus, frequency is critical.
-Moreover, the IBX will serve more non-work trips than a radial line into Manhattan, so excellent off-peak service is crucial as well.
-And this can be clearly seen in the FTA STOPS ridership model, which estimates a 25% ridership increase from more frequent all-day service.</p>
-<p id="automation-p7"><a class="link-mark" href="#automation-p7" aria-label="Link to this paragraph"></a><u><strong>[below is more just notes or old stuff]</strong></u></p>
-<p id="automation-p8"><a class="link-mark" href="#automation-p8" aria-label="Link to this paragraph"></a>only 24/7 metro systems are NYC subway, PATH, and Copenhagen’s Metro. the subway has numerous 4-track and 3-track sections that help immensely, and everyone can feel the weight of weekend maintenance.
-PATH on the other hand has much fewer 3- or 4-track segments, and well, everyone can see how good their maintenance is.
-Copenhagen, on the other hand, has 2-track lines, but still runs 24/7 without huge maintenance backlogs or weekend shutdowns because automation is such a huge help.</p>
-<h4 id="automated-light-metro"><a class="link-mark" href="#automated-light-metro" aria-label="Link to this section"></a>Automated Light Metro</h4>
-<p id="automated-light-metro-p1-2"><a class="link-mark" href="#automated-light-metro-p1-2" aria-label="Link to this paragraph"></a>Light rail is an expansive category that includes automated light metro (ALM), which would suit the IBX particularly well.
-ALM refers to a proven form of rolling stock and service delivery in use on many newer systems, such as the new REM in Montreal, and Vancouver Skytrain, as well as lines in numerous Italian cities.
-In the United States, ALM trains have long been used on numerous airport “people mover” systems, including the JFK AirTrain.
-As the name suggests, ALM systems run short trains (typically no longer than four cars per consist) at very high frequency (2 minutes apart or less), trading per-trainset capacity for higher throughput of trains per hour.
-They are thus ideal for grade-separated train services that need to run frequently but do not require the high capacity of a 600-foot subway train.
-Since most IBX riders will be making short trips either that stand alone or require one or more transfers, trains must run frequently around the clock; the ability to run trains as frequently as every 2 minutes or less thus benefits the planned line immensely.
-Additionally, ALM trains require smaller station footprints, an essential benefit given the outsized role <a href="https://transitcosts.com/city/newyork-case-study/">station size</a> plays in the MTA’s high construction costs.
-Finally, ALM trains can also climb steep grades, reducing the construction costs for tunnel and bridge approaches.</p>
-<p id="automated-light-metro-p2-2"><a class="link-mark" href="#automated-light-metro-p2-2" aria-label="Link to this paragraph"></a>What exactly does the “automated” in “automated light metro” mean?
-There are international standards for different <a href="https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation"><em>grades of automation</em></a>, signifying exactly how automated a transit line’s operations is.
-The most automated of these grades is the 4th grade (<em>GoA4)</em>.
-The MTA should also proactively study full GoA4 automation for the IBX.
-On top of controlling operating costs, automated trains accelerate and brake more smoothly than manually controlled ones, and they can be stopped at platforms precisely.
-Thus, they enable platform screen doors, which improve safety and increase comfort on the platform since people can confidently stand beside the platform edge.
-Increasing the effective usable platform area is important for cost-effectiveness. </p>
-<h4 id="off-the-shelf-rolling-stock"><a class="link-mark" href="#off-the-shelf-rolling-stock" aria-label="Link to this section"></a>Off-the-shelf rolling stock</h4>
-<p id="off-the-shelf-rolling-stock-p1"><a class="link-mark" href="#off-the-shelf-rolling-stock-p1" aria-label="Link to this paragraph"></a>Importantly, the MTA has its pick of makers for standardized light metro railcars and seems intent on selecting an off-the-shelf design.
-If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the <a href="https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16">R46 truck-cracking debacle</a>.
-As we have<a href="https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train"> </a><a href="https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train">chronicled</a>, trusting experienced firms to meet their needs is what most other transit agencies do, and it is a major reason why they have generally beaten out New York City on subway costs, especially as of late.</p>
-<h4 id="high-platforms"><a class="link-mark" href="#high-platforms" aria-label="Link to this section"></a>High platforms</h4>
-<p id="high-platforms-p1"><a class="link-mark" href="#high-platforms-p1" aria-label="Link to this paragraph"></a>To really seal the IBX’s fate as a transit project, the MTA needs to commit to high-floor vehicles.
-While high-floor vehicles require straight or only gently curved platforms, the IBX right-of-way is generally wide enough for them.
-High-floor vehicles are generally cheaper than low-floor ones, and passengers can circulate more easily in the former than in the latter where wheel wells take up valuable floor space.
-Furthermore, building high platforms at the outset would greatly simplify any further capacity expansion later—practically all systems running frequent trains of the length seen on the New York City Subway (180 meters) or longer exclusively use high-floor vehicles.</p>
-<h3 id="conclusion"><a class="link-mark" href="#conclusion" aria-label="Link to this section"></a>Conclusion</h3>
-<p id="conclusion-p1"><a class="link-mark" href="#conclusion-p1" aria-label="Link to this paragraph"></a>IBX provides an excellent opportunity to import the ALM concept firmly into the MTA from preexisting examples such as the Montréal REM or the JFK Airtrain.
-In addition to the immense benefits for IBX itself, it would serve as a proof-of-concept for, and facilitate maintenance and acquisition economies of scale with, potential future ALM systems on other corridors, such as in outer Queens and Brooklyn, or potentially New Jersey.</p>
-<p id="conclusion-p2"><a class="link-mark" href="#conclusion-p2" aria-label="Link to this paragraph"></a>Hitachi Driverless Metro railcars are used on Honolulu’s Skyline, are proven in the US (important to the MTA), and are cheaper at $2.2 million/car (need to inflation-adjust) without bundled maintenance (it is bundled, as are operations, but costs are given separately).  This is a Buy America cost, while the Alstom Metropolis Saint-Laurent cars are built in India.</p>
-<p id="conclusion-p3"><a class="link-mark" href="#conclusion-p3" aria-label="Link to this paragraph"></a>With a 32-min runtime, 2-min turns, and a 90% utilization rate, 38 trainsets are needed.
-At 4 cars/trainset and using Honolulu’s costs of $2.2 million/car inflation-adjusted to June 2025, this fleet would cost $421 million.
-Assuming <a href="https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3">3.5% future inflation</a> (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be $444 million in 2027,<sup id="fnref5" class="footnote-ref"><a href="#fn5">5</a><span class="footnote-tip" aria-hidden="true">ceil(((32 min + 2 min) * 2) / 2 min / 90%) trainsets * 4 cars/trainset * $2.2 million/car * 124% (Apr 2020 to Jan 2025 inflation) * 103.5%^(2027-2025)</span></sup> only slightly higher than the MTA’s estimated $432 million for fleet cost.
-But this is with 2-min peak headways, not 5-min peak headways.
-And with a 92% utilization rate, the cost comes down to exactly $432 million.</p>
-<p id="conclusion-p4"><a class="link-mark" href="#conclusion-p4" aria-label="Link to this paragraph"></a><u>Hitachi Driverless Metro Honolulu</u></p>
-<p id="conclusion-p5"><a class="link-mark" href="#conclusion-p5" aria-label="Link to this paragraph"></a>cost: <a href="https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to">$2.2 million/car</a> (<a href="http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf">contract in 2011</a>, <a href="https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html">first delivered on March 25, 2016</a>, <a href="https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train">last delivered on April 24, 2024</a>)</p>
-<p id="conclusion-p6"><a class="link-mark" href="#conclusion-p6" aria-label="Link to this paragraph"></a>fleet: 80 cars</p>
-<p id="conclusion-p7"><a class="link-mark" href="#conclusion-p7" aria-label="Link to this paragraph"></a>cost/length in June 2025: $2.2 million/car / 65 ft/car * 1.26 (April 2020 to June 2025 inflation) = $140k/m</p>
-<p id="conclusion-p8"><a class="link-mark" href="#conclusion-p8" aria-label="Link to this paragraph"></a>length: 65 ft (19.81 m)</p>
-<p id="conclusion-p9"><a class="link-mark" href="#conclusion-p9" aria-label="Link to this paragraph"></a>width: 10 ft (3.048 m)</p>
-<p id="conclusion-p10"><a class="link-mark" href="#conclusion-p10" aria-label="Link to this paragraph"></a>weight: <a href="https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.">72,000 lbs per 65 ft AW0 car</a></p>
-<p id="conclusion-p11"><a class="link-mark" href="#conclusion-p11" aria-label="Link to this paragraph"></a>AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m</p>
-<p id="conclusion-p12"><a class="link-mark" href="#conclusion-p12" aria-label="Link to this paragraph"></a>formation: 4-car open-gangway sets</p>
-<p id="conclusion-p13"><a class="link-mark" href="#conclusion-p13" aria-label="Link to this paragraph"></a>electrification: 750 V DC third rail</p>
-<p id="conclusion-p14"><a class="link-mark" href="#conclusion-p14" aria-label="Link to this paragraph"></a>speed: 55 mph (88.5 kmh) service, 65 mph (104.6 kmh) design</p>
-<p id="conclusion-p15"><a class="link-mark" href="#conclusion-p15" aria-label="Link to this paragraph"></a>capacity: 800</p>
-<p id="conclusion-p16"><a class="link-mark" href="#conclusion-p16" aria-label="Link to this paragraph"></a>doors: 3/car</p>
-<p id="conclusion-p17"><a class="link-mark" href="#conclusion-p17" aria-label="Link to this paragraph"></a>signaling: DTG (distance to go) ATC, Hitachi</p>
-<p id="conclusion-p18"><a class="link-mark" href="#conclusion-p18" aria-label="Link to this paragraph"></a>seating: transverse and longitudinal</p>
-<p id="conclusion-p19"><a class="link-mark" href="#conclusion-p19" aria-label="Link to this paragraph"></a><u>Alstom Metropolis Saint-Laurent</u></p>
-<p id="conclusion-p20"><a class="link-mark" href="#conclusion-p20" aria-label="Link to this paragraph"></a>cost: </p>
-<p id="conclusion-p21"><a class="link-mark" href="#conclusion-p21" aria-label="Link to this paragraph"></a>fleet: </p>
-<p id="conclusion-p22"><a class="link-mark" href="#conclusion-p22" aria-label="Link to this paragraph"></a>cost/length: </p>
-<p id="conclusion-p23"><a class="link-mark" href="#conclusion-p23" aria-label="Link to this paragraph"></a>length: 19.05 m</p>
-<p id="conclusion-p24"><a class="link-mark" href="#conclusion-p24" aria-label="Link to this paragraph"></a>width: 2.94 m</p>
-<p id="conclusion-p25"><a class="link-mark" href="#conclusion-p25" aria-label="Link to this paragraph"></a>weight: <a href="https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes">232 t per 76.2 m AW3 4-car trainset</a></p>
-<p id="conclusion-p26"><a class="link-mark" href="#conclusion-p26" aria-label="Link to this paragraph"></a>AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 2232 kg/m</p>
-<p id="conclusion-p27"><a class="link-mark" href="#conclusion-p27" aria-label="Link to this paragraph"></a>formation: 2-car open-gangway sets coupled into 4-car sets</p>
-<p id="conclusion-p28"><a class="link-mark" href="#conclusion-p28" aria-label="Link to this paragraph"></a>electrification: 1500 V DC catenary</p>
-<p id="conclusion-p29"><a class="link-mark" href="#conclusion-p29" aria-label="Link to this paragraph"></a>speed: 90 kmh service (100 kmh design)</p>
-<p id="conclusion-p30"><a class="link-mark" href="#conclusion-p30" aria-label="Link to this paragraph"></a>capacity: 780</p>
-<p id="conclusion-p31"><a class="link-mark" href="#conclusion-p31" aria-label="Link to this paragraph"></a>doors: 3/car</p>
-<p id="conclusion-p32"><a class="link-mark" href="#conclusion-p32" aria-label="Link to this paragraph"></a>signaling: Alstom Urbalis 400 CBTC</p>
-<p id="conclusion-p33"><a class="link-mark" href="#conclusion-p33" aria-label="Link to this paragraph"></a>seating: longitudinal</p>
-<section class="footnotes" id="footnotes">
-<h2><a class="link-mark" href="#footnotes" aria-label="Link to this section"></a>Footnotes</h2>
-<ol>
-<li id="fn1"><a class="link-mark" href="#fn1" aria-label="Link to this footnote"></a><p id="fn1-p1"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a> <a href="https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity">https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity</a> <a href="https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/">https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/</a> [Multiply REM derated to 4/m^2 by design frequency]</p></li>
-<li id="fn2"><a class="link-mark" href="#fn2" aria-label="Link to this footnote"></a><p id="fn2-p1"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a> All numbers come from the Italian case of the Transit Costs Project. <a href="https://transitcosts.com/cases/">https://transitcosts.com/cases/</a></p></li>
-<li id="fn3"><a class="link-mark" href="#fn3" aria-label="Link to this footnote"></a><p id="fn3-p1"><a href="#fnref3" class="footnote-back" aria-label="Back to footnote 3 in the text">↑</a> STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
-Thus, there is a limit to its accuracy.
-But the fact that it found a very similar number to the MTA’s closed-source Regional Transit Forecasting Model (RTFM) bodes well, and it also quite accurately predicted SAS Phase 1 ridership.
-Including detailed ridership in open data would enable more accurate independent analyses confirming higher ridership potential.</p></li>
-<li id="fn4"><a class="link-mark" href="#fn4" aria-label="Link to this footnote"></a><p id="fn4-p1"><a href="#fnref4" class="footnote-back" aria-label="Back to footnote 4 in the text">↑</a> As far as we are aware, the only rapid transit lines that carry more riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai Suburban Railway’s Western Line (~3 million/day).
-However, both are technically mainline rail lines, and Mumbai’s Western Line is quad-tracked for much of its length.</p></li>
-<li id="fn5"><a class="link-mark" href="#fn5" aria-label="Link to this footnote"></a><p id="fn5-p1"><a href="#fnref5" class="footnote-back" aria-label="Back to footnote 5 in the text">↑</a> ceil(((32 min + 2 min) * 2) / 2 min / 90%) trainsets * 4 cars/trainset * $2.2 million/car * 124% (Apr 2020 to Jan 2025 inflation) * 103.5%^(2027-2025)</p></li>
-</ol>
-</section>
-<section class="contributors" id="contributors">
-<h2><a class="link-mark" href="#contributors" aria-label="Link to this section"></a>Contributors</h2>
-<p>We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:</p>
-<ul>
-<li>Madison Feinberg</li>
-<li>Robert Hale</li>
-<li>Alon Levy</li>
-<li>Khyber Sen</li>
-<li>Franklin Tang</li>
-</ul>
-</section>
+  <p class="phase">Composition</p>
+  <div class="warnings"
+    ><strong>Warnings</strong><ul
+      ><li
+        >dropped a line before the <code>Header</code> section:
+        <code>IBX Automation</code></li
+      >
+      <li
+        >no <code>Title</code>-styled paragraph, so the document name <code
+          >IBX Automation</code
+        > is being used as the headline; style the headline as <code
+          >Title</code
+        > in the doc</li
+      >
+      <li
+        >unfinished text in the document:
+        <code
+          >But automation and PSDs mean a lot more than safety. Runtimes are
+          highly reliabl</code
+        ></li
+      >
+      <li
+        >unfinished text in the document: <code>TODO didn’t finish</code></li
+      >
+      <li
+        >3 suggestions still open on this tab; the build publishes the document
+        without them, as it reads today</li
+      >
+      <li>1 comment thread still open on this tab</li>
+      <li
+        >the <code>Header</code> section has no <code>Publish Due Date:</code>
+        line</li
+      >
+      <li
+        >the <code>Header</code> section has no <code>Short:</code> line</li
+      >
+      <li
+        >the <code>Header</code> section has no <code>SEO Description:</code>
+        line</li
+      ></ul
+    ></div
+  >
+  <nav class="toc" id="table-of-contents" aria-label="Table of contents">
+    <a
+      class="link-mark"
+      href="#table-of-contents"
+      aria-label="Link to this table of contents"
+    ></a>
+    <strong>Table of Contents</strong>
+    <ul>
+      <li
+        ><a href="#no-need-to-wait-automated-light-metro-is-right-for-the-ibx"
+          >No Need to Wait: Automated Light Metro is Right for the IBX</a
+        >
+        <ul>
+          <li><a href="#automated-light-metro">Automated Light Metro</a></li>
+          <li
+            ><a href="#where-alm-is-appropriate"
+              >Where ALM is Appropriate</a
+            ></li
+          >
+          <li><a href="#rising-ridership">Rising Ridership</a></li>
+          <li><a href="#light-metro">Light Metro</a></li>
+          <li
+            ><a href="#automation">Automation</a>
+            <ul>
+              <li
+                ><a href="#automated-light-metro">Automated Light Metro</a></li
+              >
+              <li
+                ><a href="#off-the-shelf-rolling-stock"
+                  >Off-the-shelf rolling stock</a
+                ></li
+              >
+              <li><a href="#high-platforms">High platforms</a></li>
+            </ul></li
+          >
+          <li><a href="#conclusion">Conclusion</a></li>
+        </ul></li
+      >
+      <li><a href="#footnotes">Footnotes</a></li>
+      <li><a href="#contributors">Contributors</a></li>
+    </ul>
+  </nav>
+  <h2 id="no-need-to-wait-automated-light-metro-is-right-for-the-ibx"
+    ><a
+      class="link-mark"
+      href="#no-need-to-wait-automated-light-metro-is-right-for-the-ibx"
+      aria-label="Link to this section"
+    ></a>No Need to Wait: Automated Light Metro is Right for the IBX</h2
+  >
+  <h3 id="automated-light-metro"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro"
+      aria-label="Link to this section"
+    ></a>Automated Light Metro</h3
+  >
+  <p id="automated-light-metro-p1"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p1"
+      aria-label="Link to this paragraph"
+    ></a>[Introduce what the driverless metro is. Talk about metro automation as
+    a technology, used on busy main lines like Paris M1/M4/M14, all new
+    Singapore lines, increasingly new Chinese lines, etc.]</p
+  >
+  <p id="automated-light-metro-p2"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p2"
+      aria-label="Link to this paragraph"
+    ></a>[Go into ALM. Explain that once the metro is driverless, costs can be
+    reduced by shrinking station footprint, and using very high frequency, which
+    would be unaffordable otherwise, to maintain a reasonable capacity. Cite
+    Marco’s Italy case study and talk about how small cities in Italy build
+    incredibly cheap metros this way, and also talk about secondary cities in
+    France and the stations on the lower-ridership GPE lines.]</p
+  >
+  <p id="automated-light-metro-p3"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p3"
+      aria-label="Link to this paragraph"
+    ></a>[Get into advantages and disadvantages—the latter including scaling up
+    problems. Mention that in Vancouver, the Canada Line is having this issue
+    due to its going well over ridership projections, but say that the outer
+    terminals are single-track to save money so it’s capped at 20 trunk tph,
+    whereas the Expo Line is capable of 33 tph and Parisian lines 42.]</p
+  >
+  <p id="automated-light-metro-p4"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p4"
+      aria-label="Link to this paragraph"
+    ></a>[possibly mention that IBX should be future proofed for platform
+    extension if it proves necessary, eg through station sitting that does not
+    preclude it. Is there a way to cost effectively preserve this option at
+    Atlantic Av?]</p
+  >
+  <p id="automated-light-metro-p5"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p5"
+      aria-label="Link to this paragraph"
+    ></a>[Say that multi-line systems in China can pool rolling stock; maybe
+    mention the Expo+Millennium line system.]</p
+  >
+  <h3 id="where-alm-is-appropriate"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate"
+      aria-label="Link to this section"
+    ></a>Where ALM is Appropriate</h3
+  >
+  <p id="where-alm-is-appropriate-p1"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p1"
+      aria-label="Link to this paragraph"
+    ></a>ALM is an intermediate-capacity system. It relies on a combination of
+    short trains to allow for cheap underground construction, and the driverless
+    system to allow for very high frequency to maintain sufficient throughput.
+    SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the
+    Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches,
+    and in all cases the branches separate quite far out of city center,
+    offering about 3-minute frequencies on a lengthy trunk. The VAL systems run
+    every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in
+    contrast, the non-driverless Marseille Metro runs every 10-15 minutes.</p
+  >
+  <p id="where-alm-is-appropriate-p2"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p2"
+      aria-label="Link to this paragraph"
+    ></a>Nevertheless, on the strongest routes in major cities, it is not
+    common. On such routes, demand is so high that the city requires both very
+    high frequency and long trains. Peak hourly ridership on the 4 and 5 trains
+    from the Upper East Side to Midtown was 30,000 before Second Avenue Subway
+    opened [source: Hub Bound 2015-16 data, and SAS EIS], whereas ALM is
+    typically designed for 15,000-25,000.<sup id="fnref1" class="footnote-ref"
+      ><a href="#fn1">1</a><span class="footnote-tip" aria-hidden="true"
+        ><a
+          tabindex="-1"
+          href="https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity"
+          >https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity</a
+        >
+        <a
+          tabindex="-1"
+          href="https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/"
+          >https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/</a
+        >
+        [Multiply REM derated to 4/m^2 by design frequency]</span
+      ></sup
+    ></p
+  >
+  <p id="where-alm-is-appropriate-p3"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p3"
+      aria-label="Link to this paragraph"
+    ></a>Thus, the earliest adopters of the technology have historically been
+    smaller cities, which looked for such capacity at low cost while still
+    maintaining the high speed of a fully grade-separated metro system. The
+    first driverless metro system to be deployed as ordinary urban mass transit,
+    as opposed to an airport people mover, was the VAL system for the Lille
+    Metro, opened 1983, from which it rapidly spread across provincial France;
+    Vancouver, at the time a metro region of only 1.5 million people, opened
+    SkyTrain in 1986.</p
+  >
+  <p id="where-alm-is-appropriate-p4"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p4"
+      aria-label="Link to this paragraph"
+    ></a>Larger cities have more recently started applying ALM technology on
+    lines that do not expect to have so much ridership that higher-capacity
+    metro and regional rail solutions are required. In all cases, the comparison
+    is not with a conventional subway, but with a light rail system. A
+    conventional subway on such routes is usually rejected because it would be
+    overkill for the expected ridership.</p
+  >
+  <p id="where-alm-is-appropriate-p5"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p5"
+      aria-label="Link to this paragraph"
+    ></a>The tradeoff between light rail and ALM is that light rail is cheaper
+    if it can be done on the street in dedicated lanes, but ALM offers the
+    higher speed of a subway, much lower operating costs due to driverless
+    operations, and, because of those low costs, high frequency all day. The
+    higher cost of a subway is defrayed through shrinking the footprint of the
+    stations. In Italy, where many urban subway lines have been built this
+    century, some driverless and some not, the cost of station construction has
+    been fairly consistent at 500€ per cubic meter outside the most difficult
+    environments (such as Classical Roman sites), producing smaller driverless
+    stations in Turin and Milan at 15 million € per station and larger ones in
+    more modern parts of Rome at 40 million €.<sup
+      id="fnref2"
+      class="footnote-ref"
+      ><a href="#fn2">2</a><span class="footnote-tip" aria-hidden="true"
+        >All numbers come from the Italian case of the Transit Costs Project.
+        <a tabindex="-1" href="https://transitcosts.com/cases/"
+          >https://transitcosts.com/cases/</a
+        ></span
+      ></sup
+    > Nonetheless, with soft costs included, the construction cost of ALM is
+    about four to five times as high as that of on-street tramways.</p
+  >
+  <p id="where-alm-is-appropriate-p6"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p6"
+      aria-label="Link to this paragraph"
+    ></a>However, when light rail cannot be built on the street, its cost
+    advantage over ALM is greatly reduced. ALM costs only 1.5 to 2 times as much
+    as elevated systems, and if light rail has to be tunneled then its cost
+    advantage over heavy rail vanishes. In a private right-of-way such as that
+    of IBX, the construction costs of ALM, which would not incur any additional
+    tunneling, are the same as those of light rail or any other non-driverless
+    solution. This is the perfect place for New York to experiment with ALM
+    technology, and reduce costs further through shrinking the station
+    footprint. Elsewhere, the tradeoff is that ALM has somewhat higher initial
+    costs but lower operating costs. But the IBX right-of-way is such that ALM
+    costs less because the stations can be shrunk without any requirement for
+    additional tunnels or elevated guideways.</p
+  >
+  <p id="where-alm-is-appropriate-p7"
+    ><a
+      class="link-mark"
+      href="#where-alm-is-appropriate-p7"
+      aria-label="Link to this paragraph"
+    ></a>Elsewhere in New York, ALM may be appropriate on other lines that have
+    no expectation of more than 15,000-25,000 passengers per hour per direction,
+    and that do not make sense as short extensions of existing subway lines.
+    Circumferential routes such as Fordham Road in the Bronx and Main Street in
+    Queens are appropriate to study for this technology, in conjunction with
+    adopting it wholesale for IBX. These routes have never been studied as rail
+    routes, because light rail may be too slow for their needs and a full-size
+    subway too expensive.</p
+  >
+  <h3 id="rising-ridership"
+    ><a
+      class="link-mark"
+      href="#rising-ridership"
+      aria-label="Link to this section"
+    ></a>Rising Ridership</h3
+  >
+  <p id="rising-ridership-p1"
+    ><a
+      class="link-mark"
+      href="#rising-ridership-p1"
+      aria-label="Link to this paragraph"
+    ></a>With ridership projections now rising to 160k/day, the IBX has seen a
+    steady rise in ridership as plans materialize and improve. The initial
+    feasibility study in 2022 estimated only 87k riders. The PEL study saw that
+    rise to 115k. Then the 20-Year Needs Assessment Comparative Evaluation
+    increased it to 118.7k. And now it has risen to 160k. This has been driven
+    by a refinement of the ridership model as more details have been decided, as
+    well as improved station locations and a truly impressive reduction in
+    runtime. But we have reason to believe it can rise even higher.</p
+  >
+  <p id="rising-ridership-p2"
+    ><a
+      class="link-mark"
+      href="#rising-ridership-p2"
+      aria-label="Link to this paragraph"
+    ></a>An independent study (<a href="https://arxiv.org/abs/2408.01562"
+      >https://arxiv.org/abs/2408.01562</a
+    >) by Yang et al found that the maximum ridership, barring land-use changes,
+    should be 254k riders/day. Another independent study by Tang at NYU Marron
+    using the FTA’s STOPS open-source ridership modeling software<sup
+      id="fnref3"
+      class="footnote-ref"
+      ><a href="#fn3">3</a><span class="footnote-tip" aria-hidden="true"
+        >STOPS depends on extensive calibration with existing ridership, which
+        includes statistics like per-platform ridership, which the MTA does not
+        make available. Thus, there is a limit to its accuracy. But the fact
+        that it found a very similar number to the MTA’s closed-source Regional
+        Transit Forecasting Model (RTFM) bodes well, and it also quite
+        accurately predicted SAS Phase 1 ridership. Including detailed ridership
+        in open data would enable more accurate independent analyses confirming
+        higher ridership potential.</span
+      ></sup
+    >
+    found the same 160k figure, albeit with the old runtime and the currently
+    stated 5-minute peak headways. If peak headways are reduced to 2 minutes
+    instead, with off-peak headways ranging from 3 minutes midday to 5 minutes
+    in the evening, ridership rises to 200k. Combined with the recent trip time
+    reductions, this could climb even higher, putting the IBX even above the
+    Second Avenue Subway’s Phase 1, which saw about 200k daily riders as well.
+    This excludes any future transit-oriented development (TOD), which neither
+    study considered.
+  </p>
+  <p id="rising-ridership-p3"
+    ><a
+      class="link-mark"
+      href="#rising-ridership-p3"
+      aria-label="Link to this paragraph"
+    ></a>With this continuously rising ridership, it is imperative that the IBX
+    be future-proofed for much higher ridership in the future. Luckily, there is
+    a cost-effective solution to this that will also deliver unparalleled
+    service to riders.</p
+  >
+  <h3 id="light-metro"
+    ><a
+      class="link-mark"
+      href="#light-metro"
+      aria-label="Link to this section"
+    ></a>Light Metro</h3
+  >
+  <p id="light-metro-p1"
+    ><a
+      class="link-mark"
+      href="#light-metro-p1"
+      aria-label="Link to this paragraph"
+    ></a>The MTA had previously always described the IBX as light rail transit
+    (LRT), but ever since the All Faiths tunnel announcement, they have
+    increasingly begun describing it more as a light metro. Jamie
+    Torres-Springer, head of MTA Construction &amp; Development, described the
+    IBX at that press conference as a “light rail metro,” and at IBX Open
+    Houses, MTA staff also said that the IBX will now be a lot closer to a light
+    metro.</p
+  >
+  <p id="light-metro-p2"
+    ><a
+      class="link-mark"
+      href="#light-metro-p2"
+      aria-label="Link to this paragraph"
+    ></a>To begin with, light rail is a fairly expansive concept. It is often
+    not fully grade-separated and spans from full street-running to
+    median-running with grade crossings to fully grade-separated, or any mix of
+    those. Thus, it also includes light metro. Thanks to the All Faiths tunnel,
+    the IBX lands squarely in the category of full grade separation.</p
+  >
+  <p id="light-metro-p3"
+    ><a
+      class="link-mark"
+      href="#light-metro-p3"
+      aria-label="Link to this paragraph"
+    ></a>So what is light metro? Light, in contrast to heavy, refers to the
+    capacity of a trainset. So it is generally shorter than heavy metro, and
+    often narrower and/or physically lighter as well. Metro generally means that
+    it is fully grade-separated. So light metro means a grade-separated rapid
+    transit line using smaller trainsets.</p
+  >
+  <p id="light-metro-p4"
+    ><a
+      class="link-mark"
+      href="#light-metro-p4"
+      aria-label="Link to this paragraph"
+    ></a>Low capacity vehicles do not necessarily make for a low capacity line,
+    however. A small trainset can allow for smaller stations and tunnels,
+    thereby drastically reducing construction cost. But it can often make up
+    capacity by running extremely frequently. Lille’s Metro, for example, runs
+    very tiny 26 m long, 2 m wide trains, but it runs them every 66 seconds, and
+    can run up to 60 seconds. While a light metro can be as small and limited as
+    an airport’s people mover system, it can also be as large as the <a
+      href="https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/"
+      >narrow 6B trains</a
+    > serving Guangzhou Metro Line 3, which carried <a
+      href="http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html"
+      >2.76 million riders a day</a
+    > in 2019 and is perhaps the busiest metro line in the world.<sup
+      id="fnref4"
+      class="footnote-ref"
+      ><a href="#fn4">4</a><span class="footnote-tip" aria-hidden="true"
+        >As far as we are aware, the only rapid transit lines that carry more
+        riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai
+        Suburban Railway’s Western Line (~3 million/day). However, both are
+        technically mainline rail lines, and Mumbai’s Western Line is
+        quad-tracked for much of its length.</span
+      ></sup
+    > To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes
+    the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy,
+    and has needed multiple relief lines and faces crowding limitations at many
+    stations) and should have been heavy metro for sure, but it is a testament
+    to the potential of light metro that it can carry the busiest metro line in
+    the world.</p
+  >
+  <p id="light-metro-p5"
+    ><a
+      class="link-mark"
+      href="#light-metro-p5"
+      aria-label="Link to this paragraph"
+    ></a>That said, while ridership keeps climbing, the IBX will never be as
+    busy as Guangzhou Metro Line 3. With the current 160k daily ridership
+    projection, however, it will already be <a
+      href="https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year."
+      >the busiest light rail system (not line, whole system) in the US</a
+    >. So it makes perfect sense to future-proof the IBX with the most
+    cost-effective type of operation available: automated light metro (ALM).</p
+  >
+  <h3 id="automation"
+    ><a
+      class="link-mark"
+      href="#automation"
+      aria-label="Link to this section"
+    ></a>Automation</h3
+  >
+  <p id="automation-p1"
+    ><a
+      class="link-mark"
+      href="#automation-p1"
+      aria-label="Link to this paragraph"
+    ></a>Automated light metro simply combines light metro with automation. Now,
+    what does automation mean? Automation generally refers to a Grade of
+    Automation 4 (GoA4), in which a train is unattended and runs, stops, and
+    opens and closes doors fully automatically. Sometimes there is a non-driver
+    attendant, but if the attendant is also a backup driver, then the system is
+    only GoA3. The MTA’s existing CBTC lines, like the 7 and L, use GoA2, in
+    which CBTC allows for Automatic Train Operation (ATO). With ATO, the train
+    driving is automatic, but there is still a driver/conductor who oversees it
+    and opens and closes doors.</p
+  >
+  <p id="automation-p2"
+    ><a
+      class="link-mark"
+      href="#automation-p2"
+      aria-label="Link to this paragraph"
+    ></a>GoA4 automation generally requires platform screen doors (PSDs) with
+    only a few grandfathered exceptions worldwide (Vancouver and Nuremberg).
+    This ensures the train operation is exceptionally safe. No one can be pushed
+    or fall into the tracks, and if open-gangways are used, no one can subway
+    surf. And crashes are exceedingly rare. Of the handful of crashes, all but
+    one were when human drivers took over control.</p
+  >
+  <p id="automation-p3"
+    ><a
+      class="link-mark"
+      href="#automation-p3"
+      aria-label="Link to this paragraph"
+    ></a>But automation and PSDs mean a lot more than safety. Runtimes are
+    highly reliable, as there is no operator variability and nothing can fall
+    onto the tracks. Precise acceleration and braking curves mean speed is
+    increased, all while the ride is smoother, too. And then high reliability
+    means schedule padding can be reduced, further cutting runtimes. For
+    example, WMATA estimates that automation would save TODO.</p
+  >
+  <p id="automation-p4"
+    ><a
+      class="link-mark"
+      href="#automation-p4"
+      aria-label="Link to this paragraph"
+    ></a><strong>TODO didn’t finish</strong></p
+  >
+  <p id="automation-p5"
+    ><a
+      class="link-mark"
+      href="#automation-p5"
+      aria-label="Link to this paragraph"
+    ></a>This allows for the highest possible frequencies, like the extreme
+    1-min headways of Lille to the more normal 1.5-2-min minimum technical
+    headways of ALMs like Montreal’s REM, Honolulu’s Skyline, Copenhagen’s
+    Metro, Vancouver’s SkyTrain, London’s DLR, and all of the many airport
+    people movers in the US, including NYC’s own JFK AirTrain. By squeezing
+    capacity out of frequency, expensive fixed infrastructure like stations can
+    be minimized. Riders are rewarded by very high frequency, reliability, and
+    speed, and operating costs are reduced by not having to employ train
+    drivers. This is especially helpful off-peak, where the large marginal
+    operating cost savings help maintain frequent service all day long.</p
+  >
+  <p id="automation-p6"
+    ><a
+      class="link-mark"
+      href="#automation-p6"
+      aria-label="Link to this paragraph"
+    ></a>This is a perfect fit for the IBX. As a circumferential line, most
+    (70%) of trips will involve a transfer to the subway, and many will involve
+    multiple. Thus, frequency is critical. Moreover, the IBX will serve more
+    non-work trips than a radial line into Manhattan, so excellent off-peak
+    service is crucial as well. And this can be clearly seen in the FTA STOPS
+    ridership model, which estimates a 25% ridership increase from more frequent
+    all-day service.</p
+  >
+  <p id="automation-p7"
+    ><a
+      class="link-mark"
+      href="#automation-p7"
+      aria-label="Link to this paragraph"
+    ></a><u><strong>[below is more just notes or old stuff]</strong></u></p
+  >
+  <p id="automation-p8"
+    ><a
+      class="link-mark"
+      href="#automation-p8"
+      aria-label="Link to this paragraph"
+    ></a>only 24/7 metro systems are NYC subway, PATH, and Copenhagen’s Metro.
+    the subway has numerous 4-track and 3-track sections that help immensely,
+    and everyone can feel the weight of weekend maintenance. PATH on the other
+    hand has much fewer 3- or 4-track segments, and well, everyone can see how
+    good their maintenance is. Copenhagen, on the other hand, has 2-track lines,
+    but still runs 24/7 without huge maintenance backlogs or weekend shutdowns
+    because automation is such a huge help.</p
+  >
+  <h4 id="automated-light-metro"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro"
+      aria-label="Link to this section"
+    ></a>Automated Light Metro</h4
+  >
+  <p id="automated-light-metro-p1-2"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p1-2"
+      aria-label="Link to this paragraph"
+    ></a>Light rail is an expansive category that includes automated light metro
+    (ALM), which would suit the IBX particularly well. ALM refers to a proven
+    form of rolling stock and service delivery in use on many newer systems,
+    such as the new REM in Montreal, and Vancouver Skytrain, as well as lines in
+    numerous Italian cities. In the United States, ALM trains have long been
+    used on numerous airport “people mover” systems, including the JFK AirTrain.
+    As the name suggests, ALM systems run short trains (typically no longer than
+    four cars per consist) at very high frequency (2 minutes apart or less),
+    trading per-trainset capacity for higher throughput of trains per hour. They
+    are thus ideal for grade-separated train services that need to run
+    frequently but do not require the high capacity of a 600-foot subway train.
+    Since most IBX riders will be making short trips either that stand alone or
+    require one or more transfers, trains must run frequently around the clock;
+    the ability to run trains as frequently as every 2 minutes or less thus
+    benefits the planned line immensely. Additionally, ALM trains require
+    smaller station footprints, an essential benefit given the outsized role <a
+      href="https://transitcosts.com/city/newyork-case-study/"
+      >station size</a
+    > plays in the MTA’s high construction costs. Finally, ALM trains can also
+    climb steep grades, reducing the construction costs for tunnel and bridge
+    approaches.</p
+  >
+  <p id="automated-light-metro-p2-2"
+    ><a
+      class="link-mark"
+      href="#automated-light-metro-p2-2"
+      aria-label="Link to this paragraph"
+    ></a>What exactly does the “automated” in “automated light metro” mean?
+    There are international standards for different <a
+      href="https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation"
+      ><em>grades of automation</em></a
+    >, signifying exactly how automated a transit line’s operations is. The most
+    automated of these grades is the 4th grade (<em>GoA4)</em>. The MTA should
+    also proactively study full GoA4 automation for the IBX. On top of
+    controlling operating costs, automated trains accelerate and brake more
+    smoothly than manually controlled ones, and they can be stopped at platforms
+    precisely. Thus, they enable platform screen doors, which improve safety and
+    increase comfort on the platform since people can confidently stand beside
+    the platform edge. Increasing the effective usable platform area is
+    important for cost-effectiveness.
+  </p>
+  <h4 id="off-the-shelf-rolling-stock"
+    ><a
+      class="link-mark"
+      href="#off-the-shelf-rolling-stock"
+      aria-label="Link to this section"
+    ></a>Off-the-shelf rolling stock</h4
+  >
+  <p id="off-the-shelf-rolling-stock-p1"
+    ><a
+      class="link-mark"
+      href="#off-the-shelf-rolling-stock-p1"
+      aria-label="Link to this paragraph"
+    ></a>Importantly, the MTA has its pick of makers for standardized light
+    metro railcars and seems intent on selecting an off-the-shelf design. If it
+    follows through, it would, happily, break a trend of insisting carmakers
+    comply with exacting standards, which started back in 1977 in the wake of
+    the <a
+      href="https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16"
+      >R46 truck-cracking debacle</a
+    >. As we have<a
+      href="https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train"
+    > </a><a
+      href="https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train"
+      >chronicled</a
+    >, trusting experienced firms to meet their needs is what most other transit
+    agencies do, and it is a major reason why they have generally beaten out New
+    York City on subway costs, especially as of late.</p
+  >
+  <h4 id="high-platforms"
+    ><a
+      class="link-mark"
+      href="#high-platforms"
+      aria-label="Link to this section"
+    ></a>High platforms</h4
+  >
+  <p id="high-platforms-p1"
+    ><a
+      class="link-mark"
+      href="#high-platforms-p1"
+      aria-label="Link to this paragraph"
+    ></a>To really seal the IBX’s fate as a transit project, the MTA needs to
+    commit to high-floor vehicles. While high-floor vehicles require straight or
+    only gently curved platforms, the IBX right-of-way is generally wide enough
+    for them. High-floor vehicles are generally cheaper than low-floor ones, and
+    passengers can circulate more easily in the former than in the latter where
+    wheel wells take up valuable floor space. Furthermore, building high
+    platforms at the outset would greatly simplify any further capacity
+    expansion later—practically all systems running frequent trains of the
+    length seen on the New York City Subway (180 meters) or longer exclusively
+    use high-floor vehicles.</p
+  >
+  <h3 id="conclusion"
+    ><a
+      class="link-mark"
+      href="#conclusion"
+      aria-label="Link to this section"
+    ></a>Conclusion</h3
+  >
+  <p id="conclusion-p1"
+    ><a
+      class="link-mark"
+      href="#conclusion-p1"
+      aria-label="Link to this paragraph"
+    ></a>IBX provides an excellent opportunity to import the ALM concept firmly
+    into the MTA from preexisting examples such as the Montréal REM or the JFK
+    Airtrain. In addition to the immense benefits for IBX itself, it would serve
+    as a proof-of-concept for, and facilitate maintenance and acquisition
+    economies of scale with, potential future ALM systems on other corridors,
+    such as in outer Queens and Brooklyn, or potentially New Jersey.</p
+  >
+  <p id="conclusion-p2"
+    ><a
+      class="link-mark"
+      href="#conclusion-p2"
+      aria-label="Link to this paragraph"
+    ></a>Hitachi Driverless Metro railcars are used on Honolulu’s Skyline, are
+    proven in the US (important to the MTA), and are cheaper at $2.2 million/car
+    (need to inflation-adjust) without bundled maintenance (it is bundled, as
+    are operations, but costs are given separately). This is a Buy America cost,
+    while the Alstom Metropolis Saint-Laurent cars are built in India.</p
+  >
+  <p id="conclusion-p3"
+    ><a
+      class="link-mark"
+      href="#conclusion-p3"
+      aria-label="Link to this paragraph"
+    ></a>With a 32-min runtime, 2-min turns, and a 90% utilization rate, 38
+    trainsets are needed. At 4 cars/trainset and using Honolulu’s costs of $2.2
+    million/car inflation-adjusted to June 2025, this fleet would cost $421
+    million. Assuming <a
+      href="https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3"
+      >3.5% future inflation</a
+    > (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be
+    $444 million in 2027,<sup id="fnref5" class="footnote-ref"
+      ><a href="#fn5">5</a><span class="footnote-tip" aria-hidden="true"
+        >ceil(((32 min + 2 min) * 2) / 2 min / 90%) trainsets * 4 cars/trainset
+        * $2.2 million/car * 124% (Apr 2020 to Jan 2025 inflation) *
+        103.5%^(2027-2025)</span
+      ></sup
+    > only slightly higher than the MTA’s estimated $432 million for fleet cost.
+    But this is with 2-min peak headways, not 5-min peak headways. And with a
+    92% utilization rate, the cost comes down to exactly $432 million.</p
+  >
+  <p id="conclusion-p4"
+    ><a
+      class="link-mark"
+      href="#conclusion-p4"
+      aria-label="Link to this paragraph"
+    ></a><u>Hitachi Driverless Metro Honolulu</u></p
+  >
+  <p id="conclusion-p5"
+    ><a
+      class="link-mark"
+      href="#conclusion-p5"
+      aria-label="Link to this paragraph"
+    ></a>cost: <a
+      href="https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to"
+      >$2.2 million/car</a
+    > (<a
+      href="http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf"
+      >contract in 2011</a
+    >,
+    <a
+      href="https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html"
+      >first delivered on March 25, 2016</a
+    >, <a
+      href="https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train"
+      >last delivered on April 24, 2024</a
+    >)</p
+  >
+  <p id="conclusion-p6"
+    ><a
+      class="link-mark"
+      href="#conclusion-p6"
+      aria-label="Link to this paragraph"
+    ></a>fleet: 80 cars</p
+  >
+  <p id="conclusion-p7"
+    ><a
+      class="link-mark"
+      href="#conclusion-p7"
+      aria-label="Link to this paragraph"
+    ></a>cost/length in June 2025: $2.2 million/car / 65 ft/car * 1.26 (April
+    2020 to June 2025 inflation) = $140k/m</p
+  >
+  <p id="conclusion-p8"
+    ><a
+      class="link-mark"
+      href="#conclusion-p8"
+      aria-label="Link to this paragraph"
+    ></a>length: 65 ft (19.81 m)</p
+  >
+  <p id="conclusion-p9"
+    ><a
+      class="link-mark"
+      href="#conclusion-p9"
+      aria-label="Link to this paragraph"
+    ></a>width: 10 ft (3.048 m)</p
+  >
+  <p id="conclusion-p10"
+    ><a
+      class="link-mark"
+      href="#conclusion-p10"
+      aria-label="Link to this paragraph"
+    ></a>weight: <a
+      href="https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-."
+      >72,000 lbs per 65 ft AW0 car</a
+    ></p
+  >
+  <p id="conclusion-p11"
+    ><a
+      class="link-mark"
+      href="#conclusion-p11"
+      aria-label="Link to this paragraph"
+    ></a>AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m</p
+  >
+  <p id="conclusion-p12"
+    ><a
+      class="link-mark"
+      href="#conclusion-p12"
+      aria-label="Link to this paragraph"
+    ></a>formation: 4-car open-gangway sets</p
+  >
+  <p id="conclusion-p13"
+    ><a
+      class="link-mark"
+      href="#conclusion-p13"
+      aria-label="Link to this paragraph"
+    ></a>electrification: 750 V DC third rail</p
+  >
+  <p id="conclusion-p14"
+    ><a
+      class="link-mark"
+      href="#conclusion-p14"
+      aria-label="Link to this paragraph"
+    ></a>speed: 55 mph (88.5 kmh) service, 65 mph (104.6 kmh) design</p
+  >
+  <p id="conclusion-p15"
+    ><a
+      class="link-mark"
+      href="#conclusion-p15"
+      aria-label="Link to this paragraph"
+    ></a>capacity: 800</p
+  >
+  <p id="conclusion-p16"
+    ><a
+      class="link-mark"
+      href="#conclusion-p16"
+      aria-label="Link to this paragraph"
+    ></a>doors: 3/car</p
+  >
+  <p id="conclusion-p17"
+    ><a
+      class="link-mark"
+      href="#conclusion-p17"
+      aria-label="Link to this paragraph"
+    ></a>signaling: DTG (distance to go) ATC, Hitachi</p
+  >
+  <p id="conclusion-p18"
+    ><a
+      class="link-mark"
+      href="#conclusion-p18"
+      aria-label="Link to this paragraph"
+    ></a>seating: transverse and longitudinal</p
+  >
+  <p id="conclusion-p19"
+    ><a
+      class="link-mark"
+      href="#conclusion-p19"
+      aria-label="Link to this paragraph"
+    ></a><u>Alstom Metropolis Saint-Laurent</u></p
+  >
+  <p id="conclusion-p20"
+    ><a
+      class="link-mark"
+      href="#conclusion-p20"
+      aria-label="Link to this paragraph"
+    ></a>cost:
+  </p>
+  <p id="conclusion-p21"
+    ><a
+      class="link-mark"
+      href="#conclusion-p21"
+      aria-label="Link to this paragraph"
+    ></a>fleet:
+  </p>
+  <p id="conclusion-p22"
+    ><a
+      class="link-mark"
+      href="#conclusion-p22"
+      aria-label="Link to this paragraph"
+    ></a>cost/length:
+  </p>
+  <p id="conclusion-p23"
+    ><a
+      class="link-mark"
+      href="#conclusion-p23"
+      aria-label="Link to this paragraph"
+    ></a>length: 19.05 m</p
+  >
+  <p id="conclusion-p24"
+    ><a
+      class="link-mark"
+      href="#conclusion-p24"
+      aria-label="Link to this paragraph"
+    ></a>width: 2.94 m</p
+  >
+  <p id="conclusion-p25"
+    ><a
+      class="link-mark"
+      href="#conclusion-p25"
+      aria-label="Link to this paragraph"
+    ></a>weight: <a
+      href="https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes"
+      >232 t per 76.2 m AW3 4-car trainset</a
+    ></p
+  >
+  <p id="conclusion-p26"
+    ><a
+      class="link-mark"
+      href="#conclusion-p26"
+      aria-label="Link to this paragraph"
+    ></a>AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 2232
+    kg/m</p
+  >
+  <p id="conclusion-p27"
+    ><a
+      class="link-mark"
+      href="#conclusion-p27"
+      aria-label="Link to this paragraph"
+    ></a>formation: 2-car open-gangway sets coupled into 4-car sets</p
+  >
+  <p id="conclusion-p28"
+    ><a
+      class="link-mark"
+      href="#conclusion-p28"
+      aria-label="Link to this paragraph"
+    ></a>electrification: 1500 V DC catenary</p
+  >
+  <p id="conclusion-p29"
+    ><a
+      class="link-mark"
+      href="#conclusion-p29"
+      aria-label="Link to this paragraph"
+    ></a>speed: 90 kmh service (100 kmh design)</p
+  >
+  <p id="conclusion-p30"
+    ><a
+      class="link-mark"
+      href="#conclusion-p30"
+      aria-label="Link to this paragraph"
+    ></a>capacity: 780</p
+  >
+  <p id="conclusion-p31"
+    ><a
+      class="link-mark"
+      href="#conclusion-p31"
+      aria-label="Link to this paragraph"
+    ></a>doors: 3/car</p
+  >
+  <p id="conclusion-p32"
+    ><a
+      class="link-mark"
+      href="#conclusion-p32"
+      aria-label="Link to this paragraph"
+    ></a>signaling: Alstom Urbalis 400 CBTC</p
+  >
+  <p id="conclusion-p33"
+    ><a
+      class="link-mark"
+      href="#conclusion-p33"
+      aria-label="Link to this paragraph"
+    ></a>seating: longitudinal</p
+  >
+  <section class="footnotes" id="footnotes">
+    <h2
+      ><a
+        class="link-mark"
+        href="#footnotes"
+        aria-label="Link to this section"
+      ></a>Footnotes</h2
+    >
+    <ol>
+      <li id="fn1"
+        ><a
+          class="link-mark"
+          href="#fn1"
+          aria-label="Link to this footnote"
+        ></a><p id="fn1-p1"
+          ><a
+            href="#fnref1"
+            class="footnote-back"
+            aria-label="Back to footnote 1 in the text"
+            >↑</a
+          >
+          <a
+            href="https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity"
+            >https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity</a
+          >
+          <a
+            href="https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/"
+            >https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/</a
+          >
+          [Multiply REM derated to 4/m^2 by design frequency]</p
+        ></li
+      >
+      <li id="fn2"
+        ><a
+          class="link-mark"
+          href="#fn2"
+          aria-label="Link to this footnote"
+        ></a><p id="fn2-p1"
+          ><a
+            href="#fnref2"
+            class="footnote-back"
+            aria-label="Back to footnote 2 in the text"
+            >↑</a
+          >
+          All numbers come from the Italian case of the Transit Costs Project.
+          <a href="https://transitcosts.com/cases/"
+            >https://transitcosts.com/cases/</a
+          ></p
+        ></li
+      >
+      <li id="fn3"
+        ><a
+          class="link-mark"
+          href="#fn3"
+          aria-label="Link to this footnote"
+        ></a><p id="fn3-p1"
+          ><a
+            href="#fnref3"
+            class="footnote-back"
+            aria-label="Back to footnote 3 in the text"
+            >↑</a
+          >
+          STOPS depends on extensive calibration with existing ridership, which
+          includes statistics like per-platform ridership, which the MTA does
+          not make available. Thus, there is a limit to its accuracy. But the
+          fact that it found a very similar number to the MTA’s closed-source
+          Regional Transit Forecasting Model (RTFM) bodes well, and it also
+          quite accurately predicted SAS Phase 1 ridership. Including detailed
+          ridership in open data would enable more accurate independent analyses
+          confirming higher ridership potential.</p
+        ></li
+      >
+      <li id="fn4"
+        ><a
+          class="link-mark"
+          href="#fn4"
+          aria-label="Link to this footnote"
+        ></a><p id="fn4-p1"
+          ><a
+            href="#fnref4"
+            class="footnote-back"
+            aria-label="Back to footnote 4 in the text"
+            >↑</a
+          >
+          As far as we are aware, the only rapid transit lines that carry more
+          riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai
+          Suburban Railway’s Western Line (~3 million/day). However, both are
+          technically mainline rail lines, and Mumbai’s Western Line is
+          quad-tracked for much of its length.</p
+        ></li
+      >
+      <li id="fn5"
+        ><a
+          class="link-mark"
+          href="#fn5"
+          aria-label="Link to this footnote"
+        ></a><p id="fn5-p1"
+          ><a
+            href="#fnref5"
+            class="footnote-back"
+            aria-label="Back to footnote 5 in the text"
+            >↑</a
+          >
+          ceil(((32 min + 2 min) * 2) / 2 min / 90%) trainsets * 4 cars/trainset
+          * $2.2 million/car * 124% (Apr 2020 to Jan 2025 inflation) *
+          103.5%^(2027-2025)</p
+        ></li
+      >
+    </ol>
+  </section>
+  <section class="contributors" id="contributors">
+    <h2
+      ><a
+        class="link-mark"
+        href="#contributors"
+        aria-label="Link to this section"
+      ></a>Contributors</h2
+    >
+    <p
+      >We wish to acknowledge the following ETA members who contributed to this
+      report, and without whose hard work it would not be possible:</p
+    >
+    <ul>
+      <li>Madison Feinberg</li>
+      <li>Robert Hale</li>
+      <li>Alon Levy</li>
+      <li>Khyber Sen</li>
+      <li>Franklin Tang</li>
+    </ul>
+  </section>
 </div>

@@ -2,7 +2,9 @@
 
 import json
 import re
+from html.parser import HTMLParser
 from pathlib import Path
+from typing import override
 
 import pytest
 from paths import FIXTURE_DIR
@@ -13,6 +15,31 @@ from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
+
+
+class Sources(HTMLParser):
+    """Every `src` on the page, read by a parser rather than matched for.
+
+    The output is formatted, so a tag long enough to wrap is spread over
+    several lines and there is no one line holding `<img src="...">`.
+    What the page says is a question for something that reads HTML.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.found: list[str] = []
+
+    @override
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "img":
+            self.found += [v for k, v in attrs if k == "src" and v is not None]
+
+
+def sources(markup: str) -> list[str]:
+    parser = Sources()
+    parser.feed(markup)
+    parser.close()
+    return parser.found
 
 
 @pytest.fixture
@@ -32,9 +59,9 @@ def test_page_images_resolve_next_to_the_page(doc: Document, tmp_path: Path) -> 
     emit(doc, tmp_path)
     page = (tmp_path / "index.html").read_text()
 
-    sources = re.findall(r'<img src="([^"]+)"', page)
-    assert sources
-    for src in sources:
+    found = sources(page)
+    assert found
+    for src in found:
         assert not src.startswith("http")
         assert (tmp_path / src).exists(), f"{src} does not resolve next to index.html"
 
@@ -47,8 +74,7 @@ def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Pa
     (tmp_path / "images").mkdir()
     emit(doc, tmp_path)
     fragment = (tmp_path / "report.html").read_text()
-    assert 'src="images/sas-west-036.png"' in fragment
-    assert "http" not in re.findall(r'<img src="([^"]+)"', fragment)[0]
+    assert sources(fragment)[0] == "images/sas-west-036.png"
 
 
 def test_warnings_are_shown_where_someone_will_see_them() -> None:

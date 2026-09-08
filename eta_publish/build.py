@@ -7,6 +7,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from . import format
 from .checks import check
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -123,7 +124,7 @@ def write_split(doc: Document, outdir: Path) -> list[Path]:
     written = []
     for n, piece in enumerate(pieces, start=1):
         dest = outdir / f"report.part{n:02d}.html"
-        dest.write_text(piece)
+        dest.write_text(format.html(piece))
         written.append(dest)
     return written
 
@@ -253,11 +254,13 @@ def emit(doc: Document, outdir: Path) -> dict[str, Path]:
     # `/reports/<slug>/` serves the report rather than a listing of files.
     # `report.html` beside it is the fragment, a piece of a page rather than one.
     page = outdir / "index.html"
-    page.write_text(report_page(doc))
+    page.write_text(format.html(report_page(doc)))
     written[page.name] = page
     for name, emitter in emitters.items():
         try:
             source = emitter.emit(doc)
+            if name.endswith(".html"):
+                source = format.html(source)
         except NotImplementedError as e:
             print(f"skipped {name}: not implemented ({e})", file=sys.stderr)
             continue
