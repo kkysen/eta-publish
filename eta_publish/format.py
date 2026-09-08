@@ -15,7 +15,6 @@ the page are formatted as a stylesheet and a script, which no HTML-only
 formatter does.
 """
 
-import shutil
 import subprocess
 from functools import cache
 from pathlib import Path
@@ -60,25 +59,23 @@ def biome() -> str:
     diff, `check-committed-site.sh` says the documents changed, which would
     not be true and points at Google Docs instead of at an installed binary.
 
-    Asked once, and for the path rather than by running `mise x` per page:
-    `mise` re-reads the pin every time it is asked, and a build formats a
-    page per report while the tests format far more, so that resolution is
-    most of what running the formatter would cost.
+    Asked once, and for the path rather than by running `mise x` per call:
+    `mise` re-reads the pin every time it is asked.
     """
-    mise = shutil.which("mise")
-    if mise is None:
-        raise MiseMissing(
-            "`mise` is not on PATH, so `biome` could not be resolved and the "
-            "HTML was not formatted. Install it from https://mise.jdx.dev, "
-            "then rerun."
+    try:
+        result = subprocess.run(  # noqa: S603
+            ["mise", "which", "biome"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
         )
-    result = subprocess.run(  # noqa: S603
-        [mise, "which", "biome"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    except FileNotFoundError as e:
+        raise MiseMissing(
+            "`mise` is not on PATH, so `biome` could not be resolved and "
+            "nothing was formatted. Install it from https://mise.jdx.dev, "
+            "then rerun."
+        ) from e
     if result.returncode != 0:
         raise MiseMissing(
             "`mise` has not installed the `biome` that `mise.toml` pins, so "
