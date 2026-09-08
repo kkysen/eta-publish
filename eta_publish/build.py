@@ -7,7 +7,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
-from . import format
 from .checks import check
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -124,7 +123,7 @@ def write_split(doc: Document, outdir: Path) -> list[Path]:
     written = []
     for n, piece in enumerate(pieces, start=1):
         dest = outdir / f"report.part{n:02d}.html"
-        dest.write_text(format.html(piece))
+        dest.write_text(piece)
         written.append(dest)
     return written
 
@@ -242,28 +241,27 @@ def _without_uri(inline_object: JsonObject) -> JsonObject:
 
 # The stylesheets and the script every report page shares, and the formatter
 # each is read by. Written once per build rather than into each page.
-SHARED_ASSETS = {
-    "page.css": format.css,
-    "report.css": format.css,
-    "report.js": format.js,
-}
+SHARED_ASSETS = (
+    "page.css",
+    "report.css",
+    "report.js",
+)
 
 
 def write_assets(siteroot: Path) -> list[Path]:
     """The one copy of what every report page links.
 
-    Formatted and linted like the pages are: they used to be inlined, so
-    `format.html` checked them on the way into each page, and moving them
-    out must not be how they stop being checked.
+    Written as they are; `format.tree` lays out and checks the whole build
+    afterwards, these among the rest.
     """
     from .assets import read
 
     dest = siteroot / ASSET_DIR
     dest.mkdir(parents=True, exist_ok=True)
     written = []
-    for name, formatter in SHARED_ASSETS.items():
+    for name in SHARED_ASSETS:
         path = dest / name
-        path.write_text(formatter(read(name)))
+        path.write_text(read(name))
         written.append(path)
     return written
 
@@ -291,13 +289,11 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
     # `/reports/<slug>/` serves the report rather than a listing of files.
     # `report.html` beside it is the fragment, a piece of a page rather than one.
     page = outdir / "index.html"
-    page.write_text(format.html(report_page(doc, asset_base=assets)))
+    page.write_text(report_page(doc, asset_base=assets))
     written[page.name] = page
     for name, emitter in emitters.items():
         try:
             source = emitter.emit(doc)
-            if name.endswith(".html"):
-                source = format.html(source)
         except NotImplementedError as e:
             print(f"skipped {name}: not implemented ({e})", file=sys.stderr)
             continue
@@ -308,7 +304,12 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
 
 
 def check_code_block_size(doc: Document, report: Path) -> None:
-    """Say something before a paste fails, not after."""
+    """Say something before a paste fails, not after.
+
+    Asked once the tree has been formatted, because that is what the file
+    will be when it is pasted: laying it out adds around an eighth to it,
+    and a limit checked against the bytes before that is not the limit.
+    """
     from .emit.html import CODE_BLOCK_LIMIT, CODE_BLOCK_WARN
 
     size = report.stat().st_size
@@ -428,9 +429,6 @@ def build_one(
     if typ is not None:
         build_pdf(typ, dest, skipped_images=not options.images and bool(doc.images))
 
-    report = written.get("report.html")
-    if report is not None:
-        check_code_block_size(doc, report)
     if options.split:
         write_split(doc, dest)
 

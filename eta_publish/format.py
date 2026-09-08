@@ -21,6 +21,27 @@ from pathlib import Path
 # whatever directory the build was started from.
 ROOT = Path(__file__).parent.parent
 
+FLAGS = (
+    # HTML formatting is off by default in this version.
+    "--html-formatter-enabled=true",
+    # As the stylesheets and the script in `assets/` are already written.
+    "--indent-style=space",
+    # Every space in the prose is one somebody typed, so none of them move.
+    #
+    # The default reads the whitespace the way CSS does and breaks a long
+    # line where the rendering would not notice, which is right for most
+    # tags and wrong for a footnote reference: `biome` 2.3.14 will break
+    # between a sentence and the `<sup>` welded to its full stop, and that
+    # newline renders as a space between the two. It puts the `>` on the
+    # next line to avoid exactly that around a `<span>`, so this is a gap
+    # in which elements it counts as inline rather than a missing idea.
+    #
+    # Under `strict` it uses that same trick everywhere and moves nothing.
+    # The markup is uglier where a line has to wrap mid-tag; the page is
+    # correct, and the page is what publishes.
+    "--html-formatter-whitespace-sensitivity=strict",
+)
+
 
 class MiseMissing(RuntimeError):
     pass
@@ -69,21 +90,6 @@ def html(source: str) -> str:
     return _source(source, "report.html")
 
 
-def css(source: str) -> str:
-    """`source`, formatted and linted, as a stylesheet.
-
-    `biome` 2.3.14 does not apply `noDuplicateProperties` to a `.css` file,
-    though it does to the same text in a page. Every other CSS rule fires
-    here, so that one rule is left missing rather than worked around.
-    """
-    return _source(source, "report.css")
-
-
-def js(source: str) -> str:
-    """`source`, formatted and linted, as a script."""
-    return _source(source, "report.js")
-
-
 def _source(source: str, name: str) -> str:
     """`source`, laid out and then checked, under the name `biome` reads it as.
 
@@ -130,24 +136,7 @@ def _pass(source: str, name: str) -> str:
             biome(),
             "format",
             f"--stdin-file-path={name}",
-            # HTML formatting is off by default in this version.
-            "--html-formatter-enabled=true",
-            # As the stylesheets and the script in `assets/` are already written.
-            "--indent-style=space",
-            # Every space in the prose is one somebody typed, so none of them move.
-            #
-            # The default reads the whitespace the way CSS does and breaks a long
-            # line where the rendering would not notice, which is right for most
-            # tags and wrong for a footnote reference: `biome` 2.3.14 will break
-            # between a sentence and the `<sup>` welded to its full stop, and that
-            # newline renders as a space between the two. It puts the `>` on the
-            # next line to avoid exactly that around a `<span>`, so this is a gap
-            # in which elements it counts as inline rather than a missing idea.
-            #
-            # Under `strict` it uses that same trick everywhere and moves nothing.
-            # The markup is uglier where a line has to wrap mid-tag; the page is
-            # correct, and the page is what publishes.
-            "--html-formatter-whitespace-sensitivity=strict",
+            *FLAGS,
         ],
         input=source,
         cwd=ROOT,
@@ -190,5 +179,44 @@ def lint(source: str, name: str = "report.html") -> None:
             text=True,
             check=False,
         )
+    if result.returncode != 0:
+        raise LintFailed(f"biome lint failed:\n{result.stderr.strip()}")
+
+
+def tree(root: Path) -> None:
+    """Lay out and check everything under `root` that `biome` reads.
+
+    One run over the whole build rather than one per file. `biome` takes
+    about 40ms to start and a few milliseconds to do the work, so a site
+    formatted a file at a time spends nearly all of its time launching
+    processes. It lays out the saved API responses too, which changes how
+    they are punctuated and not what they say.
+
+    Repeated until it reports nothing left to fix, for the reason `_format`
+    runs more than once over one page.
+    """
+    for _ in range(PASSES):
+        result = subprocess.run(  # noqa: S603
+            [biome(), "format", "--write", *FLAGS, str(root)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
+        # What `biome` says it rewrote, rather than a walk of the tree
+        # comparing timestamps: it is the one doing the counting.
+        if "Fixed" not in result.stdout:
+            break
+    else:
+        raise RuntimeError(f"biome format did not settle under {root} in {PASSES} passes")
+    result = subprocess.run(  # noqa: S603
+        [biome(), "lint", "--error-on-warnings", str(root)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
     if result.returncode != 0:
         raise LintFailed(f"biome lint failed:\n{result.stderr.strip()}")

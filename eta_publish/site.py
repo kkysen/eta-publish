@@ -29,7 +29,6 @@ from pathlib import Path, PurePosixPath
 import htpy
 from markupsafe import Markup
 
-from . import format
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one
 from .emit.html import Piece, lines, markup, tag
@@ -422,4 +421,4 @@ def index_page(site: Site) -> str:
         tag.ul["\n", lines(entries), "\n"],
         *failures,
     ]
-    return format.html(markup([Markup("<!doctype html>"), "\n", lines(page), "\n"]))
+    return markup([Markup("<!doctype html>"), "\n", lines(page), "\n"])
