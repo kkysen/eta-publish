@@ -21,27 +21,6 @@ from pathlib import Path
 # whatever directory the build was started from.
 ROOT = Path(__file__).parent.parent
 
-FLAGS = (
-    # HTML formatting is off by default in this version.
-    "--html-formatter-enabled=true",
-    # As the stylesheets and the script in `assets/` are already written.
-    "--indent-style=space",
-    # Every space in the prose is one somebody typed, so none of them move.
-    #
-    # The default reads the whitespace the way CSS does and breaks a long
-    # line where the rendering would not notice, which is right for most
-    # tags and wrong for a footnote reference: `biome` 2.3.14 will break
-    # between a sentence and the `<sup>` welded to its full stop, and that
-    # newline renders as a space between the two. It puts the `>` on the
-    # next line to avoid exactly that around a `<span>`, so this is a gap
-    # in which elements it counts as inline rather than a missing idea.
-    #
-    # Under `strict` it uses that same trick everywhere and moves nothing.
-    # The markup is uglier where a line has to wrap mid-tag; the page is
-    # correct, and the page is what publishes.
-    "--html-formatter-whitespace-sensitivity=strict",
-)
-
 
 class MiseMissing(RuntimeError):
     pass
@@ -132,7 +111,29 @@ def _format(source: str, name: str) -> str:
     the unformatted text.
     """
     result = subprocess.run(  # noqa: S603
-        [biome(), "format", f"--stdin-file-path={name}", *FLAGS],
+        [
+            biome(),
+            "format",
+            f"--stdin-file-path={name}",
+            # HTML formatting is off by default in this version.
+            "--html-formatter-enabled=true",
+            # As the stylesheets and the script in `assets/` are already written.
+            "--indent-style=space",
+            # Every space in the prose is one somebody typed, so none of them move.
+            #
+            # The default reads the whitespace the way CSS does and breaks a long
+            # line where the rendering would not notice, which is right for most
+            # tags and wrong for a footnote reference: `biome` 2.3.14 will break
+            # between a sentence and the `<sup>` welded to its full stop, and that
+            # newline renders as a space between the two. It puts the `>` on the
+            # next line to avoid exactly that around a `<span>`, so this is a gap
+            # in which elements it counts as inline rather than a missing idea.
+            #
+            # Under `strict` it uses that same trick everywhere and moves nothing.
+            # The markup is uglier where a line has to wrap mid-tag; the page is
+            # correct, and the page is what publishes.
+            "--html-formatter-whitespace-sensitivity=strict",
+        ],
         input=source,
         cwd=ROOT,
         capture_output=True,
