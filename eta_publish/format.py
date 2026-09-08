@@ -1,8 +1,12 @@
-"""Lay out the emitted HTML, and the CSS and JavaScript inside it.
+"""Lay out and check what a build wrote: the HTML, the CSS, the JavaScript.
 
 The emitter's job is what the page says; this is where it sits on the line.
-Both outputs are committed and read as diffs, and a paragraph on one line
+What is emitted is committed and read as a diff, and a paragraph on one line
 reports a corrected word as a changed paragraph.
+
+One entry point, `tree`, over the finished output directory. There is no
+second way to format a page: two of them would have to agree byte for byte,
+and nothing would notice the day they stopped.
 
 `biome` rather than a formatter written here: whether a line break is safe
 in HTML is a question about which elements are inline, and getting it wrong
@@ -13,7 +17,6 @@ formatter does.
 
 import shutil
 import subprocess
-import tempfile
 from functools import cache
 from pathlib import Path
 
@@ -85,102 +88,12 @@ def biome() -> str:
     return result.stdout.strip()
 
 
-def html(source: str) -> str:
-    """`source`, formatted and linted, as an HTML page."""
-    return _source(source, "report.html")
-
-
-def _source(source: str, name: str) -> str:
-    """`source`, laid out and then checked, under the name `biome` reads it as.
-
-    The name is how `biome` knows what language it has been handed.
-    Formatted over standard input, because the build has nowhere it wants a
-    copy of the unformatted text.
-    """
-    formatted = _format(source, name)
-    lint(formatted, name)
-    return formatted
-
-
 PASSES = 4
-"""How many times `_format` may run before it gives up on settling."""
-
-
-def _format(source: str, name: str) -> str:
-    """`source`, laid out under the name `biome` reads it as, until it settles.
-
-    Run again on its own output, because `biome` 2.3.14's HTML formatter is
-    not idempotent: given a paragraph holding two links, one of which it had
-    to break across lines, a second pass breaks the other one's `href` onto
-    its own line too, and a third changes nothing. Whatever the cause, one
-    pass is not a fixed point, and this output is committed and compared
-    against a rebuild. Anything that formats it again, an editor saving a
-    file or a hook over the repository, would otherwise rewrite it and read
-    as the documents having changed.
-
-    Over standard input, because the build has nowhere it wants a copy of
-    the unformatted text.
-    """
-    for _ in range(PASSES):
-        settled = _pass(source, name)
-        if settled == source:
-            return settled
-        source = settled
-    raise RuntimeError(f"biome format did not settle on {name} in {PASSES} passes")
-
-
-def _pass(source: str, name: str) -> str:
-    """`source`, through `biome format` once."""
-    result = subprocess.run(  # noqa: S603
-        [
-            biome(),
-            "format",
-            f"--stdin-file-path={name}",
-            *FLAGS,
-        ],
-        input=source,
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
-    return result.stdout
+"""How many times `tree` may run before it gives up on settling."""
 
 
 class LintFailed(RuntimeError):
     pass
-
-
-def lint(source: str, name: str = "report.html") -> None:
-    """Raise if `biome` has anything to say about `source` beyond its layout.
-
-    `--error-on-warnings` because every rule this finds is a warning by
-    default, and a warning nothing fails on is one the build prints forever.
-    A rule that fires here and should not is turned off in `biome.jsonc`.
-
-    Through a file rather than standard input, unlike the format: asked to
-    lint a stdin document, `biome` 2.3.14 prints the document back and
-    reports only that it did not fix it, and never names a rule.
-    """
-    with tempfile.TemporaryDirectory() as tmp:
-        page = Path(tmp) / name
-        page.write_text(source, encoding="utf-8")
-        result = subprocess.run(  # noqa: S603
-            [
-                biome(),
-                "lint",
-                "--error-on-warnings",
-                str(page),
-            ],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-    if result.returncode != 0:
-        raise LintFailed(f"biome lint failed:\n{result.stderr.strip()}")
 
 
 def tree(root: Path) -> None:

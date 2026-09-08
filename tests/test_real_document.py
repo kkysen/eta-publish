@@ -38,6 +38,8 @@ Accept it with `pytest --regenerate-snapshots`.
 
 import json
 import re
+import tempfile
+from pathlib import Path
 
 import pytest
 from paths import REAL_DIR as REAL
@@ -119,11 +121,25 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 # ---- snapshots ------------------------------------------------------
 
 
+def formatted(name: str, source: str) -> str:
+    """`source` as a build would leave it on disk.
+
+    Through `format.tree`, the same call the build makes, rather than a
+    second way of formatting kept alive for the tests: the committed page is
+    the page a build writes, formatter included, and two paths that had to
+    agree would be free to stop agreeing without a test noticing.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        page = Path(tmp) / name
+        page.write_text(source, encoding="utf-8")
+        format.tree(Path(tmp))
+        return page.read_text(encoding="utf-8")
+
+
 def test_html_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    # The committed page is the page a build writes, formatter included.
     check(
         "report.html",
-        format.html(HtmlEmitter(image_base=IMAGE_DIR).emit(doc)),
+        formatted("report.html", HtmlEmitter(image_base=IMAGE_DIR).emit(doc)),
         regenerate_snapshots,
     )
 
@@ -137,7 +153,11 @@ def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
 
 
 def test_page_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("index.html", format.html(report_page(doc, asset_base=ASSET_BASE)), regenerate_snapshots)
+    check(
+        "index.html",
+        formatted("index.html", report_page(doc, asset_base=ASSET_BASE)),
+        regenerate_snapshots,
+    )
 
 
 # ---- what the document should parse to ------------------------------
