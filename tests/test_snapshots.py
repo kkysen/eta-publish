@@ -69,6 +69,6 @@ def test_typst_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> No
 
 def test_page_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
     """Snapshotted for the same reason as the rest:
-    it is one of the four files a build writes,
+    it is one of the files a build writes,
     and leaving it out would make this directory something a build cannot reproduce."""
     check("index.html", report_page(doc, asset_base=ASSET_BASE), regenerate_snapshots)
