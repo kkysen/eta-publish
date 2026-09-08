@@ -60,11 +60,26 @@ def biome() -> str:
     not be true and points at Google Docs instead of at an installed binary.
 
     Asked once, and for the path rather than by running `mise x` per call:
-    `mise` re-reads the pin every time it is asked.
+    `mise` re-reads the pin every time it is asked, and the path is then
+    a binary to exec rather than a `mise` to start again.
+
+    Installed first if it is not there yet, which is what `mise x` would have
+    done on its own. Nobody should have to be told to run `mise install`
+    before a build that knows perfectly well what it is missing.
     """
     try:
+        path = _mise("which", "biome")
+    except MiseMissing:
+        _mise("install", "biome")
+        path = _mise("which", "biome")
+    return path
+
+
+def _mise(*args: str) -> str:
+    """What `mise` printed, or `MiseMissing` saying what it said instead."""
+    try:
         result = subprocess.run(
-            ["mise", "which", "biome"],
+            ["mise", *args],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -77,11 +92,7 @@ def biome() -> str:
             "then rerun."
         ) from e
     if result.returncode != 0:
-        raise MiseMissing(
-            "`mise` has not installed the `biome` that `mise.toml` pins, so "
-            "the HTML was not formatted. Run `mise install`, then rerun.\n"
-            f"{result.stderr.strip()}"
-        )
+        raise MiseMissing(f"`mise {' '.join(args)}` failed:\n{result.stderr.strip()}")
     return result.stdout.strip()
 
 
