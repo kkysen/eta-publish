@@ -16,7 +16,7 @@ from htpy._types import Renderable
 from markupsafe import Markup
 
 from ..assets import read
-from ..naming import IMAGE_DIR, content_anchor
+from ..naming import ASSET_DIR, IMAGE_DIR, content_anchor
 from ..nodes import (
     Block,
     Document,
@@ -178,11 +178,16 @@ def link_mark(anchor: str, what: str = "section") -> Tag:
 class HtmlEmitter(Emitter):
     extension = ".html"
 
-    def __init__(self, image_base: str = "", inline_css: bool = True) -> None:
+    def __init__(
+        self, image_base: str = "", inline_css: bool = True, inline_js: bool = True
+    ) -> None:
         super().__init__()
         self.image_base = image_base.rstrip("/")
         # Turn off once `REPORT_CSS` lives in the site's Custom CSS.
         self.inline_css = inline_css
+        # Off for a page, which links one copy; on for the fragment, which
+        # is pasted somewhere with nothing to link to.
+        self.inline_js = inline_js
         self._in_tip = False
         """Whether what is being emitted is the box a reference carries,
         which is a copy of a note and so cannot carry boxes of its own."""
@@ -283,7 +288,8 @@ class HtmlEmitter(Emitter):
         # Unlike the stylesheet, which a site can carry once under Custom CSS,
         # this travels with the report: it is small, and a fragment pasted
         # without it puts a tooltip off the edge of the screen.
-        shell.append(markup(tag.script[Markup(f"\n{REPORT_JS}")]))
+        if self.inline_js:
+            shell.append(markup(tag.script[Markup(f"\n{REPORT_JS}")]))
         # The wrapper is opened and closed around lines this does not hold,
         # so it is the one tag written rather than built: a `div` whose
         # children are joined by the caller cannot also be a `div` object.
@@ -855,7 +861,7 @@ class HtmlEmitter(Emitter):
 PAGE_CSS = read("page.css")
 
 
-def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
+def report_page(doc: Document, image_base: str = IMAGE_DIR, asset_base: str = ASSET_DIR) -> str:
     """The whole report as a page,
     which is what a build writes as `index.html` and what the site serves.
 
@@ -865,7 +871,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
     This is a document, with its own head and type,
     and the parser's warnings where whoever is about to publish will see them.
     """
-    body = HtmlEmitter(image_base=image_base, inline_css=False).emit(doc)
+    body = HtmlEmitter(image_base=image_base, inline_css=False, inline_js=False).emit(doc)
     short = doc.meta.get("short", "")
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
@@ -883,7 +889,16 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR) -> str:
         tag.title[doc.title],
         htpy.meta(name="description", content=doc.meta.get("seo description", "")),
         *card,
-        tag.style[Markup(f"\n{PAGE_CSS}\n{REPORT_CSS}")],
+        # Linked rather than inlined: every report page carries the same
+        # stylesheets and the same script, and `asset_base` is where the
+        # build put the one copy, relative to this page.
+        # In source order, because `page.css` styles the page around the
+        # report and `report.css` styles what is inside it.
+        *(
+            htpy.link(rel="stylesheet", href=f"{asset_base}/{name}")
+            for name in ("page.css", "report.css")
+        ),
+        htpy.script(src=f"{asset_base}/report.js", defer=True),
         tag.h1(id="title")[link_mark("title", "title"), doc.title],
         tag.p(class_="standfirst", id="short")[link_mark("short", "standfirst"), short],
     ]

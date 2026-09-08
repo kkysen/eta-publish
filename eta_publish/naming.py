@@ -16,6 +16,12 @@ from collections.abc import Iterable
 
 from pymdownx.slugs import slugify as _slugify
 
+ASSET_DIR = "assets"
+"""The directory the shared stylesheets and script go in, at the site root.
+
+Every report page links one copy rather than carrying its own.
+"""
+
 IMAGE_DIR = "images"
 """The directory a build writes images into, relative to the report.
 

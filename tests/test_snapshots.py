@@ -26,6 +26,9 @@ from eta_publish.naming import IMAGE_DIR
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 
+ASSET_BASE = "../../assets"
+"""What a build links from a report at `reports/<slug>/`."""
+
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
@@ -68,4 +71,4 @@ def test_page_matches_snapshot(doc: Document, regenerate_snapshots: bool) -> Non
     """Snapshotted for the same reason as the rest:
     it is one of the four files a build writes,
     and leaving it out would make this directory something a build cannot reproduce."""
-    check("index.html", report_page(doc), regenerate_snapshots)
+    check("index.html", report_page(doc, asset_base=ASSET_BASE), regenerate_snapshots)
