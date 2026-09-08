@@ -3,19 +3,16 @@
 // The emitted `.typ` is a document body that imports this,
 // so a change to how reports look is a change to one file rather than to every report.
 
-// No image in the body is taller than this.
-// The reports are illustrated at whatever size someone dropped the picture in at,
+// No image in the body is taller than this:
+// the reports are illustrated at whatever size someone dropped the picture in at,
 // and a tall one filled the page on its own.
-// Two thirds of the text height leaves room for a caption
-// and for something else to share the page.
 // The title picture is not capped here: it is sized to the page it has, below.
 #let max_image_height = 5.7in
 
 // An image at the width it is given, unless that makes it too tall,
 // in which case the height is what is set and the width follows from it.
-// `layout` is what supplies the width to measure against:
-// a figure in the body and one in the title block have different widths available,
-// and neither is known here.
+// `layout` supplies the width to measure against, which differs between
+// a figure in the body and one in the title block.
 #let capped_image(path, ..args) = layout(size => {
   let full = image(path, width: size.width, ..args)
   if measure(full).height <= max_image_height {
@@ -32,18 +29,15 @@
   contributors_note: none,
   hero: none,
   // The standfirst, and the only header field this reads.
-  // Named rather than handed the header whole:
-  // the header also carries a private contributor list
-  // and the project's internal dates and channels,
+  // Named rather than handed the header whole: the header also carries a
+  // private contributor list and the project's internal dates and channels,
   // and the emitted file is committed.
   short: none,
   // What a reader of a draft has to be told before reading it.
   // Empty for a published report, which is the state a reader assumes.
   phase: "",
-  // What the build has to say about this report.
-  // On a page of its own in front of everything,
-  // because it is read by whoever is about to publish
-  // and a page at the back is a page they will not turn to.
+  // What the build has to say about this report, on a page of its own in
+  // front of everything, because it is read by whoever is about to publish.
   // A report with nothing wrong with it has no such page,
   // so what publishes still opens on its cover.
   warnings: (),
@@ -85,9 +79,8 @@
 
   show figure.caption: set text(size: 9pt, fill: luma(35%))
   // Ranged left, as the page sets it.
-  // Typst centres a caption by default, which reads as a title under the picture
-  // rather than as the sentence about it that it is,
-  // and centring a two-line caption leaves a short second line hanging in the middle.
+  // Typst centres a caption by default, which reads as a title under the
+  // picture rather than as the sentence about it that it is.
   show figure.caption: it => block(width: 100%, align(left, it))
   show figure: set block(above: 1.6em, below: 1.6em)
 
@@ -102,15 +95,12 @@
 
   // The title page: a title and a picture, and nothing else on it.
   // The picture is with the title rather than after the contents,
-  // because the document puts it under the headline
-  // and it introduces the report rather than the section
-  // that happens to follow the outline.
+  // because the document puts it under the headline.
   //
-  // Its height is whatever the title leaves, rather than a number tuned to one report:
-  // a `block(height: 1fr)` is the rest of the page,
-  // `layout` inside one is told how much that came to,
-  // and a headline that runs to three lines takes its space out of the picture
-  // instead of pushing it onto the next page.
+  // Its height is whatever the title leaves, rather than a number tuned to one
+  // report: a `block(height: 1fr)` is the rest of the page, `layout` inside one
+  // is told how much that came to, and a headline that runs to three lines
+  // takes its space out of the picture instead of pushing it onto the next page.
   block(height: 100%, width: 100%, stack(
     dir: ttb,
     block(width: 100%)[
@@ -156,17 +146,13 @@
     },
   ))
 
-  // A page each for the cover and the contents, whatever their length.
-  // The title page is a title and a picture, and the contents are a way in;
-  // neither is helped by whatever happens to follow it up the page,
-  // and a report that opened mid-outline read as though it had already started.
-  // Explicit rather than `weak`: the break is wanted even when the page is short,
-  // which is the case for every one of these reports.
+  // A page each for the cover and the contents, whatever their length:
+  // a report that opened mid-outline read as though it had already started.
+  // Explicit rather than `weak`: the break is wanted even when the page is short.
   pagebreak()
 
-  // The report is too long to find a section by turning pages,
-  // the same reason the page has a table of contents.
-  // Typst builds it from the headings, so it cannot disagree with them.
+  // The report is too long to find a section by turning pages.
+  // Typst builds this from the headings, so it cannot disagree with them.
   outline(title: [Table of Contents], depth: 3, indent: auto)
 
   pagebreak()
@@ -174,8 +160,7 @@
   body
 
   // Credited at the end, not under the title:
-  // a report is the work of most of a chapter,
-  // and nine names above the first paragraph read as a masthead rather than a credit.
+  // nine names above the first paragraph read as a masthead rather than a credit.
   if contributors.len() > 0 {
     heading(level: 1, [Contributors])
     if contributors_note != none [#contributors_note]
