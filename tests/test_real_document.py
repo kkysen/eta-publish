@@ -52,6 +52,9 @@ from eta_publish.naming import IMAGE_DIR
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
 
+ASSET_BASE = "../../assets"
+"""What a build links from a report at `reports/<slug>/`."""
+
 FILENAMES_PATH = REAL / "images.json"
 DOWNLOADED = REAL / "images"
 DOC_JSON = json.loads((REAL / "doc.json").read_text())
@@ -134,7 +137,7 @@ def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
 
 
 def test_page_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("index.html", format.html(report_page(doc)), regenerate_snapshots)
+    check("index.html", format.html(report_page(doc, asset_base=ASSET_BASE)), regenerate_snapshots)
 
 
 # ---- what the document should parse to ------------------------------

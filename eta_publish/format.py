@@ -86,14 +86,53 @@ def biome() -> str:
 
 
 def html(source: str) -> str:
-    """`source`, formatted.
+    """`source`, formatted and linted, as an HTML page."""
+    return _source(source, "report.html")
 
-    Read from standard input and named rather than written to a file:
-    the name is how `biome` knows it is looking at HTML,
-    and the build has nowhere it wants a copy of the unformatted page.
+
+def css(source: str) -> str:
+    """`source`, formatted and linted, as a stylesheet.
+
+    Linted inside a `<style>` rather than as itself, because `biome` 2.3.14
+    applies none of its CSS rules to a `.css` file and all of them to the
+    same text in a page. These stylesheets used to be inlined and so were
+    checked that way; moving them into their own files must not be how they
+    stop being checked. Line numbers in a finding are one further down than
+    the file, which is the wrapper.
+    """
+    formatted = _format(source, "report.css")
+    lint(f"<style>\n{formatted}</style>\n")
+    return formatted
+
+
+def js(source: str) -> str:
+    """`source`, formatted and linted, as a script.
+
+    As itself, unlike the stylesheets: `biome` does lint a `.js` file.
+    """
+    return _source(source, "report.js")
+
+
+def _source(source: str, name: str) -> str:
+    """`source`, laid out and then checked, under the name `biome` reads it as.
+
+    The name is how `biome` knows what language it has been handed.
+    Formatted over standard input, because the build has nowhere it wants a
+    copy of the unformatted text.
+    """
+    formatted = _format(source, name)
+    lint(formatted, name)
+    return formatted
+
+
+def _format(source: str, name: str) -> str:
+    """`source`, laid out under the name `biome` reads it as.
+
+    Over standard input, because the build has nowhere it wants a copy of
+    the unformatted text.
     """
     result = subprocess.run(  # noqa: S603
-        [biome(), "format", "--stdin-file-path=report.html", *FLAGS],
+        [biome(), "format", f"--stdin-file-path={name}", *FLAGS],
         input=source,
         cwd=ROOT,
         capture_output=True,
@@ -102,34 +141,26 @@ def html(source: str) -> str:
     )
     if result.returncode != 0:
         raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
-    formatted = result.stdout
-    lint(formatted)
-    return formatted
+    return result.stdout
 
 
 class LintFailed(RuntimeError):
     pass
 
 
-def lint(source: str) -> None:
+def lint(source: str, name: str = "report.html") -> None:
     """Raise if `biome` has anything to say about `source` beyond its layout.
-
-    The same tool and the same page as the format above, one step further on:
-    the emitter writes the CSS and the script into every page it emits, so a
-    mistake in either is a mistake in the whole site, and the run that laid
-    the page out is the one that can say so.
 
     `--error-on-warnings` because every rule this finds is a warning by
     default, and a warning nothing fails on is one the build prints forever.
-    A rule that fires on this page and should not is turned off in
-    `biome.jsonc`, with the reason written next to it.
+    A rule that fires here and should not is turned off in `biome.jsonc`.
 
     Through a file rather than standard input, unlike the format: asked to
     lint a stdin document, `biome` 2.3.14 prints the document back and
     reports only that it did not fix it, and never names a rule.
     """
     with tempfile.TemporaryDirectory() as tmp:
-        page = Path(tmp) / "report.html"
+        page = Path(tmp) / name
         page.write_text(source, encoding="utf-8")
         result = subprocess.run(  # noqa: S603
             [biome(), "lint", "--error-on-warnings", str(page)],

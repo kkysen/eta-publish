@@ -5,7 +5,7 @@ import json
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from . import format
 from .checks import check
@@ -13,7 +13,7 @@ from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
-from .naming import IMAGE_DIR
+from .naming import ASSET_DIR, IMAGE_DIR
 from .nodes import Document, Shown
 from .parse import parse, read_review
 
@@ -240,7 +240,44 @@ def _without_uri(inline_object: JsonObject) -> JsonObject:
     }
 
 
-def emit(doc: Document, outdir: Path) -> dict[str, Path]:
+# The stylesheets and the script every report page shares, and the formatter
+# each is read by. Written once per build rather than into each page.
+SHARED_ASSETS = {
+    "page.css": format.css,
+    "report.css": format.css,
+    "report.js": format.js,
+}
+
+
+def write_assets(siteroot: Path) -> list[Path]:
+    """The one copy of what every report page links.
+
+    Formatted and linted like the pages are: they used to be inlined, so
+    `format.html` checked them on the way into each page, and moving them
+    out must not be how they stop being checked.
+    """
+    from .assets import read
+
+    dest = siteroot / ASSET_DIR
+    dest.mkdir(parents=True, exist_ok=True)
+    written = []
+    for name, formatter in SHARED_ASSETS.items():
+        path = dest / name
+        path.write_text(formatter(read(name)))
+        written.append(path)
+    return written
+
+
+def asset_base(path: str) -> str:
+    """`ASSET_DIR` as seen from a report at `path`, which says how deep it is.
+
+    Relative rather than rooted at `/`, because the site is served from
+    wherever Pages puts it and a report's own `URL:` decides its depth.
+    """
+    return "/".join([".."] * len(PurePosixPath(path).parts) + [ASSET_DIR])
+
+
+def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path]:
     """Run each emitter,
     reporting the ones not yet implemented rather than failing the whole build for them."""
     outdir.mkdir(parents=True, exist_ok=True)
@@ -254,7 +291,7 @@ def emit(doc: Document, outdir: Path) -> dict[str, Path]:
     # `/reports/<slug>/` serves the report rather than a listing of files.
     # `report.html` beside it is the fragment, a piece of a page rather than one.
     page = outdir / "index.html"
-    page.write_text(format.html(report_page(doc)))
+    page.write_text(format.html(report_page(doc, asset_base=assets)))
     written[page.name] = page
     for name, emitter in emitters.items():
         try:
@@ -382,7 +419,10 @@ def build_one(
         write_image_index(dest, download(doc, dest / IMAGE_DIR))
     read_image_shapes(dest, doc)
 
-    written = emit(doc, dest)
+    # Written here rather than once per site, so that building a single
+    # report produces a page with everything it links.
+    write_assets(outdir)
+    written = emit(doc, dest, asset_base(path))
 
     typ = written.get("report.typ")
     if typ is not None:
