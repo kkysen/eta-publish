@@ -412,7 +412,9 @@ When it fails, the rebuilt files are left in the working tree,
 which is what to read and commit.
 
 `site/` is the published site, committed:
-a report at its published path with its `doc.json` and everything emitted from it.
+a report at its published path with its `doc.json` and everything emitted from it,
+and `site/assets/` holding the one copy of the stylesheets and script
+that every report page links.
 It doubles as the project's main test corpus,
 because an actual `documents.get` response for a real report
 is where every bug that mattered came from.
