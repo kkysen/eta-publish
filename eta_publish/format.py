@@ -13,6 +13,7 @@ formatter does.
 
 import shutil
 import subprocess
+import tempfile
 from functools import cache
 from pathlib import Path
 
@@ -101,4 +102,41 @@ def html(source: str) -> str:
     )
     if result.returncode != 0:
         raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
-    return result.stdout
+    formatted = result.stdout
+    lint(formatted)
+    return formatted
+
+
+class LintFailed(RuntimeError):
+    pass
+
+
+def lint(source: str) -> None:
+    """Raise if `biome` has anything to say about `source` beyond its layout.
+
+    The same tool and the same page as the format above, one step further on:
+    the emitter writes the CSS and the script into every page it emits, so a
+    mistake in either is a mistake in the whole site, and the run that laid
+    the page out is the one that can say so.
+
+    `--error-on-warnings` because every rule this finds is a warning by
+    default, and a warning nothing fails on is one the build prints forever.
+    A rule that fires on this page and should not is turned off in
+    `biome.jsonc`, with the reason written next to it.
+
+    Through a file rather than standard input, unlike the format: asked to
+    lint a stdin document, `biome` 2.3.14 prints the document back and
+    reports only that it did not fix it, and never names a rule.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        page = Path(tmp) / "report.html"
+        page.write_text(source, encoding="utf-8")
+        result = subprocess.run(  # noqa: S603
+            [biome(), "lint", "--error-on-warnings", str(page)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    if result.returncode != 0:
+        raise LintFailed(f"biome lint failed:\n{result.stderr.strip()}")
