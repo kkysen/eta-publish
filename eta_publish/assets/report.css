@@ -1,51 +1,36 @@
 .eta-report figure { margin: 2.5em 0; }
 /* Figures the document puts next to each other sit next to each other, if
-   the reader's screen has room for them. `flex-basis` is what decides: two
-   fit in the 46rem the page is set at, and one does on a phone, with no
-   width named anywhere and nothing to keep in step with a media query.
+   the reader's screen has room. `flex-basis` is what decides, with no width
+   named anywhere and nothing to keep in step with a media query.
 
    Both the basis and the growth are the image's own aspect ratio, so the
-   widths a row settles on are proportional to it and the pictures come out
-   the same height rather than the same width. A cross-section next to the
-   cross-section it is compared with is read across, and equal heights are
-   what make that comparison one line rather than two scales. The ratio is
-   measured from the file and written on the figure; 1.4 is the landscape
-   photo the report is mostly made of, for an image whose size a build did
-   not learn.
+   pictures come out the same height rather than the same width, which is
+   what makes a cross-section beside the one it is compared with readable
+   across. 1.4 is the landscape photo the report is mostly made of, for an
+   image whose size a build did not learn.
 
-   The 10rem is the wrap point rather than a width: it is one page's worth
-   of column divided by the widest pair the report puts in a row, so the
-   pairs that fit on a tablet still do and a phone still stacks them. */
+   The 10rem is the wrap point rather than a width: one page's worth of
+   column divided by the widest pair the report puts in a row. */
 .eta-report .figure-row { display: flex; flex-wrap: wrap; gap: 1.5em;
                           align-items: flex-start; margin: 2.5em 0; }
 .eta-report .figure-row > figure {
   flex: var(--aspect, 1.4) 1 calc(var(--aspect, 1.4) * 10rem); margin: 0; }
 .eta-report figure img { width: 100%; height: auto; display: block; }
-/* No figure is taller than this. The pictures arrive at whatever size
+/* No figure is taller than this: the pictures arrive at whatever size
    someone dropped them into the document at, and a tall one filled the
-   screen on its own before a word of the report was read. The cap is a
-   `max-width` on the figure derived from the picture's own shape rather
-   than a `max-height` on the image, because `max-height` against the
-   `width: 100%` above would squash the picture, and because two figures
-   sharing a row have to come out the same height, which capping their
-   widths in proportion to `--aspect` keeps true. An image whose shape a
-   build did not learn, which is any SVG, falls back to the 1.4 the row
-   assumes and so caps at roughly the same place. The 34rem is the PDF's
-   4.5in cap scaled to this column, so that a picture cut down in one is
-   cut down in the other. Centred, because a capped figure is narrower
-   than the column it sits in. */
+   screen on its own. A `max-width` derived from the picture's own shape
+   rather than a `max-height`, which against the `width: 100%` above would
+   squash it, and which would not keep two figures sharing a row the same
+   height. The 34rem is the PDF's 4.5in cap scaled to this column, so that a
+   picture cut down in one is cut down in the other. */
 .eta-report figure { max-width: calc(var(--aspect, 1.4) * 34rem);
                      margin-left: auto; margin-right: auto; }
-/* Everything with an id carries a link to itself, because everything with
-   an id is something a reader may want to send someone: a section, a
-   figure, a paragraph they are quoting. The `#` is written by the
-   stylesheet rather than by the emitter, so that it is not part of the
-   text: selecting a heading to quote it should not pick up a stray
-   character, and a reader who cannot see the mark hears the label instead.
+/* Everything with an id carries a link to itself. The `#` is written by the
+   stylesheet rather than by the emitter, so that it is not part of the text:
+   selecting a heading to quote it should not pick up a stray character.
 
-   It hangs in the margin ahead of the block rather than sitting at the end
-   of it, so that every mark on the page is in the same column and the eye
-   knows where to look. Shown on hover, and on focus as well, or it would be
+   It hangs in the margin ahead of the block, so that every mark on the page
+   is in the same column. Shown on focus as well as on hover, or it would be
    a control only a mouse can reach. */
 .eta-report :has(> .link-mark) { position: relative; }
 /* No `top`: an absolutely positioned box with `top: auto` stays at the
@@ -74,29 +59,25 @@
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
-/* The build's own notes about this report, not part of it, and never in the
-   fragment that is pasted into the live site. A colour of its own, because it
-   is the one thing on the page that is not the report and should not be read
-   as though it were, and sans-serif for the same reason. */
+/* The build's own notes about this report. A colour and a face of their own,
+   because they are the one thing on the page that is not the report and
+   should not be read as though they were. */
 .eta-report .warnings { border-left: 3px solid #c60; padding: .4em 1em;
                         margin: 2em 0; font-size: .9rem;
                         font-family: system-ui, sans-serif; }
 .eta-report .warnings ul { margin: .4em 0 0; padding-left: 1.2em; }
-/* Marked the way a code span is marked anywhere else, because a warning
-   naming a field or a file is naming something exact and the eye should be
-   able to find it. A grey of no hue at 15%, which is a tint on a light page
-   and a lift on a dark one, so one rule serves both. */
+/* A grey of no hue at 15%, which is a tint on a light page and a lift on a
+   dark one, so one rule serves both. */
 .eta-report code { background: rgba(127, 127, 127, .15); border-radius: .25em;
                    padding: .1em .3em; font-size: .9em; }
-/* A value the warning is about, shown rather than described. Indented and
-   ranged left so that a long one is read as the quotation it is and not as
-   more of the sentence above it. */
+/* A value the warning is about, indented so that a long one is read as the
+   quotation it is and not as more of the sentence above it. */
 .eta-report .warnings blockquote { margin: .5em 0 .5em 1em; padding-left: .8em;
                                    border-left: 2px solid currentColor;
                                    opacity: .8; }
-/* A draft says so, in the one place nobody scrolls past. Bordered rather than
-   coloured: the page is read on a site whose palette this does not know, and
-   a rule in the current text colour is legible whatever that turns out to be. */
+/* Bordered rather than coloured: the page is read on a site whose palette
+   this does not know, and a rule in the current text colour is legible
+   whatever that turns out to be. */
 .eta-report .phase { font-size: .8rem; letter-spacing: .08em;
                      text-transform: uppercase; font-weight: bold;
                      border: 1px solid currentColor; border-radius: .2em;
@@ -108,48 +89,37 @@
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
 /* The note itself, shown where the reference is, so that reading a sentence
-   does not mean leaving it. The link stays exactly what it was: this is a
-   preview for a reader who has a pointer, and the way to the note at the
-   bottom is still a click.
+   does not mean leaving it. The link stays exactly what it was.
 
-   Only where hovering is a thing the device does. On a touch screen the
+   Only where hovering is a thing the device does: on a touch screen the
    first tap on a link raises `:hover` instead of following it, which would
-   turn every footnote reference into a two-tap link to buy a tooltip nobody
-   asked for. That gate also keeps the box off the narrow screens it has the
-   least room on.
+   turn every footnote reference into a two-tap link.
 
    `display` rather than `opacity`, so the duplicated text is out of the
-   layout, out of print, and out of what a screen reader reads. The note is
-   already reachable as a link, and `aria-hidden` keeps this copy from being
-   read a second time in the middle of the sentence.
+   layout, out of print, and out of what a screen reader reads.
 
    Hidden outside the query and shown inside it, not hidden inside it.
    The span is in the markup on every device, so a rule that only reaches
    the ones that hover leaves the rest displaying the note inline, in the
-   middle of the sentence it belongs to, which is worse than no preview at
-   all: a phone got every footnote spliced into the running text. */
+   middle of the sentence it belongs to. */
 .eta-report .footnote-tip { display: none; }
 @media (hover: hover) {
   .eta-report .footnote-ref { position: relative; }
   .eta-report .footnote-ref:hover .footnote-tip,
   .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
   /* Under the reference rather than over it, which is where the script
-     below will usually put it too, and where it goes when there is no
-     script: over it is outside the window whenever the reader arrived by a
-     backlink, which scrolls the reference to the top of the page. Under it
-     there is at least the rest of the paragraph.
+     usually puts it too, and where it goes when there is no script: over it
+     is outside the window whenever the reader arrived by a backlink.
 
      Which edge has room is a question about the window, and CSS cannot ask
-     it. So this is the placement to fall back to and not the one to rely
-     on; the script measures. */
+     it, so this is a fallback and the script measures. */
   .eta-report .footnote-tip {
       position: absolute; top: 1.6em; left: 50%; transform: translateX(-50%);
       z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
       padding: .5em .7em; border-radius: .3em;
-      /* The page names these two, and a site pasted into does not, where the
-         system pair is the one thing known to be legible against itself. A
-         tooltip is the one place here that needs an opaque surface: it is
-         over text. */
+      /* The page names these two and a site pasted into does not, where the
+         system pair is the one thing known to be legible against itself.
+         A tooltip needs an opaque surface: it is over text. */
       background: var(--bg, Canvas); color: var(--fg, CanvasText);
       border: 1px solid currentColor;
       /* `rem`, not `em`: this is inside a `sup`, and an `em` size would be a
@@ -159,9 +129,7 @@
       font-size: .85rem; font-style: normal; font-weight: normal;
       line-height: 1.5; text-align: left; vertical-align: baseline;
       white-space: normal;
-      /* The box is the note, links and all, so it takes the pointer: a
-         reader who sees a source cited in it can go to that source without
-         first finding the note at the bottom of the page. */
+      /* The box is the note, links and all, so it takes the pointer. */
       pointer-events: auto; }
   /* The gap between the reference and the box is a gap in the hover as well,
      and a box that closes when the pointer sets out for it cannot be reached.
@@ -171,9 +139,7 @@
   .eta-report .footnote-tip::before {
       content: ""; position: absolute; left: 0; right: 0;
       top: -.9rem; bottom: -.9rem; z-index: -1; }
-  /* Every link in the note is in the box too, and none of them is a stop on
-     the way through the page: the note itself is reachable from the reference,
-     and its links are reachable there. */
+  /* Every link in the note is in the box too. */
   .eta-report .footnote-tip a { text-decoration: underline; }
 }
 @media print { .eta-report .footnote-tip { display: none; } }

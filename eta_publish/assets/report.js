@@ -14,22 +14,19 @@
     const tip = tipOf(event);
     if (!tip) return;
     clearTimeout(closing.get(tip));
-    // Already open, and the pointer has only moved within it or back onto the
-    // reference. Measuring again would answer the same, so this leaves the box
-    // exactly where the reader is reading it.
+    // Already open: the pointer has only moved within the box or back onto
+    // the reference, and measuring again would answer the same.
     if (tip.style.position === "fixed") return;
-    // Laid out where it can be measured, and not yet shown there. The event
-    // handler runs before the frame is painted, so nothing is drawn in this
-    // position.
+    // Laid out where it can be measured, and not yet shown there: the handler
+    // runs before the frame is painted.
     tip.style.cssText =
       "display:block;visibility:hidden;position:fixed;left:0;top:0;transform:none";
     const box = tip.getBoundingClientRect();
     const ref = tip.parentElement.getBoundingClientRect();
     const below = ref.bottom + GAP;
     const above = ref.top - GAP - box.height;
-    // Under it unless that runs off the bottom, and over it only if that is
-    // somewhere the box actually fits: when neither edge has room, under is
-    // the one the reader can scroll to.
+    // Under it unless that runs off the bottom, and over it only where the
+    // box fits: with neither edge free, under is the one that can be scrolled to.
     const top = below + box.height <= innerHeight - GAP || above < GAP ? below : above;
     const middle = ref.left + ref.width / 2 - box.width / 2;
     const left = Math.min(Math.max(middle, GAP), innerWidth - box.width - GAP);
@@ -37,8 +34,7 @@
   };
   // Handed back to the stylesheet, so that a box measured against one scroll
   // position is not still carrying those numbers at the next one. After a
-  // pause, because the pointer leaves the reference on its way into the box,
-  // and a box that closes on the way to it is a box nobody can reach or read.
+  // pause, because the pointer leaves the reference on its way into the box.
   const release = (event) => {
     const tip = tipOf(event);
     if (!tip) return;
