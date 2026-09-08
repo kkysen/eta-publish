@@ -10,11 +10,6 @@ Three commands, because there are three things to do:
 `one` is for a document before it is on the list,
 and takes a Docs URL, a bare id, or a saved Docs response.
 
-Which of the two a reference is used to be worked out from how it was spelled,
-a `.toml` being a list and anything else a document.
-The command name says it instead, which is shorter to explain
-and cannot be surprised by a document whose URL ends in `.toml`.
-
 Both build the same way and write the same index,
 so the common case and the real case stay on the same code.
 Each report lands under the path its own front matter gives it.
@@ -68,12 +63,8 @@ Comments = Annotated[
     bool,
     Option(help="ask how many comment threads are open; the slowest thing a build does"),
 ]
-"""The options `all` and `one` share, spelled once.
-
-Two commands that build the same way have to offer the same switches,
-and a `--split` that worked on one of them and not the other
-would be a difference nothing in the code meant to make.
-"""
+"""The options `all` and `one` share, spelled once,
+so two commands that build the same way offer the same switches."""
 
 
 @app.command(name="all")
@@ -199,12 +190,10 @@ def add(
         added = add_report(url, reports)
     except (OSError, ValueError, LookupError, RuntimeError) as e:
         # `LookupError` and `RuntimeError` are `TabNotFound` and `FetchFailed`,
-        # which only this command can raise:
-        # neither `all` nor `one` fetches anything to resolve its argument,
-        # and a fetch that fails inside `build_site` is one report's failure there.
-        # A URL pasted without its `?tab=` id is the mistake this command exists
-        # to survive, and `TabNotFound` carries the list of tabs to pick from,
-        # which is the answer rather than the traceback it used to be printed as.
+        # which only this command can raise: a fetch that fails inside
+        # `build_site` is one report's failure there.
+        # `TabNotFound` carries the list of tabs to pick from, which is the
+        # answer to a URL pasted without its `?tab=` id.
         raise BadParameter(str(e), param_hint="URL") from e
     print(f"{reports}: added `{added.name}`, tab `{added.tab}`")
 

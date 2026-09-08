@@ -1,21 +1,16 @@
 """What makes a set of reports a site: the list, the paths, and the index.
 
 The per-document build lives in `build.py`.
-Here is what only exists once there is more than one report,
-which is the case the project is in:
-ETA has published several and will publish more,
-so nothing may be written in terms of *the* doc.
+Here is what only exists once there is more than one report.
 
 Each report lands under its own published path,
 taken from the `URL:` line in its front matter,
 so the preview URL is the published URL with a different host in front of it.
-A report whose header names no URL is not published at all.
-A slug of its headline would be a plausible path and not the published one,
-which is a report at the wrong URL rather than a report nobody forgot.
+A report whose header names no URL is not published at all,
+since a slug of its headline would be a plausible path and not the published one.
 
 That is one report failing, not the site:
-a document that cannot be built says nothing about the next one,
-so the others are still built and the exit status still reports it.
+the others are still built and the exit status still reports it.
 """
 
 import json
@@ -49,13 +44,10 @@ class Report:
     """What the document is called in Drive, which is what a build checks it against.
 
     Not where the report goes: that is the document's own to say.
-    An entry pointing at the wrong document fails
-    rather than publishing it under the heading of the one somebody meant.
 
     `None` is a document named on the command line, which states no expectation.
     An entry always states one, `""` included:
-    a field left empty says the document is called nothing, which no document is,
-    so a blank needs no rule of its own to be caught."""
+    a field left empty says the document is called nothing, which no document is."""
 
     tab: str | None = None
     """What the tab in `url` is called, checked the same way.
@@ -102,9 +94,8 @@ def load_reports(path: Path = REPORTS) -> list[Report]:
         if not url:
             raise ValueError(f"{path}: a [[report]] entry has no `url`")
         # A string either way, never `None`: an entry states an expectation
-        # whatever it says, and one that says nothing says the document is named
-        # nothing, which is a disagreement like any other and needs no rule of its own.
-        # `eta-publish add` is what fills these in without anyone typing them.
+        # whatever it says, and one that says nothing says the document is
+        # named nothing, which is a disagreement like any other.
         reports.append(
             Report(
                 url=url,
@@ -142,11 +133,8 @@ def add_report(url: str, path: Path = REPORTS) -> Report:
 
     `name` and `tab` are the document's own `title` and `tabTitle`,
     which is the only reason this command exists:
-    they are required and required to be right,
-    and a person copying two titles out of Drive by hand
-    is the step that gets them wrong.
-    Fetched rather than guessed from the URL,
-    which carries an opaque `?tab=` id and nothing else.
+    they are required to be right, and a person copying two titles out of
+    Drive by hand is the step that gets them wrong.
 
     An entry whose `url` is already listed is refused rather than duplicated:
     two entries for one document publish it twice to the same path,
@@ -162,8 +150,7 @@ def add_report(url: str, path: Path = REPORTS) -> Report:
     tab = str(document.get("tabTitle", ""))
     for field_name, value in (("name", name), ("tab", tab)):
         if not value:
-            # Nothing to write down, and writing an empty one down is what
-            # `load_reports` refuses. Better to say the document has no answer.
+            # Writing an empty one down is what `load_reports` refuses.
             raise ValueError(f"{url}: the document says no `{field_name}`")
 
     path.write_text(path.read_text().rstrip("\n") + "\n" + entry_text(url, name, tab))
@@ -209,16 +196,13 @@ def report_path(doc: Document) -> str:
     and a report published at the root of a domain
     would otherwise write to the root of the filesystem.
 
-    A path that climbs is refused for the same reason and a stronger one.
-    The build writes wherever this says,
-    so `URL: /../../etc` is a document choosing a directory outside the site,
+    A path that climbs is refused for the same reason and a stronger one:
+    `URL: /../../etc` is a document choosing a directory outside the site,
     and the check that the committed site is what a build writes
     only ever looks inside `site/`, so it would not notice.
 
-    A document that names no URL at all is refused rather than guessed at.
-    A slug of the headline is a plausible path and not the published one,
-    and the difference only shows up as a report sitting at the wrong URL,
-    quietly, next to the ones that got theirs right.
+    A document that names no URL at all is refused rather than guessed at,
+    since a slug of the headline is a plausible path and not the published one.
     Both refusals are this one report's, not the site's:
     `build_site` goes on to the next.
     """
@@ -256,13 +240,10 @@ def verifier(report: Report) -> Callable[[Document], None]:
 def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
     """What to build this report from: the document, or the last response saved for it.
 
-    Offline is a rebuild of what is already committed,
-    which is the whole of what a build does apart from asking Google for the text.
-    A report with no saved response cannot be built that way,
+    A report with no saved response cannot be built offline,
     and neither can one saved with its suggestions resolved the other way.
     Saying so is better than fetching one document
-    in a run that was asked not to fetch anything,
-    and better than publishing a document nobody asked for.
+    in a run that was asked not to fetch anything.
     """
     if not options.offline:
         return report.url
@@ -287,9 +268,7 @@ def source(report: Report, previous: Path | None, options: BuildOptions) -> str:
 MAX_AT_ONCE = 8
 """How many reports to build at once.
 
-A build is almost entirely waiting on Google, so these overlap well,
-and a list of four takes about as long as its slowest document
-rather than as long as all four.
+A build is almost entirely waiting on Google, so these overlap well.
 A ceiling rather than one thread a report, because the calls are rate limited
 at the other end and thirty asking at once is a way to be told to wait.
 """
@@ -301,17 +280,14 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
     A document that cannot be fetched says nothing about the next one,
     and a site missing one report beats no site at all.
 
-    Several at a time, because nearly all of a build is waiting for a reply
-    and one report's wait is not another's.
+    Several at a time, because nearly all of a build is waiting for a reply.
     Each carries its own HTTP client the whole way down, which is not tidiness
     but a requirement: the client under the Google libraries is `httplib2`,
     and one shared across threads takes the interpreter down in the allocator
-    rather than raising anything. Every call here builds its own.
+    rather than raising anything.
 
-    Reported in the order the list gives rather than the order they finish.
-    A build of four reports is read as a list of four reports,
-    and which one Google answered first is not something to sort by.
-    Waiting on each in turn also means the first one's warnings are printed
+    Reported in the order the list gives rather than the order they finish,
+    which also means the first one's warnings are printed
     while the rest are still running.
     """
     options = options or BuildOptions()
@@ -353,27 +329,19 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
 def disagreements(report: Report, doc: Document) -> list[str]:
     """Where `reports.toml` and the document it points at do not match.
 
-    Only checkable here, after the fetch.
-    Nothing in `reports.toml` says what the document is called
-    or which of its tabs a `?tab=` id picks out,
-    which is the whole reason the two can drift apart.
+    Only checkable here, after the fetch:
+    nothing in `reports.toml` says what the document is called
+    or which of its tabs a `?tab=` id picks out.
 
-    Every expectation is compared, and nothing about a value exempts it.
-    An entry with a blank `tab` disagrees with a document that has one,
-    and an entry with a `tab` disagrees with a response that has none,
-    for the same reason and by the same line of code:
+    Every expectation is compared, and nothing about a value exempts it:
     an unanswered question is not a passed check,
     and a blank is not a shorter entry.
-
     Only a document named straight on the command line is skipped,
     which is not an entry and holds no expectation to compare.
 
-    Not `doc.warnings`, and not warnings at all.
-    The document is fine and this file is wrong about it,
+    Not warnings: the document is fine and this file is wrong about it,
     which is nothing for the writers to fix
-    and not something to publish past either:
-    an entry pointing at the wrong document publishes that document
-    under the heading of the one somebody meant.
+    and not something to publish past either.
     """
     checks = (
         ("calls this", report.name, "the document is named", doc.file_title),

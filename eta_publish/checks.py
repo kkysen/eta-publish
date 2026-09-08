@@ -68,16 +68,14 @@ def check(doc: Document) -> None:
             doc.warn("the {} section leaves {} empty", Shown("Header"), Shown(f"{_titled(field)}:"))
 
         if TODO_RE.search(doc.meta.get(field, "")):
-            # The body walk flags an unfinished line wherever it finds one,
-            # but the header is consumed before that walk begins,
-            # so `Short: TODO` reached the page with nothing said about it.
+            # The header is consumed before the body walk that flags these,
+            # so `Short: TODO` would otherwise reach the page unremarked.
             doc.warn("{} is still marked unfinished", Shown(f"{_titled(field)}:"))
 
     seo = doc.meta.get("seo description", "")
     if len(seo) > SEO_LIMIT:
-        # The whole description, with the part that will not survive struck through.
-        # Which words are lost is the thing to fix,
-        # and a count of characters over does not say which they are.
+        # The whole description, with the part that will not survive struck
+        # through: which words are lost is the thing to fix.
         doc.warn(
             f"{{}} is {len(seo)} characters, over the {SEO_LIMIT} a search result shows:{{}}",
             Shown("SEO Description:"),
@@ -106,14 +104,9 @@ def _check_contributors(doc: Document) -> None:
     """Two contributors with no comma between them, which reads as one person.
 
     Only detectable where an address was written beside a name,
-    because the address is what says the name before it has ended:
-    text after the closing bracket and before the next comma
-    is somebody else, run into the person in front of them.
+    because the address is what says the name before it has ended.
     Two bare names run together are two words, and nothing here can tell
     those from a double-barrelled surname.
-
-    Worth a line because the byline is where it shows,
-    sorted under a surname that belongs to neither of them.
     """
     for entry in doc.meta.get("public contributors", "").split(","):
         emailed = EMAILED.search(entry)
@@ -127,11 +120,6 @@ def _check_contributors(doc: Document) -> None:
 
 def _check_figures(doc: Document) -> None:
     """Every picture is described and attributed, or says which one is not.
-
-    A caption is what the picture is for: uncaptioned, it is decoration
-    in a report that does not decorate.
-    A credit is whose it is, and these reports run other people's diagrams
-    on nearly every page.
 
     Named by the file it is written as rather than by its Docs object id,
     which nothing in the document shows anybody.
@@ -157,21 +145,18 @@ def _check_named(doc: Document) -> None:
     Without one the URL is a hash of a Docs object id:
     it says nothing about the picture,
     and it moves if the image is ever replaced.
+    A line that names no file, `Image Source` or `SVG: TODO`,
+    leaves the image as unnamed as no line at all.
 
-    A line that names no file leaves the image as unnamed as no line at all.
-    `Image Source` and `SVG: TODO` are both `Source:` lines in SAS West,
-    and neither says which file the picture is.
-
-    One warning for all of them rather than one each.
-    They are one fix repeated, seventeen times in SAS West,
-    and seventeen lines saying the same thing is a paragraph nobody reads twice.
+    One warning for all of them rather than one each:
+    they are one fix repeated, seventeen times in SAS West.
     """
     unnamed = [block for block in doc.blocks if isinstance(block, Figure) and not block.image.named]
     if not unnamed:
         return
     # One to a line, each with what the report says the picture is:
-    # a hash names nothing, and the whole difficulty of fixing these
-    # is working out which picture `img-6fb0f9c4` is.
+    # the difficulty of fixing these is working out which picture
+    # `img-6fb0f9c4` is.
     listed = Listed(*((Shown(block.image.filename), _describe(block)) for block in unnamed))
     are = "is" if len(unnamed) == 1 else "are"
     doc.warn(
@@ -208,10 +193,9 @@ def _check_review(doc: Document) -> None:
     so what publishes from a document under review looks finished
     and is a snapshot of an argument nobody has finished having.
 
-    Both counts are this tab's.
-    The document these reports live in has eight tabs
-    and 46 comments open across them, against three on the one that publishes,
-    so a count for the file would be a number nobody could act on.
+    Both counts are this tab's: the document these reports live in has eight
+    tabs and 46 comments open across them, against three on the one that
+    publishes, so a count for the file would be a number nobody could act on.
     """
     if doc.open_suggestions:
         doc.warn(

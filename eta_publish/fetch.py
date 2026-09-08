@@ -40,10 +40,9 @@ if TYPE_CHECKING:
 
 SCOPES = [
     "https://www.googleapis.com/auth/documents.readonly",
-    # Charts are linked as Drive files rather than embedded:
-    # Docs cannot place an SVG, so the vector lives in Drive and a raster stands in.
-    # Downloading it needs Drive read access, which is broader than we would like,
-    # but Drive offers nothing narrower for a file this application did not create.
+    # Charts are linked as Drive files rather than embedded, since Docs cannot
+    # place an SVG. Downloading one needs Drive read access, and Drive offers
+    # nothing narrower for a file this application did not create.
     "https://www.googleapis.com/auth/drive.readonly",
 ]
 
@@ -52,9 +51,8 @@ SCOPES = [
 SUGGESTIONS = {
     "rejected": "PREVIEW_WITHOUT_SUGGESTIONS",
     "accepted": "PREVIEW_SUGGESTIONS_ACCEPTED",
-    # Not a mode the command line offers: nothing publishes a document
-    # with the suggestion marks still in it.
-    # It is how they are counted, which is the only way to know there are any.
+    # Not a mode the command line offers: it is how suggestions are counted,
+    # which is the only way to know there are any.
     "inline": "SUGGESTIONS_INLINE",
 }
 
@@ -187,13 +185,9 @@ and a build reuses only what it would have written itself.
 def document_url(doc_id: str, tab: str = "") -> str:
     """The URL of a document, or of one of its tabs, spelled one way.
 
-    Built from the ids rather than kept from whatever was passed in.
-    A reference reaching a build can be a bare document id or a local path
-    to a saved response, neither of which is a URL,
-    and a URL that was one can be spelled several ways:
-    `/edit`, `/view`, and whatever else was in the address bar when it was copied.
-    None of that belongs in a committed file, and a link written once here
-    is one that reads the same beside every report.
+    Built from the ids rather than kept from whatever was passed in,
+    which can be a bare document id, a local path to a saved response,
+    or a URL spelled `/edit`, `/view`, or however it was copied.
 
     Not what a saved response is matched by, which is the pair of ids:
     this is for whoever opens `doc.json` and wants the document it came from.
@@ -236,13 +230,10 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
         "format": RESPONSE_FORMAT,
         # Which document and which tab this was, so a saved response says what
         # it is. Nothing else does: the outputs beside it are named after the
-        # report's own `URL:` line, which is a path and not an id, and a
-        # `?tab=` id in `reports.toml` has nothing to match against without this.
+        # report's own `URL:` line, which is a path and not an id.
         "documentId": doc_id,
         "tabId": tab_id(chosen),
         # The same two, as the link that opens them.
-        # Derived and not kept, so it says the same thing for every report
-        # however the entry that reached this build was spelled.
         "url": document_url(doc_id, tab_id(chosen)),
         "title": document.get("title", ""),
         "tabTitle": tab_title(chosen),
@@ -262,8 +253,7 @@ _SIGNING_IN = Lock()
 Reports are built in parallel, and the cache alone does not stop two threads
 that both miss it from both running the flow: on a machine with no saved token
 that is two browser windows asking for the same consent, and the second
-overwrites what the first wrote. One at a time through here, and the second
-finds it cached.
+overwrites what the first wrote.
 """
 
 
@@ -277,20 +267,15 @@ def _credentials() -> Credentials:
 def _sign_in() -> Credentials:
     """Whatever this machine has to offer, interactive or not.
 
-    Cached rather than worked out per call.
-    A build of two reports asks six times, and each answer read the token
-    file, checked its scopes, and refreshed it if it had expired,
-    which is half a second of a thirteen second build spent
-    re-deciding something that cannot change while a build runs.
-    `cache_clear` is what a test uses to be given a different answer.
+    Cached because nothing about it can change while a build runs,
+    where a build of two reports otherwise re-reads and re-checks the token
+    six times. `cache_clear` is what a test uses to be given a different answer.
 
     On a person's machine, the installed-app flow: a browser opens once, the token caches.
     Unattended, notably CI, there is no browser to open and no one to click,
-    so a service account is used through `google.auth.default`,
-    which reads `$GOOGLE_APPLICATION_CREDENTIALS`.
+    so a service account is used through `google.auth.default`.
 
-    Application default credentials are checked first,
-    because a machine that has them has them deliberately:
+    Those are checked first, because a machine that has them has them deliberately:
     they are set by an environment variable naming a key file, not found by accident.
     """
     ambient = _ambient_credentials()
@@ -310,9 +295,8 @@ def _sign_in() -> Credentials:
         try:
             creds.refresh(Request())
         except RefreshError as e:
-            # A refresh token that Google has expired or revoked
-            # is exactly the case consent has to be given again,
-            # so fall through to the flow below rather than failing the build.
+            # A revoked or expired refresh token is exactly the case consent
+            # has to be given again, so fall through to the flow below.
             reason = e.args[0] if e.args else e
             print(
                 f"the saved sign-in is no longer valid ({reason}); asking for it again",
@@ -340,8 +324,7 @@ def _ambient_credentials() -> Credentials | None:
     so the interactive flow stays the default for someone running this by hand.
 
     A service account reaches only what has been shared with it,
-    which is why CI can be given one:
-    its Drive is empty, so the key grants read access to the report and nothing else.
+    which is why CI can be given one.
     """
     if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
         return None
@@ -421,8 +404,8 @@ def open_suggestions(doc_id: str, tab: str | None = None) -> int | None:
     which is 240 insertion marks for a document with far fewer suggestions in it.
 
     Reading them needs more than reading the document does:
-    an account with view access is told it does not have permission,
-    which is what CI's service account is.
+    an account with view access, which is what CI's service account is,
+    is told it does not have permission.
     That is a question this cannot answer rather than a build that cannot run,
     so it is `None` and the caller keeps whatever the last answer was.
     """
@@ -469,10 +452,9 @@ def open_comments_on_tab(doc_id: str, tab: str | None) -> int | None:
     after the text, the comments left on that tab, which is the answer.
 
     It is not an API, and it does not always answer:
-    often enough it returns a sign-in page instead, with a 200 beside it.
-    That page has no comments in it, so a run that took it at its word
-    would report a document under review as clean,
-    which is worse than reporting nothing. Hence the shape check, the retries,
+    often enough it returns a sign-in page instead, with a 200 beside it,
+    and a run that took that at its word would report a document under review
+    as clean. Hence the shape check, the retries,
     and `None` rather than a zero this cannot stand behind.
     """
     from google.auth.transport.requests import AuthorizedSession
@@ -499,9 +481,8 @@ def modified_time(doc_id: str) -> str | None:
 
     The cheapest question there is about a document: half a second,
     against two for the document itself and another two for its suggestions.
-    Editing a document is what moves this, and proposing, accepting, or
-    rejecting a suggestion is editing it, so a document that has not moved
-    has the same text and the same suggestions as the last build saw.
+    Proposing, accepting, or rejecting a suggestion is editing, so a document
+    that has not moved has the same text and suggestions as the last build saw.
 
     Comments are not editing, and do not move it. They are counted every time.
 
@@ -528,19 +509,13 @@ def unchanged(doc_id: str, cached: Path, suggestions: str) -> JsonObject | None:
     Three questions, and a no to any of them is a fetch.
     Whether the document has been edited since, which Drive answers.
     Whether it was saved with the suggestions resolved the way this run
-    resolves them, which the response itself says.
+    resolves them, which `modifiedTime` cannot see and the response itself says.
     And whether it is the shape a build writes today,
     because a response saved before a key was added is missing that key,
-    and no amount of asking Drive would turn that up:
-    the document did not change, the code did.
-    A response saved with them rejected is a different document
-    from the same file with them accepted, and no edit has to happen
-    for the two to differ, so `modifiedTime` cannot see the difference.
+    and no amount of asking Drive would turn that up.
 
-    `None` whenever neither can be established,
-    which is a saved response that is missing, unreadable, or was written
-    before a build recorded what it is of.
-    Every one of those is a reason to fetch rather than a reason to guess.
+    `None` for a saved response that is missing, unreadable, or was written
+    before a build recorded what it is of: all reasons to fetch.
     """
     try:
         document = json.loads(cached.read_text())
@@ -571,37 +546,26 @@ def fetch(
     reused = document is not None
     if document is None:
         document = select_tab(fetch_document(doc_id, suggestions), wanted)
-        # Recorded on the way out rather than asked for on the way in,
-        # so the next build has something to compare against.
-        # After the fetch, so a document edited while it was in flight
-        # reads as changed next time rather than as already current.
         # What this response is of, so the next build can tell whether it is
-        # the one it wants: which document, when, and read which way.
+        # the one it wants. Read after the fetch, so a document edited while
+        # it was in flight reads as changed next time rather than as current.
         document["suggestions"] = suggestions
         current = modified_time(doc_id)
         if current:
             document["modifiedTime"] = current
-    # Recorded into the response rather than warned about here,
-    # for the reason `tabTitle` is: a build from a saved response
-    # has to write the same page as the build that fetched it,
-    # and neither the suggestions nor the comments survive in what is saved.
-    # Only what could actually be read.
-    # A key left out is one the last answer stands for,
-    # which `build_one` carries over from the saved response.
+    # Recorded into the response rather than warned about here, so a build from
+    # a saved response writes the same page as the build that fetched it.
+    # Only what could actually be read: a key left out is one the last answer
+    # stands for, which `build_one` carries over from the saved response.
     if _ambient_credentials() is not None:
-        # A service account is not a person with the document open,
-        # and neither question has an answer it can give.
-        # Suggestions it is refused outright.
-        # Comments it is not refused: the export answers,
-        # renders a document with no comments in it because it cannot see any,
-        # and returns a confident nought that no retry would catch.
-        # So it is not asked, and the last answer stands.
+        # A service account is refused the suggestions outright, and for
+        # comments the export answers with a document it cannot see any in,
+        # which is a confident nought no retry would catch.
         #
-        # Said out loud, because otherwise it is silent.
-        # `google.auth.default` finds a key named by the environment,
-        # and it finds `gcloud auth application-default login` too,
-        # so a machine that acquires one stops counting these
-        # and goes on publishing the last numbers as though it had checked.
+        # Said out loud, because `google.auth.default` finds
+        # `gcloud auth application-default login` as well as a key named by
+        # the environment, so a machine that acquires one would otherwise stop
+        # counting these silently.
         print(
             "not asking about suggestions or comments: this is a service account, "
             "which cannot see either; keeping the counts from the last build that could",

@@ -80,12 +80,9 @@ def strip_trailing_space(text: str) -> str:
     """Drop whitespace at the end of every line.
 
     Two trailing spaces mean a hard line break and any other number means nothing,
-    so linters reject the in-between cases.
-    Thirteen lines of the SAS West report end in a single space,
-    carried over from where the sentence ends in the document.
-
-    Nothing is lost by removing them:
-    a hard break here is a trailing backslash, which is unambiguous and visible.
+    so linters reject the in-between cases, which the document leaves behind
+    wherever a sentence ends in one.
+    Nothing is lost: a hard break here is a trailing backslash.
     """
     return "\n".join(line.rstrip() for line in text.split("\n"))
 
@@ -143,10 +140,9 @@ class MarkdownEmitter(Emitter):
     def warnings(self, doc: Document) -> str:
         """The build's notes about this report, above it and below the dateline.
 
-        Written as a list, and rendered from the warning's pieces
-        rather than from what `str` makes of them, for the reason the other
-        two emitters are: a value is marked because it is a value,
-        not because of what it happens to contain.
+        Rendered from the warning's pieces rather than from what `str` makes of
+        them, as the other two emitters do: a value is marked because it is a
+        value, not because of what it happens to contain.
         """
         if not doc.warnings:
             return ""
@@ -205,12 +201,9 @@ class MarkdownEmitter(Emitter):
     def heading(self, node: Heading) -> str:
         """Just the heading, with no explicit identifier.
 
-        Pandoc's `{#anchor}` syntax was here
-        so the archive's anchors matched the published ones.
-        GitHub has no attribute syntax and renders it as literal text in the heading,
-        which is where this file is actually read, and it bought nothing:
-        the anchor is a property of the HTML,
-        and a static site would be built from the tree rather than from here.
+        Pandoc's `{#anchor}` syntax would match the published anchors,
+        but GitHub, which is where this file is read, has no attribute syntax
+        and renders it as literal text in the heading.
         """
         return f"{'#' * node.level} {self.inlines(node.content)}"
 
@@ -252,15 +245,10 @@ class MarkdownEmitter(Emitter):
         if node.credit:
             lines.append(self.inlines(node.credit))
 
-        # A bare newline is a soft break, which is a space:
-        # the picture, its caption and its credit rendered as one running line.
-        # The trailing backslash is the hard break that is visible in the source,
-        # rather than the two trailing spaces that mean the same
-        # and that any editor is entitled to strip.
-        #
-        # The source line is a comment, which renders as nothing,
-        # so a break before it would be a break to nowhere,
-        # and the backslash asking for it would be the last thing on a visible line.
+        # A bare newline is a soft break, which would run the picture, its
+        # caption and its credit together on one line.
+        # No break before the source line, which is a comment and renders as
+        # nothing, so the break would be one to nowhere.
         out = "\\\n".join(lines)
         if node.source:
             out += f"\n<!-- {self.inlines(node.source)} -->"

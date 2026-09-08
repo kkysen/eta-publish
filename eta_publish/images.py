@@ -43,15 +43,13 @@ def download(
     http = session or requests.Session()
     written: dict[str, Path] = {}
 
-    # A saved response carries no URIs, because they expire and are not committed.
-    # That is the ordinary shape of a rebuild rather than a defect in any one image,
-    # so it is said once below instead of 29 times,
-    # and the remedy is a fetch rather than an edit to the document.
+    # A saved response carries no URIs, because they expire and are not
+    # committed. That is the ordinary shape of a rebuild rather than a defect
+    # in any one image, so it is said once below instead of 29 times.
     no_uris = bool(doc.images) and not any(image.source_uri for image in doc.images)
-    # Said afterwards rather than here, because a URI is only missed by an image
-    # that needed one. A rebuild of a site whose images are already on disk
-    # downloads nothing and wants nothing, and telling it to re-fetch a document
-    # to collect files it already has is advice to ignore.
+    # Said afterwards rather than here, because a URI is only missed by an
+    # image that needed one: a rebuild whose images are already on disk
+    # downloads nothing and wants nothing.
     missing: list[str] = []
 
     for image in doc.images:
