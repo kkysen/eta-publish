@@ -13,10 +13,12 @@ formatter does.
 
 import shutil
 import subprocess
+from functools import cache
+from pathlib import Path
 
-# Pinned, because the output is committed and a formatter that changes its
-# mind between versions rewrites every report without a report changing.
-VERSION = "2.3.14"
+# `mise` reads the pin from the nearest `mise.toml`, which is this one,
+# whatever directory the build was started from.
+ROOT = Path(__file__).parent.parent
 
 FLAGS = (
     # HTML formatting is off by default in this version.
@@ -40,27 +42,46 @@ FLAGS = (
 )
 
 
-class BiomeMissing(RuntimeError):
+class MiseMissing(RuntimeError):
     pass
 
 
-def command() -> list[str]:
-    """`biome`, however this machine has it.
+@cache
+def biome() -> str:
+    """The `biome` that `mise.toml` pins.
 
-    On `PATH` first, because a build runs the formatter once per output and
-    `npx` resolves the package each time it is asked.
+    Through `mise` rather than off `PATH`, so that pin is the only answer to
+    which version runs. The output is committed, and a different `biome`
+    would rewrite every report without a report having changed: reading that
+    diff, `check-committed-site.sh` says the documents changed, which would
+    not be true and points at Google Docs instead of at an installed binary.
+
+    Asked once, and for the path rather than by running `mise x` per page:
+    `mise` re-reads the pin every time it is asked, and a build formats a
+    page per report while the tests format far more, so that resolution is
+    most of what running the formatter would cost.
     """
-    binary = shutil.which("biome")
-    if binary is not None:
-        return [binary]
-    npx = shutil.which("npx")
-    if npx is not None:
-        return [npx, "--yes", f"@biomejs/biome@{VERSION}"]
-    raise BiomeMissing(
-        "`biome` is not on PATH and neither is `npx`, so the HTML could not be "
-        f"formatted. Install it with `mise use -g biome@{VERSION}` or "
-        "`npm i -g @biomejs/biome`, then rerun."
+    mise = shutil.which("mise")
+    if mise is None:
+        raise MiseMissing(
+            "`mise` is not on PATH, so `biome` could not be resolved and the "
+            "HTML was not formatted. Install it from https://mise.jdx.dev, "
+            "then rerun."
+        )
+    result = subprocess.run(  # noqa: S603
+        [mise, "which", "biome"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
     )
+    if result.returncode != 0:
+        raise MiseMissing(
+            "`mise` has not installed the `biome` that `mise.toml` pins, so "
+            "the HTML was not formatted. Run `mise install`, then rerun.\n"
+            f"{result.stderr.strip()}"
+        )
+    return result.stdout.strip()
 
 
 def html(source: str) -> str:
@@ -71,8 +92,9 @@ def html(source: str) -> str:
     and the build has nowhere it wants a copy of the unformatted page.
     """
     result = subprocess.run(  # noqa: S603
-        [*command(), "format", "--stdin-file-path=report.html", *FLAGS],
+        [biome(), "format", "--stdin-file-path=report.html", *FLAGS],
         input=source,
+        cwd=ROOT,
         capture_output=True,
         text=True,
         check=False,
