@@ -72,23 +72,15 @@ def html(source: str) -> str:
 def css(source: str) -> str:
     """`source`, formatted and linted, as a stylesheet.
 
-    Linted inside a `<style>` rather than as itself, because `biome` 2.3.14
-    applies none of its CSS rules to a `.css` file and all of them to the
-    same text in a page. These stylesheets used to be inlined and so were
-    checked that way; moving them into their own files must not be how they
-    stop being checked. Line numbers in a finding are one further down than
-    the file, which is the wrapper.
+    `biome` 2.3.14 does not apply `noDuplicateProperties` to a `.css` file,
+    though it does to the same text in a page. Every other CSS rule fires
+    here, so that one rule is left missing rather than worked around.
     """
-    formatted = _format(source, "report.css")
-    lint(f"<style>\n{formatted}</style>\n")
-    return formatted
+    return _source(source, "report.css")
 
 
 def js(source: str) -> str:
-    """`source`, formatted and linted, as a script.
-
-    As itself, unlike the stylesheets: `biome` does lint a `.js` file.
-    """
+    """`source`, formatted and linted, as a script."""
     return _source(source, "report.js")
 
 
@@ -104,12 +96,35 @@ def _source(source: str, name: str) -> str:
     return formatted
 
 
+PASSES = 4
+"""How many times `_format` may run before it gives up on settling."""
+
+
 def _format(source: str, name: str) -> str:
-    """`source`, laid out under the name `biome` reads it as.
+    """`source`, laid out under the name `biome` reads it as, until it settles.
+
+    Run again on its own output, because `biome` 2.3.14's HTML formatter is
+    not idempotent: given a paragraph holding two links, one of which it had
+    to break across lines, a second pass breaks the other one's `href` onto
+    its own line too, and a third changes nothing. Whatever the cause, one
+    pass is not a fixed point, and this output is committed and compared
+    against a rebuild. Anything that formats it again, an editor saving a
+    file or a hook over the repository, would otherwise rewrite it and read
+    as the documents having changed.
 
     Over standard input, because the build has nowhere it wants a copy of
     the unformatted text.
     """
+    for _ in range(PASSES):
+        settled = _pass(source, name)
+        if settled == source:
+            return settled
+        source = settled
+    raise RuntimeError(f"biome format did not settle on {name} in {PASSES} passes")
+
+
+def _pass(source: str, name: str) -> str:
+    """`source`, through `biome format` once."""
     result = subprocess.run(  # noqa: S603
         [
             biome(),
@@ -164,7 +179,12 @@ def lint(source: str, name: str = "report.html") -> None:
         page = Path(tmp) / name
         page.write_text(source, encoding="utf-8")
         result = subprocess.run(  # noqa: S603
-            [biome(), "lint", "--error-on-warnings", str(page)],
+            [
+                biome(),
+                "lint",
+                "--error-on-warnings",
+                str(page),
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
