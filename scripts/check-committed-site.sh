@@ -5,14 +5,12 @@
 #
 # What is deployed has to be what was reviewed.
 # A push to `main` republishes the site by fetching the documents,
-# so without this it would publish whatever Google Docs said at that moment:
-# a sentence someone was still editing,
-# or a paragraph deleted an hour ago and not yet restored.
+# so without this it would publish whatever Google Docs said at that moment.
 #
 # A build is deterministic, so unchanged documents rewrite the committed files
 # byte for byte and there is no diff.
-# `doc.json` covers the text and `images.json` covers the pictures,
-# which are not committed themselves but whose hashes are.
+# `images.json` covers the pictures, which are not committed themselves
+# but whose hashes are.
 
 set -euo pipefail
 
@@ -28,8 +26,7 @@ fail() {
 }
 
 # The build writes into `site/`, so anything uncommitted there is about to be lost.
-# Against `HEAD` rather than the index,
-# so staged-but-not-committed counts as uncommitted, which it is.
+# Against `HEAD` rather than the index, so staged counts as uncommitted.
 if ! git diff --quiet HEAD -- site; then
     fail "site/ has uncommitted changes and this rebuilds into it; commit or stash them first"
 fi
@@ -37,8 +34,7 @@ fi
 uv run eta-publish all
 
 # The whole diff, not a summary:
-# it is the change to a published report,
-# and reading it is the review the commit stands for.
+# reading it is the review the commit stands for.
 if ! git diff --quiet HEAD -- site; then
     git diff --stat HEAD -- site >&2
     git diff HEAD -- site >&2
