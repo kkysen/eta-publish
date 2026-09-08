@@ -42,6 +42,7 @@ import re
 import pytest
 from paths import REAL_DIR as REAL
 
+from eta_publish import format
 from eta_publish.checks import check as run_checks
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter, report_page
@@ -116,7 +117,12 @@ def check(name: str, actual: str, regenerate: bool) -> None:
 
 
 def test_html_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("report.html", HtmlEmitter(image_base=IMAGE_DIR).emit(doc), regenerate_snapshots)
+    # The committed page is the page a build writes, formatter included.
+    check(
+        "report.html",
+        format.html(HtmlEmitter(image_base=IMAGE_DIR).emit(doc)),
+        regenerate_snapshots,
+    )
 
 
 def test_markdown_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
@@ -128,7 +134,7 @@ def test_typst_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
 
 
 def test_page_snapshot(doc: Document, regenerate_snapshots: bool) -> None:
-    check("index.html", report_page(doc), regenerate_snapshots)
+    check("index.html", format.html(report_page(doc)), regenerate_snapshots)
 
 
 # ---- what the document should parse to ------------------------------

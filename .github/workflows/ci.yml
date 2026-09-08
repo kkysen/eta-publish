@@ -15,6 +15,10 @@ jobs:
         with:
           enable-cache: true
 
+      # `biome` formats the emitted HTML, so a build without it writes
+      # nothing, and the tests compare against pages it laid out.
+      - uses: jdx/mise-action@v3
+
       - name: ruff format
         run: uv run ruff format --check
 

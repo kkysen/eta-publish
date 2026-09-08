@@ -111,38 +111,22 @@ def _is_abbreviation(before: str) -> bool:
     return bool(re.fullmatch(r"[a-z]", word)) or bool(re.fullmatch(r"(?:[a-z]\.)+[a-z]", word))
 
 
-def boundaries(text: str) -> list[int]:
-    """Where in `text` a sentence ends: the index of the space after each.
-
-    One space, never more, because that is what `BOUNDARY` matches.
-    Which makes each of these an index a line break can replace a space at
-    without adding or removing a character of whitespace,
-    and that is the whole of why it is safe to break there in HTML.
-    """
-    if not text:
-        return []
-
-    found: list[int] = []
-    start = 0
-    for match in BOUNDARY.finditer(text):
-        end = match.end("close")
-        if _is_abbreviation(text[start:end]):
-            continue
-        found.append(end)
-        start = match.end()
-    return found
-
-
 def split(text: str) -> list[str]:
     """Split one paragraph into sentences, preserving the text exactly.
 
     Joining the result with a single space reproduces the input,
     so nothing can be lost or gained by reflowing.
     """
+    if not text:
+        return []
+
     sentences: list[str] = []
     start = 0
-    for end in boundaries(text):
+    for match in BOUNDARY.finditer(text):
+        end = match.end("close")
+        if _is_abbreviation(text[start:end]):
+            continue
         sentences.append(text[start:end])
-        start = end + 1
+        start = match.end()
     sentences.append(text[start:])
     return [s for s in sentences if s]
