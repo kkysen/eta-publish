@@ -44,7 +44,7 @@ def compile_pdf(source: Path, dest: Path | None = None) -> Path:
             "then rerun. The `.typ` source has already been written."
         )
     dest = dest or source.with_suffix(".pdf")
-    result = subprocess.run(  # noqa: S603
+    result = subprocess.run(
         [typst, "compile", "--root", str(source.parent), str(source), str(dest)],
         capture_output=True,
         text=True,

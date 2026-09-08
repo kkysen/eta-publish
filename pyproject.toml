@@ -37,7 +37,10 @@ artifacts = ["eta_publish/assets/*"]
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM"]
+# `RUF100` so a `noqa` for a rule not selected here is reported rather than
+# read as a suppression that is doing something. Every one in the tree was
+# inert: `S` and `BLE` are not on this list and never were.
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF100"]
 
 [tool.pyrefly]
 preset = "strict"

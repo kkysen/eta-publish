@@ -387,7 +387,7 @@ def fetch_document(doc_id: str, suggestions: str = "rejected") -> JsonObject:
     )
     try:
         return request.execute()
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise FetchFailed(_explain(e)) from e
 
 
@@ -515,7 +515,7 @@ def modified_time(doc_id: str) -> str | None:
         service = build("drive", "v3", credentials=_credentials())
         files = service.files()  # pyrefly: ignore[missing-attribute]
         return files.get(fileId=doc_id, fields="modifiedTime").execute().get("modifiedTime")
-    except Exception:  # noqa: BLE001
+    except Exception:
         # Broad on purpose, and building the client is inside it:
         # every way of not getting an answer is the same answer here,
         # which is that this build does not know and will fetch.
@@ -634,5 +634,5 @@ def download_drive_file(file_id: str) -> bytes:
     files = service.files()  # pyrefly: ignore[missing-attribute]
     try:
         return files.get_media(fileId=file_id).execute()
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise FetchFailed(_explain(e)) from e
