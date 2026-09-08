@@ -378,7 +378,6 @@ and `tests/fixture/` is a document folder with nothing else in it.
 ## Development
 
 ```sh
-mise install
 uv sync
 uv run pre-commit install
 uv run pytest
@@ -387,6 +386,7 @@ uv run pytest
 [`mise`](https://mise.jdx.dev) is required, not optional:
 it is how `biome` is resolved, and `biome` lays out every emitted page.
 A build without it writes nothing.
+`biome` itself needs no step of its own: the first build installs it.
 The version is pinned in `mise.toml` and nowhere else,
 because the emitted HTML is committed
 and a formatter that changed its mind between versions
