@@ -63,7 +63,7 @@ def biome() -> str:
     `mise` re-reads the pin every time it is asked.
     """
     try:
-        result = subprocess.run(  # noqa: S603
+        result = subprocess.run(
             ["mise", "which", "biome"],
             cwd=ROOT,
             capture_output=True,
@@ -106,7 +106,7 @@ def tree(root: Path) -> None:
     runs more than once over one page.
     """
     for _ in range(PASSES):
-        result = subprocess.run(  # noqa: S603
+        result = subprocess.run(
             [biome(), "format", "--write", *FLAGS, str(root)],
             cwd=ROOT,
             capture_output=True,
@@ -121,7 +121,7 @@ def tree(root: Path) -> None:
             break
     else:
         raise RuntimeError(f"biome format did not settle under {root} in {PASSES} passes")
-    result = subprocess.run(  # noqa: S603
+    result = subprocess.run(
         [biome(), "lint", "--error-on-warnings", str(root)],
         cwd=ROOT,
         capture_output=True,

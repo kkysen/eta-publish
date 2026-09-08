@@ -336,7 +336,7 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
             label = report.name or report.url
             try:
                 doc, path = building.result()
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 # Broad on purpose: a fetch, parse, disagreement, or disk failure
                 # is the same decision here,
                 # which is to keep going and say which report did not make it.
