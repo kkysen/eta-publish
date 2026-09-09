@@ -106,7 +106,7 @@
               "endIndex": 44,
               "startIndex": 32,
               "textRun": {
-                "content": ": published\n",
+                "content": ": Published\n",
                 "textStyle": {}
               }
             }
@@ -14445,7 +14445,7 @@
       }
     }
   },
-  "modifiedTime": "2026-09-09T01:46:02.956Z",
+  "modifiedTime": "2026-09-09T02:16:00.129Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [
