@@ -59,7 +59,7 @@ def test_a_warning_off_a_terminal_is_one_line() -> None:
 
 def test_a_warning_off_a_terminal_has_no_escape_sequences() -> None:
     """Redirected output is a file, and colour in a file is noise to search past."""
-    assert "\x1b" not in rendered(log.built("A report", [WARNING], plain()), plain())
+    assert "\x1b" not in rendered(log.built("A report", "reports/a", [WARNING], plain()), plain())
 
 
 def test_the_shown_values_keep_their_backticks_where_there_is_no_colour() -> None:
@@ -121,12 +121,15 @@ def test_a_failure_says_its_reason_where_it_says_the_name() -> None:
 
 
 def test_a_report_that_built_is_counted_by_its_warnings() -> None:
-    written = rendered(log.built("A report", [WARNING, WARNING], plain()), plain())
-    assert written.startswith("✓ A report  2 warnings")
+    written = rendered(log.built("A report", "reports/a", [WARNING, WARNING], plain()), plain())
+    assert written.startswith("✓ reports/a · A report · 2 warnings")
 
 
 def test_a_report_with_nothing_to_fix_says_nothing_about_warnings() -> None:
-    assert rendered(log.built("A report", [], plain()), plain()) == "✓ A report\n"
+    assert (
+        rendered(log.built("A report", "reports/a", [], plain()), plain())
+        == "✓ reports/a · A report\n"
+    )
 
 
 @pytest.mark.parametrize(
@@ -145,26 +148,6 @@ def test_the_summary_counts_only_what_is_there(
     assert rendered(log.summary(built, failed, warnings), plain()) == f"{expected}\n"
 
 
-def test_nothing_built_prints_no_table_of_paths() -> None:
-    """A heading over an empty list is a line saying nothing happened, twice."""
-    assert log.paths([]) is None
-
-
-def test_the_paths_line_up_under_each_other() -> None:
-    """The column that is scanned is the path, and a ragged one is scanned
-    by reading every title beside it."""
-    lines = rendered(log.paths([("reports/a-long-one", "A"), ("briefs/b", "B")]), plain())
-    first, second = lines.splitlines()
-    assert first.index("A") == second.index("B")
-
-
-def test_a_title_is_a_title_and_not_markup() -> None:
-    """`rich` reads square brackets as styles and colons as emoji,
-    and a document is named by whoever named it rather than by this."""
-    written = rendered(log.paths([("reports/x", "A [bold]Draft[/] :construction:")]), plain())
-    assert "[bold]Draft[/] :construction:" in written
-
-
 def test_a_note_is_marked_apart_from_a_warning() -> None:
     """A missing `typst` is not something to go and fix in a document,
     and a reader scanning for what needs attention should be able to tell."""
@@ -179,3 +162,17 @@ def test_what_was_added_is_read_back() -> None:
         log.added(Path("reports.toml"), "IBX Automation", "Draft 2", plain()), plain()
     )
     assert written == "✓ reports.toml: added `IBX Automation`, tab `Draft 2`\n"
+
+
+def test_a_heading_holds_its_fields_apart_without_colour() -> None:
+    """Piped into a file there is no colour saying where one field stops,
+    and three fields with two spaces between them are one field."""
+    written = rendered(log.built("A report", "reports/a", [WARNING], plain()), plain())
+    assert written.splitlines()[0] == "✓ reports/a · A report · 1 warning"
+
+
+def test_a_title_is_a_title_and_not_markup() -> None:
+    """`rich` reads square brackets as styles and colons as emoji,
+    and a document is named by whoever named it rather than by this."""
+    written = rendered(log.built("A [bold]Draft[/] :construction:", "b/x", [], plain()), plain())
+    assert "A [bold]Draft[/] :construction:" in written

@@ -357,7 +357,7 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
                 console.write(console.failed(label, str(e)), log)
                 site.failed.append(Failed(report=report, error=str(e)))
                 continue
-            console.write(console.built(label, doc.warnings, log), log)
+            console.write(console.built(label, path, doc.warnings, log), log)
             site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
