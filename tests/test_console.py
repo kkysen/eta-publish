@@ -1,0 +1,164 @@
+"""What the log looks like, on a terminal and off one.
+
+Two audiences and two answers.
+On a terminal a build is being watched by somebody who is going to go and fix
+what it names, and the layout is for reading.
+Off one it is a file about to be searched, and the layout is one warning per
+line with nothing in it that is not a word.
+"""
+
+import io
+import re
+
+import pytest
+from rich.console import Console, RenderableType
+
+from eta_publish import console as log
+from eta_publish.nodes import Cut, Listed, Notice, Quoted, Shown
+
+WARNING = Notice(
+    (
+        "the ",
+        Shown("Header"),
+        " section has no ",
+        Shown("Short:"),
+        " line",
+    )
+)
+
+
+def rendered(renderable: RenderableType | None, console: Console) -> str:
+    """What that console was given to write."""
+    log.write(renderable, console)
+    file = console.file
+    assert isinstance(file, io.StringIO)
+    return file.getvalue()
+
+
+def _visible(line: str) -> str:
+    """`line` with the colour taken back out, for asserting about its words."""
+    return re.sub(r"\x1b\[[0-9;]*m", "", line)
+
+
+def plain() -> Console:
+    """A console writing where nothing is watching, at the width one gets."""
+    return Console(file=io.StringIO(), highlight=False, width=log.UNWRAPPED)
+
+
+def terminal(width: int = 60) -> Console:
+    """A console that believes it is a terminal, narrow enough to have to wrap."""
+    return Console(file=io.StringIO(), highlight=False, force_terminal=True, width=width)
+
+
+def test_a_warning_off_a_terminal_is_one_line() -> None:
+    """A log is read with `rg`, and half a warning does not match a search for it."""
+    written = rendered(log.notice(WARNING, plain()), plain())
+    assert written == "  ! the `Header` section has no `Short:` line\n"
+
+
+def test_a_warning_off_a_terminal_has_no_escape_sequences() -> None:
+    """Redirected output is a file, and colour in a file is noise to search past."""
+    assert "\x1b" not in rendered(log.built("A report", [WARNING], plain()), plain())
+
+
+def test_the_shown_values_keep_their_backticks_where_there_is_no_colour() -> None:
+    """Colour is what says where a value starts and stops, and it is the only thing:
+    without it the backticks are, so they stay."""
+    assert "`Short:`" in rendered(log.notice(WARNING, plain()), plain())
+
+
+def test_the_shown_values_are_coloured_rather_than_quoted_on_a_terminal() -> None:
+    """Both at once is one mark too many for a value already picked out in cyan."""
+    console = terminal()
+    written = rendered(log.notice(WARNING, console), console)
+    assert "`" not in written
+    assert "\x1b" in written
+
+
+def test_a_warning_too_long_for_the_terminal_hangs_under_itself() -> None:
+    """The continuation is indented past the `!`, so a warning that takes three
+    lines still reads as one warning rather than as three."""
+    console = terminal(40)
+    long = Notice(("a warning long enough that it cannot fit on one line at all",))
+    lines = rendered(log.notice(long, console), console).splitlines()
+    assert len(lines) > 1
+    assert _visible(lines[0]).startswith("  ! a warning")
+    assert _visible(lines[1]).startswith("    ")
+
+
+def test_what_a_warning_sets_apart_is_indented_under_it() -> None:
+    """A list of seventeen images at the left margin reads as seventeen warnings."""
+    listed = Notice(("unnamed images:", Listed((Shown("img-1"),), (Shown("img-2"),))))
+    lines = rendered(log.notice(listed, plain()), plain()).splitlines()
+    assert lines == [
+        "  ! unnamed images:",
+        "      • `img-1`",
+        "      • `img-2`",
+    ]
+
+
+def test_a_quoted_value_is_given_its_own_lines() -> None:
+    """Long enough to run into the sentence, which is why it was set apart."""
+    quoted = Notice(("too long:", Quoted("kept ", Cut("cut"))))
+    lines = rendered(log.notice(quoted, plain()), plain()).splitlines()
+    assert lines == ["  ! too long:", "      kept ~~cut~~"]
+
+
+def test_the_cut_part_keeps_its_marks_on_a_terminal_too() -> None:
+    """Struck-through text is not drawn by every terminal,
+    and a warning about where a sentence stops cannot rely on one that does."""
+    console = terminal(200)
+    quoted = Notice(("too long:", Quoted("kept ", Cut("cut"))))
+    assert "~~cut~~" in _visible(rendered(log.notice(quoted, console), console))
+
+
+def test_a_failure_says_its_reason_where_it_says_the_name() -> None:
+    """One failure named twice, once with the reason and once without,
+    is the same failure read twice."""
+    written = rendered(log.failed("A report", "the tab is named ``"), plain())
+    assert written.splitlines() == ["✗ A report", "  the tab is named ``"]
+
+
+def test_a_report_that_built_is_counted_by_its_warnings() -> None:
+    written = rendered(log.built("A report", [WARNING, WARNING], plain()), plain())
+    assert written.startswith("✓ A report  2 warnings")
+
+
+def test_a_report_with_nothing_to_fix_says_nothing_about_warnings() -> None:
+    assert rendered(log.built("A report", [], plain()), plain()) == "✓ A report\n"
+
+
+@pytest.mark.parametrize(
+    ("built", "failed", "warnings", "expected"),
+    [
+        (3, 0, 27, "3 built · 27 warnings"),
+        (3, 0, 0, "3 built"),
+        (2, 1, 1, "2 built · 1 warning · 1 failed"),
+    ],
+)
+def test_the_summary_counts_only_what_is_there(
+    built: int, failed: int, warnings: int, expected: str
+) -> None:
+    """`0 failed` after every successful build teaches people to skip the line
+    that says a build failed."""
+    assert rendered(log.summary(built, failed, warnings), plain()) == f"{expected}\n"
+
+
+def test_nothing_built_prints_no_table_of_paths() -> None:
+    """A heading over an empty list is a line saying nothing happened, twice."""
+    assert log.paths([]) is None
+
+
+def test_the_paths_line_up_under_each_other() -> None:
+    """The column that is scanned is the path, and a ragged one is scanned
+    by reading every title beside it."""
+    lines = rendered(log.paths([("reports/a-long-one", "A"), ("briefs/b", "B")]), plain())
+    first, second = lines.splitlines()
+    assert first.index("A") == second.index("B")
+
+
+def test_a_title_is_a_title_and_not_markup() -> None:
+    """`rich` reads square brackets as styles and colons as emoji,
+    and a document is named by whoever named it rather than by this."""
+    written = rendered(log.paths([("reports/x", "A [bold]Draft[/] :construction:")]), plain())
+    assert "[bold]Draft[/] :construction:" in written

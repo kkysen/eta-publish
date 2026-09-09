@@ -15,7 +15,6 @@ the others are still built and the exit status still reports it.
 """
 
 import json
-import sys
 import tomllib
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -25,6 +24,7 @@ from pathlib import Path, PurePosixPath
 import htpy
 from markupsafe import Markup
 
+from . import console
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one, has_its_images
 from .emit.html import Piece, lines, markup, phase_markup, tag
@@ -332,6 +332,7 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
     # the document behind it has not been edited since it was written.
     saved = saved_responses(outdir)
     site = Site()
+    log = console.for_stream()
 
     def build(report: Report) -> tuple[Document, str]:
         previous = saved_for(report, saved)
@@ -353,12 +354,10 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
                 # Broad on purpose: a fetch, parse, disagreement, or disk failure
                 # is the same decision here,
                 # which is to keep going and say which report did not make it.
-                print(f"failed: {label}: {e}", file=sys.stderr)
+                console.write(console.failed(label, str(e)), log)
                 site.failed.append(Failed(report=report, error=str(e)))
                 continue
-            print(f"built {label}", file=sys.stderr)
-            for warning in doc.warnings:
-                print(f"  warning: {warning}", file=sys.stderr)
+            console.write(console.built(label, doc.warnings, log), log)
             site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
