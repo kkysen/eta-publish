@@ -116,7 +116,7 @@ def tree(root: Path) -> None:
             # line has to wrap mid-tag; the page is correct, and the page is
             # what publishes.
             "--html-formatter-whitespace-sensitivity=strict",
-            str(root),
+            root,
         ],
         cwd=ROOT,
         capture_output=True,
@@ -126,7 +126,7 @@ def tree(root: Path) -> None:
     if result.returncode != 0:
         raise RuntimeError(f"biome format failed:\n{result.stderr.strip()}")
     result = subprocess.run(
-        [biome(), "lint", "--error-on-warnings", str(root)],
+        [biome(), "lint", "--error-on-warnings", root],
         cwd=ROOT,
         capture_output=True,
         text=True,
