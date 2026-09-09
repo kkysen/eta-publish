@@ -35,9 +35,17 @@ def download(
 ) -> dict[str, Path]:
     """Fetch every image in `doc`, returning object id to written path.
 
-    Images already on disk are left alone.
-    The filename depends only on the Docs object id,
-    so a re-run after an unrelated edit re-downloads nothing.
+    An image with a URI is always fetched, never taken from disk.
+    Nothing available says whether the file already there is still the picture
+    the document holds: the Docs object id survives a replacement unchanged,
+    the `ETag` is the constant `"v0"` for every image, there is no
+    `Last-Modified`, and a blob inside a document is not a Drive file and so
+    has no checksum to ask for. The bytes are the only authority there is,
+    and having them means fetching them.
+
+    A file on disk is used only where there is no URI to check it against,
+    which is a build from a saved response: those expire and are not saved.
+
     """
     outdir.mkdir(parents=True, exist_ok=True)
     http = session or requests.Session()
@@ -52,22 +60,74 @@ def download(
     # downloads nothing and wants nothing.
     missing: list[str] = []
 
+    # Why every image with a URI is fetched again, every time, and never
+    # taken from the copy already on disk.
+    #
+    # There is no way to ask whether the picture changed. Not one of the
+    # things that usually answers this answers it here, and each fails in a
+    # way that looks like it works:
+    #
+    # The Docs object id does not change. `kix.2b6311sni148` was replaced
+    # with an entirely different picture, 219589 bytes becoming 382683, and
+    # came back under the same id, with no id added or removed anywhere in
+    # the document. The id names a slot in the document, not what is in it.
+    #
+    # The `ETag` is the literal string `"v0"` for every image in the
+    # document, so a conditional request is worse than none: asking for one
+    # image with a different image's `ETag` returns `304 Not Modified` and an
+    # empty body. `If-None-Match` here would report "unchanged" for a picture
+    # that had been replaced.
+    #
+    # There is no `Last-Modified`, no `Content-MD5`, no `Digest`, and no
+    # `x-goog-hash`. The only content-derived header is `Content-Length`,
+    # which a `HEAD` will give without the body, and which a same-sized
+    # replacement slips straight past.
+    #
+    # `Cache-Control: private, max-age=86400` is not permission to keep the
+    # file for a day. It describes how long a cache may reuse a response it
+    # already holds, which is a different question from whether the picture
+    # is still the picture, and a different question again from how long the
+    # URL keeps working: Google documents `contentUri` as having a default
+    # lifetime of 30 minutes.
+    #
+    # Drive has all of this, and cannot help. `files.get` gives
+    # `md5Checksum`, `sha1Checksum`, `sha256Checksum` and `modifiedTime` for
+    # a file in Drive. An image pasted into a document is not a file in
+    # Drive: it is a blob inside the document, with no id to ask about. The
+    # document itself is a native Google file and has no checksums either.
+    # `_fetch_vector` is the exception that proves it, because a linked chart
+    # really is a Drive file.
+    #
+    # What Google offers instead is a content-addressed URL: the `AD_4nX...`
+    # in a `contentUri` is stable across fetches of an unchanged image, which
+    # is why the `ETag` can afford to be a constant. Whether it changes when
+    # the bytes change is untested, and until it is tested it is not something
+    # to skip a download on.
+    #
+    # So the bytes are the only authority, and having them means fetching
+    # them. A file on disk is used only where there is no URI to check it
+    # against, which is a build from a saved response, because a `contentUri`
+    # is never saved.
+    wanted: list[Image] = []
     for image in doc.images:
         if image.vector is not None and _fetch_vector(image, outdir, doc, written):
             continue
-
-        existing = next(iter(outdir.glob(f"{image.filename}.*")), None)
-        if existing is not None:
-            written[image.object_id] = existing
-            doc.image_files[image.object_id] = existing.name
+        if image.source_uri:
+            wanted.append(image)
             continue
-        if not image.source_uri:
+        existing = next(iter(outdir.glob(f"{image.filename}.*")), None)
+        if existing is None:
             missing.append(image.object_id)
             continue
+        written[image.object_id] = existing
+        doc.image_files[image.object_id] = existing.name
 
+    for image in wanted:
+        assert image.source_uri is not None
         response = http.get(image.source_uri, timeout=60)
         response.raise_for_status()
         content_type = response.headers.get("content-type", "").split(";")[0].strip()
+        body = response.content
         extension = EXTENSIONS.get(content_type)
         if extension is None:
             # Refused rather than saved under a bare stem.
@@ -79,9 +139,8 @@ def download(
                 f"which is not an image type this knows how to name; "
                 f"expected one of {', '.join(sorted(EXTENSIONS))}"
             )
-
         dest = outdir / f"{image.filename}{extension}"
-        dest.write_bytes(crop_to(image, response.content, doc))
+        dest.write_bytes(crop_to(image, body, doc))
         written[image.object_id] = dest
         doc.image_files[image.object_id] = dest.name
 
