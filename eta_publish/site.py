@@ -26,7 +26,7 @@ import htpy
 from markupsafe import Markup
 
 from .assets import read
-from .build import DOC_JSON, BuildOptions, build_one
+from .build import DOC_JSON, BuildOptions, build_one, has_its_images
 from .emit.html import Piece, lines, markup, tag
 from .nodes import Document
 
@@ -190,6 +190,30 @@ def saved_for(report: Report, saved: dict[tuple[str, str], Path]) -> Path | None
     return saved.get((doc_id, tab or ""))
 
 
+def reusable(previous: Path | None, options: BuildOptions) -> Path | None:
+    """The response a fetch may reuse, which is not every response there is.
+
+    Drive answering that the document has not been edited is not enough on its own.
+    The response is committed and the images it describes are not,
+    so a fresh checkout has one describing pictures that are not beside it,
+    and a `contentUri` expires within the hour and is never saved.
+    Reused there, the build downloads nothing,
+    the emitters have no filename to write,
+    and the page publishes with every image missing.
+    Fetching the document again is what turns up the URIs to download from,
+    and it is only the cost of the build that a fresh checkout is doing anyway.
+
+    A `--no-images` build reuses it regardless:
+    it is not going to download them either way,
+    and the pictures on disk are not what it is asking about.
+    """
+    if previous is None:
+        return None
+    if options.images and not has_its_images(previous):
+        return None
+    return previous / DOC_JSON
+
+
 def report_path(doc: Document) -> str:
     """Where this report goes on the site, from its own front matter.
 
@@ -316,7 +340,7 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
             outdir,
             options,
             verify=verifier(report),
-            cached=previous / DOC_JSON if previous is not None else None,
+            cached=reusable(previous, options),
         )
 
     with ThreadPoolExecutor(max_workers=max(1, min(len(reports), MAX_AT_ONCE))) as pool:

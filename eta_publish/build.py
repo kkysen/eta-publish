@@ -178,6 +178,28 @@ def _pixel_size(path: Path) -> dict[str, int]:
         return {}
 
 
+def has_its_images(dest: Path) -> bool:
+    """Whether the last build's image files are still beside its response.
+
+    The images are not committed and the response is,
+    so a fresh checkout has a saved response describing pictures that are not there.
+    Reusing that response is what makes the build write a page with no images in it:
+    a saved `contentUri` expires within the hour and so is never saved,
+    which leaves the download nothing to fetch from
+    and the emitters no filename to write.
+
+    Asked of `images.json` rather than of the directory,
+    because only the index says which files a complete build wrote.
+    An index that is missing or unreadable is not evidence that anything is gone,
+    so it reads as present and the build goes on to answer the question itself.
+    """
+    try:
+        recorded = json.loads((dest / IMAGES_JSON).read_text())
+    except OSError, ValueError:
+        return True
+    return all((dest / IMAGE_DIR / entry["file"]).exists() for entry in recorded.values())
+
+
 def read_image_shapes(dest: Path, doc: Document) -> None:
     """Tell `doc` how large the last build's images turned out to be.
 
