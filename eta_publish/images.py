@@ -15,6 +15,8 @@ The PDF needs these same files,
 so one download serves both the web and the print output.
 """
 
+from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import requests
@@ -28,6 +30,16 @@ EXTENSIONS = {
     "image/webp": ".webp",
     "image/svg+xml": ".svg",
 }
+
+
+MAX_AT_ONCE = 8
+"""How many images to fetch at once.
+
+The transfer is the whole cost: 16 MB over 29 requests,
+none of which is waiting on any other.
+Bounded rather than unbounded because `build_site` is already
+running reports concurrently, and the two multiply.
+"""
 
 
 def download(
@@ -46,6 +58,9 @@ def download(
     A file on disk is used only where there is no URI to check it against,
     which is a build from a saved response: those expire and are not saved.
 
+    The fetches run together and the writes do not.
+    A warning is part of the published page, so the order they are raised in
+    has to be the order the document is in, whatever order the network answers.
     """
     outdir.mkdir(parents=True, exist_ok=True)
     http = session or requests.Session()
@@ -108,12 +123,14 @@ def download(
     # them. A file on disk is used only where there is no URI to check it
     # against, which is a build from a saved response, because a `contentUri`
     # is never saved.
-    wanted: list[Image] = []
+    wanted: list[tuple[Image, str]] = []
     for image in doc.images:
         if image.vector is not None and _fetch_vector(image, outdir, doc, written):
             continue
         if image.source_uri:
-            wanted.append(image)
+            # Carried along rather than read again where it is used:
+            # only here is it known not to be `None`.
+            wanted.append((image, image.source_uri))
             continue
         existing = next(iter(outdir.glob(f"{image.filename}.*")), None)
         if existing is None:
@@ -122,12 +139,7 @@ def download(
         written[image.object_id] = existing
         doc.image_files[image.object_id] = existing.name
 
-    for image in wanted:
-        assert image.source_uri is not None
-        response = http.get(image.source_uri, timeout=60)
-        response.raise_for_status()
-        content_type = response.headers.get("content-type", "").split(";")[0].strip()
-        body = response.content
+    for image, content_type, body in _fetch_all(wanted, http):
         extension = EXTENSIONS.get(content_type)
         if extension is None:
             # Refused rather than saved under a bare stem.
@@ -155,6 +167,35 @@ def download(
                 doc.warn("image {} has no source URI; not downloaded", Shown(object_id))
 
     return written
+
+
+def _fetch_all(
+    wanted: list[tuple[Image, str]], http: requests.Session
+) -> Iterator[tuple[Image, str, bytes]]:
+    """Each image with what came back for it, in the order `wanted` is in.
+
+    The requests overlap; what is yielded does not.
+    A failure is raised as the document reaches it rather than as it happens,
+    so which image is blamed does not depend on which answered first.
+    """
+    if not wanted:
+        return
+    with ThreadPoolExecutor(max_workers=min(len(wanted), MAX_AT_ONCE)) as pool:
+        started = [(image, pool.submit(_fetch_one, uri, http)) for image, uri in wanted]
+        for image, fetching in started:
+            content_type, body = fetching.result()
+            yield image, content_type, body
+
+
+def _fetch_one(uri: str, http: requests.Session) -> tuple[str, bytes]:
+    """One image's content type and bytes, as the server gave them.
+
+    The content type is read here rather than guessed from the source line:
+    a Docs `inlineObject` says nothing about what kind of file it is.
+    """
+    response = http.get(uri, timeout=60)
+    response.raise_for_status()
+    return response.headers.get("content-type", "").split(";")[0].strip(), response.content
 
 
 def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, Path]) -> bool:
