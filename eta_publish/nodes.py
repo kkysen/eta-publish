@@ -395,7 +395,7 @@ class Document:
     which is the record the last build left of exactly this.
     Empty only where neither has anything to say,
     where `image_href` falls back to the raster's name without an extension
-    and `check_images_written` refuses the build that would publish it.
+    and `check_images_named` refuses the build that meant to know better.
     """
 
     image_shapes: dict[str, tuple[int, int]] = field(default_factory=dict)

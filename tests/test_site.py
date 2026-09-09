@@ -16,7 +16,7 @@ from paths import FIXTURE_DIR
 from eta_publish.build import (
     IMAGES_JSON,
     BuildOptions,
-    check_images_written,
+    check_images_named,
     read_image_index,
     write_image_index,
 )
@@ -530,14 +530,20 @@ def test_a_download_that_turned_up_nothing_does_not_erase_the_index(tmp_path: Pa
     assert json.loads((previous / IMAGES_JSON).read_text()) == recorded
 
 
-def test_a_page_is_refused_if_it_links_pictures_that_were_not_written(
-    tmp_path: Path, doc: Document
-) -> None:
-    """A missing image surfaced as a `typst` warning and a diff against the
+def test_a_page_is_refused_if_it_cannot_name_the_pictures_it_links(doc: Document) -> None:
+    """An unnamed image surfaced as a `typst` warning and a diff against the
     committed site, which says a rebuild disagrees with what was published
-    rather than that this build has holes in it."""
-    with pytest.raises(ValueError, match="images were not written"):
-        check_images_written(tmp_path, doc)
+    rather than that this build cannot name half its pictures."""
+    with pytest.raises(ValueError, match="have no filename"):
+        check_images_named(doc)
+
+
+def test_a_named_picture_is_not_asked_to_be_on_disk(doc: Document) -> None:
+    """The file being there is a different question:
+    a build that wants no images has no `images` directory,
+    and the paths it writes are the right paths to files it did not fetch."""
+    doc.image_files = {image.object_id: f"{image.filename}.jpg" for image in doc.images}
+    check_images_named(doc)
 
 
 def test_a_build_that_downloaded_nothing_reads_the_filenames_back(tmp_path: Path) -> None:
