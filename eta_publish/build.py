@@ -141,7 +141,16 @@ def write_image_index(dest: Path, written: dict[str, Path]) -> None:
     Only written when images were downloaded:
     a `--no-images` build knows nothing about them
     and must not replace what a real build recorded.
+
+    A download that turned up nothing is the same thing arrived at differently,
+    and is why an empty result is refused rather than written.
+    The caller only asks when the document has images,
+    so nothing to record means none of them could be fetched,
+    and recording that would erase the one file
+    that says which pictures a complete build wrote.
     """
+    if not written and (dest / IMAGES_JSON).exists():
+        return
     index = {
         object_id: {
             "file": path.name,
