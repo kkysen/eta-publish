@@ -105,13 +105,15 @@
     dir: ttb,
     block(width: 100%)[
       #set align(left)
+      // Filled rather than outlined, and labelled: this says the report is a
+      // draft, and a reader who misses it reads a draft as published.
       #if phase != "" [
         #block(
-          stroke: 0.6pt,
+          fill: rgb("#c0202a"),
           radius: 2pt,
-          inset: (x: 5pt, y: 3pt),
-          below: 0.8em,
-          text(size: 8pt, weight: "bold", tracking: 0.08em)[#upper(phase)],
+          inset: (x: 7pt, y: 5pt),
+          below: 0.9em,
+          text(size: 13pt, weight: "bold", fill: white)[Phase: #phase],
         )
       ]
       #text(size: 21pt, weight: "bold")[#title]

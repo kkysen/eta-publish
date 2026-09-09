@@ -110,8 +110,8 @@ class MarkdownEmitter(Emitter):
     @override
     def document(self, doc: Document) -> str:
         parts = [
-            self.title(doc),
             self.phase(doc),
+            self.title(doc),
             self.dateline(doc),
             self.warnings(doc),
             self.blocks([doc.hero] if doc.hero is not None else []),
@@ -134,8 +134,12 @@ class MarkdownEmitter(Emitter):
         return f"{heading}\n\n{escape(short)}" if short else heading
 
     def phase(self, doc: Document) -> str:
-        """Bold, because the archive has no styling to give it and it is a warning."""
-        return f"**{escape(doc.phase)}**" if doc.phase else ""
+        """Bold, because the archive has no styling to give it and it is a warning.
+
+        Ahead of the headline, and labelled, because a bare state on its own line
+        reads as part of the report rather than as a note about it.
+        """
+        return f"**Phase: {escape(doc.phase)}**" if doc.phase else ""
 
     def warnings(self, doc: Document) -> str:
         """The build's notes about this report, above it and below the dateline.

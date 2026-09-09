@@ -135,18 +135,20 @@
   border-left: 2px solid currentColor;
   opacity: 0.8;
 }
-/* Bordered rather than coloured: the page is read on a site whose palette
-   this does not know, and a rule in the current text colour is legible
-   whatever that turns out to be. */
-.eta-report .phase {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* Coloured, unlike everything else here, and the loudest thing on the page:
+   this says the report is a draft, and a reader who misses it reads a draft as
+   published. Not uppercased, so it reads as the sentence it is.
+   Unscoped, because the page writes it above the headline,
+   which is outside `.eta-report`. */
+.phase {
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
   font-weight: bold;
-  border: 1px solid currentColor;
+  color: #fff;
+  background: #c0202a;
   border-radius: 0.2em;
   display: inline-block;
-  padding: 0.15em 0.5em;
+  padding: 0.3em 0.7em;
   margin: 0 0 1em;
 }
 .eta-report .toc {
