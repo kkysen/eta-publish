@@ -13,7 +13,13 @@ from pathlib import Path
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.build import IMAGES_JSON, BuildOptions, check_images_written, write_image_index
+from eta_publish.build import (
+    IMAGES_JSON,
+    BuildOptions,
+    check_images_written,
+    read_image_index,
+    write_image_index,
+)
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.site import (
@@ -532,3 +538,25 @@ def test_a_page_is_refused_if_it_links_pictures_that_were_not_written(
     rather than that this build has holes in it."""
     with pytest.raises(ValueError, match="images were not written"):
         check_images_written(tmp_path, doc)
+
+
+def test_a_build_that_downloaded_nothing_reads_the_filenames_back(tmp_path: Path) -> None:
+    """`images.json` is committed and the images are not,
+    so it is the only thing that says what each picture was written as.
+    Without it the page links every one of them by a stem with no extension."""
+    (tmp_path / IMAGES_JSON).write_text(
+        json.dumps({"kix.1": {"file": "img-a.jpg", "width": 10, "height": 5}})
+    )
+    doc = Document()
+    read_image_index(tmp_path, doc)
+    assert doc.image_files == {"kix.1": "img-a.jpg"}
+    assert doc.image_shapes == {"kix.1": (10, 5)}
+
+
+def test_what_this_build_downloaded_beats_what_the_last_one_recorded(tmp_path: Path) -> None:
+    """They differ where a content type or a vector fallback changed,
+    and there the file on disk is the one being published."""
+    (tmp_path / IMAGES_JSON).write_text(json.dumps({"kix.1": {"file": "img-a.jpg"}}))
+    doc = Document(image_files={"kix.1": "img-a.svg"})
+    read_image_index(tmp_path, doc)
+    assert doc.image_files == {"kix.1": "img-a.svg"}
