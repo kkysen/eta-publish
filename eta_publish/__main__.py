@@ -15,7 +15,6 @@ so the common case and the real case stay on the same code.
 Each report lands under the path its own front matter gives it.
 """
 
-import sys
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -207,8 +206,12 @@ def add(
         # `TabNotFound` carries the list of tabs to pick from, which is the
         # answer to a URL pasted without its `?tab=` id.
         raise BadParameter(str(e), param_hint="URL") from e
-    out = console.for_stream(sys.stdout)
-    console.write(console.added(reports, added.name or "", added.tab or "", out), out)
+    # On stderr, like everything else these commands say.
+    # What `add` produces is the line it wrote into `reports.toml`;
+    # saying that it wrote it is commentary on having done so,
+    # and stdout is left for something a caller would want to read.
+    log = console.for_stream()
+    console.write(console.added(reports, added.name or "", added.tab or "", log), log)
 
 
 def main() -> None:

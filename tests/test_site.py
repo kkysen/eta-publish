@@ -590,3 +590,27 @@ def test_skipping_the_download_needs_the_record_of_one(tmp_path: Path, doc: Docu
     whatever is fetched stays on disk, so that cost is paid once and never again."""
     with pytest.raises(ValueError, match="build it once with the download"):
         require_image_index(tmp_path, doc)
+
+
+def test_what_the_commands_say_is_not_on_stdout(tmp_path: Path) -> None:
+    """A build's product is the files under `site/` and `add`'s is the line it
+    wrote into `reports.toml`, so what either says about doing it is commentary,
+    the way `cargo build` narrates on stderr and leaves stdout clear.
+    Only `--help` answers a question that was asked, and only it uses stdout."""
+    from typer.testing import CliRunner
+
+    from eta_publish.__main__ import app
+
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps({**FIXTURE, "title": "IBX Automation", "tabTitle": "Live version"}))
+    path = tmp_path / "reports.toml"
+    path.write_text('[[report]]\nname = "A"\ntab = "B"\nurl = "u"\n')
+
+    result = CliRunner().invoke(app, ["add", str(saved), "-r", str(path)])
+    assert result.exit_code == 0
+    assert result.stdout == ""
+    assert "added `IBX Automation`, tab `Live version`" in result.stderr
+
+    result = CliRunner().invoke(app, ["--help"])
+    assert result.exit_code == 0
+    assert "eta-publish" in result.stdout
