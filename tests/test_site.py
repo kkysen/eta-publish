@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.build import BuildOptions
+from eta_publish.build import IMAGES_JSON, BuildOptions, write_image_index
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.site import (
@@ -26,6 +26,7 @@ from eta_publish.site import (
     index_page,
     load_reports,
     report_path,
+    reusable,
     saved_responses,
 )
 
@@ -484,3 +485,40 @@ def test_a_url_that_climbs_out_of_the_site_is_refused(doc: Document) -> None:
     doc.meta["url"] = "/../../../../tmp/pwned"
     with pytest.raises(ValueError, match="climbs out of the site"):
         report_path(doc)
+
+
+def _report_dir(tmp_path: Path, recorded: dict[str, dict[str, str]]) -> Path:
+    previous = tmp_path / "reports" / "x"
+    (previous / "images").mkdir(parents=True)
+    (previous / IMAGES_JSON).write_text(json.dumps(recorded))
+    return previous
+
+
+def test_a_response_whose_images_are_gone_is_not_reused(tmp_path: Path) -> None:
+    """The response is committed and the images are not,
+    so a fresh checkout has one describing pictures that are not beside it.
+    Reused there, the build downloads nothing and publishes a page with no images."""
+    previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
+    assert reusable(previous, BuildOptions()) is None
+
+
+def test_a_response_whose_images_are_there_is_reused(tmp_path: Path) -> None:
+    previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
+    (previous / "images" / "img-a.jpg").write_bytes(b"")
+    assert reusable(previous, BuildOptions()) == previous / "doc.json"
+
+
+def test_a_build_that_wants_no_images_does_not_ask_where_they_are(tmp_path: Path) -> None:
+    """It is not going to download them either way,
+    so the pictures on disk are not what it is asking about."""
+    previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
+    assert reusable(previous, BuildOptions(images=False)) == previous / "doc.json"
+
+
+def test_a_download_that_turned_up_nothing_does_not_erase_the_index(tmp_path: Path) -> None:
+    """`images.json` is the one file that says which pictures a complete build wrote,
+    and a build that fetched none of them knows less than it did, not more."""
+    recorded = {"kix.1": {"file": "img-a.jpg", "sha256": "abc"}}
+    previous = _report_dir(tmp_path, recorded)
+    write_image_index(previous, {})
+    assert json.loads((previous / IMAGES_JSON).read_text()) == recorded
