@@ -16,8 +16,8 @@ from paths import FIXTURE_DIR
 from eta_publish.build import (
     IMAGES_JSON,
     BuildOptions,
-    check_images_named,
     read_image_index,
+    require_image_index,
     write_image_index,
 )
 from eta_publish.nodes import Document
@@ -37,6 +37,20 @@ from eta_publish.site import (
 )
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
+
+
+SLUG = "reports/digging-out-deep-hole-sas-west"
+
+
+def seed_image_index(out: Path) -> None:
+    """Give a build that skips the download the record it now requires.
+
+    A real run has one because a real run downloaded once and left it there.
+    A test that builds into an empty directory has to say so itself.
+    """
+    dest = out / SLUG
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / IMAGES_JSON).write_text((FIXTURE_DIR / IMAGES_JSON).read_text())
 
 
 @pytest.fixture
@@ -203,6 +217,7 @@ def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
         Report(url=str(broken), name="gone", tab="Draft 2"),
         Report(url=str(good), name="Digging Out of a Very Deep Hole", tab="Draft 2"),
     ]
+    seed_image_index(tmp_path / "site")
     site = build_site(reports, tmp_path / "site", BuildOptions(images=False))
     assert [f.report.name for f in site.failed] == ["gone"]
     assert [b.report.name for b in site.built] == ["Digging Out of a Very Deep Hole"]
@@ -273,6 +288,7 @@ def test_offline_builds_from_the_saved_response(tmp_path: Path) -> None:
 
     monkeypatch = pytest.MonkeyPatch()
     monkeypatch.setattr(build_module, "fetch", boom, raising=False)
+    seed_image_index(out)
     site = build_site([report], out, BuildOptions(images=False, offline=True, comments=False))
     monkeypatch.undo()
     assert [b.path for b in site.built] == ["reports/digging-out-deep-hole-sas-west"]
@@ -393,6 +409,7 @@ def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
 
     from eta_publish.__main__ import app
 
+    seed_image_index(tmp_path / "site")
     result = CliRunner().invoke(
         app, ["one", str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images"]
     )
@@ -530,12 +547,12 @@ def test_a_download_that_turned_up_nothing_does_not_erase_the_index(tmp_path: Pa
     assert json.loads((previous / IMAGES_JSON).read_text()) == recorded
 
 
-def test_a_page_is_refused_if_it_cannot_name_the_pictures_it_links(doc: Document) -> None:
-    """An unnamed image surfaced as a `typst` warning and a diff against the
-    committed site, which says a rebuild disagrees with what was published
-    rather than that this build cannot name half its pictures."""
-    with pytest.raises(ValueError, match="have no filename"):
-        check_images_named(doc)
+def test_a_picture_nothing_wrote_has_no_name_to_emit(doc: Document) -> None:
+    """The stem is not an answer: an extension is learned by fetching,
+    so `images/img-d4734d4b` is a path no browser serves as an image,
+    and a page that links one has a hole in it that nothing reports as this."""
+    with pytest.raises(ValueError, match="was never written"):
+        doc.image_href(doc.images[0])
 
 
 def test_a_named_picture_is_not_asked_to_be_on_disk(doc: Document) -> None:
@@ -543,13 +560,13 @@ def test_a_named_picture_is_not_asked_to_be_on_disk(doc: Document) -> None:
     a build that wants no images has no `images` directory,
     and the paths it writes are the right paths to files it did not fetch."""
     doc.image_files = {image.object_id: f"{image.filename}.jpg" for image in doc.images}
-    check_images_named(doc)
+    assert doc.image_href(doc.images[0]).endswith(".jpg")
 
 
-def test_a_build_that_downloaded_nothing_reads_the_filenames_back(tmp_path: Path) -> None:
-    """`images.json` is committed and the images are not,
-    so it is the only thing that says what each picture was written as.
-    Without it the page links every one of them by a stem with no extension."""
+def test_a_build_that_downloaded_nothing_reads_both_back(tmp_path: Path) -> None:
+    """Neither the filename nor the shape can be derived, and the files are not
+    committed, so `images.json` is the record of both and the only thing such a
+    build has to go on."""
     (tmp_path / IMAGES_JSON).write_text(
         json.dumps({"kix.1": {"file": "img-a.jpg", "width": 10, "height": 5}})
     )
@@ -566,3 +583,10 @@ def test_what_this_build_downloaded_beats_what_the_last_one_recorded(tmp_path: P
     doc = Document(image_files={"kix.1": "img-a.svg"})
     read_image_index(tmp_path, doc)
     assert doc.image_files == {"kix.1": "img-a.svg"}
+
+
+def test_skipping_the_download_needs_the_record_of_one(tmp_path: Path, doc: Document) -> None:
+    """Skipping is for not fetching 18 MB again, not for building in the dark:
+    whatever is fetched stays on disk, so that cost is paid once and never again."""
+    with pytest.raises(ValueError, match="build it once with the download"):
+        require_image_index(tmp_path, doc)

@@ -390,12 +390,12 @@ class Document:
     Only fetching can know it:
     a Docs `inlineObject` says nothing about what kind of file it is,
     and a vector named alongside a raster is written under a different name entirely.
-    So `images.download` fills this in as it writes each file,
-    and a build that skipped the download reads it back from `images.json`,
-    which is the record the last build left of exactly this.
-    Empty only where neither has anything to say,
-    where `image_href` falls back to the raster's name without an extension
-    and `check_images_named` refuses the build that meant to know better.
+    `images.download` fills this in as it writes each file,
+    and a build that skips the download reads it back from `images.json`,
+    which every build that downloaded left behind and which such a build requires.
+
+    An image missing from here is one nothing has ever written,
+    and `image_href` refuses to name it rather than guessing at a stem.
     """
 
     image_shapes: dict[str, tuple[int, int]] = field(default_factory=dict)
@@ -524,8 +524,23 @@ class Document:
             yield from _walk(footnote.content)
 
     def image_href(self, image: Image) -> str:
-        """The filename as emitted, once a download or the last build's index has settled it."""
-        return self.image_files.get(image.object_id, image.filename)
+        """The filename as emitted, which is the name of the file that was written.
+
+        There is no answer for an image nothing wrote.
+        The stem is not one: an extension is learned by fetching,
+        so `images/img-d4734d4b` is a path no browser serves as an image
+        and `typst` will not open at all,
+        and a page that links one is a page with a hole in it
+        that nothing downstream reports as this.
+        """
+        written = self.image_files.get(image.object_id)
+        if written is None:
+            raise ValueError(
+                f"image {image.object_id} was never written, so nothing says what it "
+                f"is called; an extension is learned by fetching, and `{image.filename}` "
+                f"without one is not a picture anything can serve"
+            )
+        return written
 
     def image_aspect(self, image: Image) -> float | None:
         """The written file's width over its height, if that was recorded."""

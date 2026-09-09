@@ -13,10 +13,13 @@ It is a corpus because it is the real thing, not the other way around.
 Each holds its emitted output beside its `doc.json`,
 so a corpus can be rebuilt from what it already contains.
 Only the image filenames need the network:
-their extensions come from fetching, which is why `images.json` records them.
+their extensions come from fetching, which is why `images.json` records them,
+and why a test that emits a page has to stand in for the download.
 """
 
 from pathlib import Path
+
+from eta_publish.nodes import Document
 
 TESTS = Path(__file__).parent
 ROOT = TESTS.parent
@@ -27,3 +30,16 @@ FIXTURE_DIR = FIXTURE / SLUG
 
 SITE = ROOT / "site"
 REAL_DIR = SITE / SLUG
+
+
+def named_images(doc: Document) -> Document:
+    """Name `doc`'s images the way a build does, and hand it back.
+
+    An extension is learned by fetching, so nothing about a parsed document
+    says what its pictures were written as, and `image_href` refuses to guess.
+    A test that emits a page is a test of the page rather than of the download,
+    so this stands in for the download and says which file each one is.
+    """
+    for image in doc.images:
+        doc.image_files.setdefault(image.object_id, f"{image.filename}.png")
+    return doc

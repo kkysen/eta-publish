@@ -200,52 +200,18 @@ def has_its_images(dest: Path) -> bool:
     return all((dest / IMAGE_DIR / entry["file"]).exists() for entry in recorded.values())
 
 
-def check_images_named(doc: Document) -> None:
-    """Refuse a build that emits a picture it cannot name.
-
-    An extension is learned by fetching, so `image_href` answers with the
-    raster's bare stem for an image that neither a download nor `images.json`
-    has settled. That reaches the page as `src="images/img-d4734d4b"`,
-    which no browser serves as an image and `typst` will not open at all.
-
-    Caught here rather than left to whatever notices it downstream.
-    It surfaced as a `typst` warning and a diff against the committed site,
-    which says a rebuild disagrees with what was published
-    and not that this build cannot name half its pictures.
-
-    The file being there is a different question and deliberately not this one:
-    a build that wants no images has no `images` directory,
-    and the paths it writes are the right paths to files it did not fetch.
-    Only a build that meant to download them is asked,
-    because only that build had a way to find out.
-    """
-    unnamed = sorted(
-        image.object_id for image in doc.images if image.object_id not in doc.image_files
-    )
-    if unnamed:
-        raise ValueError(
-            f"{len(unnamed)} of {len(doc.images)} images have no filename, "
-            f"so the page would link them by a stem with no extension on it: "
-            f"{', '.join(unnamed)}"
-        )
-
-
 def read_image_index(dest: Path, doc: Document) -> None:
     """Tell `doc` what the last build's images were written as, and how large.
 
-    Both are learned by fetching and neither can be derived:
-    a Docs `inlineObject` says nothing about what kind of file it is,
-    and Docs says how large an image is placed rather than how large it is.
-    The files are not committed and `images.json` is,
-    so this is the only record a build that skipped the download has,
-    and without it that build lays a row of figures out differently
-    from the page beside it in the repository
-    and links every picture by a stem with no extension on it.
+    Neither can be derived. A Docs `inlineObject` says nothing about what kind
+    of file it is, so `.jpg` or `.png` is learned by fetching; Docs says how
+    large an image is placed rather than how large it is, and the crop applied
+    on the way down changes the shape of the file.
 
-    What this build downloaded wins over what the last one recorded:
-    the index is the last answer, and a download is this one.
-    They differ exactly where a content type or a vector fallback changed,
-    and there the file on disk is the one being published.
+    The files are not committed and `images.json` is, which makes it the record
+    of both. A build that downloads them learns it first-hand and this changes
+    nothing; a build that skips the download has nothing else to go on, and
+    `require_image_index` is why it can count on this being here.
     """
     index = dest / IMAGES_JSON
     if not index.exists():
@@ -255,6 +221,26 @@ def read_image_index(dest: Path, doc: Document) -> None:
             doc.image_files.setdefault(object_id, entry["file"])
         if "width" in entry and "height" in entry:
             doc.image_shapes.setdefault(object_id, (entry["width"], entry["height"]))
+
+
+def require_image_index(dest: Path, doc: Document) -> None:
+    """Refuse to skip the download when nothing records what was downloaded.
+
+    Skipping is for not fetching 18 MB again, not for building in the dark.
+    Whatever is fetched stays on disk and `download` leaves it there,
+    so the cost this avoids is paid once and never again,
+    and one build that pays it leaves the `images.json` every later one reads.
+
+    Without it there is no filename and no shape, and the page that comes out
+    links every picture by a stem with no extension and lays the rows out
+    differently from the page beside it in the repository.
+    """
+    if not (dest / IMAGES_JSON).exists():
+        raise ValueError(
+            f"no {IMAGES_JSON} here, so nothing says what this report's "
+            f"{len(doc.images)} images were written as; "
+            "build it once with the download before building it without"
+        )
 
 
 def without_content_uris(document: JsonObject) -> JsonObject:
@@ -459,13 +445,14 @@ def build_one(
         json.dumps(without_content_uris(document), indent=2, sort_keys=True)
     )
 
-    if doc.images and options.images:
-        from .images import download
+    if doc.images:
+        if options.images:
+            from .images import download
 
-        write_image_index(dest, download(doc, dest / IMAGE_DIR))
+            write_image_index(dest, download(doc, dest / IMAGE_DIR))
+        else:
+            require_image_index(dest, doc)
     read_image_index(dest, doc)
-    if doc.images and options.images:
-        check_images_named(doc)
 
     # Written here rather than once per site, so that building a single
     # report produces a page with everything it links.

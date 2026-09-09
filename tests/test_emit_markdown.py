@@ -3,7 +3,7 @@
 import json
 
 import pytest
-from paths import FIXTURE_DIR
+from paths import FIXTURE_DIR, named_images
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.markdown import MarkdownEmitter
@@ -15,9 +15,7 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 @pytest.fixture
 def doc() -> Document:
-    parsed = parse(FIXTURE)
-    parsed.image_files["io.1"] = "sas-west-036.png"
-    return parsed
+    return named_images(parse(FIXTURE))
 
 
 @pytest.fixture
@@ -35,7 +33,7 @@ def with_paragraph(text: str) -> Document:
             }
         }
     )
-    return parse(doc_json)
+    return named_images(parse(doc_json))
 
 
 def test_it_opens_the_way_the_page_does(out: str) -> None:
@@ -136,7 +134,7 @@ def test_a_url_containing_parentheses_survives() -> None:
             }
         }
     )
-    out = MarkdownEmitter().emit(parse(doc_json))
+    out = MarkdownEmitter().emit(named_images(parse(doc_json)))
     assert f"[see here](<{href}>)" in out
 
 
@@ -157,7 +155,7 @@ def test_tables_render_with_a_header_row(out: str) -> None:
 def test_a_caption_is_a_line_of_its_own() -> None:
     """A bare newline is a soft break, which renders as a space:
     the picture, its caption and its credit came out as one running line."""
-    doc = parse(FIXTURE)
+    doc = named_images(parse(FIXTURE))
     doc.image_files["io.1"] = "sas-west-036.png"
     out = MarkdownEmitter().emit(doc)
     picture = next(line for line in out.splitlines() if line.startswith("!["))
