@@ -21,22 +21,6 @@ from pathlib import Path
 # whatever directory the build was started from.
 ROOT = Path(__file__).parent.parent
 
-FLAGS = (
-    # HTML formatting is off by default in this version.
-    "--html-formatter-enabled=true",
-    # As the stylesheets and the script in `assets/` are already written.
-    "--indent-style=space",
-    # Every space in the prose is one somebody typed, so none of them move.
-    #
-    # The default breaks a long line where the rendering would not notice,
-    # which is wrong for a footnote reference: `biome` 2.3.14 will break
-    # between a sentence and the `<sup>` welded to its full stop, and that
-    # newline renders as a space between the two.
-    # Under `strict` it moves nothing. The markup is uglier where a line has
-    # to wrap mid-tag; the page is correct, and the page is what publishes.
-    "--html-formatter-whitespace-sensitivity=strict",
-)
-
 
 class MiseMissing(RuntimeError):
     pass
@@ -93,8 +77,9 @@ class LintFailed(RuntimeError):
 def tree(root: Path) -> None:
     """Lay out and check everything under `root` that `biome` reads.
 
-    One run over the whole build rather than one per file. `biome` takes
-    about 40ms to start and a few milliseconds to do the work.
+    One run over the whole build rather than one per file: `biome` spends
+    about 30ms opening a workspace before it has looked at a file, and 20ms
+    laying out all of the HTML here.
     It lays out the saved API responses too, which changes how
     they are punctuated and not what they say.
 
@@ -111,7 +96,28 @@ def tree(root: Path) -> None:
     bytes as it did last time.
     """
     result = subprocess.run(
-        [biome(), "format", "--write", *FLAGS, str(root)],
+        [
+            biome(),
+            "format",
+            "--write",
+            # HTML formatting is off by default in this version.
+            "--html-formatter-enabled=true",
+            # `biome` indents with tabs; the stylesheets and the script in
+            # `assets/` are already written with spaces.
+            "--indent-style=space",
+            # Every space in the prose is one somebody typed, so none of them
+            # move.
+            #
+            # The default breaks a long line where the rendering would not
+            # notice, which is wrong for a footnote reference: `biome` 2.3.14
+            # will break between a sentence and the `<sup>` welded to its full
+            # stop, and that newline renders as a space between the two.
+            # Under `strict` it moves nothing. The markup is uglier where a
+            # line has to wrap mid-tag; the page is correct, and the page is
+            # what publishes.
+            "--html-formatter-whitespace-sensitivity=strict",
+            str(root),
+        ],
         cwd=ROOT,
         capture_output=True,
         text=True,
