@@ -1,0 +1,6169 @@
+{
+  "body": {
+    "content": [
+      {
+        "endIndex": 1,
+        "sectionBreak": {
+          "sectionStyle": {
+            "columnSeparatorStyle": "NONE",
+            "contentDirection": "LEFT_TO_RIGHT",
+            "sectionType": "CONTINUOUS"
+          }
+        }
+      },
+      {
+        "endIndex": 8,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8,
+              "startIndex": 1,
+              "textRun": {
+                "content": "Header\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.l1rogg2h47o",
+            "namedStyleType": "HEADING_2"
+          }
+        },
+        "startIndex": 1
+      },
+      {
+        "endIndex": 9,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9,
+              "startIndex": 8,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8
+      },
+      {
+        "endIndex": 36,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 24,
+              "startIndex": 9,
+              "textRun": {
+                "content": "Project Manager",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 36,
+              "startIndex": 24,
+              "textRun": {
+                "content": ": Alon Levy\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9
+      },
+      {
+        "endIndex": 55,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 42,
+              "startIndex": 36,
+              "textRun": {
+                "content": "Phase:",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 55,
+              "startIndex": 42,
+              "textRun": {
+                "content": " Compositing\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 36
+      },
+      {
+        "endIndex": 100,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 74,
+              "startIndex": 55,
+              "textRun": {
+                "content": "Discussion Channel:",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 100,
+              "startIndex": 74,
+              "textRun": {
+                "content": " #prj-noise-announcements\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 55
+      },
+      {
+        "endIndex": 125,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 109,
+              "startIndex": 100,
+              "textRun": {
+                "content": "Due Date:",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 125,
+              "startIndex": 109,
+              "textRun": {
+                "content": " End of August?\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 100
+      },
+      {
+        "endIndex": 263,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 132,
+              "startIndex": 125,
+              "textRun": {
+                "content": "Public ",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 145,
+              "startIndex": 132,
+              "textRun": {
+                "content": "Contributors:",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 215,
+              "startIndex": 145,
+              "textRun": {
+                "content": " Blair Lorenzo, Alon Levy, Madison Feinberg, Robert Hale, Khyber Sen, ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 262,
+              "startIndex": 215,
+              "textRun": {
+                "content": "Darius Jankauskas, Tim Lazaroff, Elijah Fischer",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.08627451,
+                        "green": 0.019607844
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 263,
+              "startIndex": 262,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 125
+      },
+      {
+        "endIndex": 286,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 270,
+              "startIndex": 263,
+              "textRun": {
+                "content": "Private",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 283,
+              "startIndex": 270,
+              "textRun": {
+                "content": " Contributors",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 285,
+              "startIndex": 283,
+              "textRun": {
+                "content": ": ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 286,
+              "startIndex": 285,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "bold": true,
+                  "underline": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 263
+      },
+      {
+        "endIndex": 327,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 302,
+              "startIndex": 286,
+              "textRun": {
+                "content": "Related Document",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 304,
+              "startIndex": 302,
+              "textRun": {
+                "content": ": ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 326,
+              "startIndex": 304,
+              "textRun": {
+                "content": "Potential Video Script",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://docs.google.com/document/d/1FvhTNSxwNAas2gg6EOopruVN1dvbN3s2HZoufRyBcZA/edit?tab=t.0"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 327,
+              "startIndex": 326,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 286
+      },
+      {
+        "endIndex": 354,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 330,
+              "startIndex": 327,
+              "textRun": {
+                "content": "URL",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 354,
+              "startIndex": 330,
+              "textRun": {
+                "content": ": /briefs/too-damn-loud\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 327
+      },
+      {
+        "endIndex": 911,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 359,
+              "startIndex": 354,
+              "textRun": {
+                "content": "Brief",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 541,
+              "startIndex": 359,
+              "textRun": {
+                "content": ": The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be.\u000b",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 545,
+              "startIndex": 541,
+              "textRun": {
+                "content": "Page",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 911,
+              "startIndex": 545,
+              "textRun": {
+                "content": ": The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. It's time to stop the cacophony, and let riders travel in peace.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 354
+      },
+      {
+        "endIndex": 1179,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 916,
+              "startIndex": 911,
+              "textRun": {
+                "content": "Video",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1179,
+              "startIndex": 916,
+              "textRun": {
+                "content": ": The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be for the visually impaired and for those for whom English is not a first language.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 911
+      },
+      {
+        "endIndex": 1180,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1180,
+              "startIndex": 1179,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1179
+      },
+      {
+        "endIndex": 1371,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1371,
+              "startIndex": 1180,
+              "textRun": {
+                "content": "In its new brief report, ETA outlines the best practices for transit audio design. Yes to clear, concise messages reserved for actionable information, no to unnecessary noise, PSAs, and ads.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1180
+      },
+      {
+        "endIndex": 1372,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1372,
+              "startIndex": 1371,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1371
+      },
+      {
+        "endIndex": 1446,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1446,
+              "startIndex": 1372,
+              "textRun": {
+                "content": "It's time to stop the cacophony. It's time to let riders travel in peace.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1372
+      },
+      {
+        "endIndex": 1447,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1447,
+              "startIndex": 1446,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1446
+      },
+      {
+        "endIndex": 1501,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1501,
+              "startIndex": 1447,
+              "textRun": {
+                "content": "Read more: https://www.etany.org/briefs/too-damn-loud\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1447
+      },
+      {
+        "endIndex": 1502,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1502,
+              "startIndex": 1501,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1501
+      },
+      {
+        "endIndex": 1503,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1503,
+              "startIndex": 1502,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "bold": true,
+                  "underline": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1502
+      },
+      {
+        "endIndex": 1566,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1566,
+              "startIndex": 1503,
+              "textRun": {
+                "content": "Too Damn Loud: Announcements on NYC Transit are Out of Control\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.9obbs3w7lfkv",
+            "namedStyleType": "TITLE"
+          }
+        },
+        "startIndex": 1503
+      },
+      {
+        "endIndex": 1567,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1567,
+              "startIndex": 1566,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "bold": true,
+                  "underline": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1566
+      },
+      {
+        "endIndex": 1582,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1582,
+              "startIndex": 1567,
+              "textRun": {
+                "content": "[Insert Video]\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1567
+      },
+      {
+        "endIndex": 1583,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1583,
+              "startIndex": 1582,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1582
+      },
+      {
+        "endIndex": 1586,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1584,
+              "inlineObjectElement": {
+                "inlineObjectId": "kix.djm0a1aand4k",
+                "textStyle": {}
+              },
+              "startIndex": 1583
+            },
+            {
+              "endIndex": 1585,
+              "inlineObjectElement": {
+                "inlineObjectId": "kix.ir9gl4tqd2i2",
+                "textStyle": {}
+              },
+              "startIndex": 1584
+            },
+            {
+              "endIndex": 1586,
+              "startIndex": 1585,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1583
+      },
+      {
+        "endIndex": 1587,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1587,
+              "startIndex": 1586,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1586
+      },
+      {
+        "endIndex": 1601,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1601,
+              "startIndex": 1587,
+              "textRun": {
+                "content": "Too Damn Loud\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.mad2yq43rnyn",
+            "namedStyleType": "HEADING_1"
+          }
+        },
+        "startIndex": 1587
+      },
+      {
+        "endIndex": 1655,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1655,
+              "startIndex": 1601,
+              "textRun": {
+                "content": "Transit in and around New York is just too damn loud.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1601
+      },
+      {
+        "endIndex": 1656,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1656,
+              "startIndex": 1655,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1655
+      },
+      {
+        "endIndex": 1849,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1849,
+              "startIndex": 1656,
+              "textRun": {
+                "content": "Some of this is unavoidable. Providing transit can be a noisy endeavor, and things like the squeal of a train around a tight curve or the roar of a diesel engine can be difficult to eliminate.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1656
+      },
+      {
+        "endIndex": 1850,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1850,
+              "startIndex": 1849,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1849
+      },
+      {
+        "endIndex": 2212,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2212,
+              "startIndex": 1850,
+              "textRun": {
+                "content": "But far too much of the noise that bombards New Yorkers\u2019 ears, is not the product of a loud environment, but rather a deliberate assault on riders\u2019 attention. Whether waiting on a platform or traveling on a bus or on the subway, transit riders rarely get more than a few moments of peace before being inundated in a stream of unnecessary, verbose announcements.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 1850
+      },
+      {
+        "endIndex": 2213,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2213,
+              "startIndex": 2212,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2212
+      },
+      {
+        "endIndex": 2781,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2578,
+              "startIndex": 2213,
+              "textRun": {
+                "content": "From incessant \u201cImportant reminder[s] from the NYPD\u201d about theft, to repeated \u201cIt is against New York State law to smoke on platforms and waiting areas\u201d on commuter trains to endless repetitions of \u201cNew York has more than 100 accessible stations,\u201d riders\u2019 ears are constantly assailed with messages that have little or no bearing on their travels. The MTA has even ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2617,
+              "startIndex": 2578,
+              "textRun": {
+                "content": "begun to experiment with advertisements",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 2759,
+              "startIndex": 2617,
+              "textRun": {
+                "content": " played to a captive audience over its PA systems. This cacophony has reached the point that it is noticeably degrading the riding experience,",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2778,
+              "startIndex": 2759,
+              "textRun": {
+                "content": " for no gain at all",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 2781,
+              "startIndex": 2778,
+              "textRun": {
+                "content": ". \n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2213
+      },
+      {
+        "endIndex": 2782,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 2782,
+              "startIndex": 2781,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2781
+      },
+      {
+        "endIndex": 3341,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3341,
+              "startIndex": 2782,
+              "textRun": {
+                "content": "Indeed, ETA recorded a one-way ride from 34 St-Hudson Yards to Flushing-Main St, and nearly 10 minutes out of a 40 minute ride comprised announcements. Riders should not be subjected to constant sound for 25% of their ride. On the Berlin S-Bahn, a complex branched system that must announce train numbers and destinations, the announcements\u2014all short snippets of information about the train\u2019s identity and destination or the door closing warning\u2014are 15 seconds per interstation segment, only about 12.5% of the ride, half as long as on New York City Transit.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 2782
+      },
+      {
+        "endIndex": 3342,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3342,
+              "startIndex": 3341,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3341
+      },
+      {
+        "endIndex": 3344,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3343,
+              "inlineObjectElement": {
+                "inlineObjectId": "kix.9htcorb8042p",
+                "textStyle": {}
+              },
+              "startIndex": 3342
+            },
+            {
+              "endIndex": 3344,
+              "startIndex": 3343,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3342
+      },
+      {
+        "endIndex": 3352,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3347,
+              "startIndex": 3344,
+              "textRun": {
+                "content": "PNG",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3348,
+              "startIndex": 3347,
+              "textRun": {
+                "content": " ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3351,
+              "startIndex": 3348,
+              "textRun": {
+                "content": "SVG",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 3352,
+              "startIndex": 3351,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3344
+      },
+      {
+        "endIndex": 3443,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3442,
+              "startIndex": 3352,
+              "textRun": {
+                "content": "Hands over ears icon created by Gan Khoon Lay from the Noun Project, used with permission.",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 9,
+                    "unit": "PT"
+                  }
+                }
+              }
+            },
+            {
+              "endIndex": 3443,
+              "startIndex": 3442,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 9,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3352
+      },
+      {
+        "endIndex": 3444,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3444,
+              "startIndex": 3443,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3443
+      },
+      {
+        "endIndex": 3978,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3533,
+              "startIndex": 3444,
+              "textRun": {
+                "content": "This misuse of public address systems is particularly frustrating because announcements, ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3552,
+              "startIndex": 3533,
+              "textRun": {
+                "content": "when done correctly",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3763,
+              "startIndex": 3552,
+              "textRun": {
+                "content": ", are a key part of any transit system. Announcements are critical for increasing riders\u2019 situational awareness, ensuring that they always know where they are, where they are going, what\u2019s going on around them, ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3801,
+              "startIndex": 3763,
+              "textRun": {
+                "content": "and what to do if service is disrupted",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 3978,
+              "startIndex": 3801,
+              "textRun": {
+                "content": ". Audio announcements are especially vital for visually impaired riders, who rely on their presence and their clarity to navigate the transit system with minimal visual input. \n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3444
+      },
+      {
+        "endIndex": 3979,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3979,
+              "startIndex": 3978,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3978
+      },
+      {
+        "endIndex": 4623,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4265,
+              "startIndex": 3979,
+              "textRun": {
+                "content": "This noise pollution has proliferated gradually, often one message at a time.  Slowly, by following the path of least resistance, best practices were eroded. What began as relatively clear announcements designed around riders' needs has slowly accreted more and more unnecessary pieces.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 4396,
+              "startIndex": 4265,
+              "textRun": {
+                "content": " One manager may have wanted to push a safety campaign. Another may have seen an opportunity for ad revenue. Another organization, ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 4408,
+              "startIndex": 4396,
+              "textRun": {
+                "content": "for instance",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 4623,
+              "startIndex": 4408,
+              "textRun": {
+                "content": ", the NYPD, asks to have safety announcements. Each ask is minor\u2014after all, who would complain about just one more brief message? However, over time, announcements have snowballed, burying riders in a sea of noise.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3979
+      },
+      {
+        "endIndex": 4624,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4624,
+              "startIndex": 4623,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4623
+      },
+      {
+        "endIndex": 5004,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5004,
+              "startIndex": 4624,
+              "textRun": {
+                "content": "Restoring clarity and concision in announcements is not difficult. Less important communication like public service announcements should be moved to posters and digital information boards, and even necessary announcements can be shortened. It is time for the region to create a travel environment that is not only more accessible, but respects the public\u2019s wish to ride in peace.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4624
+      },
+      {
+        "endIndex": 5037,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5037,
+              "startIndex": 5004,
+              "textRun": {
+                "content": "The Proper Role of Announcements\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.nd6r4jo13jz6",
+            "namedStyleType": "HEADING_1"
+          }
+        },
+        "startIndex": 5004
+      },
+      {
+        "endIndex": 5262,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5262,
+              "startIndex": 5037,
+              "textRun": {
+                "content": "Transit announcements are a balancing act. On the one hand, they must convey the vital information that riders need. On the other hand, if they are too frequent or too verbose, they can bring a host of negative consequences:\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5037
+      },
+      {
+        "endIndex": 5263,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5263,
+              "startIndex": 5262,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5262
+      },
+      {
+        "endIndex": 5428,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hh43iqfg82el",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 5428,
+              "startIndex": 5263,
+              "textRun": {
+                "content": "Incessant announcements cause riders to tune out as much as possible. This means they are primed to miss critical information during service changes or emergencies.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5263
+      },
+      {
+        "endIndex": 5528,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hh43iqfg82el",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 5527,
+              "startIndex": 5428,
+              "textRun": {
+                "content": "They make it much more difficult for non-English speakers to pick out key destinations and phrases.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 5528,
+              "startIndex": 5527,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5428
+      },
+      {
+        "endIndex": 5637,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hh43iqfg82el",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 5637,
+              "startIndex": 5528,
+              "textRun": {
+                "content": "They increase the cognitive load on riders with vision impairment who are relying on audio cues to navigate.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5528
+      },
+      {
+        "endIndex": 5726,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hh43iqfg82el",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 5726,
+              "startIndex": 5637,
+              "textRun": {
+                "content": "Constant noise simply makes transit a louder and more unpleasant place for riders to be.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5637
+      },
+      {
+        "endIndex": 5727,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5727,
+              "startIndex": 5726,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5726
+      },
+      {
+        "endIndex": 6019,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 6019,
+              "startIndex": 5727,
+              "textRun": {
+                "content": "Announcement design must keep in mind that passengers can\u2019t just choose what to listen to the way they can choose where to cast their eyes. The best they can do is try to tune out the entire environment, which means if there is too much noise, they will not listen even for important things.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 5727
+      },
+      {
+        "endIndex": 6020,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 6020,
+              "startIndex": 6019,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 6019
+      },
+      {
+        "endIndex": 6643,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 6643,
+              "startIndex": 6020,
+              "textRun": {
+                "content": "This is made worse by the fact that transit stations and vehicles are already loud places, so that understanding announcements can often be difficult even in the best of times. The automatic announcements used on most modern MTA trains and buses have improved clarity, but the fundamental problem of distractions remains. Announcements that are either verbose or, worse, irrelevant only make the situation harder. This is especially difficult for passengers who don\u2019t speak fluent English, as they need to be listening carefully to extract information, which is far more difficult to do with too much auditory distraction.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 6020
+      },
+      {
+        "endIndex": 6644,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 6644,
+              "startIndex": 6643,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 6643
+      },
+      {
+        "endIndex": 7259,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7259,
+              "startIndex": 6644,
+              "textRun": {
+                "content": "A similar problem exists in a very different context for industries that use radio communication, such as air traffic control, emergency services, and even transit dispatching. Analog radios are often noisy and low fidelity, not unlike announcements in a noisy transit environment, making communication difficult. As clear understanding can often be a matter of life or death in these industries, they have developed systems to ensure messages are understood: radio discipline. The key is that listeners know what to expect: communication sticks to simple, key phrases and unnecessary chatter is kept to a minimum.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 6644
+      },
+      {
+        "endIndex": 7260,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7260,
+              "startIndex": 7259,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7259
+      },
+      {
+        "endIndex": 7658,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7658,
+              "startIndex": 7260,
+              "textRun": {
+                "content": "The MTA and other transit operators can take a page from radio discipline and reconcile all these issues by emphasizing focus and concision. Clear and concentrated announcements serve all riders best: they are simpler for non-English speakers to understand, create a less cluttered aural environment for visually-impaired travelers, and are less likely to grate on regular riders and be tuned out.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7260
+      },
+      {
+        "endIndex": 7659,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7659,
+              "startIndex": 7658,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7658
+      },
+      {
+        "endIndex": 7726,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7726,
+              "startIndex": 7659,
+              "textRun": {
+                "content": "To that end, audio messages should focus on a small set of topics:\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7659
+      },
+      {
+        "endIndex": 7727,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7727,
+              "startIndex": 7726,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7726
+      },
+      {
+        "endIndex": 7753,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.cu4atbypp1s8",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7753,
+              "startIndex": 7727,
+              "textRun": {
+                "content": "The current and next stop\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7727
+      },
+      {
+        "endIndex": 7775,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.cu4atbypp1s8",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7775,
+              "startIndex": 7753,
+              "textRun": {
+                "content": "Available connections\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7753
+      },
+      {
+        "endIndex": 7791,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.cu4atbypp1s8",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7791,
+              "startIndex": 7775,
+              "textRun": {
+                "content": "Service changes\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7775
+      },
+      {
+        "endIndex": 7830,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.cu4atbypp1s8",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7830,
+              "startIndex": 7791,
+              "textRun": {
+                "content": "Real-time updates on unexpected delays\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7791
+      },
+      {
+        "endIndex": 7909,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.cu4atbypp1s8",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7909,
+              "startIndex": 7830,
+              "textRun": {
+                "content": "Elevator location, on vehicles that cannot display such information on screens\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7830
+      },
+      {
+        "endIndex": 7910,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 7910,
+              "startIndex": 7909,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7909
+      },
+      {
+        "endIndex": 8091,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8091,
+              "startIndex": 7910,
+              "textRun": {
+                "content": "Greater New York\u2019s transit network is already one of the most complicated in the world; its announcements should do everything they can to simplify the experience of navigating it.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 7910
+      },
+      {
+        "endIndex": 8125,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8125,
+              "startIndex": 8091,
+              "textRun": {
+                "content": "Constructing Better Announcements\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.5ethg0yxea5d",
+            "namedStyleType": "HEADING_1"
+          }
+        },
+        "startIndex": 8091
+      },
+      {
+        "endIndex": 8142,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8142,
+              "startIndex": 8125,
+              "textRun": {
+                "content": "Basic Principles\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "headingId": "h.ykfp5xbfcttz",
+            "namedStyleType": "HEADING_3"
+          }
+        },
+        "startIndex": 8125
+      },
+      {
+        "endIndex": 8143,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8143,
+              "startIndex": 8142,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8142
+      },
+      {
+        "endIndex": 8650,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8650,
+              "startIndex": 8143,
+              "textRun": {
+                "content": "For the same reason that announcements should only include the most critical information, they should also be made with the minimum number of words necessary. Short, simple messages allow non-fluent English speakers to pick out vital words more easily. The same holds true for the visually impaired: shorter messages mean less time and less mental energy expended on parsing information. Finally, short announcements minimize annoyance for frequent transit riders, who will hear them dozens of times daily.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8143
+      },
+      {
+        "endIndex": 8651,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8651,
+              "startIndex": 8650,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8650
+      },
+      {
+        "endIndex": 9338,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 8676,
+              "startIndex": 8651,
+              "textRun": {
+                "content": "This is why in the 1960s ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 8754,
+              "startIndex": 8676,
+              "textRun": {
+                "content": "London Transport spent so long developing the now-iconic phrase \u201cMind the Gap\u201d",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 9338,
+              "startIndex": 8754,
+              "textRun": {
+                "content": ": it was short, clear, and to the point. Similarly, in Berlin, the phrase \u201cZur\u00fcckbleiben bitte\u201d\u2014\u201cplease stay back\u201d\u2014is very short and understandable even by people with middling German. In contrast, New York\u2019s \u201cStand clear of the closing doors please\u201d sentence, while iconic to many, is so long that conductors often interrupt it to close the doors faster. It\u2019s even longer than Ottawa\u2019s bilingual announcements. Bernie Wagenblast\u2019s announcements have become iconic in New York, and it would be ideal for the MTA to bring her back to record new, shorter versions of her original work.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8651
+      },
+      {
+        "endIndex": 9339,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9339,
+              "startIndex": 9338,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9338
+      },
+      {
+        "endIndex": 9394,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9394,
+              "startIndex": 9339,
+              "textRun": {
+                "content": "[audio files of NYC, Berlin, and Ottawa door closings]\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9339
+      },
+      {
+        "endIndex": 9395,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9395,
+              "startIndex": 9394,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9394
+      },
+      {
+        "endIndex": 9608,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9528,
+              "startIndex": 9395,
+              "textRun": {
+                "content": "The audio announcements on today\u2019s subway trains are far too verbose. Compare the normal announcements used on these trains with the ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 9546,
+              "startIndex": 9528,
+              "textRun": {
+                "content": "shortened versions",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://www.youtube.com/watch?v=KDaRRmUWUZI"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 9608,
+              "startIndex": 9546,
+              "textRun": {
+                "content": " that the MTA created around 2015 but never put into service.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9395
+      },
+      {
+        "endIndex": 9609,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9609,
+              "startIndex": 9608,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9608
+      },
+      {
+        "endIndex": 10162,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9766,
+              "startIndex": 9609,
+              "textRun": {
+                "content": "Beyond verbosity, automated announcements should also be designed to communicate common reroutes and changes. This is especially true in New York, where the ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 9777,
+              "startIndex": 9766,
+              "textRun": {
+                "content": "complicated",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 9969,
+              "startIndex": 9777,
+              "textRun": {
+                "content": " subway system enables many potential reroutes. Right now, conductors must manually announce changes, often leading to garbled, unclear messages that confuse riders. While some more intensive ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 9980,
+              "startIndex": 9969,
+              "textRun": {
+                "content": "maintenance",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 10162,
+              "startIndex": 9980,
+              "textRun": {
+                "content": " regimes might call for reroutes that are difficult to communicate, systems should be designed to inform riders of common changes, like trains running local or express unexpectedly.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 9609
+      },
+      {
+        "endIndex": 10163,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 10163,
+              "startIndex": 10162,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 10162
+      },
+      {
+        "endIndex": 10724,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 10724,
+              "startIndex": 10163,
+              "textRun": {
+                "content": "The announcements on both Metro-North and the Long Island Rail Road\u2019s recent rolling stock are even worse, both in length and design. This is especially true of the announcements made at terminals before trains depart, where the system must inform riders of complex stopping patterns that often change. Conductors often feel the need to provide their own supplementary descriptions, a clear sign that the announcements need further attention and design. Significant information, such as informing riders of short platforms, must be made manually by conductors.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 10163
+      },
+      {
+        "endIndex": 10725,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 10725,
+              "startIndex": 10724,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 10724
+      },
+      {
+        "endIndex": 11185,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11185,
+              "startIndex": 10725,
+              "textRun": {
+                "content": "Of course, transit systems obviously need and want to communicate things other than destinations, connections, and immediate service disruptions. Thankfully, LCD screens across the region\u2019s transit network and increasingly on trains give operators the perfect place to present such information. Using screens for PSAs, announcements about future service changes, and other less-critical pieces of information would keep the transit soundscape free of clutter.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 10725
+      },
+      {
+        "endIndex": 11186,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11186,
+              "startIndex": 11185,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11185
+      },
+      {
+        "endIndex": 11930,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11930,
+              "startIndex": 11186,
+              "textRun": {
+                "content": "Once transit operators have established a system of high-quality, clear, concise announcements, it is then important they remain consistent. There will always be pressure to add just one more announcement, be it for a new PSA, or from an outside agency, or a message from a politician. Allowing one could quickly open the floodgates, recreating the loud, chaotic audio situation greater New York faces today. Transit operators should make clear guidelines akin to those presented here, and stick to them as much as possible. Ensuring accessible and pleasant trips for all users means constantly being on guard against erosion of announcement principles. Audio announcements should remain solely the domain of important, actionable information.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11186
+      },
+      {
+        "endIndex": 11931,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11931,
+              "startIndex": 11930,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11930
+      },
+      {
+        "endIndex": 11945,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11944,
+              "startIndex": 11931,
+              "textRun": {
+                "content": "Accessibility",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            },
+            {
+              "endIndex": 11945,
+              "startIndex": 11944,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11931
+      },
+      {
+        "endIndex": 11946,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 11946,
+              "startIndex": 11945,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11945
+      },
+      {
+        "endIndex": 12345,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12155,
+              "startIndex": 11946,
+              "textRun": {
+                "content": "Audio announcements are a vital tool for creating transit systems that are accessible and usable for all. Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 12156,
+              "footnoteReference": {
+                "footnoteId": "kix.89naddigwtva",
+                "footnoteNumber": "1",
+                "textStyle": {}
+              },
+              "startIndex": 12155
+            },
+            {
+              "endIndex": 12345,
+              "startIndex": 12156,
+              "textRun": {
+                "content": " The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 11946
+      },
+      {
+        "endIndex": 12346,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12346,
+              "startIndex": 12345,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12345
+      },
+      {
+        "endIndex": 12728,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12728,
+              "startIndex": 12346,
+              "textRun": {
+                "content": "Proper design is critical for announcements to serve as an effective accessibility aid. The key is to keep the needs of various different groups in mind when designing announcements. Thankfully, the needs of most disabled riders line up with the general principles presented above: announcements should be clear, concise, and limited to the most important information about travel.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12346
+      },
+      {
+        "endIndex": 12729,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12729,
+              "startIndex": 12728,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12728
+      },
+      {
+        "endIndex": 12759,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12758,
+              "startIndex": 12729,
+              "textRun": {
+                "content": "The blind and vision-impaired",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            },
+            {
+              "endIndex": 12759,
+              "startIndex": 12758,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12729
+      },
+      {
+        "endIndex": 12760,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 12760,
+              "startIndex": 12759,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12759
+      },
+      {
+        "endIndex": 13247,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 13247,
+              "startIndex": 12760,
+              "textRun": {
+                "content": "Traditionally, it has been difficult for those with significant vision impairments to navigate transit systems without outside aid. Most transit systems have been designed for people to navigate primarily by sight, using either signs or landmarks. The advent of audio announcements\u2014and especially of pre-recorded announcements\u2014has significantly improved the situation for travelers with impaired vision. Announcement design, however, is required to maximize the benefit to these riders.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 12760
+      },
+      {
+        "endIndex": 13248,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 13248,
+              "startIndex": 13247,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 13247
+      },
+      {
+        "endIndex": 14046,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14046,
+              "startIndex": 13248,
+              "textRun": {
+                "content": "A subway system is a loud and complex place. Keeping audio announcements clear and concise helps declutter the auditory environment. Unnecessary announcements like PSAs, general safety or rules information, and advertisements force blind and vision-impaired riders to pay attention to a near-endless list of comparatively unimportant information to pick out the vital information that they need to navigate. It also takes a fair amount of concentration to separate announcements from loud background noises such as moving trains and large crowds of people. Similar to how radio discipline makes noisy communications understandable, a clear, concise system of announcements with a minimum of unnecessary noise reduces the amount of information that blind and vision-impaired riders need to process.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 13248
+      },
+      {
+        "endIndex": 14047,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14047,
+              "startIndex": 14046,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14046
+      },
+      {
+        "endIndex": 14098,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14097,
+              "startIndex": 14047,
+              "textRun": {
+                "content": "Riders who don\u2019t speak English as a first language",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            },
+            {
+              "endIndex": 14098,
+              "startIndex": 14097,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14047
+      },
+      {
+        "endIndex": 14099,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14099,
+              "startIndex": 14098,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14098
+      },
+      {
+        "endIndex": 14525,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14525,
+              "startIndex": 14099,
+              "textRun": {
+                "content": "It is a similar story for passengers who do not speak English as their first language, and especially those who don\u2019t speak it fluently. New York is a world city of the highest order, welcoming untold numbers of visitors and immigrants from around the world, speaking every language on the planet. As such, the needs of non-native and non-fluent English speakers needs to be taken into account in any system of announcements.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14099
+      },
+      {
+        "endIndex": 14526,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14526,
+              "startIndex": 14525,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14525
+      },
+      {
+        "endIndex": 15099,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 14931,
+              "startIndex": 14526,
+              "textRun": {
+                "content": "Unfortunately, the subway\u2019s current user interface is not at all legible to passengers who speak poor English, especially if they only speak languages that don\u2019t use the Latin alphabet, like Mandarin. They can\u2019t parse the verbal announcements and often can\u2019t even read the station names; an ethnography found that one Chinese rider navigated by the first letters of the station names on the Flushing Line.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 14932,
+              "footnoteReference": {
+                "footnoteId": "kix.2g3q0xb0f2bz",
+                "footnoteNumber": "2",
+                "textStyle": {}
+              },
+              "startIndex": 14931
+            },
+            {
+              "endIndex": 15099,
+              "startIndex": 14932,
+              "textRun": {
+                "content": " In countries used to either illiteracy or tourism by people who can\u2019t read the alphabet, such as Japan or China, stations are numbered sequentially within each line.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 14526
+      },
+      {
+        "endIndex": 15100,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15100,
+              "startIndex": 15099,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15099
+      },
+      {
+        "endIndex": 15143,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15143,
+              "startIndex": 15100,
+              "textRun": {
+                "content": "Things that should be Avoided or Minimized\n",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15100
+      },
+      {
+        "endIndex": 15144,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15144,
+              "startIndex": 15143,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15143
+      },
+      {
+        "endIndex": 15159,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15159,
+              "startIndex": 15144,
+              "textRun": {
+                "content": "Advertisements\n",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15144
+      },
+      {
+        "endIndex": 15160,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15160,
+              "startIndex": 15159,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15159
+      },
+      {
+        "endIndex": 15756,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15756,
+              "startIndex": 15160,
+              "textRun": {
+                "content": "In a disturbing precedent, the MTA recently experimented with playing commercial advertisements over subway station PA systems. For all the reasons listed above, this is an inappropriate use of passenger information systems. Unlike normal visual advertisements, riders can't simply choose to look away from the sound surrounding them. Commercials further incentivize passengers to tune out as much as possible, make life harder for the visually impaired, who have no choice but to listen for critical information, and make the system harder to navigate for those who do not speak fluent English.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15160
+      },
+      {
+        "endIndex": 15757,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15757,
+              "startIndex": 15756,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15756
+      },
+      {
+        "endIndex": 16229,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 15841,
+              "startIndex": 15757,
+              "textRun": {
+                "content": "More fundamentally, while these advertisements have brought in a modicum of revenue,",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 15842,
+              "footnoteReference": {
+                "footnoteId": "kix.hsnw89mvovs7",
+                "footnoteNumber": "3",
+                "textStyle": {}
+              },
+              "startIndex": 15841
+            },
+            {
+              "endIndex": 16229,
+              "startIndex": 15842,
+              "textRun": {
+                "content": " they have arguably cost the system more in riders and long-term reputation. They cheapen transit, treating riders not as the customers or as citizens, but as the product. It screams that the MTA doesn\u2019t care about the experience of its riders. In the long run, such maneuvers could well push riders away from transit towards other modes of travel that respect their time and attention.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 15757
+      },
+      {
+        "endIndex": 16230,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16230,
+              "startIndex": 16229,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16229
+      },
+      {
+        "endIndex": 16303,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16303,
+              "startIndex": 16230,
+              "textRun": {
+                "content": "Announcements exist to inform passengers, not to take advantage of them.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16230
+      },
+      {
+        "endIndex": 16304,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16304,
+              "startIndex": 16303,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16303
+      },
+      {
+        "endIndex": 16325,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16325,
+              "startIndex": 16304,
+              "textRun": {
+                "content": "Hiring Announcements\n",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16304
+      },
+      {
+        "endIndex": 16326,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16326,
+              "startIndex": 16325,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16325
+      },
+      {
+        "endIndex": 16680,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16680,
+              "startIndex": 16326,
+              "textRun": {
+                "content": "Hiring announcements have recently become common on the MTA. Staff who spoke to ETA not for attribution indicated that it generated a raft of consumer complaints. These announcements are essentially a hiring advertisement for the MTA itself, and should be treated as such. Riders should not be subjected to such messages simply in order to ride transit.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16326
+      },
+      {
+        "endIndex": 16681,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16681,
+              "startIndex": 16680,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16680
+      },
+      {
+        "endIndex": 16710,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16710,
+              "startIndex": 16681,
+              "textRun": {
+                "content": "Public Service Announcements\n",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16681
+      },
+      {
+        "endIndex": 16711,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 16711,
+              "startIndex": 16710,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16710
+      },
+      {
+        "endIndex": 17020,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17020,
+              "startIndex": 16711,
+              "textRun": {
+                "content": "New York straphangers have been subjected to more and more dubiously effective public service announcements (PSAs). These began with the now ubiquitous important messages from the NYPD, and have in recent years have expanded to include things like continual announcements about the dangers of subway surfing.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 16711
+      },
+      {
+        "endIndex": 17021,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17021,
+              "startIndex": 17020,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17020
+      },
+      {
+        "endIndex": 17614,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17614,
+              "startIndex": 17021,
+              "textRun": {
+                "content": "Just as with advertising, these PSAs assume that passengers are simply blank slates with no interest in reading, talking to traveling companions, or simply riding in peace. They affect usability, and make transit simply a far less pleasant place than it ought to be. Constant NYPD reminders about pickpockets reinforce false stereotypes about the dangers of transit that have no basis in reality. Such announcements only hurt the perception of transit over the long term. A private automobile never forces its driver to listen to such messages, or even messages about the risk of car crashes.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17021
+      },
+      {
+        "endIndex": 17615,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17615,
+              "startIndex": 17614,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17614
+      },
+      {
+        "endIndex": 17980,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17980,
+              "startIndex": 17615,
+              "textRun": {
+                "content": "If PSAs are to be a part of the subway experience, they should be limited to the digital screens, as with all other non-essentially pieces of travel information. Indeed, the MTA already has a successful history of both print and digital PSAs about such courtesy norms as using headphones, taking one\u2019s bag off, not taking up multiple seats, and not blocking doors.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17615
+      },
+      {
+        "endIndex": 17981,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17981,
+              "startIndex": 17980,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17980
+      },
+      {
+        "endIndex": 17996,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17996,
+              "startIndex": 17981,
+              "textRun": {
+                "content": "Long-Term Work\n",
+                "textStyle": {
+                  "italic": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17981
+      },
+      {
+        "endIndex": 17997,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 17997,
+              "startIndex": 17996,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17996
+      },
+      {
+        "endIndex": 18478,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18476,
+              "startIndex": 17997,
+              "textRun": {
+                "content": "One of the key things that audio announcements may be appropriate for is to communicate reroutes and/or delays caused by temporary work. When work is scheduled to take around two weeks or more, however, it can generally be assumed that riders are aware of service changes. Indeed, Berlin, which sometimes shuts down segments of the subway for long-term renewal work and regularly shuts down commuter rail segments on weekends, announces those changes purely visually and on maps.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 18477,
+              "footnoteReference": {
+                "footnoteId": "kix.teb3u68jk46",
+                "footnoteNumber": "4",
+                "textStyle": {}
+              },
+              "startIndex": 18476
+            },
+            {
+              "endIndex": 18478,
+              "startIndex": 18477,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 17997
+      },
+      {
+        "endIndex": 18479,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18479,
+              "startIndex": 18478,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18478
+      },
+      {
+        "endIndex": 18869,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18867,
+              "startIndex": 18479,
+              "textRun": {
+                "content": "It is good practice to announce major changes for the week before they happen and then the first week they occur. After that point, LCD screens and other information systems are a far better way to keep riders informed than the constant repetition of announcements. For example, riders do not need constant audio announcements about elevator replacements scheduled to take months or more.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 18868,
+              "footnoteReference": {
+                "footnoteId": "kix.pb5ckggpleeh",
+                "footnoteNumber": "5",
+                "textStyle": {}
+              },
+              "startIndex": 18867
+            },
+            {
+              "endIndex": 18869,
+              "startIndex": 18868,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "unit": "PT"
+            },
+            "indentStart": {
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18479
+      },
+      {
+        "endIndex": 18870,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18870,
+              "startIndex": 18869,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18869
+      },
+      {
+        "endIndex": 18895,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18895,
+              "startIndex": 18870,
+              "textRun": {
+                "content": "In Short, Respect Riders\n",
+                "textStyle": {
+                  "bold": true
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18870
+      },
+      {
+        "endIndex": 18896,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 18896,
+              "startIndex": 18895,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18895
+      },
+      {
+        "endIndex": 19290,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 19290,
+              "startIndex": 18896,
+              "textRun": {
+                "content": "Announcement design is a balancing act. Getting it right will require an ongoing process of trial, evolution, and improvement. However, the current state of announcements is very far from any reasonable optimum. The constant barrage of PSAs and lengthy messages about the system disrespects the riders\u2019 attention. Transit should strive to be a positive part of a rider's day, not an annoyance.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 18896
+      },
+      {
+        "endIndex": 19291,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 19291,
+              "startIndex": 19290,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 19290
+      },
+      {
+        "endIndex": 19646,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 19372,
+              "startIndex": 19291,
+              "textRun": {
+                "content": "Announcements that treat riders with respect are almost a reverse version of the ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 19387,
+              "startIndex": 19372,
+              "textRun": {
+                "content": "curb cut effect",
+                "textStyle": {
+                  "foregroundColor": {
+                    "color": {
+                      "rgbColor": {
+                        "blue": 0.8,
+                        "green": 0.33333334,
+                        "red": 0.06666667
+                      }
+                    }
+                  },
+                  "link": {
+                    "url": "https://en.wikipedia.org/wiki/Curb_cut_effect"
+                  },
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 19646,
+              "startIndex": 19387,
+              "textRun": {
+                "content": ".  In this case, designing announcements that do not grate and do not waste straphangers\u2019 time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 19291
+      },
+      {
+        "endIndex": 19647,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 19647,
+              "startIndex": 19646,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 19646
+      },
+      {
+        "endIndex": 20291,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 20291,
+              "startIndex": 19647,
+              "textRun": {
+                "content": "There is much more about announcements beyond the scope of this piece. This includes equipment design, ensuring that ongoing improvement is easy to implement, operator training, both on automated equipment and on improved techniques for manual announcements, and on the design of the passenger experience, in general. Solving these problems will take time and effort. Regardless, the situation in New York has become intolerable. The region's transit agencies, and the MTA in particular, can no longer assume it is okay to fill every quiet second with unimportant noise. It hurts usability, and it damages the reputation of transit in general.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 19647
+      },
+      {
+        "endIndex": 20292,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 20292,
+              "startIndex": 20291,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 20291
+      },
+      {
+        "endIndex": 20371,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 20370,
+              "startIndex": 20292,
+              "textRun": {
+                "content": "Transit in New York is too damn loud. It's time to let riders travel in peace.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 20371,
+              "startIndex": 20370,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {
+                  "fontSize": {
+                    "magnitude": 12,
+                    "unit": "PT"
+                  }
+                }
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 20292
+      }
+    ]
+  },
+  "documentId": "1--AKo1YU2iyFZzKh-DZxU5UlVOURySG2XlfKXC0c2aY",
+  "documentStyle": {
+    "background": {
+      "color": {}
+    },
+    "documentFormat": {
+      "documentMode": "PAGES"
+    },
+    "marginBottom": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginFooter": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginHeader": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginLeft": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginRight": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "marginTop": {
+      "magnitude": 72,
+      "unit": "PT"
+    },
+    "pageNumberStart": 1,
+    "pageSize": {
+      "height": {
+        "magnitude": 792,
+        "unit": "PT"
+      },
+      "width": {
+        "magnitude": 612,
+        "unit": "PT"
+      }
+    },
+    "useCustomHeaderFooterMargins": true
+  },
+  "footers": {},
+  "footnotes": {
+    "kix.2g3q0xb0f2bz": {
+      "content": [
+        {
+          "endIndex": 279,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 149,
+                "textRun": {
+                  "content": "  Yu, Shaolu, 2016. \"\u2019I am like a deaf, dumb and blind person\u2019: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,\u201d ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 179,
+                "startIndex": 149,
+                "textRun": {
+                  "content": "Journal of Transport Geography",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "italic": true
+                  }
+                }
+              },
+              {
+                "endIndex": 207,
+                "startIndex": 179,
+                "textRun": {
+                  "content": ", 54(C) (June 2016): 10\u201321. ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 278,
+                "startIndex": 207,
+                "textRun": {
+                  "content": "https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 279,
+                "startIndex": 278,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.2g3q0xb0f2bz"
+    },
+    "kix.89naddigwtva": {
+      "content": [
+        {
+          "endIndex": 39,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {}
+                }
+              },
+              {
+                "endIndex": 15,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "36 CFR 1192.35",
+                  "textStyle": {
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 16,
+                "startIndex": 15,
+                "textRun": {
+                  "content": "\u000b",
+                  "textStyle": {
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.105882354,
+                          "green": 0.105882354,
+                          "red": 0.105882354
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 38,
+                "startIndex": 16,
+                "textRun": {
+                  "content": "49 CFR 37.167(b) & (c)",
+                  "textStyle": {
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 39,
+                "startIndex": 38,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {}
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.89naddigwtva"
+    },
+    "kix.hsnw89mvovs7": {
+      "content": [
+        {
+          "endIndex": 202,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 126,
+                "textRun": {
+                  "content": " Barbara Russo-Lennon, \u201cSubway spots: MTA\u2019s ad blitz delivers big bucks for NYC\u2019s transit system and reliability for riders,\u201d ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 130,
+                "startIndex": 126,
+                "textRun": {
+                  "content": "AMNY",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "italic": true
+                  }
+                }
+              },
+              {
+                "endIndex": 145,
+                "startIndex": 130,
+                "textRun": {
+                  "content": ", July 3, 2025,",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 146,
+                "startIndex": 145,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 201,
+                "startIndex": 146,
+                "textRun": {
+                  "content": "https://www.amny.com/news/mta-nyc-subway-ads-and-money/",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.amny.com/news/mta-nyc-subway-ads-and-money/"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 202,
+                "startIndex": 201,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.hsnw89mvovs7"
+    },
+    "kix.pb5ckggpleeh": {
+      "content": [
+        {
+          "endIndex": 74,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 74,
+                "textRun": {
+                  "content": " Elevator replacements should not take months, but that is another piece.\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.pb5ckggpleeh"
+    },
+    "kix.teb3u68jk46": {
+      "content": [
+        {
+          "endIndex": 116,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 14,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "S-Bahn Berlin",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "italic": true
+                  }
+                }
+              },
+              {
+                "endIndex": 71,
+                "startIndex": 14,
+                "textRun": {
+                  "content": ", \u201cSt\u00f6rungen und Bauarbeiten,\u201d accessed August 24, 2026, ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 114,
+                "startIndex": 71,
+                "textRun": {
+                  "content": "https://sbahn.berlin/fahren/bauen-stoerung/",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://sbahn.berlin/fahren/bauen-stoerung/"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 115,
+                "startIndex": 114,
+                "textRun": {
+                  "content": ".",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 116,
+                "startIndex": 115,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.teb3u68jk46"
+    }
+  },
+  "format": "e6cf8ee6",
+  "headers": {},
+  "inlineObjects": {
+    "kix.9htcorb8042p": {
+      "inlineObjectProperties": {
+        "embeddedObject": {
+          "embeddedObjectBorder": {
+            "color": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "dashStyle": "SOLID",
+            "propertyState": "NOT_RENDERED",
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "imageProperties": {
+            "cropProperties": {
+              "offsetLeft": 0.00037871933,
+              "offsetRight": 0.00037871933
+            },
+            "sourceUri": "https://lh3.google.com/u/0/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC=s2048?auditContext=thumbnail"
+          },
+          "marginBottom": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginLeft": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginRight": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginTop": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "size": {
+            "height": {
+              "magnitude": 212.4597355769231,
+              "unit": "PT"
+            },
+            "width": {
+              "magnitude": 303.375,
+              "unit": "PT"
+            }
+          }
+        }
+      },
+      "objectId": "kix.9htcorb8042p"
+    },
+    "kix.djm0a1aand4k": {
+      "inlineObjectProperties": {
+        "embeddedObject": {
+          "embeddedObjectBorder": {
+            "color": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "dashStyle": "SOLID",
+            "propertyState": "NOT_RENDERED",
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "imageProperties": {
+            "cropProperties": {}
+          },
+          "marginBottom": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginLeft": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginRight": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginTop": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "size": {
+            "height": {
+              "magnitude": 127.875,
+              "unit": "PT"
+            },
+            "width": {
+              "magnitude": 82.69602272727273,
+              "unit": "PT"
+            }
+          }
+        }
+      },
+      "objectId": "kix.djm0a1aand4k"
+    },
+    "kix.ir9gl4tqd2i2": {
+      "inlineObjectProperties": {
+        "embeddedObject": {
+          "embeddedObjectBorder": {
+            "color": {
+              "color": {
+                "rgbColor": {}
+              }
+            },
+            "dashStyle": "SOLID",
+            "propertyState": "NOT_RENDERED",
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "imageProperties": {
+            "cropProperties": {}
+          },
+          "marginBottom": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginLeft": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginRight": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "marginTop": {
+            "magnitude": 9,
+            "unit": "PT"
+          },
+          "size": {
+            "height": {
+              "magnitude": 99.375,
+              "unit": "PT"
+            },
+            "width": {
+              "magnitude": 189.63302752293578,
+              "unit": "PT"
+            }
+          }
+        }
+      },
+      "objectId": "kix.ir9gl4tqd2i2"
+    }
+  },
+  "lists": {
+    "kix.2xr4lzwksf65": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "bold": false,
+              "fontSize": {
+                "magnitude": 12,
+                "unit": "PT"
+              },
+              "foregroundColor": {
+                "color": {
+                  "rgbColor": {
+                    "blue": 0.08627451,
+                    "green": 0.019607844
+                  }
+                }
+              },
+              "italic": false,
+              "smallCaps": false,
+              "underline": false,
+              "weightedFontFamily": {
+                "fontFamily": "Arial",
+                "weight": 400
+              }
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphType": "GLYPH_TYPE_UNSPECIFIED",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.b2pptr2nyntq": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0.",
+            "glyphType": "DECIMAL",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1.",
+            "glyphType": "ALPHA",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "END",
+            "glyphFormat": "%2.",
+            "glyphType": "ROMAN",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3.",
+            "glyphType": "DECIMAL",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4.",
+            "glyphType": "ALPHA",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "END",
+            "glyphFormat": "%5.",
+            "glyphType": "ROMAN",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6.",
+            "glyphType": "DECIMAL",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7.",
+            "glyphType": "ALPHA",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "END",
+            "glyphFormat": "%8.",
+            "glyphType": "ROMAN",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.bcs6dvcnke8o": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.cu4atbypp1s8": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.e8lsbdmax75v": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.hh43iqfg82el": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.hzewi67my83z": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
+    "kix.u5wwb8tx0m5i": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    }
+  },
+  "modifiedTime": "2026-09-09T02:08:22.530Z",
+  "namedRanges": {},
+  "namedStyles": {
+    "styles": [
+      {
+        "namedStyleType": "NORMAL_TEXT",
+        "paragraphStyle": {
+          "alignment": "START",
+          "avoidWidowAndOrphan": true,
+          "borderBetween": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderBottom": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderLeft": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderRight": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderTop": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "direction": "LEFT_TO_RIGHT",
+          "indentEnd": {
+            "unit": "PT"
+          },
+          "indentFirstLine": {
+            "unit": "PT"
+          },
+          "indentStart": {
+            "unit": "PT"
+          },
+          "keepLinesTogether": false,
+          "keepWithNext": false,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "shading": {
+            "backgroundColor": {}
+          },
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "unit": "PT"
+          },
+          "spacingMode": "COLLAPSE_LISTS"
+        },
+        "textStyle": {
+          "backgroundColor": {},
+          "baselineOffset": "NONE",
+          "bold": false,
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {}
+            }
+          },
+          "italic": false,
+          "smallCaps": false,
+          "strikethrough": false,
+          "underline": false,
+          "weightedFontFamily": {
+            "fontFamily": "Arial",
+            "weight": 400
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_1",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 20,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 6,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 20,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_2",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 18,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 6,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_3",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 16,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.2627451,
+                "green": 0.2627451,
+                "red": 0.2627451
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_4",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_5",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_6",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": true
+        }
+      },
+      {
+        "namedStyleType": "TITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 3,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 26,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "SUBTITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 15,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": false,
+          "weightedFontFamily": {
+            "fontFamily": "Arial",
+            "weight": 400
+          }
+        }
+      }
+    ]
+  },
+  "openComments": 2,
+  "openSuggestions": 25,
+  "positionedObjects": {},
+  "suggestions": "rejected",
+  "tabId": "t.wnvaanbw75s",
+  "tabTitle": "Draft 2 (live)",
+  "title": "Noise Pollution",
+  "url": "https://docs.google.com/document/d/1--AKo1YU2iyFZzKh-DZxU5UlVOURySG2XlfKXC0c2aY/edit?tab=t.wnvaanbw75s"
+}
