@@ -227,21 +227,31 @@ def check_images_written(dest: Path, doc: Document) -> None:
         )
 
 
-def read_image_shapes(dest: Path, doc: Document) -> None:
-    """Tell `doc` how large the last build's images turned out to be.
+def read_image_index(dest: Path, doc: Document) -> None:
+    """Tell `doc` what the last build's images were written as, and how large.
 
-    A shape is measured from the file, and the files are not committed,
-    so a build that skipped the download would otherwise lay a row of figures
-    out differently from the page beside it in the repository.
+    Both are learned by fetching and neither can be derived:
+    a Docs `inlineObject` says nothing about what kind of file it is,
+    and Docs says how large an image is placed rather than how large it is.
+    The files are not committed and `images.json` is,
+    so this is the only record a build that skipped the download has,
+    and without it that build lays a row of figures out differently
+    from the page beside it in the repository
+    and links every picture by a stem with no extension on it.
 
-    Only the shapes: what each image was written as is `download`'s to say.
+    What this build downloaded wins over what the last one recorded:
+    the index is the last answer, and a download is this one.
+    They differ exactly where a content type or a vector fallback changed,
+    and there the file on disk is the one being published.
     """
     index = dest / IMAGES_JSON
     if not index.exists():
         return
     for object_id, entry in json.loads(index.read_text()).items():
+        if "file" in entry:
+            doc.image_files.setdefault(object_id, entry["file"])
         if "width" in entry and "height" in entry:
-            doc.image_shapes[object_id] = (entry["width"], entry["height"])
+            doc.image_shapes.setdefault(object_id, (entry["width"], entry["height"]))
 
 
 def without_content_uris(document: JsonObject) -> JsonObject:
@@ -450,7 +460,7 @@ def build_one(
         from .images import download
 
         write_image_index(dest, download(doc, dest / IMAGE_DIR))
-    read_image_shapes(dest, doc)
+    read_image_index(dest, doc)
     if doc.images and options.images:
         check_images_written(dest, doc)
 

@@ -387,11 +387,15 @@ class Document:
     image_files: dict[str, str] = field(default_factory=dict)
     """Docs object id to the filename actually written, extension included.
 
-    Only `images.download` can know it:
+    Only fetching can know it:
     a Docs `inlineObject` says nothing about what kind of file it is,
     and a vector named alongside a raster is written under a different name entirely.
-    Empty when images were skipped,
-    where `image_href` falls back to the raster's name without an extension.
+    So `images.download` fills this in as it writes each file,
+    and a build that skipped the download reads it back from `images.json`,
+    which is the record the last build left of exactly this.
+    Empty only where neither has anything to say,
+    where `image_href` falls back to the raster's name without an extension
+    and `check_images_written` refuses the build that would publish it.
     """
 
     image_shapes: dict[str, tuple[int, int]] = field(default_factory=dict)
@@ -520,7 +524,7 @@ class Document:
             yield from _walk(footnote.content)
 
     def image_href(self, image: Image) -> str:
-        """The filename as emitted, once a download has settled what it is."""
+        """The filename as emitted, once a download or the last build's index has settled it."""
         return self.image_files.get(image.object_id, image.filename)
 
     def image_aspect(self, image: Image) -> float | None:
