@@ -365,6 +365,15 @@ class Document:
     """The doc's leading `Header` section, lowercased keys.
     Unrecognized keys are kept rather than dropped."""
 
+    has_header: bool = False
+    """Whether the document had a `Header` section for `meta` to be read from.
+
+    Not the same as an empty `meta`, which is also what a `Header` section
+    holding no `Key: value` lines leaves behind.
+    The two are different mistakes and want different things said about them:
+    a missing section is usually one whose heading is styled as body text,
+    where an empty one is a section nobody filled in."""
+
     blocks: list[Block] = field(default_factory=list)
     footnotes: list[Footnote] = field(default_factory=list)
     warnings: list[Notice] = field(default_factory=list)

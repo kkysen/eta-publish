@@ -700,6 +700,8 @@ class Parser:
             )
             return content
 
+        self.doc.has_header = True
+
         for item in content[:start]:
             para = item.get("paragraph")
             text = plain(para) if para is not None else ""
