@@ -200,6 +200,33 @@ def has_its_images(dest: Path) -> bool:
     return all((dest / IMAGE_DIR / entry["file"]).exists() for entry in recorded.values())
 
 
+def check_images_written(dest: Path, doc: Document) -> None:
+    """Refuse a build that emits a path to a picture it did not write.
+
+    Every emitter asks `image_href` where an image went,
+    and it answers with the raster's bare stem for an image nothing downloaded.
+    That reaches the page as `src="images/img-d4734d4b"`,
+    which no browser serves as an image and `typst` will not open at all.
+
+    Caught here rather than left to whatever notices it downstream.
+    A missing file surfaced as a `typst` warning and a diff against the
+    committed site, which says a rebuild disagrees with what was published
+    and not that this build has holes in it.
+    Only asked of a build that meant to have the images:
+    a `--no-images` run is not publishing this page.
+    """
+    absent = sorted(
+        doc.image_href(image)
+        for image in doc.images
+        if not (dest / IMAGE_DIR / doc.image_href(image)).is_file()
+    )
+    if absent:
+        raise ValueError(
+            f"{len(absent)} of {len(doc.images)} images were not written, "
+            f"so the page would link pictures that are not there: {', '.join(absent)}"
+        )
+
+
 def read_image_shapes(dest: Path, doc: Document) -> None:
     """Tell `doc` how large the last build's images turned out to be.
 
@@ -424,6 +451,8 @@ def build_one(
 
         write_image_index(dest, download(doc, dest / IMAGE_DIR))
     read_image_shapes(dest, doc)
+    if doc.images and options.images:
+        check_images_written(dest, doc)
 
     # Written here rather than once per site, so that building a single
     # report produces a page with everything it links.
