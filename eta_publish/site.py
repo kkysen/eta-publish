@@ -27,7 +27,7 @@ from markupsafe import Markup
 
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one, has_its_images
-from .emit.html import Piece, lines, markup, tag
+from .emit.html import Piece, lines, markup, phase_markup, tag
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
@@ -406,8 +406,13 @@ def index_page(site: Site) -> str:
         doc = built.doc
         meta = [m for m in (doc.dateline, ", ".join(doc.contributors)) if m]
         warned = f" · {len(doc.warnings)} warning(s)" if doc.warnings else ""
+        # The phase above the title, as the report itself carries it:
+        # a draft has to say so wherever it is read, and this list is where
+        # someone picks which report to open.
+        phase = [Markup(phase_markup(doc.phase))] if doc.phase else []
         entries.append(
             tag.li[
+                *phase,
                 tag.a(href=f"{built.path}/")[tag.strong[doc.title]],
                 tag.div(class_="short")[doc.meta.get("short", "")],
                 tag.div(class_="meta")[" · ".join(meta), warned],
