@@ -7,7 +7,7 @@ from typing import override
 
 import pytest
 from htpy import a
-from paths import FIXTURE_DIR
+from paths import FIXTURE_DIR, named_images
 
 from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
@@ -18,7 +18,7 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 @pytest.fixture
 def doc() -> Document:
-    parsed = parse(FIXTURE)
+    parsed = named_images(parse(FIXTURE))
     parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
@@ -40,7 +40,7 @@ def test_every_footnote_has_a_matching_backlink(out: str) -> None:
 
 def test_ids_are_unique() -> None:
     """`fn18-return` appears twice on the published page."""
-    emitted = HtmlEmitter().emit(parse(FIXTURE))
+    emitted = HtmlEmitter().emit(named_images(parse(FIXTURE)))
     ids = re.findall(r'id="([^"]+)"', emitted)
     assert len(ids) == len(set(ids))
 
@@ -185,7 +185,7 @@ def test_text_and_urls_are_escaped() -> None:
             }
         }
     )
-    emitted = HtmlEmitter().emit(parse(hostile))
+    emitted = HtmlEmitter().emit(named_images(parse(hostile)))
     parsed = read(emitted)
     # The page carries one script of its own, the one that places the footnote
     # tooltips, so the check is that nothing from the document became a second

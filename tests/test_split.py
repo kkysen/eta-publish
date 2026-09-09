@@ -3,7 +3,7 @@
 import json
 import re
 
-from paths import FIXTURE_DIR
+from paths import FIXTURE_DIR, named_images
 
 from eta_publish.emit.html import CODE_BLOCK_LIMIT, HtmlEmitter
 from eta_publish.parse import parse
@@ -12,12 +12,12 @@ FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
 
 def fragment() -> str:
-    return HtmlEmitter().emit(parse(FIXTURE))
+    return HtmlEmitter().emit(named_images(parse(FIXTURE)))
 
 
 def pieces() -> list[str]:
     emitter = HtmlEmitter()
-    doc = parse(FIXTURE)
+    doc = named_images(parse(FIXTURE))
     return [emitter.join(emitter.wrapped(group)) for group in emitter.groups(doc)]
 
 
@@ -62,7 +62,7 @@ def test_the_pieces_are_the_whole_report() -> None:
     """Cut from the blocks rather than out of the markup, so this is the check
     that the two ways of walking one document agree."""
     emitter = HtmlEmitter()
-    doc = parse(FIXTURE)
+    doc = named_images(parse(FIXTURE))
     whole = emitter.emit(doc)
     body = emitter.join([part for group in emitter.groups(doc) for part in group])
     assert body in whole

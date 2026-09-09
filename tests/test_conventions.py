@@ -5,6 +5,7 @@ rather than guessed from the fixture.
 """
 
 import pytest
+from paths import named_images
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
@@ -32,26 +33,28 @@ def image(object_id: str = "io.1") -> JsonObject:
 
 
 def build(content: list[JsonObject], alt: str = "", crop: JsonObject | None = None) -> Document:
-    return parse(
-        {
-            "title": "SAS West Feasibility Response",
-            "body": {"content": content},
-            "footnotes": {},
-            "lists": {},
-            "inlineObjects": {
-                "io.1": {
-                    "inlineObjectProperties": {
-                        "embeddedObject": {
-                            "description": alt,
-                            "imageProperties": {
-                                "contentUri": "https://x.invalid/1",
-                                "cropProperties": crop or {},
-                            },
+    return named_images(
+        parse(
+            {
+                "title": "SAS West Feasibility Response",
+                "body": {"content": content},
+                "footnotes": {},
+                "lists": {},
+                "inlineObjects": {
+                    "io.1": {
+                        "inlineObjectProperties": {
+                            "embeddedObject": {
+                                "description": alt,
+                                "imageProperties": {
+                                    "contentUri": "https://x.invalid/1",
+                                    "cropProperties": crop or {},
+                                },
+                            }
                         }
                     }
-                }
-            },
-        }
+                },
+            }
+        )
     )
 
 

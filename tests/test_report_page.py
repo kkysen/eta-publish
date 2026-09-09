@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import override
 
 import pytest
-from paths import FIXTURE_DIR
+from paths import FIXTURE_DIR, named_images
 
 from eta_publish.build import emit
 from eta_publish.emit.html import report_page
@@ -44,7 +44,7 @@ def sources(markup: str) -> list[str]:
 
 @pytest.fixture
 def doc() -> Document:
-    parsed = parse(FIXTURE)
+    parsed = named_images(parse(FIXTURE))
     parsed.image_files["io.1"] = "sas-west-036.png"
     return parsed
 
@@ -78,7 +78,7 @@ def test_the_published_fragment_points_beside_itself(doc: Document, tmp_path: Pa
 
 
 def test_warnings_are_shown_where_someone_will_see_them() -> None:
-    doc = parse(FIXTURE)
+    doc = named_images(parse(FIXTURE))
     doc.warn("something looked wrong")
     assert "something looked wrong" in report_page(doc)
 
