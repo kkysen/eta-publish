@@ -51,6 +51,17 @@ def test_a_report_with_no_url_is_refused(doc: Document) -> None:
         report_path(doc)
 
 
+def test_a_document_with_no_header_is_told_that_and_not_about_its_url(doc: Document) -> None:
+    """A `Header` line styled as body text is not a `Header` section,
+    so every line under it, the `URL:` one included, is read as prose.
+    Reporting the missing URL sends whoever reads it looking for a line
+    that is sitting right there in the document."""
+    doc.meta.clear()
+    doc.has_header = False
+    with pytest.raises(ValueError, match="no `Header` section"):
+        report_path(doc)
+
+
 def test_an_absolute_url_cannot_escape_the_site_root(doc: Document) -> None:
     """`/reports/x` is a published path, not a filesystem one;
     joined unstripped it would write to the root of the disk."""

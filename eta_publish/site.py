@@ -8,6 +8,7 @@ taken from the `URL:` line in its front matter,
 so the preview URL is the published URL with a different host in front of it.
 A report whose header names no URL is not published at all,
 since a slug of its headline would be a plausible path and not the published one.
+Nor is one with no `Header` section for a URL to be named in.
 
 That is one report failing, not the site:
 the others are still built and the exit status still reports it.
@@ -203,10 +204,22 @@ def report_path(doc: Document) -> str:
 
     A document that names no URL at all is refused rather than guessed at,
     since a slug of the headline is a plausible path and not the published one.
-    Both refusals are this one report's, not the site's:
+    That is two refusals rather than one, because it is two mistakes:
+    a `Header` section with no `URL:` line in it,
+    and no `Header` section at all, which is what a document has
+    when its `Header` line is styled as body text rather than as a heading.
+    Naming the one that happened is the difference between
+    a line to go and add and a line to go and restyle.
+
+    All three refusals are this one report's, not the site's:
     `build_site` goes on to the next.
     """
     slug = doc.slug.strip("/")
+    if not slug and not doc.has_header:
+        raise ValueError(
+            "no `Header` section, so nothing says where this publishes; "
+            "add one, styling its heading as a heading rather than as body text"
+        )
     if not slug:
         raise ValueError(
             "no `URL:` line in the `Header` section, so nothing says where this publishes; "
