@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.build import IMAGES_JSON, BuildOptions, write_image_index
+from eta_publish.build import IMAGES_JSON, BuildOptions, check_images_written, write_image_index
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.site import (
@@ -522,3 +522,13 @@ def test_a_download_that_turned_up_nothing_does_not_erase_the_index(tmp_path: Pa
     previous = _report_dir(tmp_path, recorded)
     write_image_index(previous, {})
     assert json.loads((previous / IMAGES_JSON).read_text()) == recorded
+
+
+def test_a_page_is_refused_if_it_links_pictures_that_were_not_written(
+    tmp_path: Path, doc: Document
+) -> None:
+    """A missing image surfaced as a `typst` warning and a diff against the
+    committed site, which says a rebuild disagrees with what was published
+    rather than that this build has holes in it."""
+    with pytest.raises(ValueError, match="images were not written"):
+        check_images_written(tmp_path, doc)

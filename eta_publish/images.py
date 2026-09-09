@@ -70,12 +70,15 @@ def download(
         content_type = response.headers.get("content-type", "").split(";")[0].strip()
         extension = EXTENSIONS.get(content_type)
         if extension is None:
-            doc.warn(
-                "image {} has unexpected content type {}; saved without an extension",
-                Shown(image.object_id),
-                Shown(content_type),
+            # Refused rather than saved under a bare stem.
+            # Nothing serves a file with no extension the way an image is served,
+            # and `typst` will not open one at all,
+            # so the alternative is a page that looks built and has holes in it.
+            raise ValueError(
+                f"image {image.object_id} came back as {content_type or 'nothing'}, "
+                f"which is not an image type this knows how to name; "
+                f"expected one of {', '.join(sorted(EXTENSIONS))}"
             )
-            extension = ""
 
         dest = outdir / f"{image.filename}{extension}"
         dest.write_bytes(crop_to(image, response.content, doc))
