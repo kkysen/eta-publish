@@ -614,3 +614,23 @@ def test_what_the_commands_say_is_not_on_stdout(tmp_path: Path) -> None:
     result = CliRunner().invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "eta-publish" in result.stdout
+
+
+def test_reports_are_separated_from_each_other(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A report is a heading and everything under it,
+    and two of them run together are one list of warnings rather than two.
+    Nothing above the first, which would be a blank line opening the build."""
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE))
+    build_site(
+        [Report(url=str(saved)), Report(url=str(saved))],
+        tmp_path / "site",
+        BuildOptions(images=False),
+    )
+    lines = capsys.readouterr().err.splitlines()
+    headings = [i for i, line in enumerate(lines) if line.startswith(("✓", "✗"))]
+    assert len(headings) == 2
+    assert headings[0] == 0
+    assert lines[headings[1] - 1] == ""

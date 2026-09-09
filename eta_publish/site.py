@@ -346,7 +346,12 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
 
     with ThreadPoolExecutor(max_workers=max(1, min(len(reports), MAX_AT_ONCE))) as pool:
         started = [(report, pool.submit(build, report)) for report in reports]
-        for report, building in started:
+        for index, (report, building) in enumerate(started):
+            # A blank line between reports and none above the first:
+            # a report is a heading and everything under it, and a run of them
+            # with nothing between is one list of warnings rather than three.
+            if index:
+                log.line()
             label = report.name or report.url
             try:
                 doc, path = building.result()
