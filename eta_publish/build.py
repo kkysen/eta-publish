@@ -200,30 +200,33 @@ def has_its_images(dest: Path) -> bool:
     return all((dest / IMAGE_DIR / entry["file"]).exists() for entry in recorded.values())
 
 
-def check_images_written(dest: Path, doc: Document) -> None:
-    """Refuse a build that emits a path to a picture it did not write.
+def check_images_named(doc: Document) -> None:
+    """Refuse a build that emits a picture it cannot name.
 
-    Every emitter asks `image_href` where an image went,
-    and it answers with the raster's bare stem for an image nothing downloaded.
-    That reaches the page as `src="images/img-d4734d4b"`,
+    An extension is learned by fetching, so `image_href` answers with the
+    raster's bare stem for an image that neither a download nor `images.json`
+    has settled. That reaches the page as `src="images/img-d4734d4b"`,
     which no browser serves as an image and `typst` will not open at all.
 
     Caught here rather than left to whatever notices it downstream.
-    A missing file surfaced as a `typst` warning and a diff against the
-    committed site, which says a rebuild disagrees with what was published
-    and not that this build has holes in it.
-    Only asked of a build that meant to have the images:
-    a `--no-images` run is not publishing this page.
+    It surfaced as a `typst` warning and a diff against the committed site,
+    which says a rebuild disagrees with what was published
+    and not that this build cannot name half its pictures.
+
+    The file being there is a different question and deliberately not this one:
+    a build that wants no images has no `images` directory,
+    and the paths it writes are the right paths to files it did not fetch.
+    Only a build that meant to download them is asked,
+    because only that build had a way to find out.
     """
-    absent = sorted(
-        doc.image_href(image)
-        for image in doc.images
-        if not (dest / IMAGE_DIR / doc.image_href(image)).is_file()
+    unnamed = sorted(
+        image.object_id for image in doc.images if image.object_id not in doc.image_files
     )
-    if absent:
+    if unnamed:
         raise ValueError(
-            f"{len(absent)} of {len(doc.images)} images were not written, "
-            f"so the page would link pictures that are not there: {', '.join(absent)}"
+            f"{len(unnamed)} of {len(doc.images)} images have no filename, "
+            f"so the page would link them by a stem with no extension on it: "
+            f"{', '.join(unnamed)}"
         )
 
 
@@ -462,7 +465,7 @@ def build_one(
         write_image_index(dest, download(doc, dest / IMAGE_DIR))
     read_image_index(dest, doc)
     if doc.images and options.images:
-        check_images_written(dest, doc)
+        check_images_named(doc)
 
     # Written here rather than once per site, so that building a single
     # report produces a page with everything it links.
