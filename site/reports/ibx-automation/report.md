@@ -1,6 +1,6 @@
-# IBX Automation
+**Phase: Composition**
 
-**Composition**
+# IBX Automation
 
 **Warnings**
 

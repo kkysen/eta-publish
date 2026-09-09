@@ -1,6 +1,6 @@
-# Too Damn Loud: Announcements on NYC Transit are Out of Control
+**Phase: Compositing**
 
-**Compositing**
+# Too Damn Loud: Announcements on NYC Transit are Out of Control
 
 **Warnings**
 

@@ -151,11 +151,30 @@ def link_mark(anchor: str, what: str = "section") -> Tag:
     return tag.a(class_="link-mark", href=f"#{anchor}", aria_label=f"Link to this {what}")
 
 
+def phase_markup(phase: str) -> str:
+    """What a reader of a draft has to be told before reading it.
+
+    Labelled `Phase:`, because the state on its own is a word like `Compositing`
+    that means nothing to a reader who does not already know what it is a phase of.
+
+    A function rather than only a method,
+    because `report_page` writes it above the headline
+    and never walks to it.
+    """
+    if not phase:
+        return ""
+    return markup(tag.p(class_="phase")[tag.span(class_="phase-label")["Phase: "], phase])
+
+
 class HtmlEmitter(Emitter):
     extension = ".html"
 
     def __init__(
-        self, image_base: str = "", inline_css: bool = True, inline_js: bool = True
+        self,
+        image_base: str = "",
+        inline_css: bool = True,
+        inline_js: bool = True,
+        inline_phase: bool = True,
     ) -> None:
         super().__init__()
         self.image_base = image_base.rstrip("/")
@@ -164,6 +183,10 @@ class HtmlEmitter(Emitter):
         # Off for a page, which links one copy; on for the fragment, which
         # is pasted somewhere with nothing to link to.
         self.inline_js = inline_js
+        # Off for a page, which writes the phase above the headline, where it
+        # qualifies the title too; on for the fragment, which has no headline
+        # of its own and opens on the report.
+        self.inline_phase = inline_phase
         self._in_tip = False
         """Whether what is being emitted is the box a reference carries,
         which is a copy of a note and so cannot carry boxes of its own."""
@@ -333,9 +356,7 @@ class HtmlEmitter(Emitter):
         the date a draft is due says nothing useful
         until you know it is a draft you are holding.
         """
-        if not doc.phase:
-            return ""
-        return markup(tag.p(class_="phase")[doc.phase])
+        return phase_markup(doc.phase) if self.inline_phase else ""
 
     def dateline(self, doc: Document) -> str:
         """When the report published, from `Final Due Date:` in the header.
@@ -765,7 +786,9 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR, asset_base: str = AS
     `report.html` is a `div` to paste into a Squarespace code block,
     which inherits the site's typography and has nowhere to put a warning.
     """
-    body = HtmlEmitter(image_base=image_base, inline_css=False, inline_js=False).emit(doc)
+    body = HtmlEmitter(
+        image_base=image_base, inline_css=False, inline_js=False, inline_phase=False
+    ).emit(doc)
     short = doc.meta.get("short", "")
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
@@ -790,6 +813,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR, asset_base: str = AS
             for name in ("page.css", "report.css")
         ),
         htpy.script(src=f"{asset_base}/report.js", defer=True),
+        *([Markup(phase_markup(doc.phase))] if doc.phase else []),
         tag.h1(id="title")[link_mark("title", "title"), doc.title],
         tag.p(class_="standfirst", id="short")[link_mark("short", "standfirst"), short],
     ]
