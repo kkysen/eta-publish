@@ -148,12 +148,34 @@ def describe_tabs(document: JsonObject) -> str:
     )
 
 
-RESPONSE_KEYS = (
+TAB_CONTENT_KEYS = (
     "body",
-    "documentId",
+    "documentStyle",
+    "footers",
     "footnotes",
+    "headers",
     "inlineObjects",
     "lists",
+    "namedRanges",
+    "namedStyles",
+    "positionedObjects",
+)
+"""Everything a `documentTab` holds, kept whether or not anything reads it yet.
+
+The parser reads four of these. The rest are saved because a response is
+the document as it was, and a build that wants one of them later should not
+need the document re-fetched to find out what it said: `positionedObjects`
+is the floating image an inline one is not, `headers` and `footers` are the
+page furniture, and `namedStyles` is what the style names on each paragraph
+are defined as.
+
+Written with an empty default rather than left out where a document has none,
+so every saved response is the same shape and `RESPONSE_FORMAT` means something.
+"""
+
+RESPONSE_KEYS = (
+    *TAB_CONTENT_KEYS,
+    "documentId",
     "tabId",
     "tabTitle",
     "title",
@@ -201,6 +223,13 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
 
     The parser only sees `body`, `footnotes`, `inlineObjects`, and `lists`,
     so a tab and a document are interchangeable to it.
+    Every other `documentTab` key is saved alongside them even though
+    nothing reads it yet: see `TAB_CONTENT_KEYS`.
+
+    What is left behind is the document around the tab rather than the tab:
+    the other tabs, `revisionId`, which is for writing and this never writes,
+    and `suggestionsViewMode`, which the response records as `suggestions`
+    in the terms this build asked in.
     """
     tabs = list(iter_tabs(document.get("tabs", [])))
     if not tabs:
@@ -237,10 +266,7 @@ def select_tab(document: JsonObject, wanted: str | None) -> JsonObject:
         "url": document_url(doc_id, tab_id(chosen)),
         "title": document.get("title", ""),
         "tabTitle": tab_title(chosen),
-        "body": content.get("body", {}),
-        "footnotes": content.get("footnotes", {}),
-        "inlineObjects": content.get("inlineObjects", {}),
-        "lists": content.get("lists", {}),
+        **{key: content.get(key, {}) for key in TAB_CONTENT_KEYS},
     }
 
 

@@ -243,6 +243,19 @@ def require_image_index(dest: Path, doc: Document) -> None:
         )
 
 
+OBJECT_PROPERTIES = {
+    "inlineObjects": "inlineObjectProperties",
+    "positionedObjects": "positionedObjectProperties",
+}
+"""Where each kind of embedded object keeps the object itself.
+
+An image floating on the page and one sitting in the text
+are the same `embeddedObject` reached by a different name.
+Both carry a `contentUri`, so both have to be stripped of it,
+including `positionedObjects`, which nothing reads yet.
+"""
+
+
 def without_content_uris(document: JsonObject) -> JsonObject:
     """The response as it is worth saving: no `contentUri` values.
 
@@ -254,26 +267,26 @@ def without_content_uris(document: JsonObject) -> JsonObject:
     whether or not a URI came with it,
     so everything but the download works from a saved response.
     """
-    inline_objects = document.get("inlineObjects")
-    if not inline_objects:
-        return document
     stripped = dict(document)
-    stripped["inlineObjects"] = {
-        object_id: _without_uri(inline_object)
-        for object_id, inline_object in inline_objects.items()
-    }
+    for collection, properties in OBJECT_PROPERTIES.items():
+        objects = document.get(collection)
+        if not objects:
+            continue
+        stripped[collection] = {
+            object_id: _without_uri(embedded, properties) for object_id, embedded in objects.items()
+        }
     return stripped
 
 
-def _without_uri(inline_object: JsonObject) -> JsonObject:
-    properties = inline_object.get("inlineObjectProperties", {})
+def _without_uri(embedded_object: JsonObject, properties_key: str) -> JsonObject:
+    properties = embedded_object.get(properties_key, {})
     embedded = properties.get("embeddedObject", {})
     if "imageProperties" not in embedded:
-        return inline_object
+        return embedded_object
     image_properties = {k: v for k, v in embedded["imageProperties"].items() if k != "contentUri"}
     return {
-        **inline_object,
-        "inlineObjectProperties": {
+        **embedded_object,
+        properties_key: {
             **properties,
             "embeddedObject": {**embedded, "imageProperties": image_properties},
         },

@@ -10778,6 +10778,92 @@
     ]
   },
   "documentId": "1U-M71SN5azsWSLAnp_1cPaPBj8YDHfb9Z8uoopVopBg",
+  "documentStyle": {
+    "background": {
+      "color": {
+        "color": {
+          "rgbColor": {
+            "blue": 1,
+            "green": 1,
+            "red": 1
+          }
+        }
+      }
+    },
+    "defaultFooterId": "kix.e2a70ws5bt7s",
+    "documentFormat": {
+      "documentMode": "PAGES"
+    },
+    "marginBottom": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginFooter": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginHeader": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginLeft": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginRight": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "marginTop": {
+      "magnitude": 36,
+      "unit": "PT"
+    },
+    "pageNumberStart": 1,
+    "pageSize": {
+      "height": {
+        "magnitude": 792,
+        "unit": "PT"
+      },
+      "width": {
+        "magnitude": 612,
+        "unit": "PT"
+      }
+    },
+    "useCustomHeaderFooterMargins": true
+  },
+  "footers": {
+    "kix.e2a70ws5bt7s": {
+      "content": [
+        {
+          "endIndex": 2,
+          "paragraph": {
+            "elements": [
+              {
+                "autoText": {
+                  "textStyle": {},
+                  "type": "PAGE_NUMBER"
+                },
+                "endIndex": 1
+              },
+              {
+                "endIndex": 2,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {}
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footerId": "kix.e2a70ws5bt7s"
+    }
+  },
   "footnotes": {
     "kix.au23zndppkwl": {
       "content": [
@@ -11961,7 +12047,8 @@
       "footnoteId": "kix.xv2zv4pgie30"
     }
   },
-  "format": "cb6a4d92",
+  "format": "e6cf8ee6",
+  "headers": {},
   "inlineObjects": {
     "kix.1l0tdeahqwci": {
       "inlineObjectProperties": {
@@ -14358,9 +14445,363 @@
       }
     }
   },
-  "modifiedTime": "2026-09-01T01:10:14.243Z",
+  "modifiedTime": "2026-09-09T01:46:02.956Z",
+  "namedRanges": {},
+  "namedStyles": {
+    "styles": [
+      {
+        "namedStyleType": "NORMAL_TEXT",
+        "paragraphStyle": {
+          "alignment": "START",
+          "avoidWidowAndOrphan": true,
+          "borderBetween": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderBottom": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderLeft": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderRight": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "borderTop": {
+            "color": {},
+            "dashStyle": "SOLID",
+            "padding": {
+              "unit": "PT"
+            },
+            "width": {
+              "unit": "PT"
+            }
+          },
+          "direction": "LEFT_TO_RIGHT",
+          "indentEnd": {
+            "unit": "PT"
+          },
+          "indentFirstLine": {
+            "unit": "PT"
+          },
+          "indentStart": {
+            "unit": "PT"
+          },
+          "keepLinesTogether": false,
+          "keepWithNext": false,
+          "lineSpacing": 115,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "shading": {
+            "backgroundColor": {}
+          },
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 10,
+            "unit": "PT"
+          },
+          "spacingMode": "NEVER_COLLAPSE"
+        },
+        "textStyle": {
+          "backgroundColor": {},
+          "baselineOffset": "NONE",
+          "bold": false,
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {}
+            }
+          },
+          "italic": false,
+          "smallCaps": false,
+          "strikethrough": false,
+          "underline": false,
+          "weightedFontFamily": {
+            "fontFamily": "Times New Roman",
+            "weight": 400
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_1",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 20,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 6,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 20,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_2",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 18,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 6,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_3",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 16,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "bold": false,
+          "fontSize": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.2627451,
+                "green": 0.2627451,
+                "red": 0.2627451
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_4",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 14,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_5",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          }
+        }
+      },
+      {
+        "namedStyleType": "HEADING_6",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "magnitude": 12,
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 4,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 11,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": true
+        }
+      },
+      {
+        "namedStyleType": "TITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 3,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 26,
+            "unit": "PT"
+          }
+        }
+      },
+      {
+        "namedStyleType": "SUBTITLE",
+        "paragraphStyle": {
+          "direction": "LEFT_TO_RIGHT",
+          "keepLinesTogether": true,
+          "keepWithNext": true,
+          "namedStyleType": "NORMAL_TEXT",
+          "pageBreakBefore": false,
+          "spaceAbove": {
+            "unit": "PT"
+          },
+          "spaceBelow": {
+            "magnitude": 16,
+            "unit": "PT"
+          }
+        },
+        "textStyle": {
+          "fontSize": {
+            "magnitude": 15,
+            "unit": "PT"
+          },
+          "foregroundColor": {
+            "color": {
+              "rgbColor": {
+                "blue": 0.4,
+                "green": 0.4,
+                "red": 0.4
+              }
+            }
+          },
+          "italic": false,
+          "weightedFontFamily": {
+            "fontFamily": "Arial",
+            "weight": 400
+          }
+        }
+      }
+    ]
+  },
   "openComments": 3,
   "openSuggestions": 17,
+  "positionedObjects": {},
   "suggestions": "rejected",
   "tabId": "t.ul3yzv5xed4w",
   "tabTitle": "Draft 2",
