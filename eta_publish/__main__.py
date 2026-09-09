@@ -22,7 +22,7 @@ from typing import Annotated
 
 from typer import Argument, BadParameter, Exit, Option, Typer
 
-from . import format
+from . import console, format
 from .build import BuildOptions, check_code_block_size
 from .site import REPORTS, Report, Site, add_report, build_site, index_page, load_reports
 
@@ -160,10 +160,26 @@ def publish(
 
 
 def report_outcome(site: Site) -> None:
-    for built in site.built:
-        print(f"  {built.path}  {built.doc.title}")
-    for failure in site.failed:
-        print(f"  failed: {failure.report.name or failure.report.url}", file=sys.stderr)
+    """Where the site was written, and one line saying how the build went.
+
+    The paths on stdout, because they are the answer to what was just built
+    and the thing somebody pipes somewhere.
+    Each failure has already been said, with the reason, as it happened:
+    repeating the names here without their reasons would only be the same
+    list read a second time, so this counts them instead.
+    """
+    console.write(
+        console.paths([(built.path, built.doc.title) for built in site.built]),
+        console.for_stream(sys.stdout),
+    )
+    console.write(
+        console.summary(
+            len(site.built),
+            len(site.failed),
+            sum(len(built.doc.warnings) for built in site.built),
+        ),
+        console.for_stream(),
+    )
     # Non-zero when anything failed, even though the rest of the site was written,
     # so an unattended run cannot fail quietly.
     if site.failed:
