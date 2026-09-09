@@ -160,18 +160,14 @@ def publish(
 
 
 def report_outcome(site: Site) -> None:
-    """Where the site was written, and one line saying how the build went.
+    """One line saying how the build went.
 
-    The paths on stdout, because they are the answer to what was just built
-    and the thing somebody pipes somewhere.
+    Where each report went is on that report's own heading, said as it was
+    built rather than listed again once they all were.
     Each failure has already been said, with the reason, as it happened:
     repeating the names here without their reasons would only be the same
     list read a second time, so this counts them instead.
     """
-    console.write(
-        console.paths([(built.path, built.doc.title) for built in site.built]),
-        console.for_stream(sys.stdout),
-    )
     console.write(
         console.summary(
             len(site.built),

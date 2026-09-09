@@ -138,13 +138,27 @@ def notice(about: Notice, console: Console, indent: str = "  ") -> RenderableTyp
     return Group(said, *apart)
 
 
-def built(name: str, warnings: list[Notice], console: Console) -> RenderableType:
-    """One report that was built, and everything in it to fix."""
+def built(name: str, path: str, warnings: list[Notice], console: Console) -> RenderableType:
+    """One report that was built, where it went, and everything in it to fix.
+
+    Where it went belongs on this line rather than in a list of its own at the
+    end: the list was written before there was a heading to put the path on,
+    and it named each report by its headline where this names it by its entry
+    in `reports.toml`, so the two read as being about different reports.
+
+    Separated by a mark and not by spaces alone.
+    On a terminal the colour is what says one field has ended and the next
+    begun; piped into a file there is no colour left to say it, and three
+    fields with two spaces between them are one field.
+    """
     heading = Text()
     heading.append("✓ ", style="bold green")
+    heading.append(path, style=SHOWN)
+    heading.append(" · ", style="dim")
     heading.append(name, style="bold")
     if warnings:
-        heading.append(f"  {len(warnings)} warning{'' if len(warnings) == 1 else 's'}", "yellow")
+        heading.append(" · ", style="dim")
+        heading.append(f"{len(warnings)} warning{'' if len(warnings) == 1 else 's'}", "yellow")
     return Group(heading, *(notice(warning, console) for warning in warnings))
 
 
@@ -211,23 +225,6 @@ def summary(built_count: int, failed_count: int, warning_count: int) -> Text:
     if failed_count:
         line.append(" · ", "dim").append(f"{failed_count} failed", "bold red")
     return line
-
-
-def paths(entries: list[tuple[str, str]]) -> RenderableType | None:
-    """Where each report was written, and what it is called.
-
-    Two columns, because the one that is scanned is the path,
-    and a ragged column is scanned by reading every title beside it.
-    """
-    if not entries:
-        return None
-    width = max(len(path) for path, _ in entries)
-    return Group(
-        *(
-            _hanging(Text(f"  {path.ljust(width)}  ", style=SHOWN), Text(title, style="dim"))
-            for path, title in entries
-        )
-    )
 
 
 def write(renderable: RenderableType | None, console: Console | None = None) -> None:
