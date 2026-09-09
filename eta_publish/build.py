@@ -2,11 +2,11 @@
 
 import hashlib
 import json
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
+from . import console
 from .checks import check
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -349,7 +349,7 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
         try:
             source = emitter.emit(doc)
         except NotImplementedError as e:
-            print(f"skipped {name}: not implemented ({e})", file=sys.stderr)
+            console.write(console.note(f"skipped {name}: not implemented ({e})"))
             continue
         dest = outdir / name
         dest.write_text(source)
@@ -391,10 +391,11 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     from .pdf import TypstMissing, compile_pdf, install_template
 
     if skipped_images:
-        print(
-            "note: skipping the PDF because images were not downloaded; "
-            "Typst embeds them from disk, so it needs the real files",
-            file=sys.stderr,
+        console.write(
+            console.note(
+                "skipping the PDF because images were not downloaded; "
+                "Typst embeds them from disk, so it needs the real files"
+            ),
         )
         return None
 
@@ -402,9 +403,9 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     try:
         return compile_pdf(source)
     except TypstMissing as e:
-        print(f"note: {e}", file=sys.stderr)
+        console.write(console.note(str(e)))
     except RuntimeError as e:
-        print(f"warning: {e}", file=sys.stderr)
+        console.write(console.warning(str(e)))
     return None
 
 
