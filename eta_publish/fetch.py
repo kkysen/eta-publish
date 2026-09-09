@@ -25,7 +25,6 @@ import hashlib
 import json
 import os
 import re
-import sys
 from collections.abc import Iterator
 from functools import cache
 from pathlib import Path
@@ -33,6 +32,7 @@ from threading import Lock
 from typing import TYPE_CHECKING
 from urllib.parse import parse_qs, urlparse
 
+from . import console
 from .docs_json import JsonObject
 
 if TYPE_CHECKING:
@@ -324,17 +324,19 @@ def _sign_in() -> Credentials:
             # A revoked or expired refresh token is exactly the case consent
             # has to be given again, so fall through to the flow below.
             reason = e.args[0] if e.args else e
-            print(
-                f"the saved sign-in is no longer valid ({reason}); asking for it again",
-                file=sys.stderr,
+            console.write(
+                console.note(
+                    f"the saved sign-in is no longer valid ({reason}); asking for it again"
+                ),
             )
             creds = None
     if not creds or not creds.valid:
         missing = set(SCOPES) - _granted_scopes()
         if TOKEN_PATH.exists() and missing:
-            print(
-                f"asking for access again, because this now needs {', '.join(sorted(missing))}",
-                file=sys.stderr,
+            console.write(
+                console.note(
+                    f"asking for access again, because this now needs {', '.join(sorted(missing))}"
+                ),
             )
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), SCOPES)
         creds = flow.run_local_server(port=0)
@@ -592,10 +594,11 @@ def fetch(
         # `gcloud auth application-default login` as well as a key named by
         # the environment, so a machine that acquires one would otherwise stop
         # counting these silently.
-        print(
-            "not asking about suggestions or comments: this is a service account, "
-            "which cannot see either; keeping the counts from the last build that could",
-            file=sys.stderr,
+        console.write(
+            console.note(
+                "not asking about suggestions or comments: this is a service account, "
+                "which cannot see either; keeping the counts from the last build that could"
+            ),
         )
         return document
 

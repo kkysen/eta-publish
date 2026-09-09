@@ -211,7 +211,8 @@ def add(
         # `TabNotFound` carries the list of tabs to pick from, which is the
         # answer to a URL pasted without its `?tab=` id.
         raise BadParameter(str(e), param_hint="URL") from e
-    print(f"{reports}: added `{added.name}`, tab `{added.tab}`")
+    out = console.for_stream(sys.stdout)
+    console.write(console.added(reports, added.name or "", added.tab or "", out), out)
 
 
 def main() -> None:

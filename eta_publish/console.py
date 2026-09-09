@@ -25,6 +25,7 @@ holds no escape sequences to search past and no line broken mid-sentence.
 """
 
 import sys
+from pathlib import Path
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
@@ -158,6 +159,42 @@ def failed(name: str, error: str) -> RenderableType:
     heading.append("✗ ", style="bold red")
     heading.append(name, style="bold")
     return Group(heading, _hanging(Text("  "), Text(error, style="red")))
+
+
+def note(said: str) -> Text:
+    """Something the build did differently, which is not a document's fault.
+
+    A missing `typst`, a sign-in being asked for again, a PDF not attempted:
+    nothing to go and fix in a report, and not nothing either.
+    """
+    text = Text()
+    text.append("· ", style="dim")
+    text.append(said, style="dim")
+    return text
+
+
+def warning(said: str) -> Text:
+    """Something that went wrong and did not stop the build.
+
+    The same mark as a document's warnings, because a reader scanning for
+    what needs attention should not have to learn two.
+    """
+    text = Text()
+    text.append("! ", style="bold yellow")
+    text.append(said)
+    return text
+
+
+def added(reports: Path, name: str, tab: str, console: Console) -> Text:
+    """What `eta-publish add` wrote into the list.
+
+    Both values back, because both were read off the document rather than
+    typed, and reading them back is the only way anybody sees what they are.
+    """
+    text = Text()
+    text.append("✓ ", style="bold green")
+    text.append_text(_spans((f"{reports}: added ", Shown(name), ", tab ", Shown(tab)), console))
+    return text
 
 
 def summary(built_count: int, failed_count: int, warning_count: int) -> Text:

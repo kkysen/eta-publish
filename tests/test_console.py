@@ -9,6 +9,7 @@ line with nothing in it that is not a word.
 
 import io
 import re
+from pathlib import Path
 
 import pytest
 from rich.console import Console, RenderableType
@@ -162,3 +163,19 @@ def test_a_title_is_a_title_and_not_markup() -> None:
     and a document is named by whoever named it rather than by this."""
     written = rendered(log.paths([("reports/x", "A [bold]Draft[/] :construction:")]), plain())
     assert "[bold]Draft[/] :construction:" in written
+
+
+def test_a_note_is_marked_apart_from_a_warning() -> None:
+    """A missing `typst` is not something to go and fix in a document,
+    and a reader scanning for what needs attention should be able to tell."""
+    assert rendered(log.note("typst is not installed"), plain()) == "· typst is not installed\n"
+    assert rendered(log.warning("biome lint failed"), plain()) == "! biome lint failed\n"
+
+
+def test_what_was_added_is_read_back() -> None:
+    """Both values were read off the document rather than typed,
+    so reading them back is the only way anybody sees what they are."""
+    written = rendered(
+        log.added(Path("reports.toml"), "IBX Automation", "Draft 2", plain()), plain()
+    )
+    assert written == "✓ reports.toml: added `IBX Automation`, tab `Draft 2`\n"
