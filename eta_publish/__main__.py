@@ -167,13 +167,17 @@ def report_outcome(site: Site) -> None:
     repeating the names here without their reasons would only be the same
     list read a second time, so this counts them instead.
     """
+    log = console.for_stream()
+    if site.built or site.failed:
+        # Off the last report's warnings, since it is about all of them.
+        log.line()
     console.write(
         console.summary(
             len(site.built),
             len(site.failed),
             sum(len(built.doc.warnings) for built in site.built),
         ),
-        console.for_stream(),
+        log,
     )
     # Non-zero when anything failed, even though the rest of the site was written,
     # so an unattended run cannot fail quietly.
