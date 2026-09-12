@@ -208,3 +208,48 @@ def test_without_keys_nothing_is_submitted(monkeypatch: pytest.MonkeyPatch) -> N
     with pytest.raises(archive.NoCredentials):
         archive.capture(doc, session=Answering(200))
     assert doc.archives == {}
+
+
+# ---- a link to a page of a PDF ---------------------------------------
+
+
+def test_pages_of_one_pdf_are_one_document_to_capture() -> None:
+    """A fragment never reaches a server, so there is one file to ask for."""
+    doc = cites(
+        "https://a.example/report.pdf#page=28",
+        "https://a.example/report.pdf#page=5",
+        "https://a.example/report.pdf",
+    )
+    assert len(doc.sources) == 3
+    assert missing(doc) == ["https://a.example/report.pdf"]
+
+
+def test_every_page_of_a_pdf_shares_the_one_capture(keyed: None) -> None:
+    doc = cites("https://a.example/report.pdf#page=28", "https://a.example/report.pdf#page=5")
+    session = Answering(
+        200,
+        {"archived_snapshots": {"closest": {"available": True, "timestamp": "20240503123456"}}},
+    )
+    assert archive.capture(doc, session=session) == 1
+
+
+def test_the_archived_copy_opens_on_the_page_that_was_cited() -> None:
+    doc = cites("https://a.example/report.pdf#page=28")
+    doc.archives["https://a.example/report.pdf"] = Archived(
+        snapshot="https://web.archive.org/web/20240503123456/https://a.example/report.pdf",
+        timestamp="20240503123456",
+    )
+    archived = doc.archived("https://a.example/report.pdf#page=28")
+    assert archived is not None
+    assert archived.snapshot.endswith("/https://a.example/report.pdf#page=28")
+
+
+def test_a_hand_written_snapshot_of_a_page_is_recorded_as_the_document() -> None:
+    original, archived = unwrap_snapshot(
+        "https://web.archive.org/web/20240503123456/https://a.example/report.pdf#page=50"
+    )
+    assert original == "https://a.example/report.pdf#page=50"
+    assert archived is not None
+    assert archived.snapshot == (
+        "https://web.archive.org/web/20240503123456/https://a.example/report.pdf"
+    )

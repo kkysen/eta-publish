@@ -39,6 +39,7 @@ from .nodes import (
     Table,
     Text,
     Vector,
+    document_url,
     plain_text,
     unwrap_snapshot,
 )
@@ -296,7 +297,9 @@ class Parser:
             return None
         original, archived = unwrap_snapshot(url)
         if archived is not None:
-            self.doc.archives.setdefault(original, archived)
+            # Keyed by the document, which is what was captured: one PDF cited
+            # at fifteen of its pages is one entry in the record.
+            self.doc.archives.setdefault(document_url(original), archived)
         return original
 
     def _rich_link(self, chip: JsonObject) -> Text:

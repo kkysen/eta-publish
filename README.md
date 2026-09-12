@@ -116,7 +116,12 @@ a phone has no hover and a printed page has no links at all,
 so the number and the section are what always work.
 
 `archives.json`, committed beside `report.md`, is the record of
-which capture belongs to which source, keyed by the original URL.
+which capture belongs to which source, keyed by the original URL
+without its fragment.
+A fragment never reaches a server: `#page=28` is an instruction to the PDF
+viewer once the file has arrived, so the fifteen pages of one MTA PDF that
+SAS West cites are one file to capture, and the page goes back on the
+archived link so it still opens where the citation meant.
 A build submits only what is missing from it,
 so a source keeps the capture it has:
 the point of a snapshot is that it is of the page as the report read it,

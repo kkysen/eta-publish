@@ -592,7 +592,7 @@ class HtmlEmitter(Emitter):
         return tag.li(id=f"src{number}")[
             back,
             tag.a(class_="source-url", href=url)[shown_url(url)],
-            self.source_archive(self.doc.archives.get(url)),
+            self.source_archive(self.doc.archived(url)),
         ]
 
     def source_archive(self, archived: Archived | None) -> Piece:
