@@ -139,6 +139,21 @@ which for reference 3 is after the period in `takes seven minutes.`,
 and renders it as a plain superscript number.
 Live renders `[3]` and places it before the period.
 
+### Every source is listed and archived (intended)
+
+New here.
+Every external link carries a `[n]` into a `Sources` section
+after the footnotes, where the entry names the page,
+the capture of it in the Wayback Machine,
+and a `↑` back to each place the report cites it.
+Live has no such section and no such markers:
+a link there is a link, and when the page behind it moves, it is gone.
+
+Four of SAS West's links are already `web.archive.org` URLs typed by hand,
+and `index.html` shows those as the page they are of
+with the capture beside it rather than as an address
+that is itself an archive.
+
 ## SAS West
 
 - <https://www.etany.org/reports/digging-out-deep-hole-sas-west>

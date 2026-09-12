@@ -45,9 +45,10 @@ Reads the Google Doc, builds a document tree, and emits from that tree:
 | `report.typ` / `report.pdf` | [Typst](https://typst.app/) source, and the compiled PDF |
 | `index.html` | Standalone page for review, including any warnings |
 | `images/` | The doc's inline images, for hosting outside Squarespace |
+| `archives.json` | Where each source the report cites is archived |
 
 Headings, anchors, the table of contents, footnote numbering,
-and the `↑` backlinks are all generated.
+the `Sources` section, and the `↑` backlinks are all generated.
 They cannot drift out of sync, because nothing maintains them by hand.
 
 ## Design decisions worth knowing
@@ -96,6 +97,38 @@ It does not survive an insertion above it in the same section,
 a smaller blast radius than numbering the page as a whole
 and a larger one than hashing the text,
 which moved the id of every paragraph anyone corrected.
+
+### Every source is archived, and cited as archived
+
+A link is a claim about a page nobody promised to keep.
+*Digging Out of a Very Deep Hole* cites 113 of them:
+55 on `www.mta.info`, 22 on `transitcosts.com`,
+the rest agency press releases and news sites,
+which are exactly the pages that get reorganized.
+The report is supposed to outlive them.
+
+So every external link carries a `[n]` into a `Sources` section at the end,
+where the entry names the page and the capture of it,
+with a `↑` back to each citation.
+Hovering is not the way to it:
+a phone has no hover and a printed page has no links at all,
+so the number and the section are what always work.
+
+`archives.json`, committed beside `report.md`, is the record of
+which capture belongs to which source, keyed by the original URL.
+A build submits only what is missing from it,
+so a source keeps the capture it has:
+the point of a snapshot is that it is of the page as the report read it,
+and recapturing would quietly move it forward to whatever the page says now.
+A document that already writes a link as `web.archive.org/web/<ts>/<url>`
+has it unwrapped on the way in and seeds the record with the capture it named,
+so a source archived by hand and a source archived here are one source.
+
+Captures go through [Save Page Now](https://archive.org/account/s3.php),
+which needs an archive.org account:
+put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`.
+Without them a build says so and goes on,
+and every source not already in the record publishes saying it has none.
 
 ### Semantic line breaks in the Markdown
 
