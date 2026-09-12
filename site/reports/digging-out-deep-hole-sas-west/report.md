@@ -765,7 +765,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 108. <https://www.mta.info/document/179396#page=25> (not archived)
 109. <https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72> (not archived)
 110. <http://stations.albertguillaumes.cat/> (not archived)
-111. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>))
+111. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348id_/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>))
 112. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>))
 113. <https://link.nfpa.org/free-access/publications/130/2026> (not archived)
 
