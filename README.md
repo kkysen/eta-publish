@@ -110,7 +110,8 @@ The report is supposed to outlive them.
 So every external link carries a `[n]` into a `Sources` section at the end,
 where the entry names the page and the capture of it,
 with a `↑` back to each citation.
-Hovering is not the way to it:
+Hovering a citation does show the pair, built from the entry by `report.js`,
+but it is not the way to it:
 a phone has no hover and a printed page has no links at all,
 so the number and the section are what always work.
 
