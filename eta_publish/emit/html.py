@@ -914,9 +914,26 @@ class HtmlEmitter(Emitter):
 
     @override
     def image(self, node: Image) -> str:
+        """The picture, at the size of the file that was written.
+
+        `width` and `height` are the file's own pixels, not how wide it is
+        shown: the stylesheet still lays it out at `width: 100%`, and what the
+        two attributes give the browser is the shape, so it can leave the right
+        gap before the file arrives.
+
+        Without them an image is zero pixels tall until it loads, and with 29
+        of them loading lazily the report is 1,280 pixels shorter than it will
+        be. A reader who opens `#src50` lands where that anchor was before the
+        pictures pushed it down.
+
+        An SVG has no pixel size to read, so it is the one this cannot say
+        anything about.
+        """
         href = self.doc.image_href(node)
         src = f"{self.image_base}/{href}" if self.image_base else href
-        return markup(htpy.img(src=src, alt=node.alt, loading="lazy"))
+        shape = self.doc.image_shapes.get(node.object_id)
+        width, height = shape if shape else (None, None)
+        return markup(htpy.img(src=src, alt=node.alt, loading="lazy", width=width, height=height))
 
 
 # Enough to read the report as it will look, and nothing more.
