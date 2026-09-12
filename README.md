@@ -122,6 +122,15 @@ A fragment never reaches a server: `#page=28` is an instruction to the PDF
 viewer once the file has arrived, so the fifteen pages of one MTA PDF that
 SAS West cites are one file to capture, and the page goes back on the
 archived link so it still opens where the citation meant.
+
+A `#page=` citation is archived with Wayback's `id_` modifier,
+which is what makes that work.
+The ordinary Wayback URL for a PDF is not the PDF:
+it is an HTML page carrying the capture toolbar with the file inside it,
+so the browser applies `#page=50` to that wrapper and the reader gets the cover.
+Asked for raw, the same capture comes back as the PDF itself.
+An HTML capture is the archived document,
+so an anchor in one already resolves and it keeps the ordinary URL.
 A build submits only what is missing from it,
 so a source keeps the capture it has:
 the point of a snapshot is that it is of the page as the report read it,

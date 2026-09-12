@@ -253,3 +253,32 @@ def test_a_hand_written_snapshot_of_a_page_is_recorded_as_the_document() -> None
     assert archived.snapshot == (
         "https://web.archive.org/web/20240503123456/https://a.example/report.pdf"
     )
+
+
+def test_a_page_of_a_pdf_is_asked_for_raw() -> None:
+    """The ordinary Wayback URL for a PDF is an HTML page carrying the toolbar,
+    so `#page=50` lands on a wrapper that has no page 50."""
+    doc = cites("https://a.example/report.pdf#page=50")
+    doc.archives["https://a.example/report.pdf"] = Archived(
+        snapshot="https://web.archive.org/web/20240503123456/https://a.example/report.pdf",
+        timestamp="20240503123456",
+    )
+    archived = doc.archived("https://a.example/report.pdf#page=50")
+    assert archived is not None
+    assert archived.snapshot == (
+        "https://web.archive.org/web/20240503123456id_/https://a.example/report.pdf#page=50"
+    )
+
+
+def test_an_anchor_in_a_page_is_left_on_the_ordinary_capture() -> None:
+    """An HTML capture is the document itself, toolbar and rewritten assets included."""
+    doc = cites("https://a.example/article#grades")
+    doc.archives["https://a.example/article"] = Archived(
+        snapshot="https://web.archive.org/web/20240503123456/https://a.example/article",
+        timestamp="20240503123456",
+    )
+    archived = doc.archived("https://a.example/article#grades")
+    assert archived is not None
+    assert archived.snapshot == (
+        "https://web.archive.org/web/20240503123456/https://a.example/article#grades"
+    )

@@ -571,12 +571,28 @@ class Document:
         page of it the report cites. The fragment goes back on the way out,
         which is what makes the archived copy of a claim about page 28 open on
         page 28 rather than on the cover.
+
+        A `#page=` citation is served raw, because the ordinary Wayback URL for
+        a PDF is not the PDF. It is an HTML page carrying the capture toolbar
+        with the file inside it, so the browser applies `#page=50` to that
+        wrapper, which has no page 50, and the reader gets the cover. Asked for
+        with `id_`, the same capture comes back as the PDF itself and the
+        viewer opens where the citation meant. Measured in a browser, on the
+        `R211 Tech Spec.pdf` capture the report already cites: `50 / 819`.
+
+        Only for those. An HTML capture is the archived document itself, so an
+        anchor in it already resolves, and the ordinary URL is the one that
+        keeps the toolbar and serves the page's images and stylesheets from the
+        archive rather than from a live site that may no longer have them.
         """
         base, hash_, fragment = source.partition("#")
         found = self.archives.get(base)
         if found is None or not found.snapshot or not hash_:
             return found
-        return replace(found, snapshot=f"{found.snapshot}{hash_}{fragment}")
+        snapshot = found.snapshot
+        if fragment.startswith(PDF_PAGE):
+            snapshot = RAW.sub(r"\1id_/", snapshot, count=1)
+        return replace(found, snapshot=f"{snapshot}{hash_}{fragment}")
 
     @property
     def source_uses(self) -> dict[str, int]:
@@ -741,6 +757,21 @@ def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
     return url, Archived(
         snapshot=f"https://web.archive.org/web/{stamp}/{document}", timestamp=stamp
     )
+
+
+PDF_PAGE = "page="
+"""The fragment a link to a page of a PDF carries.
+
+An instruction to the PDF viewer rather than an anchor in a document, which is
+why it is the one fragment the ordinary Wayback URL swallows.
+"""
+
+RAW = re.compile(r"(https?://web\.archive\.org/web/\d{4,14})/")
+"""Where the modifier goes in a Wayback URL, between the timestamp and the page.
+
+`id_` is the one that says to serve the capture as it was rather than rewritten
+and wrapped.
+"""
 
 
 def document_url(url: str) -> str:
