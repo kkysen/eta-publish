@@ -147,6 +147,16 @@ def test_a_failed_capture_is_not_tried_again() -> None:
 # ---- what the service says --------------------------------------------
 
 
+@pytest.fixture(autouse=True)
+def impatient(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Ask once and take the answer.
+
+    A real build waits and asks again, because being told to slow down is not
+    an answer. A test that did would spend 85 seconds finding that out.
+    """
+    monkeypatch.setattr(archive, "PATIENCE", ())
+
+
 @pytest.fixture
 def keyed(monkeypatch: pytest.MonkeyPatch) -> None:
     """Keys in the environment, so these test the capture rather than their absence."""
@@ -306,3 +316,24 @@ def test_a_request_that_never_arrived_says_nothing_about_the_source(keyed: None)
     assert archive.capture(doc, session=Timing()) == (0, 0)
     assert doc.archives == {}
     assert missing(doc) == ["https://a.example/1"]
+
+
+def test_being_told_to_slow_down_is_asked_again(
+    keyed: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Two `429`s and then an answer, which is the shape a real build meets."""
+    monkeypatch.setattr(archive, "PATIENCE", (0, 0, 0))
+    answers = [429, 429, 200]
+
+    class Relenting(requests.Session):
+        @override
+        def request(self, *args: object, **kwargs: object) -> requests.Response:
+            response = requests.Response()
+            response.status_code = answers.pop(0) if answers else 200
+            response.url = "https://web.archive.org/asked"
+            response._content = json.dumps([["timestamp"], ["20240503123456"]]).encode()
+            return response
+
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=Relenting()) == (1, 0)
+    assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
