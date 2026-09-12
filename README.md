@@ -102,7 +102,7 @@ which moved the id of every paragraph anyone corrected.
 
 A link is a claim about a page nobody promised to keep.
 *Digging Out of a Very Deep Hole* cites 113 of them:
-55 on `www.mta.info`, 22 on `transitcosts.com`,
+33 on `www.mta.info`, 12 on `transitcosts.com`, 9 on `mp.weixin.qq.com`,
 the rest agency press releases and news sites,
 which are exactly the pages that get reorganized.
 The report is supposed to outlive them.
