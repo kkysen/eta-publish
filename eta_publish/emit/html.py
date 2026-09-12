@@ -7,6 +7,7 @@ so without this the captions, table of contents, and footnotes
 render as undifferentiated body text.
 """
 
+import re
 from collections.abc import Callable, Iterable
 from string import ascii_lowercase
 from typing import cast, override
@@ -166,6 +167,26 @@ def phase_markup(phase: str) -> str:
     if not phase:
         return ""
     return markup(tag.p(class_="phase")[tag.span(class_="phase-label")["Phase: "], phase])
+
+
+TEXT_FRAGMENT = re.compile(r"#:~:text=.*$")
+"""A link's text fragment, which tells the browser what to highlight.
+
+Not part of the address: it is 300 characters of percent-encoded sentence on
+some of these, and a reader checking where a citation goes is reading the host
+and the path. The link still carries it, so the page still opens on the
+sentence it was citing.
+"""
+
+
+def shown_url(url: str) -> str:
+    """A source URL as the entry prints it: the address, without the machinery.
+
+    The scheme goes, the way every address written for a person to read drops
+    it, and so does a text fragment. Only what is shown is shortened; the link
+    is the URL the document holds.
+    """
+    return TEXT_FRAGMENT.sub("", url.split("://", 1)[-1])
 
 
 class HtmlEmitter(Emitter):
@@ -570,7 +591,7 @@ class HtmlEmitter(Emitter):
             )
         return tag.li(id=f"src{number}")[
             back,
-            tag.a(class_="source-url", href=url)[url],
+            tag.a(class_="source-url", href=url)[shown_url(url)],
             self.source_archive(self.doc.archives.get(url)),
         ]
 
