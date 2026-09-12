@@ -19,6 +19,7 @@ the emitters read the result off the document and stay pure.
 import json
 import os
 import time
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from pathlib import Path
@@ -55,12 +56,23 @@ Out of the environment rather than a file in the repository, because they are
 credentials and this repository is public.
 """
 
-MAX_AT_ONCE = 4
-"""How many captures to have in flight at once.
+MAX_AT_ONCE = 2
+"""How many sources to be asking about at once.
 
-Save Page Now allows an authenticated account twelve. Well under it, because a
-capture is a crawl of somebody else's site: the limit is what the service will
-tolerate, and this is what a build should ask of it.
+Save Page Now allows an authenticated account twelve captures in flight. Well
+under it, because the index is the part that runs on every build and it is
+stricter: 81 lookups four at a time answered `429` to nearly all of them, and
+went on refusing single queries two seconds apart for minutes afterwards. What
+that build recorded was that 72 of 81 sources were unarchived, when what had
+happened was that it had been told to stop asking.
+"""
+
+PATIENCE = (5, 20, 60)
+"""How long to wait before asking again, after being told to slow down.
+
+Three tries and then the source is left for the next build. Growing, because a
+rate limit that is still there after five seconds is not one more seconds will
+clear; and finite, because a build should end.
 """
 
 CAPTURE_TIMEOUT = 180
@@ -243,7 +255,7 @@ def _archive(
     half of this that needs no account.
     """
     try:
-        found = _existing(http, url)
+        found = _patiently(lambda: _existing(http, url))
         if found is not None:
             return found, True
         if headers is None:
@@ -273,6 +285,21 @@ def _checked(response: requests.Response) -> requests.Response:
         raise Busy(f"{response.status_code} from {response.url}")
     response.raise_for_status()
     return response
+
+
+def _patiently[T](ask: Callable[[], T]) -> T:
+    """`ask`, again after a wait if the answer was that it is being asked too much.
+
+    The waiting is what makes the count mean anything: a source recorded as
+    unarchived because the index was busy is a source that will publish saying
+    so, and nothing later goes back to check.
+    """
+    for wait in PATIENCE:
+        try:
+            return ask()
+        except Busy:
+            time.sleep(wait)
+    return ask()
 
 
 def _existing(http: requests.Session, url: str) -> Archived | None:

@@ -555,14 +555,14 @@
         "startIndex": 321
       },
       {
-        "endIndex": 538,
+        "endIndex": 677,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 538,
+              "endIndex": 677,
               "startIndex": 343,
               "textRun": {
-                "content": "[Introduce what the driverless metro is. Talk about metro automation as a technology, used on busy main lines like Paris M1/M4/M14, all new Singapore lines, increasingly new Chinese lines, etc.]\n",
+                "content": "[Discuss Honolulu Skyline. Only US example. Good rolling stock costs. Appropriate rolling stock for IBX except it's third rail not catenary. PSDs have a separate cost since it came as a change order, ~$27M/21 stations. Would be ~$31M for the IBX if adjusted for inflation and number of stations, which is 0.5% of total project cost.]\n",
                 "textStyle": {}
               }
             }
@@ -575,12 +575,52 @@
         "startIndex": 343
       },
       {
-        "endIndex": 539,
+        "endIndex": 850,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 539,
-              "startIndex": 538,
+              "endIndex": 850,
+              "startIndex": 677,
+              "textRun": {
+                "content": "[Honolulu board was convinced to add PSDs by showing them videos of babies falling in front of trains. Might be a good strategy. Also for subway surfing and open gangways.]\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 677
+      },
+      {
+        "endIndex": 1045,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1045,
+              "startIndex": 850,
+              "textRun": {
+                "content": "[Introduce what the driverless metro is. Talk about metro automation as a technology, used on busy main lines like Paris M1/M4/M14, all new Singapore lines, increasingly new Chinese lines, etc.]\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 850
+      },
+      {
+        "endIndex": 1046,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 1046,
+              "startIndex": 1045,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -592,15 +632,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 538
+        "startIndex": 1045
       },
       {
-        "endIndex": 964,
+        "endIndex": 1471,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 964,
-              "startIndex": 539,
+              "endIndex": 1471,
+              "startIndex": 1046,
               "textRun": {
                 "content": "[Go into ALM. Explain that once the metro is driverless, costs can be reduced by shrinking station footprint, and using very high frequency, which would be unaffordable otherwise, to maintain a reasonable capacity. Cite Marco\u2019s Italy case study and talk about how small cities in Italy build incredibly cheap metros this way, and also talk about secondary cities in France and the stations on the lower-ridership GPE lines.]\n",
                 "textStyle": {}
@@ -612,15 +652,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 539
+        "startIndex": 1046
       },
       {
-        "endIndex": 965,
+        "endIndex": 1472,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 965,
-              "startIndex": 964,
+              "endIndex": 1472,
+              "startIndex": 1471,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -632,15 +672,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 964
+        "startIndex": 1471
       },
       {
-        "endIndex": 1323,
+        "endIndex": 1830,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1323,
-              "startIndex": 965,
+              "endIndex": 1830,
+              "startIndex": 1472,
               "textRun": {
                 "content": "[Get into advantages and disadvantages\u2014the latter including scaling up problems. Mention that in Vancouver, the Canada Line is having this issue due to its going well over ridership projections, but say that the outer terminals are single-track to save money so it\u2019s capped at 20 trunk tph, whereas the Expo Line is capable of 33 tph and Parisian lines 42.]\n",
                 "textStyle": {}
@@ -652,15 +692,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 965
+        "startIndex": 1472
       },
       {
-        "endIndex": 1324,
+        "endIndex": 1831,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1324,
-              "startIndex": 1323,
+              "endIndex": 1831,
+              "startIndex": 1830,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -672,15 +712,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1323
+        "startIndex": 1830
       },
       {
-        "endIndex": 1550,
+        "endIndex": 2057,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1550,
-              "startIndex": 1324,
+              "endIndex": 2057,
+              "startIndex": 1831,
               "textRun": {
                 "content": "[possibly mention that IBX should be future proofed for platform extension if it proves necessary, eg through station sitting that does not preclude it. Is there a way to cost effectively preserve this option at Atlantic Av?]\n",
                 "textStyle": {}
@@ -692,15 +732,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1324
+        "startIndex": 1831
       },
       {
-        "endIndex": 1551,
+        "endIndex": 2058,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1551,
-              "startIndex": 1550,
+              "endIndex": 2058,
+              "startIndex": 2057,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -712,15 +752,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1550
+        "startIndex": 2057
       },
       {
-        "endIndex": 1661,
+        "endIndex": 2168,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1661,
-              "startIndex": 1551,
+              "endIndex": 2168,
+              "startIndex": 2058,
               "textRun": {
                 "content": "[Say that multi-line systems in China can pool rolling stock; maybe mention the Expo+Millennium line system.]\n",
                 "textStyle": {}
@@ -732,15 +772,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1551
+        "startIndex": 2058
       },
       {
-        "endIndex": 1662,
+        "endIndex": 2169,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1662,
-              "startIndex": 1661,
+              "endIndex": 2169,
+              "startIndex": 2168,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -752,15 +792,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1661
+        "startIndex": 2168
       },
       {
-        "endIndex": 1687,
+        "endIndex": 2194,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1687,
-              "startIndex": 1662,
+              "endIndex": 2194,
+              "startIndex": 2169,
               "textRun": {
                 "content": "Where ALM is Appropriate\n",
                 "textStyle": {}
@@ -773,17 +813,17 @@
             "namedStyleType": "HEADING_2"
           }
         },
-        "startIndex": 1662
+        "startIndex": 2169
       },
       {
-        "endIndex": 2342,
+        "endIndex": 3131,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2342,
-              "startIndex": 1687,
+              "endIndex": 3131,
+              "startIndex": 2194,
               "textRun": {
-                "content": "ALM is an intermediate-capacity system. It relies on a combination of short trains to allow for cheap underground construction, and the driverless system to allow for very high frequency to maintain sufficient throughput. SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk. The VAL systems run every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in contrast, the non-driverless Marseille Metro runs every 10-15 minutes.\n",
+                "content": "ALM is an intermediate-capacity system. It relies on a combination of short trains to allow cheap underground construction and driverless trains to allow the very high frequency required for sufficient throughput. This, in turn, is because station costs are a considerable proportion of overall subway construction costs: the ratio of station to tunnel costs ranges from a little less than 1:1 in some low-cost French examples to more than 3:1 for Second Avenue Subway. As far as the Transit Costs Project has been able to tell from detailed American and Italian data, station costs within each environment are proportional to the dig volume; for the same reason, ETA recommended reducing the station dig volumes for Second Avenue Subway\u2019s proposed 125th Street extension to avoid extraneous mezzanines. Shrinking the size of the train on a new-build line allows further reduction in station footprint and thus considerably lower costs.\n",
                 "textStyle": {}
               }
             }
@@ -793,15 +833,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1687
+        "startIndex": 2194
       },
       {
-        "endIndex": 2343,
+        "endIndex": 3132,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2343,
-              "startIndex": 2342,
+              "endIndex": 3132,
+              "startIndex": 3131,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -813,169 +853,243 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 2342
+        "startIndex": 3131
       },
       {
-        "endIndex": 2742,
+        "endIndex": 3693,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2740,
-              "startIndex": 2343,
+              "endIndex": 3693,
+              "startIndex": 3132,
               "textRun": {
-                "content": "Nevertheless, on the strongest routes in major cities, it is not common. On such routes, demand is so high that the city requires both very high frequency and long trains. Peak hourly ridership on the 4 and 5 trains from the Upper East Side to Midtown was 30,000 before Second Avenue Subway opened [source: Hub Bound 2015-16 data, and SAS EIS], whereas ALM is typically designed for 15,000-25,000.",
+                "content": "The value of driverless operation is that it permits high off-peak frequency, even in a small city. SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk. The systems using driverless VAL technology run every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in contrast, the non-driverless Marseille Metro runs every 10-15 minutes.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3132
+      },
+      {
+        "endIndex": 3694,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3694,
+              "startIndex": 3693,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3693
+      },
+      {
+        "endIndex": 4046,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 3988,
+              "startIndex": 3694,
+              "textRun": {
+                "content": "Nevertheless, on the strongest routes in major cities ALM systems are not common. On such routes, demand  requires both very high frequency and long trains. The 4 and 5 trains handled 30,000 passengers from the Upper East Side to Midtown during the peak hour before Second Avenue Subway opened,",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 2741,
+              "endIndex": 3989,
               "footnoteReference": {
-                "footnoteId": "kix.tlsl8nd2kyii",
+                "footnoteId": "kix.3yrrey4d93v5",
                 "footnoteNumber": "1",
                 "textStyle": {}
               },
-              "startIndex": 2740
+              "startIndex": 3988
             },
             {
-              "endIndex": 2742,
-              "startIndex": 2741,
+              "endIndex": 3990,
+              "startIndex": 3989,
               "textRun": {
-                "content": "\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 2343
-      },
-      {
-        "endIndex": 2743,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 2743,
-              "startIndex": 2742,
-              "textRun": {
-                "content": "\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 2742
-      },
-      {
-        "endIndex": 3270,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 3270,
-              "startIndex": 2743,
-              "textRun": {
-                "content": "Thus, the earliest adopters of the technology have historically been smaller cities, which looked for such capacity at low cost while still maintaining the high speed of a fully grade-separated metro system. The first driverless metro system to be deployed as ordinary urban mass transit, as opposed to an airport people mover, was the VAL system for the Lille Metro, opened 1983, from which it rapidly spread across provincial France; Vancouver, at the time a metro region of only 1.5 million people, opened SkyTrain in 1986.\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 2743
-      },
-      {
-        "endIndex": 3271,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 3271,
-              "startIndex": 3270,
-              "textRun": {
-                "content": "\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 3270
-      },
-      {
-        "endIndex": 3667,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 3667,
-              "startIndex": 3271,
-              "textRun": {
-                "content": "Larger cities have more recently started applying ALM technology on lines that do not expect to have so much ridership that higher-capacity metro and regional rail solutions are required. In all cases, the comparison is not with a conventional subway, but with a light rail system. A conventional subway on such routes is usually rejected because it would be overkill for the expected ridership.\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 3271
-      },
-      {
-        "endIndex": 3668,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 3668,
-              "startIndex": 3667,
-              "textRun": {
-                "content": "\n",
-                "textStyle": {}
-              }
-            }
-          ],
-          "paragraphStyle": {
-            "direction": "LEFT_TO_RIGHT",
-            "namedStyleType": "NORMAL_TEXT"
-          }
-        },
-        "startIndex": 3667
-      },
-      {
-        "endIndex": 4578,
-        "paragraph": {
-          "elements": [
-            {
-              "endIndex": 4441,
-              "startIndex": 3668,
-              "textRun": {
-                "content": "The tradeoff between light rail and ALM is that light rail is cheaper if it can be done on the street in dedicated lanes, but ALM offers the higher speed of a subway, much lower operating costs due to driverless operations, and, because of those low costs, high frequency all day. The higher cost of a subway is defrayed through shrinking the footprint of the stations. In Italy, where many urban subway lines have been built this century, some driverless and some not, the cost of station construction has been fairly consistent at 500\u20ac per cubic meter outside the most difficult environments (such as Classical Roman sites), producing smaller driverless stations in Turin and Milan at 15 million \u20ac per station and larger ones in more modern parts of Rome at 40 million \u20ac.",
+                "content": " ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 4442,
+              "endIndex": 3991,
               "footnoteReference": {
-                "footnoteId": "kix.n2aftxltefkz",
+                "footnoteId": "kix.u8j9tlnfqsxx",
                 "footnoteNumber": "2",
                 "textStyle": {}
               },
-              "startIndex": 4441
+              "startIndex": 3990
             },
             {
-              "endIndex": 4578,
-              "startIndex": 4442,
+              "endIndex": 4044,
+              "startIndex": 3991,
+              "textRun": {
+                "content": " whereas ALM is typically designed for 15,000-25,000.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 4045,
+              "footnoteReference": {
+                "footnoteId": "kix.tlsl8nd2kyii",
+                "footnoteNumber": "3",
+                "textStyle": {}
+              },
+              "startIndex": 4044
+            },
+            {
+              "endIndex": 4046,
+              "startIndex": 4045,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 3694
+      },
+      {
+        "endIndex": 4047,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4047,
+              "startIndex": 4046,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4046
+      },
+      {
+        "endIndex": 4570,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4570,
+              "startIndex": 4047,
+              "textRun": {
+                "content": "Thus, the earliest adopters of the technology have historically been smaller cities, which looked for medium capacity at low cost while still maintaining the high speed of a fully grade-separated metro system. The first driverless metro system deployed as ordinary urban mass transit, as opposed to an airport people mover, was the VAL system for the Lille Metro, opened 1983, from which it rapidly spread across provincial France. Vancouver, at the time a metro region of only 1.5 million people, opened SkyTrain in 1986.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4047
+      },
+      {
+        "endIndex": 4571,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4571,
+              "startIndex": 4570,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4570
+      },
+      {
+        "endIndex": 4928,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4928,
+              "startIndex": 4571,
+              "textRun": {
+                "content": "Larger cities have more recently started applying ALM technology on lines that do not expect to have ridership that warrants metro or regional rail. In all cases, the comparison is not with a conventional subway, but with a light rail system. A conventional subway on such routes is usually rejected because it would be overkill for the expected ridership.\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4571
+      },
+      {
+        "endIndex": 4929,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 4929,
+              "startIndex": 4928,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 4928
+      },
+      {
+        "endIndex": 5862,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 5725,
+              "startIndex": 4929,
+              "textRun": {
+                "content": "The tradeoff between light rail and ALM is that light rail is cheaper if it can be done on the street in dedicated lanes, but ALM offers the higher speed of a subway, much lower operating costs due to driverless operations, and, because of those low costs, high frequency all day. The cost increase stemming from complete grade separation is defrayed by shrinking the footprint of the stations. In Italy, where many urban subway lines have been built this century, some driverless and some not, the cost of station construction has been fairly consistent at \u20ac500 per cubic meter outside the most difficult environments (such as Classical Roman sites), producing smaller driverless stations in Turin and Milan at \u20ac15 million per station and larger ones in more modern parts of Rome at \u20ac40 million.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 5726,
+              "footnoteReference": {
+                "footnoteId": "kix.n2aftxltefkz",
+                "footnoteNumber": "4",
+                "textStyle": {}
+              },
+              "startIndex": 5725
+            },
+            {
+              "endIndex": 5862,
+              "startIndex": 5726,
               "textRun": {
                 "content": " Nonetheless, with soft costs included, the construction cost of ALM is about four to five times as high as that of on-street tramways.\n",
                 "textStyle": {}
@@ -987,15 +1101,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3668
+        "startIndex": 4929
       },
       {
-        "endIndex": 4579,
+        "endIndex": 5863,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 4579,
-              "startIndex": 4578,
+              "endIndex": 5863,
+              "startIndex": 5862,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1007,17 +1121,17 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4578
+        "startIndex": 5862
       },
       {
-        "endIndex": 5424,
+        "endIndex": 6901,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5424,
-              "startIndex": 4579,
+              "endIndex": 6901,
+              "startIndex": 5863,
               "textRun": {
-                "content": "However, when light rail cannot be built on the street, its cost advantage over ALM is greatly reduced. ALM costs only 1.5 to 2 times as much as elevated systems, and if light rail has to be tunneled then its cost advantage over heavy rail vanishes. In a private right-of-way such as that of IBX, the construction costs of ALM, which would not incur any additional tunneling, are the same as those of light rail or any other non-driverless solution. This is the perfect place for New York to experiment with ALM technology, and reduce costs further through shrinking the station footprint. Elsewhere, the tradeoff is that ALM has somewhat higher initial costs but lower operating costs. But the IBX right-of-way is such that ALM costs less because the stations can be shrunk without any requirement for additional tunnels or elevated guideways.\n",
+                "content": "However, when light rail cannot be built on the street, its cost advantage over ALM is greatly reduced. In truth, the costs of light and heavy rail are the same if both are built of the same type: underground, or elevated, or at-grade. Light rail is cheaper only when it can be built at-grade and heavy rail cannot, as light rail technology is designed to handle frequent grade crossings whereas driverless metro must be built entirely grade-separated. In a private right-of-way such as that of IBX, the construction costs of ALM, which would not incur any additional tunneling, are the same as those of light rail or any other non-driverless solution. IBX is the perfect place for New York to experiment with ALM technology and reduce costs further by shrinking station footprints. Elsewhere, the tradeoff is that ALM has somewhat higher initial costs but lower operating costs. But the IBX right-of-way is such that ALM costs less because the stations can be shrunk without any requirement for additional tunnels or elevated guideways.\n",
                 "textStyle": {}
               }
             }
@@ -1027,15 +1141,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4579
+        "startIndex": 5863
       },
       {
-        "endIndex": 5425,
+        "endIndex": 6902,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5425,
-              "startIndex": 5424,
+              "endIndex": 6902,
+              "startIndex": 6901,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1047,17 +1161,17 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5424
+        "startIndex": 6901
       },
       {
-        "endIndex": 5968,
+        "endIndex": 7394,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5968,
-              "startIndex": 5425,
+              "endIndex": 7394,
+              "startIndex": 6902,
               "textRun": {
-                "content": "Elsewhere in New York, ALM may be appropriate on other lines that have no expectation of more than 15,000-25,000 passengers per hour per direction, and that do not make sense as short extensions of existing subway lines. Circumferential routes such as Fordham Road in the Bronx and Main Street in Queens are appropriate to study for this technology, in conjunction with adopting it wholesale for IBX. These routes have never been studied as rail routes, because light rail may be too slow for their needs and a full-size subway too expensive.\n",
+                "content": "Elsewhere in New York, ALM may be appropriate on other lines that have no expectation of more than 15,000-25,000 passengers per hour per direction, and that do not make sense as short extensions of existing subway lines. Circumferential routes such as Fordham Road in the Bronx and Main Street in Queens are appropriate to study for this technology. These routes have never been studied as rail routes, because light rail may be too slow for their needs and a full-size subway too expensive.\n",
                 "textStyle": {}
               }
             }
@@ -1067,15 +1181,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5425
+        "startIndex": 6902
       },
       {
-        "endIndex": 5985,
+        "endIndex": 7411,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5985,
-              "startIndex": 5968,
+              "endIndex": 7411,
+              "startIndex": 7394,
               "textRun": {
                 "content": "Rising Ridership\n",
                 "textStyle": {}
@@ -1088,17 +1202,34 @@
             "namedStyleType": "HEADING_2"
           }
         },
-        "startIndex": 5968
+        "startIndex": 7394
       },
       {
-        "endIndex": 6561,
+        "endIndex": 7862,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6561,
-              "startIndex": 5985,
+              "endIndex": 7658,
+              "startIndex": 7411,
               "textRun": {
-                "content": "With ridership projections now rising to 160k/day, the IBX has seen a steady rise in ridership as plans materialize and improve.  The initial feasibility study in 2022 estimated only 87k riders. The PEL study saw that rise to 115k. Then the 20-Year Needs Assessment Comparative Evaluation increased it to 118.7k. And now it has risen to 160k. This has been driven by a refinement of the ridership model as more details have been decided, as well as improved station locations and a truly impressive reduction in runtime. But we have reason to believe it can rise even higher.\n",
+                "content": "IBX has seen a steady rise in projected ridership as plans materialize and improve. Ridership projections have risen from 87,000 per day in the initial feasibility study in 2022 to 160,000 per day in the more detailed and higher-speed 2025 design.",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 7659,
+              "footnoteReference": {
+                "footnoteId": "kix.xerbbbt8t2n7",
+                "footnoteNumber": "5",
+                "textStyle": {}
+              },
+              "startIndex": 7658
+            },
+            {
+              "endIndex": 7862,
+              "startIndex": 7659,
+              "textRun": {
+                "content": " The PEL study saw that rise to 115k. Then the 20-Year Needs Assessment Comparative Evaluation increased it to 118.7k. And now it has risen to 160k. This has been driven by all of the following factors:\n",
                 "textStyle": {}
               }
             }
@@ -1108,15 +1239,154 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5985
+        "startIndex": 7411
       },
       {
-        "endIndex": 6562,
+        "endIndex": 7930,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hijhgui8ezf4",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7930,
+              "startIndex": 7862,
+              "textRun": {
+                "content": "Refinement of the ridership model as more details have been decided\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spacingMode": "COLLAPSE_LISTS"
+          }
+        },
+        "startIndex": 7862
+      },
+      {
+        "endIndex": 7957,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hijhgui8ezf4",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 7957,
+              "startIndex": 7930,
+              "textRun": {
+                "content": "Improved station locations\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spacingMode": "COLLAPSE_LISTS"
+          }
+        },
+        "startIndex": 7930
+      },
+      {
+        "endIndex": 8074,
+        "paragraph": {
+          "bullet": {
+            "listId": "kix.hijhgui8ezf4",
+            "textStyle": {
+              "underline": false
+            }
+          },
+          "elements": [
+            {
+              "endIndex": 8070,
+              "startIndex": 7957,
+              "textRun": {
+                "content": "A reduction in runtime after ETA successfully pressured the MTA to drop street running around All Faiths Cemetery",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 8071,
+              "footnoteReference": {
+                "footnoteId": "kix.a1aqfkvyo1da",
+                "footnoteNumber": "6",
+                "textStyle": {}
+              },
+              "startIndex": 8070
+            },
+            {
+              "endIndex": 8072,
+              "startIndex": 8071,
+              "textRun": {
+                "content": " ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 8073,
+              "footnoteReference": {
+                "footnoteId": "kix.nlj3ixqelkiy",
+                "footnoteNumber": "7",
+                "textStyle": {}
+              },
+              "startIndex": 8072
+            },
+            {
+              "endIndex": 8074,
+              "startIndex": 8073,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "namedStyleType": "NORMAL_TEXT",
+            "spacingMode": "COLLAPSE_LISTS"
+          }
+        },
+        "startIndex": 7957
+      },
+      {
+        "endIndex": 8075,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6562,
-              "startIndex": 6561,
+              "endIndex": 8075,
+              "startIndex": 8074,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1128,23 +1398,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6561
+        "startIndex": 8074
       },
       {
-        "endIndex": 7370,
+        "endIndex": 8789,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6584,
-              "startIndex": 6562,
+              "endIndex": 8097,
+              "startIndex": 8075,
               "textRun": {
                 "content": "An independent study (",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 6616,
-              "startIndex": 6584,
+              "endIndex": 8129,
+              "startIndex": 8097,
               "textRun": {
                 "content": "https://arxiv.org/abs/2408.01562",
                 "textStyle": {
@@ -1165,41 +1435,53 @@
               }
             },
             {
-              "endIndex": 6617,
-              "startIndex": 6616,
+              "endIndex": 8130,
+              "startIndex": 8129,
               "textRun": {
                 "content": ")",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 6828,
-              "startIndex": 6617,
+              "endIndex": 8341,
+              "startIndex": 8130,
               "textRun": {
                 "content": " by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day. Another independent study by Tang at NYU Marron using the FTA\u2019s STOPS open-source ridership modeling software",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 6829,
+              "endIndex": 8342,
               "footnoteReference": {
                 "footnoteId": "kix.yv74cxmq1ray",
-                "footnoteNumber": "3",
+                "footnoteNumber": "8",
                 "textStyle": {}
               },
-              "startIndex": 6828
+              "startIndex": 8341
             },
             {
-              "endIndex": 7369,
-              "startIndex": 6829,
+              "endIndex": 8789,
+              "startIndex": 8342,
               "textRun": {
-                "content": " found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways. If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k. Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway\u2019s Phase 1, which saw about 200k daily riders as well. This excludes any future transit-oriented development (TOD), which neither study considered. ",
+                "content": " found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways. If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k. Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway\u2019s Phase 1, which saw about 200k daily riders as well.\n",
                 "textStyle": {}
               }
-            },
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8075
+      },
+      {
+        "endIndex": 8790,
+        "paragraph": {
+          "elements": [
             {
-              "endIndex": 7370,
-              "startIndex": 7369,
+              "endIndex": 8790,
+              "startIndex": 8789,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1211,15 +1493,43 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6562
+        "startIndex": 8789
       },
       {
-        "endIndex": 7371,
+        "endIndex": 9323,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7371,
-              "startIndex": 7370,
+              "endIndex": 9322,
+              "startIndex": 8790,
+              "textRun": {
+                "content": "Ridership could rise even further with additional transit-oriented development (TOD) beyond current conditions. All studies above look purely at present-day land use, as the FTA forbids the use of promises of future upzoning in ridership analysis. However, the Mamdani administration is interested in extending City of Yes upzoning to IBX, and ongoing analysis by Ensari at Marron is finding that a large number of additional housing units could be built profitably in the area if current programs were extended and IBX were built. ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 9323,
+              "startIndex": 9322,
+              "textRun": {
+                "content": "\n",
+                "textStyle": {}
+              }
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 8790
+      },
+      {
+        "endIndex": 9324,
+        "paragraph": {
+          "elements": [
+            {
+              "endIndex": 9324,
+              "startIndex": 9323,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1237,17 +1547,17 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7370
+        "startIndex": 9323
       },
       {
-        "endIndex": 7608,
+        "endIndex": 9520,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7608,
-              "startIndex": 7371,
+              "endIndex": 9520,
+              "startIndex": 9324,
               "textRun": {
-                "content": "With this continuously rising ridership, it is imperative that the IBX be future-proofed for much higher ridership in the future. Luckily, there is a cost-effective solution to this that will also deliver unparalleled service to riders.\n",
+                "content": "It is imperative that the IBX be future-proofed for much higher ridership in the future. Luckily, there is a cost-effective solution to this that will also deliver unparalleled service to riders.\n",
                 "textStyle": {}
               }
             }
@@ -1263,15 +1573,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7371
+        "startIndex": 9324
       },
       {
-        "endIndex": 7620,
+        "endIndex": 9532,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7620,
-              "startIndex": 7608,
+              "endIndex": 9532,
+              "startIndex": 9520,
               "textRun": {
                 "content": "Light Metro\n",
                 "textStyle": {}
@@ -1284,15 +1594,15 @@
             "namedStyleType": "HEADING_2"
           }
         },
-        "startIndex": 7608
+        "startIndex": 9520
       },
       {
-        "endIndex": 8045,
+        "endIndex": 9957,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8045,
-              "startIndex": 7620,
+              "endIndex": 9957,
+              "startIndex": 9532,
               "textRun": {
                 "content": "The MTA had previously always described the IBX as light rail transit (LRT), but ever since the All Faiths tunnel announcement, they have increasingly begun describing it more as a light metro. Jamie Torres-Springer, head of MTA Construction & Development, described the IBX at that press conference as a \u201clight rail metro,\u201d and at IBX Open Houses, MTA staff also said that the IBX will now be a lot closer to a light metro.\n",
                 "textStyle": {}
@@ -1304,15 +1614,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7620
+        "startIndex": 9532
       },
       {
-        "endIndex": 8046,
+        "endIndex": 9958,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8046,
-              "startIndex": 8045,
+              "endIndex": 9958,
+              "startIndex": 9957,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1324,15 +1634,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8045
+        "startIndex": 9957
       },
       {
-        "endIndex": 8396,
+        "endIndex": 10308,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8396,
-              "startIndex": 8046,
+              "endIndex": 10308,
+              "startIndex": 9958,
               "textRun": {
                 "content": "To begin with, light rail is a fairly expansive concept. It is often not fully grade-separated and spans from full street-running to median-running with grade crossings to fully grade-separated, or any mix of those. Thus, it also includes light metro. Thanks to the All Faiths tunnel, the IBX lands squarely in the category of full grade separation.\n",
                 "textStyle": {}
@@ -1344,15 +1654,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8046
+        "startIndex": 9958
       },
       {
-        "endIndex": 8397,
+        "endIndex": 10309,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8397,
-              "startIndex": 8396,
+              "endIndex": 10309,
+              "startIndex": 10308,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1364,15 +1674,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8396
+        "startIndex": 10308
       },
       {
-        "endIndex": 8726,
+        "endIndex": 10638,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8726,
-              "startIndex": 8397,
+              "endIndex": 10638,
+              "startIndex": 10309,
               "textRun": {
                 "content": "So what is light metro? Light, in contrast to heavy, refers to the capacity of a trainset. So it is generally shorter than heavy metro, and often narrower and/or physically lighter as well. Metro generally means that it is fully grade-separated. So light metro means a grade-separated rapid transit line using smaller trainsets.\n",
                 "textStyle": {}
@@ -1384,15 +1694,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8397
+        "startIndex": 10309
       },
       {
-        "endIndex": 8727,
+        "endIndex": 10639,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8727,
-              "startIndex": 8726,
+              "endIndex": 10639,
+              "startIndex": 10638,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1404,23 +1714,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8726
+        "startIndex": 10638
       },
       {
-        "endIndex": 9773,
+        "endIndex": 11685,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9235,
-              "startIndex": 8727,
+              "endIndex": 11147,
+              "startIndex": 10639,
               "textRun": {
                 "content": "Low capacity vehicles do not necessarily make for a low capacity line, however. A small trainset can allow for smaller stations and tunnels, thereby drastically reducing construction cost. But it can often make up capacity by running extremely frequently. Lille\u2019s Metro, for example, runs very tiny 26 m long, 2 m wide trains, but it runs them every 66 seconds, and can run up to 60 seconds. While a light metro can be as small and limited as an airport\u2019s people mover system, it can also be as large as the ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 9251,
-              "startIndex": 9235,
+              "endIndex": 11163,
+              "startIndex": 11147,
               "textRun": {
                 "content": "narrow 6B trains",
                 "textStyle": {
@@ -1441,16 +1751,16 @@
               }
             },
             {
-              "endIndex": 9298,
-              "startIndex": 9251,
+              "endIndex": 11210,
+              "startIndex": 11163,
               "textRun": {
                 "content": " serving Guangzhou Metro Line 3, which carried ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 9323,
-              "startIndex": 9298,
+              "endIndex": 11235,
+              "startIndex": 11210,
               "textRun": {
                 "content": "2.76 million riders a day",
                 "textStyle": {
@@ -1471,25 +1781,25 @@
               }
             },
             {
-              "endIndex": 9383,
-              "startIndex": 9323,
+              "endIndex": 11295,
+              "startIndex": 11235,
               "textRun": {
                 "content": " in 2019 and is perhaps the busiest metro line in the world.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 9384,
+              "endIndex": 11296,
               "footnoteReference": {
                 "footnoteId": "kix.e8w5cne30j8o",
-                "footnoteNumber": "4",
+                "footnoteNumber": "9",
                 "textStyle": {}
               },
-              "startIndex": 9383
+              "startIndex": 11295
             },
             {
-              "endIndex": 9773,
-              "startIndex": 9384,
+              "endIndex": 11685,
+              "startIndex": 11296,
               "textRun": {
                 "content": " To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy, and has needed multiple relief lines and faces crowding limitations at many stations) and should have been heavy metro for sure, but it is a testament to the potential of light metro that it can carry the busiest metro line in the world.\n",
                 "textStyle": {}
@@ -1501,15 +1811,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8727
+        "startIndex": 10639
       },
       {
-        "endIndex": 9774,
+        "endIndex": 11686,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9774,
-              "startIndex": 9773,
+              "endIndex": 11686,
+              "startIndex": 11685,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1521,23 +1831,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9773
+        "startIndex": 11685
       },
       {
-        "endIndex": 10155,
+        "endIndex": 12067,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9952,
-              "startIndex": 9774,
+              "endIndex": 11864,
+              "startIndex": 11686,
               "textRun": {
                 "content": "That said, while ridership keeps climbing, the IBX will never be as busy as Guangzhou Metro Line 3. With the current 160k daily ridership projection, however, it will already be ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 10016,
-              "startIndex": 9952,
+              "endIndex": 11928,
+              "startIndex": 11864,
               "textRun": {
                 "content": "the busiest light rail system (not line, whole system) in the US",
                 "textStyle": {
@@ -1558,8 +1868,8 @@
               }
             },
             {
-              "endIndex": 10155,
-              "startIndex": 10016,
+              "endIndex": 12067,
+              "startIndex": 11928,
               "textRun": {
                 "content": ". So it makes perfect sense to future-proof the IBX with the most cost-effective type of operation available: automated light metro (ALM).\n",
                 "textStyle": {}
@@ -1571,15 +1881,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9774
+        "startIndex": 11686
       },
       {
-        "endIndex": 10166,
+        "endIndex": 12078,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10166,
-              "startIndex": 10155,
+              "endIndex": 12078,
+              "startIndex": 12067,
               "textRun": {
                 "content": "Automation\n",
                 "textStyle": {}
@@ -1592,15 +1902,15 @@
             "namedStyleType": "HEADING_2"
           }
         },
-        "startIndex": 10155
+        "startIndex": 12067
       },
       {
-        "endIndex": 10784,
+        "endIndex": 12696,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10784,
-              "startIndex": 10166,
+              "endIndex": 12696,
+              "startIndex": 12078,
               "textRun": {
                 "content": "Automated light metro simply combines light metro with automation. Now, what does automation mean? Automation generally refers to a Grade of Automation 4 (GoA4), in which a train is unattended and runs, stops, and opens and closes doors fully automatically. Sometimes there is a non-driver attendant, but if the attendant is also a backup driver, then the system is only GoA3. The MTA\u2019s existing CBTC lines, like the 7 and L, use GoA2, in which CBTC allows for Automatic Train Operation (ATO). With ATO, the train driving is automatic, but there is still a driver/conductor who oversees it and opens and closes doors.\n",
                 "textStyle": {}
@@ -1612,15 +1922,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10166
+        "startIndex": 12078
       },
       {
-        "endIndex": 10785,
+        "endIndex": 12697,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10785,
-              "startIndex": 10784,
+              "endIndex": 12697,
+              "startIndex": 12696,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1632,15 +1942,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10784
+        "startIndex": 12696
       },
       {
-        "endIndex": 11200,
+        "endIndex": 13112,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11200,
-              "startIndex": 10785,
+              "endIndex": 13112,
+              "startIndex": 12697,
               "textRun": {
                 "content": "GoA4 automation generally requires platform screen doors (PSDs) with only a few grandfathered exceptions worldwide (Vancouver and Nuremberg). This ensures the train operation is exceptionally safe. No one can be pushed or fall into the tracks, and if open-gangways are used, no one can subway surf. And crashes are exceedingly rare. Of the handful of crashes, all but one were when human drivers took over control.\n",
                 "textStyle": {}
@@ -1652,15 +1962,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10785
+        "startIndex": 12697
       },
       {
-        "endIndex": 11201,
+        "endIndex": 13113,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11201,
-              "startIndex": 11200,
+              "endIndex": 13113,
+              "startIndex": 13112,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1672,15 +1982,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11200
+        "startIndex": 13112
       },
       {
-        "endIndex": 11613,
+        "endIndex": 13525,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11613,
-              "startIndex": 11201,
+              "endIndex": 13525,
+              "startIndex": 13113,
               "textRun": {
                 "content": "But automation and PSDs mean a lot more than safety. Runtimes are highly reliable, as there is no operator variability and nothing can fall onto the tracks. Precise acceleration and braking curves mean speed is increased, all while the ride is smoother, too. And then high reliability means schedule padding can be reduced, further cutting runtimes. For example, WMATA estimates that automation would save TODO.\n",
                 "textStyle": {}
@@ -1692,15 +2002,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11201
+        "startIndex": 13113
       },
       {
-        "endIndex": 11614,
+        "endIndex": 13526,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11614,
-              "startIndex": 11613,
+              "endIndex": 13526,
+              "startIndex": 13525,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1712,15 +2022,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11613
+        "startIndex": 13525
       },
       {
-        "endIndex": 11633,
+        "endIndex": 13545,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11633,
-              "startIndex": 11614,
+              "endIndex": 13545,
+              "startIndex": 13526,
               "textRun": {
                 "content": "TODO didn\u2019t finish\n",
                 "textStyle": {
@@ -1734,15 +2044,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11614
+        "startIndex": 13526
       },
       {
-        "endIndex": 11634,
+        "endIndex": 13546,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11634,
-              "startIndex": 11633,
+              "endIndex": 13546,
+              "startIndex": 13545,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1754,15 +2064,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11633
+        "startIndex": 13545
       },
       {
-        "endIndex": 12345,
+        "endIndex": 14257,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12345,
-              "startIndex": 11634,
+              "endIndex": 14257,
+              "startIndex": 13546,
               "textRun": {
                 "content": "This allows for the highest possible frequencies, like the extreme 1-min headways of Lille to the more normal 1.5-2-min minimum technical headways of ALMs like Montreal\u2019s REM, Honolulu\u2019s Skyline, Copenhagen\u2019s Metro, Vancouver\u2019s SkyTrain, London\u2019s DLR, and all of the many airport people movers in the US, including NYC\u2019s own JFK AirTrain. By squeezing capacity out of frequency, expensive fixed infrastructure like stations can be minimized. Riders are rewarded by very high frequency, reliability, and speed, and operating costs are reduced by not having to employ train drivers. This is especially helpful off-peak, where the large marginal operating cost savings help maintain frequent service all day long.\n",
                 "textStyle": {}
@@ -1774,15 +2084,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11634
+        "startIndex": 13546
       },
       {
-        "endIndex": 12346,
+        "endIndex": 14258,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12346,
-              "startIndex": 12345,
+              "endIndex": 14258,
+              "startIndex": 14257,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1794,15 +2104,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12345
+        "startIndex": 14257
       },
       {
-        "endIndex": 12802,
+        "endIndex": 14714,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12802,
-              "startIndex": 12346,
+              "endIndex": 14714,
+              "startIndex": 14258,
               "textRun": {
                 "content": "This is a perfect fit for the IBX. As a circumferential line, most (70%) of trips will involve a transfer to the subway, and many will involve multiple. Thus, frequency is critical. Moreover, the IBX will serve more non-work trips than a radial line into Manhattan, so excellent off-peak service is crucial as well. And this can be clearly seen in the FTA STOPS ridership model, which estimates a 25% ridership increase from more frequent all-day service.\n",
                 "textStyle": {}
@@ -1814,15 +2124,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12346
+        "startIndex": 14258
       },
       {
-        "endIndex": 12803,
+        "endIndex": 14715,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12803,
-              "startIndex": 12802,
+              "endIndex": 14715,
+              "startIndex": 14714,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -1837,15 +2147,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12802
+        "startIndex": 14714
       },
       {
-        "endIndex": 12843,
+        "endIndex": 14755,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12843,
-              "startIndex": 12803,
+              "endIndex": 14755,
+              "startIndex": 14715,
               "textRun": {
                 "content": "[below is more just notes or old stuff]\n",
                 "textStyle": {
@@ -1864,15 +2174,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12803
+        "startIndex": 14715
       },
       {
-        "endIndex": 12844,
+        "endIndex": 14756,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12844,
-              "startIndex": 12843,
+              "endIndex": 14756,
+              "startIndex": 14755,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1884,23 +2194,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12843
+        "startIndex": 14755
       },
       {
-        "endIndex": 13330,
+        "endIndex": 15242,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 13329,
-              "startIndex": 12844,
+              "endIndex": 15241,
+              "startIndex": 14756,
               "textRun": {
                 "content": "only 24/7 metro systems are NYC subway, PATH, and Copenhagen\u2019s Metro. the subway has numerous 4-track and 3-track sections that help immensely, and everyone can feel the weight of weekend maintenance. PATH on the other hand has much fewer 3- or 4-track segments, and well, everyone can see how good their maintenance is. Copenhagen, on the other hand, has 2-track lines, but still runs 24/7 without huge maintenance backlogs or weekend shutdowns because automation is such a huge help.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 13330,
-              "startIndex": 13329,
+              "endIndex": 15242,
+              "startIndex": 15241,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1912,15 +2222,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12844
+        "startIndex": 14756
       },
       {
-        "endIndex": 13352,
+        "endIndex": 15264,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 13352,
-              "startIndex": 13330,
+              "endIndex": 15264,
+              "startIndex": 15242,
               "textRun": {
                 "content": "Automated Light Metro\n",
                 "textStyle": {}
@@ -1941,23 +2251,23 @@
             }
           }
         },
-        "startIndex": 13330
+        "startIndex": 15242
       },
       {
-        "endIndex": 14707,
+        "endIndex": 16619,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14535,
-              "startIndex": 13352,
+              "endIndex": 16447,
+              "startIndex": 15264,
               "textRun": {
                 "content": "Light rail is an expansive category that includes automated light metro (ALM), which would suit the IBX particularly well. ALM refers to a proven form of rolling stock and service delivery in use on many newer systems, such as the new REM in Montreal, and Vancouver Skytrain, as well as lines in numerous Italian cities. In the United States, ALM trains have long been used on numerous airport \u201cpeople mover\u201d systems, including the JFK AirTrain. As the name suggests, ALM systems run short trains (typically no longer than four cars per consist) at very high frequency (2 minutes apart or less), trading per-trainset capacity for higher throughput of trains per hour. They are thus ideal for grade-separated train services that need to run frequently but do not require the high capacity of a 600-foot subway train. Since most IBX riders will be making short trips either that stand alone or require one or more transfers, trains must run frequently around the clock; the ability to run trains as frequently as every 2 minutes or less thus benefits the planned line immensely. Additionally, ALM trains require smaller station footprints, an essential benefit given the outsized role ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 14547,
-              "startIndex": 14535,
+              "endIndex": 16459,
+              "startIndex": 16447,
               "textRun": {
                 "content": "station size",
                 "textStyle": {
@@ -1978,8 +2288,8 @@
               }
             },
             {
-              "endIndex": 14707,
-              "startIndex": 14547,
+              "endIndex": 16619,
+              "startIndex": 16459,
               "textRun": {
                 "content": " plays in the MTA\u2019s high construction costs. Finally, ALM trains can also climb steep grades, reducing the construction costs for tunnel and bridge approaches.\n",
                 "textStyle": {}
@@ -1999,15 +2309,15 @@
             }
           }
         },
-        "startIndex": 13352
+        "startIndex": 15264
       },
       {
-        "endIndex": 14708,
+        "endIndex": 16620,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14708,
-              "startIndex": 14707,
+              "endIndex": 16620,
+              "startIndex": 16619,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2027,23 +2337,23 @@
             }
           }
         },
-        "startIndex": 14707
+        "startIndex": 16619
       },
       {
-        "endIndex": 15456,
+        "endIndex": 17368,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14823,
-              "startIndex": 14708,
+              "endIndex": 16735,
+              "startIndex": 16620,
               "textRun": {
                 "content": "What exactly does the \u201cautomated\u201d in \u201cautomated light metro\u201d mean? There are international standards for different ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 14843,
-              "startIndex": 14823,
+              "endIndex": 16755,
+              "startIndex": 16735,
               "textRun": {
                 "content": "grades of automation",
                 "textStyle": {
@@ -2065,16 +2375,16 @@
               }
             },
             {
-              "endIndex": 14963,
-              "startIndex": 14843,
+              "endIndex": 16875,
+              "startIndex": 16755,
               "textRun": {
                 "content": ", signifying exactly how automated a transit line\u2019s operations is. The most automated of these grades is the 4th grade (",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 14968,
-              "startIndex": 14963,
+              "endIndex": 16880,
+              "startIndex": 16875,
               "textRun": {
                 "content": "GoA4)",
                 "textStyle": {
@@ -2083,8 +2393,8 @@
               }
             },
             {
-              "endIndex": 15456,
-              "startIndex": 14968,
+              "endIndex": 17368,
+              "startIndex": 16880,
               "textRun": {
                 "content": ". The MTA should also proactively study full GoA4 automation for the IBX. On top of controlling operating costs, automated trains accelerate and brake more smoothly than manually controlled ones, and they can be stopped at platforms precisely. Thus, they enable platform screen doors, which improve safety and increase comfort on the platform since people can confidently stand beside the platform edge. Increasing the effective usable platform area is important for cost-effectiveness. \n",
                 "textStyle": {}
@@ -2104,15 +2414,15 @@
             }
           }
         },
-        "startIndex": 14708
+        "startIndex": 16620
       },
       {
-        "endIndex": 15484,
+        "endIndex": 17396,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15484,
-              "startIndex": 15456,
+              "endIndex": 17396,
+              "startIndex": 17368,
               "textRun": {
                 "content": "Off-the-shelf rolling stock\n",
                 "textStyle": {}
@@ -2133,23 +2443,23 @@
             }
           }
         },
-        "startIndex": 15456
+        "startIndex": 17368
       },
       {
-        "endIndex": 16030,
+        "endIndex": 17942,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15778,
-              "startIndex": 15484,
+              "endIndex": 17690,
+              "startIndex": 17396,
               "textRun": {
                 "content": "Importantly, the MTA has its pick of makers for standardized light metro railcars and seems intent on selecting an off-the-shelf design. If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 15804,
-              "startIndex": 15778,
+              "endIndex": 17716,
+              "startIndex": 17690,
               "textRun": {
                 "content": "R46 truck-cracking debacle",
                 "textStyle": {
@@ -2170,16 +2480,16 @@
               }
             },
             {
-              "endIndex": 15816,
-              "startIndex": 15804,
+              "endIndex": 17728,
+              "startIndex": 17716,
               "textRun": {
                 "content": ". As we have",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 15817,
-              "startIndex": 15816,
+              "endIndex": 17729,
+              "startIndex": 17728,
               "textRun": {
                 "content": " ",
                 "textStyle": {
@@ -2190,8 +2500,8 @@
               }
             },
             {
-              "endIndex": 15827,
-              "startIndex": 15817,
+              "endIndex": 17739,
+              "startIndex": 17729,
               "textRun": {
                 "content": "chronicled",
                 "textStyle": {
@@ -2212,8 +2522,8 @@
               }
             },
             {
-              "endIndex": 16030,
-              "startIndex": 15827,
+              "endIndex": 17942,
+              "startIndex": 17739,
               "textRun": {
                 "content": ", trusting experienced firms to meet their needs is what most other transit agencies do, and it is a major reason why they have generally beaten out New York City on subway costs, especially as of late.\n",
                 "textStyle": {}
@@ -2233,15 +2543,15 @@
             }
           }
         },
-        "startIndex": 15484
+        "startIndex": 17396
       },
       {
-        "endIndex": 16045,
+        "endIndex": 17957,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16045,
-              "startIndex": 16030,
+              "endIndex": 17957,
+              "startIndex": 17942,
               "textRun": {
                 "content": "High platforms\n",
                 "textStyle": {}
@@ -2262,15 +2572,15 @@
             }
           }
         },
-        "startIndex": 16030
+        "startIndex": 17942
       },
       {
-        "endIndex": 16728,
+        "endIndex": 18640,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16728,
-              "startIndex": 16045,
+              "endIndex": 18640,
+              "startIndex": 17957,
               "textRun": {
                 "content": "To really seal the IBX\u2019s fate as a transit project, the MTA needs to commit to high-floor vehicles. While high-floor vehicles require straight or only gently curved platforms, the IBX right-of-way is generally wide enough for them. High-floor vehicles are generally cheaper than low-floor ones, and passengers can circulate more easily in the former than in the latter where wheel wells take up valuable floor space. Furthermore, building high platforms at the outset would greatly simplify any further capacity expansion later\u2014practically all systems running frequent trains of the length seen on the New York City Subway (180 meters) or longer exclusively use high-floor vehicles.\n",
                 "textStyle": {}
@@ -2290,15 +2600,15 @@
             }
           }
         },
-        "startIndex": 16045
+        "startIndex": 17957
       },
       {
-        "endIndex": 16739,
+        "endIndex": 18651,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16739,
-              "startIndex": 16728,
+              "endIndex": 18651,
+              "startIndex": 18640,
               "textRun": {
                 "content": "Conclusion\n",
                 "textStyle": {}
@@ -2319,15 +2629,15 @@
             }
           }
         },
-        "startIndex": 16728
+        "startIndex": 18640
       },
       {
-        "endIndex": 17171,
+        "endIndex": 19083,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17171,
-              "startIndex": 16739,
+              "endIndex": 19083,
+              "startIndex": 18651,
               "textRun": {
                 "content": "IBX provides an excellent opportunity to import the ALM concept firmly into the MTA from preexisting examples such as the Montr\u00e9al REM or the JFK Airtrain. In addition to the immense benefits for IBX itself, it would serve as a proof-of-concept for, and facilitate maintenance and acquisition economies of scale with, potential future ALM systems on other corridors, such as in outer Queens and Brooklyn, or potentially New Jersey.\n",
                 "textStyle": {}
@@ -2347,15 +2657,15 @@
             }
           }
         },
-        "startIndex": 16739
+        "startIndex": 18651
       },
       {
-        "endIndex": 17537,
+        "endIndex": 19449,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17537,
-              "startIndex": 17171,
+              "endIndex": 19449,
+              "startIndex": 19083,
               "textRun": {
                 "content": "Hitachi Driverless Metro railcars are used on Honolulu\u2019s Skyline, are proven in the US (important to the MTA), and are cheaper at $2.2 million/car (need to inflation-adjust) without bundled maintenance (it is bundled, as are operations, but costs are given separately).  This is a Buy America cost, while the Alstom Metropolis Saint-Laurent cars are built in India.\n",
                 "textStyle": {}
@@ -2373,15 +2683,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17171
+        "startIndex": 19083
       },
       {
-        "endIndex": 17538,
+        "endIndex": 19450,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17538,
-              "startIndex": 17537,
+              "endIndex": 19450,
+              "startIndex": 19449,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2399,23 +2709,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17537
+        "startIndex": 19449
       },
       {
-        "endIndex": 18104,
+        "endIndex": 20016,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17771,
-              "startIndex": 17538,
+              "endIndex": 19683,
+              "startIndex": 19450,
               "textRun": {
                 "content": "With a 32-min runtime, 2-min turns, and a 90% utilization rate, 38 trainsets are needed. At 4 cars/trainset and using Honolulu\u2019s costs of $2.2 million/car inflation-adjusted to June 2025, this fleet would cost $421 million. Assuming ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 17792,
-              "startIndex": 17771,
+              "endIndex": 19704,
+              "startIndex": 19683,
               "textRun": {
                 "content": "3.5% future inflation",
                 "textStyle": {
@@ -2436,25 +2746,25 @@
               }
             },
             {
-              "endIndex": 17886,
-              "startIndex": 17792,
+              "endIndex": 19798,
+              "startIndex": 19704,
               "textRun": {
                 "content": " (used by the MTA\u2019s 20-Year Needs Comparative Evaluation), this would be $444 million in 2027,",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 17887,
+              "endIndex": 19799,
               "footnoteReference": {
                 "footnoteId": "kix.s7hmds4qc4zj",
-                "footnoteNumber": "5",
+                "footnoteNumber": "10",
                 "textStyle": {}
               },
-              "startIndex": 17886
+              "startIndex": 19798
             },
             {
-              "endIndex": 18104,
-              "startIndex": 17887,
+              "endIndex": 20016,
+              "startIndex": 19799,
               "textRun": {
                 "content": " only slightly higher than the MTA\u2019s estimated $432 million for fleet cost. But this is with 2-min peak headways, not 5-min peak headways. And with a 92% utilization rate, the cost comes down to exactly $432 million.\n",
                 "textStyle": {}
@@ -2472,15 +2782,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17538
+        "startIndex": 19450
       },
       {
-        "endIndex": 18105,
+        "endIndex": 20017,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18105,
-              "startIndex": 18104,
+              "endIndex": 20017,
+              "startIndex": 20016,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2498,15 +2808,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18104
+        "startIndex": 20016
       },
       {
-        "endIndex": 18139,
+        "endIndex": 20051,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18139,
-              "startIndex": 18105,
+              "endIndex": 20051,
+              "startIndex": 20017,
               "textRun": {
                 "content": "Hitachi Driverless Metro Honolulu\n",
                 "textStyle": {
@@ -2526,23 +2836,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18105
+        "startIndex": 20017
       },
       {
-        "endIndex": 18250,
+        "endIndex": 20162,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18145,
-              "startIndex": 18139,
+              "endIndex": 20057,
+              "startIndex": 20051,
               "textRun": {
                 "content": "cost: ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18161,
-              "startIndex": 18145,
+              "endIndex": 20073,
+              "startIndex": 20057,
               "textRun": {
                 "content": "$2.2 million/car",
                 "textStyle": {
@@ -2563,16 +2873,16 @@
               }
             },
             {
-              "endIndex": 18163,
-              "startIndex": 18161,
+              "endIndex": 20075,
+              "startIndex": 20073,
               "textRun": {
                 "content": " (",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18179,
-              "startIndex": 18163,
+              "endIndex": 20091,
+              "startIndex": 20075,
               "textRun": {
                 "content": "contract in 2011",
                 "textStyle": {
@@ -2593,16 +2903,16 @@
               }
             },
             {
-              "endIndex": 18181,
-              "startIndex": 18179,
+              "endIndex": 20093,
+              "startIndex": 20091,
               "textRun": {
                 "content": ", ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18214,
-              "startIndex": 18181,
+              "endIndex": 20126,
+              "startIndex": 20093,
               "textRun": {
                 "content": "first delivered on March 25, 2016",
                 "textStyle": {
@@ -2623,16 +2933,16 @@
               }
             },
             {
-              "endIndex": 18216,
-              "startIndex": 18214,
+              "endIndex": 20128,
+              "startIndex": 20126,
               "textRun": {
                 "content": ", ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18248,
-              "startIndex": 18216,
+              "endIndex": 20160,
+              "startIndex": 20128,
               "textRun": {
                 "content": "last delivered on April 24, 2024",
                 "textStyle": {
@@ -2653,8 +2963,8 @@
               }
             },
             {
-              "endIndex": 18250,
-              "startIndex": 18248,
+              "endIndex": 20162,
+              "startIndex": 20160,
               "textRun": {
                 "content": ")\n",
                 "textStyle": {}
@@ -2672,15 +2982,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18139
+        "startIndex": 20051
       },
       {
-        "endIndex": 18265,
+        "endIndex": 20177,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18265,
-              "startIndex": 18250,
+              "endIndex": 20177,
+              "startIndex": 20162,
               "textRun": {
                 "content": "fleet: 80 cars\n",
                 "textStyle": {}
@@ -2698,15 +3008,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18250
+        "startIndex": 20162
       },
       {
-        "endIndex": 18373,
+        "endIndex": 20285,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18373,
-              "startIndex": 18265,
+              "endIndex": 20285,
+              "startIndex": 20177,
               "textRun": {
                 "content": "cost/length in June 2025: $2.2 million/car / 65 ft/car * 1.26 (April 2020 to June 2025 inflation) = $140k/m\n",
                 "textStyle": {}
@@ -2724,15 +3034,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18265
+        "startIndex": 20177
       },
       {
-        "endIndex": 18397,
+        "endIndex": 20309,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18397,
-              "startIndex": 18373,
+              "endIndex": 20309,
+              "startIndex": 20285,
               "textRun": {
                 "content": "length: 65 ft (19.81 m)\n",
                 "textStyle": {}
@@ -2750,15 +3060,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18373
+        "startIndex": 20285
       },
       {
-        "endIndex": 18420,
+        "endIndex": 20332,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18420,
-              "startIndex": 18397,
+              "endIndex": 20332,
+              "startIndex": 20309,
               "textRun": {
                 "content": "width: 10 ft (3.048 m)\n",
                 "textStyle": {}
@@ -2776,23 +3086,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18397
+        "startIndex": 20309
       },
       {
-        "endIndex": 18457,
+        "endIndex": 20369,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18428,
-              "startIndex": 18420,
+              "endIndex": 20340,
+              "startIndex": 20332,
               "textRun": {
                 "content": "weight: ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18456,
-              "startIndex": 18428,
+              "endIndex": 20368,
+              "startIndex": 20340,
               "textRun": {
                 "content": "72,000 lbs per 65 ft AW0 car",
                 "textStyle": {
@@ -2813,8 +3123,8 @@
               }
             },
             {
-              "endIndex": 18457,
-              "startIndex": 18456,
+              "endIndex": 20369,
+              "startIndex": 20368,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2832,15 +3142,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18420
+        "startIndex": 20332
       },
       {
-        "endIndex": 18507,
+        "endIndex": 20419,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18507,
-              "startIndex": 18457,
+              "endIndex": 20419,
+              "startIndex": 20369,
               "textRun": {
                 "content": "AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m\n",
                 "textStyle": {}
@@ -2858,15 +3168,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18457
+        "startIndex": 20369
       },
       {
-        "endIndex": 18542,
+        "endIndex": 20454,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18542,
-              "startIndex": 18507,
+              "endIndex": 20454,
+              "startIndex": 20419,
               "textRun": {
                 "content": "formation: 4-car open-gangway sets\n",
                 "textStyle": {}
@@ -2884,15 +3194,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18507
+        "startIndex": 20419
       },
       {
-        "endIndex": 18579,
+        "endIndex": 20491,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18579,
-              "startIndex": 18542,
+              "endIndex": 20491,
+              "startIndex": 20454,
               "textRun": {
                 "content": "electrification: 750 V DC third rail\n",
                 "textStyle": {}
@@ -2910,15 +3220,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18542
+        "startIndex": 20454
       },
       {
-        "endIndex": 18639,
+        "endIndex": 20551,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18639,
-              "startIndex": 18579,
+              "endIndex": 20551,
+              "startIndex": 20491,
               "textRun": {
                 "content": "speed: 55 mph (88.5 kmh) service, 65 mph (104.6 kmh) design\n",
                 "textStyle": {}
@@ -2936,15 +3246,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18579
+        "startIndex": 20491
       },
       {
-        "endIndex": 18653,
+        "endIndex": 20565,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18653,
-              "startIndex": 18639,
+              "endIndex": 20565,
+              "startIndex": 20551,
               "textRun": {
                 "content": "capacity: 800\n",
                 "textStyle": {}
@@ -2962,15 +3272,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18639
+        "startIndex": 20551
       },
       {
-        "endIndex": 18666,
+        "endIndex": 20578,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18666,
-              "startIndex": 18653,
+              "endIndex": 20578,
+              "startIndex": 20565,
               "textRun": {
                 "content": "doors: 3/car\n",
                 "textStyle": {}
@@ -2988,15 +3298,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18653
+        "startIndex": 20565
       },
       {
-        "endIndex": 18711,
+        "endIndex": 20623,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18711,
-              "startIndex": 18666,
+              "endIndex": 20623,
+              "startIndex": 20578,
               "textRun": {
                 "content": "signaling: DTG (distance to go) ATC, Hitachi\n",
                 "textStyle": {}
@@ -3014,15 +3324,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18666
+        "startIndex": 20578
       },
       {
-        "endIndex": 18748,
+        "endIndex": 20660,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18748,
-              "startIndex": 18711,
+              "endIndex": 20660,
+              "startIndex": 20623,
               "textRun": {
                 "content": "seating: transverse and longitudinal\n",
                 "textStyle": {}
@@ -3040,15 +3350,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18711
+        "startIndex": 20623
       },
       {
-        "endIndex": 18749,
+        "endIndex": 20661,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18749,
-              "startIndex": 18748,
+              "endIndex": 20661,
+              "startIndex": 20660,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3066,15 +3376,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18748
+        "startIndex": 20660
       },
       {
-        "endIndex": 18781,
+        "endIndex": 20693,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18781,
-              "startIndex": 18749,
+              "endIndex": 20693,
+              "startIndex": 20661,
               "textRun": {
                 "content": "Alstom Metropolis Saint-Laurent\n",
                 "textStyle": {
@@ -3094,15 +3404,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18749
+        "startIndex": 20661
       },
       {
-        "endIndex": 18788,
+        "endIndex": 20700,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18788,
-              "startIndex": 18781,
+              "endIndex": 20700,
+              "startIndex": 20693,
               "textRun": {
                 "content": "cost: \n",
                 "textStyle": {}
@@ -3120,15 +3430,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18781
+        "startIndex": 20693
       },
       {
-        "endIndex": 18796,
+        "endIndex": 20708,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18796,
-              "startIndex": 18788,
+              "endIndex": 20708,
+              "startIndex": 20700,
               "textRun": {
                 "content": "fleet: \n",
                 "textStyle": {}
@@ -3146,15 +3456,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18788
+        "startIndex": 20700
       },
       {
-        "endIndex": 18810,
+        "endIndex": 20722,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18810,
-              "startIndex": 18796,
+              "endIndex": 20722,
+              "startIndex": 20708,
               "textRun": {
                 "content": "cost/length: \n",
                 "textStyle": {}
@@ -3172,15 +3482,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18796
+        "startIndex": 20708
       },
       {
-        "endIndex": 18826,
+        "endIndex": 20738,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18826,
-              "startIndex": 18810,
+              "endIndex": 20738,
+              "startIndex": 20722,
               "textRun": {
                 "content": "length: 19.05 m\n",
                 "textStyle": {}
@@ -3198,15 +3508,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18810
+        "startIndex": 20722
       },
       {
-        "endIndex": 18840,
+        "endIndex": 20752,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18840,
-              "startIndex": 18826,
+              "endIndex": 20752,
+              "startIndex": 20738,
               "textRun": {
                 "content": "width: 2.94 m\n",
                 "textStyle": {}
@@ -3224,23 +3534,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18826
+        "startIndex": 20738
       },
       {
-        "endIndex": 18884,
+        "endIndex": 20796,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18848,
-              "startIndex": 18840,
+              "endIndex": 20760,
+              "startIndex": 20752,
               "textRun": {
                 "content": "weight: ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18883,
-              "startIndex": 18848,
+              "endIndex": 20795,
+              "startIndex": 20760,
               "textRun": {
                 "content": "232 t per 76.2 m AW3 4-car trainset",
                 "textStyle": {
@@ -3261,8 +3571,8 @@
               }
             },
             {
-              "endIndex": 18884,
-              "startIndex": 18883,
+              "endIndex": 20796,
+              "startIndex": 20795,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3280,15 +3590,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18840
+        "startIndex": 20752
       },
       {
-        "endIndex": 18957,
+        "endIndex": 20869,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18957,
-              "startIndex": 18884,
+              "endIndex": 20869,
+              "startIndex": 20796,
               "textRun": {
                 "content": "AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 2232 kg/m\n",
                 "textStyle": {}
@@ -3306,15 +3616,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18884
+        "startIndex": 20796
       },
       {
-        "endIndex": 19016,
+        "endIndex": 20928,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19016,
-              "startIndex": 18957,
+              "endIndex": 20928,
+              "startIndex": 20869,
               "textRun": {
                 "content": "formation: 2-car open-gangway sets coupled into 4-car sets\n",
                 "textStyle": {}
@@ -3332,15 +3642,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18957
+        "startIndex": 20869
       },
       {
-        "endIndex": 19052,
+        "endIndex": 20964,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19052,
-              "startIndex": 19016,
+              "endIndex": 20964,
+              "startIndex": 20928,
               "textRun": {
                 "content": "electrification: 1500 V DC catenary\n",
                 "textStyle": {}
@@ -3358,15 +3668,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19016
+        "startIndex": 20928
       },
       {
-        "endIndex": 19091,
+        "endIndex": 21003,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19091,
-              "startIndex": 19052,
+              "endIndex": 21003,
+              "startIndex": 20964,
               "textRun": {
                 "content": "speed: 90 kmh service (100 kmh design)\n",
                 "textStyle": {}
@@ -3384,15 +3694,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19052
+        "startIndex": 20964
       },
       {
-        "endIndex": 19105,
+        "endIndex": 21017,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19105,
-              "startIndex": 19091,
+              "endIndex": 21017,
+              "startIndex": 21003,
               "textRun": {
                 "content": "capacity: 780\n",
                 "textStyle": {}
@@ -3410,15 +3720,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19091
+        "startIndex": 21003
       },
       {
-        "endIndex": 19118,
+        "endIndex": 21030,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19118,
-              "startIndex": 19105,
+              "endIndex": 21030,
+              "startIndex": 21017,
               "textRun": {
                 "content": "doors: 3/car\n",
                 "textStyle": {}
@@ -3436,15 +3746,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19105
+        "startIndex": 21017
       },
       {
-        "endIndex": 19153,
+        "endIndex": 21065,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19153,
-              "startIndex": 19118,
+              "endIndex": 21065,
+              "startIndex": 21030,
               "textRun": {
                 "content": "signaling: Alstom Urbalis 400 CBTC\n",
                 "textStyle": {}
@@ -3462,15 +3772,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19118
+        "startIndex": 21030
       },
       {
-        "endIndex": 19175,
+        "endIndex": 21087,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19175,
-              "startIndex": 19153,
+              "endIndex": 21087,
+              "startIndex": 21065,
               "textRun": {
                 "content": "seating: longitudinal\n",
                 "textStyle": {}
@@ -3488,15 +3798,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19153
+        "startIndex": 21065
       },
       {
-        "endIndex": 19176,
+        "endIndex": 21088,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19176,
-              "startIndex": 19175,
+              "endIndex": 21088,
+              "startIndex": 21087,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3514,7 +3824,7 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19175
+        "startIndex": 21087
       }
     ]
   },
@@ -3606,6 +3916,142 @@
     }
   },
   "footnotes": {
+    "kix.3yrrey4d93v5": {
+      "content": [
+        {
+          "endIndex": 107,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 106,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM_TDS_Hub_Bound_Travel_2016-FINAL.pdf",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM_TDS_Hub_Bound_Travel_2016-FINAL.pdf"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 107,
+                "startIndex": 106,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.3yrrey4d93v5"
+    },
+    "kix.a1aqfkvyo1da": {
+      "content": [
+        {
+          "endIndex": 45,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 44,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "https://www.etany.org/ibx-all-faiths-tunnel",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.etany.org/ibx-all-faiths-tunnel"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 45,
+                "startIndex": 44,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.a1aqfkvyo1da"
+    },
     "kix.e8w5cne30j8o": {
       "content": [
         {
@@ -3702,6 +4148,113 @@
         }
       ],
       "footnoteId": "kix.n2aftxltefkz"
+    },
+    "kix.nlj3ixqelkiy": {
+      "content": [
+        {
+          "endIndex": 226,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 144,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 146,
+                "startIndex": 144,
+                "textRun": {
+                  "content": "\u000b\u000b",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 225,
+                "startIndex": 146,
+                "textRun": {
+                  "content": "https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 226,
+                "startIndex": 225,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.nlj3ixqelkiy"
     },
     "kix.s7hmds4qc4zj": {
       "content": [
@@ -3839,6 +4392,103 @@
       ],
       "footnoteId": "kix.tlsl8nd2kyii"
     },
+    "kix.u8j9tlnfqsxx": {
+      "content": [
+        {
+          "endIndex": 31,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 31,
+                "textRun": {
+                  "content": " [We should cite the SAS EIS.]\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.u8j9tlnfqsxx"
+    },
+    "kix.xerbbbt8t2n7": {
+      "content": [
+        {
+          "endIndex": 113,
+          "paragraph": {
+            "elements": [
+              {
+                "endIndex": 1,
+                "textRun": {
+                  "content": " ",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              },
+              {
+                "endIndex": 112,
+                "startIndex": 1,
+                "textRun": {
+                  "content": "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    },
+                    "foregroundColor": {
+                      "color": {
+                        "rgbColor": {
+                          "blue": 0.8,
+                          "green": 0.33333334,
+                          "red": 0.06666667
+                        }
+                      }
+                    },
+                    "link": {
+                      "url": "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase"
+                    },
+                    "underline": true
+                  }
+                }
+              },
+              {
+                "endIndex": 113,
+                "startIndex": 112,
+                "textRun": {
+                  "content": "\n",
+                  "textStyle": {
+                    "fontSize": {
+                      "magnitude": 10,
+                      "unit": "PT"
+                    }
+                  }
+                }
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        }
+      ],
+      "footnoteId": "kix.xerbbbt8t2n7"
+    },
     "kix.yv74cxmq1ray": {
       "content": [
         {
@@ -3873,6 +4523,165 @@
   "headers": {},
   "inlineObjects": {},
   "lists": {
+    "kix.hijhgui8ezf4": {
+      "listProperties": {
+        "nestingLevels": [
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%0",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 18,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 36,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%1",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 54,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 72,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%2",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 90,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 108,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%3",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 126,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 144,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%4",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 162,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 180,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%5",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 198,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 216,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%6",
+            "glyphSymbol": "\u25cf",
+            "indentFirstLine": {
+              "magnitude": 234,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 252,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%7",
+            "glyphSymbol": "\u25cb",
+            "indentFirstLine": {
+              "magnitude": 270,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 288,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          },
+          {
+            "bulletAlignment": "START",
+            "glyphFormat": "%8",
+            "glyphSymbol": "\u25a0",
+            "indentFirstLine": {
+              "magnitude": 306,
+              "unit": "PT"
+            },
+            "indentStart": {
+              "magnitude": 324,
+              "unit": "PT"
+            },
+            "startNumber": 1,
+            "textStyle": {
+              "underline": false
+            }
+          }
+        ]
+      }
+    },
     "kix.l7gx7xlyaubw": {
       "listProperties": {
         "nestingLevels": [
@@ -4192,7 +5001,7 @@
       }
     }
   },
-  "modifiedTime": "2026-09-09T21:45:38.158Z",
+  "modifiedTime": "2026-09-11T00:35:43.466Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [
@@ -4546,7 +5355,7 @@
     ]
   },
   "openComments": 1,
-  "openSuggestions": 3,
+  "openSuggestions": 4,
   "positionedObjects": {},
   "suggestions": "rejected",
   "tabId": "t.nfnx93uo764a",

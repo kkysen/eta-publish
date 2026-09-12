@@ -45,6 +45,7 @@ import pytest
 from paths import REAL_DIR as REAL
 
 from eta_publish import format
+from eta_publish.archive import read_archive_index
 from eta_publish.checks import check as run_checks
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter, report_page
@@ -97,6 +98,11 @@ def doc(regenerate_snapshots: bool) -> Document:
     parsed = parse(DOC_JSON)
     parsed.image_files.update(image_files(regenerate_snapshots))
     parsed.image_shapes.update(image_shapes(regenerate_snapshots))
+    # Where each source is archived, from the record a build left here, for the
+    # same reason as the image index: it is a fact only the network can learn,
+    # and these snapshots are the files a build writes. Without it, regenerating
+    # them overwrote the built report with one saying `not archived` 109 times.
+    read_archive_index(REAL, parsed)
     # As a build does it, because the page carries the warnings
     # and these snapshots are the pages a build writes.
     # `run_checks` rather than `check`, which is this module's snapshot comparison.
