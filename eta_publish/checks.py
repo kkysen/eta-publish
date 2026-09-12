@@ -160,7 +160,7 @@ def _check_named(doc: Document) -> None:
     listed = Listed(*((Shown(block.image.filename), _describe(block)) for block in unnamed))
     are = "is" if len(unnamed) == 1 else "are"
     doc.warn(
-        f"{_plural(len(unnamed), 'image')} {are} unnamed, so each publishes under a "
+        f"{plural(len(unnamed), 'image')} {are} unnamed, so each publishes under a "
         f"hash; give each a {{}} line naming its file:{{}}",
         Shown("Source:"),
         listed,
@@ -199,12 +199,12 @@ def _check_review(doc: Document) -> None:
     """
     if doc.open_suggestions:
         doc.warn(
-            f"{_plural(doc.open_suggestions, 'suggestion')} still open on this tab; "
+            f"{plural(doc.open_suggestions, 'suggestion')} still open on this tab; "
             "the build publishes the document without them, as it reads today"
         )
     if doc.open_comments:
-        doc.warn(f"{_plural(doc.open_comments, 'comment thread')} still open on this tab")
+        doc.warn(f"{plural(doc.open_comments, 'comment thread')} still open on this tab")
 
 
-def _plural(count: int, thing: str) -> str:
+def plural(count: int, thing: str) -> str:
     return f"{count} {thing}" if count == 1 else f"{count} {thing}s"

@@ -8,7 +8,7 @@ from pathlib import Path, PurePosixPath
 
 from . import console
 from .archive import read_archive_index, write_archive_index
-from .checks import check
+from .checks import check, plural
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
@@ -358,6 +358,38 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
     return written
 
 
+def archive_sources(doc: Document) -> None:
+    """Capture the sources nothing has captured yet, if there are keys to do it with.
+
+    Part of an ordinary build rather than a step somebody remembers to run: a
+    source is archived because it was cited, and the moment it was cited is
+    this one. Captured later, the snapshot is of whatever the page said later,
+    which is not what the report read.
+
+    Only what is missing, so the cost is a handful of captures on the build
+    after a draft gains a link, and the whole of a report's sources only on the
+    first build that has keys.
+
+    Without keys the build goes on and says so. The record stands, every source
+    in it keeps the capture it has, and the rest publish saying they have none,
+    which is true.
+    """
+    from .archive import NoCredentials, capture, missing
+
+    wanted = missing(doc)
+    if not wanted:
+        return
+    console.write(console.note(f"archiving {plural(len(wanted), 'new source')}"))
+    try:
+        captured = capture(doc)
+    except NoCredentials as e:
+        console.write(console.note(str(e)))
+        return
+    failed = len(wanted) - captured
+    said = f"archived {plural(captured, 'source')}"
+    console.write(console.note(f"{said}; {failed} could not be captured" if failed else said))
+
+
 def check_code_block_size(doc: Document, report: Path) -> None:
     """Say something before a paste fails, not after.
 
@@ -472,6 +504,8 @@ def build_one(
     # After the document is parsed, because what it cites is what it cites,
     # and before the emitters, which write the Sources section off it.
     read_archive_index(dest, doc)
+    if not options.offline:
+        archive_sources(doc)
     write_archive_index(dest, doc)
 
     # Written here rather than once per site, so that building a single
