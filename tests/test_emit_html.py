@@ -365,7 +365,7 @@ def test_the_footnote_preview_is_hidden_where_nothing_hovers() -> None:
     # What is left is what a phone reads, and it has to hide the box.
     without_hover = re.sub(r"@media \(hover: hover\) \{.*?\n\}", "", REPORT_CSS, flags=re.S)
     assert ".footnote-ref:hover" not in without_hover
-    assert ".eta-report .footnote-tip { display: none; }" in without_hover
+    assert ".eta-report .footnote-tip,\n.eta-report .source-tip { display: none; }" in without_hover
 
 
 def test_the_footnote_preview_is_shown_where_something_does(out: str) -> None:
@@ -375,7 +375,9 @@ def test_the_footnote_preview_is_shown_where_something_does(out: str) -> None:
     hovering = re.search(r"@media \(hover: hover\) \{.*?\n\}", REPORT_CSS, re.S)
     assert hovering is not None
     assert ".footnote-ref:hover .footnote-tip" in hovering.group()
-    assert ".footnote-ref:focus-within .footnote-tip { display: block; }" in hovering.group()
+    assert ".footnote-ref:focus-within .footnote-tip," in hovering.group()
+    # A source's box is shown by the same rule, and built by the script.
+    assert ".cited:focus-within .source-tip { display: block; }" in hovering.group()
 
 
 def test_an_empty_shown_value_is_still_marked(doc: Document) -> None:

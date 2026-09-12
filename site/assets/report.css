@@ -206,15 +206,19 @@
    The span is in the markup on every device, so a rule that only reaches
    the ones that hover leaves the rest displaying the note inline, in the
    middle of the sentence it belongs to. */
-.eta-report .footnote-tip {
+.eta-report .footnote-tip,
+.eta-report .source-tip {
   display: none;
 }
 @media (hover: hover) {
-  .eta-report .footnote-ref {
+  .eta-report .footnote-ref,
+  .eta-report .cited {
     position: relative;
   }
   .eta-report .footnote-ref:hover .footnote-tip,
-  .eta-report .footnote-ref:focus-within .footnote-tip {
+  .eta-report .footnote-ref:focus-within .footnote-tip,
+  .eta-report .cited:hover .source-tip,
+  .eta-report .cited:focus-within .source-tip {
     display: block;
   }
   /* Under the reference rather than over it, which is where the script
@@ -223,7 +227,8 @@
 
      Which edge has room is a question about the window, and CSS cannot ask
      it, so this is a fallback and the script measures. */
-  .eta-report .footnote-tip {
+  .eta-report .footnote-tip,
+  .eta-report .source-tip {
     position: absolute;
     top: 1.6em;
     left: 50%;
@@ -258,7 +263,8 @@
      This is the gap, made part of the box, on both sides because the script
      puts the box above the reference as readily as below it. Behind the box,
      so it covers the space and not the page. */
-  .eta-report .footnote-tip::before {
+  .eta-report .footnote-tip::before,
+  .eta-report .source-tip::before {
     content: "";
     position: absolute;
     left: 0;
@@ -268,12 +274,14 @@
     z-index: -1;
   }
   /* Every link in the note is in the box too. */
-  .eta-report .footnote-tip a {
+  .eta-report .footnote-tip a,
+  .eta-report .source-tip a {
     text-decoration: underline;
   }
 }
 @media print {
-  .eta-report .footnote-tip {
+  .eta-report .footnote-tip,
+  .eta-report .source-tip {
     display: none;
   }
 }
