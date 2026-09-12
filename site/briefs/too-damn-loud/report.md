@@ -33,7 +33,7 @@ But far too much of the noise that bombards New Yorkers’ ears, is not the prod
 Whether waiting on a platform or traveling on a bus or on the subway, transit riders rarely get more than a few moments of peace before being inundated in a stream of unnecessary, verbose announcements.
 
 From incessant “Important reminder\[s\] from the NYPD” about theft, to repeated “It is against New York State law to smoke on platforms and waiting areas” on commuter trains to endless repetitions of “New York has more than 100 accessible stations,” riders’ ears are constantly assailed with messages that have little or no bearing on their travels.
-The MTA has even [begun to experiment with advertisements](<https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>) played to a captive audience over its PA systems.
+The MTA has even [begun to experiment with advertisements](<https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>)<sup>\[1\]</sup> played to a captive audience over its PA systems.
 This cacophony has reached the point that it is noticeably degrading the riding experience, for no gain at all.
 
 Indeed, ETA recorded a one-way ride from 34 St-Hudson Yards to Flushing-Main St, and nearly 10 minutes out of a 40 minute ride comprised announcements.
@@ -41,7 +41,7 @@ Riders should not be subjected to constant sound for 25% of their ride.
 On the Berlin S-Bahn, a complex branched system that must announce train numbers and destinations, the announcements—all short snippets of information about the train’s identity and destination or the door closing warning—are 15 seconds per interstation segment, only about 12.5% of the ride, half as long as on New York City Transit.
 
 ![PNG SVG](<images/img-b17aa21a.png>)\
-[PNG](<https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>) [SVG](<https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>)
+[PNG](<https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>)<sup>\[2\]</sup> [SVG](<https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>)<sup>\[3\]</sup>
 
 Hands over ears icon created by Gan Khoon Lay from the Noun Project, used with permission.
 
@@ -107,7 +107,7 @@ Short, simple messages allow non-fluent English speakers to pick out vital words
 The same holds true for the visually impaired: shorter messages mean less time and less mental energy expended on parsing information.
 Finally, short announcements minimize annoyance for frequent transit riders, who will hear them dozens of times daily.
 
-This is why in the 1960s [London Transport spent so long developing the now-iconic phrase “Mind the Gap”](<https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>): it was short, clear, and to the point.
+This is why in the 1960s [London Transport spent so long developing the now-iconic phrase “Mind the Gap”](<https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>)<sup>\[4\]</sup>: it was short, clear, and to the point.
 Similarly, in Berlin, the phrase “Zurückbleiben bitte”—“please stay back”—is very short and understandable even by people with middling German.
 In contrast, New York’s “Stand clear of the closing doors please” sentence, while iconic to many, is so long that conductors often interrupt it to close the doors faster.
 It’s even longer than Ottawa’s bilingual announcements.
@@ -116,7 +116,7 @@ Bernie Wagenblast’s announcements have become iconic in New York, and it would
 \[audio files of NYC, Berlin, and Ottawa door closings\]
 
 The audio announcements on today’s subway trains are far too verbose.
-Compare the normal announcements used on these trains with the [shortened versions](<https://www.youtube.com/watch?v=KDaRRmUWUZI>) that the MTA created around 2015 but never put into service.
+Compare the normal announcements used on these trains with the [shortened versions](<https://www.youtube.com/watch?v=KDaRRmUWUZI>)<sup>\[5\]</sup> that the MTA created around 2015 but never put into service.
 
 Beyond verbosity, automated announcements should also be designed to communicate common reroutes and changes.
 This is especially true in New York, where the complicated subway system enables many potential reroutes.
@@ -225,7 +225,7 @@ However, the current state of announcements is very far from any reasonable opti
 The constant barrage of PSAs and lengthy messages about the system disrespects the riders’ attention.
 Transit should strive to be a positive part of a rider's day, not an annoyance.
 
-Announcements that treat riders with respect are almost a reverse version of the [curb cut effect](<https://en.wikipedia.org/wiki/Curb_cut_effect>).  In this case, designing announcements that do not grate and do not waste straphangers’ time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.
+Announcements that treat riders with respect are almost a reverse version of the [curb cut effect](<https://en.wikipedia.org/wiki/Curb_cut_effect>)<sup>\[6\]</sup>.  In this case, designing announcements that do not grate and do not waste straphangers’ time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.
 
 There is much more about announcements beyond the scope of this piece.
 This includes equipment design, ensuring that ongoing improvement is easy to implement, operator training, both on automated equipment and on improved techniques for manual announcements, and on the design of the passenger experience, in general.
@@ -237,16 +237,30 @@ It hurts usability, and it damages the reputation of transit in general.
 Transit in New York is too damn loud.
 It's time to let riders travel in peace.
 
-[^1]: [36 CFR 1192.35](<https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)\
-    [49 CFR 37.167(b) & (c)](<https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)
+[^1]: [36 CFR 1192.35](<https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)<sup>\[7\]</sup>\
+    [49 CFR 37.167(b) & (c)](<https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)<sup>\[8\]</sup>
 
-[^2]: Yu, Shaolu, 2016. "’I am like a deaf, dumb and blind person’: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,” *Journal of Transport Geography*, 54(C) (June 2016): 10–21. [https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393](<https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)
+[^2]: Yu, Shaolu, 2016. "’I am like a deaf, dumb and blind person’: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,” *Journal of Transport Geography*, 54(C) (June 2016): 10–21. [https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393](<https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)<sup>\[9\]</sup>
 
-[^3]: Barbara Russo-Lennon, “Subway spots: MTA’s ad blitz delivers big bucks for NYC’s transit system and reliability for riders,” *AMNY*, July 3, 2025, [https://www.amny.com/news/mta-nyc-subway-ads-and-money/](<https://www.amny.com/news/mta-nyc-subway-ads-and-money/>)
+[^3]: Barbara Russo-Lennon, “Subway spots: MTA’s ad blitz delivers big bucks for NYC’s transit system and reliability for riders,” *AMNY*, July 3, 2025, [https://www.amny.com/news/mta-nyc-subway-ads-and-money/](<https://www.amny.com/news/mta-nyc-subway-ads-and-money/>)<sup>\[10\]</sup>
 
-[^4]: *S-Bahn Berlin*, “Störungen und Bauarbeiten,” accessed August 24, 2026, [https://sbahn.berlin/fahren/bauen-stoerung/](<https://sbahn.berlin/fahren/bauen-stoerung/>).
+[^4]: *S-Bahn Berlin*, “Störungen und Bauarbeiten,” accessed August 24, 2026, [https://sbahn.berlin/fahren/bauen-stoerung/](<https://sbahn.berlin/fahren/bauen-stoerung/>)<sup>\[11\]</sup>.
 
 [^5]: Elevator replacements should not take months, but that is another piece.
+
+## Sources
+
+1. <https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/> (not archived)
+2. <https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link> (not archived)
+3. <https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link> (not archived)
+4. <https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement> (not archived)
+5. <https://www.youtube.com/watch?v=KDaRRmUWUZI> (not archived)
+6. <https://en.wikipedia.org/wiki/Curb_cut_effect> (not archived)
+7. <https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php> (not archived)
+8. <https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167> (not archived)
+9. <https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393> (not archived)
+10. <https://www.amny.com/news/mta-nyc-subway-ads-and-money/> (not archived)
+11. <https://sbahn.berlin/fahren/bauen-stoerung/> (not archived)
 
 ## Contributors
 

@@ -91,6 +91,16 @@
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
+/* Sources are set like the footnotes, because that is what they are: back
+   matter a sentence points at rather than part of the argument. */
+.eta-report .sources { font-size: .9rem; opacity: .85; }
+.eta-report .sources ol { padding-left: 3.4em; }
+.eta-report .source-ref a,
+.eta-report .source-back { text-decoration: none; }
+/* The URL itself is the entry, so it has to be able to break: these are long,
+   and a query string with no spaces in it would otherwise run off the page. */
+.eta-report .source-url { word-break: break-word; }
+.eta-report .source-none { opacity: .8; }
 /* The note itself, shown where the reference is, so that reading a sentence
    does not mean leaving it. The link stays exactly what it was.
 
@@ -149,7 +159,9 @@
 .eta-report .contributors { font-size: .95rem; }
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
-.eta-report .footnotes, .eta-report .contributors { margin-top: 3em; }
+.eta-report .footnotes,
+.eta-report .sources,
+.eta-report .contributors { margin-top: 3em; }
 .eta-report .table-scroll { overflow-x: auto; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }
@@ -212,10 +224,11 @@
 <li><a href="#ground-conditions">Ground Conditions</a></li>
 </ul></li>
 <li><a href="#footnotes">Footnotes</a></li>
+<li><a href="#sources">Sources</a></li>
 </ul>
 </nav>
 <h2 id="the-elephants-in-the-room"><a class="link-mark" href="#the-elephants-in-the-room" aria-label="Link to this section"></a>The Elephants in the Room</h2>
-<p id="the-elephants-in-the-room-p1"><a class="link-mark" href="#the-elephants-in-the-room-p1" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a><span class="footnote-tip" aria-hidden="true">Inflation-adjusted from the 2024 capital plan.</span></sup>, per the <a href="https://www.mta.info/document/196361">MTA study</a>.</p>
+<p id="the-elephants-in-the-room-p1"><a class="link-mark" href="#the-elephants-in-the-room-p1" aria-label="Link to this paragraph"></a>SAS West is projected to cost <strong>$7.7 billion</strong> for 1.25 miles<sup id="fnref1" class="footnote-ref"><a href="#fn1">1</a><span class="footnote-tip" aria-hidden="true">Inflation-adjusted from the 2024 capital plan.</span></sup>, per the <span class="cited"><a href="https://www.mta.info/document/196361">MTA study</a><sup class="source-ref" id="srcref1-1"><a href="#src1">[1]</a></sup></span>.</p>
 <figure id="sas-west-036"><a class="link-mark" href="#sas-west-036" aria-label="Link to this figure"></a><img src="images/sas-west-036.png" alt="SAS West alignment map" loading="lazy"><figcaption class="figure-caption">The SAS West and Phase 2 alignments.</figcaption><figcaption class="figure-credit">Credit: MTA</figcaption></figure>
 <p id="the-elephants-in-the-room-p2"><a class="link-mark" href="#the-elephants-in-the-room-p2" aria-label="Link to this paragraph"></a>That is a lot of money.</p>
 <div class="table-scroll" id="table-943f5817"><a class="link-mark" href="#table-943f5817" aria-label="Link to this table"></a><table><tr><td><p id="table-943f5817-p1"><strong>Project</strong></p></td><td><p id="table-943f5817-p2"><strong>Cost per mile</strong></p></td></tr><tr><td><p id="table-943f5817-p3">SAS West</p></td><td><p id="table-943f5817-p4">$6.2B</p></td></tr><tr><td><p id="table-943f5817-p5">Grand Paris Express</p></td><td><p id="table-943f5817-p6">$530M</p></td></tr></table></div>
@@ -227,6 +240,12 @@
 <ol>
 <li id="fn1"><a class="link-mark" href="#fn1" aria-label="Link to this footnote"></a><p id="fn1-p1"><a href="#fnref1" class="footnote-back" aria-label="Back to footnote 1 in the text">↑</a> Inflation-adjusted from the 2024 capital plan.</p></li>
 <li id="fn2"><a class="link-mark" href="#fn2" aria-label="Link to this footnote"></a><p id="fn2-p1"><a href="#fnref2" class="footnote-back" aria-label="Back to footnote 2 in the text">↑</a> Measured from street level to platform.</p></li>
+</ol>
+</section>
+<section class="sources" id="sources">
+<h2><a class="link-mark" href="#sources" aria-label="Link to this section"></a>Sources</h2>
+<ol>
+<li id="src1"><a href="#srcref1-1" class="source-back" aria-label="Back to this source in the text">↑</a> <a class="source-url" href="https://www.mta.info/document/196361">https://www.mta.info/document/196361</a><span class="source-none"> (not archived)</span></li>
 </ol>
 </section>
 </div>

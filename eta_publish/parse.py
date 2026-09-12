@@ -40,6 +40,7 @@ from .nodes import (
     Text,
     Vector,
     plain_text,
+    unwrap_snapshot,
 )
 
 HEADING_LEVELS = {
@@ -282,10 +283,26 @@ class Parser:
             self.doc.warn("a date chip carries no timestamp; dropped")
         return Text(text=text)
 
+    def _href(self, url: str | None) -> str | None:
+        """A link as the tree holds it: the page it is of, not the capture of it.
+
+        A `web.archive.org` URL typed into the document is a source already
+        archived, so the wrapping comes off here and the capture it named is
+        recorded as the one that source has. Doing it at the door means every
+        output, the record, and the numbering all see one URL for one page,
+        however the document happened to write it.
+        """
+        if url is None:
+            return None
+        original, archived = unwrap_snapshot(url)
+        if archived is not None:
+            self.doc.archives.setdefault(original, archived)
+        return original
+
     def _rich_link(self, chip: JsonObject) -> Text:
         """A linked Drive file, which is how `Source:` lines name an asset."""
         props = chip.get("richLinkProperties", {})
-        return Text(text=props.get("title", ""), href=props.get("uri"))
+        return Text(text=props.get("title", ""), href=self._href(props.get("uri")))
 
     def _text_run(self, run: JsonObject) -> list[Inline]:
         """One run, split at any soft line breaks it contains."""
@@ -306,7 +323,7 @@ class Parser:
                 underline=bool(style.get("underline")) and "link" not in style,
                 sup=offset == "SUPERSCRIPT",
                 sub=offset == "SUBSCRIPT",
-                href=style.get("link", {}).get("url"),
+                href=self._href(style.get("link", {}).get("url")),
             )
 
         out: list[Inline] = []

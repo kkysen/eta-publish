@@ -11,7 +11,7 @@
 
 = The Elephants in the Room
 
-SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inflation-adjusted from the 2024 capital plan.], per the #link("https://www.mta.info/document/196361")[MTA study].
+SAS West is projected to cost #strong[\$7.7 billion] for 1.25 miles#footnote[Inflation-adjusted from the 2024 capital plan.], per the #link("https://www.mta.info/document/196361")[MTA study]#super[#link(<src1>)[\[1\]]].
 
 #figure(
   capped_image("images/sas-west-036.png", alt: "SAS West alignment map"),
@@ -38,3 +38,7 @@ That is a lot of money.
 - Second point
 
 Stations are over 100 ft deep.#footnote[Measured from street level to platform.]
+
+= Sources
+
++ #link("https://www.mta.info/document/196361")[https://www.mta.info/document/196361] (not archived) <src1>

@@ -117,6 +117,7 @@ class MarkdownEmitter(Emitter):
             self.blocks([doc.hero] if doc.hero is not None else []),
             self.blocks(doc.body),
             self.footnotes(doc),
+            self.sources(doc),
             self.contributors(doc),
         ]
         return strip_trailing_space(self.join(parts)) + "\n"
@@ -182,6 +183,45 @@ class MarkdownEmitter(Emitter):
             return ""
         listed = "\n".join(f"- {name}" for name in names)
         return f"## Contributors\n\n{CONTRIBUTORS_NOTE}\n\n{listed}"
+
+    def sources(self, doc: Document) -> str:
+        """Every source the report cites, with the archived copy beside it.
+
+        A heading of its own, unlike the footnotes: those are a thing the
+        format provides and collects under a rule, and this is a section the
+        report has.
+
+        Numbered, and nothing more: a Markdown file has no anchors to hang a
+        backlink on that GitHub will honour, so the number in the text and the
+        number in this list are the whole of the connection, which is how a
+        bibliography has always worked.
+        """
+        if not doc.sources:
+            return ""
+        items = [
+            f"{n}. {self.source(doc, source)}" for n, source in enumerate(doc.sources, start=1)
+        ]
+        return "## Sources\n\n" + "\n".join(items)
+
+    def source(self, doc: Document, source: str) -> str:
+        """One entry: the source, and where it is archived, or that it is not."""
+        archived = doc.archives.get(source)
+        if archived is None:
+            return f"{url(source)} (not archived)"
+        if archived.error:
+            return f"{url(source)} (not archived: {escape(archived.error)})"
+        return f"{url(source)} (archived [{archived.date}]({url(archived.snapshot)}))"
+
+    def source_ref(self, href: str) -> str:
+        """The `[12]` after a link, which is its number in Sources.
+
+        Escaped, because a bare `[12]` beside a link is Markdown's own
+        reference-link syntax and would resolve to nothing.
+        """
+        number = self.source_number(href)
+        if not number:
+            return ""
+        return f"<sup>\\[{number}\\]</sup>"
 
     def footnotes(self, doc: Document) -> str:
         """The notes themselves, with no heading over them.
@@ -290,7 +330,7 @@ class MarkdownEmitter(Emitter):
         if node.italic:
             out = f"*{out}*"
         if node.href:
-            out = f"[{out}]({url(node.href)})"
+            out = f"[{out}]({url(node.href)}){self.source_ref(node.href)}"
         return out
 
     @override

@@ -22,6 +22,37 @@ from typing import override
 
 
 @dataclass(frozen=True)
+class Archived:
+    """Where a snapshot of one source lives, or why there is none.
+
+    `snapshot` and `timestamp` are the capture; `error` is a capture that was
+    tried and did not happen, which is a third state and not the absence of one.
+    A source nothing has ever tried is simply missing from the record, and a
+    later build submits it; one recorded here with an `error` is one a later
+    build already knows the answer for, and so does not submit again and again
+    forever. Some URLs cannot be archived at all: a page behind a login, and
+    every `mp.weixin.qq.com` link the reports cite.
+    """
+
+    snapshot: str = ""
+    timestamp: str = ""
+    """When the snapshot was taken, as the 14 digits Wayback writes, or the
+    date the attempt failed."""
+    error: str = ""
+
+    @property
+    def date(self) -> str:
+        """The capture written out, e.g. `May 3, 2024`.
+
+        A reader checking a source against the page it cites is asking when the
+        report read it, and 14 digits is not an answer anyone reads.
+        Whatever does not parse as a date is shown as it is, which is the same
+        choice `dateline` makes and for the same reason.
+        """
+        return _long_date(self.timestamp[:8])
+
+
+@dataclass(frozen=True)
 class Text:
     """A run of text sharing one style.
 
@@ -407,6 +438,16 @@ class Document:
     An SVG has no pixel size to read, so it is one this is empty for.
     """
 
+    archives: dict[str, Archived] = field(default_factory=dict)
+    """Source URL to the snapshot of it, keyed by the original and never by the
+    snapshot.
+
+    Filled in from `archive.json`, which is committed, and added to by a build
+    that submits the sources not yet in it. A document whose own href already
+    points at a snapshot seeds this at parse time, so a link written by hand as
+    an archive is one already archived rather than one to archive again.
+    """
+
     @property
     def hero(self) -> Figure | None:
         """The figure a report opens with, if it opens with one.
@@ -504,6 +545,36 @@ class Document:
         return list(seen.values())
 
     @property
+    def sources(self) -> list[str]:
+        """Every external link the report cites, in the order it cites them.
+
+        Deduplicated by URL, first use first, the way `images` deduplicates by
+        object id: one page cited six times is one source, and renumbering it
+        because a later section cites it again would renumber everything after.
+
+        Document order and nothing else decides the numbering. Reading it off
+        the archive record instead would make the numbers a property of which
+        captures happened to have succeeded, and an offline build against a
+        partial record would renumber the whole report.
+        """
+        seen: dict[str, None] = {}
+        for block in self._every_block():
+            for href in _links_in(block):
+                if is_source(href):
+                    seen.setdefault(href, None)
+        return list(seen)
+
+    @property
+    def source_uses(self) -> dict[str, int]:
+        """How many times each source is cited, which is how many backlinks it has."""
+        uses: dict[str, int] = {}
+        for block in self._every_block():
+            for href in _links_in(block):
+                if is_source(href):
+                    uses[href] = uses.get(href, 0) + 1
+        return uses
+
+    @property
     def figures(self) -> list[Figure]:
         """Every figure in the document, in order, footnotes included.
 
@@ -569,7 +640,7 @@ class Document:
 # What a Docs date chip can render, most likely first.
 # A chip is a real date, so this is a short list of ways to write one
 # rather than an attempt at parsing dates in general.
-DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%Y-%m-%d", "%m/%d/%Y")
+DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%Y-%m-%d", "%m/%d/%Y", "%Y%m%d")
 
 
 def _long_date(text: str) -> str:
@@ -620,6 +691,71 @@ def _walk(blocks: list[Block]) -> Iterator[Block]:
             for row in block.rows:
                 for cell in row:
                     yield from _walk(cell)
+
+
+SNAPSHOT = re.compile(
+    r"^https?://web\.archive\.org/web/(\d{4,14})[a-z_]*/(?P<url>https?://.+)$",
+    re.IGNORECASE,
+)
+"""A Wayback URL, as the timestamp it was taken at and the page it is of.
+
+The digits are followed by a modifier on some of these, `id_` for the
+unrewritten original and `im_` for an image, which says how Wayback serves the
+capture rather than which capture it is.
+"""
+
+
+def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
+    """A link split into the page it is of and the capture it is, if it is one.
+
+    A report that cites `web.archive.org/web/.../nypost.com/...` has already
+    done by hand what this does: the source is the Post article, and the
+    snapshot is the capture already named. Left wrapped it would be a source of
+    its own, keyed in the record under a URL that is itself the answer, and the
+    same article cited bare elsewhere would be a second source saying the same
+    thing.
+    """
+    found = SNAPSHOT.match(href)
+    if found is None:
+        return href, None
+    stamp, url = found.group(1), found.group("url")
+    # Rebuilt rather than kept as written, so that a capture cited with a
+    # modifier and the same capture cited without one are one snapshot.
+    return url, Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
+
+
+def is_source(href: str | None) -> bool:
+    """Whether a link is a citation of something outside the report.
+
+    An anchor is a place in this page, `mailto:` is a person, and `etany.org`
+    is the site the report is published on: none of the three is a source that
+    can go away, and archiving the site into itself would say nothing.
+    """
+    if not href:
+        return False
+    if not href.startswith(("http://", "https://")):
+        return False
+    return "etany.org" not in href
+
+
+def _links_in(block: Block) -> list[str]:
+    """Every href the block's own inlines carry, in order."""
+    match block:
+        case Figure():
+            # `Figure.source` is left out: it names the original file in Drive
+            # for whoever assembles the report, no emitter publishes it, and a
+            # Sources entry for a link nothing on the page points at is an
+            # entry whose way back into the text does not exist.
+            return _hrefs(block.caption) + _hrefs(block.credit)
+        case Paragraph() | Heading():
+            return _hrefs(block.content)
+        case List():
+            return [href for item in _items(block.items) for href in _hrefs(item.content)]
+    return []
+
+
+def _hrefs(content: list[Inline]) -> list[str]:
+    return [i.href for i in content if isinstance(i, Text) and i.href]
 
 
 def _images_in(block: Block) -> list[Image]:
