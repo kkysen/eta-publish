@@ -114,18 +114,23 @@
    The span is in the markup on every device, so a rule that only reaches
    the ones that hover leaves the rest displaying the note inline, in the
    middle of the sentence it belongs to. */
-.eta-report .footnote-tip { display: none; }
+.eta-report .footnote-tip,
+.eta-report .source-tip { display: none; }
 @media (hover: hover) {
-  .eta-report .footnote-ref { position: relative; }
+  .eta-report .footnote-ref,
+  .eta-report .cited { position: relative; }
   .eta-report .footnote-ref:hover .footnote-tip,
-  .eta-report .footnote-ref:focus-within .footnote-tip { display: block; }
+  .eta-report .footnote-ref:focus-within .footnote-tip,
+  .eta-report .cited:hover .source-tip,
+  .eta-report .cited:focus-within .source-tip { display: block; }
   /* Under the reference rather than over it, which is where the script
      usually puts it too, and where it goes when there is no script: over it
      is outside the window whenever the reader arrived by a backlink.
 
      Which edge has room is a question about the window, and CSS cannot ask
      it, so this is a fallback and the script measures. */
-  .eta-report .footnote-tip {
+  .eta-report .footnote-tip,
+  .eta-report .source-tip {
       position: absolute; top: 1.6em; left: 50%; transform: translateX(-50%);
       z-index: 1; width: max-content; max-width: min(24rem, calc(100vw - 2.5rem));
       padding: .5em .7em; border-radius: .3em;
@@ -148,13 +153,18 @@
      This is the gap, made part of the box, on both sides because the script
      puts the box above the reference as readily as below it. Behind the box,
      so it covers the space and not the page. */
-  .eta-report .footnote-tip::before {
+  .eta-report .footnote-tip::before,
+  .eta-report .source-tip::before {
       content: ""; position: absolute; left: 0; right: 0;
       top: -.9rem; bottom: -.9rem; z-index: -1; }
   /* Every link in the note is in the box too. */
-  .eta-report .footnote-tip a { text-decoration: underline; }
+  .eta-report .footnote-tip a,
+  .eta-report .source-tip a { text-decoration: underline; }
 }
-@media print { .eta-report .footnote-tip { display: none; } }
+@media print {
+  .eta-report .footnote-tip,
+  .eta-report .source-tip { display: none; }
+}
 .eta-report .contributors { font-size: .95rem; }
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
