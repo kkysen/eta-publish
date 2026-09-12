@@ -8,6 +8,7 @@ render as undifferentiated body text.
 """
 
 from collections.abc import Callable, Iterable
+from string import ascii_lowercase
 from typing import cast, override
 
 import htpy
@@ -18,6 +19,7 @@ from markupsafe import Markup
 from ..assets import read
 from ..naming import ASSET_DIR, IMAGE_DIR, content_anchor
 from ..nodes import (
+    Archived,
     Block,
     Document,
     Figure,
@@ -196,6 +198,9 @@ class HtmlEmitter(Emitter):
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
+        self._source_uses: dict[str, int] = {}
+        """How many times each source has been cited so far in this walk,
+        which is which backlink letter the next citation of it gets."""
         self._lead: Piece = None
         """Markup for the next paragraph to open with, inside its own tag.
 
@@ -258,7 +263,16 @@ class HtmlEmitter(Emitter):
         document rather than passed down the tree.
         """
         self.doc = doc
-        self._taken = {"title", "short", "table-of-contents", "footnotes", "contributors"}
+        self.number_sources(doc)
+        self._taken = {
+            "title",
+            "short",
+            "table-of-contents",
+            "footnotes",
+            "sources",
+            "contributors",
+        }
+        self._source_uses = {}
         self._scope = ""
         self._paragraphs = 0
         self._marked = True
@@ -320,7 +334,11 @@ class HtmlEmitter(Emitter):
             if markup:
                 groups[-1].append(markup)
 
-        back = [part for part in (self.footnotes(doc), self.contributors(doc)) if part]
+        back = [
+            part
+            for part in (self.footnotes(doc), self.sources(doc), self.contributors(doc))
+            if part
+        ]
         groups[-1].extend(back)
         return [group for group in groups if group]
 
@@ -434,6 +452,8 @@ class HtmlEmitter(Emitter):
         sections = []
         if doc.footnotes:
             sections.append(Heading(level=2, anchor="footnotes", content=[Text("Footnotes")]))
+        if doc.sources:
+            sections.append(Heading(level=2, anchor="sources", content=[Text("Sources")]))
         if doc.contributors:
             sections.append(Heading(level=2, anchor="contributors", content=[Text("Contributors")]))
         return sections
@@ -470,6 +490,106 @@ class HtmlEmitter(Emitter):
             else:
                 items.append(tag.li[link])
         return tag.ul["\n", lines(items), "\n"], headings
+
+    def source_ref(self, href: str) -> Piece:
+        """The `[12]` after a link, which is the way to its entry in Sources.
+
+        Hovering shows the pair, but a phone has no hover and a printed page
+        has no links at all, so the way to the archived copy cannot be the
+        tooltip. This is the one that always works.
+
+        Bracketed, where a footnote reference is a bare number: the two ride
+        at the same height and there are two numbering schemes on one page, so
+        the brackets are what tells `[12]` from footnote 12 at a glance.
+
+        Built as a `sup` around an `a`, the same shape `footnote_ref` writes,
+        rather than one `a` carrying both. Not only for the symmetry: `biome`
+        2.3.14 fails to lay out a long caption with the flatter form, with an
+        internal error rather than a complaint about the markup.
+
+        Inside the box a reference carries it gets no id and does not count as
+        a use: that box is a copy of a note emitted a second time, and the
+        note's own citation is the one the backlink has to land on.
+        """
+        number = self.source_number(href)
+        if not number:
+            return None
+        if self._in_tip:
+            return tag.sup(class_="source-ref")[
+                tag.a(tabindex="-1", href=f"#src{number}")[f"[{number}]"]
+            ]
+        use = self._source_uses[href] = self._source_uses.get(href, 0) + 1
+        return tag.sup(class_="source-ref", id=f"srcref{number}-{use}")[
+            tag.a(href=f"#src{number}")[f"[{number}]"]
+        ]
+
+    def sources(self, doc: Document) -> str:
+        """Every source the report cites, with the archived copy beside it.
+
+        The original first, because that is what the report read and where the
+        page still lives while it lives. The capture after it, because that is
+        what is left when it does not.
+        """
+        if not doc.sources:
+            return ""
+        uses = doc.source_uses
+        items = [
+            self.source(number, url, uses.get(url, 1))
+            for number, url in enumerate(doc.sources, start=1)
+        ]
+        return markup(
+            tag.section(class_="sources", id="sources")[
+                "\n",
+                tag.h2[self.mark("sources"), "Sources"],
+                "\n",
+                tag.ol["\n", lines(items), "\n"],
+                "\n",
+            ]
+        )
+
+    def source(self, number: int, url: str, uses: int) -> Tag:
+        """One entry: the ways back to it, the source, and its archived copy.
+
+        A source cited once gets a bare arrow, as a footnote does. One cited
+        six times gets an arrow per citation, lettered, because an arrow that
+        can only return to the first of six is wrong five times.
+        """
+        back: list[Piece] = []
+        for use in range(1, uses + 1):
+            mark = "\u2191" if uses == 1 else f"\u2191{ascii_lowercase[use - 1]}"
+            where = f"citation {use} of this source" if uses > 1 else "this source"
+            back.extend(
+                [
+                    tag.a(
+                        href=f"#srcref{number}-{use}",
+                        class_="source-back",
+                        aria_label=f"Back to {where} in the text",
+                    )[mark],
+                    " ",
+                ]
+            )
+        return tag.li(id=f"src{number}")[
+            back,
+            tag.a(class_="source-url", href=url)[url],
+            self.source_archive(self.doc.archives.get(url)),
+        ]
+
+    def source_archive(self, archived: Archived | None) -> Piece:
+        """What is said about the capture: where it is, or that there is none.
+
+        A source nothing has captured says so rather than saying nothing.
+        A link with no archive beside it and a link whose archive failed look
+        identical on the page otherwise, and they are not the same thing.
+        """
+        if archived is None:
+            return tag.span(class_="source-none")[" (not archived)"]
+        if archived.error:
+            return tag.span(class_="source-none")[f" (not archived: {archived.error})"]
+        return [
+            " (archived ",
+            tag.a(class_="source-archive", href=archived.snapshot)[archived.date],
+            ")",
+        ]
 
     def footnotes(self, doc: Document) -> str:
         if not doc.footnotes:
@@ -733,7 +853,13 @@ class HtmlEmitter(Emitter):
         if node.underline:
             out = tag.u[out]
         if node.href:
-            out = self.link(node.href)[out]
+            link = self.link(node.href)[out]
+            ref = self.source_ref(node.href)
+            # Held together in one element rather than set side by side: a
+            # citation and the link it is of do not wrap apart, and `biome`
+            # 2.3.14 fails with an internal error laying out a `sup` welded to
+            # the end of a link long enough to need breaking.
+            out = tag.span(class_="cited")[link, ref] if ref is not None else link
         return markup(out)
 
     @override

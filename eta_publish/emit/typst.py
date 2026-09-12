@@ -92,7 +92,7 @@ class TypstEmitter(Emitter):
             f"{self.hero(doc)}"
             f")\n"
         )
-        return header + "\n" + self.blocks(doc.body) + "\n"
+        return header + "\n" + self.join([self.blocks(doc.body), self.sources(doc)]) + "\n"
 
     def hero(self, doc: Document) -> str:
         """The opening figure, passed to the template rather than emitted.
@@ -131,6 +131,39 @@ class TypstEmitter(Emitter):
         return "".join(f"{string(name)}, " for name in doc.contributors)
 
     # ---- blocks -----------------------------------------------------
+
+    def sources(self, doc: Document) -> str:
+        """Every source the report cites, with the archived copy beside it.
+
+        A real section with real links: a PDF is the output most likely to
+        outlive the pages it cites, and the one a reader cannot hover.
+        Each entry carries a label, so the `[12]` in the text is a jump rather
+        than a number to go looking for.
+        """
+        if not doc.sources:
+            return ""
+        items = [
+            f"+ {self.source(doc, source)} <src{n}>"
+            for n, source in enumerate(doc.sources, start=1)
+        ]
+        return "= Sources\n\n" + "\n".join(items)
+
+    def source(self, doc: Document, source: str) -> str:
+        """One entry: the source, and where it is archived, or that it is not."""
+        shown = f"#link({string(source)})[{escape(source)}]"
+        archived = doc.archives.get(source)
+        if archived is None:
+            return f"{shown} (not archived)"
+        if archived.error:
+            return f"{shown} (not archived: {escape(archived.error)})"
+        return f"{shown} (archived #link({string(archived.snapshot)})[{escape(archived.date)}])"
+
+    def source_ref(self, href: str) -> str:
+        """The `[12]` after a link, which jumps to its entry in Sources."""
+        number = self.source_number(href)
+        if not number:
+            return ""
+        return f"#super[#link(<src{number}>)[\\[{number}\\]]]"
 
     @override
     def heading(self, node: Heading) -> str:
@@ -200,7 +233,7 @@ class TypstEmitter(Emitter):
         if node.underline:
             out = f"#underline[{out}]"
         if node.href:
-            out = f"#link({string(node.href)})[{out}]"
+            out = f"#link({string(node.href)})[{out}]{self.source_ref(node.href)}"
         return out
 
     @override

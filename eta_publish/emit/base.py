@@ -116,10 +116,30 @@ class Emitter(ABC):
         # Set by `emit`, the only entry point.
         # Node methods read it for document-wide context, so calling one directly fails.
         self.doc = Document()
+        self.source_numbers: dict[str, int] = {}
 
     def emit(self, doc: Document) -> str:
         self.doc = doc
+        self.number_sources(doc)
         return self.document(doc)
+
+    def number_sources(self, doc: Document) -> None:
+        """Fix the number each source is cited by, once per document.
+
+        Once, because every link asks: `Document.sources` walks the whole tree
+        to answer, and asking it per link would walk the report once per
+        citation of it.
+        """
+        self.source_numbers = {source: n for n, source in enumerate(doc.sources, start=1)}
+
+    def source_number(self, href: str | None) -> int:
+        """Which source `href` is, or zero if it is not one of them.
+
+        Zero for a link no output points at: the `Source:` line of a figure is
+        kept in the Markdown archive as a comment, and a comment is not a
+        citation.
+        """
+        return self.source_numbers.get(href or "", 0)
 
     # ---- dispatch ---------------------------------------------------
 

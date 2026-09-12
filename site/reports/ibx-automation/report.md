@@ -75,7 +75,7 @@ And now it has risen to 160k.
 This has been driven by a refinement of the ridership model as more details have been decided, as well as improved station locations and a truly impressive reduction in runtime.
 But we have reason to believe it can rise even higher.
 
-An independent study ([https://arxiv.org/abs/2408.01562](<https://arxiv.org/abs/2408.01562>)) by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day.
+An independent study ([https://arxiv.org/abs/2408.01562](<https://arxiv.org/abs/2408.01562>)<sup>\[1\]</sup>) by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day.
 Another independent study by Tang at NYU Marron using the FTA’s STOPS open-source ridership modeling software[^3] found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways.
 If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k.
 Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway’s Phase 1, which saw about 200k daily riders as well.
@@ -104,10 +104,10 @@ Low capacity vehicles do not necessarily make for a low capacity line, however.
 A small trainset can allow for smaller stations and tunnels, thereby drastically reducing construction cost.
 But it can often make up capacity by running extremely frequently.
 Lille’s Metro, for example, runs very tiny 26 m long, 2 m wide trains, but it runs them every 66 seconds, and can run up to 60 seconds.
-While a light metro can be as small and limited as an airport’s people mover system, it can also be as large as the [narrow 6B trains](<https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/>) serving Guangzhou Metro Line 3, which carried [2.76 million riders a day](<http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html>) in 2019 and is perhaps the busiest metro line in the world.[^4] To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy, and has needed multiple relief lines and faces crowding limitations at many stations) and should have been heavy metro for sure, but it is a testament to the potential of light metro that it can carry the busiest metro line in the world.
+While a light metro can be as small and limited as an airport’s people mover system, it can also be as large as the [narrow 6B trains](<https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/>)<sup>\[2\]</sup> serving Guangzhou Metro Line 3, which carried [2.76 million riders a day](<http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html>)<sup>\[3\]</sup> in 2019 and is perhaps the busiest metro line in the world.[^4] To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy, and has needed multiple relief lines and faces crowding limitations at many stations) and should have been heavy metro for sure, but it is a testament to the potential of light metro that it can carry the busiest metro line in the world.
 
 That said, while ridership keeps climbing, the IBX will never be as busy as Guangzhou Metro Line 3.
-With the current 160k daily ridership projection, however, it will already be [the busiest light rail system (not line, whole system) in the US](<https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.>).
+With the current 160k daily ridership projection, however, it will already be [the busiest light rail system (not line, whole system) in the US](<https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.>)<sup>\[4\]</sup>.
 So it makes perfect sense to future-proof the IBX with the most cost-effective type of operation available: automated light metro (ALM).
 
 ### Automation
@@ -158,11 +158,11 @@ In the United States, ALM trains have long been used on numerous airport “peop
 As the name suggests, ALM systems run short trains (typically no longer than four cars per consist) at very high frequency (2 minutes apart or less), trading per-trainset capacity for higher throughput of trains per hour.
 They are thus ideal for grade-separated train services that need to run frequently but do not require the high capacity of a 600-foot subway train.
 Since most IBX riders will be making short trips either that stand alone or require one or more transfers, trains must run frequently around the clock; the ability to run trains as frequently as every 2 minutes or less thus benefits the planned line immensely.
-Additionally, ALM trains require smaller station footprints, an essential benefit given the outsized role [station size](<https://transitcosts.com/city/newyork-case-study/>) plays in the MTA’s high construction costs.
+Additionally, ALM trains require smaller station footprints, an essential benefit given the outsized role [station size](<https://transitcosts.com/city/newyork-case-study/>)<sup>\[5\]</sup> plays in the MTA’s high construction costs.
 Finally, ALM trains can also climb steep grades, reducing the construction costs for tunnel and bridge approaches.
 
 What exactly does the “automated” in “automated light metro” mean?
-There are international standards for different [*grades of automation*](<https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation>), signifying exactly how automated a transit line’s operations is.
+There are international standards for different [*grades of automation*](<https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation>)<sup>\[6\]</sup>, signifying exactly how automated a transit line’s operations is.
 The most automated of these grades is the 4th grade (*GoA4)*.
 The MTA should also proactively study full GoA4 automation for the IBX.
 On top of controlling operating costs, automated trains accelerate and brake more smoothly than manually controlled ones, and they can be stopped at platforms precisely.
@@ -172,7 +172,7 @@ Increasing the effective usable platform area is important for cost-effectivenes
 #### Off-the-shelf rolling stock
 
 Importantly, the MTA has its pick of makers for standardized light metro railcars and seems intent on selecting an off-the-shelf design.
-If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the [R46 truck-cracking debacle](<https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16>).
+If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the [R46 truck-cracking debacle](<https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16>)<sup>\[7\]</sup>.
 As we have[ ](<https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train>)[chronicled](<https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train>), trusting experienced firms to meet their needs is what most other transit agencies do, and it is a major reason why they have generally beaten out New York City on subway costs, especially as of late.
 
 #### High platforms
@@ -191,13 +191,13 @@ Hitachi Driverless Metro railcars are used on Honolulu’s Skyline, are proven i
 
 With a 32-min runtime, 2-min turns, and a 90% utilization rate, 38 trainsets are needed.
 At 4 cars/trainset and using Honolulu’s costs of $2.2 million/car inflation-adjusted to June 2025, this fleet would cost $421 million.
-Assuming [3.5% future inflation](<https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3>) (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be $444 million in 2027,[^5] only slightly higher than the MTA’s estimated $432 million for fleet cost.
+Assuming [3.5% future inflation](<https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3>)<sup>\[8\]</sup> (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be $444 million in 2027,[^5] only slightly higher than the MTA’s estimated $432 million for fleet cost.
 But this is with 2-min peak headways, not 5-min peak headways.
 And with a 92% utilization rate, the cost comes down to exactly $432 million.
 
 Hitachi Driverless Metro Honolulu
 
-cost: [$2.2 million/car](<https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to>) ([contract in 2011](<http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf>), [first delivered on March 25, 2016](<https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html>), [last delivered on April 24, 2024](<https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train>))
+cost: [$2.2 million/car](<https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to>)<sup>\[9\]</sup> ([contract in 2011](<http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf>)<sup>\[10\]</sup>, [first delivered on March 25, 2016](<https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html>)<sup>\[11\]</sup>, [last delivered on April 24, 2024](<https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train>)<sup>\[12\]</sup>)
 
 fleet: 80 cars
 
@@ -207,7 +207,7 @@ length: 65 ft (19.81 m)
 
 width: 10 ft (3.048 m)
 
-weight: [72,000 lbs per 65 ft AW0 car](<https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.>)
+weight: [72,000 lbs per 65 ft AW0 car](<http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.>)<sup>\[13\]</sup>
 
 AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m
 
@@ -237,7 +237,7 @@ length: 19.05 m
 
 width: 2.94 m
 
-weight: [232 t per 76.2 m AW3 4-car trainset](<https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes>)
+weight: [232 t per 76.2 m AW3 4-car trainset](<https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes>)<sup>\[14\]</sup>
 
 AW0 weight/length: (232 t - (175 lbs \* 780)) / (19.05 m \* 4) = 2232 kg/m
 
@@ -255,9 +255,9 @@ signaling: Alstom Urbalis 400 CBTC
 
 seating: longitudinal
 
-[^1]: [https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity](<https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity>) [https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/](<https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/>) \[Multiply REM derated to 4/m^2 by design frequency\]
+[^1]: [https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity](<https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity>)<sup>\[15\]</sup> [https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/](<https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/>)<sup>\[16\]</sup> \[Multiply REM derated to 4/m^2 by design frequency\]
 
-[^2]: All numbers come from the Italian case of the Transit Costs Project. [https://transitcosts.com/cases/](<https://transitcosts.com/cases/>)
+[^2]: All numbers come from the Italian case of the Transit Costs Project. [https://transitcosts.com/cases/](<https://transitcosts.com/cases/>)<sup>\[17\]</sup>
 
 [^3]: STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
     Thus, there is a limit to its accuracy.
@@ -268,6 +268,26 @@ seating: longitudinal
     However, both are technically mainline rail lines, and Mumbai’s Western Line is quad-tracked for much of its length.
 
 [^5]: ceil(((32 min + 2 min) \* 2) / 2 min / 90%) trainsets \* 4 cars/trainset \* $2.2 million/car \* 124% (Apr 2020 to Jan 2025 inflation) \* 103.5%^(2027-2025)
+
+## Sources
+
+1. <https://arxiv.org/abs/2408.01562> (not archived)
+2. <https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/> (archived [May 15, 2026](<https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/>))
+3. <http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html> (not archived)
+4. <https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.> (not archived)
+5. <https://transitcosts.com/city/newyork-case-study/> (not archived)
+6. <https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation> (not archived)
+7. <https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16> (not archived)
+8. <https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3> (not archived)
+9. <https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to> (not archived)
+10. <http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf> (not archived)
+11. <https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html> (not archived)
+12. <https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train> (not archived)
+13. <http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.> (archived [August 8, 2014](<https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.>))
+14. <https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes> (not archived)
+15. <https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity> (not archived)
+16. <https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/> (not archived)
+17. <https://transitcosts.com/cases/> (not archived)
 
 ## Contributors
 

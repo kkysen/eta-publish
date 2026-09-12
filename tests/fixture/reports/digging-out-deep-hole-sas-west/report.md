@@ -4,7 +4,7 @@ A 125 St subway should be a slam dunk.
 
 ## The Elephants in the Room
 
-SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>).
+SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>)<sup>\[1\]</sup>.
 
 ![SAS West alignment map](<images/sas-west-036.png>)\
 The SAS West and Phase 2 alignments.\
@@ -29,3 +29,7 @@ Stations are over 100 ft deep.[^2]
 [^1]: Inflation-adjusted from the 2024 capital plan.
 
 [^2]: Measured from street level to platform.
+
+## Sources
+
+1. <https://www.mta.info/document/196361> (not archived)

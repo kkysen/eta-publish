@@ -90,6 +90,16 @@
 .eta-report .footnotes { font-size: .9rem; opacity: .85; }
 .eta-report .footnote-ref a,
 .eta-report .footnote-back { text-decoration: none; }
+/* Sources are set like the footnotes, because that is what they are: back
+   matter a sentence points at rather than part of the argument. */
+.eta-report .sources { font-size: .9rem; opacity: .85; }
+.eta-report .sources ol { padding-left: 3.4em; }
+.eta-report .source-ref a,
+.eta-report .source-back { text-decoration: none; }
+/* The URL itself is the entry, so it has to be able to break: these are long,
+   and a query string with no spaces in it would otherwise run off the page. */
+.eta-report .source-url { word-break: break-word; }
+.eta-report .source-none { opacity: .8; }
 /* The note itself, shown where the reference is, so that reading a sentence
    does not mean leaving it. The link stays exactly what it was.
 
@@ -148,7 +158,9 @@
 .eta-report .contributors { font-size: .95rem; }
 /* The back matter is set off by space, not by a rule. A page gives every
    `h2` a rule of its own, so a separator here drew a second one. */
-.eta-report .footnotes, .eta-report .contributors { margin-top: 3em; }
+.eta-report .footnotes,
+.eta-report .sources,
+.eta-report .contributors { margin-top: 3em; }
 .eta-report .table-scroll { overflow-x: auto; }
 .eta-report table { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .eta-report td { border: 1px solid currentColor; padding: .4em .6em; vertical-align: top; }

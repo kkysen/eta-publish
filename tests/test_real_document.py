@@ -280,7 +280,11 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
 
     size = len(HtmlEmitter(image_base="https://assets.etany.org/sas-west").emit(doc).encode())
     assert size < CODE_BLOCK_LIMIT
-    assert size < 130_000, f"grown to {size:,} bytes; still fits, worth a look"
+    # Moved from 130,000 when the Sources section landed: 113 entries and a
+    # `[n]` on every link is what it costs to make an archived copy reachable
+    # without hovering. Laid out, the committed fragment is around 225 KB,
+    # which is inside the limit and closing on `CODE_BLOCK_WARN`.
+    assert size < 200_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:

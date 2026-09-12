@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from . import console
+from .archive import read_archive_index, write_archive_index
 from .checks import check
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -467,6 +468,11 @@ def build_one(
         else:
             require_image_index(dest, doc)
     read_image_index(dest, doc)
+
+    # After the document is parsed, because what it cites is what it cites,
+    # and before the emitters, which write the Sources section off it.
+    read_archive_index(dest, doc)
+    write_archive_index(dest, doc)
 
     # Written here rather than once per site, so that building a single
     # report produces a page with everything it links.
