@@ -31,7 +31,9 @@
     return tip;
   };
   const tipOf = (e) => {
-    const cited = e.target.closest?.(".eta-report .cited");
+    // Not inside a note's box, which is already a box: a citation in there is
+    // a copy of one in the note, and its entry is a jump away from both.
+    const cited = e.target.closest?.(".eta-report .cited:not(.footnote-tip *)");
     if (cited) return sourceTip(cited);
     return e.target.closest?.(".eta-report .footnote-ref")?.querySelector(".footnote-tip");
   };
