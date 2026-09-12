@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from . import console
-from .archive import read_archive_index, write_archive_index
+from .archive import ACCESS_KEY, SECRET_KEY, read_archive_index, write_archive_index
 from .checks import check, plural
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -30,6 +30,16 @@ class BuildOptions:
     suggestions: str = "rejected"
     split: bool = False
     images: bool = True
+
+    archive: bool = True
+    """Whether to ask the Wayback Machine about the sources the report cites.
+
+    On, because a link is archived at the moment it is cited or not at the
+    moment it is cited. Off is for a build that should touch nothing: the
+    record still decides what every output says, so the pages are the same
+    either way for a source already in it.
+    """
+
     offline: bool = False
     """Whether to rebuild from the responses a previous build saved.
 
@@ -359,35 +369,41 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
 
 
 def archive_sources(doc: Document) -> None:
-    """Capture the sources nothing has captured yet, if there are keys to do it with.
+    """Find or make a capture of every source nothing has one for yet.
 
     Part of an ordinary build rather than a step somebody remembers to run: a
     source is archived because it was cited, and the moment it was cited is
     this one. Captured later, the snapshot is of whatever the page said later,
     which is not what the report read.
 
-    Only what is missing, so the cost is a handful of captures on the build
+    Only what is missing, so the cost is a handful of lookups on the build
     after a draft gains a link, and the whole of a report's sources only on the
-    first build that has keys.
+    first build that asks.
 
-    Without keys the build goes on and says so. The record stands, every source
-    in it keeps the capture it has, and the rest publish saying they have none,
-    which is true.
+    Asking what the Wayback Machine already holds needs no account, and most of
+    what these reports cite is already in it. That half runs on every build.
+    Asking for a new capture needs keys, and without them the sources nothing
+    has captured are left as they are, to be asked for by a build that can.
     """
-    from .archive import NoCredentials, capture, missing
+    from .archive import capture, have_keys, missing
 
     wanted = missing(doc)
     if not wanted:
         return
-    console.write(console.note(f"archiving {plural(len(wanted), 'new source')}"))
-    try:
-        captured = capture(doc)
-    except NoCredentials as e:
-        console.write(console.note(str(e)))
-        return
-    failed = len(wanted) - captured
-    said = f"archived {plural(captured, 'source')}"
-    console.write(console.note(f"{said}; {failed} could not be captured" if failed else said))
+    console.write(console.note(f"looking up {plural(len(wanted), 'source')} in the archive"))
+    found, submitted = capture(doc)
+    said = [f"{plural(found, 'source')} already archived"]
+    if submitted:
+        said.append(f"{plural(submitted, 'source')} captured")
+    left = len(missing(doc))
+    if left and not have_keys():
+        said.append(
+            f"{left} not archived and no keys to ask for a capture; "
+            f"set {ACCESS_KEY} and {SECRET_KEY} from https://archive.org/account/s3.php"
+        )
+    elif left:
+        said.append(f"{left} could not be captured")
+    console.write(console.note("; ".join(said)))
 
 
 def check_code_block_size(doc: Document, report: Path) -> None:
@@ -504,7 +520,7 @@ def build_one(
     # After the document is parsed, because what it cites is what it cites,
     # and before the emitters, which write the Sources section off it.
     read_archive_index(dest, doc)
-    if not options.offline:
+    if options.archive and not options.offline:
         archive_sources(doc)
     write_archive_index(dest, doc)
 

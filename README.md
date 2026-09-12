@@ -139,11 +139,25 @@ A document that already writes a link as `web.archive.org/web/<ts>/<url>`
 has it unwrapped on the way in and seeds the record with the capture it named,
 so a source archived by hand and a source archived here are one source.
 
-Captures go through [Save Page Now](https://archive.org/account/s3.php),
-which needs an archive.org account:
+Every build asks the Wayback Machine what it already holds,
+which needs no account and is most of the answer:
+11 of IBX Automation's 14 sources were already archived by somebody else.
+Only the newest capture that came back `200` counts,
+because a page that has been taken down still gets crawled
+and its newest captures are of the 404.
+
+Asking for a *new* capture goes through
+[Save Page Now](https://archive.org/account/s3.php),
+which does need an archive.org account:
 put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`.
-Without them a build says so and goes on,
-and every source not already in the record publishes saying it has none.
+Without them a build says how many sources it could not ask about,
+and those publish saying they have no archive, which is true.
+`--no-archive` skips both halves.
+
+What cannot be checked: a capture that answered `200`
+with a login wall or a site's own "page not found"
+is a capture of a page that loaded,
+and nothing in the index tells it from the real thing.
 
 ### Semantic line breaks in the Markdown
 

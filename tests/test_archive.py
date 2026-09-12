@@ -175,39 +175,47 @@ class Answering(requests.Session):
 def test_being_told_to_slow_down_is_not_an_answer_about_the_page(keyed: None) -> None:
     """A rate limit leaves the source missing, so the next build asks again."""
     doc = cites("https://a.example/1")
-    captured = archive.capture(doc, session=Answering(429))
-    assert captured == 0
+    assert archive.capture(doc, session=Answering(429)) == (0, 0)
     assert doc.archives == {}
     assert missing(doc) == ["https://a.example/1"]
 
 
 def test_a_capture_somebody_else_already_made_is_used(keyed: None) -> None:
     doc = cites("https://a.example/1")
-    session = Answering(
-        200,
-        {
-            "archived_snapshots": {
-                "closest": {"available": True, "timestamp": "20240503123456"},
-            }
-        },
-    )
-    assert archive.capture(doc, session=session) == 1
+    session = Answering(200, [["timestamp"], ["20240503123456"]])
+    assert archive.capture(doc, session=session) == (1, 0)
     assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
 
 
 def test_a_server_error_is_not_recorded_as_a_fact_about_the_source(keyed: None) -> None:
     doc = cites("https://a.example/1")
-    assert archive.capture(doc, session=Answering(503)) == 0
+    assert archive.capture(doc, session=Answering(503)) == (0, 0)
     assert doc.archives == {}
 
 
-def test_without_keys_nothing_is_submitted(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_without_keys_what_is_already_archived_is_still_found(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Looking one up needs no account; only asking for a new one does."""
     monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
     monkeypatch.delenv(archive.SECRET_KEY, raising=False)
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.NoCredentials):
-        archive.capture(doc, session=Answering(200))
+    found, submitted = archive.capture(
+        doc, session=Answering(200, [["timestamp"], ["20240503123456"]])
+    )
+    assert (found, submitted) == (1, 0)
+    assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
+
+
+def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=Answering(200, [["timestamp"]])) == (0, 0)
     assert doc.archives == {}
+    assert missing(doc) == ["https://a.example/1"]
 
 
 # ---- a link to a page of a PDF ---------------------------------------
@@ -226,11 +234,8 @@ def test_pages_of_one_pdf_are_one_document_to_capture() -> None:
 
 def test_every_page_of_a_pdf_shares_the_one_capture(keyed: None) -> None:
     doc = cites("https://a.example/report.pdf#page=28", "https://a.example/report.pdf#page=5")
-    session = Answering(
-        200,
-        {"archived_snapshots": {"closest": {"available": True, "timestamp": "20240503123456"}}},
-    )
-    assert archive.capture(doc, session=session) == 1
+    session = Answering(200, [["timestamp"], ["20240503123456"]])
+    assert archive.capture(doc, session=session) == (1, 0)
 
 
 def test_the_archived_copy_opens_on_the_page_that_was_cited() -> None:
@@ -282,3 +287,22 @@ def test_an_anchor_in_a_page_is_left_on_the_ordinary_capture() -> None:
     assert archived.snapshot == (
         "https://web.archive.org/web/20240503123456/https://a.example/article#grades"
     )
+
+
+def test_a_request_that_never_arrived_says_nothing_about_the_source(keyed: None) -> None:
+    """A read timeout is about reaching `web.archive.org`, not about the page.
+
+    Recorded as a failed capture it would leave that source with no archive
+    for good, which is what happened to a Wikipedia article that has been
+    captured hundreds of times.
+    """
+
+    class Timing(requests.Session):
+        @override
+        def request(self, *args: object, **kwargs: object) -> requests.Response:
+            raise requests.Timeout("read timed out")
+
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=Timing()) == (0, 0)
+    assert doc.archives == {}
+    assert missing(doc) == ["https://a.example/1"]
