@@ -13,7 +13,7 @@ Anything the parser cannot place here becomes a warning rather than a silent dro
 
 import re
 from collections.abc import Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 from enum import Enum
 from typing import override
@@ -564,6 +564,20 @@ class Document:
                     seen.setdefault(href, None)
         return list(seen)
 
+    def archived(self, source: str) -> Archived | None:
+        """Where `source` is archived, with its own fragment put back.
+
+        The record is keyed by the document, so a capture is shared by every
+        page of it the report cites. The fragment goes back on the way out,
+        which is what makes the archived copy of a claim about page 28 open on
+        page 28 rather than on the cover.
+        """
+        base, hash_, fragment = source.partition("#")
+        found = self.archives.get(base)
+        if found is None or not found.snapshot or not hash_:
+            return found
+        return replace(found, snapshot=f"{found.snapshot}{hash_}{fragment}")
+
     @property
     def source_uses(self) -> dict[str, int]:
         """How many times each source is cited, which is how many backlinks it has."""
@@ -721,7 +735,25 @@ def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
     stamp, url = found.group(1), found.group("url")
     # Rebuilt rather than kept as written, so that a capture cited with a
     # modifier and the same capture cited without one are one snapshot.
-    return url, Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
+    # Of the document rather than of the page of it named here, because that is
+    # what a capture is, and `Document.archived` puts the fragment back.
+    document = document_url(url)
+    return url, Archived(
+        snapshot=f"https://web.archive.org/web/{stamp}/{document}", timestamp=stamp
+    )
+
+
+def document_url(url: str) -> str:
+    """A link's address without its fragment, which is the thing that is archived.
+
+    A fragment never reaches a server. `#page=28` is an instruction to the PDF
+    viewer once the file has arrived, and `#:~:text=` is one to the browser, so
+    fifteen citations of fifteen pages of one MTA PDF are fifteen citations of
+    one document and one capture of it. Asking for fifteen would spend fifteen
+    of the day's captures on the same file and get fifteen snapshots of it,
+    taken at fifteen moments.
+    """
+    return url.partition("#")[0]
 
 
 def is_source(href: str | None) -> bool:

@@ -205,7 +205,7 @@ class MarkdownEmitter(Emitter):
 
     def source(self, doc: Document, source: str) -> str:
         """One entry: the source, and where it is archived, or that it is not."""
-        archived = doc.archives.get(source)
+        archived = doc.archived(source)
         if archived is None:
             return f"{url(source)} (not archived)"
         if archived.error:

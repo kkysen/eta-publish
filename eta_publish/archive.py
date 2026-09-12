@@ -25,7 +25,7 @@ from pathlib import Path
 
 import requests
 
-from .nodes import Archived, Document
+from .nodes import Archived, Document, document_url
 
 ARCHIVES_JSON = "archives.json"
 
@@ -112,7 +112,7 @@ def write_archive_index(dest: Path, doc: Document) -> None:
     them the report still stands on.
     """
     index = {}
-    for url in doc.sources:
+    for url in _documents(doc):
         archived = doc.archives.get(url)
         if archived is None:
             continue
@@ -126,13 +126,24 @@ def write_archive_index(dest: Path, doc: Document) -> None:
 
 
 def missing(doc: Document) -> list[str]:
-    """The sources nothing has tried to capture yet, in document order.
+    """The documents nothing has tried to capture yet, in the order they are cited.
 
-    A source recorded with an `error` is not among them: that one has been
-    tried, and a build that submitted it again on every run would spend the
-    rate limit on the pages least likely to ever answer.
+    Documents rather than sources: a fragment never reaches a server, so the
+    fifteen pages of one MTA PDF the report cites are one file to capture.
+
+    One recorded with an `error` is not among them: that one has been tried,
+    and a build that submitted it again on every run would spend the rate limit
+    on the pages least likely to ever answer.
     """
-    return [url for url in doc.sources if url not in doc.archives]
+    return [url for url in _documents(doc) if url not in doc.archives]
+
+
+def _documents(doc: Document) -> list[str]:
+    """Every source as the thing that gets captured, deduplicated, in order."""
+    seen: dict[str, None] = {}
+    for source in doc.sources:
+        seen.setdefault(document_url(source), None)
+    return list(seen)
 
 
 def today() -> str:

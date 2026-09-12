@@ -151,7 +151,7 @@ class TypstEmitter(Emitter):
     def source(self, doc: Document, source: str) -> str:
         """One entry: the source, and where it is archived, or that it is not."""
         shown = f"#link({string(source)})[{escape(source)}]"
-        archived = doc.archives.get(source)
+        archived = doc.archived(source)
         if archived is None:
             return f"{shown} (not archived)"
         if archived.error:
