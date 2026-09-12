@@ -54,6 +54,10 @@ Images = Annotated[
     bool,
     Option(help="download the images; the output references them either way"),
 ]
+Archive = Annotated[
+    bool,
+    Option(help="look up or ask for a capture of every source not already archived"),
+]
 Offline = Annotated[
     bool,
     Option(help="rebuild from the responses saved by the last build; no network"),
@@ -76,6 +80,7 @@ def build_all(
     suggestions: Suggested = Suggestions.REJECTED,
     split: Split = False,
     images: Images = True,
+    archive: Archive = True,
     comments: Comments = True,
     offline: Offline = False,
 ) -> None:
@@ -89,7 +94,7 @@ def build_all(
     except (OSError, ValueError) as e:
         # Typer's own wording for a bad argument, because that is what it is.
         raise BadParameter(str(e), param_hint="LIST") from e
-    publish(listed, outdir, suggestions, split, images, comments, offline)
+    publish(listed, outdir, suggestions, split, images, comments, offline, archive)
 
 
 @app.command(name="one")
@@ -105,6 +110,7 @@ def build_one_report(
     suggestions: Suggested = Suggestions.REJECTED,
     split: Split = False,
     images: Images = True,
+    archive: Archive = True,
     comments: Comments = True,
 ) -> None:
     """Build one document, before it is on the list or instead of it.
@@ -112,7 +118,7 @@ def build_one_report(
     The report has no entry, so there is nothing saying what it should be called
     and nothing to hold it up against: what the document says, it publishes as.
     """
-    publish([Report(url=doc)], outdir, suggestions, split, images, comments)
+    publish([Report(url=doc)], outdir, suggestions, split, images, comments, archive=archive)
 
 
 def publish(
@@ -123,6 +129,7 @@ def publish(
     images: bool,
     comments: bool,
     offline: bool = False,
+    archive: bool = True,
 ) -> None:
     """Build these reports and write the index over them.
 
@@ -137,6 +144,7 @@ def publish(
             suggestions=str(suggestions),
             split=split,
             images=images,
+            archive=archive,
             comments=comments,
             offline=offline,
         ),

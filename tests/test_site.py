@@ -111,7 +111,9 @@ def test_an_entry_that_names_nothing_disagrees_like_any_other(tmp_path: Path, bl
     fields = {"name": "Digging Out of a Very Deep Hole", "tab": "Draft 2"}
     fields[blank] = ""
     site = build_site(
-        [Report(url=str(saved), **fields)], tmp_path / "site", BuildOptions(images=False)
+        [Report(url=str(saved), **fields)],
+        tmp_path / "site",
+        BuildOptions(images=False, archive=False),
     )
     assert not site.built
     # An empty marked span, which is what a name that is not there looks like.
@@ -218,7 +220,7 @@ def test_one_failure_does_not_stop_the_others(tmp_path: Path) -> None:
         Report(url=str(good), name="Digging Out of a Very Deep Hole", tab="Draft 2"),
     ]
     seed_image_index(tmp_path / "site")
-    site = build_site(reports, tmp_path / "site", BuildOptions(images=False))
+    site = build_site(reports, tmp_path / "site", BuildOptions(images=False, archive=False))
     assert [f.report.name for f in site.failed] == ["gone"]
     assert [b.report.name for b in site.built] == ["Digging Out of a Very Deep Hole"]
     assert (tmp_path / "site" / site.built[0].path / "index.html").exists()
@@ -233,7 +235,7 @@ def test_a_wrong_entry_leaves_no_files_behind(tmp_path: Path) -> None:
     site = build_site(
         [Report(url=str(saved), name="Some Other Document", tab="Draft 2")],
         out,
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     assert not site.built
     assert "the document is named" in site.failed[0].error
@@ -289,7 +291,9 @@ def test_offline_builds_from_the_saved_response(tmp_path: Path) -> None:
     monkeypatch = pytest.MonkeyPatch()
     monkeypatch.setattr(build_module, "fetch", boom, raising=False)
     seed_image_index(out)
-    site = build_site([report], out, BuildOptions(images=False, offline=True, comments=False))
+    site = build_site(
+        [report], out, BuildOptions(images=False, offline=True, comments=False, archive=False)
+    )
     monkeypatch.undo()
     assert [b.path for b in site.built] == ["reports/digging-out-deep-hole-sas-west"]
 
@@ -306,7 +310,7 @@ def test_offline_refuses_a_response_read_the_other_way(tmp_path: Path) -> None:
     site = build_site(
         [Report(url="https://docs.google.com/document/d/abc/edit?tab=t.1", name="A", tab="B")],
         out,
-        BuildOptions(offline=True, suggestions="accepted"),
+        BuildOptions(offline=True, suggestions="accepted", archive=False),
     )
     assert not site.built
     assert "needs a fetch" in site.failed[0].error
@@ -317,7 +321,7 @@ def test_offline_says_which_report_it_has_nothing_saved_for(tmp_path: Path) -> N
     site = build_site(
         [Report(url="https://docs.google.com/document/d/abc/edit?tab=t.1", name="A", tab="B")],
         tmp_path / "site",
-        BuildOptions(offline=True),
+        BuildOptions(offline=True, archive=False),
     )
     assert not site.built
     assert "nothing saved" in site.failed[0].error
@@ -411,7 +415,10 @@ def test_a_report_directory_is_a_document(tmp_path: Path) -> None:
 
     seed_image_index(tmp_path / "site")
     result = CliRunner().invoke(
-        app, ["one", str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images"]
+        app,
+        # `--no-archive`, because the docstring's "no network" is the point of
+        # the test and looking a source up is a request like any other.
+        ["one", str(FIXTURE_DIR), "-o", str(tmp_path / "site"), "--no-images", "--no-archive"],
     )
     assert result.exit_code == 0, result.output
     built = tmp_path / "site" / "reports" / "digging-out-deep-hole-sas-west"
@@ -439,7 +446,7 @@ def test_a_name_that_is_not_the_documents_is_warned_about(
     build_site(
         [Report(url=str(saved), name="SAS West")],
         tmp_path / "site",
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     warning = capsys.readouterr().err
     assert "reports.toml calls this `SAS West`" in warning
@@ -454,7 +461,7 @@ def test_the_documents_own_name_is_not_warned_about(
     build_site(
         [Report(url=str(saved), name=str(FIXTURE["title"]))],
         tmp_path / "site",
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     assert "reports.toml calls this" not in capsys.readouterr().err
 
@@ -468,7 +475,7 @@ def test_a_tab_that_is_not_the_documents_is_warned_about(
     build_site(
         [Report(url=str(saved), tab="Draft 1")],
         tmp_path / "site",
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     warning = capsys.readouterr().err
     assert "reports.toml expects the tab `Draft 1`" in warning
@@ -485,7 +492,7 @@ def test_a_response_that_names_no_tab_cannot_confirm_one(tmp_path: Path) -> None
     site = build_site(
         [Report(url=str(saved), name="Digging Out of a Very Deep Hole", tab="Draft 1")],
         tmp_path / "site",
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     assert not site.built
     assert "the tab is named ``" in site.failed[0].error
@@ -497,7 +504,9 @@ def test_an_entry_that_names_neither_is_not_warned_about(
     """Both fields are optional: an entry says as much as whoever wrote it wanted."""
     saved = tmp_path / "doc.json"
     saved.write_text(json.dumps(FIXTURE))
-    build_site([Report(url=str(saved))], tmp_path / "site", BuildOptions(images=False))
+    build_site(
+        [Report(url=str(saved))], tmp_path / "site", BuildOptions(images=False, archive=False)
+    )
     assert "reports.toml" not in capsys.readouterr().err
 
 
@@ -522,20 +531,20 @@ def test_a_response_whose_images_are_gone_is_not_reused(tmp_path: Path) -> None:
     so a fresh checkout has one describing pictures that are not beside it.
     Reused there, the build downloads nothing and publishes a page with no images."""
     previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
-    assert reusable(previous, BuildOptions()) is None
+    assert reusable(previous, BuildOptions(archive=False)) is None
 
 
 def test_a_response_whose_images_are_there_is_reused(tmp_path: Path) -> None:
     previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
     (previous / "images" / "img-a.jpg").write_bytes(b"")
-    assert reusable(previous, BuildOptions()) == previous / "doc.json"
+    assert reusable(previous, BuildOptions(archive=False)) == previous / "doc.json"
 
 
 def test_a_build_that_wants_no_images_does_not_ask_where_they_are(tmp_path: Path) -> None:
     """It is not going to download them either way,
     so the pictures on disk are not what it is asking about."""
     previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
-    assert reusable(previous, BuildOptions(images=False)) == previous / "doc.json"
+    assert reusable(previous, BuildOptions(images=False, archive=False)) == previous / "doc.json"
 
 
 def test_a_download_that_turned_up_nothing_does_not_erase_the_index(tmp_path: Path) -> None:
@@ -627,7 +636,7 @@ def test_reports_are_separated_from_each_other(
     build_site(
         [Report(url=str(saved)), Report(url=str(saved))],
         tmp_path / "site",
-        BuildOptions(images=False),
+        BuildOptions(images=False, archive=False),
     )
     lines = capsys.readouterr().err.splitlines()
     headings = [i for i, line in enumerate(lines) if line.startswith(("✓", "✗"))]

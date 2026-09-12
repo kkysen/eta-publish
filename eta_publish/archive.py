@@ -32,11 +32,19 @@ ARCHIVES_JSON = "archives.json"
 SAVE = "https://web.archive.org/save"
 """Save Page Now, which takes a URL and captures it."""
 
-AVAILABLE = "https://archive.org/wayback/available"
-"""What the Wayback Machine already has, which is asked first and costs nothing.
+INDEX = "https://web.archive.org/cdx/search/cdx"
+"""What the Wayback Machine already has, which is asked first and needs no keys.
 
-A source somebody else already captured is a source already archived. Spending
-a capture on it would take a slot from one of the pages nothing has.
+A source somebody else already captured is a source already archived. Asking
+costs nothing, spending a capture on it would take a slot from one of the pages
+nothing has, and a capture already years old is better evidence of what the
+page said than one taken today.
+
+The index rather than `wayback/available`, because it can be asked for a
+capture that came back `200`. The newest capture of a page that has since been
+taken down is a capture of the 404, and recording that as where the source is
+archived would be worse than recording nothing: the entry would say `archived`
+and lead to a page saying the thing is gone.
 """
 
 ACCESS_KEY = "SPN2_ACCESS_KEY"
@@ -151,12 +159,12 @@ def today() -> str:
     return datetime.now(UTC).strftime("%Y%m%d")
 
 
-class NoCredentials(RuntimeError):
-    """No archive.org keys, so nothing can be submitted."""
+def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[int, int]:
+    """Archive every source of `doc` that nothing has tried yet.
 
-
-def capture(doc: Document, *, session: requests.Session | None = None) -> int:
-    """Archive every source of `doc` that nothing has tried yet, and say how many.
+    Returns how many were found already captured and how many were captured on
+    request, which are different things to tell somebody about: the first costs
+    nothing and needs no account, and the second is what the keys are for.
 
     Only the ones missing from the record: a source already captured keeps the
     capture it has, because the point of a snapshot is that it is of the page
@@ -176,49 +184,83 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> int:
     """
     wanted = missing(doc)
     if not wanted:
-        return 0
+        return 0, 0
     http = session or requests.Session()
-    headers = _authorization()
+    # Looking up what the archive already holds needs no account, so a build
+    # without keys still does the half it can: most of what a report cites is
+    # already in the Wayback Machine, put there by somebody else.
+    headers = _keys()
 
-    def archive(url: str) -> Archived | None:
+    def archive(url: str) -> tuple[Archived | None, bool]:
         return _archive(http, headers, url)
 
     with ThreadPoolExecutor(max_workers=MAX_AT_ONCE) as pool:
         results = list(pool.map(archive, wanted))
     # Written in document order rather than as each answer arrives, so that two
     # builds that captured the same sources write the same file.
-    for url, archived in zip(wanted, results, strict=True):
-        if archived is not None:
-            doc.archives[url] = archived
-    return sum(1 for archived in results if archived is not None and not archived.error)
+    found = submitted = 0
+    for url, (archived, already) in zip(wanted, results, strict=True):
+        if archived is None:
+            continue
+        doc.archives[url] = archived
+        if archived.error:
+            continue
+        if already:
+            found += 1
+        else:
+            submitted += 1
+    return found, submitted
 
 
-def _authorization() -> dict[str, str]:
-    """The headers every request carries, or `NoCredentials` saying what is missing."""
+def _keys() -> dict[str, str] | None:
+    """The headers a capture request carries, or `None` if there are no keys.
+
+    Asking for a capture needs an account; asking what is already archived does
+    not. So this is a question rather than a refusal, and a build without keys
+    does the half of the work that is open to it.
+    """
     access, secret = os.environ.get(ACCESS_KEY), os.environ.get(SECRET_KEY)
     if not access or not secret:
-        raise NoCredentials(
-            f"no archive.org keys in the environment, so no source was submitted; "
-            f"set {ACCESS_KEY} and {SECRET_KEY} from https://archive.org/account/s3.php"
-        )
+        return None
     return {"Accept": "application/json", "Authorization": f"LOW {access}:{secret}"}
 
 
-def _archive(http: requests.Session, headers: dict[str, str], url: str) -> Archived | None:
+def have_keys() -> bool:
+    """Whether this build can ask for a capture as well as look one up."""
+    return _keys() is not None
+
+
+def _archive(
+    http: requests.Session, headers: dict[str, str] | None, url: str
+) -> tuple[Archived | None, bool]:
     """One source: the capture it already has, or a new one, or why neither.
 
-    `None` where the service said nothing about the page: it is not an answer,
-    so it is not recorded, and the next build asks again.
+    `None` where nothing was learned: the service declined to answer, or it has
+    no capture and there are no keys to ask for one. Neither is a fact about
+    the page, so neither is written down, and the next build asks again.
+
+    The second value says whether the capture was already there, which is the
+    half of this that needs no account.
     """
     try:
-        found = _existing(http, headers, url)
+        found = _existing(http, url)
         if found is not None:
-            return found
-        return _submit(http, headers, url)
-    except Busy:
-        return None
-    except requests.RequestException as e:
-        return Archived(timestamp=today(), error=_said(e))
+            return found, True
+        if headers is None:
+            return None, False
+        return _submit(http, headers, url), False
+    except Busy, requests.RequestException:
+        # Nothing about the source. A read that timed out, a connection that
+        # dropped, a name that would not resolve: all of them are about getting
+        # to `web.archive.org`, and one of them recorded as a failed capture is
+        # a source left with no archive because of a slow afternoon. The first
+        # run of this wrote exactly that against
+        # `en.wikipedia.org/wiki/Automatic_train_operation`, which has been
+        # archived hundreds of times.
+        #
+        # A source is written down as uncapturable only when Save Page Now says
+        # so about that URL, which `_submit` is what hears.
+        return None, False
 
 
 class Busy(RuntimeError):
@@ -233,16 +275,42 @@ def _checked(response: requests.Response) -> requests.Response:
     return response
 
 
-def _existing(http: requests.Session, headers: dict[str, str], url: str) -> Archived | None:
-    """The capture the Wayback Machine already holds, if it holds one."""
-    response = _checked(http.get(AVAILABLE, params={"url": url}, headers=headers, timeout=30))
-    closest = response.json().get("archived_snapshots", {}).get("closest", {})
-    if not closest.get("available") or not closest.get("timestamp"):
+def _existing(http: requests.Session, url: str) -> Archived | None:
+    """The newest capture of `url` that came back `200`, if there is one.
+
+    `200` and nothing else. A page that has been taken down still gets crawled,
+    so its newest captures are of the 404, and a `warc/revisit` row carries no
+    status at all because it only says the bytes had not changed since an
+    earlier capture. What is wanted is the newest capture that was the page.
+
+    That is the whole of what can be checked here. A capture that answered
+    `200` with a login wall, or with a site's own "page not found", is a
+    capture of a page that loaded, and nothing in the index tells it from the
+    real thing.
+    """
+    response = _checked(
+        http.get(
+            INDEX,
+            params={
+                "url": url,
+                "output": "json",
+                "fl": "timestamp",
+                "filter": "statuscode:200",
+                # The last row is the newest, and the only one wanted: this is
+                # asked once per source, and a report has 113 of them.
+                "limit": "-1",
+            },
+            timeout=60,
+        )
+    )
+    # A page with no capture answers with nothing at all rather than with an
+    # empty list, and the first row of an answer names the fields.
+    rows: list[list[str]] = response.json() if response.text.strip() else []
+    if len(rows) < 2:
         return None
-    # Rebuilt from the timestamp rather than taken as given: what comes back
-    # carries whichever scheme and host the service felt like, and the record
-    # is compared against a fresh build byte for byte.
-    stamp = closest["timestamp"]
+    stamp = str(rows[1][0])
+    # Built here rather than taken as given: the record is committed and
+    # compared against a fresh build byte for byte.
     return Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
 
 
@@ -274,8 +342,3 @@ def _refused(answer: dict[str, object]) -> str:
     """What the service said, short enough to publish beside the source."""
     said = answer.get("status_ext") or answer.get("message") or answer.get("status")
     return str(said) if said else "the capture failed without saying why"
-
-
-def _said(error: requests.RequestException) -> str:
-    """A failed request as one line, because this reaches the published page."""
-    return " ".join(str(error).split())[:200] or error.__class__.__name__
