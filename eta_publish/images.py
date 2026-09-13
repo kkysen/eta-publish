@@ -253,21 +253,6 @@ def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
         return data
 
 
-PRINT_PIXELS = 1710
-"""The longest edge a picture keeps in the PDF, in pixels.
-
-300 DPI across the full column, which is the width every figure is set to:
-Letter less the 1.4in margins on each side is 5.7in, and 5.7 * 300 is 1710.
-So no picture is reduced below what print asks for,
-and the five that arrive larger than that were carrying detail
-no page reproduces.
-
-The cap is not what makes the PDF smaller, though. Typst hands a JPEG
-straight through and has to store a PNG losslessly, so a photograph saved as
-a PNG stays its full size inside the file: re-encoding is four fifths of the
-saving, and this is the backstop on the rest.
-"""
-
 PRINT_QUALITY = 85
 """The JPEG quality the PDF's copies are written at."""
 
@@ -302,13 +287,17 @@ def write_print_copies(written: dict[str, Path], dest: Path) -> dict[str, Path]:
 
 
 def _for_print(path: Path) -> bytes | None:
-    """`path` re-encoded as a JPEG no wider or taller than `PRINT_PIXELS`.
+    """`path` re-encoded as a JPEG, at the size it arrived.
 
-    `None` for a file that is already what the PDF wants,
-    which the caller copies rather than rewrites:
-    a vector, which has no resolution to cap and nothing to gain from one,
-    and a JPEG already within the cap, which would only be
-    decoded and recompressed into a second generation of the same artifacts.
+    No resolution cap. One was measured at 300 DPI across the column and
+    dropped: it saved 1.9 MB of a budget with 20 MB to spare, and a PDF is
+    read on a screen that zooms, where the detail it threw away is the
+    detail someone is zooming in to see.
+
+    `None` for a file that is already what the PDF wants, which the caller
+    copies rather than rewrites: a vector, which has no raster to re-encode,
+    and a JPEG, which would only be decoded and recompressed into a second
+    generation of its own artifacts.
 
     Both are decided by what the file is rather than by how well it compresses,
     so the name in `PRINT_DIR` stays a function of the name it arrived under.
@@ -320,14 +309,13 @@ def _for_print(path: Path) -> bytes | None:
     if path.suffix.lower() == ".svg":
         return None
     with Pillow.open(path) as opened:
-        if opened.format == "JPEG" and max(opened.size) <= PRINT_PIXELS:
+        if opened.format == "JPEG":
             return None
         # Flattened rather than composited onto white: every alpha channel in
         # these documents compresses to under 3 KB, which is a channel that
         # says nothing, and JPEG has nowhere to put one anyway.
-        image = opened.convert("RGB")
-        if max(image.size) > PRINT_PIXELS:
-            image.thumbnail((PRINT_PIXELS, PRINT_PIXELS), Pillow.Resampling.LANCZOS)
         buffer = io.BytesIO()
-        image.save(buffer, "JPEG", quality=PRINT_QUALITY, optimize=True, progressive=True)
+        opened.convert("RGB").save(
+            buffer, "JPEG", quality=PRINT_QUALITY, optimize=True, progressive=True
+        )
         return buffer.getvalue()
