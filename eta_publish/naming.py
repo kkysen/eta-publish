@@ -44,6 +44,41 @@ Serving them from somewhere else is an emitter's `image_base`,
 which is a decision about hosting rather than about a build.
 """
 
+PRINT_DIR = "print"
+"""The directory the PDF's copies of the images go in, beside `IMAGE_DIR`.
+
+Two copies rather than one because they answer different questions.
+`images/` is the picture as the document holds it, which is what the page
+serves and what the PDF links out to. `print/` is that picture re-encoded to
+fit in a PDF a host will accept, which costs resolution and costs detail,
+and is not a thing to serve as the image.
+
+Kept rather than built in a temporary directory,
+so the `report.typ` published beside the PDF compiles as it stands:
+it names these files, and serving source that cannot compile
+is the thing the workflow keeps `template.typ` around to avoid.
+"""
+
+
+def print_href(href: str) -> str:
+    """What `href` is called in `PRINT_DIR`.
+
+    A raster becomes a JPEG and says so, because Typst reads the format off
+    the extension: a JPEG called `.png` is a compile error, not a picture.
+
+    A vector is copied under its own name. There is nothing to re-encode,
+    it is already the smallest it can be, and rasterizing a diagram to save
+    bytes would cost the one format that stays sharp at any size.
+
+    Safe against collision because the extension is not part of what makes a
+    name unique: `image_filenames` allocates over names with the extension
+    stripped, and the real one is appended once the download settles it,
+    so two images cannot differ only in extension.
+    """
+    stem, _, extension = href.rpartition(".")
+    return href if extension.lower() == "svg" else f"{stem}.jpg"
+
+
 # What a filename may keep: a dot is as much a part of a name as a letter,
 # and `-` and `_` are what people join names with.
 _NON_FILENAME = re.compile(r"[^\w.-]")

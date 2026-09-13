@@ -19,7 +19,7 @@ import json
 import re
 from typing import override
 
-from ..naming import IMAGE_DIR, SITE
+from ..naming import IMAGE_DIR, PRINT_DIR, SITE, print_href
 from ..nodes import (
     Document,
     Figure,
@@ -66,7 +66,7 @@ class TypstEmitter(Emitter):
     # A blank line between blocks, as Typst separates them.
     separator = "\n\n"
 
-    def __init__(self, template: str = "template.typ", image_dir: str = IMAGE_DIR) -> None:
+    def __init__(self, template: str = "template.typ", image_dir: str = PRINT_DIR) -> None:
         super().__init__()
         self.template = template
         self.image_dir = image_dir.rstrip("/")
@@ -262,7 +262,10 @@ class TypstEmitter(Emitter):
         because the figure built its own call.
         """
         href = self.doc.image_href(node)
-        path = f"{self.image_dir}/{href}"
+        # The PDF embeds its own copy and links the document's:
+        # what is on the page is what fits in a PDF, and what the link opens
+        # is the picture itself, which is the reason for the link.
+        path = f"{self.image_dir}/{print_href(href)}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""
         # `capped_image` rather than `image`: the width is the column's,
         # except for a picture tall enough to break the page it opens.
