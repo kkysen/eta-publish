@@ -228,6 +228,94 @@ def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
     assert missing(doc) == ["https://a.example/1"]
 
 
+# ---- not asking again about the same nothing -------------------------
+
+
+class Counting(Answering):
+    """An `Answering` that says how many requests it was sent."""
+
+    def __init__(self, status: int, body: object = None) -> None:
+        super().__init__(status, body)
+        self.asked = 0
+
+    @override
+    def request(self, *args: object, **kwargs: object) -> requests.Response:
+        self.asked += 1
+        return super().request(*args, **kwargs)
+
+
+@pytest.fixture
+def unkeyed(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No keys, which is the case the cache is for."""
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+
+
+def test_a_source_with_no_capture_is_not_looked_up_again_the_same_week(unkeyed: None) -> None:
+    """The slow half of a build, spent to write down the same nothing twice."""
+    doc = cites("https://a.example/1")
+    session = Counting(200, [["timestamp"]])
+    archive.capture(doc, session=session)
+    assert session.asked == 1
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.asked == 1
+
+
+def test_it_is_looked_up_again_once_the_week_is_up(
+    unkeyed: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    doc = cites("https://a.example/1")
+    session = Counting(200, [["timestamp"]])
+    archive.capture(doc, session=session)
+    monkeypatch.setattr(archive, "LOOKUP_CACHE_DAYS", 0)
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.asked == 2
+
+
+def test_what_the_cache_holds_back_is_still_counted_as_unarchived(unkeyed: None) -> None:
+    """The count a person reads is how many sources have no capture.
+
+    Not how many were asked about today: a build that said `0 sources` because
+    it skipped them all would be reporting on its own cache.
+    """
+    doc = cites("https://a.example/1")
+    archive.capture(doc, session=Answering(200, [["timestamp"]]))
+    again = cites("https://a.example/1")
+    archive.capture(again, session=Answering(200, [["timestamp"]]))
+    assert missing(again) == ["https://a.example/1"]
+
+
+def test_being_told_to_slow_down_is_not_cached(unkeyed: None) -> None:
+    """Nothing was learned, so there is nothing to remember for a week."""
+    doc = cites("https://a.example/1")
+    session = Counting(429)
+    archive.capture(doc, session=session)
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.asked == 2
+
+
+def test_with_keys_nothing_is_held_back(keyed: None) -> None:
+    """A source with no capture is submitted, so it leaves `missing` either way.
+
+    So a build that has keys asks about it however recently one without them
+    looked, and the capture gets made rather than waiting out the week.
+    """
+    archive._remember_nothing(["https://a.example/1"])
+    assert archive.to_ask(cites("https://a.example/1")) == ["https://a.example/1"]
+
+
+def test_a_cache_that_cannot_be_read_is_an_empty_one(
+    unkeyed: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A truncated write is a slower build, not a failed one."""
+    broken = tmp_path / "archive-lookups.json"
+    broken.write_text("{not json")
+    monkeypatch.setenv(archive.ARCHIVE_CACHE, str(broken))
+    session = Counting(200, [["timestamp"]])
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.asked == 1
+
+
 # ---- a link to a page of a PDF ---------------------------------------
 
 

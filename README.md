@@ -145,6 +145,27 @@ which needs no account and is most of the answer:
 Only the newest capture that came back `200` counts,
 because a page that has been taken down still gets crawled
 and its newest captures are of the 404.
+That is why the index is asked rather than `wayback/available`
+or the redirect on `web.archive.org/web/2099/<url>`,
+both of which answer in a fifth of a second
+and answer about the newest capture of any status.
+
+A lookup that finds nothing is remembered for a week,
+in `~/.cache/eta-publish/archive-lookups.json` and never committed.
+The index takes seconds per source and sometimes half a minute,
+so a report with twenty unarchived sources spent minutes on every build
+to write down the same nothing;
+and nothing is what it writes, because a source with no capture
+has no entry in `archives.json` either way.
+So the cache cannot change what a build produces,
+which is what lets it expire, be thrown away, or be missing on a fresh clone
+without `scripts/check-committed-site.sh` noticing.
+What changes the answer is somebody else archiving the page,
+which happens on the scale of weeks if it happens at all.
+CI keeps the same file through `actions/cache`,
+because a runner starts with nothing and would re-ask about all of them.
+A build that has keys skips the cache:
+that one submits a capture instead, and the source leaves the record for good.
 
 Asking for a *new* capture goes through
 [Save Page Now](https://archive.org/account/s3.php),

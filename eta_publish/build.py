@@ -380,14 +380,18 @@ def archive_sources(doc: Document) -> None:
     after a draft gains a link, and the whole of a report's sources only on the
     first build that asks.
 
+    And, without keys, not the ones looked up in the last `LOOKUP_CACHE_DAYS`
+    and not found: nothing is written down for those either way, so asking again
+    on every build spent a hundred seconds to learn the same nothing.
+
     Asking what the Wayback Machine already holds needs no account, and most of
     what these reports cite is already in it. That half runs on every build.
     Asking for a new capture needs keys, and without them the sources nothing
     has captured are left as they are, to be asked for by a build that can.
     """
-    from .archive import capture, have_keys, missing
+    from .archive import LOOKUP_CACHE_DAYS, capture, have_keys, missing, to_ask
 
-    wanted = missing(doc)
+    wanted = to_ask(doc)
     if not wanted:
         return
     console.write(console.note(f"looking up {plural(len(wanted), 'source')} in the archive"))
@@ -401,6 +405,7 @@ def archive_sources(doc: Document) -> None:
             f"{left} not archived and no keys to ask for a capture; "
             f"set {ACCESS_KEY} and {SECRET_KEY} from https://archive.org/account/s3.php"
         )
+        said.append(f"asking again in {plural(LOOKUP_CACHE_DAYS, 'day')}")
     elif left:
         said.append(f"{left} could not be captured")
     console.write(console.note("; ".join(said)))

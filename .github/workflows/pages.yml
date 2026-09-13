@@ -47,6 +47,25 @@ jobs:
       # `biome` lays out the emitted HTML, so a build without it writes nothing.
       - uses: jdx/mise-action@v3
 
+      # Which sources the Wayback Machine has no capture of.
+      #
+      # A runner starts with nothing, so without this every run re-asks the
+      # index about all of them, which is the slowest thing the build does and
+      # takes minutes. Nothing is written to `site/` either way, so a restored
+      # cache, a stale one and a missing one all build the same bytes and
+      # `check-committed-site.sh` compares the same.
+      #
+      # The key carries the run id so each run saves its own, and `restore-keys`
+      # is what makes the previous one the starting point: a key that never
+      # changes would restore the first run's cache forever and never save
+      # another, and the week would never expire.
+      - name: Restore the archive lookups
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/eta-publish
+          key: archive-lookups-${{ github.run_id }}
+          restore-keys: archive-lookups-
+
       # Written to the runner's temp directory rather than the workspace,
       # so it cannot be picked up by a later step that globs the checkout.
       - name: Write the service account key

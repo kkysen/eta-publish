@@ -57,3 +57,22 @@ def _forget_credentials(request: pytest.FixtureRequest, monkeypatch: pytest.Monk
         )
 
     monkeypatch.setattr(InstalledAppFlow, "run_local_server", refused)
+
+
+@pytest.fixture(autouse=True)
+def _fresh_lookup_cache(
+    tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A cache of the person's own builds is not a fixture.
+
+    `archive.to_ask` skips a source looked up in the last week and not found, and
+    the file saying which those are lives in the person's cache directory. Left
+    alone, a suite run after a real build would be told to skip the very lookups
+    the test set up an answer for, and would pass or fail depending on what the
+    machine happened to have done that week.
+    """
+    from eta_publish.archive import ARCHIVE_CACHE
+
+    monkeypatch.setenv(
+        ARCHIVE_CACHE, str(tmp_path_factory.mktemp("cache") / "archive-lookups.json")
+    )
