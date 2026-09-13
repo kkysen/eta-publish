@@ -354,3 +354,44 @@ def test_distinct_fields_are_not_a_repeat() -> None:
     }
     doc = parse(document)
     assert not any("more than one" in w for w in map(str, doc.warnings))
+
+
+def test_two_fields_in_one_paragraph_are_two_fields() -> None:
+    """A Shift+Enter between two fields reads like a paragraph break and is not one.
+
+    The real brief writes `Short:` and `SEO Description:` that way.
+    Taking only the first line of the paragraph would lose the second field,
+    and ending the scan there would lose every field after it too.
+    """
+    document: JsonObject = {
+        "title": "Noise Pollution",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Short: Too loud.\vSEO Description: Far too loud."),
+                para("URL: /briefs/too-damn-loud"),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta["short"] == "Too loud."
+    assert doc.meta["seo description"] == "Far too loud."
+    assert doc.meta["url"] == "/briefs/too-damn-loud"
+
+
+def test_a_value_that_wraps_keeps_the_rest_of_itself() -> None:
+    """A soft break inside one value continues it rather than ending the section."""
+    document: JsonObject = {
+        "title": "Noise Pollution",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Short: Too loud,\vand too long."),
+                para("URL: /briefs/too-damn-loud"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta["short"] == "Too loud, and too long."
+    assert doc.meta["url"] == "/briefs/too-damn-loud"
