@@ -375,7 +375,7 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
                 # Broad on purpose: a fetch, parse, disagreement, or disk failure
                 # is the same decision here,
                 # which is to keep going and say which report did not make it.
-                console.write(console.failed(named, str(e), log), log)
+                console.write(console.failed(named, str(e)), log)
                 site.failed.append(Failed(report=report, error=str(e)))
                 continue
             console.write(console.built(named, path, doc.warnings, log), log)

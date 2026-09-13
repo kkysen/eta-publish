@@ -34,6 +34,7 @@ from urllib.parse import parse_qs, urlparse
 
 from . import console
 from .docs_json import JsonObject
+from .nodes import Shown
 
 if TYPE_CHECKING:
     from google.auth.credentials import Credentials
@@ -335,7 +336,8 @@ def _sign_in() -> Credentials:
         if TOKEN_PATH.exists() and missing:
             console.write(
                 console.note(
-                    f"asking for access again, because this now needs {', '.join(sorted(missing))}"
+                    "asking for access again, because this now needs {}",
+                    Shown(", ".join(sorted(missing))),
                 ),
             )
         flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), SCOPES)

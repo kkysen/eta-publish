@@ -88,6 +88,9 @@ archived would be worse than recording nothing: the entry would say `archived`
 and lead to a page saying the thing is gone.
 """
 
+KEYS_PAGE = "https://archive.org/account/s3.php"
+"""Where the keys to ask for a capture come from."""
+
 ACCESS_KEY = "SPN2_ACCESS_KEY"
 SECRET_KEY = "SPN2_SECRET_KEY"
 """The archive.org keys, from `https://archive.org/account/s3.php`.

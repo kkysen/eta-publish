@@ -273,6 +273,28 @@ so nothing a report says can be mistaken for one.
 """
 
 
+def filled[T](template: str, values: tuple[T, ...]) -> tuple[str | T, ...]:
+    """`template` split at its `{}`, with `values` in their places.
+
+    The words and the values stay separate spans rather than becoming one
+    string, because that is what lets each of them be rendered as what it is:
+    a value is coloured, or quoted, or struck through, and words are words.
+    Interpolating first and looking for the values again afterwards is the
+    other way round, and it has to guess.
+
+    Shared by a document's warnings and by the log's own notes, so both say a
+    value the same way and neither has to be read twice.
+    """
+    said = template.split(SLOT)
+    if len(said) != len(values) + 1:
+        raise ValueError(f"{template!r} has {len(said) - 1} {SLOT} for {len(values)} values")
+    parts: list[str | T] = [said[0]]
+    for value, rest in zip(values, said[1:], strict=True):
+        parts.append(value)
+        parts.append(rest)
+    return tuple(part for part in parts if part != "")
+
+
 @dataclass(frozen=True)
 class Shown:
     """A value a warning shows rather than says.
@@ -657,14 +679,7 @@ class Document:
         which is why they are handed over separately rather than formatted in:
         a value is never read as markup, whatever it happens to contain.
         """
-        said = template.split(SLOT)
-        if len(said) != len(values) + 1:
-            raise ValueError(f"{template!r} has {len(said) - 1} {SLOT} for {len(values)} values")
-        parts: list[Part] = [said[0]]
-        for value, rest in zip(values, said[1:], strict=True):
-            parts.append(value)
-            parts.append(rest)
-        self.warnings.append(Notice(tuple(part for part in parts if part != "")))
+        self.warnings.append(Notice(filled(template, values)))
 
 
 # What a Docs date chip can render, most likely first.

@@ -24,7 +24,6 @@ written plain and whole on one line, so a log that is going to be searched
 holds no escape sequences to search past and no line broken mid-sentence.
 """
 
-import re
 import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -37,7 +36,7 @@ from rich.console import Console, Group, RenderableType
 from rich.table import Table
 from rich.text import Text
 
-from .nodes import Cut, Listed, Notice, Quoted, Shown, Span
+from .nodes import Cut, Listed, Notice, Quoted, Shown, Span, filled
 
 SHOWN = "cyan"
 """A value to go and find in the document, marked the way code is marked."""
@@ -58,19 +57,6 @@ document or type into a shell, and a link is neither.
 The terminal is told it is a link as well, by the escape the one that supports
 it uses, so a URL too long to be worth retyping can be clicked instead.
 """
-
-URL = re.compile(r"https?://[^\s<>`]+")
-"""A bare URL in a message.
-
-Only the two schemes these messages ever name, and stopped by whitespace,
-angle brackets, or a backtick, since one written inside marks is already a
-value. What trails it in a sentence is trimmed off afterwards: a URL at the
-end of a clause is followed by the punctuation of the clause and not by more
-URL.
-"""
-
-TRAILING = ".,;:!?)]'\""
-"""Punctuation that ends a sentence rather than a URL."""
 
 UNWRAPPED = 10_000
 """The width to lay a log out at when there is no terminal to fit it to.
@@ -138,7 +124,12 @@ def about(name: str) -> Iterator[None]:
         _ABOUT.reset(token)
 
 
-def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -> Text:
+def _sentence(
+    template: str,
+    values: tuple[Span | Linked, ...],
+    console: Console | None,
+    plain: str = "",
+) -> Text:
     """One note or warning: who it is about, then what it says.
 
     The name is a value, marked the way `added` marks the same name it read
@@ -146,9 +137,8 @@ def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -
     and a name inside a sentence is picked out or it runs into the words
     around it. A heading names a report bold and behind a ` · ` instead,
     because there the name is a field and not part of a sentence.
-    It is put in front as a span of its own, not spliced into `said` before
-    that is read for backticks, so a report called `` `Draft` on 125 St ``
-    keeps its marks and its words.
+    It is put in front as a span of its own, like every other value here, so
+    a report called `` `Draft` on 125 St `` keeps its marks and its words.
     A colon after it, not the ` · ` a heading uses: that separates the fields
     of a heading, and a note is a sentence rather than a field.
     No name at all outside a build, which is what `fetch` on its own is: there
@@ -160,27 +150,26 @@ def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -
     """
     console = console or for_stream()
     name = _ABOUT.get()
-    spans: tuple[Span | _Url, ...] = _marked(said) if code else (said,)
+    spans = filled(template, values)
     if name:
         spans = (Shown(name), ": ", *spans)
     return _spans(spans, console, plain)
 
 
 @dataclass(frozen=True)
-class _Url:
-    """A URL a message names, for `_spans` to mark as one.
+class Linked:
+    """A URL a message names, given to `note` where the message is written.
 
-    Private to this module, unlike `Shown`, because it is read out of the
-    words of a message here rather than built by whatever raised it: nothing
-    outside says "this part is a link", it just writes one.
+    Here rather than in `nodes.py` beside `Shown`, because only a terminal has
+    anywhere to put a link: no emitter renders one, and widening the `Span` a
+    document's warnings are made of would hand every emitter a case it has no
+    answer for.
     """
 
     value: str
 
 
-def _spans(
-    spans: tuple[Span, ...] | tuple[Span | _Url, ...], console: Console, plain: str = ""
-) -> Text:
+def _spans(spans: tuple[Span | Linked, ...], console: Console, plain: str = "") -> Text:
     """The inline pieces of a warning as one styled run of text.
 
     A `Shown` keeps its backticks where there is no colour, since that is
@@ -197,7 +186,7 @@ def _spans(
                 text.append(value if console.is_terminal else f"`{value}`", style=SHOWN)
             case Cut(value):
                 text.append(f"~~{value}~~", style=CUT)
-            case _Url(value):
+            case Linked(value):
                 # Left exactly as written either way: a URL is already the
                 # thing it names, so there is nothing to take out on a
                 # terminal and nothing to put back off one.
@@ -205,58 +194,6 @@ def _spans(
             case _:
                 text.append(span, style=plain)
     return text
-
-
-def _marked(said: str) -> tuple[Span | _Url, ...]:
-    """`said` split into its words, the `code` inside backticks, and its URLs.
-
-    These messages are written the way the rest of the prose here is written,
-    with a path, a command, or a variable in backticks, and a terminal that
-    can colour one should colour it: the backticks are the plain-text stand-in
-    for the colour, not the point.
-    A URL is marked as well, and marked differently, because what a reader
-    does with one is open it rather than go and find it.
-
-    Rendered by `_spans`, rather than by a second renderer that would get to
-    disagree with it about what a value looks like off a terminal.
-
-    Conservative on purpose, because not every one of these strings is written
-    here: a compiler's diagnostic arrives as the text of an exception and may
-    hold a lone backtick or a quoted span of somebody's source. A pair has to
-    be on one line with something between it to count, and anything else is
-    the text it looks like.
-    """
-    spans: list[Span | _Url] = []
-    rest = said
-    while True:
-        open_at = rest.find("`")
-        if open_at == -1:
-            break
-        close_at = rest.find("`", open_at + 1)
-        value = rest[open_at + 1 : close_at]
-        if close_at == -1 or not value or "\n" in value:
-            break
-        spans.extend((*_linked(rest[:open_at]), Shown(value)))
-        rest = rest[close_at + 1 :]
-    spans.extend(_linked(rest))
-    return tuple(span for span in spans if span != "")
-
-
-def _linked(words: str) -> tuple[Span | _Url, ...]:
-    """`words` with the URLs in it set apart from the prose around them.
-
-    The punctuation a URL is followed by is left in the sentence, where it
-    belongs: a link taken to include the full stop after it is a link that
-    opens nothing.
-    """
-    spans: list[Span | _Url] = []
-    at = 0
-    for found in URL.finditer(words):
-        url = found.group().rstrip(TRAILING)
-        spans.extend((words[at : found.start()], _Url(url)))
-        at = found.start() + len(url)
-    spans.append(words[at:])
-    return tuple(spans)
 
 
 def _hanging(prefix: Text, body: Text) -> Table:
@@ -328,27 +265,25 @@ def built(name: str, path: str, warnings: list[Notice], console: Console) -> Ren
     return Group(heading, *(notice(warning, console) for warning in warnings))
 
 
-def failed(name: str, error: str, console: Console | None = None) -> RenderableType:
+def failed(name: str, error: str) -> RenderableType:
     """One report that was not built, and the reason, which is the message.
 
     Said here rather than counted here and explained elsewhere: a failure
     named twice, once with its reason and once without, is one failure read
     twice.
 
-    The reason is prose this codebase wrote, so a tab id or a path it spells
-    in backticks is coloured like any other value, red sentence around it and
-    cyan value in it. What says this is a failure is the ✗ and the name, not
-    the colour of every word under them.
+    The reason is the text of whatever was raised, from anywhere in a build,
+    and it arrives as one string with nothing saying which part of it is a
+    value. So it is written as it came, backticks and all, which is what a log
+    holds anyway.
     """
-    console = console or for_stream()
     heading = Text()
     heading.append("✗ ", style="bold red")
     heading.append(name, style="bold")
-    said = _spans(_marked(error), console, plain="red")
-    return Group(heading, _hanging(Text("  "), said))
+    return Group(heading, _hanging(Text("  "), Text(error, style="red")))
 
 
-def note(said: str, console: Console | None = None, code: bool = True) -> Text:
+def note(template: str, *values: Span | Linked, console: Console | None = None) -> Text:
     """Something the build did differently, which is not a document's fault.
 
     A missing `typst`, a sign-in being asked for again, a PDF not attempted:
@@ -359,26 +294,28 @@ def note(said: str, console: Console | None = None, code: bool = True) -> Text:
     sources were looked up is not worth much without the report that cites
     them.
 
-    `code` is off for a message this codebase did not write, which is the text
-    of an exception a tool raised: see `_backticked`.
+    Written as `Document.warn` writes a warning, with `{}` where a value goes
+    and the value handed over as what it is: a `Shown` for a path or a command,
+    a `Linked` for a URL. A message this codebase did not write, which is the
+    text of an exception a tool raised, is one value and no template.
     """
     text = Text()
     text.append("· ", style="dim")
-    text.append_text(_sentence(said, console, code, plain="dim"))
+    text.append_text(_sentence(template, values, console, plain="dim"))
     return text
 
 
-def warning(said: str, console: Console | None = None, code: bool = True) -> Text:
+def warning(template: str, *values: Span | Linked, console: Console | None = None) -> Text:
     """Something that went wrong and did not stop the build.
 
     The same mark as a document's warnings, because a reader scanning for
     what needs attention should not have to learn two.
 
-    `code`, as in `note`, is off for the text of somebody else's exception.
+    Takes its values as `note` does, and for the same reason.
     """
     text = Text()
     text.append("! ", style="bold yellow")
-    text.append_text(_sentence(said, console, code))
+    text.append_text(_sentence(template, values, console))
     return text
 
 

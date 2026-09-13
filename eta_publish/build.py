@@ -7,14 +7,14 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from . import console
-from .archive import ACCESS_KEY, SECRET_KEY, read_archive_index, write_archive_index
+from .archive import ACCESS_KEY, KEYS_PAGE, SECRET_KEY, read_archive_index, write_archive_index
 from .checks import check, plural
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
 from .naming import ASSET_DIR, IMAGE_DIR
-from .nodes import Document, Shown
+from .nodes import Document, Shown, Span
 from .parse import parse, read_review
 
 
@@ -360,7 +360,7 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
         try:
             source = emitter.emit(doc)
         except NotImplementedError as e:
-            console.write(console.note(f"skipped `{name}`: not implemented ({e})"))
+            console.write(console.note("skipped {}: not implemented ({})", Shown(name), str(e)))
             continue
         dest = outdir / name
         dest.write_text(source)
@@ -397,18 +397,31 @@ def archive_sources(doc: Document) -> None:
         return
     console.write(console.note(f"looking up {plural(len(wanted), 'source')} in the archive"))
     found, submitted = capture(doc)
-    said = [f"{plural(found, 'source')} already archived"]
+    # A list of clauses and the values in them, joined once at the end: a
+    # value is handed to the log as the value it is, so a clause is a template
+    # and its values rather than a finished string.
+    said: list[tuple[str, tuple[Span | console.Linked, ...]]] = [
+        (f"{plural(found, 'source')} already archived", ())
+    ]
     if submitted:
-        said.append(f"{plural(submitted, 'source')} captured")
+        said.append((f"{plural(submitted, 'source')} captured", ()))
     left = len(missing(doc))
     if left and not have_keys():
         said.append(
-            f"{left} not archived and no keys to ask for a capture; "
-            f"set `${ACCESS_KEY}` and `${SECRET_KEY}` from https://archive.org/account/s3.php"
+            (
+                f"{left} not archived and no keys to ask for a capture; "
+                "set {} and {} from {}",
+                (Shown(f"${ACCESS_KEY}"), Shown(f"${SECRET_KEY}"), console.Linked(KEYS_PAGE)),
+            )
         )
     elif left:
-        said.append(f"{left} could not be captured")
-    console.write(console.note("; ".join(said)))
+        said.append((f"{left} could not be captured", ()))
+    console.write(
+        console.note(
+            "; ".join(template for template, _ in said),
+            *(value for _, values in said for value in values),
+        )
+    )
 
 
 def check_code_block_size(doc: Document, report: Path) -> None:
@@ -456,12 +469,24 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     install_template(outdir)
     try:
         return compile_pdf(source)
-    except TypstMissing as e:
-        console.write(console.note(str(e)))
+    except TypstMissing:
+        # Said here rather than raised with the exception: the exception is
+        # control flow, and a sentence with a command and a URL in it is
+        # written where the values in it can be handed over as values.
+        console.write(
+            console.note(
+                "{} is not on PATH, so the PDF was not built. Install it with {} "
+                "or from {}, then rerun. The {} source has already been written.",
+                Shown("typst"),
+                Shown("mise use -g typst"),
+                console.Linked("https://typst.app/"),
+                Shown(".typ"),
+            )
+        )
     except RuntimeError as e:
         # `typst`'s own diagnostics, verbatim: what it quotes out of the source
-        # it was compiling is not this codebase's prose to read backticks in.
-        console.write(console.warning(str(e), code=False))
+        # it was compiling is not this codebase's prose to pick values out of.
+        console.write(console.warning("{}", str(e)))
     return None
 
 

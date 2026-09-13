@@ -17,6 +17,8 @@ from rich.console import Console, RenderableType
 from eta_publish import console as log
 from eta_publish.nodes import Cut, Listed, Notice, Quoted, Shown
 
+KEYS = "https://archive.org/account/s3.php"
+
 WARNING = Notice(
     (
         "the ",
@@ -123,22 +125,6 @@ def test_a_failure_says_its_reason_where_it_says_the_name() -> None:
     assert written.splitlines() == ["✗ A report", "  the tab is named ``"]
 
 
-def test_a_failure_colours_the_values_its_reason_names() -> None:
-    """The reason is prose written here, and the tab id in it is a value to go
-    and look for, the same as a value in a warning."""
-    console = terminal(width=log.UNWRAPPED)
-    written = rendered(log.failed("A report", "no tab `t.9` in this document", console), console)
-    assert "`" not in written
-    assert _visible(written).splitlines()[1] == "  no tab t.9 in this document"
-    assert "\x1b[36m" in written
-
-
-def test_a_failure_off_a_terminal_keeps_the_marks_around_them() -> None:
-    """Nothing else says where the id stops, and a log is searched for it."""
-    written = rendered(log.failed("A report", "no tab `t.9` in this document", plain()), plain())
-    assert written.splitlines()[1] == "  no tab `t.9` in this document"
-
-
 def test_a_report_that_built_is_counted_by_its_warnings() -> None:
     written = rendered(log.built("A report", "reports/a", [WARNING, WARNING], plain()), plain())
     assert written.startswith("✓ reports/a · A report · 2 warnings")
@@ -188,29 +174,37 @@ def test_a_note_outside_a_build_names_no_report() -> None:
     assert rendered(log.note("nothing to archive"), plain()) == "· nothing to archive\n"
 
 
-def test_a_note_keeps_its_backticks_off_a_terminal() -> None:
+def test_a_note_keeps_its_values_marked_off_a_terminal() -> None:
     """The same rule a warning's values follow: off a terminal the backticks are
     the only thing saying where a command stops, so they stay."""
-    written = rendered(log.note("install it with `mise use -g typst`"), plain())
+    written = rendered(log.note("install it with {}", Shown("mise use -g typst")), plain())
     assert written == "· install it with `mise use -g typst`\n"
 
 
-def test_a_note_colours_what_it_backticked_on_a_terminal() -> None:
+def test_a_note_colours_its_values_on_a_terminal() -> None:
     """A command in a note is a value to go and use, marked the way the values
     in a warning are, and marked once rather than in colour and quotes both."""
     console = terminal(width=log.UNWRAPPED)
-    written = rendered(log.note("install it with `mise use -g typst`", console), console)
+    said = log.note("install it with {}", Shown("mise use -g typst"), console=console)
+    written = rendered(said, console)
     assert "`" not in written
     assert _visible(written) == "· install it with mise use -g typst\n"
     # The value is the colour a value is, not a dim version of it.
     assert "\x1b[36m" in written
 
 
+def test_a_note_says_a_whole_message_with_no_values() -> None:
+    """The text of somebody else's exception is one value and no template,
+    and a brace in it is a brace: nothing here formats a string."""
+    written = rendered(log.warning("{}", "typst compile failed: a { b"), plain())
+    assert written == "! typst compile failed: a { b\n"
+
+
 def test_a_url_in_a_note_is_left_alone_off_a_terminal() -> None:
     """A URL is already the thing it names: nothing to add and nothing to take
     out, and a log searched for one holds exactly what was written."""
-    said = "no keys; set them from https://archive.org/account/s3.php"
-    assert rendered(log.note(said), plain()) == f"· {said}\n"
+    written = rendered(log.note("set them from {}", log.Linked(KEYS)), plain())
+    assert written == f"· set them from {KEYS}\n"
 
 
 def test_a_url_on_a_terminal_is_underlined_and_made_a_link() -> None:
@@ -218,35 +212,10 @@ def test_a_url_on_a_terminal_is_underlined_and_made_a_link() -> None:
     open it rather than go and find it, and told to the terminal as a link so it
     can be clicked instead of retyped."""
     console = terminal(width=log.UNWRAPPED)
-    written = rendered(
-        log.note("set them from https://archive.org/account/s3.php", console), console
-    )
+    written = rendered(log.note("set them from {}", log.Linked(KEYS), console=console), console)
     assert "\x1b[4m" in written
-    assert "https://archive.org/account/s3.php\x1b\\" in written
-
-
-def test_the_punctuation_after_a_url_is_the_sentence_s() -> None:
-    """A link taken to include the full stop after it is a link that opens
-    nothing."""
-    console = terminal(width=log.UNWRAPPED)
-    written = rendered(log.note("or from https://typst.app/, then rerun.", console), console)
-    assert "https://typst.app/\x1b\\" in written
-    assert _visible(written) == "· or from https://typst.app/, then rerun.\n"
-
-
-def test_a_tool_s_own_diagnostic_is_left_as_it_came() -> None:
-    """`typst` quotes spans of the source it was compiling, and a stray backtick
-    in somebody's document is not this codebase's prose to read marks in."""
-    console = terminal(width=log.UNWRAPPED)
-    said = "typst compile failed: unknown variable `x`"
-    assert _visible(rendered(log.warning(said, console, code=False), console)) == f"! {said}\n"
-
-
-def test_an_unpaired_backtick_is_the_text_it_looks_like() -> None:
-    """Nothing to colour and nothing to take out: a mark with no partner is a
-    character somebody wrote."""
-    written = rendered(log.note("a lone ` and an empty ``"), plain())
-    assert written == "· a lone ` and an empty ``\n"
+    assert f"{KEYS}\x1b\\" in written
+    assert _visible(written) == f"· set them from {KEYS}\n"
 
 
 def test_what_was_added_is_read_back() -> None:
