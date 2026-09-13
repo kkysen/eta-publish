@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 from paths import FIXTURE_DIR
 
+from eta_publish import console
 from eta_publish.build import (
     IMAGES_JSON,
     BuildOptions,
@@ -357,6 +358,33 @@ def test_reports_are_built_at_once_and_reported_in_order(
     # nearer the floor than the ceiling without being a stopwatch:
     # a loaded runner may be slow, but it cannot make two waits into one.
     assert elapsed < 2 * SLOW
+
+
+def test_a_note_says_which_report_it_is_about(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    doc: Document,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Several reports are built at once and each writes as it goes,
+    so a note about one of them that does not name it names none of them."""
+    import eta_publish.site as site_module
+
+    def build(ref: str, *args: object, **kwargs: object) -> tuple[Document, str]:
+        name = ref.rsplit("/", 1)[-1]
+        console.write(console.note(f"looked up {name}"))
+        return doc, f"reports/{name}"
+
+    monkeypatch.setattr(site_module, "build_one", build)
+    reports = [
+        Report(url=f"https://example.invalid/{name}", name=name.title()) for name in ("one", "two")
+    ]
+
+    build_site(reports, tmp_path / "site")
+
+    written = capsys.readouterr().err
+    assert "One: looked up one" in written
+    assert "Two: looked up two" in written
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:

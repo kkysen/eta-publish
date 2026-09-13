@@ -254,6 +254,17 @@ def report_path(doc: Document) -> str:
     return slug
 
 
+def label(report: Report) -> str:
+    """What to call this report in the log.
+
+    Its entry in `reports.toml`, and the URL for a document built without one,
+    which is what `eta-publish one` passes. In one place because the heading
+    and the notes written under it have to agree: the same report named two
+    ways reads as two reports.
+    """
+    return report.name or report.url
+
+
 def verifier(report: Report) -> Callable[[Document], None]:
     """What `build_one` calls once the document is parsed and before it is written.
 
@@ -336,13 +347,18 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
 
     def build(report: Report) -> tuple[Document, str]:
         previous = saved_for(report, saved)
-        return build_one(
-            source(report, previous, options),
-            outdir,
-            options,
-            verify=verifier(report),
-            cached=reusable(previous, options),
-        )
+        # Named for the whole of the build, so the notes it writes along the
+        # way say which report they are about. Several reports are built at
+        # once and each writes as it goes, so an unattributed line is one the
+        # reader has to guess the owner of.
+        with console.about(label(report)):
+            return build_one(
+                source(report, previous, options),
+                outdir,
+                options,
+                verify=verifier(report),
+                cached=reusable(previous, options),
+            )
 
     with ThreadPoolExecutor(max_workers=max(1, min(len(reports), MAX_AT_ONCE))) as pool:
         started = [(report, pool.submit(build, report)) for report in reports]
@@ -352,17 +368,17 @@ def build_site(reports: list[Report], outdir: Path, options: BuildOptions | None
             # with nothing between is one list of warnings rather than three.
             if index:
                 log.line()
-            label = report.name or report.url
+            named = label(report)
             try:
                 doc, path = building.result()
             except Exception as e:
                 # Broad on purpose: a fetch, parse, disagreement, or disk failure
                 # is the same decision here,
                 # which is to keep going and say which report did not make it.
-                console.write(console.failed(label, str(e)), log)
+                console.write(console.failed(named, str(e)), log)
                 site.failed.append(Failed(report=report, error=str(e)))
                 continue
-            console.write(console.built(label, path, doc.warnings, log), log)
+            console.write(console.built(named, path, doc.warnings, log), log)
             site.built.append(Built(report=report, doc=doc, path=path))
     return site
 
