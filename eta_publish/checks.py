@@ -202,8 +202,9 @@ def _check_tracked(doc: Document) -> None:
     if not tracked:
         return
     listed = Listed(*((Shown(_tag(source)), " on ", Shown(source)) for source in tracked))
+    carry = "carries" if len(tracked) == 1 else "carry"
     doc.warn(
-        f"{plural(len(tracked), 'source')} still carries the tag it was copied with; "
+        f"{plural(len(tracked), 'source')} still {carry} the tag it was copied with; "
         f"take it off the link in the doc:{{}}",
         listed,
     )
