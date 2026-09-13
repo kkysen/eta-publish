@@ -25,6 +25,9 @@ holds no escape sequences to search past and no line broken mid-sentence.
 """
 
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
 from typing import IO
 
@@ -73,6 +76,54 @@ def for_stream(stream: IO[str] | None = None) -> Console:
     if asked.is_terminal:
         return asked
     return Console(file=file, width=UNWRAPPED, highlight=False, markup=False, emoji=False)
+
+
+_ABOUT: ContextVar[str | None] = ContextVar("about", default=None)
+"""Which report the build is in the middle of, for the notes it writes.
+
+A context variable rather than an argument threaded through the build, because
+every one of these notes is written from somewhere that has no idea which
+report it is building: a sign-in asked for again in `fetch`, a `typst` that is
+not installed, a count of sources looked up in the archive. Passing a name
+down to each of them means passing it through everything in between, which is
+most of the build, to be used by a handful of lines.
+
+Attribution belongs in `note` and `warning` for the same reason.
+A caller that has to remember to say which report it is writing about is a
+caller that will not, and the one which forgets is the one whose line gets
+read on a build of fourteen reports at once.
+
+Set for the duration of one report, in the worker that builds it, so a note
+written by a pooled thread is attributed to the report that thread is on and
+not to the one it was on last.
+"""
+
+
+@contextmanager
+def about(name: str) -> Iterator[None]:
+    """Attribute everything written inside this to `name`.
+
+    Reset on the way out rather than left set: the threads that build reports
+    are reused, and a label left behind is a note about the next report under
+    the name of the last one.
+    """
+    token = _ABOUT.set(name)
+    try:
+        yield
+    finally:
+        _ABOUT.reset(token)
+
+
+def _said(said: str) -> str:
+    """`said`, with the report it is about in front of it where there is one.
+
+    A colon, not the ` · ` a heading uses: that separates the three fields of
+    a heading, and a note is a sentence rather than a field.
+    Nothing at all outside a build, which is what `fetch` on its own is: there
+    is one document there, and naming it says nothing the caller did not type.
+    """
+    name = _ABOUT.get()
+    return f"{name}: {said}" if name else said
 
 
 def _spans(spans: tuple[Span, ...], console: Console) -> Text:
@@ -180,10 +231,15 @@ def note(said: str) -> Text:
 
     A missing `typst`, a sign-in being asked for again, a PDF not attempted:
     nothing to go and fix in a report, and not nothing either.
+
+    Prefixed with the report being built, because a build of a list of them
+    runs several at once and writes these as they happen: a line saying three
+    sources were looked up is not worth much without the report that cites
+    them.
     """
     text = Text()
     text.append("· ", style="dim")
-    text.append(said, style="dim")
+    text.append(_said(said), style="dim")
     return text
 
 
@@ -195,7 +251,7 @@ def warning(said: str) -> Text:
     """
     text = Text()
     text.append("! ", style="bold yellow")
-    text.append(said)
+    text.append(_said(said))
     return text
 
 
