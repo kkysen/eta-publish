@@ -290,7 +290,12 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
     # `[n]` on every link is what it costs to make an archived copy reachable
     # without hovering. Laid out, the committed fragment is around 225 KB,
     # which is inside the limit and closing on `CODE_BLOCK_WARN`.
-    assert size < 200_000, f"grown to {size:,} bytes; still fits, worth a look"
+    #
+    # And from 200,000 when three more sources turned out to have a capture:
+    # 200,438 bytes, which is what looking cost. An archived link is about 150
+    # bytes, so the next few captures move this again, and the thing worth
+    # noticing here is a jump, not a source.
+    assert size < 205_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:
