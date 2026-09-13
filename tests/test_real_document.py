@@ -191,25 +191,48 @@ def test_smart_chips_resolve(doc: Document) -> None:
     assert doc.meta["seo description"].startswith("A 125 St subway should be a slam dunk")
 
 
-def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
-    """Each of these is something to fix in the document, not in the code.
-    A new warning appearing here means the report changed or the parser did.
+KNOWN_WARNINGS = (
+    "unnamed, so each publishes under a hash",
+    "suggestions still open on this tab",
+    "suggestion still open on this tab",
+    "comment threads still open on this tab",
+    "comment thread still open on this tab",
+    "the tag it was copied with",
+    "a search result shows",
+    "has no `Credit:` line",
+    "unfinished text in the document",
+)
+"""Every kind of warning this report has been known to raise.
 
-    The opening line of each: the two that carry a list or a quotation
-    are checked for what they list below.
-    """
-    assert sorted(w.split("\n")[0] for w in map(str, doc.warnings)) == [
-        "1 source still carries the tag it was copied with; take it off the link in the doc:",
-        "17 images are unnamed, so each publishes under a hash; "
-        "give each a `Source:` line naming its file:",
-        "17 suggestions still open on this tab; "
-        "the build publishes the document without them, as it reads today",
-        "3 comment threads still open on this tab",
-        "`SEO Description:` is 398 characters, over the 300 a search result shows:",
-        "the image `img-44bf278f` has no `Credit:` line",
-        "the image `project_cost_comparison` has no `Credit:` line",
-        "unfinished text in the document: `SVG: TODO`",
+Kinds rather than the warnings themselves, and a subset rather than an equality:
+what varies here is the document, and fixing the document is the point of a
+warning. Asserted as a list, this test failed twice in one afternoon for reasons
+that were not about the code: once when a new check started firing, and once
+when the tag it complained about was taken off the doc, which is the warning
+having worked.
+
+What is still worth catching is a kind nobody has seen, because that is either
+a check that started firing on this report or one that changed its wording.
+The exact text of every warning the report publishes is pinned byte for byte
+anyway, in the committed `report.md` and `index.html`: they are published on the
+page, so the output snapshot is already the assertion that they have not moved.
+
+Counts, image names and lengths are left loose on purpose. A seventeenth image
+gaining a `Source:` line is not a thing this test should have an opinion about.
+The phrase each one carries is enough to tell it from the others, so these are
+substrings rather than patterns: there is nothing here to match loosely, and a
+pattern over `\d+` and `(?:is|are)` would only be a way to get the plural wrong.
+"""
+
+
+def test_no_warning_is_of_a_kind_we_have_not_seen(doc: Document) -> None:
+    """Each of these is something to fix in the document, not in the code."""
+    unknown = [
+        first
+        for first in (str(w).split("\n")[0] for w in doc.warnings)
+        if not any(known in first for known in KNOWN_WARNINGS)
     ]
+    assert unknown == [], f"new kind of warning on this report: {unknown}"
 
 
 def test_every_unnamed_image_is_listed_with_what_it_shows(doc: Document) -> None:
