@@ -748,27 +748,25 @@ class Parser:
                 end = i + 1
                 continue
 
-            match = KEY_RE.match(text)
-            if match is None:
+            # A paragraph can hold more than one field:
+            # the real brief writes `Short:` and `SEO Description:`
+            # with a Shift+Enter between them rather than a paragraph break.
+            # The two read alike in the document and are not alike here,
+            # so every line of the paragraph is considered, not just the first.
+            lines = text.split("\n")
+            if KEY_RE.match(lines[0]) is None:
                 break  # prose: the header section is over
 
-            written = KEY_NOTE_RE.sub("", match.group("key").strip())
-            key = written.lower()
-            value = match.group("value").strip()
-            if key in self.doc.meta:
-                # The later line wins, and says so: a corrected line pasted
-                # below the original and a duplicate nobody meant look
-                # identical, and neither is visible in what gets published.
-                # Matched on the key as it is read, so a `Short:` and a
-                # `Short (60 char limit):` count as the two they are.
-                self.doc.warn(
-                    "the {} section has more than one {} line; using {} and ignoring {}",
-                    Shown("Header"),
-                    Shown(f"{written}:"),
-                    Shown(value),
-                    Shown(self.doc.meta[key]),
-                )
-            self.doc.meta[key] = value
+            key = ""
+            for line in lines:
+                match = KEY_RE.match(line)
+                if match is None:
+                    # A line that names no field continues the value above it.
+                    # Ending the scan here would drop the rest of the paragraph,
+                    # and every field after it, over a value that merely wrapped.
+                    self.doc.meta[key] = f"{self.doc.meta[key]} {line}".strip()
+                    continue
+                key = self._meta_line(match)
             end = i + 1
 
         if not self.doc.meta:
@@ -781,6 +779,27 @@ class Parser:
                 Shown("SEO Description:"),
             )
         return content[end:]
+
+    def _meta_line(self, match: re.Match[str]) -> str:
+        """Record one `Key: value` header line, and answer which key it set."""
+        written = KEY_NOTE_RE.sub("", match.group("key").strip())
+        key = written.lower()
+        value = match.group("value").strip()
+        if key in self.doc.meta:
+            # The later line wins, and says so: a corrected line pasted
+            # below the original and a duplicate nobody meant look
+            # identical, and neither is visible in what gets published.
+            # Matched on the key as it is read, so a `Short:` and a
+            # `Short (60 char limit):` count as the two they are.
+            self.doc.warn(
+                "the {} section has more than one {} line; using {} and ignoring {}",
+                Shown("Header"),
+                Shown(f"{written}:"),
+                Shown(value),
+                Shown(self.doc.meta[key]),
+            )
+        self.doc.meta[key] = value
+        return key
 
     def _header_index(self, content: list[JsonObject]) -> int | None:
         """Where the `Header` heading is, if the report has one.
