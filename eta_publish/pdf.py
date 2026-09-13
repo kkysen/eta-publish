@@ -15,7 +15,10 @@ TEMPLATE = "template.typ"
 
 
 class TypstMissing(RuntimeError):
-    pass
+    """`typst` is not installed, which costs the PDF and nothing else.
+
+    Carries no sentence: see `compile_pdf`.
+    """
 
 
 def install_template(outdir: Path) -> Path:
@@ -38,11 +41,11 @@ def compile_pdf(source: Path, dest: Path | None = None) -> Path:
     """Run `typst compile` on `source`, returning the PDF path."""
     typst = shutil.which("typst")
     if typst is None:
-        raise TypstMissing(
-            "`typst` is not on PATH, so the PDF was not built. "
-            "Install it with `mise use -g typst` or from https://typst.app/, "
-            "then rerun. The `.typ` source has already been written."
-        )
+        # Nothing said here: what a build does about a missing `typst` is print
+        # a sentence, and that sentence is written where it is printed, in
+        # `build_pdf`, so the command and the URL in it are given to the log as
+        # the values they are rather than spelled into a string.
+        raise TypstMissing("typst")
     dest = dest or source.with_suffix(".pdf")
     result = subprocess.run(
         [typst, "compile", "--root", str(source.parent), str(source), str(dest)],
