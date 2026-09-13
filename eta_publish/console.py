@@ -117,11 +117,16 @@ def about(name: str) -> Iterator[None]:
 def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -> Text:
     """One note or warning: who it is about, then what it says.
 
-    The name goes in front as the words it is, not spliced into `said` before
-    it is read for backticks: it comes out of `reports.toml`, and a report
-    called `` `Draft` on 125 St `` names a report and not a value.
-    A colon after it, not the ` · ` a heading uses: that separates the three
-    fields of a heading, and a note is a sentence rather than a field.
+    The name is a value, marked the way `added` marks the same name it read
+    off the same list: a note is a sentence with a report's name inside it,
+    and a name inside a sentence is picked out or it runs into the words
+    around it. A heading names a report bold and behind a ` · ` instead,
+    because there the name is a field and not part of a sentence.
+    It is put in front as a span of its own, not spliced into `said` before
+    that is read for backticks, so a report called `` `Draft` on 125 St ``
+    keeps its marks and its words.
+    A colon after it, not the ` · ` a heading uses: that separates the fields
+    of a heading, and a note is a sentence rather than a field.
     No name at all outside a build, which is what `fetch` on its own is: there
     is one document there, and naming it says nothing the caller did not type.
 
@@ -132,10 +137,9 @@ def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -
     console = console or for_stream()
     name = _ABOUT.get()
     spans: tuple[Span, ...] = _backticked(said) if code else (said,)
-    text = Text()
     if name:
-        text.append(f"{name}: ", style=plain)
-    return text.append_text(_spans(spans, console, plain))
+        spans = (Shown(name), ": ", *spans)
+    return _spans(spans, console, plain)
 
 
 def _spans(spans: tuple[Span, ...], console: Console, plain: str = "") -> Text:

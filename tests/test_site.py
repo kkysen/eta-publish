@@ -383,8 +383,8 @@ def test_a_note_says_which_report_it_is_about(
     build_site(reports, tmp_path / "site")
 
     written = capsys.readouterr().err
-    assert "One: looked up one" in written
-    assert "Two: looked up two" in written
+    assert "`One`: looked up one" in written
+    assert "`Two`: looked up two" in written
 
 
 def test_the_index_lists_what_built_and_what_did_not(doc: Document) -> None:
