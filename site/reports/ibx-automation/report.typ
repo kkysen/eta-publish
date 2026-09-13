@@ -12,6 +12,7 @@
     [no #raw("Title")-styled paragraph, so the document name #raw("IBX Automation") is being used as the headline; style the headline as #raw("Title") in the doc],
     [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
     [unfinished text in the document: #raw("TODO didn’t finish")],
+    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath...")], [#raw("https://www.6sqft.com/mta-awards-166m-design-contract-for-in...")], )],
     [4 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [1 comment thread still open on this tab],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],

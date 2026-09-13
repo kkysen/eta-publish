@@ -6,8 +6,14 @@ September 9, 2026
 
 **Warnings**
 
+- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
+  - `Short: The seemingly-endless onslaught of announcements on...`
+  - `SEO Description: The seemingly-endless onslaught of...`
 - 2 images share one paragraph; only the first becomes a figure
 - image `kix.djm0a1aand4k` has no alt text and no caption; add a description to it in the doc
+- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
+  - `36 CFR 1192.35`
+  - `49 CFR 37.167(b) & (c)`
 - the image `img-831248b1` has no caption
 - the image `img-831248b1` has no `Credit:` line
 - the image `img-b17aa21a` has no `Credit:` line

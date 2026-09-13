@@ -201,6 +201,8 @@ KNOWN_WARNINGS = (
     "a search result shows",
     "has no `Credit:` line",
     "unfinished text in the document",
+    "rather than `Enter`",
+    "standing in for blank space",
 )
 """Every kind of warning this report has been known to raise.
 
