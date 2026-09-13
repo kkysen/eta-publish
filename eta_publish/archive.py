@@ -18,6 +18,7 @@ the emitters read the result off the document and stay pure.
 
 import json
 import os
+import re
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -34,6 +35,24 @@ ARCHIVES_JSON = "archives.json"
 
 SAVE = "https://web.archive.org/save"
 """Save Page Now, which takes a URL and captures it."""
+
+REPLAY = "https://web.archive.org/web"
+"""The archived copies themselves, which is also the cheapest way to find one.
+
+`REPLAY/<date>/<url>` redirects to the capture closest to that date, which is a
+point lookup rather than a scan, and the capture it serves carries the status the
+crawler got. So the question the index is asked can be asked here instead, in
+about 200 ms rather than seconds, and the answer is about the URL this publishes.
+"""
+
+NEWEST = "2099"
+"""A date nothing is archived past, so the capture closest to it is the newest."""
+
+REDIRECT = 302
+"""What the replay says when it has a capture, naming it in `Location`."""
+
+OK = 200
+"""What it says when that capture is the page rather than a wall or a 404."""
 
 INDEX = "https://web.archive.org/cdx/search/cdx"
 """What the Wayback Machine already has, which is asked first and needs no keys.
@@ -153,9 +172,8 @@ _REMEMBERING = Lock()
 
 Reports are built in parallel, so three of these finish at once, and each one
 reads the file, adds its own sources and writes the whole thing back. Unheld,
-the last write wins and the other two reports' sources are simply not in the
-cache: the first run of this looked up 3 sources and then 21, and the file it
-left held 21.
+two that interleave leave one report's sources out of the cache, and the only
+sign of it is a build that is slow again for no visible reason.
 
 Like `_SIGNING_IN` in `fetch.py`, and for the same reason: a cache does not make
 a read-modify-write atomic.
@@ -444,7 +462,81 @@ def _patiently[T](ask: Callable[[], T]) -> T:
 
 
 def _existing(http: requests.Session, url: str) -> Archived | None:
-    """The newest capture of `url` that came back `200`, if there is one.
+    """The newest capture of `url` that is the page, if there is one.
+
+    Asked of the replay first and of the index only if that did not answer.
+    Both answer the same question; the index is the one that can be asked it
+    exactly, and it is twenty to sixty times slower.
+    """
+    served = _served(http, url)
+    if served is not None:
+        return served
+    return _indexed(http, url)
+
+
+def _served(http: requests.Session, url: str) -> Archived | None:
+    """The newest capture, if the archive serves it as the page.
+
+    Two `HEAD`s where the index takes one query, and still far cheaper: the
+    replay answers in about 200 ms of server time because it is a point lookup,
+    where a `statuscode` filter over a URL's whole row set took 0.5s to 31s,
+    varying 50-fold for the same query asked three times running.
+
+    The first `HEAD` asks the replay for the capture closest to a date nothing
+    is archived past, which is the newest one, and reads the timestamp out of
+    the redirect. The second asks for that capture at the URL this would
+    publish, rather than at the one the redirect names: those differ over
+    percent-encoding, and the point is to check the link a reader will click.
+
+    `200` there is the answer the index is asked for, arrived at the other way
+    round. Stricter in one way: the index says a crawler once logged `200`,
+    while this says the archived URL serves the page now. Looser in another: a
+    `warc/revisit` capture carries no status in the index and so is filtered
+    out, but the replay resolves it and serves it, and it is a later crawl of
+    bytes that had not changed. `hsr.ca.gov`'s 2026 business plan is one, five
+    weeks newer than the newest row the index would allow and the same digest.
+
+    `None` where the capture is not the page: taken down, paywalled, a login
+    wall. The NYT's 125th Street piece is captured daily and the newest replays
+    `403`. Then the index is asked, because the newest capture that *was* the
+    page is a different question and only the index can answer it.
+    """
+    landed = _checked_service(
+        http.head(f"{REPLAY}/{NEWEST}/{url}", timeout=30, allow_redirects=False)
+    )
+    if landed.status_code != REDIRECT:
+        # No capture at all, or none the replay will serve. Either way this is
+        # not the answer, and the index is asked rather than trusted to agree.
+        return None
+    stamp = _stamp(landed.headers.get("location", ""))
+    if stamp is None:
+        return None
+    snapshot = f"{REPLAY}/{stamp}/{url}"
+    if _checked_service(http.head(snapshot, timeout=60, allow_redirects=False)).status_code != OK:
+        return None
+    return Archived(snapshot=snapshot, timestamp=stamp)
+
+
+def _stamp(location: str) -> str | None:
+    """The 14 digits naming the capture in a replay redirect, if they are there."""
+    found = re.search(r"/web/(\d{14})", location)
+    return found.group(1) if found else None
+
+
+def _checked_service(response: requests.Response) -> requests.Response:
+    """`response`, or `Busy` if the answer was about the service.
+
+    Unlike `_checked`, every other status is handed back rather than raised on:
+    a `403` or a `404` from the replay is an answer about the capture, and the
+    caller's next move is to ask the index rather than to give up.
+    """
+    if response.status_code == TOO_MANY or response.status_code >= SERVER_ERROR:
+        raise Busy(f"{response.status_code} from {response.url}")
+    return response
+
+
+def _indexed(http: requests.Session, url: str) -> Archived | None:
+    """The newest capture of `url` that the index says came back `200`.
 
     `200` and nothing else. A page that has been taken down still gets crawled,
     so its newest captures are of the 404, and a `warc/revisit` row carries no

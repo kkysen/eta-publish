@@ -145,10 +145,30 @@ which needs no account and is most of the answer:
 Only the newest capture that came back `200` counts,
 because a page that has been taken down still gets crawled
 and its newest captures are of the 404.
-That is why the index is asked rather than `wayback/available`
-or the redirect on `web.archive.org/web/2099/<url>`,
-both of which answer in a fifth of a second
-and answer about the newest capture of any status.
+The replay is asked first and the index only if it did not answer.
+`web.archive.org/web/2099/<url>` redirects to the capture closest to a date
+nothing is archived past, which is the newest one,
+and asking for that capture says whether it serves the page:
+a point lookup of about 200 ms against a filtered scan of a URL's whole row set,
+which took anywhere from 0.5s to 31s for the same query.
+Sixteen sources took 11.7s that way and 47.3s through the index.
+`wayback/available` would be a third way to ask and answers `429` outright.
+
+`200` from the replay is the answer the index is asked for,
+arrived at the other way round, and on one point it is better evidence:
+the index says a crawler once logged `200`,
+while this says the URL the report is about to publish serves the page.
+It is looser on `warc/revisit`, a capture recording that the bytes
+had not changed, which carries no status in the index and is filtered out
+but which the replay resolves and serves.
+`hsr.ca.gov`'s 2026 business plan is one, five weeks newer
+than the newest row the index allows and the same digest.
+Anything but `200` falls through to the index,
+because the newest capture that *was* the page is a different question:
+the NYT's 125th Street piece is captured daily
+and its newest capture replays `403`.
+A source with no capture falls through too,
+so `not archived` still rests on the index rather than on a `404`.
 
 A lookup that finds nothing is remembered for a week,
 in `~/.cache/eta-publish/archive-lookups.json` and never committed.
