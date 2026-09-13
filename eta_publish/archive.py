@@ -18,7 +18,6 @@ the emitters read the result off the document and stay pure.
 
 import json
 import os
-import re
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -26,6 +25,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
+from urllib.parse import urlsplit
 
 import requests
 
@@ -53,6 +53,25 @@ REDIRECT = 302
 
 OK = 200
 """What it says when that capture is the page rather than a wall or a 404."""
+
+ITEM_HOST = "archive.org"
+ITEM_PATH = "details"
+"""An Internet Archive item: a scanned book, a recording, a piece of software.
+
+Already archival, and by the institution that runs the Wayback Machine, which
+is why it cannot be captured there: `archive.org` excludes its own pages from
+the index, so every one of these answers `403` to both the index and the replay.
+SAS West cites two pages of one scanned book and both published as
+`not archived`, which reads as no preserved copy existing when the link is the
+preserved copy.
+"""
+
+METADATA = "https://archive.org/metadata"
+"""What an item says about itself, which includes the day it was added.
+
+So these are cited the way every other source is, with a date and a link,
+rather than as a special case the reader has to know how to read.
+"""
 
 INDEX = "https://web.archive.org/cdx/search/cdx"
 """What the Wayback Machine already has, which is asked first and needs no keys.
@@ -398,6 +417,11 @@ def _archive(
 ) -> Lookup:
     """One source: the capture it already has, or a new one, or why neither."""
     try:
+        item = _item(url)
+        if item is not None:
+            # Nothing to look up and nothing to ask for: it is already archived,
+            # and asking the Wayback Machine about it only ever answers `403`.
+            return Lookup(_patiently(lambda: _added(http, url, item)), already=True)
         found = _patiently(lambda: _existing(http, url, index=index))
         if found is not None:
             return Lookup(found, already=True)
@@ -516,10 +540,81 @@ def _served(http: requests.Session, url: str) -> Archived | None:
     return Archived(snapshot=snapshot, timestamp=stamp)
 
 
+def _item(url: str) -> str | None:
+    """The identifier of the Internet Archive item `url` points into, if it is one.
+
+    `archive.org/details/<identifier>` and anything under it: the two SAS West
+    citations are two pages of one book, so the identifier is the third segment
+    however much path follows it.
+
+    Read out of the parsed URL rather than matched: the host has to be that host
+    and not one ending in it, and `details` has to be a whole segment.
+    """
+    parsed = urlsplit(url)
+    if parsed.hostname != ITEM_HOST:
+        return None
+    segments = parsed.path.strip("/").split("/")
+    if len(segments) < 2 or segments[0] != ITEM_PATH:
+        return None
+    return segments[1] or None
+
+
+def _added(http: requests.Session, url: str, identifier: str) -> Archived | None:
+    """`url` as its own archived copy, dated the day the item was added.
+
+    An item has no capture and so no capture date, but it has the day it
+    arrived, which is the same kind of fact: the day this copy started existing
+    where the report points. `publicdate` where there is no `addeddate`, which
+    is the day it became readable and is the nearest thing left.
+
+    The URL as cited, not the item's front page: `.../page/34/mode/2up` is the
+    page the claim is about, and the whole point of citing the archive is
+    landing on it.
+
+    `None` where the item says neither, or would not say: that is a build that
+    learned nothing rather than a source with no archive, so it is asked again.
+    """
+    answer = _checked(http.get(f"{METADATA}/{identifier}", timeout=30)).json()
+    if not isinstance(answer, dict):
+        return None
+    metadata = answer.get("metadata")
+    if not isinstance(metadata, dict):
+        # An identifier nothing holds answers `{}` rather than saying so.
+        return None
+    for field in ("addeddate", "publicdate"):
+        stamp = _fourteen(str(metadata.get(field, "")))
+        if stamp is not None:
+            return Archived(snapshot=url, timestamp=stamp)
+    return None
+
+
+def _fourteen(said: str) -> str | None:
+    """`2023-05-04 00:51:39` as the 14 digits the record is written in.
+
+    Whatever an item writes that is not a date is not one: these are typed by
+    hand often enough that a `0000-00-00` is a thing that happens.
+    """
+    digits = "".join(character for character in said if character.isdigit())
+    if len(digits) < 8:
+        return None
+    try:
+        datetime.strptime(digits[:8], "%Y%m%d")
+    except ValueError:
+        return None
+    return (digits + "000000")[:14]
+
+
 def _stamp(location: str) -> str | None:
-    """The 14 digits naming the capture in a replay redirect, if they are there."""
-    found = re.search(r"/web/(\d{14})", location)
-    return found.group(1) if found else None
+    """The 14 digits naming the capture in a replay redirect, if they are there.
+
+    `/web/<stamp>/<url>`, where the stamp may carry a modifier: `id_` asks for
+    the capture raw, and the digits in front of it are the same capture.
+    """
+    segments = urlsplit(location).path.strip("/").split("/")
+    if len(segments) < 2 or segments[0] != "web":
+        return None
+    stamp = segments[1][:14]
+    return stamp if len(stamp) == 14 and stamp.isdigit() else None
 
 
 def _checked_service(response: requests.Response) -> requests.Response:

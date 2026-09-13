@@ -228,6 +228,81 @@ def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
     assert missing(doc) == ["https://a.example/1"]
 
 
+# ---- a source that is already an Internet Archive item ---------------
+
+
+class Item(requests.Session):
+    """The metadata API, answering with `body` for any identifier."""
+
+    def __init__(self, body: object) -> None:
+        super().__init__()
+        self.body = body
+        self.wayback_asked = 0
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        response = requests.Response()
+        response.url = str(url)
+        if not str(url).startswith(archive.METADATA):
+            # `archive.org` excludes its own pages from the Wayback Machine,
+            # so anything asked there about one of these answers `403`.
+            self.wayback_asked += 1
+            response.status_code = 403
+            return response
+        response.status_code = 200
+        response._content = json.dumps(self.body).encode()
+        return response
+
+
+def test_an_item_is_archived_at_itself_the_day_it_was_added() -> None:
+    """It cannot be captured and does not need to be: it is the preserved copy."""
+    doc = cites("https://archive.org/details/slurrywallsasstr0000xant/page/34/mode/2up")
+    session = Item({"metadata": {"addeddate": "2023-05-04 00:51:39"}})
+    assert archive.capture(doc, session=session) == (1, 0)
+    archived = doc.archives["https://archive.org/details/slurrywallsasstr0000xant/page/34/mode/2up"]
+    assert archived.timestamp == "20230504005139"
+    assert archived.date == "May 4, 2023"
+    assert session.wayback_asked == 0
+
+
+def test_the_archived_copy_is_the_page_that_was_cited() -> None:
+    """`/page/34/mode/2up` is the page the claim is about, not the front matter."""
+    url = "https://archive.org/details/slurrywallsasstr0000xant/page/34/mode/2up"
+    doc = cites(url)
+    archive.capture(doc, session=Item({"metadata": {"addeddate": "2023-05-04 00:51:39"}}))
+    assert doc.archives[url].snapshot == url
+
+
+def test_public_date_stands_in_where_an_item_has_no_added_date() -> None:
+    """The day it became readable, which is the nearest thing left."""
+    url = "https://archive.org/details/something"
+    doc = cites(url)
+    archive.capture(doc, session=Item({"metadata": {"publicdate": "2023-03-29 19:29:10"}}))
+    assert doc.archives[url].timestamp == "20230329192910"
+
+
+def test_an_item_that_says_no_date_is_left_to_the_next_build() -> None:
+    """Learning nothing is not the same as there being no archive."""
+    doc = cites("https://archive.org/details/something")
+    archive.capture(doc, session=Item({"metadata": {"addeddate": "0000-00-00"}}))
+    assert doc.archives == {}
+
+
+def test_an_identifier_nothing_holds_is_not_recorded() -> None:
+    """The API answers `{}` rather than saying so."""
+    doc = cites("https://archive.org/details/nothing-is-here")
+    archive.capture(doc, session=Item({}))
+    assert doc.archives == {}
+
+
+def test_an_archive_org_url_that_is_not_an_item_is_an_ordinary_source() -> None:
+    """`archive.org/about` is a page like any other, and can be captured."""
+    doc = cites("https://archive.org/about")
+    session = Replaying([("20240503123456", 200)])
+    archive.capture(doc, session=session)
+    assert doc.archives["https://archive.org/about"].timestamp == "20240503123456"
+
+
 # ---- asking the replay before the index ------------------------------
 
 
