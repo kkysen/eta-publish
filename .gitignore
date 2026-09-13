@@ -19,11 +19,13 @@ token.json
 # every re-fetch would add another copy to history forever. Both are
 # rebuilt by CI before deploying, so nothing here is needed to publish.
 /site/**/images/
+/site/**/print/
 /site/**/report.pdf
 /site/**/template.typ
 /site/index.html
 /site/robots.txt
 /tests/fixture/**/images/
+/tests/fixture/**/print/
 /tests/fixture/**/report.pdf
 /tests/fixture/**/template.typ
 /tests/fixture/index.html

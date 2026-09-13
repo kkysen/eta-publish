@@ -9,6 +9,8 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.emit.typst import TypstEmitter
+from eta_publish.images import write_print_copies
+from eta_publish.naming import IMAGE_DIR, PRINT_DIR
 from eta_publish.nodes import Document
 from eta_publish.parse import parse
 from eta_publish.pdf import compile_pdf, install_template
@@ -45,12 +47,17 @@ def test_headings_map_to_typst_depth(out: str) -> None:
 
 
 def test_the_source_line_is_not_emitted(out: str) -> None:
-    assert "sas-west-036.jpg" not in out
+    # The `Source:` line names `sas-west-036.jpg` and the download wrote a
+    # `.png`, so the written name is the only one either path may use.
+    # `print/sas-west-036.jpg` is not that name reappearing: it is the `.png`
+    # re-encoded for the PDF, which is a JPEG and has to say so.
+    assert "images/sas-west-036.jpg" not in out
     assert "Source:" not in out
 
 
 def test_figures_carry_caption_and_credit(out: str) -> None:
-    assert 'capped_image("images/sas-west-036.png", alt: "SAS West alignment map")' in out
+    assert 'capped_image("print/sas-west-036.jpg", alt: "SAS West alignment map")' in out
+    assert '/images/sas-west-036.png")[#capped_image(' in out
     assert "The SAS West and Phase 2 alignments." in out
     assert "Credit: MTA" in out
     assert "#emph[Credit: MTA]" not in out
@@ -80,8 +87,12 @@ def test_a_field_name_cannot_be_typst_code(doc: Document) -> None:
 @pytest.mark.skipif(shutil.which("typst") is None, reason="typst is not installed")
 def test_the_emitted_source_compiles(doc: Document, tmp_path: Path) -> None:
     """Escaping and syntax errors only show up here."""
-    (tmp_path / "images").mkdir()
-    (tmp_path / "images" / "sas-west-036.png").write_bytes(PNG)
+    # `PRINT_DIR`, not `images/`: the PDF embeds the copies made for it,
+    # and links the originals, which nothing has to open to compile.
+    original = tmp_path / IMAGE_DIR / "sas-west-036.png"
+    original.parent.mkdir()
+    original.write_bytes(PNG)
+    write_print_copies({"kix.1": original}, tmp_path / PRINT_DIR)
     source = tmp_path / "report.typ"
     source.write_text(TypstEmitter().emit(doc))
     install_template(tmp_path)

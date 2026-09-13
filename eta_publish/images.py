@@ -21,6 +21,7 @@ from pathlib import Path
 
 import requests
 
+from .naming import print_href
 from .nodes import Document, Image, Shown
 
 EXTENSIONS = {
@@ -250,3 +251,83 @@ def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
     except OSError as e:
         doc.warn(f"could not crop image {{}} ({e}); left uncropped", Shown(image.object_id))
         return data
+
+
+PRINT_PIXELS = 1710
+"""The longest edge a picture keeps in the PDF, in pixels.
+
+300 DPI across the full column, which is the width every figure is set to:
+Letter less the 1.4in margins on each side is 5.7in, and 5.7 * 300 is 1710.
+So no picture is reduced below what print asks for,
+and the five that arrive larger than that were carrying detail
+no page reproduces.
+
+The cap is not what makes the PDF smaller, though. Typst hands a JPEG
+straight through and has to store a PNG losslessly, so a photograph saved as
+a PNG stays its full size inside the file: re-encoding is four fifths of the
+saving, and this is the backstop on the rest.
+"""
+
+PRINT_QUALITY = 85
+"""The JPEG quality the PDF's copies are written at."""
+
+
+def write_print_copies(written: dict[str, Path], dest: Path) -> dict[str, Path]:
+    """Write the PDF's copy of every image, returning object id to written path.
+
+    Every raster is re-encoded, even the few that a JPEG barely shrinks.
+    What each file is called has to follow from the name it arrived under and
+    nothing else: `report.typ` is committed and compared against a fresh
+    build, so a name that depended on how well a picture happened to compress
+    would make the committed file depend on the encoder, and a build that
+    skipped the images would write a different one again.
+
+    The cost is line art, which picks up ringing along hard edges for little
+    saving. It is paid in the PDF only: `images/` keeps what the document
+    holds, and that is what each picture in the PDF links to.
+    """
+    import shutil
+
+    dest.mkdir(parents=True, exist_ok=True)
+    copies: dict[str, Path] = {}
+    for object_id, path in written.items():
+        out = dest / print_href(path.name)
+        copies[object_id] = out
+        data = _for_print(path)
+        if data is None:
+            shutil.copyfile(path, out)
+        else:
+            out.write_bytes(data)
+    return copies
+
+
+def _for_print(path: Path) -> bytes | None:
+    """`path` re-encoded as a JPEG no wider or taller than `PRINT_PIXELS`.
+
+    `None` for a file that is already what the PDF wants,
+    which the caller copies rather than rewrites:
+    a vector, which has no resolution to cap and nothing to gain from one,
+    and a JPEG already within the cap, which would only be
+    decoded and recompressed into a second generation of the same artifacts.
+
+    Both are decided by what the file is rather than by how well it compresses,
+    so the name in `PRINT_DIR` stays a function of the name it arrived under.
+    """
+    import io
+
+    from PIL import Image as Pillow
+
+    if path.suffix.lower() == ".svg":
+        return None
+    with Pillow.open(path) as opened:
+        if opened.format == "JPEG" and max(opened.size) <= PRINT_PIXELS:
+            return None
+        # Flattened rather than composited onto white: every alpha channel in
+        # these documents compresses to under 3 KB, which is a channel that
+        # says nothing, and JPEG has nowhere to put one anyway.
+        image = opened.convert("RGB")
+        if max(image.size) > PRINT_PIXELS:
+            image.thumbnail((PRINT_PIXELS, PRINT_PIXELS), Pillow.Resampling.LANCZOS)
+        buffer = io.BytesIO()
+        image.save(buffer, "JPEG", quality=PRINT_QUALITY, optimize=True, progressive=True)
+        return buffer.getvalue()

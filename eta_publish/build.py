@@ -13,7 +13,7 @@ from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
-from .naming import ASSET_DIR, IMAGE_DIR
+from .naming import ASSET_DIR, IMAGE_DIR, PRINT_DIR
 from .nodes import Document, Shown, Span
 from .parse import parse, read_review
 
@@ -542,9 +542,15 @@ def build_one(
 
     if doc.images:
         if options.images:
-            from .images import download
+            from .images import download, write_print_copies
 
-            write_image_index(dest, download(doc, dest / IMAGE_DIR))
+            written_images = download(doc, dest / IMAGE_DIR)
+            write_image_index(dest, written_images)
+            # Not recorded in `images.json`: that file is committed, and a
+            # JPEG encoder is not byte-stable between versions, so a Pillow
+            # release would break the committed-site check months later
+            # over pictures nothing publishes.
+            write_print_copies(written_images, dest / PRINT_DIR)
         else:
             require_image_index(dest, doc)
     read_image_index(dest, doc)
