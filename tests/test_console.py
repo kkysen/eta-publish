@@ -171,6 +171,20 @@ def test_a_note_is_marked_apart_from_a_warning() -> None:
     assert rendered(log.warning("biome lint failed"), plain()) == "! biome lint failed\n"
 
 
+def test_the_report_a_note_is_about_is_marked_as_the_value_it_is() -> None:
+    """`added` marks the same name, read off the same list, the same way: a name
+    inside a sentence runs into the words around it unless it is picked out."""
+    with log.about("IBX Automation"):
+        written = rendered(log.note("looking up 3 sources in the archive"), plain())
+    assert written == "· `IBX Automation`: looking up 3 sources in the archive\n"
+
+
+def test_a_note_outside_a_build_names_no_report() -> None:
+    """One document fetched on its own is the only document there is,
+    and naming it says nothing the caller did not type."""
+    assert rendered(log.note("nothing to archive"), plain()) == "· nothing to archive\n"
+
+
 def test_a_note_keeps_its_backticks_off_a_terminal() -> None:
     """The same rule a warning's values follow: off a terminal the backticks are
     the only thing saying where a command stops, so they stay."""
