@@ -281,11 +281,11 @@ Credit: Seungho Kang, Joint Transit Association
 
 Techniques like these can all be combined depending on exact site specifics.
 For example, the Heping South Street Station on Line 3 of the Shenyang, China Metro was constructed in similarly challenging soil conditions with a high water table.
-There, engineers mixed traditional cut-and-cover with a [pipe roof method called SP-TS](<http://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>, very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
+There, engineers mixed traditional cut-and-cover with a [pipe roof method called SP-TS](<https://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>, very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
 
 ![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/img-60a0a749.png>)\
 Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.\
-[Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[63\]</sup>
+[Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>
 <!-- [Image Source](<https://ars.els-cdn.com/content/image/1-s2.0-S2214509525014135-gr2_lrg.jpg>) -->
 
 Some combination of one or all of these methods could be used along SAS West to not only massively reduce cost, but make the stations far more useful once completed.
@@ -297,35 +297,35 @@ A one-size-fits-all approach that locks the project into deep SEM stations also 
 
 There is a pressing time constraint when it comes to depth.
 Because SAS West will continue from the end of SAS Phase 2, the depth of the station at Lenox Av (2/3) will ultimately be determined by the depth of the tail tracks of the earlier project.
-First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>)<sup>\[64\]</sup>.
+First and foremost, for all the reasons listed above, all available measures should be taken to reduce the depth of Phase 2’s station at 125 St/Lexington Av. Even if that's not possible, however, there is still time to adjust the tail tracks: SAS 2’s TBMs won’t start digging until 2027, and won't [reach Lenox Av until 2028](<https://www.mta.info/document/196361#page=39>)<sup>\[63\]</sup>.
 See [SAS Phase 2 Tail Tracks](<#sas-phase-2-tail-tracks>) for more information on how this can be done.
 
 ![A video rendering of the 125 St/Lexington Av station.](<images/Screenshot_2026-07-18_100636-4392a78e.png>)\
 A video rendering of the 125 St/Lexington Av station.\
-[Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)<sup>\[65\]</sup>
+[Credit: MTA](<https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137>)<sup>\[64\]</sup>
 <!-- Uncropped Source: [Screenshot 2026-07-18 100636.png](<https://drive.google.com/file/d/1_UuQs5LygSlFd62nZK6yndl0gDIPlxyq/view>) -->
 
-Coming closer to the surface would save considerable sums of money for the stations on SAS West: if for example, the stations can be built an average of 60-70 ft deep based on the international precedents, then the cost can follow the [A Better Billion model](<https://transitcosts.com/a-better-billion.html>)<sup>\[66\]</sup> based on SAS costs, $770 million per station and a total of $3.4 billion for SAS West in 2025 prices.
+Coming closer to the surface would save considerable sums of money for the stations on SAS West: if for example, the stations can be built an average of 60-70 ft deep based on the international precedents, then the cost can follow the [A Better Billion model](<https://transitcosts.com/a-better-billion.html>)<sup>\[65\]</sup> based on SAS costs, $770 million per station and a total of $3.4 billion for SAS West in 2025 prices.
 
 ### Station Width
 
 Depth isn't the only problem driving up costs; so is the size of the stations.
-The feasibility study assumes station boxes, the basic excavated area a station is built within, to be [75 ft wide](<https://www.mta.info/document/196361#page=24>)<sup>\[67\]</sup>.
+The feasibility study assumes station boxes, the basic excavated area a station is built within, to be [75 ft wide](<https://www.mta.info/document/196361#page=24>)<sup>\[66\]</sup>.
 This is excessive, even by the standards of the Second Ave subway.
 
-For example, the station box at [72 St is 64 ft wide](<https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes>)<sup>\[68\]</sup>, while the station itself has a 28 ft-wide platform.
-Measurements are similar at 86 St and 96 St (which has a 30 ft-wide platform).[^6] Even the plans for the very busy transfer station at 125 St/Lexington Av, with connections to the 4/5/6 and Metro-North, will be built inside a 63 ft-wide station box with a [30 ft-wide platform](<https://www.mta.info/document/131306#page=12>)<sup>\[69\]</sup>.
+For example, the station box at [72 St is 64 ft wide](<https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes>)<sup>\[67\]</sup>, while the station itself has a 28 ft-wide platform.
+Measurements are similar at 86 St and 96 St (which has a 30 ft-wide platform).[^6] Even the plans for the very busy transfer station at 125 St/Lexington Av, with connections to the 4/5/6 and Metro-North, will be built inside a 63 ft-wide station box with a [30 ft-wide platform](<https://www.mta.info/document/131306#page=12>)<sup>\[68\]</sup>.
 And at 116 St, which will be built within an existing subway tunnel built during the 1970s, the station box will be 59 ft wide with a 25.25 ft-wide platform.
 All on its own, narrowing the station on SAS West from 75 ft to the already large 63 ft of Phases 1 and 2 would reduce the amount of required excavation by 16%.
 
 ![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-a718beb8.png>)\
-Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>)<sup>\[70\]</sup> that switched the mezzanine from above to below the platform.\
-Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)<sup>\[71\]</sup>
+Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>)<sup>\[69\]</sup> that switched the mezzanine from above to below the platform.\
+Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)<sup>\[70\]</sup>
 <!-- [Image Source](<https://storage.ghost.io/c/19/31/1931222a-d1c5-42ac-8932-2ee3ac1f8927/content/images/old-theurbanist-org/wp-content/uploads/2026/01/nyc-mta-116th-station-design.png>) -->
 
 ![A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.](<images/sas-2-029-3ec53fb1.jpg>)\
 A rendering of the 125 St/Lexington Av station on SAS Phase 2. The platform is 30 ft wide and the station box is 63 ft wide.\
-[Credit: MTA](<https://www.mta.info/document/114626#page=5>)<sup>\[72\]</sup>
+[Credit: MTA](<https://www.mta.info/document/114626#page=5>)<sup>\[71\]</sup>
 <!-- Source: [sas-2-029.jpg](<https://drive.google.com/file/d/1L5XwcbIAWiqnp15ALHRJ9xpRNK4GWQhB/view>) -->
 
 Narrowing the station boxes should be a high priority to keep costs reasonable.
@@ -341,8 +341,8 @@ They can also significantly lower station costs by isolating platform air from t
 ### Station Length and Mezzanines
 
 One of the largest drivers of cost inflation on SAS Phase 1 was the construction of stations far longer than the trains they serve.
-Underground construction is phenomenally expensive, and as a result, international best practice is usually to build stations that are as short as practicable, generally between [105% and 120% of train length](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36>)<sup>\[73\]</sup>[^7].
-For the 600 ft trains used on the SAS, that would be around 620-660 ft. In contrast, the shortest station on SAS Phase 1 was 86 St at [969 ft](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>)<sup>\[74\]</sup> (162% of train length), and 96 St was a mammoth [1,591 ft](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>)<sup>\[74\]</sup> (265% of train length).
+Underground construction is phenomenally expensive, and as a result, international best practice is usually to build stations that are as short as practicable, generally between [105% and 120% of train length](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36>)<sup>\[72\]</sup>[^7].
+For the 600 ft trains used on the SAS, that would be around 620-660 ft. In contrast, the shortest station on SAS Phase 1 was 86 St at [969 ft](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>)<sup>\[73\]</sup> (162% of train length), and 96 St was a mammoth [1,591 ft](<https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>)<sup>\[73\]</sup> (265% of train length).
 None of this extra space is accessible to passengers.
 Instead, as a general rule, most of it is deeply underutilized back-of-house space for MTA employees.
 
@@ -351,8 +351,8 @@ Station length as a percentage of platform length.
 <!-- SVG: TODO -->
 
 Here, the MTA and its consultants have learned at least a little from the cost explosion of SAS Phase 1—but nowhere near enough.
-The stations for SAS Phase 2 are projected to be around [1,000 ft long](<https://www.mta.info/document/179396#page=26>)<sup>\[75\]</sup> each[^8].
-On SAS West, the station at [Lenox Av](<https://www.mta.info/document/196361#page=25>)<sup>\[76\]</sup> is planned to be around 750 ft, at [St Nicholas Av](<https://www.mta.info/document/196361#page=27>)<sup>\[77\]</sup> around 900 ft, and at [Broadway](<https://www.mta.info/document/196361#page=29>)<sup>\[78\]</sup> around 800 ft (125-150% of train length).
+The stations for SAS Phase 2 are projected to be around [1,000 ft long](<https://www.mta.info/document/179396#page=26>)<sup>\[74\]</sup> each[^8].
+On SAS West, the station at [Lenox Av](<https://www.mta.info/document/196361#page=25>)<sup>\[75\]</sup> is planned to be around 750 ft, at [St Nicholas Av](<https://www.mta.info/document/196361#page=27>)<sup>\[76\]</sup> around 900 ft, and at [Broadway](<https://www.mta.info/document/196361#page=29>)<sup>\[77\]</sup> around 800 ft (125-150% of train length).
 While an improvement, this is still far longer than the 620-660 ft that international best practices would recommend, driving up costs.
 
 Like their Phase 1 counterparts, much of this extra space is planned to be filled by unnecessary back-of-house space.
@@ -369,7 +369,7 @@ Other metro systems around the world, such as Milan Line 4, build ventilation sy
 
 ![A ventilation and daylight structure from Milan’s M1 line.](<images/italian-case-study-139.jpg>)\
 A ventilation and daylight structure from Milan’s M1 line.\
-[Credit: Transit Costs Report](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>)<sup>\[79\]</sup>
+[Credit: Transit Costs Report](<https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>)<sup>\[78\]</sup>
 <!-- Uncropped Source: [italian-case-study-139.jpg](<https://drive.google.com/file/d/1SpTWO0qh8Ak3r3SW32aIn12RSqa16fBy/view>) -->
 
 ![The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Phase 1.](<images/img-2a097531.jpg>)\
@@ -377,13 +377,13 @@ The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Phase 1.\
 Credit: ETA, Blair Lorenzo
 
 Indeed, a key element for Seattle’s recent value engineering has been reducing headhouse and ventilation structures.
-Early signs from cost-savings measures on the proposed [West Seattle Link Extension](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>)<sup>\[80\]</sup> suggest that a series of measures stand to cut $3 billion from a previously estimated cost of $8 billion.
+Early signs from cost-savings measures on the proposed [West Seattle Link Extension](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>)<sup>\[79\]</sup> suggest that a series of measures stand to cut $3 billion from a previously estimated cost of $8 billion.
 At Alaska Junction station, two station headhouses, a vent structure, and a traction and power subsystem structure (TPSS) were consolidated from four buildings to one, reducing the station box to a footprint not much longer than the trains, saving $190–235 million.
 At SODO station, they’ve reduced the size of an overbuilt mezzanine and removed redundant stairs and escalators, saving $125–160 million.
 
 ![Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.](<images/img-d4ca00ff.png>)\
 Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.\
-Credit: Sound Transit, [via The Urbanist](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>)<sup>\[80\]</sup>
+Credit: Sound Transit, [via The Urbanist](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>)<sup>\[79\]</sup>
 
 This is the model that the MTA should follow on SAS West and future projects.
 Cutting unnecessary structures and making the remaining ones smaller can save hundreds of millions of dollars at a time—very quickly adding up to major savings.
@@ -393,8 +393,8 @@ Cutting unnecessary structures and making the remaining ones smaller can save hu
 ### Fire Code
 
 Beyond the sheer size of the stations, the MTA and its contractors are also overdesigning many elements, provisioning for conditions that are extremely unlikely to happen.
-For example, it is [designing all elements of SAS Phase 2](<https://www.mta.info/document/179396#page=9>)<sup>\[81\]</sup> so that pedestrian flows and queues never exceed LOS (level of service) C—a minor slowdown in free walking speed.
-However, the Transportation Research Board generally considers [excursions to LOS D](<https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67>)<sup>\[82\]</sup>—a more restricted flow where moving against the current is briefly difficult—to be acceptable during peak times.
+For example, it is [designing all elements of SAS Phase 2](<https://www.mta.info/document/179396#page=9>)<sup>\[80\]</sup> so that pedestrian flows and queues never exceed LOS (level of service) C—a minor slowdown in free walking speed.
+However, the Transportation Research Board generally considers [excursions to LOS D](<https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67>)<sup>\[81\]</sup>—a more restricted flow where moving against the current is briefly difficult—to be acceptable during peak times.
 The MTA is targeting for all passengers to be able to clear a platform or mezzanine within 30 seconds, which, while certainly nice to have, is overbuilt even for the peak, when some longer waits are acceptable and very common at other stations.
 Overdesigns like this can stack over a large project, greatly driving up its final price tag for very little real-world benefit.
 
@@ -413,7 +413,7 @@ Instead, ventilation fans can be included as part of the station structure or wi
 
 ![Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.](<images/img-dff7e45d.png>)\
 Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.\
-[Credit: M4 S.p.A.](<https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/>)<sup>\[83\]</sup>
+[Credit: M4 S.p.A.](<https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/>)<sup>\[82\]</sup>
 
 Ventilation structures may also be greatly reduced in scope.
 Indeed, one such structure built for SAS Phase 1 broke and the MTA found that the system worked fine without it, and tried unsuccessfully to ask the FTA to allow a modification to Phase 2 to eliminate the unnecessary structure.[^11]
@@ -426,22 +426,22 @@ The MTA and its contractors should import these global lessons: they allow trans
 The SAS West feasibility study indicates that it may be possible to build the station at Broadway more cheaply using cut-and-cover, but still deeper than might otherwise be ideal, because the grade is limited to 3% when climbing from the incredibly deep station at St Nicholas Av. Indeed, the feasibility study claims that a [3% grade](<https://www.mta.info/document/196361#page=18>)<sup>\[41\]</sup> is the maximum allowed on the New York City subway.
 
 In an age of highly capable electric multiple-unit trains, however, this shallow slope is incredibly conservative.
-Indeed, [NYCT’s ruling grade](<https://www.mta.info/document/172206#page=6>)<sup>\[84\]</sup> (the steepest part of the network) today is 5.5%, which includes the Q train on the Manhattan Bridge's outdoor approaches, subject to rain, deicing fluid, and the elements.
+Indeed, [NYCT’s ruling grade](<https://www.mta.info/document/172206#page=6>)<sup>\[83\]</sup> (the steepest part of the network) today is 5.5%, which includes the Q train on the Manhattan Bridge's outdoor approaches, subject to rain, deicing fluid, and the elements.
 All NYCT trains, except for some soon-to-be-retired work trains, can already manage this 5.5% grade.
-Even in 1957, when electric traction technology was more primitive than it is today, the Port Authority was comfortable [proposing a track connection](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>)<sup>\[85\]</sup> containing a 4.5% grade between the predecessor of the current PATH WTC station and the 6 train near Brooklyn Bridge-City Hall.
+Even in 1957, when electric traction technology was more primitive than it is today, the Port Authority was comfortable [proposing a track connection](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>)<sup>\[84\]</sup> containing a 4.5% grade between the predecessor of the current PATH WTC station and the 6 train near Brooklyn Bridge-City Hall.
 
 ![The engineering schematic of the Port Authority’s 1957 plans to connect the now-PATH to the 6.](<images/img-3230dd0e.png>)\
 The engineering schematic of the Port Authority’s 1957 plans to connect the now-PATH to the 6.\
-Credit: Port Authority, [via Nolan Hicks](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>)<sup>\[85\]</sup>
+Credit: Port Authority, [via Nolan Hicks](<https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>)<sup>\[84\]</sup>
 
 ![A cross-section of the Steinway tubes, which carry the 7 under the East River. It shows a 4.6% grade on the Queens side.](<images/img-e47b1bdb.png>)\
 A cross-section of the Steinway tubes, which carry the 7 under the East River. It shows a 4.6% grade on the Queens side.\
-Credit: historic design document, [via David Rogoff (NYCSubway.org)](<https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts>)<sup>\[86\]</sup>
+Credit: historic design document, [via David Rogoff (NYCSubway.org)](<https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts>)<sup>\[85\]</sup>
 
 Using NYCT’s actual ruling grade, or at least something far closer, could be a trivial adjustment to make the Broadway station far shallower and thus cheaper than currently planned.
 
 As an example of how such grade requirements can make a huge cost difference, California High-Speed Rail (CAHSR) recently made a similar adjustment.
-By updating its [design criteria to allow 4% grades](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[87\]</sup> (with a 3.5% baseline), up from the original 2.5% (with a 1.25% baseline), CAHSR has [reduced tunneling length](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[87\]</sup> by a massive 50%, [saving ](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[88\]</sup>[*tens of billions *](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[88\]</sup>[of](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[88\]</sup>[ dollars](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[88\]</sup>.
+By updating its [design criteria to allow 4% grades](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> (with a 3.5% baseline), up from the original 2.5% (with a 1.25% baseline), CAHSR has [reduced tunneling length](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> by a massive 50%, [saving ](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[*tens of billions *](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[of](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[ dollars](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>.
 In NYCT’s case, they only need to follow their current maximum sustained grade to reap these benefits.
 
 ### Tail Tracks
@@ -450,7 +450,7 @@ In NYCT’s case, they only need to follow their current maximum sustained grade
 
 ![The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.](<images/Screenshot_2026-04-27_160823-e68e5d52.png>)\
 The MTA proposed extending tail tracks all the way up 12 Av to 137 St in a board meeting on April 27, 2026.\
-[Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)<sup>\[89\]</sup>
+[Credit: MTA](<https://www.youtube.com/live/syjWBXSAbyM?t=2940s>)<sup>\[88\]</sup>
 <!-- Uncropped Source: [Screenshot 2026-04-27 160823.png](<https://drive.google.com/file/d/1wP8kC13_147MWx12IOlPU0jtMU0VOw1f/view>) -->
 
 In the feasibility study, the MTA's consultants proposed [tail tracks](<https://www.mta.info/document/196361#page=23>)<sup>\[28\]</sup> west of Broadway long enough to [store 6 trainsets](<https://www.mta.info/document/196361#page=23>)<sup>\[28\]</sup>.
@@ -471,7 +471,7 @@ But tunneling underground storage tracks in Manhattan is very expensive, and so 
 While storage for two trains is reasonable, the MTA should not insist that storage for six trains is required a priori without a cost-benefit analysis.
 If tail tracks are built shallow and cheaply, they can be valuable as storage space, but plenty of subway and metro lines run 30 trains per hour (tph) without tail tracks longer than the minimum required for slack protection[^12].
 Some recent underground extensions within city centers have had shorter tail tracks, used just for overrun purposes; for example, the U5 extension in Berlin has only about one train length’s worth of tail tracks on the western (typically outbound) track.
-The elevated Chuo Line (Rapid) in Tokyo has had a [peak throughput of 30 tph](<https://www.mlit.go.jp/common/001382429.pdf>)<sup>\[90\]</sup>, with tail tracks around 90 ft long, a fraction of the length of one train.
+The elevated Chuo Line (Rapid) in Tokyo has had a [peak throughput of 30 tph](<https://www.mlit.go.jp/common/001382429.pdf>)<sup>\[89\]</sup>, with tail tracks around 90 ft long, a fraction of the length of one train.
 
 Geography complicates matters.
 If the MTA desires to store six trainsets past Broadway, this would normally require 1,800 ft of additional TBM-tunneled tracks.
@@ -505,26 +505,26 @@ Moreover, construction of the Lenox Av station will likely require temporarily c
 
 A huge amount of the SAS West costs comes from soft costs.
 Soft costs are generally defined as those attributable to design, planning, project management, land acquisition, and contingency, as opposed to hard costs, which are the physical infrastructure costs.
-For SAS West, [soft costs](<https://www.mta.info/document/196361#page=36>)<sup>\[91\]</sup> are a whopping [43%](<https://www.mta.info/document/196361#page=36>)<sup>\[91\]</sup> of total costs.
-By contrast, Phase 2 soft costs are projected to be [38%](<https://media.discordapp.net/attachments/1299887947335602177/1465474065421828273/Screenshot_2026-01-26_at_5.23.25_PM.png?ex=69793c94&is=6977eb14&hm=09f30fcd5aa50cbdcea00cf5c1c9586fe26c6d454275dbd35942a7febdac7a58>)<sup>\[92\]</sup> and Phase 1 soft costs were only [17%](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>)<sup>\[93\]</sup>[^14].
+For SAS West, [soft costs](<https://www.mta.info/document/196361#page=36>)<sup>\[90\]</sup> are a whopping [43%](<https://www.mta.info/document/196361#page=36>)<sup>\[90\]</sup> of total costs.
+By contrast, Phase 2 soft costs are projected to be [38%](<https://media.discordapp.net/attachments/1299887947335602177/1465474065421828273/Screenshot_2026-01-26_at_5.23.25_PM.png?ex=69793c94&is=6977eb14&hm=09f30fcd5aa50cbdcea00cf5c1c9586fe26c6d454275dbd35942a7febdac7a58>)<sup>\[91\]</sup> and Phase 1 soft costs were only [17%](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>)<sup>\[92\]</sup>[^14].
 Simply reducing SAS West’s soft cost percentage to that of Phase 1 would save $1.4 billion.[^15]
 
 Internationally, this is an absurd figure.
 The most detailed breakdowns between hard and soft costs are available in Italy.
 There, soft costs are about 18-20% of total costs.[^16] The rest are hard costs: tunneling, systems, station digs, and fittings.
 Third-party design costs are usually 7-8%, which is common in Spain, France, and Sweden.
-[In Turkey, soft costs are quoted as 25-30%](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>)<sup>\[94\]</sup>, but those include additional finance charges, and third-party design costs are actually lower than the Continental norm, usually 3-5%.
+[In Turkey, soft costs are quoted as 25-30%](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>)<sup>\[93\]</sup>, but those include additional finance charges, and third-party design costs are actually lower than the Continental norm, usually 3-5%.
 If the soft cost share were reduced from 43% to 19%, without changing the hard cost, it would reduce the total cost of SAS West by 29%.[^17]
 
 ![A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.](<images/project_cost_comparison.svg>)\
 A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.
 <!-- SVG: [project\_cost\_comparison.svg](<https://drive.google.com/open?id=1BP66CGI9ioIx570isLn4ppS1qfJmBafA>)  -->
 
-A significant chunk of this comes from guidelines by the Federal Transit Administration (FTA), which recommend a whopping [40% contingency](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62>)<sup>\[95\]</sup> at this stage in the project (15% design[^18]).
+A significant chunk of this comes from guidelines by the Federal Transit Administration (FTA), which recommend a whopping [40% contingency](<https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62>)<sup>\[94\]</sup> at this stage in the project (15% design[^18]).
 Projects essentially always spend their contingency funds, as the money has already been allocated.
 For SAS, this problem has only compounded over time, as the SAS West contingency is calculated from previous phases, which already included contingency themselves, instead of their projected hard costs.
 
-It is particularly important to avoid comparison to the soft cost percentage of projects that underwent extensive value engineering late in the process, such as SAS Phase 2, which announced a [shrinking of its station footprint](<https://www.mta.info/document/167606#page=33>)<sup>\[96\]</sup> in late 2023 with an attendant [cost saving of $1 billion](<https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/>)<sup>\[97\]</sup>.
+It is particularly important to avoid comparison to the soft cost percentage of projects that underwent extensive value engineering late in the process, such as SAS Phase 2, which announced a [shrinking of its station footprint](<https://www.mta.info/document/167606#page=33>)<sup>\[95\]</sup> in late 2023 with an attendant [cost saving of $1 billion](<https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/>)<sup>\[96\]</sup>.
 A late redesign saves hard costs since the larger station does not need to be built, but does not save soft costs since it was already designed and engineered, and may even incur a slight increase in soft costs because they repeat some design and engineering work.
 It is always better to design a project to minimize cost from the start, rather than reengineering it later to cut costs.
 
@@ -563,12 +563,12 @@ Otherwise, it will simply become impossible for the region to build the transit 
 
 ![A photo inside the Freedom Tunnel, showing room for 4 tracks.](<images/img-d4734d4b.jpg>)\
 A photo inside the Freedom Tunnel, showing room for 4 tracks.\
-[Credit: Logan Hicks](<https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/>)<sup>\[98\]</sup>
+[Credit: Logan Hicks](<https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/>)<sup>\[97\]</sup>
 
 The Freedom Tunnel was formerly the 4-track, at-grade West Side Line used by freight, which was then capped by Riverside Park.
-It now contains only 2 tracks, which are used by Amtrak’s Empire Service, and [potentially Metro-North’s Penn Station Access West in the future](<https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of>)<sup>\[99\]</sup>.
+It now contains only 2 tracks, which are used by Amtrak’s Empire Service, and [potentially Metro-North’s Penn Station Access West in the future](<https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of>)<sup>\[98\]</sup>.
 This leaves room for 2 additional tracks that could be used as a linear yard for the Q, essentially just extremely long tail tracks.
-At 2.6 miles long, this is long enough for around 40 trainsets, more than enough to store all [33 trainsets projected to be required for the Q](<https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf#page=46>)<sup>\[100\]</sup> after Phase 2.
+At 2.6 miles long, this is long enough for around 40 trainsets, more than enough to store all [33 trainsets projected to be required for the Q](<https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf#page=46>)<sup>\[99\]</sup> after Phase 2.
 For an MTA that is in desperate need of more storage space,[^19] this could be a golden opportunity.
 
 The MTA may be hesitant to work with Amtrak, who owns the Freedom Tunnel, after their numerous fights over Penn Station Access (PSA) and the New Haven Line.
@@ -583,26 +583,26 @@ Between Broadway and the 129 St highway off-ramp is only ~1000 ft long, three ti
 ### Appendix B: Endless Escalators, or High-Speed Elevator Stations?
 
 If the MTA does not sufficiently reduce station depth, they could embrace elevator stations where capacity permits, as they’re already doing at 116 St in SAS Phase 2.
-The current design for 116 St is elevator-only between the street and a [56 ft-deep](<https://www.mta.info/document/179396#page=20>)<sup>\[101\]</sup> below-platform mezzanine; stairs will be for emergencies only.
+The current design for 116 St is elevator-only between the street and a [56 ft-deep](<https://www.mta.info/document/179396#page=20>)<sup>\[100\]</sup> below-platform mezzanine; stairs will be for emergencies only.
 While this is a mistake at 116 St because the platforms are only [39 ft deep](<https://www.mta.info/document/179396#page=6>)<sup>\[33\]</sup>, adding travel time and complexity unnecessarily, elevators make sense for deeper stations where they speed rather than slow the time to reach the platform.
 
 The proposed SAS West stations are over twice as deep as 116 St, and yet the MTA is proposing huge and expensive shafts of escalator switchbacks that would take [over 5 minutes](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> to reach the platform.
 Transfer volumes will be greater than at 116 St, but that just means more and larger elevators would be needed, like at the busy 168 St station.
 Elevators, in contrast with the proposed escalators, only take [1.6](<https://www.mta.info/document/196361#page=26>)<sup>\[27\]</sup> to [2.1 minutes](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> for transfers in the feasibility study, and even faster elevators can be used.
-At the 236 ft-deep Édouard-Montpetit REM station in Montreal, high-speed elevators traverse 198 ft to the Blue Line in [19 seconds](<https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>)<sup>\[102\]</sup>, door closing to door opening.
+At the 236 ft-deep Édouard-Montpetit REM station in Montreal, high-speed elevators traverse 198 ft to the Blue Line in [19 seconds](<https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>)<sup>\[101\]</sup>, door closing to door opening.
 Furthermore, while this station is not truly elevator-only, the stairs are only for emergency use, similar to 116 St. The elevators are a means of egress in a fire, and the station is NFPA 130-compliant.[^20]
 
 ![A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.](<images/img-0fb4cdcf.jpg>)\
 A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.\
-[Credit: MTA](<https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>)<sup>\[103\]</sup>
+[Credit: MTA](<https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>)<sup>\[102\]</sup>
 
 ![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/img-ed748d24.png>)\
 A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.\
-[Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)<sup>\[104\]</sup>
+[Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)<sup>\[103\]</sup>
 
 [^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
-    The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>)<sup>\[105\]</sup>.\
-    The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>)<sup>\[106\]</sup> and is in 2026 USD, inflation-adjusted using CPI.
+    The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>)<sup>\[104\]</sup>.\
+    The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>)<sup>\[105\]</sup> and is in 2026 USD, inflation-adjusted using CPI.
 
 [^2]: ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7
 
@@ -615,17 +615,17 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 
 [^6]: Platform widths at 72 St, 86 St, and 96 St were measured by ETA.
 
-[^7]: Odenplan station on the Stockholm City Tunnel is [117%](<https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>)<sup>\[107\]</sup> as long as the longest trains that serve it.
+[^7]: Odenplan station on the Stockholm City Tunnel is [117%](<https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>)<sup>\[106\]</sup> as long as the longest trains that serve it.
 
-[^8]: [Page 26](<https://www.mta.info/document/179396#page=26>)<sup>\[75\]</sup> shows an isometric view of the whole 116 St station within the street grid, while [page 25](<https://www.mta.info/document/179396#page=25>)<sup>\[108\]</sup> shows a top-down view showing just the platform within the street grid with a scale bar.
+[^8]: [Page 26](<https://www.mta.info/document/179396#page=26>)<sup>\[74\]</sup> shows an isometric view of the whole 116 St station within the street grid, while [page 25](<https://www.mta.info/document/179396#page=25>)<sup>\[107\]</sup> shows a top-down view showing just the platform within the street grid with a scale bar.
     Synthesizing the information in the two diagrams, one obtains a station box length of approximately 1,000 ft.
 
 [^9]: If the stations can be raised and built cut-and-cover as suggested in [Station Depth](<#station-depth>), then a full length mezzanine is much less problematic, as all of it is already dug out anyways.
     Back-of-house space can be sited at unused parts of the mezzanine.
 
 [^10]: The Transit Costs Project conducted extensive interviews with engineers working on subway and commuter rail tunnel construction in Turkey, and some interviews in China and Spain.
-    For Turkey, this is mentioned in the [Istanbul Case Study](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72>)<sup>\[109\]</sup>.
-    Also see [diagrams of Spanish metro stations](<http://stations.albertguillaumes.cat/>)<sup>\[110\]</sup> created by engineer Albert Guillaumes.
+    For Turkey, this is mentioned in the [Istanbul Case Study](<https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72>)<sup>\[108\]</sup>.
+    Also see [diagrams of Spanish metro stations](<http://stations.albertguillaumes.cat/>)<sup>\[109\]</sup> created by engineer Albert Guillaumes.
 
 [^11]: From an NYU Marron Transit Cost Project interview with a high-ranking MTA employee who has direct knowledge of SAS Phase 1 operations.
 
@@ -633,9 +633,9 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
     For example, 8 Av on the L runs 22 tph with zero tail tracks.
     Slack protection tail tracks (1) are very short and usually needed for 30+ tph, and reversing tail tracks (2) are not needed for 30+ tph, but very often used.
 
-[^13]: NYCT rolling stock can be [parked indefinitely on a 5.6% grade](<https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>)<sup>\[111\]</sup>, as specified in the [R211 Technical Specifications](<https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>)<sup>\[112\]</sup>.
+[^13]: NYCT rolling stock can be [parked indefinitely on a 5.6% grade](<https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>)<sup>\[110\]</sup>, as specified in the [R211 Technical Specifications](<https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>)<sup>\[111\]</sup>.
 
-[^14]: Reported as [21% of the hard costs](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>)<sup>\[93\]</sup>, which maps to 17% of the total cost.
+[^14]: Reported as [21% of the hard costs](<https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>)<sup>\[92\]</sup>, which maps to 17% of the total cost.
     21% \* 100/(100 + 21) = 17%.
 
 [^15]: Projected cost of $7.7 billion \* (1.17/1.43) = $6.3 billion, or a $1.4 billion savings.
@@ -651,7 +651,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 
 [^20]: Baseline NFPA 130 standards allow for elevators to comprise only up to 50% of required emergency egress capacity from the platform to a point of safety.
     Modern stations like REM’s Édouard-Montpetit, often use elevators for all or nearly all the egress capacity from a point of safety to the street.
-    See section 5.3 of NFPA 130: [https://link.nfpa.org/free-access/publications/130/2026](<https://link.nfpa.org/free-access/publications/130/2026>)<sup>\[113\]</sup>
+    See section 5.3 of NFPA 130: [https://link.nfpa.org/free-access/publications/130/2026](<https://link.nfpa.org/free-access/publications/130/2026>)<sup>\[112\]</sup>
 
 ## Sources
 
@@ -716,58 +716,57 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 59. <https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external> (not archived)
 60. <https://www.issmge.org/uploads/publications/6/20/2014_075.pdf> (archived [May 12, 2024](<https://web.archive.org/web/20240512173015/https://www.issmge.org/uploads/publications/6/20/2014_075.pdf>))
 61. <https://www.rocksoil.com/pdf/118_r.pdf> (archived [November 26, 2024](<https://web.archive.org/web/20241126224308/https://www.rocksoil.com/pdf/118_r.pdf>))
-62. <http://doi.org/10.1016/j.cscm.2025.e05615> (not archived)
-63. <https://doi.org/10.1016/j.cscm.2025.e05615> (not archived)
-64. <https://www.mta.info/document/196361#page=39> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=39>))
-65. <https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137> (not archived)
-66. <https://transitcosts.com/a-better-billion.html> (archived [September 8, 2026](<https://web.archive.org/web/20260908151113/https://transitcosts.com/a-better-billion.html>))
-67. <https://www.mta.info/document/196361#page=24> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=24>))
-68. <https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes> (archived [December 6, 2025](<https://web.archive.org/web/20251206053156/https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes>))
-69. <https://www.mta.info/document/131306#page=12> (archived [August 21, 2026](<https://web.archive.org/web/20260821134859id_/https://www.mta.info/document/131306#page=12>))
-70. <https://www.mta.info/document/179396> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244/https://www.mta.info/document/179396>))
-71. <https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/> (archived [May 10, 2026](<https://web.archive.org/web/20260510175415/https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>))
-72. <https://www.mta.info/document/114626#page=5> (archived [May 18, 2026](<https://web.archive.org/web/20260518003240id_/https://www.mta.info/document/114626#page=5>))
-73. <https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36> (archived [September 9, 2026](<https://web.archive.org/web/20260909150154id_/https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36>))
-74. <https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370> (archived [September 9, 2026](<https://web.archive.org/web/20260909150154id_/https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>))
-75. <https://www.mta.info/document/179396#page=26> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=26>))
-76. <https://www.mta.info/document/196361#page=25> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=25>))
-77. <https://www.mta.info/document/196361#page=27> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=27>))
-78. <https://www.mta.info/document/196361#page=29> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=29>))
-79. <https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67> (archived [May 12, 2026](<https://web.archive.org/web/20260512184237id_/https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>))
-80. <https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/> (archived [August 17, 2026](<https://web.archive.org/web/20260817144244/https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>))
-81. <https://www.mta.info/document/179396#page=9> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=9>))
-82. <https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67> (archived [December 5, 2025](<https://web.archive.org/web/20251205025049id_/https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67>))
-83. <https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/> (archived [February 23, 2026](<https://web.archive.org/web/20260223063234/https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/>))
-84. <https://www.mta.info/document/172206#page=6> (archived [May 19, 2026](<https://web.archive.org/web/20260519070421id_/https://www.mta.info/document/172206#page=6>))
-85. <https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22> (archived [April 11, 2026](<https://web.archive.org/web/20260411224025/https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>))
-86. <https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts> (archived [September 9, 2026](<https://web.archive.org/web/20260909010353/https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts>))
-87. <https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91> (archived [August 27, 2026](<https://web.archive.org/web/20260827040025id_/https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>))
-88. <https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44> (archived [July 11, 2026](<https://web.archive.org/web/20260711145153id_/https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>))
-89. <https://www.youtube.com/live/syjWBXSAbyM?t=2940s> (archived [August 21, 2026](<https://web.archive.org/web/20260821170758/https://www.youtube.com/live/syjWBXSAbyM?t=2940s>))
-90. <https://www.mlit.go.jp/common/001382429.pdf> (archived [November 12, 2025](<https://web.archive.org/web/20251112044545/https://www.mlit.go.jp/common/001382429.pdf>))
-91. <https://www.mta.info/document/196361#page=36> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=36>))
-92. <https://media.discordapp.net/attachments/1299887947335602177/1465474065421828273/Screenshot_2026-01-26_at_5.23.25_PM.png?ex=69793c94&is=6977eb14&hm=09f30fcd5aa50cbdcea00cf5c1c9586fe26c6d454275dbd35942a7febdac7a58> (not archived)
-93. <https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is> (archived [September 8, 2026](<https://web.archive.org/web/20260908151113/https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>))
-94. <https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125/https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>))
-95. <https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62> (archived [July 11, 2025](<https://web.archive.org/web/20250711075929id_/https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62>))
-96. <https://www.mta.info/document/167606#page=33> (archived [May 18, 2026](<https://web.archive.org/web/20260518045753id_/https://www.mta.info/document/167606#page=33>))
-97. <https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/> (archived [June 23, 2026](<https://web.archive.org/web/20260623220918/https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/>))
-98. <https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/> (not archived)
-99. <https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of> (archived [May 18, 2026](<https://web.archive.org/web/20260518115446/https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of>))
-100. <https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf#page=46> (not archived)
-101. <https://www.mta.info/document/179396#page=20> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=20>))
-102. <https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing> (archived [April 13, 2026](<https://web.archive.org/web/20260413015629/https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>))
-103. <https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg> (archived [February 7, 2026](<https://web.archive.org/web/20260207122304/https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>))
-104. <https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png> (archived [August 20, 2026](<https://web.archive.org/web/20260820113035/https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>))
-105. <https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188> (archived [May 31, 2026](<https://web.archive.org/web/20260531195109id_/https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>))
-106. <https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125/https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>))
-107. <https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40> (archived [May 12, 2026](<https://web.archive.org/web/20260512184232id_/https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>))
-108. <https://www.mta.info/document/179396#page=25> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=25>))
-109. <https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125id_/https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72>))
-110. <http://stations.albertguillaumes.cat/> (archived [August 22, 2026](<https://web.archive.org/web/20260822120640/http://stations.albertguillaumes.cat/>))
-111. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348id_/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>))
-112. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>))
-113. <https://link.nfpa.org/free-access/publications/130/2026> (archived [December 23, 2025](<https://web.archive.org/web/20251223020221/https://link.nfpa.org/free-access/publications/130/2026>))
+62. <https://doi.org/10.1016/j.cscm.2025.e05615> (not archived)
+63. <https://www.mta.info/document/196361#page=39> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=39>))
+64. <https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137> (not archived)
+65. <https://transitcosts.com/a-better-billion.html> (archived [September 8, 2026](<https://web.archive.org/web/20260908151113/https://transitcosts.com/a-better-billion.html>))
+66. <https://www.mta.info/document/196361#page=24> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=24>))
+67. <https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes> (archived [December 6, 2025](<https://web.archive.org/web/20251206053156/https://www.ohla-usa.com/projects/second-avenue-subway-72nd-street-station-fit-out-finishes>))
+68. <https://www.mta.info/document/131306#page=12> (archived [August 21, 2026](<https://web.archive.org/web/20260821134859id_/https://www.mta.info/document/131306#page=12>))
+69. <https://www.mta.info/document/179396> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244/https://www.mta.info/document/179396>))
+70. <https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/> (archived [May 10, 2026](<https://web.archive.org/web/20260510175415/https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>))
+71. <https://www.mta.info/document/114626#page=5> (archived [May 18, 2026](<https://web.archive.org/web/20260518003240id_/https://www.mta.info/document/114626#page=5>))
+72. <https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36> (archived [September 9, 2026](<https://web.archive.org/web/20260909150154id_/https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=36>))
+73. <https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370> (archived [September 9, 2026](<https://web.archive.org/web/20260909150154id_/https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf#page=370>))
+74. <https://www.mta.info/document/179396#page=26> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=26>))
+75. <https://www.mta.info/document/196361#page=25> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=25>))
+76. <https://www.mta.info/document/196361#page=27> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=27>))
+77. <https://www.mta.info/document/196361#page=29> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=29>))
+78. <https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67> (archived [May 12, 2026](<https://web.archive.org/web/20260512184237id_/https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf#page=67>))
+79. <https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/> (archived [August 17, 2026](<https://web.archive.org/web/20260817144244/https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>))
+80. <https://www.mta.info/document/179396#page=9> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=9>))
+81. <https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67> (archived [December 5, 2025](<https://web.archive.org/web/20251205025049id_/https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf#page=67>))
+82. <https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/> (archived [February 23, 2026](<https://web.archive.org/web/20260223063234/https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/>))
+83. <https://www.mta.info/document/172206#page=6> (archived [May 19, 2026](<https://web.archive.org/web/20260519070421id_/https://www.mta.info/document/172206#page=6>))
+84. <https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22> (archived [April 11, 2026](<https://web.archive.org/web/20260411224025/https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22>))
+85. <https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts> (archived [September 9, 2026](<https://web.archive.org/web/20260909010353/https://www.nycsubway.org/wiki/The_Steinway_Tunnels_(1960)#Ground_Breaking_Finally_Starts>))
+86. <https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91> (archived [August 27, 2026](<https://web.archive.org/web/20260827040025id_/https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>))
+87. <https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44> (archived [July 11, 2026](<https://web.archive.org/web/20260711145153id_/https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>))
+88. <https://www.youtube.com/live/syjWBXSAbyM?t=2940s> (archived [August 21, 2026](<https://web.archive.org/web/20260821170758/https://www.youtube.com/live/syjWBXSAbyM?t=2940s>))
+89. <https://www.mlit.go.jp/common/001382429.pdf> (archived [November 12, 2025](<https://web.archive.org/web/20251112044545/https://www.mlit.go.jp/common/001382429.pdf>))
+90. <https://www.mta.info/document/196361#page=36> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=36>))
+91. <https://media.discordapp.net/attachments/1299887947335602177/1465474065421828273/Screenshot_2026-01-26_at_5.23.25_PM.png?ex=69793c94&is=6977eb14&hm=09f30fcd5aa50cbdcea00cf5c1c9586fe26c6d454275dbd35942a7febdac7a58> (not archived)
+92. <https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is> (archived [September 8, 2026](<https://web.archive.org/web/20260908151113/https://transitcosts.com/transit-costs-study-final-report/#:~:text=Subway%2C%20it%20was-,21%25,-.%20Moreover%2C%20this%20is>))
+93. <https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125/https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf>))
+94. <https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62> (archived [July 11, 2025](<https://web.archive.org/web/20250711075929id_/https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62>))
+95. <https://www.mta.info/document/167606#page=33> (archived [May 18, 2026](<https://web.archive.org/web/20260518045753id_/https://www.mta.info/document/167606#page=33>))
+96. <https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/> (archived [June 23, 2026](<https://web.archive.org/web/20260623220918/https://nypost.com/2023/12/08/metro/mta-needs-extra-1b-for-non-pedestrian-expansions-as-drivers-face-congestion-fee/>))
+97. <https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/> (not archived)
+98. <https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of> (archived [May 18, 2026](<https://web.archive.org/web/20260518115446/https://www.mta.info/press-release/icymi-governor-hochul-proposes-major-investment-hudson-valley-rail-service-part-of>))
+99. <https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf#page=46> (not archived)
+100. <https://www.mta.info/document/179396#page=20> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=20>))
+101. <https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing> (archived [April 13, 2026](<https://web.archive.org/web/20260413015629/https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>))
+102. <https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg> (archived [February 7, 2026](<https://web.archive.org/web/20260207122304/https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>))
+103. <https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png> (archived [August 20, 2026](<https://web.archive.org/web/20260820113035/https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>))
+104. <https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188> (archived [May 31, 2026](<https://web.archive.org/web/20260531195109id_/https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>))
+105. <https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125/https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>))
+106. <https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40> (archived [May 12, 2026](<https://web.archive.org/web/20260512184232id_/https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf#page=40>))
+107. <https://www.mta.info/document/179396#page=25> (archived [May 18, 2026](<https://web.archive.org/web/20260518003244id_/https://www.mta.info/document/179396#page=25>))
+108. <https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72> (archived [August 19, 2026](<https://web.archive.org/web/20260819134125id_/https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf#page=72>))
+109. <http://stations.albertguillaumes.cat/> (archived [August 22, 2026](<https://web.archive.org/web/20260822120640/http://stations.albertguillaumes.cat/>))
+110. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348id_/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50>))
+111. <https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf> (archived [April 5, 2023](<https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf>))
+112. <https://link.nfpa.org/free-access/publications/130/2026> (archived [December 23, 2025](<https://web.archive.org/web/20251223020221/https://link.nfpa.org/free-access/publications/130/2026>))
 
 ## Contributors
 
