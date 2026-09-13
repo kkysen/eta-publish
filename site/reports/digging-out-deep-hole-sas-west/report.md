@@ -281,7 +281,7 @@ Credit: Seungho Kang, Joint Transit Association
 
 Techniques like these can all be combined depending on exact site specifics.
 For example, the Heping South Street Station on Line 3 of the Shenyang, China Metro was constructed in similarly challenging soil conditions with a high water table.
-There, engineers mixed traditional cut-and-cover with a [pipe roof method called SP-TS](<https://www.sciencedirect.com/science/article/pii/S2214509525014135>)<sup>\[62\]</sup>, very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
+There, engineers mixed traditional cut-and-cover with a [pipe roof method called SP-TS](<http://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>, very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
 
 ![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/img-60a0a749.png>)\
 Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.\
@@ -716,7 +716,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 59. <https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external> (not archived)
 60. <https://www.issmge.org/uploads/publications/6/20/2014_075.pdf> (archived [May 12, 2024](<https://web.archive.org/web/20240512173015/https://www.issmge.org/uploads/publications/6/20/2014_075.pdf>))
 61. <https://www.rocksoil.com/pdf/118_r.pdf> (archived [November 26, 2024](<https://web.archive.org/web/20241126224308/https://www.rocksoil.com/pdf/118_r.pdf>))
-62. <https://www.sciencedirect.com/science/article/pii/S2214509525014135> (not archived)
+62. <http://doi.org/10.1016/j.cscm.2025.e05615> (not archived)
 63. <https://doi.org/10.1016/j.cscm.2025.e05615> (not archived)
 64. <https://www.mta.info/document/196361#page=39> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=39>))
 65. <https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137> (not archived)
