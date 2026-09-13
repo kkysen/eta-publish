@@ -5547,7 +5547,7 @@
                     }
                   },
                   "link": {
-                    "url": "https://www.sciencedirect.com/science/article/pii/S2214509525014135"
+                    "url": "http://doi.org/10.1016/j.cscm.2025.e05615"
                   },
                   "underline": true
                 }
@@ -14445,7 +14445,7 @@
       }
     }
   },
-  "modifiedTime": "2026-09-13T19:25:41.591Z",
+  "modifiedTime": "2026-09-13T20:00:11.087Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [

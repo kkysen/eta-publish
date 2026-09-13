@@ -281,7 +281,7 @@ Seoul Line 9’s underground Express Bus Terminal station combined CAM and TRCM,
 
 Techniques like these can all be combined depending on exact site specifics.
 For example, the Heping South Street Station on Line 3 of the Shenyang, China Metro was constructed in similarly challenging soil conditions with a high water table.
-There, engineers mixed traditional cut-and-cover with a #link("https://www.sciencedirect.com/science/article/pii/S2214509525014135")[pipe roof method called SP-TS]#super[#link(<src62>)[\[62\]]], very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
+There, engineers mixed traditional cut-and-cover with a #link("http://doi.org/10.1016/j.cscm.2025.e05615")[pipe roof method called SP-TS]#super[#link(<src62>)[\[62\]]], very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
 
 #figure(
   capped_image("images/img-60a0a749.png", alt: "Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically."),
@@ -699,7 +699,7 @@ See section 5.3 of NFPA 130: #link("https://link.nfpa.org/free-access/publicatio
 + #link("https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external")[https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external] (not archived) <src59>
 + #link("https://www.issmge.org/uploads/publications/6/20/2014_075.pdf")[https://www.issmge.org/uploads/publications/6/20/2014\_075.pdf] (archived #link("https://web.archive.org/web/20240512173015/https://www.issmge.org/uploads/publications/6/20/2014_075.pdf")[May 12, 2024]) <src60>
 + #link("https://www.rocksoil.com/pdf/118_r.pdf")[https://www.rocksoil.com/pdf/118\_r.pdf] (archived #link("https://web.archive.org/web/20241126224308/https://www.rocksoil.com/pdf/118_r.pdf")[November 26, 2024]) <src61>
-+ #link("https://www.sciencedirect.com/science/article/pii/S2214509525014135")[https://www.sciencedirect.com/science/article/pii/S2214509525014135] (not archived) <src62>
++ #link("http://doi.org/10.1016/j.cscm.2025.e05615")[http://doi.org/10.1016/j.cscm.2025.e05615] (not archived) <src62>
 + #link("https://doi.org/10.1016/j.cscm.2025.e05615")[https://doi.org/10.1016/j.cscm.2025.e05615] (not archived) <src63>
 + #link("https://www.mta.info/document/196361#page=39")[https://www.mta.info/document/196361\#page=39] (archived #link("https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=39")[May 18, 2026]) <src64>
 + #link("https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137")[https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137] (not archived) <src65>
