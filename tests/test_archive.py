@@ -228,6 +228,96 @@ def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
     assert missing(doc) == ["https://a.example/1"]
 
 
+# ---- asking the replay before the index ------------------------------
+
+
+class Replaying(requests.Session):
+    """A replay that has `captures`, newest last, each with the status it serves.
+
+    The index answers separately, from `rows`, so a test can say what each of
+    the two would say and check which one was believed.
+    """
+
+    def __init__(self, captures: list[tuple[str, int]], rows: object = None) -> None:
+        super().__init__()
+        self.captures = captures
+        self.rows = rows
+        self.index_asked = 0
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        response = requests.Response()
+        response.url = str(url)
+        asked = str(url)
+        if asked.startswith(archive.INDEX):
+            self.index_asked += 1
+            response.status_code = 200
+            response._content = json.dumps(self.rows or [["timestamp"]]).encode()
+            return response
+        if not self.captures:
+            response.status_code = 404
+            return response
+        stamp, status = self.captures[-1]
+        if f"/web/{archive.NEWEST}/" in asked:
+            response.status_code = 302
+            response.headers["location"] = f"{archive.REPLAY}/{stamp}/whatever"
+            return response
+        response.status_code = status
+        return response
+
+
+def test_a_capture_the_replay_serves_is_taken_without_asking_the_index(keyed: None) -> None:
+    """Two `HEAD`s at 200 ms beat one query that took 0.5s to 31s."""
+    doc = cites("https://a.example/1")
+    session = Replaying([("20240503123456", 200)])
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
+    assert session.index_asked == 0
+
+
+def test_the_snapshot_is_the_url_this_publishes(keyed: None) -> None:
+    """Built from the timestamp, not taken from the redirect.
+
+    The two differ over percent-encoding, and the record is committed and
+    compared against a fresh build byte for byte.
+    """
+    doc = cites("https://a.example/1")
+    archive.capture(doc, session=Replaying([("20240503123456", 200)]))
+    assert doc.archives["https://a.example/1"].snapshot == (
+        "https://web.archive.org/web/20240503123456/https://a.example/1"
+    )
+
+
+def test_a_capture_that_is_not_the_page_falls_back_to_the_index(keyed: None) -> None:
+    """The NYT's newest capture replays `403`, and the newest that was the page
+    is a different question only the index can answer."""
+    doc = cites("https://a.example/1")
+    session = Replaying([("20260913083748", 403)], rows=[["timestamp"], ["20260101035028"]])
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert doc.archives["https://a.example/1"].timestamp == "20260101035028"
+    assert session.index_asked == 1
+
+
+def test_no_capture_at_all_is_confirmed_with_the_index(
+    keyed: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A `404` from the replay is not taken as the answer.
+
+    Nothing is written down without the index saying so, because `not archived`
+    is what a report publishes.
+    """
+    refused = Archived(timestamp="20260913", error="no")
+
+    def refuse(*args: object) -> Archived:
+        return refused
+
+    monkeypatch.setattr(archive, "_submit", refuse)
+    doc = cites("https://a.example/1")
+    session = Replaying([])
+    archive.capture(doc, session=session)
+    assert session.index_asked == 1
+
+
 # ---- not asking again about the same nothing -------------------------
 
 
@@ -256,9 +346,10 @@ def test_a_source_with_no_capture_is_not_looked_up_again_the_same_week(unkeyed: 
     doc = cites("https://a.example/1")
     session = Counting(200, [["timestamp"]])
     archive.capture(doc, session=session)
-    assert session.asked == 1
+    asked = session.asked
+    assert asked
     archive.capture(cites("https://a.example/1"), session=session)
-    assert session.asked == 1
+    assert session.asked == asked, "asked again inside the week"
 
 
 def test_it_is_looked_up_again_once_the_week_is_up(
@@ -267,9 +358,10 @@ def test_it_is_looked_up_again_once_the_week_is_up(
     doc = cites("https://a.example/1")
     session = Counting(200, [["timestamp"]])
     archive.capture(doc, session=session)
+    asked = session.asked
     monkeypatch.setattr(archive, "LOOKUP_CACHE_DAYS", 0)
     archive.capture(cites("https://a.example/1"), session=session)
-    assert session.asked == 2
+    assert session.asked > asked
 
 
 def test_what_the_cache_holds_back_is_still_counted_as_unarchived(unkeyed: None) -> None:
@@ -290,8 +382,9 @@ def test_being_told_to_slow_down_is_not_cached(unkeyed: None) -> None:
     doc = cites("https://a.example/1")
     session = Counting(429)
     archive.capture(doc, session=session)
+    asked = session.asked
     archive.capture(cites("https://a.example/1"), session=session)
-    assert session.asked == 2
+    assert session.asked > asked
 
 
 def test_with_keys_nothing_is_held_back(keyed: None) -> None:
@@ -313,7 +406,7 @@ def test_a_cache_that_cannot_be_read_is_an_empty_one(
     monkeypatch.setenv(archive.ARCHIVE_CACHE, str(broken))
     session = Counting(200, [["timestamp"]])
     archive.capture(cites("https://a.example/1"), session=session)
-    assert session.asked == 1
+    assert session.asked
 
 
 # ---- a link to a page of a PDF ---------------------------------------
