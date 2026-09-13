@@ -22,7 +22,9 @@ token.json
 /site/**/report.pdf
 /site/**/template.typ
 /site/index.html
+/site/robots.txt
 /tests/fixture/**/images/
 /tests/fixture/**/report.pdf
 /tests/fixture/**/template.typ
 /tests/fixture/index.html
+/tests/fixture/robots.txt

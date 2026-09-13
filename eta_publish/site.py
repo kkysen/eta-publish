@@ -444,6 +444,15 @@ def index_page(site: Site) -> str:
     page: list[Piece] = [
         htpy.meta(charset="utf-8"),
         htpy.meta(name="viewport", content="width=device-width, initial-scale=1"),
+        # Until the reports are published, nothing here should be findable.
+        # `robots.txt` only asks a crawler not to fetch a page,
+        # which leaves one already indexed where it is;
+        # `noindex` is what takes it back out,
+        # and it is the only one of the two that a project page can carry at all,
+        # since `robots.txt` is read from the root of the host
+        # and these pages are served from a path under it.
+        # Remove this, and `site/robots.txt`, when the reports go out.
+        htpy.meta(name="robots", content="noindex, nofollow"),
         tag.title["ETA report previews"],
         tag.style[Markup(f"\n{INDEX_CSS}")],
         tag.h1["ETA report previews"],
