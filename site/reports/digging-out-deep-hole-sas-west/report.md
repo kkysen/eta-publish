@@ -29,6 +29,8 @@ August 19, 2026
   - `img-ed748d24`: A station diagram of Montreal’s Édouard-Montpetit station, showing the...
 - 17 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 3 comment threads still open on this tab
+- 1 source still carries the tag it was copied with; take it off the link in the doc:
+  - `utm_source=chatgpt.com` on `https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill`
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
 
