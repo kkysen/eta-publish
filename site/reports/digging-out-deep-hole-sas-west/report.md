@@ -29,8 +29,6 @@ August 19, 2026
   - `img-ed748d24`: A station diagram of Montreal’s Édouard-Montpetit station, showing the...
 - 17 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 3 comment threads still open on this tab
-- 1 source still carries the tag it was copied with; take it off the link in the doc:
-  - `utm_source=chatgpt.com` on `https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill`
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
 
@@ -228,7 +226,7 @@ Diaphragm walls can be constructed with a water table as high as 3 ft below grou
 #### Existing Lines
 
 Moving to cheaper, shallower stations still requires contending with poor ground conditions and potential impacts to existing lines, but even here, the current plans are excessively conservative.
-Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)<sup>\[40\]</sup>) TBM is required between tunneling and the existing stations, far less than what has been proposed.
+Generally, only around 1.5-2x the diameter of the (in this case, [22 ft](<https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>)<sup>\[40\]</sup>) TBM is required between tunneling and the existing stations, far less than what has been proposed.
 With underpinning, this separation can be reduced even further to mere feet below existing structures, even in watery sand.[^5]
 
 ![The station and tunnel profile from the feasibility study, calling for significant separation between new and existing stations, increasing transfer times.](<images/SAS_West_-_Tunnel_Profile_-_pg_18.screenshot-af4262b6.png>)\
@@ -696,7 +694,7 @@ A station diagram of Montreal’s Édouard-Montpetit station, showing the elevat
 37. <https://www.mdpi.com/2075-5309/14/6/1678> (archived [June 6, 2024](<https://web.archive.org/web/20240606142321/https://www.mdpi.com/2075-5309/14/6/1678>))
 38. <https://www.mta.info/document/22201#page=12> (archived [December 31, 2025](<https://web.archive.org/web/20251231130623id_/https://www.mta.info/document/22201#page=12>))
 39. <https://archive.org/details/slurrywallsasstr0000xant/page/658/mode/2up> (not archived)
-40. <https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill> (archived [May 18, 2026](<https://web.archive.org/web/20260518070114/https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract?utm_source=chatgpt.com#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>))
+40. <https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill> (archived [May 18, 2026](<https://web.archive.org/web/20260518070114/https://www.masstransitmag.com/rail/infrastructure/press-release/55310767/mta-headquarters-governor-hochul-announces-second-avenue-subway-phase-2-moving-forward-with-award-of-tunneling-contract#:~:text=machines%20equipped%20with-,22%2Dfoot,-diamond%2Dstudded%20drill>))
 41. <https://www.mta.info/document/196361#page=18> (archived [May 18, 2026](<https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=18>))
 42. <https://mp.weixin.qq.com/s/nJyWc3B0LYJPGPE1Up5iCA> (not archived)
 43. <https://mp.weixin.qq.com/s/4l7RbnS01yLp1p2Zdee_yA#:~:text=%E5%87%80%E8%B7%9D%E4%BB%85-,0.6m,-%EF%BC%8C%E8%80%83%E8%99%91%E6%97%A2%E6%9C%89%E7%AB%99> (not archived)
