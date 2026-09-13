@@ -2,9 +2,9 @@
 
 #show: report.with(
   title: "Too Damn Loud: Announcements on NYC Transit are Out of Control",
-  short: "",
-  phase: "Compositing",
-  dateline: "",
+  short: "The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be.",
+  phase: "",
+  dateline: "September 9, 2026",
   contributors: ("Madison Feinberg", "Elijah Fischer", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
@@ -14,11 +14,9 @@
     [the image #raw("img-831248b1") has no #raw("Credit:") line],
     [the image #raw("img-b17aa21a") has no #raw("Credit:") line],
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-831248b1")], [#raw("img-b17aa21a"): PNG SVG], )],
-    [25 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [24 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [2 comment threads still open on this tab],
-    [the #raw("Header") section has no #raw("Publish Due Date:") line],
-    [the #raw("Header") section has no #raw("Short:") line],
-    [the #raw("Header") section has no #raw("SEO Description:") line],
+    [#raw("SEO Description:") is 363 characters, over the 300 a search result shows:#quote(block: true)[The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I#strike[t's time to stop the cacophony, and let riders travel in peace.]]],
   ),
 )
 
