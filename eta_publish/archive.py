@@ -21,8 +21,10 @@ import os
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 
 import requests
 
@@ -95,6 +97,114 @@ with no archive forever.
 
 POLL_EVERY = 5
 
+LOOKUP_CACHE_DAYS = 7
+"""How long a lookup that found nothing stands before it is asked again.
+
+What changes a `no capture` answer is somebody else archiving the page, which
+happens on the scale of weeks if it happens at all. A week of not re-asking is
+20-odd lookups a build does not make, and the cost of being a week late to cite
+a capture somebody else made is not a cost a reader can see.
+"""
+
+
+ARCHIVE_CACHE = "ETA_ARCHIVE_CACHE"
+"""Where to keep the cache instead, named like `ETA_TOKEN` and for tests."""
+
+
+def archive_cache_path() -> Path:
+    """Where the lookups that found nothing are remembered.
+
+    Outside the repository and never committed, because it is not a fact about
+    the report: `archives.json` says where each source is archived, and a source
+    with no capture has no entry there either way. So this can expire, be
+    thrown away, or be absent on a fresh clone, and the build writes the same
+    `site/` regardless. That is the whole reason it is a cache and not a record.
+
+    Read on each call rather than resolved once, so a test can point it
+    somewhere else.
+    """
+    override = os.environ.get(ARCHIVE_CACHE)
+    if override:
+        return Path(override)
+    root = os.environ.get("XDG_CACHE_HOME")
+    return (Path(root) if root else Path.home() / ".cache") / "eta-publish" / "archive-lookups.json"
+
+
+def _cached_nothing() -> dict[str, str]:
+    """The sources looked up and not found, by the date each was looked up.
+
+    A cache nothing can read is an empty one: a truncated write, a file from an
+    older layout, a directory somebody's backup tool replaced. None of them are
+    worth failing a build over, because the answer to all of them is to ask the
+    index again.
+    """
+    path = archive_cache_path()
+    try:
+        loaded = json.loads(path.read_text())
+    except OSError, ValueError:
+        return {}
+    if not isinstance(loaded, dict):
+        return {}
+    return {url: str(date) for url, date in loaded.items() if isinstance(url, str)}
+
+
+_REMEMBERING = Lock()
+"""Held across the read and the write, because the file is one and the reports are not.
+
+Reports are built in parallel, so three of these finish at once, and each one
+reads the file, adds its own sources and writes the whole thing back. Unheld,
+the last write wins and the other two reports' sources are simply not in the
+cache: the first run of this looked up 3 sources and then 21, and the file it
+left held 21.
+
+Like `_SIGNING_IN` in `fetch.py`, and for the same reason: a cache does not make
+a read-modify-write atomic.
+"""
+
+
+def _remember_nothing(urls: list[str]) -> None:
+    """Write down that these were looked up today and had no capture.
+
+    Only the ones asked about on this build are refreshed; the rest keep the
+    date they had, so they expire when they were going to. Except the ones
+    already expired, which are dropped: they are no longer holding anything
+    back, and a file that kept every URL a draft ever cited would grow forever.
+
+    Sorted, like every other file here, so that looking at it is possible.
+    """
+    if not urls:
+        return
+    with _REMEMBERING:
+        known = {url: date for url, date in _cached_nothing().items() if _fresh(date)}
+        known.update(dict.fromkeys(urls, today()))
+        path = archive_cache_path()
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            # Written beside it and moved over it, so nothing ever reads this
+            # half-written. A torn read would parse as nothing, and nothing is
+            # what the next write would then build on: one interrupted write
+            # would throw the whole cache away rather than one entry.
+            temp = path.with_suffix(".writing")
+            temp.write_text(json.dumps(known, indent=2, sort_keys=True) + "\n")
+            temp.replace(path)
+        except OSError:
+            # A cache that cannot be written is a build that is slower than it
+            # needs to be, which is not a build that should fail.
+            pass
+
+
+def _fresh(date: str) -> bool:
+    """Whether a lookup made on `date` still stands.
+
+    A date nothing can read has not been made recently, so the source is asked
+    about again, which is the harmless direction.
+    """
+    try:
+        when = datetime.strptime(date, "%Y%m%d").replace(tzinfo=UTC)
+    except ValueError:
+        return False
+    return (datetime.now(UTC) - when).days < LOOKUP_CACHE_DAYS
+
 
 def read_archive_index(dest: Path, doc: Document) -> None:
     """Tell `doc` which of its sources already have a capture.
@@ -158,6 +268,24 @@ def missing(doc: Document) -> list[str]:
     return [url for url in _documents(doc) if url not in doc.archives]
 
 
+def to_ask(doc: Document) -> list[str]:
+    """The ones to look up on this build: `missing`, less those asked about lately.
+
+    The cache is only about a build with no keys. There, a source with no
+    capture is left exactly as it was, so asking about it again tomorrow costs a
+    slow lookup to write down the same nothing. With keys the same source is
+    submitted instead, gets an entry either way, and leaves `missing` for good,
+    so there is nothing to remember and this is `missing`.
+
+    `missing` is still what the build reports on, so the count a person reads is
+    how many sources have no capture, not how many were asked about today.
+    """
+    if have_keys():
+        return missing(doc)
+    known = _cached_nothing()
+    return [url for url in missing(doc) if not _fresh(known.get(url, ""))]
+
+
 def _documents(doc: Document) -> list[str]:
     """Every source as the thing that gets captured, deduplicated, in order."""
     seen: dict[str, None] = {}
@@ -194,16 +322,16 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[
     recording it as one would mean a rate limit hit on a Tuesday permanently
     left a source with no archive.
     """
-    wanted = missing(doc)
-    if not wanted:
-        return 0, 0
     http = session or requests.Session()
     # Looking up what the archive already holds needs no account, so a build
     # without keys still does the half it can: most of what a report cites is
     # already in the Wayback Machine, put there by somebody else.
     headers = _keys()
+    wanted = to_ask(doc)
+    if not wanted:
+        return 0, 0
 
-    def archive(url: str) -> tuple[Archived | None, bool]:
+    def archive(url: str) -> Lookup:
         return _archive(http, headers, url)
 
     with ThreadPoolExecutor(max_workers=MAX_AT_ONCE) as pool:
@@ -211,16 +339,17 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[
     # Written in document order rather than as each answer arrives, so that two
     # builds that captured the same sources write the same file.
     found = submitted = 0
-    for url, (archived, already) in zip(wanted, results, strict=True):
-        if archived is None:
+    for url, result in zip(wanted, results, strict=True):
+        if result.archived is None:
             continue
-        doc.archives[url] = archived
-        if archived.error:
+        doc.archives[url] = result.archived
+        if result.archived.error:
             continue
-        if already:
+        if result.already:
             found += 1
         else:
             submitted += 1
+    _remember_nothing([url for url, result in zip(wanted, results, strict=True) if result.nothing])
     return found, submitted
 
 
@@ -242,25 +371,34 @@ def have_keys() -> bool:
     return _keys() is not None
 
 
-def _archive(
-    http: requests.Session, headers: dict[str, str] | None, url: str
-) -> tuple[Archived | None, bool]:
-    """One source: the capture it already has, or a new one, or why neither.
+@dataclass(frozen=True)
+class Lookup:
+    """What asking about one source came to.
 
-    `None` where nothing was learned: the service declined to answer, or it has
-    no capture and there are no keys to ask for one. Neither is a fact about
-    the page, so neither is written down, and the next build asks again.
+    `archived` is what to write down, and `None` where nothing was learned.
+    `already` says the capture was there to be found, which is the half of this
+    that needs no account.
 
-    The second value says whether the capture was already there, which is the
-    half of this that needs no account.
+    `nothing` is the third case and the reason this is not a pair: the index
+    answered, and the answer was that there is no capture. That is worth
+    remembering for a week so the next build does not ask again, and it is not
+    the same as an answer that never came.
     """
+
+    archived: Archived | None = None
+    already: bool = False
+    nothing: bool = False
+
+
+def _archive(http: requests.Session, headers: dict[str, str] | None, url: str) -> Lookup:
+    """One source: the capture it already has, or a new one, or why neither."""
     try:
         found = _patiently(lambda: _existing(http, url))
         if found is not None:
-            return found, True
+            return Lookup(found, already=True)
         if headers is None:
-            return None, False
-        return _submit(http, headers, url), False
+            return Lookup(nothing=True)
+        return Lookup(_submit(http, headers, url))
     except Busy, requests.RequestException:
         # Nothing about the source. A read that timed out, a connection that
         # dropped, a name that would not resolve: all of them are about getting
@@ -272,7 +410,10 @@ def _archive(
         #
         # A source is written down as uncapturable only when Save Page Now says
         # so about that URL, which `_submit` is what hears.
-        return None, False
+        #
+        # Not remembered either, for the same reason: a cache of this would be a
+        # week of not asking about a page nothing ever learned anything about.
+        return Lookup()
 
 
 class Busy(RuntimeError):
