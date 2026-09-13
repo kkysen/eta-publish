@@ -262,17 +262,24 @@ def built(name: str, path: str, warnings: list[Notice], console: Console) -> Ren
     return Group(heading, *(notice(warning, console) for warning in warnings))
 
 
-def failed(name: str, error: str) -> RenderableType:
+def failed(name: str, error: str, console: Console | None = None) -> RenderableType:
     """One report that was not built, and the reason, which is the message.
 
     Said here rather than counted here and explained elsewhere: a failure
     named twice, once with its reason and once without, is one failure read
     twice.
+
+    The reason is prose this codebase wrote, so a tab id or a path it spells
+    in backticks is coloured like any other value, red sentence around it and
+    cyan value in it. What says this is a failure is the ✗ and the name, not
+    the colour of every word under them.
     """
+    console = console or for_stream()
     heading = Text()
     heading.append("✗ ", style="bold red")
     heading.append(name, style="bold")
-    return Group(heading, _hanging(Text("  "), Text(error, style="red")))
+    said = _spans(_backticked(error), console, plain="red")
+    return Group(heading, _hanging(Text("  "), said))
 
 
 def note(said: str, console: Console | None = None, code: bool = True) -> Text:
