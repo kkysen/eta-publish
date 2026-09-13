@@ -114,23 +114,39 @@ def about(name: str) -> Iterator[None]:
         _ABOUT.reset(token)
 
 
-def _said(said: str) -> str:
-    """`said`, with the report it is about in front of it where there is one.
+def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -> Text:
+    """One note or warning: who it is about, then what it says.
 
-    A colon, not the ` · ` a heading uses: that separates the three fields of
-    a heading, and a note is a sentence rather than a field.
-    Nothing at all outside a build, which is what `fetch` on its own is: there
+    The name goes in front as the words it is, not spliced into `said` before
+    it is read for backticks: it comes out of `reports.toml`, and a report
+    called `` `Draft` on 125 St `` names a report and not a value.
+    A colon after it, not the ` · ` a heading uses: that separates the three
+    fields of a heading, and a note is a sentence rather than a field.
+    No name at all outside a build, which is what `fetch` on its own is: there
     is one document there, and naming it says nothing the caller did not type.
+
+    The console is asked for where the caller has none, as `write` does, and
+    for the same reason: whether there is a terminal is what decides whether a
+    value is coloured or left in its backticks.
     """
+    console = console or for_stream()
     name = _ABOUT.get()
-    return f"{name}: {said}" if name else said
+    spans: tuple[Span, ...] = _backticked(said) if code else (said,)
+    text = Text()
+    if name:
+        text.append(f"{name}: ", style=plain)
+    return text.append_text(_spans(spans, console, plain))
 
 
-def _spans(spans: tuple[Span, ...], console: Console) -> Text:
+def _spans(spans: tuple[Span, ...], console: Console, plain: str = "") -> Text:
     """The inline pieces of a warning as one styled run of text.
 
     A `Shown` keeps its backticks where there is no colour, since that is
     then the only thing left saying where the value starts and stops.
+
+    `plain` is the style for the words around the values, for a line that is
+    written in a style of its own: a note is dim, and a value in it is the
+    colour a value is and not a dim version of it, which is mud.
     """
     text = Text()
     for span in spans:
@@ -140,8 +156,41 @@ def _spans(spans: tuple[Span, ...], console: Console) -> Text:
             case Cut(value):
                 text.append(f"~~{value}~~", style=CUT)
             case _:
-                text.append(span)
+                text.append(span, style=plain)
     return text
+
+
+def _backticked(said: str) -> tuple[Span, ...]:
+    """`said` split into its words and the `code` spelled inside backticks.
+
+    These messages are written the way the rest of the prose here is written,
+    with a path, a command, or a variable in backticks, and a terminal that
+    can colour one should colour it: the backticks are the plain-text stand-in
+    for the colour, not the point.
+
+    Rendered by `_spans`, rather than by a second renderer that would get to
+    disagree with it about what a value looks like off a terminal.
+
+    Conservative on purpose, because not every one of these strings is written
+    here: a compiler's diagnostic arrives as the text of an exception and may
+    hold a lone backtick or a quoted span of somebody's source. A pair has to
+    be on one line with something between it to count, and anything else is
+    the text it looks like.
+    """
+    spans: list[Span] = []
+    rest = said
+    while True:
+        open_at = rest.find("`")
+        if open_at == -1:
+            break
+        close_at = rest.find("`", open_at + 1)
+        value = rest[open_at + 1 : close_at]
+        if close_at == -1 or not value or "\n" in value:
+            break
+        spans.extend((rest[:open_at], Shown(value)))
+        rest = rest[close_at + 1 :]
+    spans.append(rest)
+    return tuple(span for span in spans if span != "")
 
 
 def _hanging(prefix: Text, body: Text) -> Table:
@@ -226,7 +275,7 @@ def failed(name: str, error: str) -> RenderableType:
     return Group(heading, _hanging(Text("  "), Text(error, style="red")))
 
 
-def note(said: str) -> Text:
+def note(said: str, console: Console | None = None, code: bool = True) -> Text:
     """Something the build did differently, which is not a document's fault.
 
     A missing `typst`, a sign-in being asked for again, a PDF not attempted:
@@ -236,22 +285,27 @@ def note(said: str) -> Text:
     runs several at once and writes these as they happen: a line saying three
     sources were looked up is not worth much without the report that cites
     them.
+
+    `code` is off for a message this codebase did not write, which is the text
+    of an exception a tool raised: see `_backticked`.
     """
     text = Text()
     text.append("· ", style="dim")
-    text.append(_said(said), style="dim")
+    text.append_text(_sentence(said, console, code, plain="dim"))
     return text
 
 
-def warning(said: str) -> Text:
+def warning(said: str, console: Console | None = None, code: bool = True) -> Text:
     """Something that went wrong and did not stop the build.
 
     The same mark as a document's warnings, because a reader scanning for
     what needs attention should not have to learn two.
+
+    `code`, as in `note`, is off for the text of somebody else's exception.
     """
     text = Text()
     text.append("! ", style="bold yellow")
-    text.append(_said(said))
+    text.append_text(_sentence(said, console, code))
     return text
 
 
