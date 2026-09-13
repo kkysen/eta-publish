@@ -341,15 +341,40 @@ def unkeyed(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv(archive.SECRET_KEY, raising=False)
 
 
-def test_a_source_with_no_capture_is_not_looked_up_again_the_same_week(unkeyed: None) -> None:
+def test_the_index_is_not_asked_again_the_same_week(unkeyed: None) -> None:
     """The slow half of a build, spent to write down the same nothing twice."""
     doc = cites("https://a.example/1")
-    session = Counting(200, [["timestamp"]])
+    session = Replaying([])
     archive.capture(doc, session=session)
-    asked = session.asked
-    assert asked
+    assert session.index_asked == 1
     archive.capture(cites("https://a.example/1"), session=session)
-    assert session.asked == asked, "asked again inside the week"
+    assert session.index_asked == 1, "the index was asked again inside the week"
+
+
+def test_the_replay_is_asked_every_build(unkeyed: None) -> None:
+    """It costs half a second and it is the half that finds a new capture.
+
+    Held back with the index, a source would publish as unarchived for a week
+    after somebody archived it, which is what `masstransitmag.com` did.
+    """
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    session = Replaying([("20240503123456", 200)])
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
+    assert session.index_asked == 0
+
+
+def test_a_week_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
+    """The date is the day the index said so, not the day it was skipped.
+
+    Refreshed on a build that never asked, the entry would be a week old
+    forever and the index would never be asked again.
+    """
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    cached = json.loads(archive.archive_cache_path().read_text())
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    assert json.loads(archive.archive_cache_path().read_text()) == cached
 
 
 def test_it_is_looked_up_again_once_the_week_is_up(
@@ -387,14 +412,22 @@ def test_being_told_to_slow_down_is_not_cached(unkeyed: None) -> None:
     assert session.asked > asked
 
 
-def test_with_keys_nothing_is_held_back(keyed: None) -> None:
+def test_with_keys_nothing_is_held_back(keyed: None, monkeypatch: pytest.MonkeyPatch) -> None:
     """A source with no capture is submitted, so it leaves `missing` either way.
 
-    So a build that has keys asks about it however recently one without them
+    So a build that has keys asks the index however recently one without them
     looked, and the capture gets made rather than waiting out the week.
     """
+    refused = Archived(timestamp="20260913", error="no")
+
+    def refuse(*args: object) -> Archived:
+        return refused
+
+    monkeypatch.setattr(archive, "_submit", refuse)
     archive._remember_nothing(["https://a.example/1"])
-    assert archive.to_ask(cites("https://a.example/1")) == ["https://a.example/1"]
+    session = Replaying([])
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.index_asked == 1
 
 
 def test_a_cache_that_cannot_be_read_is_an_empty_one(
