@@ -120,6 +120,22 @@ def test_a_failure_says_its_reason_where_it_says_the_name() -> None:
     assert written.splitlines() == ["✗ A report", "  the tab is named ``"]
 
 
+def test_a_failure_colours_the_values_its_reason_names() -> None:
+    """The reason is prose written here, and the tab id in it is a value to go
+    and look for, the same as a value in a warning."""
+    console = terminal(width=log.UNWRAPPED)
+    written = rendered(log.failed("A report", "no tab `t.9` in this document", console), console)
+    assert "`" not in written
+    assert _visible(written).splitlines()[1] == "  no tab t.9 in this document"
+    assert "\x1b[36m" in written
+
+
+def test_a_failure_off_a_terminal_keeps_the_marks_around_them() -> None:
+    """Nothing else says where the id stops, and a log is searched for it."""
+    written = rendered(log.failed("A report", "no tab `t.9` in this document", plain()), plain())
+    assert written.splitlines()[1] == "  no tab `t.9` in this document"
+
+
 def test_a_report_that_built_is_counted_by_its_warnings() -> None:
     written = rendered(log.built("A report", "reports/a", [WARNING, WARNING], plain()), plain())
     assert written.startswith("✓ reports/a · A report · 2 warnings")
