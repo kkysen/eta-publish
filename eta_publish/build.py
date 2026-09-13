@@ -360,7 +360,7 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
         try:
             source = emitter.emit(doc)
         except NotImplementedError as e:
-            console.write(console.note(f"skipped {name}: not implemented ({e})"))
+            console.write(console.note(f"skipped `{name}`: not implemented ({e})"))
             continue
         dest = outdir / name
         dest.write_text(source)
@@ -404,7 +404,7 @@ def archive_sources(doc: Document) -> None:
     if left and not have_keys():
         said.append(
             f"{left} not archived and no keys to ask for a capture; "
-            f"set {ACCESS_KEY} and {SECRET_KEY} from https://archive.org/account/s3.php"
+            f"set `${ACCESS_KEY}` and `${SECRET_KEY}` from https://archive.org/account/s3.php"
         )
     elif left:
         said.append(f"{left} could not be captured")
@@ -459,7 +459,9 @@ def build_pdf(source: Path, outdir: Path, skipped_images: bool) -> Path | None:
     except TypstMissing as e:
         console.write(console.note(str(e)))
     except RuntimeError as e:
-        console.write(console.warning(str(e)))
+        # `typst`'s own diagnostics, verbatim: what it quotes out of the source
+        # it was compiling is not this codebase's prose to read backticks in.
+        console.write(console.warning(str(e), code=False))
     return None
 
 
