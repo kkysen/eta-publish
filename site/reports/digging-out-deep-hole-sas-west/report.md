@@ -6,7 +6,15 @@ August 19, 2026
 
 **Warnings**
 
+- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
+  - `Composite image of the MTA’s SAS West St Nicholas Av...`
+  - `Credit: MTA, ETA (Blair Lorenzo)`
+- a paragraph has a stray `Shift+Enter` standing in for blank space; it is dropped, and a paragraph's spacing belongs in its style: `Many decisions created this mammoth price tag, a number of...`
 - unfinished text in the document: `SVG: TODO`
+- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
+  - `($7.7 billion / 1.25 miles) * (1 - 3.5%) / $2.56 billion/km...`
+  - `The figure of $7.7 billion was deflated by 3.5% from 2027...`
+  - `The figure of $2.56 billion/km is from the Transit Costs...`
 - the image `img-44bf278f` has no `Credit:` line
 - the image `project_cost_comparison` has no `Credit:` line
 - 17 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:

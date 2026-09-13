@@ -8,6 +8,9 @@
 - no `Title`-styled paragraph, so the document name `IBX Automation` is being used as the headline; style the headline as `Title` in the doc
 - unfinished text in the document: `But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl`
 - unfinished text in the document: `TODO didn’t finish`
+- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
+  - `https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath...`
+  - `https://www.6sqft.com/mta-awards-166m-design-contract-for-in...`
 - 4 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 1 comment thread still open on this tab
 - the `Header` section has no `Publish Due Date:` line

@@ -8,8 +8,10 @@
   contributors: ("Madison Feinberg", "Elijah Fischer", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
+    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("Short: The seemingly-endless onslaught of announcements on...")], [#raw("SEO Description: The seemingly-endless onslaught of...")], )],
     [2 images share one paragraph; only the first becomes a figure],
     [image #raw("kix.djm0a1aand4k") has no alt text and no caption; add a description to it in the doc],
+    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("36 CFR 1192.35")], [#raw("49 CFR 37.167(b) & (c)")], )],
     [the image #raw("img-831248b1") has no caption],
     [the image #raw("img-831248b1") has no #raw("Credit:") line],
     [the image #raw("img-b17aa21a") has no #raw("Credit:") line],

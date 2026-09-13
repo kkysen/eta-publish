@@ -32,6 +32,7 @@ from .nodes import (
     Inline,
     LineBreak,
     List,
+    Listed,
     ListItem,
     ListKind,
     Paragraph,
@@ -59,7 +60,12 @@ IGNORED_ELEMENTS = frozenset({"pageBreak", "columnBreak", "horizontalRule", "equ
 # Ids the emitters generate for themselves, which no heading may take.
 RESERVED_ANCHORS = frozenset({"footnotes", "contributors"})
 
-# Docs writes a Shift+Enter line break as a vertical tab inside the run.
+# Docs writes a Shift+Enter line break as a vertical tab inside the run,
+# a teletype control character for advancing the paper without returning the carriage.
+# Nothing has used it for that in fifty years,
+# and Docs uses it because its own model is the one it inherited:
+# a paragraph is a run of text, so a break inside one cannot be structure
+# and has to be a character, and the character set has exactly one spare.
 SOFT_BREAK = "\v"
 
 KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
@@ -92,6 +98,17 @@ ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
 # so here it would only ever match a word that happened to be spelled that way.
 TODO_RE = re.compile(r"\bTODO\b|\bFIXME\b|\bXXX\b")
 CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
+
+
+# How much of a line a warning quotes back before it is just repeating the document.
+CLIP = 60
+
+
+def _clipped(line: str) -> str:
+    """A line short enough to quote in a warning, cut on a word where it has to be."""
+    if len(line) <= CLIP:
+        return line
+    return line[:CLIP].rsplit(" ", 1)[0] + "..."
 
 
 def source_name(source: list[Inline]) -> str:
@@ -227,6 +244,7 @@ class Parser:
             elif not (IGNORED_ELEMENTS & el.keys()):
                 kinds = sorted(k for k in el if k not in ("startIndex", "endIndex"))
                 self.doc.warn("unhandled document element {}, dropped", Shown(", ".join(kinds)))
+        self._soft_breaks(para)
         # A soft break at either end is spacing rather than part of what the paragraph says,
         # and renders as a stray line break with nothing on one side of it.
         while out and isinstance(out[0], LineBreak):
@@ -234,6 +252,42 @@ class Parser:
         while out and isinstance(out[-1], LineBreak):
             out.pop()
         return self.cross_references(out)
+
+    def _soft_breaks(self, para: JsonObject) -> None:
+        """Warn about a paragraph broken with Shift+Enter rather than Enter.
+
+        Docs draws the two almost the same and stores them differently:
+        Enter starts another paragraph, Shift+Enter writes a vertical tab
+        inside this one. Nothing on the page says which is which,
+        so nobody finds out until something reads the two lines as one,
+        which is how this brief's `Short:` and `SEO Description:`
+        went unpublished for sharing a paragraph.
+
+        Both spellings still publish: the line break is emitted where it was written.
+        The warning is that the document does not mean what it looks like it means.
+        """
+        text = "".join(el.get("textRun", {}).get("content", "") for el in para.get("elements", []))
+        if SOFT_BREAK not in text:
+            return
+        lines = [line.strip() for line in text.strip().split(SOFT_BREAK)]
+        written = [line for line in lines if line]
+        if len(written) < 2:
+            # Nothing on one side of it, so it is blank space rather than a break
+            # between two things, and it is dropped rather than published.
+            self.doc.warn(
+                "a paragraph has a stray {} standing in for blank space; "
+                "it is dropped, and a paragraph's spacing belongs in its style: {}",
+                Shown("Shift+Enter"),
+                Shown(_clipped(written[0]) if written else ""),
+            )
+            return
+        self.doc.warn(
+            "a paragraph is broken with {} rather than {}, "
+            "so lines that look separate are one paragraph; give each line its own:{}",
+            Shown("Shift+Enter"),
+            Shown("Enter"),
+            Listed(*((Shown(_clipped(line)),) for line in written)),
+        )
 
     def cross_references(self, content: list[Inline]) -> list[Inline]:
         """Turn italicized section names into links to those sections.
@@ -568,7 +622,10 @@ class Parser:
                 # A caption and its credit are often one paragraph split by a soft line break,
                 # so each line is classified separately.
                 claimed = False
-                for line in split_lines(self.inlines(para)):
+                # Read once: a caption that turns out to be prose is emitted below,
+                # and parsing it twice says everything it has to say twice.
+                inlines = self.inlines(para)
+                for line in split_lines(inlines):
                     line_text = plain_text(line).strip()
                     if not line_text:
                         continue
@@ -586,8 +643,11 @@ class Parser:
                 if claimed:
                     continue
 
+            else:
+                inlines = self.inlines(para)
+
             caption_slot = 0
-            out.append(Paragraph(content=self.inlines(para)))
+            out.append(Paragraph(content=inlines))
 
         drop_pending()
         for block in out:
@@ -747,6 +807,9 @@ class Parser:
             if not text:
                 end = i + 1
                 continue
+
+            # The header section never reaches `inlines`, so it says this for itself.
+            self._soft_breaks(para)
 
             # A paragraph can hold more than one field:
             # the real brief writes `Short:` and `SEO Description:`

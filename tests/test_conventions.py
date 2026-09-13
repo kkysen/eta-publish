@@ -560,3 +560,48 @@ def test_the_full_name_wins_over_a_shortened_one() -> None:
         }
     )
     assert linked(doc) == [("Appendix A", "#appendix-a")]
+
+
+def test_a_soft_line_break_is_warned_about_wherever_it_is() -> None:
+    """It still publishes as the line break it is; the warning is that Docs
+    draws Shift+Enter and Enter almost alike and stores them differently,
+    so nobody can see which one a paragraph was written with."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            para("One line.\vAnother line."),
+        ]
+    )
+    warning = next(w for w in map(str, doc.warnings) if "Shift+Enter" in w)
+    assert "One line." in warning
+    assert "Another line." in warning
+
+
+def test_a_prose_paragraph_after_a_figure_is_warned_about_once() -> None:
+    """A paragraph in the caption slot that turns out to be prose is read twice
+    unless the parser keeps what it read, and said everything twice with it."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("A caption."),
+            para("Prose.\vMore prose."),
+        ]
+    )
+    assert sum("Shift+Enter" in w for w in map(str, doc.warnings)) == 1
+
+
+def test_a_soft_break_with_nothing_on_one_side_is_called_spacing() -> None:
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            para("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            para("\vA paragraph pushed down the page."),
+        ]
+    )
+    assert any("standing in for blank space" in w for w in map(str, doc.warnings))

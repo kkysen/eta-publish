@@ -395,3 +395,20 @@ def test_a_value_that_wraps_keeps_the_rest_of_itself() -> None:
     doc = parse(document)
     assert doc.meta["short"] == "Too loud, and too long."
     assert doc.meta["url"] == "/briefs/too-damn-loud"
+
+
+def test_a_shared_paragraph_says_so() -> None:
+    """Two fields still publish, and the document is told it does not mean what it looks like."""
+    document: JsonObject = {
+        "title": "Noise Pollution",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                para("Short: Too loud.\vSEO Description: Far too loud."),
+            ]
+        },
+    }
+    doc = parse(document)
+    warning = next(w for w in map(str, doc.warnings) if "Shift+Enter" in w)
+    assert "Short: Too loud." in warning
+    assert "SEO Description: Far too loud." in warning
