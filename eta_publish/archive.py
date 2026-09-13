@@ -286,24 +286,6 @@ def missing(doc: Document) -> list[str]:
     return [url for url in _documents(doc) if url not in doc.archives]
 
 
-def to_ask(doc: Document) -> list[str]:
-    """The ones to look up on this build: `missing`, less those asked about lately.
-
-    The cache is only about a build with no keys. There, a source with no
-    capture is left exactly as it was, so asking about it again tomorrow costs a
-    slow lookup to write down the same nothing. With keys the same source is
-    submitted instead, gets an entry either way, and leaves `missing` for good,
-    so there is nothing to remember and this is `missing`.
-
-    `missing` is still what the build reports on, so the count a person reads is
-    how many sources have no capture, not how many were asked about today.
-    """
-    if have_keys():
-        return missing(doc)
-    known = _cached_nothing()
-    return [url for url in missing(doc) if not _fresh(known.get(url, ""))]
-
-
 def _documents(doc: Document) -> list[str]:
     """Every source as the thing that gets captured, deduplicated, in order."""
     seen: dict[str, None] = {}
@@ -345,12 +327,15 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[
     # without keys still does the half it can: most of what a report cites is
     # already in the Wayback Machine, put there by somebody else.
     headers = _keys()
-    wanted = to_ask(doc)
+    wanted = missing(doc)
     if not wanted:
         return 0, 0
+    # Only a build with no keys defers anything: one with keys submits a source
+    # the replay found nothing for, which records an answer either way.
+    lately = _cached_nothing() if headers is None else {}
 
     def archive(url: str) -> Lookup:
-        return _archive(http, headers, url)
+        return _archive(http, headers, url, index=not _fresh(lately.get(url, "")))
 
     with ThreadPoolExecutor(max_workers=MAX_AT_ONCE) as pool:
         results = list(pool.map(archive, wanted))
@@ -408,14 +393,19 @@ class Lookup:
     nothing: bool = False
 
 
-def _archive(http: requests.Session, headers: dict[str, str] | None, url: str) -> Lookup:
+def _archive(
+    http: requests.Session, headers: dict[str, str] | None, url: str, *, index: bool = True
+) -> Lookup:
     """One source: the capture it already has, or a new one, or why neither."""
     try:
-        found = _patiently(lambda: _existing(http, url))
+        found = _patiently(lambda: _existing(http, url, index=index))
         if found is not None:
             return Lookup(found, already=True)
         if headers is None:
-            return Lookup(nothing=True)
+            # `nothing` only where the index was the one that said so. Where it
+            # was held back, this build learned nothing, and writing today's
+            # date would renew the entry on every build and expire it never.
+            return Lookup(nothing=index)
         return Lookup(_submit(http, headers, url))
     except Busy, requests.RequestException:
         # Nothing about the source. A read that timed out, a connection that
@@ -461,17 +451,26 @@ def _patiently[T](ask: Callable[[], T]) -> T:
     return ask()
 
 
-def _existing(http: requests.Session, url: str) -> Archived | None:
+def _existing(http: requests.Session, url: str, *, index: bool = True) -> Archived | None:
     """The newest capture of `url` that is the page, if there is one.
 
     Asked of the replay first and of the index only if that did not answer.
     Both answer the same question; the index is the one that can be asked it
     exactly, and it is twenty to sixty times slower.
+
+    `index` is what the cache holds back, and only that. The replay runs on
+    every build for every source: it costs about half a second, and it is the
+    half that finds a capture somebody else has just made. Held back, a source
+    would go on publishing as unarchived for a week after its capture appeared,
+    and a build checking its own work could not see what a fresh one would.
+    That is not a theory: `masstransitmag.com`'s press release was published as
+    `not archived` because this machine had cached the older answer, and CI,
+    which had no cache, found the capture and failed the check.
     """
     served = _served(http, url)
     if served is not None:
         return served
-    return _indexed(http, url)
+    return _indexed(http, url) if index else None
 
 
 def _served(http: requests.Session, url: str) -> Archived | None:
