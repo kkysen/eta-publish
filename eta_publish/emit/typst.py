@@ -19,7 +19,7 @@ import json
 import re
 from typing import override
 
-from ..naming import IMAGE_DIR
+from ..naming import IMAGE_DIR, SITE
 from ..nodes import (
     Document,
     Figure,
@@ -261,8 +261,28 @@ class TypstEmitter(Emitter):
         alt text added here once reached inline images only,
         because the figure built its own call.
         """
-        path = f"{self.image_dir}/{self.doc.image_href(node)}"
+        href = self.doc.image_href(node)
+        path = f"{self.image_dir}/{href}"
         alt = f", alt: {string(node.alt)}" if node.alt else ""
         # `capped_image` rather than `image`: the width is the column's,
         # except for a picture tall enough to break the page it opens.
-        return f"capped_image({string(path)}{alt})"
+        call = f"capped_image({string(path)}{alt})"
+        url = self.image_url(href)
+        if not url:
+            return call
+        # The picture in the PDF is the page's copy, and a reader who wants to
+        # read a diagram rather than look at one needs the file itself.
+        # A content block, so the call inside it is markup and takes its `#`;
+        # the caller prepends the one this whole expression needs.
+        return f"link({string(url)})[#{call}]"
+
+    def image_url(self, href: str) -> str:
+        """Where this image is published, for the PDF to link to.
+
+        Empty for a document that names no `URL:`,
+        which is `eta-publish one` before the report is on the list:
+        it has no published home yet, so there is nothing to point at,
+        and a link to where it would go if it had one would be a broken one.
+        """
+        slug = self.doc.slug.strip("/")
+        return f"{SITE}/{slug}/{IMAGE_DIR}/{href}" if slug else ""

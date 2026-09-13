@@ -22,6 +22,21 @@ ASSET_DIR = "assets"
 Every report page links one copy rather than carrying its own.
 """
 
+SITE = "https://kkysen.github.io/eta-publish"
+"""Where the built site is served, with no trailing slash.
+
+Only the PDF needs this. Every other output links within itself
+and so says nothing about where it is hosted,
+but a PDF is read away from the site it came from:
+a link in it has to name the host or name nothing.
+
+One constant rather than an option, because `report.typ` is committed
+and `check-committed-site.sh` refuses a build that differs from it:
+a base that varied per run would make the committed file depend on
+who ran the build. This is the preview host, and it changes when the
+reports are published somewhere else.
+"""
+
 IMAGE_DIR = "images"
 """The directory a build writes images into, relative to the report.
 
