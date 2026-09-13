@@ -153,6 +153,14 @@ def publish(
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "index.html").write_text(index_page(site))
 
+    # Belt to the `noindex` the pages carry, and the weaker half of the pair:
+    # a crawler reads `robots.txt` from the root of the host,
+    # so at `kkysen.github.io/eta-publish/robots.txt` this file asks nothing of
+    # anyone. It is here for whoever serves these pages from a root later,
+    # and so that the intent is visible in the site rather than only in the
+    # emitter. Remove it, and the `noindex`, when the reports go out.
+    (outdir / "robots.txt").write_text("User-agent: *\nDisallow: /\n")
+
     # Once, over everything just written, rather than per file as it was
     # written: `biome` costs far more to start than to run.
     format.tree(outdir)
