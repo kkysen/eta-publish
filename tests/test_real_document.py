@@ -199,6 +199,7 @@ def test_the_warnings_are_the_ones_we_expect(doc: Document) -> None:
     are checked for what they list below.
     """
     assert sorted(w.split("\n")[0] for w in map(str, doc.warnings)) == [
+        "1 source still carries the tag it was copied with; take it off the link in the doc:",
         "17 images are unnamed, so each publishes under a hash; "
         "give each a `Source:` line naming its file:",
         "17 suggestions still open on this tab; "

@@ -55,6 +55,7 @@ def check(doc: Document) -> None:
     _check_named(doc)
     _check_review(doc)
     _check_contributors(doc)
+    _check_tracked(doc)
 
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
@@ -164,6 +165,55 @@ def _check_named(doc: Document) -> None:
         f"hash; give each a {{}} line naming its file:{{}}",
         Shown("Source:"),
         listed,
+    )
+
+
+TRACKING = ("utm_",)
+"""Query parameters that say where a link was copied from, not what it points at.
+
+`utm_source`, `utm_medium` and the rest are what an analytics tag looks like,
+and they arrive by pasting a link out of somewhere that added them.
+The prefix rather than a list of names: they are an open set by design,
+and anything beginning `utm_` is one of them whatever follows.
+"""
+
+
+def _check_tracked(doc: Document) -> None:
+    """Which sources are cited with an analytics tag still on the URL.
+
+    Left on, it is published as part of the citation, and it says where whoever
+    added the link was reading rather than anything about the page. SAS West
+    cited a `masstransitmag.com` press release as `?utm_source=chatgpt.com`.
+
+    It also costs the source its archived copy, or nearly:
+    nothing had ever captured that URL with the parameter on it,
+    because nothing links to it that way. The replay drops tracking parameters
+    before it looks, so it found the capture anyway, and the index, which does
+    not, had no row for it at all. A build before the replay landed published
+    that source as `not archived` with two captures of the page sitting there.
+
+    One warning for all of them, like `_check_named`: it is one fix repeated.
+    """
+    tracked = [
+        source
+        for source in doc.sources
+        if any(f"?{tag}" in source or f"&{tag}" in source for tag in TRACKING)
+    ]
+    if not tracked:
+        return
+    listed = Listed(*((Shown(_tag(source)), " on ", Shown(source)) for source in tracked))
+    doc.warn(
+        f"{plural(len(tracked), 'source')} still carries the tag it was copied with; "
+        f"take it off the link in the doc:{{}}",
+        listed,
+    )
+
+
+def _tag(source: str) -> str:
+    """The tracking parameters on `source`, for saying which to take off."""
+    query = source.partition("?")[2].partition("#")[0]
+    return "&".join(
+        part for part in query.split("&") if any(part.startswith(tag) for tag in TRACKING)
     )
 
 
