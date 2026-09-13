@@ -24,10 +24,12 @@ written plain and whole on one line, so a log that is going to be searched
 holds no escape sequences to search past and no line broken mid-sentence.
 """
 
+import re
 import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
+from dataclasses import dataclass
 from pathlib import Path
 from typing import IO
 
@@ -47,6 +49,28 @@ The `~~` around it is kept as well as the strike:
 not every terminal draws one, and a warning whose whole point is where a
 sentence stops cannot rest on a terminal that does not.
 """
+
+LINK = "underline"
+"""A URL in a sentence, marked as the thing to go and open.
+
+Underlined rather than coloured: `SHOWN` is for a value to go and find in a
+document or type into a shell, and a link is neither.
+The terminal is told it is a link as well, by the escape the one that supports
+it uses, so a URL too long to be worth retyping can be clicked instead.
+"""
+
+URL = re.compile(r"https?://[^\s<>`]+")
+"""A bare URL in a message.
+
+Only the two schemes these messages ever name, and stopped by whitespace,
+angle brackets, or a backtick, since one written inside marks is already a
+value. What trails it in a sentence is trimmed off afterwards: a URL at the
+end of a clause is followed by the punctuation of the clause and not by more
+URL.
+"""
+
+TRAILING = ".,;:!?)]'\""
+"""Punctuation that ends a sentence rather than a URL."""
 
 UNWRAPPED = 10_000
 """The width to lay a log out at when there is no terminal to fit it to.
@@ -136,13 +160,27 @@ def _sentence(said: str, console: Console | None, code: bool, plain: str = "") -
     """
     console = console or for_stream()
     name = _ABOUT.get()
-    spans: tuple[Span, ...] = _backticked(said) if code else (said,)
+    spans: tuple[Span | _Url, ...] = _marked(said) if code else (said,)
     if name:
         spans = (Shown(name), ": ", *spans)
     return _spans(spans, console, plain)
 
 
-def _spans(spans: tuple[Span, ...], console: Console, plain: str = "") -> Text:
+@dataclass(frozen=True)
+class _Url:
+    """A URL a message names, for `_spans` to mark as one.
+
+    Private to this module, unlike `Shown`, because it is read out of the
+    words of a message here rather than built by whatever raised it: nothing
+    outside says "this part is a link", it just writes one.
+    """
+
+    value: str
+
+
+def _spans(
+    spans: tuple[Span, ...] | tuple[Span | _Url, ...], console: Console, plain: str = ""
+) -> Text:
     """The inline pieces of a warning as one styled run of text.
 
     A `Shown` keeps its backticks where there is no colour, since that is
@@ -159,18 +197,25 @@ def _spans(spans: tuple[Span, ...], console: Console, plain: str = "") -> Text:
                 text.append(value if console.is_terminal else f"`{value}`", style=SHOWN)
             case Cut(value):
                 text.append(f"~~{value}~~", style=CUT)
+            case _Url(value):
+                # Left exactly as written either way: a URL is already the
+                # thing it names, so there is nothing to take out on a
+                # terminal and nothing to put back off one.
+                text.append(value, style=f"{LINK} link {value}" if console.is_terminal else plain)
             case _:
                 text.append(span, style=plain)
     return text
 
 
-def _backticked(said: str) -> tuple[Span, ...]:
-    """`said` split into its words and the `code` spelled inside backticks.
+def _marked(said: str) -> tuple[Span | _Url, ...]:
+    """`said` split into its words, the `code` inside backticks, and its URLs.
 
     These messages are written the way the rest of the prose here is written,
     with a path, a command, or a variable in backticks, and a terminal that
     can colour one should colour it: the backticks are the plain-text stand-in
     for the colour, not the point.
+    A URL is marked as well, and marked differently, because what a reader
+    does with one is open it rather than go and find it.
 
     Rendered by `_spans`, rather than by a second renderer that would get to
     disagree with it about what a value looks like off a terminal.
@@ -181,7 +226,7 @@ def _backticked(said: str) -> tuple[Span, ...]:
     be on one line with something between it to count, and anything else is
     the text it looks like.
     """
-    spans: list[Span] = []
+    spans: list[Span | _Url] = []
     rest = said
     while True:
         open_at = rest.find("`")
@@ -191,10 +236,27 @@ def _backticked(said: str) -> tuple[Span, ...]:
         value = rest[open_at + 1 : close_at]
         if close_at == -1 or not value or "\n" in value:
             break
-        spans.extend((rest[:open_at], Shown(value)))
+        spans.extend((*_linked(rest[:open_at]), Shown(value)))
         rest = rest[close_at + 1 :]
-    spans.append(rest)
+    spans.extend(_linked(rest))
     return tuple(span for span in spans if span != "")
+
+
+def _linked(words: str) -> tuple[Span | _Url, ...]:
+    """`words` with the URLs in it set apart from the prose around them.
+
+    The punctuation a URL is followed by is left in the sentence, where it
+    belongs: a link taken to include the full stop after it is a link that
+    opens nothing.
+    """
+    spans: list[Span | _Url] = []
+    at = 0
+    for found in URL.finditer(words):
+        url = found.group().rstrip(TRAILING)
+        spans.extend((words[at : found.start()], _Url(url)))
+        at = found.start() + len(url)
+    spans.append(words[at:])
+    return tuple(spans)
 
 
 def _hanging(prefix: Text, body: Text) -> Table:
@@ -282,7 +344,7 @@ def failed(name: str, error: str, console: Console | None = None) -> RenderableT
     heading = Text()
     heading.append("✗ ", style="bold red")
     heading.append(name, style="bold")
-    said = _spans(_backticked(error), console, plain="red")
+    said = _spans(_marked(error), console, plain="red")
     return Group(heading, _hanging(Text("  "), said))
 
 

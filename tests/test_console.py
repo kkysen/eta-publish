@@ -37,8 +37,11 @@ def rendered(renderable: RenderableType | None, console: Console) -> str:
 
 
 def _visible(line: str) -> str:
-    """`line` with the colour taken back out, for asserting about its words."""
-    return re.sub(r"\x1b\[[0-9;]*m", "", line)
+    """`line` with the colour and the links taken back out, for asserting about
+    its words. A hyperlink is an escape around the text rather than in it, so
+    what is left is what a reader sees either way."""
+    words = re.sub(r"\x1b\]8;[^\x1b]*\x1b\\", "", line)
+    return re.sub(r"\x1b\[[0-9;]*m", "", words)
 
 
 def plain() -> Console:
@@ -201,6 +204,34 @@ def test_a_note_colours_what_it_backticked_on_a_terminal() -> None:
     assert _visible(written) == "· install it with mise use -g typst\n"
     # The value is the colour a value is, not a dim version of it.
     assert "\x1b[36m" in written
+
+
+def test_a_url_in_a_note_is_left_alone_off_a_terminal() -> None:
+    """A URL is already the thing it names: nothing to add and nothing to take
+    out, and a log searched for one holds exactly what was written."""
+    said = "no keys; set them from https://archive.org/account/s3.php"
+    assert rendered(log.note(said), plain()) == f"· {said}\n"
+
+
+def test_a_url_on_a_terminal_is_underlined_and_made_a_link() -> None:
+    """Underlined rather than coloured, because what a reader does with a URL is
+    open it rather than go and find it, and told to the terminal as a link so it
+    can be clicked instead of retyped."""
+    console = terminal(width=log.UNWRAPPED)
+    written = rendered(
+        log.note("set them from https://archive.org/account/s3.php", console), console
+    )
+    assert "\x1b[4m" in written
+    assert "https://archive.org/account/s3.php\x1b\\" in written
+
+
+def test_the_punctuation_after_a_url_is_the_sentence_s() -> None:
+    """A link taken to include the full stop after it is a link that opens
+    nothing."""
+    console = terminal(width=log.UNWRAPPED)
+    written = rendered(log.note("or from https://typst.app/, then rerun.", console), console)
+    assert "https://typst.app/\x1b\\" in written
+    assert _visible(written) == "· or from https://typst.app/, then rerun.\n"
 
 
 def test_a_tool_s_own_diagnostic_is_left_as_it_came() -> None:
