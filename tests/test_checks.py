@@ -7,7 +7,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.checks import REQUIRED_FIELDS, check
-from eta_publish.nodes import Document, Figure, Image, Text
+from eta_publish.nodes import Block, Document, Figure, Image, Paragraph, Text
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -193,3 +193,63 @@ def test_names_without_addresses_are_left_alone(doc: Document) -> None:
     check(doc)
     assert doc.contributors == ["Grace Hopper", "Ada Lovelace"]
     assert not any("comma is missing" in w for w in map(str, doc.warnings))
+
+
+# ---- a tracking tag left on a source ---------------------------------
+
+
+def citing(*hrefs: str) -> list[Block]:
+    """A body that is one paragraph of links."""
+    return [Paragraph(content=[Text(text=href, href=href) for href in hrefs])]
+
+
+def test_a_tracking_tag_left_on_a_source_is_flagged(doc: Document) -> None:
+    """It publishes where the link was read rather than anything about the page.
+
+    It also costs the source its archived copy in the index, which has no row
+    for a URL nothing links to.
+    """
+    doc.blocks = citing("https://a.example/story?utm_source=chatgpt.com")
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "1 source still carries the tag it was copied with; take it off the link in the doc:\n"
+        "- `utm_source=chatgpt.com` on `https://a.example/story?utm_source=chatgpt.com`"
+    ]
+
+
+def test_every_utm_parameter_on_one_source_is_named(doc: Document) -> None:
+    """All of them, because taking one off and leaving two is not the fix."""
+    doc.blocks = citing("https://a.example/story?utm_source=x&utm_medium=email&id=7")
+    check(doc)
+    assert "`utm_source=x&utm_medium=email`" in str(doc.warnings[0])
+
+
+def test_a_tag_after_another_parameter_is_found(doc: Document) -> None:
+    """`?id=7&utm_source=x` is the same mistake as `?utm_source=x`."""
+    doc.blocks = citing("https://a.example/story?id=7&utm_source=x")
+    check(doc)
+    assert doc.warnings
+
+
+def test_an_ordinary_query_is_left_alone(doc: Document) -> None:
+    """A parameter that changes the page is part of the source, not a tag on it."""
+    doc.blocks = citing("https://a.example/search?q=slurry&page=2")
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_a_parameter_that_merely_ends_in_utm_is_not_a_tag(doc: Document) -> None:
+    """The prefix is what names these, and `?autm_source=` is not one."""
+    doc.blocks = citing("https://a.example/story?autm_source=x")
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_all_the_tagged_sources_are_listed_together(doc: Document) -> None:
+    """One warning rather than one each: it is one fix repeated."""
+    doc.blocks = citing(
+        "https://a.example/one?utm_source=x", "https://b.example/two?utm_campaign=y"
+    )
+    check(doc)
+    assert len(doc.warnings) == 1
+    assert str(doc.warnings[0]).startswith("2 sources still carry the tag")
