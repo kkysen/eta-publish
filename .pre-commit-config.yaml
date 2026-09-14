@@ -1,6 +1,7 @@
-# `pre-commit install` installs both,
-# so a clone that follows the README gets the push check as well as the commit checks.
-default_install_hook_types: [pre-commit, pre-push]
+# `pre-commit install` installs all three,
+# so a clone that follows the README gets the message and push checks
+# as well as the commit checks.
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -40,6 +41,15 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+      # `Co-Authored-By:` is easy to write and still looks right,
+      # so the spelling `CLAUDE.md` asks for is checked here
+      # rather than caught in review, or not caught.
+      - id: commit-message
+        name: the commit message attributes Claude the way `CLAUDE.md` says
+        entry: scripts/check-commit-message.sh
+        language: script
+        stages: [commit-msg]
 
       # On push rather than on commit:
       # it fetches every document, which is slow and needs credentials.
