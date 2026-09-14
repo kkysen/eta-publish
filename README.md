@@ -406,9 +406,10 @@ making the reports agree is the writer's, and the build only says where to look.
   `125 St`, not `125th Street`; `2 Av`, not `2nd Ave`;
   `Queens Blvd`, `Fordham Rd`, `Henry Hudson Pkwy`.
   A reader who goes looking for the station should be looking for what the
-  platform says. A spelled-out number is the exception and grows instead:
-  `Second Avenue` is the avenue whose station is `2 Av`,
-  and `Second Avenue Subway` is the project's own name.
+  platform says, so a number written as a word is a digit too:
+  `Second Avenue` is `2 Av`.
+  The exception is the phrase `Second Avenue Subway`, the project's own name,
+  which `Second Ave Subway` is corrected towards rather than to the station.
   A street somewhere else has no MTA spelling,
   so `Nanba Road` and `Heping South Street` are listed in `ELSEWHERE`
   in `eta_publish/style.py`, which is where the next one goes.
