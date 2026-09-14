@@ -320,25 +320,6 @@ def test_a_field_written_twice_says_which_one_won() -> None:
     )
 
 
-def test_a_note_in_the_key_does_not_hide_a_repeat() -> None:
-    """`SEO Description (300 char limit):` and `SEO Description:` are one field,
-    which is the whole reason the note is stripped before the lookup."""
-    document: JsonObject = {
-        "title": "SAS West Feasibility Response",
-        "body": {
-            "content": [
-                para("Header", "HEADING_2"),
-                para("SEO Description (300 char limit): First."),
-                para("SEO Description: Second."),
-                para("The Real Headline", "TITLE"),
-            ]
-        },
-    }
-    doc = parse(document)
-    assert doc.meta["SEO Description"] == "Second."
-    assert any("more than one `SEO Description:` line" in w for w in map(str, doc.warnings))
-
-
 def test_distinct_fields_are_not_a_repeat() -> None:
     document: JsonObject = {
         "title": "SAS West Feasibility Response",

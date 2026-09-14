@@ -21,7 +21,6 @@ from .parse import (
     names_a_field,
     split_lines,
     unfinished,
-    without_note,
 )
 
 SEO_LIMIT = 300
@@ -144,7 +143,7 @@ def _check_stray_fields(doc: Document) -> None:
             found = key_line(text)
             if found is None:
                 continue
-            field = without_note(found[0])
+            field = found[0]
             if field in KNOWN_FIELDS:
                 doc.warn(
                     "{} is a {} field, and this one is outside it: {}",

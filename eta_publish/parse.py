@@ -266,22 +266,6 @@ def key_line(line: str) -> tuple[str, str] | None:
     return field.label, field.value
 
 
-def without_note(key: str) -> str:
-    """A field name without the note to whoever fills it in.
-
-    The real doc writes `SEO Description (300 char limit):`,
-    and a lookup for `SEO Description` finds nothing unless the note is stripped.
-    """
-    text = key.rstrip()
-    if not text.endswith(")"):
-        return key.strip()
-    # The note is the bracketed run the name ends with.
-    # Its opening bracket is the first one after any earlier closing bracket,
-    # so a name carrying brackets of its own keeps them.
-    opened = text.find("(", text.rfind(")", 0, len(text) - 1) + 1)
-    return key.strip() if opened < 0 else text[:opened].strip()
-
-
 NOT_IN_A_NAME = ",;\"“”'‘’"
 """Punctuation a field name does not carry, whatever else it looks like.
 
@@ -328,15 +312,15 @@ def names_a_field(key: str) -> bool:
 def header_field(line: str) -> str:
     """The header field `line` writes, or nothing where it writes none.
 
-    The name only, without its value and without the note beside it,
-    so `SEO Description (300 char limit): ...` answers `SEO Description`.
+    The name only, without its value,
+    so `SEO Description: ...` answers `SEO Description`.
     A line naming no recognized field answers nothing,
     which is what keeps a sentence holding a colon from being read as one.
     """
     found = key_line(line)
     if found is None:
         return ""
-    key = without_note(found[0])
+    key = found[0]
     return key if key in KNOWN_FIELDS else ""
 
 
@@ -1094,9 +1078,8 @@ class Parser:
             )
         return content[end:]
 
-    def _meta_line(self, written: str, value: str) -> str:
+    def _meta_line(self, key: str, value: str) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
-        key = without_note(written)
         value = value.strip()
         if key not in KNOWN_FIELDS:
             # A field nothing reads is a field nobody notices is missing.
@@ -1112,8 +1095,6 @@ class Parser:
             # The later line wins, and says so: a corrected line pasted
             # below the original and a duplicate nobody meant look
             # identical, and neither is visible in what gets published.
-            # Matched on the key as it is read, so a `Short:` and a
-            # `Short (60 char limit):` count as the two they are.
             self.doc.warn(
                 "the {} section has more than one {} line; using {} and ignoring {}",
                 Shown("Header"),

@@ -603,8 +603,6 @@ Alternatively, put `Title:` in the header block.
 
 Unrecognized keys are kept rather than treated as body text,
 so adding a field to a future report is safe.
-A parenthetical note in a key is not part of its name:
-`SEO Description (300 char limit):` is read as `seo description`.
 
 ### The rest
 
