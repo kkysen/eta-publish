@@ -219,6 +219,7 @@ KNOWN_WARNINGS = (
     "rather than `Enter`",
     "standing in for blank space",
     "has an unrecognized",
+    "runs past it into the value",
 )
 """Every kind of warning this report has been known to raise.
 

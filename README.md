@@ -323,7 +323,8 @@ Three rules matter, because all three are load-bearing:
 That is what makes a line a field rather than prose that holds a colon,
 and it is the only thing that does.
 Docs carries the underline forward as you keep typing,
-so turn it off after the name.
+so turn it off after the name:
+an underline running into the value is reported.
 
 **The block ends at the first line that is not `Key: value`.**
 Any heading, the headline, a paragraph containing an image, or ordinary prose.

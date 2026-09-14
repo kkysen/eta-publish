@@ -207,6 +207,14 @@ class Labelled:
     is not a field name.
     """
 
+    bled: bool
+    """Whether the underline ran past the mark into the value.
+
+    Docs carries a style forward as the writer keeps typing,
+    so a label underlined and a value underlined with it is the one
+    mistake this convention invites. The line is still the label it looks like;
+    the underline is what needs fixing, and the warning says so."""
+
 
 @dataclass(frozen=True)
 class Marked:
@@ -266,6 +274,7 @@ def labelled(content: list[Inline]) -> Labelled:
         bracketed=bracketed,
         underlined=_every(label, lambda m: m.underlined),
         linked=_every(label, lambda m: m.linked),
+        bled=any(m.underlined and not m.linked for m in rest if not m.character.isspace()),
     )
 
 
@@ -878,6 +887,7 @@ class Parser:
             inlines = self.inlines(para)
 
             if is_source_note(inlines) or is_asset_note(inlines):
+                self._bleed(inlines)
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
@@ -913,9 +923,11 @@ class Parser:
                     if not plain_text(line).strip():
                         continue
                     if is_credit_note(line):
+                        self._bleed(line)
                         last.credit = unmarked(line)
                         claimed = True
                     elif is_source_note(line) or is_asset_note(line):
+                        self._bleed(line)
                         last.source = last.source + unmarked(line)
                         self._claim_name(last, line)
                         claimed = True
@@ -1106,6 +1118,7 @@ class Parser:
                     wrapped = plain_text(line).strip()
                     self.doc.meta[key] = f"{self.doc.meta[key]} {wrapped}".strip()
                     continue
+                self._bleed(line)
                 key = self._meta_line(*field)
             end = i + 1
 
@@ -1119,6 +1132,23 @@ class Parser:
                 Shown("SEO Description:"),
             )
         return content[end:]
+
+    def _bleed(self, line: list[Inline]) -> None:
+        """Warn where the underline marking a label ran on into its value.
+
+        Docs carries a style forward as the writer keeps typing,
+        which is the one mistake this convention invites.
+        The line still reads as the label it looks like:
+        what is wrong is the underline, and the warning says so
+        rather than quietly publishing a rule under half the caption.
+        """
+        note = labelled(line)
+        if note.bled:
+            self.doc.warn(
+                "the underline on {} runs past it into the value; underline the name only: {}",
+                Shown(f"{note.label}:"),
+                Shown(_clipped(plain_text(line).strip())),
+            )
 
     def _meta_line(self, key: str, value: str) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
