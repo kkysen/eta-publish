@@ -14,6 +14,7 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
+- a sentence ends with `2` spaces after it, where one is the house style: `...ut costs are given separately).  This is a Buy America cost, wh...`
 
 ## No Need to Wait: Automated Light Metro is Right for the IBX
 
