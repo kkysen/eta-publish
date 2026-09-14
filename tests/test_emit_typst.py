@@ -72,7 +72,7 @@ def test_only_the_fields_something_renders_are_passed(out: str) -> None:
     """The header carries the private contributor list and the internal dates,
     and this file is committed."""
     assert "short: " in out
-    for private in ("private contributors", "discussion channel", "draft due date"):
+    for private in ("Private Contributors", "Discussion Channel", "Draft Due Date"):
         assert private not in out
         assert private.replace(" ", "_") not in out
 

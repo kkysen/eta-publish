@@ -131,7 +131,7 @@ class MarkdownEmitter(Emitter):
         """
         if not doc.title:
             return ""
-        short = doc.meta.get("short", "")
+        short = doc.meta.get("Short", "")
         heading = f"# {escape(doc.title)}"
         return f"{heading}\n\n{escape(short)}" if short else heading
 

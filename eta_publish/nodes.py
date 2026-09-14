@@ -506,7 +506,7 @@ class Document:
         Sorted, because `etany.org` credits contributors alphabetically
         and the field they are typed into is in whoever-was-added-when order.
         """
-        names = self.meta.get("public contributors", "")
+        names = self.meta.get("Public Contributors", "")
         listed = [_named(name) for name in names.split(",")]
         return sorted((name for name in listed if name), key=_by_surname)
 
@@ -521,7 +521,7 @@ class Document:
         Anything that does not parse as a date is published exactly as written:
         guessing would be worse than showing what the header says.
         """
-        return _long_date(self.meta.get("publish due date", ""))
+        return _long_date(self.meta.get("Publish Due Date", ""))
 
     @property
     def phase(self) -> str:
@@ -532,13 +532,13 @@ class Document:
         Anything else is a draft of some kind reaching someone,
         and that is exactly what they need to be told.
         """
-        phase = self.meta.get("phase", "").strip()
+        phase = self.meta.get("Phase", "").strip()
         return "" if phase.casefold() == "published" else phase
 
     @property
     def slug(self) -> str:
         """The published path, e.g. `/reports/digging-out-deep-hole-sas-west`."""
-        return self.meta.get("url", "")
+        return self.meta.get("URL", "")
 
     def headings(self, level: int | None = None) -> list[Heading]:
         """Every heading in order, or only those at one level.

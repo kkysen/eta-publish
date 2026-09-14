@@ -60,14 +60,14 @@ def doc() -> Document:
 
 
 def test_a_report_is_published_at_the_path_its_header_names(doc: Document) -> None:
-    doc.meta["url"] = "/reports/digging-out-deep-hole-sas-west"
+    doc.meta["URL"] = "/reports/digging-out-deep-hole-sas-west"
     assert report_path(doc) == "reports/digging-out-deep-hole-sas-west"
 
 
 def test_a_report_with_no_url_is_refused(doc: Document) -> None:
     """A slug of the headline is a plausible path and not the published one,
     so guessing one publishes the report at the wrong URL, quietly."""
-    doc.meta.pop("url", None)
+    doc.meta.pop("URL", None)
     doc.title = "Digging Out of a Very Deep Hole"
     with pytest.raises(ValueError, match="no `URL:` line"):
         report_path(doc)
@@ -87,7 +87,7 @@ def test_a_document_with_no_header_is_told_that_and_not_about_its_url(doc: Docum
 def test_an_absolute_url_cannot_escape_the_site_root(doc: Document) -> None:
     """`/reports/x` is a published path, not a filesystem one;
     joined unstripped it would write to the root of the disk."""
-    doc.meta["url"] = "/reports/x"
+    doc.meta["URL"] = "/reports/x"
     assert not Path(report_path(doc)).is_absolute()
 
 
@@ -542,7 +542,7 @@ def test_a_url_that_climbs_out_of_the_site_is_refused(doc: Document) -> None:
     """The build writes wherever this says, and the committed-site check
     only ever looks inside `site/`, so a climb would leave no trace there."""
     doc.title = "Digging Out of a Very Deep Hole"
-    doc.meta["url"] = "/../../../../tmp/pwned"
+    doc.meta["URL"] = "/../../../../tmp/pwned"
     with pytest.raises(ValueError, match="climbs out of the site"):
         report_path(doc)
 

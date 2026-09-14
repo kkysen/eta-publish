@@ -972,8 +972,7 @@ class Parser:
 
     def _meta_line(self, written: str, value: str) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
-        written = self._without_note(written)
-        key = written.lower()
+        key = self._without_note(written)
         value = value.strip()
         if key in self.doc.meta:
             # The later line wins, and says so: a corrected line pasted
@@ -984,7 +983,7 @@ class Parser:
             self.doc.warn(
                 "the {} section has more than one {} line; using {} and ignoring {}",
                 Shown("Header"),
-                Shown(f"{written}:"),
+                Shown(f"{key}:"),
                 Shown(value),
                 Shown(self.doc.meta[key]),
             )
@@ -1033,14 +1032,14 @@ class Parser:
             Shown(filename),
             Shown("Title"),
         )
-        if self.doc.meta.get("title"):
+        if self.doc.meta.get("Title"):
             # Said separately, because it is a different thing to fix:
             # the headline is written down, in a line that does not set it.
             self.doc.warn(
                 "the {} section has {}, which is not what the headline comes from; "
                 "style that line as {} in the body instead",
                 Shown("Header"),
-                Shown(f"Title: {self.doc.meta['title']}"),
+                Shown(f"Title: {self.doc.meta['Title']}"),
                 Shown("Title"),
             )
         return filename

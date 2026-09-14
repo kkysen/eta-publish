@@ -29,7 +29,7 @@ def test_a_complete_header_is_not_warned_about(doc: Document) -> None:
 def test_a_missing_field_is_named(doc: Document) -> None:
     """By name, rather than as a list of nine:
     a warning naming one line is a line to go and add."""
-    del doc.meta["discussion channel"]
+    del doc.meta["Discussion Channel"]
     check(doc)
     assert [str(w) for w in doc.warnings] == [
         "the `Header` section has no `Discussion Channel:` line"
@@ -37,20 +37,20 @@ def test_a_missing_field_is_named(doc: Document) -> None:
 
 
 def test_seo_is_spelled_the_way_the_document_spells_it(doc: Document) -> None:
-    del doc.meta["seo description"]
+    del doc.meta["SEO Description"]
     check(doc)
     assert "`SEO Description:`" in str(doc.warnings[0])
 
 
 def test_an_empty_field_is_not_a_filled_one(doc: Document) -> None:
-    doc.meta["url"] = "   "
+    doc.meta["URL"] = "   "
     check(doc)
     assert [str(w) for w in doc.warnings] == ["the `Header` section leaves `URL:` empty"]
 
 
 def test_an_empty_private_list_is_an_answer(doc: Document) -> None:
     """A report with nobody uncredited has an empty line, and that is the answer."""
-    doc.meta["private contributors"] = ""
+    doc.meta["Private Contributors"] = ""
     check(doc)
     assert doc.warnings == []
 
@@ -65,7 +65,7 @@ def test_a_document_with_no_header_is_left_to_the_parser(doc: Document) -> None:
 def test_an_seo_description_over_the_limit_shows_what_is_cut(doc: Document) -> None:
     """Which words are lost is the thing to fix,
     and a count of characters over does not say which they are."""
-    doc.meta["seo description"] = "x" * 300 + " and this is lost"
+    doc.meta["SEO Description"] = "x" * 300 + " and this is lost"
     check(doc)
     assert [str(w) for w in doc.warnings] == [
         "`SEO Description:` is 317 characters, over the 300 a search result shows:\n> "
@@ -75,7 +75,7 @@ def test_an_seo_description_over_the_limit_shows_what_is_cut(doc: Document) -> N
 
 
 def test_an_seo_description_at_the_limit_is_fine(doc: Document) -> None:
-    doc.meta["seo description"] = "x" * 300
+    doc.meta["SEO Description"] = "x" * 300
     check(doc)
     assert doc.warnings == []
 
@@ -116,7 +116,7 @@ def test_a_figure_missing_both_says_both(doc: Document) -> None:
 
 def test_an_unfinished_header_line_is_flagged(doc: Document) -> None:
     """The body walk never sees the header: it is consumed before that walk begins."""
-    doc.meta["short"] = "TODO write this"
+    doc.meta["Short"] = "TODO write this"
     check(doc)
     assert [str(w) for w in doc.warnings] == ["`Short:` is still marked unfinished"]
 
@@ -175,13 +175,13 @@ def test_an_image_a_human_named_img_is_not_unnamed(doc: Document) -> None:
 def test_an_address_beside_a_name_is_not_published(doc: Document) -> None:
     """A byline is names. Docs writes the address when it cannot resolve
     a person chip to a display name, and the name is typed beside it."""
-    doc.meta["public contributors"] = "Alon Levy (alon@example.org), Khyber Sen"
+    doc.meta["Public Contributors"] = "Alon Levy (alon@example.org), Khyber Sen"
     assert doc.contributors == ["Alon Levy", "Khyber Sen"]
 
 
 def test_a_missing_comma_after_an_address_is_warned_about(doc: Document) -> None:
     """It reads as one contributor, sorted under a surname belonging to neither."""
-    doc.meta["public contributors"] = "Franklin Tang (ft@example.org) Madison Feinberg, Khyber Sen"
+    doc.meta["Public Contributors"] = "Franklin Tang (ft@example.org) Madison Feinberg, Khyber Sen"
     check(doc)
     assert any("a comma is missing after the address" in w for w in map(str, doc.warnings))
 
@@ -189,7 +189,7 @@ def test_a_missing_comma_after_an_address_is_warned_about(doc: Document) -> None
 def test_names_without_addresses_are_left_alone(doc: Document) -> None:
     """Two bare names run together are two words,
     and nothing here can tell those from a double-barrelled surname."""
-    doc.meta["public contributors"] = "Ada Lovelace, Grace Hopper"
+    doc.meta["Public Contributors"] = "Ada Lovelace, Grace Hopper"
     check(doc)
     assert doc.contributors == ["Grace Hopper", "Ada Lovelace"]
     assert not any("comma is missing" in w for w in map(str, doc.warnings))

@@ -74,7 +74,7 @@ def doc() -> Document:
 
 
 def test_the_header_section_ends_at_the_headline(doc: Document) -> None:
-    assert set(doc.meta) == {"project manager", "url", "mta sas west feasibility study"}
+    assert set(doc.meta) == {"Project Manager", "URL", "MTA SAS West Feasibility Study"}
     assert "addendum" not in doc.meta
 
 
@@ -121,7 +121,7 @@ def test_prose_ends_the_header_section_even_without_a_headline() -> None:
             },
         }
     )
-    assert set(doc.meta) == {"url"}
+    assert set(doc.meta) == {"URL"}
     assert len(doc.blocks) == 1
 
 
@@ -167,8 +167,8 @@ def test_scaffolding_before_the_header_does_not_hide_it() -> None:
             },
         }
     )
-    assert doc.meta["url"] == "/reports/digging-out-deep-hole-sas-west"
-    assert doc.meta["short"] == "A 125 St subway should be a slam dunk."
+    assert doc.meta["URL"] == "/reports/digging-out-deep-hole-sas-west"
+    assert doc.meta["Short"] == "A 125 St subway should be a slam dunk."
     assert doc.title == "The Real Headline"
 
 
@@ -230,31 +230,31 @@ def test_a_headline_before_the_header_stops_the_search() -> None:
 def test_contributors_are_sorted_by_surname() -> None:
     """`etany.org` credits contributors alphabetically,
     and the field they are typed into is in whatever order people were added."""
-    doc = Document(meta={"public contributors": "Khyber Sen, Alon Levy, Robert Hale"})
+    doc = Document(meta={"Public Contributors": "Khyber Sen, Alon Levy, Robert Hale"})
     assert doc.contributors == ["Robert Hale", "Alon Levy", "Khyber Sen"]
 
 
 def test_a_one_word_name_sorts_on_itself() -> None:
-    doc = Document(meta={"public contributors": "Zoe, Alon Levy"})
+    doc = Document(meta={"Public Contributors": "Zoe, Alon Levy"})
     assert doc.contributors == ["Alon Levy", "Zoe"]
 
 
 def test_the_date_is_written_out() -> None:
     """`etany.org` writes the month out; a Docs chip renders it short."""
-    assert Document(meta={"publish due date": "Aug 19, 2026"}).dateline == "August 19, 2026"
+    assert Document(meta={"Publish Due Date": "Aug 19, 2026"}).dateline == "August 19, 2026"
 
 
 def test_a_day_is_not_padded() -> None:
-    assert Document(meta={"publish due date": "Aug 1, 2026"}).dateline == "August 1, 2026"
+    assert Document(meta={"Publish Due Date": "Aug 1, 2026"}).dateline == "August 1, 2026"
 
 
 def test_a_date_already_written_out_is_left_alone() -> None:
-    assert Document(meta={"publish due date": "August 19, 2026"}).dateline == "August 19, 2026"
+    assert Document(meta={"Publish Due Date": "August 19, 2026"}).dateline == "August 19, 2026"
 
 
 def test_something_that_is_not_a_date_is_published_as_written() -> None:
     """Guessing would be worse than showing what the header block says."""
-    assert Document(meta={"publish due date": "when it is ready"}).dateline == "when it is ready"
+    assert Document(meta={"Publish Due Date": "when it is ready"}).dateline == "when it is ready"
 
 
 def test_no_date_is_still_no_dateline() -> None:
@@ -311,7 +311,7 @@ def test_a_field_written_twice_says_which_one_won() -> None:
         },
     }
     doc = parse(document)
-    assert doc.meta["short"] == "The second answer."
+    assert doc.meta["Short"] == "The second answer."
     assert any(
         "more than one `Short:` line" in w
         and "`The second answer.`" in w
@@ -335,7 +335,7 @@ def test_a_note_in_the_key_does_not_hide_a_repeat() -> None:
         },
     }
     doc = parse(document)
-    assert doc.meta["seo description"] == "Second."
+    assert doc.meta["SEO Description"] == "Second."
     assert any("more than one `SEO Description:` line" in w for w in map(str, doc.warnings))
 
 
@@ -375,9 +375,9 @@ def test_two_fields_in_one_paragraph_are_two_fields() -> None:
         },
     }
     doc = parse(document)
-    assert doc.meta["short"] == "Too loud."
-    assert doc.meta["seo description"] == "Far too loud."
-    assert doc.meta["url"] == "/briefs/too-damn-loud"
+    assert doc.meta["Short"] == "Too loud."
+    assert doc.meta["SEO Description"] == "Far too loud."
+    assert doc.meta["URL"] == "/briefs/too-damn-loud"
 
 
 def test_a_value_that_wraps_keeps_the_rest_of_itself() -> None:
@@ -393,8 +393,8 @@ def test_a_value_that_wraps_keeps_the_rest_of_itself() -> None:
         },
     }
     doc = parse(document)
-    assert doc.meta["short"] == "Too loud, and too long."
-    assert doc.meta["url"] == "/briefs/too-damn-loud"
+    assert doc.meta["Short"] == "Too loud, and too long."
+    assert doc.meta["URL"] == "/briefs/too-damn-loud"
 
 
 def test_a_shared_paragraph_says_so() -> None:
