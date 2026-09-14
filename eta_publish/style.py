@@ -15,15 +15,7 @@ rather than quietly making the reports agree.
 import re
 from collections.abc import Iterator
 
-from .nodes import Document, Shown, Where, plain_text
-
-QUOTES_SOMEBODY_ELSE = frozenset({Where.FOOTNOTE})
-"""Where the words are not ours to set.
-
-A footnote is a citation, and a citation is an author and a headline
-copied from wherever it was published. Restyling a quoted headline
-misquotes it, so how it spells a thing says nothing about this report.
-"""
+from .nodes import Document, Shown, plain_text
 
 CONTEXT = 30
 """How much of the line to show on either side of what is being warned about.
@@ -51,6 +43,10 @@ def _excerpt(text: str, start: int, end: int, shown: str | None = None) -> str:
 def _prose(doc: Document) -> Iterator[str]:
     """Every run of the document's own words, as one string each.
 
+    Footnotes included. They carry the report's own prose as often as they
+    carry a citation, and a citation copied from where it was published is
+    published here too, under this report's name and in its house style.
+
     The header is read alongside the body rather than left out of this.
     `text_runs` walks the blocks, and the header was consumed before those
     existed, so a `Short:` or `SEO Description:` written against the style
@@ -59,9 +55,7 @@ def _prose(doc: Document) -> Iterator[str]:
     and as what a search result shows.
     """
     yield from doc.meta.values()
-    for run, where in doc.text_runs():
-        if where in QUOTES_SOMEBODY_ELSE:
-            continue
+    for run, _ in doc.text_runs():
         yield plain_text(run)
 
 
