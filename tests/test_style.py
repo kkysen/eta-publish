@@ -292,3 +292,22 @@ def test_a_number_written_as_a_word_is_left_alone() -> None:
 def test_the_second_avenue_is_not_a_second() -> None:
     """`second` is a unit and an avenue, and only one of them follows a number."""
     assert warnings(written("The Second Avenue Subway opened.")) == []
+
+
+def test_a_measurement_is_not_hyphenated_into_what_it_describes() -> None:
+    """The hyphen is right as English and dropped all the same,
+    so a search for `20 ft` finds every one of them rather than the ones
+    that happened not to be describing anything."""
+    assert "`600-foot` is `600 ft`" in warnings(written("The capacity of a 600-foot train."))[0]
+    assert "`1-min` is `1 min`" in warnings(written("The extreme 1-min headways of Lille."))[0]
+
+
+def test_a_hyphenated_measurement_is_one_warning_rather_than_two() -> None:
+    """The unit is spelled out and hyphenated, and both are the same fix."""
+    assert len(warnings(written("The capacity of a 600-foot train."))) == 1
+
+
+def test_an_ordinary_hyphenated_phrase_is_not_a_measurement() -> None:
+    """`2-track`, `4-car` and `NFPA 130-compliant` are hyphenated for the
+    ordinary reason, and the reports are full of them."""
+    assert warnings(written("It has 2-track lines, 4-car sets, and is NFPA 130-compliant.")) == []
