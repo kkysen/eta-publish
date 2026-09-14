@@ -208,8 +208,10 @@ KNOWN_WARNINGS = (
     "has an unrecognized",
     "runs past it into the value",
     "in MTA style",
-    "how a report writes a measurement",
-    "with no hyphen between a number and its unit",
+    # Every house-style warning, as one kind. They say what to write and not
+    # why, so the words in one are the document's rather than the check's,
+    # and there is nothing else in them to match on.
+    "style: ",
 )
 """Every kind of warning this report has been known to raise.
 

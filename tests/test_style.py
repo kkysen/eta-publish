@@ -300,8 +300,7 @@ def test_a_measurement_is_not_hyphenated_into_what_it_describes() -> None:
     that happened not to be describing anything."""
     found = warnings(written("The extreme 1-min headways of Lille."))
     assert found == [
-        "style: `1-min` is `1 min`, with no hyphen between a number and its unit: "
-        "`The extreme 1-min headways of Lille.`"
+        "style: `1-min` is `1 min`, with no hyphen: `The extreme 1-min headways of Lille.`"
     ]
 
 

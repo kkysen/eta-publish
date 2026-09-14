@@ -15,38 +15,38 @@
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: `125th Street` is `125 St` in MTA style: `...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...`
-- style: `8 minutes` is `8 min`, which is how a report writes a measurement: `...l city. SkyTrain runs every 6-8 minutes off-peak on each of two branc...`
-- style: `6 minutes` is `6 min`, which is how a report writes a measurement: `...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...`
-- style: `3-minute` is `3-min`, which is how a report writes a measurement: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
-- style: `6 minutes` is `6 min`, which is how a report writes a measurement: `...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...`
-- style: `15 minutes` is `15 min`, which is how a report writes a measurement: `...Marseille Metro runs every 10-15 minutes.`
-- style: `3-minute` is `3 min`, with no hyphen between a number and its unit: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
+- style: `8 minutes` is `8 min`: `...l city. SkyTrain runs every 6-8 minutes off-peak on each of two branc...`
+- style: `6 minutes` is `6 min`: `...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...`
+- style: `3-minute` is `3-min`: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
+- style: `6 minutes` is `6 min`: `...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...`
+- style: `15 minutes` is `15 min`: `...Marseille Metro runs every 10-15 minutes.`
+- style: `3-minute` is `3 min`, with no hyphen: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
 - style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
 - style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
 - style: `Fordham Road` is `Fordham Rd` in MTA style: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
 - style: `Main Street` is `Main St` in MTA style: `...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...`
-- style: `5-minute` is `5-min`, which is how a report writes a measurement: `...time and the currently stated 5-minute peak headways. If peak headwa...`
-- style: `2 minutes` is `2 min`, which is how a report writes a measurement: `... peak headways are reduced to 2 minutes instead, with off-peak headwa...`
-- style: `3 minutes` is `3 min`, which is how a report writes a measurement: `...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...`
-- style: `5 minutes` is `5 min`, which is how a report writes a measurement: `...ging from 3 minutes midday to 5 minutes in the evening, ridership ris...`
-- style: `5-minute` is `5 min`, with no hyphen between a number and its unit: `...time and the currently stated 5-minute peak headways. If peak headwa...`
-- style: `66 seconds` is `66 sec`, which is how a report writes a measurement: `...rains, but it runs them every 66 seconds, and can run up to 60 seconds...`
-- style: `60 seconds` is `60 sec`, which is how a report writes a measurement: `...66 seconds, and can run up to 60 seconds. While a light metro can be a...`
-- style: `1-min` is `1 min`, with no hyphen between a number and its unit: `...frequencies, like the extreme 1-min headways of Lille to the more...`
-- style: `2-min` is `2 min`, with no hyphen between a number and its unit: `... Lille to the more normal 1.5-2-min minimum technical headways of...`
-- style: `2 minutes` is `2 min`, which is how a report writes a measurement: `...sist) at very high frequency (2 minutes apart or less), trading per-t...`
-- style: `600-foot` is `600-ft`, which is how a report writes a measurement: `...equire the high capacity of a 600-foot subway train. Since most IBX ...`
-- style: `2 minutes` is `2 min`, which is how a report writes a measurement: `...trains as frequently as every 2 minutes or less thus benefits the pla...`
-- style: `600-foot` is `600 ft`, with no hyphen between a number and its unit: `...equire the high capacity of a 600-foot subway train. Since most IBX ...`
-- style: `180 meters` is `180 m`, which is how a report writes a measurement: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
+- style: `5-minute` is `5-min`: `...time and the currently stated 5-minute peak headways. If peak headwa...`
+- style: `2 minutes` is `2 min`: `... peak headways are reduced to 2 minutes instead, with off-peak headwa...`
+- style: `3 minutes` is `3 min`: `...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...`
+- style: `5 minutes` is `5 min`: `...ging from 3 minutes midday to 5 minutes in the evening, ridership ris...`
+- style: `5-minute` is `5 min`, with no hyphen: `...time and the currently stated 5-minute peak headways. If peak headwa...`
+- style: `66 seconds` is `66 sec`: `...rains, but it runs them every 66 seconds, and can run up to 60 seconds...`
+- style: `60 seconds` is `60 sec`: `...66 seconds, and can run up to 60 seconds. While a light metro can be a...`
+- style: `1-min` is `1 min`, with no hyphen: `...frequencies, like the extreme 1-min headways of Lille to the more...`
+- style: `2-min` is `2 min`, with no hyphen: `... Lille to the more normal 1.5-2-min minimum technical headways of...`
+- style: `2 minutes` is `2 min`: `...sist) at very high frequency (2 minutes apart or less), trading per-t...`
+- style: `600-foot` is `600-ft`: `...equire the high capacity of a 600-foot subway train. Since most IBX ...`
+- style: `2 minutes` is `2 min`: `...trains as frequently as every 2 minutes or less thus benefits the pla...`
+- style: `600-foot` is `600 ft`, with no hyphen: `...equire the high capacity of a 600-foot subway train. Since most IBX ...`
+- style: `180 meters` is `180 m`: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a sentence should end with 1 space, not 2: `...t costs are given separately).··This is a Buy America cost, wh...`
-- style: `32-min` is `32 min`, with no hyphen between a number and its unit: `With a 32-min runtime, 2-min turns, and a 9...`
-- style: `2-min` is `2 min`, with no hyphen between a number and its unit: `With a 32-min runtime, 2-min turns, and a 90% utilization ...`
-- style: `2-min` is `2 min`, with no hyphen between a number and its unit: `... fleet cost. But this is with 2-min peak headways, not 5-min peak...`
-- style: `5-min` is `5 min`, with no hyphen between a number and its unit: `...with 2-min peak headways, not 5-min peak headways. And with a 92%...`
-- style: `72,000 lbs` is `72,000 lb`, which is how a report writes a measurement: `weight: 72,000 lbs per 65 ft AW0 car`
-- style: `72,000 lbs` is `72,000 lb`, which is how a report writes a measurement: `AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m`
-- style: `175 lbs` is `175 lb`, which is how a report writes a measurement: `AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 223...`
+- style: `32-min` is `32 min`, with no hyphen: `With a 32-min runtime, 2-min turns, and a 9...`
+- style: `2-min` is `2 min`, with no hyphen: `With a 32-min runtime, 2-min turns, and a 90% utilization ...`
+- style: `2-min` is `2 min`, with no hyphen: `... fleet cost. But this is with 2-min peak headways, not 5-min peak...`
+- style: `5-min` is `5 min`, with no hyphen: `...with 2-min peak headways, not 5-min peak headways. And with a 92%...`
+- style: `72,000 lbs` is `72,000 lb`: `weight: 72,000 lbs per 65 ft AW0 car`
+- style: `72,000 lbs` is `72,000 lb`: `AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m`
+- style: `175 lbs` is `175 lb`: `AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 223...`
 
 ## No Need to Wait: Automated Light Metro is Right for the IBX
 

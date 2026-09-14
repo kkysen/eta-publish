@@ -513,7 +513,7 @@ def _check_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
             doc,
-            "{} is {}, which is how a report writes a measurement: {}",
+            "{} is {}: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, match.start()), written, _after(text, match.end())),
@@ -557,7 +557,7 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
         _warn(
             doc,
-            "{} is {}, with no hyphen between a number and its unit: {}",
+            "{} is {}, with no hyphen: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
@@ -616,7 +616,7 @@ def _check_spelled_out_symbols(doc: Document, text: str) -> None:
         correct = f"${amount}{scale}" if money else f"{amount}%"
         _warn(
             doc,
-            "{} is {}, which is how a report writes it: {}",
+            "{} is {}: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
