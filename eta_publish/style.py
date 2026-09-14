@@ -543,12 +543,18 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
     wherever it appears and a search for `600 ft` finds every one of them
     rather than the ones that happened not to be describing anything.
 
-    Only the hyphen. A unit spelled out as well is the other warning's,
-    and the two together say to write `600 ft`.
+    What it says to write is the whole measurement, `600 ft`,
+    spelled out unit and all. A unit spelled out is the other warning's to
+    make, and this one says it too rather than leaving somebody to write
+    `600 foot` and be told about it on the next build.
     """
     for match in JOINED.finditer(text):
+        unit = match.group("unit")
+        correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
         _warn(
             doc,
-            "a number is joined to its unit by a hyphen, where MTA style has a space: {}",
+            "{} is {} in MTA style, with no hyphen: {}",
+            Shown(match.group()),
+            Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
         )
