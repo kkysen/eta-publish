@@ -146,6 +146,154 @@ def _is_word(text: str) -> bool:
     return bool(text) and all(c.isalnum() or c == "_" for c in text)
 
 
+# Editorial notes naming where an image came from, none of which is published.
+# The real report uses four spellings:
+# `Source:` under an image, `Uncropped Source:` for one that was trimmed,
+# and, after a caption,
+# either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
+# One optional qualifying word covers all of them and whatever the next one is.
+SOURCE_LABEL = "source"
+
+# The same idea for chart assets: `SVG:` and `PNG:` name the file to link beside a figure.
+# Notes to whoever assembles the page; the published report carries real links.
+ASSET_LABELS = frozenset({"svg", "png", "pdf"})
+
+CREDIT_LABEL = "credit"
+
+# What ends a label: a colon where the line was typed,
+# a bracket where the label is the text of a link.
+LABEL_MARKS = ":]"
+
+
+def note_label(line: str) -> tuple[str, str]:
+    """A note line read as the label it is headed with and the mark that ends it.
+
+    `Uncropped Source:` is `("uncropped source", ":")`
+    and `[Image Source]` is `("image source", "]")`.
+    A line with neither mark is all label and an empty mark,
+    which only the bare spelling is allowed to be.
+
+    The opening bracket is optional for every label, not only the linked ones.
+    Wider than the lines the reports actually write,
+    deliberately: a bracketed `[SVG: ...]` is the note it looks like,
+    and publishing it as prose because of the bracket helps nobody.
+    """
+    head = line.lstrip().removeprefix("[").lstrip()
+    for index, character in enumerate(head):
+        if character in LABEL_MARKS:
+            return head[:index].strip().casefold(), character
+    return head.strip().casefold(), ""
+
+
+def is_source_note(line: str) -> bool:
+    """Whether `line` is a `Source:` note rather than prose.
+
+    The bare spelling needs no mark, which is why the label has to be
+    the whole of what precedes it:
+    a paragraph beginning "Source of the estimate is ..." is prose,
+    and only one saying nothing but "Image Source" is a note.
+    """
+    label, _ = note_label(line)
+    words = label.split()
+    if not words or words[-1] != SOURCE_LABEL:
+        return False
+    # The qualifier is one word: `Uncropped Source`, `Image Source`.
+    # Anything else before the label is a sentence that happens to end in it.
+    return len(words) == 1 or (len(words) == 2 and _is_word(words[0]))
+
+
+def is_asset_note(line: str) -> bool:
+    """Whether `line` is a `SVG:`/`PNG:`/`PDF:` note.
+
+    A colon and nothing else: these are typed, never linked,
+    and a bare `PDF` is a word.
+    """
+    label, mark = note_label(line)
+    return mark == ":" and label in ASSET_LABELS
+
+
+def is_credit_note(line: str) -> bool:
+    """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
+    label, mark = note_label(line)
+    return bool(mark) and label == CREDIT_LABEL
+
+
+# How long a field name may run before the line is prose that holds a colon.
+# `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
+# is a headline, not a field.
+MAX_KEY = 61
+
+
+def key_line(line: str) -> tuple[str, str] | None:
+    """One `Key: value` line split in two, or `None` where the line is prose.
+
+    A field name starts with a capital, holds no colon of its own,
+    and is short: the first colon ends it,
+    and a long run before that is a sentence rather than a name.
+    """
+    key, colon, value = line.partition(":")
+    if not colon:
+        return None
+    key = key.rstrip()
+    if not key or key[0] not in ascii_uppercase or len(key) > MAX_KEY:
+        return None
+    return key, value.lstrip()
+
+
+def without_note(key: str) -> str:
+    """A field name without the note to whoever fills it in.
+
+    The real doc writes `SEO Description (300 char limit):`,
+    and a lookup for `seo description` finds nothing unless the note is stripped.
+    """
+    text = key.rstrip()
+    if not text.endswith(")"):
+        return key.strip()
+    # The note is the bracketed run the name ends with.
+    # Its opening bracket is the first one after any earlier closing bracket,
+    # so a name carrying brackets of its own keeps them.
+    opened = text.find("(", text.rfind(")", 0, len(text) - 1) + 1)
+    return key.strip() if opened < 0 else text[:opened].strip()
+
+
+MAX_FIELD_WORDS = 6
+"""How many words a field name may run to.
+
+`MTA SAS West Feasibility Study` is five and is a field.
+Past this a run before a colon is a sentence.
+"""
+
+
+def names_a_field(key: str) -> bool:
+    """Whether `key` reads as the name of a field rather than as prose.
+
+    A field name is written as a name: short, and every word capitalized.
+    `The answer was simple` is a clause, and a clause before a colon is prose,
+    which is what keeps this off the many body sentences holding a colon.
+    """
+    words = key.split()
+    return (
+        bool(words)
+        and len(words) <= MAX_FIELD_WORDS
+        and all(not word[0].isalpha() or word[0].isupper() for word in words)
+    )
+
+
+def header_field(line: str) -> str:
+    """The header field `line` writes, or nothing where it writes none.
+
+    The name only, without its value and without the note beside it,
+    so `SEO Description (300 char limit): ...` answers `SEO Description`.
+    A line naming no recognized field answers nothing,
+    which is what keeps a sentence holding a colon from being read as one.
+    """
+    found = key_line(line)
+    if found is None:
+        return ""
+    key = without_note(found[0])
+    return key if key in KNOWN_FIELDS else ""
+
+
 # How much of a line a warning quotes back before it is just repeating the document.
 CLIP = 60
 
@@ -574,77 +722,6 @@ class Parser:
 
     # ---- blocks ------------------------------------------------------
 
-    # Editorial notes naming where an image came from, none of which is published.
-    # The real report uses four spellings:
-    # `Source:` under an image, `Uncropped Source:` for one that was trimmed,
-    # and, after a caption,
-    # either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
-    # One optional qualifying word covers all of them and whatever the next one is.
-    SOURCE_LABEL = "source"
-
-    # The same idea for chart assets: `SVG:` and `PNG:` name the file to link beside a figure.
-    # Notes to whoever assembles the page; the published report carries real links.
-    ASSET_LABELS = frozenset({"svg", "png", "pdf"})
-
-    CREDIT_LABEL = "credit"
-
-    # What ends a label: a colon where the line was typed,
-    # a bracket where the label is the text of a link.
-    LABEL_MARKS = ":]"
-
-    @staticmethod
-    def _labelled(line: str) -> tuple[str, str]:
-        """A note line read as the label it is headed with and the mark that ends it.
-
-        `Uncropped Source:` is `("uncropped source", ":")`
-        and `[Image Source]` is `("image source", "]")`.
-        A line with neither mark is all label and an empty mark,
-        which only the bare spelling is allowed to be.
-
-        The opening bracket is optional for every label, not only the linked ones.
-        Wider than the lines the reports actually write,
-        deliberately: a bracketed `[SVG: ...]` is the note it looks like,
-        and publishing it as prose because of the bracket helps nobody.
-        """
-        head = line.lstrip().removeprefix("[").lstrip()
-        for index, character in enumerate(head):
-            if character in Parser.LABEL_MARKS:
-                return head[:index].strip().casefold(), character
-        return head.strip().casefold(), ""
-
-    @classmethod
-    def _is_source(cls, line: str) -> bool:
-        """Whether `line` is a `Source:` note rather than prose.
-
-        The bare spelling needs no mark, which is why the label has to be
-        the whole of what precedes it:
-        a paragraph beginning "Source of the estimate is ..." is prose,
-        and only one saying nothing but "Image Source" is a note.
-        """
-        label, _ = cls._labelled(line)
-        words = label.split()
-        if not words or words[-1] != cls.SOURCE_LABEL:
-            return False
-        # The qualifier is one word: `Uncropped Source`, `Image Source`.
-        # Anything else before the label is a sentence that happens to end in it.
-        return len(words) == 1 or (len(words) == 2 and _is_word(words[0]))
-
-    @classmethod
-    def _is_asset(cls, line: str) -> bool:
-        """Whether `line` is a `SVG:`/`PNG:`/`PDF:` note.
-
-        A colon and nothing else: these are typed, never linked,
-        and a bare `PDF` is a word.
-        """
-        label, mark = cls._labelled(line)
-        return mark == ":" and label in cls.ASSET_LABELS
-
-    @classmethod
-    def _is_credit(cls, line: str) -> bool:
-        """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
-        label, mark = cls._labelled(line)
-        return bool(mark) and label == cls.CREDIT_LABEL
-
     def blocks(self, content: list[JsonObject]) -> list[Block]:
         out: list[Block] = []
         pending_source: list[Inline] | None = None
@@ -720,7 +797,7 @@ class Parser:
             if unfinished(text):
                 self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
-            if self._is_source(text) or self._is_asset(text):
+            if is_source_note(text) or is_asset_note(text):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
@@ -759,10 +836,10 @@ class Parser:
                     line_text = plain_text(line).strip()
                     if not line_text:
                         continue
-                    if self._is_credit(line_text):
+                    if is_credit_note(line_text):
                         last.credit = line
                         claimed = True
-                    elif self._is_source(line_text) or self._is_asset(line_text):
+                    elif is_source_note(line_text) or is_asset_note(line_text):
                         last.source = last.source + line
                         self._claim_name(last, line)
                         claimed = True
@@ -878,27 +955,6 @@ class Parser:
                     return image
         return None
 
-    # How long a field name may run before the line is prose that holds a colon.
-    # `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
-    # is a headline, not a field.
-    MAX_KEY = 61
-
-    @staticmethod
-    def _key_line(line: str) -> tuple[str, str] | None:
-        """One `Key: value` line split in two, or `None` where the line is prose.
-
-        A field name starts with a capital, holds no colon of its own,
-        and is short: the first colon ends it,
-        and a long run before that is a sentence rather than a name.
-        """
-        key, colon, value = line.partition(":")
-        if not colon:
-            return None
-        key = key.rstrip()
-        if not key or key[0] not in ascii_uppercase or len(key) > Parser.MAX_KEY:
-            return None
-        return key, value.lstrip()
-
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
@@ -968,12 +1024,12 @@ class Parser:
             # The two read alike in the document and are not alike here,
             # so every line of the paragraph is considered, not just the first.
             lines = text.split("\n")
-            if self._key_line(lines[0]) is None:
+            if key_line(lines[0]) is None:
                 break  # prose: the header section is over
 
             key = ""
             for line in lines:
-                field = self._key_line(line)
+                field = key_line(line)
                 if field is None:
                     # A line that names no field continues the value above it.
                     # Ending the scan here would drop the rest of the paragraph,
@@ -994,25 +1050,9 @@ class Parser:
             )
         return content[end:]
 
-    @staticmethod
-    def _without_note(key: str) -> str:
-        """A field name without the note to whoever fills it in.
-
-        The real doc writes `SEO Description (300 char limit):`,
-        and a lookup for `seo description` finds nothing unless the note is stripped.
-        """
-        text = key.rstrip()
-        if not text.endswith(")"):
-            return key.strip()
-        # The note is the bracketed run the name ends with.
-        # Its opening bracket is the first one after any earlier closing bracket,
-        # so a name carrying brackets of its own keeps them.
-        opened = text.find("(", text.rfind(")", 0, len(text) - 1) + 1)
-        return key.strip() if opened < 0 else text[:opened].strip()
-
     def _meta_line(self, written: str, value: str) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
-        key = self._without_note(written)
+        key = without_note(written)
         value = value.strip()
         if key not in KNOWN_FIELDS:
             # A field nothing reads is a field nobody notices is missing.

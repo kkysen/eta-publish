@@ -637,6 +637,15 @@ class Document:
         """
         return [b for b in self._every_block() if isinstance(b, Figure)]
 
+    def text_runs(self) -> Iterator[tuple[list[Inline], Where]]:
+        """Every run of inline content in the report, captions and footnotes included.
+
+        What somebody typed, wherever they typed it,
+        for the checks that ask whether a line belongs where it sits.
+        """
+        for block in self._every_block():
+            yield from inlines_in(block)
+
     def _every_block(self) -> Iterator[Block]:
         """Every block of the report, then every block of its footnotes.
 
@@ -889,6 +898,49 @@ def is_source(href: str | None) -> bool:
     if not href.startswith(("http://", "https://")):
         return False
     return "etany.org" not in href
+
+
+class Where(Enum):
+    """Where in the document a run of text sits.
+
+    What is a stray line in one place is the ordinary spelling in another:
+    a `Credit:` under a picture is a credit,
+    and the same line in a body paragraph is a line somebody lost.
+    """
+
+    BODY = "body"
+    HEADING = "heading"
+    SOURCE = "source"
+    CAPTION = "caption"
+    CREDIT = "credit"
+
+
+def inlines_in(block: Block) -> list[tuple[list[Inline], Where]]:
+    """Every run of inline content the block carries, in reading order, and where it sits.
+
+    A figure's `Source:` line is included, unlike `_links_in`:
+    what reads these is asking what the document says, not what it publishes,
+    and an editorial note is still something somebody typed.
+    A table contributes nothing of its own; `_walk` reaches its cells.
+    """
+    match block:
+        case Figure():
+            return [
+                (content, where)
+                for content, where in (
+                    (block.source, Where.SOURCE),
+                    (block.caption, Where.CAPTION),
+                    (block.credit, Where.CREDIT),
+                )
+                if content
+            ]
+        case Heading():
+            return [(block.content, Where.HEADING)]
+        case Paragraph():
+            return [(block.content, Where.BODY)]
+        case List():
+            return [(item.content, Where.BODY) for item in _items(block.items)]
+    return []
 
 
 def _links_in(block: Block) -> list[str]:
