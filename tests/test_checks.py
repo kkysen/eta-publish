@@ -333,7 +333,7 @@ def test_prose_holding_a_colon_is_not_a_stray_field(doc: Document) -> None:
     doc.blocks = [
         Paragraph(content=[Text(text="The answer was simple: build it shallower.")]),
         Paragraph(content=[Text(text="Phases of the project: three.")]),
-        Paragraph(content=[Text(text="Addendum: One sentence. Then a second one.")]),
+        Paragraph(content=[Text(text='Barbara Russo-Lennon, "Subway spots: the ad blitz."')]),
     ]
     check(doc)
     assert doc.warnings == []

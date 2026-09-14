@@ -256,6 +256,13 @@ def without_note(key: str) -> str:
     return key.strip() if opened < 0 else text[:opened].strip()
 
 
+NOT_IN_A_NAME = ",;\"“”'‘’"
+"""Punctuation a field name does not carry, whatever else it looks like.
+
+A citation opens with a name and a comma and quotes the headline after it,
+which capitalization alone reads as a field.
+"""
+
 MAX_FIELD_WORDS = 6
 """How many words a field name may run to.
 
@@ -267,16 +274,29 @@ Past this a run before a colon is a sentence.
 def names_a_field(key: str) -> bool:
     """Whether `key` reads as the name of a field rather than as prose.
 
-    A field name is written as a name: short, and every word capitalized.
-    `The answer was simple` is a clause, and a clause before a colon is prose,
-    which is what keeps this off the many body sentences holding a colon.
+    A field name is written as a name: short, and capitalized throughout.
+    A clause is written as a sentence: a capital to start it and lower case after,
+    which is what `The answer was simple: build it shallower` is,
+    and what keeps this off the many body sentences holding a colon.
+
+    Punctuation settles the rest. A name has none of a sentence's:
+    `Barbara Russo-Lennon, "Subway spots` is the start of a citation,
+    and the comma says so before any question of capitals arises.
+
+    Not every word, because a name carries small words that stay lower:
+    `Date of Publication` is a name and `of` is not going to be capitalized.
+    So the test is the balance rather than the exception:
+    more of the words after the first in lower case than not, and it is a clause.
     """
+    if any(character in NOT_IN_A_NAME for character in key):
+        return False
     words = key.split()
-    return (
-        bool(words)
-        and len(words) <= MAX_FIELD_WORDS
-        and all(not word[0].isalpha() or word[0].isupper() for word in words)
-    )
+    if not words or len(words) > MAX_FIELD_WORDS:
+        return False
+    if words[0][0].isalpha() and not words[0][0].isupper():
+        return False
+    rest = [word for word in words[1:] if word[0].isalpha()]
+    return sum(word[0].islower() for word in rest) * 2 <= len(rest)
 
 
 def header_field(line: str) -> str:
