@@ -41,11 +41,6 @@ from ..nodes import (
 from ..sentences import split
 from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
 
-# Characters that would otherwise be read as Markdown syntax.
-# Escaping is minimal: over-escaping makes the archive harder to read by hand,
-# which is most of the point of having it.
-ESCAPE = re.compile(r"([\\`*_\[\]|])")
-
 
 def fence(value: str) -> str:
     """`value` as a Markdown code span, whatever backticks it holds.
@@ -59,6 +54,12 @@ def fence(value: str) -> str:
     ticks = "`" * (longest + 1)
     padding = " " if value.startswith("`") or value.endswith("`") else ""
     return f"{ticks}{padding}{value}{padding}{ticks}"
+
+
+# Characters that would otherwise be read as Markdown syntax.
+# Escaping is minimal: over-escaping makes the archive harder to read by hand,
+# which is most of the point of having it.
+ESCAPE = re.compile(r"([\\`*_\[\]|])")
 
 
 def escape(text: str) -> str:
