@@ -43,7 +43,16 @@ def _excerpt(text: str, start: int, end: int) -> str:
 
 
 def _prose(doc: Document) -> Iterator[str]:
-    """Every run of the document's own words, as one string each."""
+    """Every run of the document's own words, as one string each.
+
+    The header is read alongside the body rather than left out of this.
+    `text_runs` walks the blocks, and the header was consumed before those
+    existed, so a `Short:` or `SEO Description:` written against the style
+    would otherwise be the one piece of prose nothing here reads,
+    and it is the piece that publishes as the standfirst
+    and as what a search result shows.
+    """
+    yield from doc.meta.values()
     for run, where in doc.text_runs():
         if where in QUOTES_SOMEBODY_ELSE:
             continue

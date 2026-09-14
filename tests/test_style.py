@@ -121,3 +121,18 @@ def test_a_word_beginning_with_the_initials_is_not_them() -> None:
 
 def test_a_quoted_headline_is_left_as_it_was_published() -> None:
     assert warnings(cited('Barbara Russo-Lennon, "What the ETA wants."')) == []
+
+
+def test_the_header_is_read_like_the_body() -> None:
+    """`Short:` publishes as the standfirst and `SEO Description:` as what a
+    search result shows, and the header is consumed before the body walk,
+    so neither is reached by walking the blocks."""
+    doc = Document()
+    doc.meta = {"Short": "It is deep.  It is also expensive."}
+    assert len(warnings(doc)) == 1
+
+
+def test_a_header_field_saying_the_initials_is_warned_about() -> None:
+    doc = Document()
+    doc.meta = {"SEO Description": "The ETA outlines the best practices."}
+    assert len(warnings(doc)) == 1
