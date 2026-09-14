@@ -23,7 +23,6 @@ from .parse import (
     unfinished,
     without_note,
 )
-from .sentences import split as sentences
 
 SEO_LIMIT = 300
 """How long a `SEO Description:` may be.
@@ -127,7 +126,7 @@ def _check_stray_fields(doc: Document) -> None:
     Under a picture, `Source:`, `Credit:` and `SVG:` are the ordinary spellings
     rather than strays, so those are left alone there and warned about in prose.
 
-    Only lines that read as a field: short, and every word capitalized.
+    Only lines that read as a field, which `names_a_field` decides.
     A sentence holding a colon is prose, and saying otherwise
     on every `and then: this` would make the check worth turning off.
     """
@@ -149,9 +148,7 @@ def _check_stray_fields(doc: Document) -> None:
                     Shown("Header"),
                     Shown(text),
                 )
-            elif names_a_field(field) and len(sentences(found[1])) <= 1:
-                # A field holds a value, not a passage.
-                # A label introducing three sentences of prose is how prose is written.
+            elif names_a_field(field):
                 doc.warn(
                     "{} reads as a field and is not one: {}",
                     Shown(f"{field}:"),
