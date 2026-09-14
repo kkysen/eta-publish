@@ -719,25 +719,41 @@ def addressed(entry: str) -> tuple[str, str] | None:
     over an address this has no business having an opinion about.
     """
     name, bracket, rest = entry.partition("(")
-    if not bracket:
-        return None
-    address, closed, after = rest.partition(")")
-    address = address.strip()
+    while bracket:
+        address, closed, after = rest.partition(")")
+        if closed and _is_address(address.strip()):
+            return name.strip(), after.strip()
+        # Brackets holding something else, `(chair)` and the like,
+        # are part of the name: kept, and scanned past
+        # rather than stopping the search for an address behind them.
+        name += f"{bracket}{address}{closed}"
+        more, bracket, rest = after.partition("(")
+        name += more
+    return None
+
+
+def _is_address(address: str) -> bool:
+    """Whether a bracketed run is the address Docs writes for an unresolved chip."""
     local, at, domain = address.partition("@")
-    if not closed or not at or not local or not domain:
-        return None
-    if any(character.isspace() for character in address):
-        return None
-    return name.strip(), after.strip()
+    return bool(at and local and domain) and not any(c.isspace() for c in address)
 
 
 def _named(entry: str) -> str:
-    """One listed contributor, as a byline writes them."""
-    found = addressed(entry)
-    if found is None:
-        return entry.strip()
-    name, after = found
-    return f"{name} {after}".strip()
+    """One listed contributor, as a byline writes them.
+
+    Every address goes, not just the first.
+    An entry holding two of them is two contributors
+    whose separating comma was missed, and the byline is wrong either way;
+    leaving the second address in would publish it,
+    which is the one outcome worth ruling out.
+    """
+    names = []
+    rest = entry
+    while (found := addressed(rest)) is not None:
+        name, rest = found
+        names.append(name)
+    names.append(rest.strip())
+    return " ".join(name for name in names if name)
 
 
 def _by_surname(name: str) -> tuple[str, str]:
