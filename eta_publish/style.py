@@ -427,7 +427,7 @@ where `137 ft` and `1.2 km` are measurements a reader compares.
 MEASURED = re.compile(
     rf"""
     (?P<amount>\d[\d,.]*)
-    [ ]
+    (?P<gap>[ -])
     (?P<unit>{"|".join(sorted(UNITS, key=len, reverse=True))})\b
     """,
     re.VERBOSE,
@@ -437,6 +437,10 @@ MEASURED = re.compile(
 A digit rather than a word: `ten minutes` is a duration somebody is
 describing and `10 min` is one they are measuring, and `two miles`
 is already the way a distance is written out.
+
+A hyphen as well as a space, since `a 600-foot train` spells the unit out
+the same way. What joins them is a rule of its own and is left as it was
+written here, so each warning is about the one thing it is about.
 
 Longest spelling first, so `miles per hour` is read as the unit it is
 rather than as the `miles` at the front of it.
@@ -452,7 +456,7 @@ def _check_units(doc: Document, text: str) -> None:
     """
     for match in MEASURED.finditer(text):
         written = match.group()
-        correct = f"{match.group('amount')} {UNITS[match.group('unit')]}"
+        correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
             doc,
             "{} is {} in MTA style: {}",
@@ -484,19 +488,17 @@ reason, and the reports are full of them.
 def _check_hyphenated_units(doc: Document, text: str) -> None:
     """A measurement hyphenated into the phrase it modifies.
 
-    The hyphen is right, as English: `a 20-foot cavern` is one adjective.
+    The hyphen is right, as English: `a 600 ft cavern` is one adjective.
     It is dropped all the same, so that a measurement is written one way
-    wherever it appears and a search for `20 ft` finds every one of them
+    wherever it appears and a search for `600 ft` finds every one of them
     rather than the ones that happened not to be describing anything.
+
+    Only the hyphen. A unit spelled out as well is the other warning's,
+    and the two together say to write `600 ft`.
     """
     for match in JOINED.finditer(text):
-        written = match.group()
-        unit = match.group("unit")
-        correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
         _warn(
             doc,
-            "{} is {} in MTA style, hyphen and all: {}",
-            Shown(written),
-            Shown(correct),
-            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+            "a number is joined to its unit by a hyphen, where MTA style has a space: {}",
+            Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
         )
