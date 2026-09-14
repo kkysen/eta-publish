@@ -15,7 +15,7 @@ import pytest
 from rich.console import Console, RenderableType
 
 from eta_publish import console as log
-from eta_publish.nodes import Cut, Listed, Notice, Quoted, Shown, Spaced
+from eta_publish.nodes import Cut, Highlighted, Listed, Notice, Quoted, Shown
 
 KEYS = "https://archive.org/account/s3.php"
 
@@ -241,26 +241,28 @@ def test_a_title_is_a_title_and_not_markup() -> None:
     assert "A [bold]Draft[/] :construction:" in written
 
 
-GAPPED = Notice((Spaced("It is deep.", 2, "It is expensive."),))
+GAPPED = Notice((Highlighted("It is deep.", "\u00b7\u00b7", "It is expensive."),))
 
 
-def test_a_gap_keeps_its_spaces_on_a_terminal() -> None:
-    """The width of the gap is the thing to see,
-    and nothing drawn inside it says how wide it is."""
+def test_the_marked_part_is_drawn_on_a_terminal_too() -> None:
+    """The highlight says which characters, and the dots say what they are:
+    a highlighted space is a space, and it is spaces that are being warned about."""
     console = terminal(width=log.UNWRAPPED)
     written = _visible(rendered(log.notice(GAPPED, console), console))
-    assert "It is deep.  It is expensive." in written
+    assert "It is deep.\u00b7\u00b7It is expensive." in written
 
 
-def test_a_gap_is_drawn_as_dots_off_a_terminal() -> None:
-    """A piped log has no reverse video to give it, and a pair of spaces in a
-    file is a pair of spaces nobody sees."""
+def test_the_marked_part_is_highlighted_rather_than_reversed() -> None:
+    """Reverse video is whatever the terminal's foreground happens to be,
+    which is white on a white-on-black theme and no mark at all."""
+    console = terminal(width=log.UNWRAPPED)
+    written = rendered(log.notice(GAPPED, console), console)
+    assert "\x1b[30;43m\u00b7\u00b7\x1b[0m" in written
+
+
+def test_a_marked_value_is_one_quoted_value_off_a_terminal() -> None:
+    """Nothing in a file can carry a highlight,
+    and three backticked pieces of one excerpt read as three values."""
     assert "`It is deep.\u00b7\u00b7It is expensive.`" in rendered(
         log.notice(GAPPED, plain()), plain()
     )
-
-
-def test_the_gap_on_a_terminal_is_marked_rather_than_left_bare() -> None:
-    console = terminal(width=log.UNWRAPPED)
-    written = rendered(log.notice(GAPPED, console), console)
-    assert "\x1b[7m  \x1b[0m" in written
