@@ -296,15 +296,21 @@ def test_the_second_avenue_is_not_a_second() -> None:
 
 def test_a_measurement_is_not_hyphenated_into_what_it_describes() -> None:
     """The hyphen is right as English and dropped all the same,
-    so a search for `20 ft` finds every one of them rather than the ones
+    so a search for `600 ft` finds every one of them rather than the ones
     that happened not to be describing anything."""
-    assert "`600-foot` is `600 ft`" in warnings(written("The capacity of a 600-foot train."))[0]
-    assert "`1-min` is `1 min`" in warnings(written("The extreme 1-min headways of Lille."))[0]
+    found = warnings(written("The extreme 1-min headways of Lille."))
+    assert found == [
+        "style: a number is joined to its unit by a hyphen, "
+        "where MTA style has a space: `The extreme 1-min headways of Lille.`"
+    ]
 
 
-def test_a_hyphenated_measurement_is_one_warning_rather_than_two() -> None:
-    """The unit is spelled out and hyphenated, and both are the same fix."""
-    assert len(warnings(written("The capacity of a 600-foot train."))) == 1
+def test_the_hyphen_and_the_spelling_are_two_warnings() -> None:
+    """Two mistakes in one measurement, each said once: `600 ft` is both of them."""
+    found = warnings(written("The capacity of a 600-foot train."))
+    assert len(found) == 2
+    assert "`600-foot` is `600-ft`" in found[0]
+    assert "joined to its unit by a hyphen" in found[1]
 
 
 def test_an_ordinary_hyphenated_phrase_is_not_a_measurement() -> None:
