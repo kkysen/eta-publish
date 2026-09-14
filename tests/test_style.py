@@ -368,7 +368,8 @@ def test_a_scale_says_a_year_is_a_sum_after_all() -> None:
 
 
 def test_the_in_is_what_says_the_dollars_are_dated() -> None:
-    """Nothing counts money as `in 5 dollars`,
-    so the word in front is the clearer half of the test."""
+    """The `in` says so whatever the number is,
+    which is why it holds for years no pattern would recognize as one."""
     assert warnings(written("That is $4.5 billion per mile in 2050 dollars.")) == []
     assert warnings(written("Costs are given in 2026 dollars throughout.")) == []
+    assert warnings(written("A denarius bought more in 5 dollars than today.")) == []
