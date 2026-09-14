@@ -8,13 +8,10 @@
   contributors: ("Madison Feinberg", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "William Meehan", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
-    [the #raw("Header") section has an unrecognized #raw("MTA SAS West Feasibility Study:") line; check it for a typo],
     [unfinished text in the document: #raw("SVG: TODO")],
-    [the image #raw("img-44bf278f") has no #raw("Credit:") line],
-    [the image #raw("project_cost_comparison") has no #raw("Credit:") line],
     [17 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-6fb0f9c4"): Composite image of the MTA’s SAS West St Nicholas Av station diagram a...], [#raw("img-4b8ff8de"): One of the two massive caverns blasted out of bedrock 140 ft below Gra...], [#raw("img-f5b8dae7"): Cross-section of Zhongsheng station.], [#raw("img-6a139fa2"): Cross-section of the pipe-jacking at Jing’an Temple station.], [#raw("img-6c3ad309"): The existing elevated 125 St/Broadway station with a wide, 172 ft arch...], [#raw("img-a5e93aab"): The 72 St headhouse in the Broadway median.], [#raw("img-60a0a749"): Heping South Street station utilized cut-and-cover except for the inte...], [#raw("img-a718beb8"): Cross-section of the 116 St station on SAS Phase 2. This is before the...], [#raw("img-44bf278f"): Station length as a percentage of platform length.], [#raw("img-2a097531"): The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Pha...], [#raw("img-d4ca00ff"): Sound Transit recently reduced the scope of its proposed Alaska Juncti...], [#raw("img-dff7e45d"): Milan Metro Line 4 includes ventilation fans within station structures...], [#raw("img-3230dd0e"): The engineering schematic of the Port Authority’s 1957 plans to connec...], [#raw("img-e47b1bdb"): A cross-section of the Steinway tubes, which carry the 7 under the Eas...], [#raw("img-d4734d4b"): A photo inside the Freedom Tunnel, showing room for 4 tracks.], [#raw("img-0fb4cdcf"): A rendering of the short below-mezzanine and elevator-only entrance to...], [#raw("img-ed748d24"): A station diagram of Montreal’s Édouard-Montpetit station, showing the...], )],
-    [17 suggestions still open on this tab; the build publishes the document without them, as it reads today],
-    [3 comment threads still open on this tab],
+    [7 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [2 comment threads still open on this tab],
     [#raw("SEO Description:") is 398 characters, over the 300 a search result shows:#quote(block: true)[A 125 St subway should be a slam dunk. But at \$7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how#strike[ever, NY would not only be able to build more for less, but would also save riders time every day.]]],
   ),
   hero: [
@@ -357,7 +354,8 @@ Instead, as a general rule, most of it is deeply underutilized back-of-house spa
 
 #figure(
   link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-44bf278f.png")[#capped_image("print/img-44bf278f.jpg", alt: "Station length as a percentage of platform length.")],
-  caption: [Station length as a percentage of platform length.],
+  caption: [Station length as a percentage of platform length. \
+  Credit: ETA],
 )
 
 Here, the MTA and its consultants have learned at least a little from the cost explosion of SAS Phase 1—but nowhere near enough.
@@ -548,7 +546,8 @@ If the soft cost share were reduced from 43% to 19%, without changing the hard c
 
 #figure(
   link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/project_cost_comparison.svg")[#capped_image("print/project_cost_comparison.svg", alt: "A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.")],
-  caption: [A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs.],
+  caption: [A bar graph comparing SAS West anticipated hard and soft costs versus global hard and soft costs. \
+  Credit: ETA],
 )
 
 A significant chunk of this comes from guidelines by the Federal Transit Administration (FTA), which recommend a whopping #link("https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf#page=62")[40% contingency]#super[#link(<src94>)[\[94\]]] at this stage in the project (15% design#footnote[Even strictly following the FTA guidelines, advancing to 60% design would lower the contingency to 26%, saving \$770 million.]).
