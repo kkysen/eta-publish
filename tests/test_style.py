@@ -317,3 +317,25 @@ def test_an_ordinary_hyphenated_phrase_is_not_a_measurement() -> None:
     """`2-track`, `4-car` and `NFPA 130-compliant` are hyphenated for the
     ordinary reason, and the reports are full of them."""
     assert warnings(written("It has 2-track lines, 4-car sets, and is NFPA 130-compliant.")) == []
+
+
+def test_the_units_the_reports_already_write_as_symbols() -> None:
+    """`750 V`, `232 t`, `83 dB`, `2.9 mm` and `33 tph` are right today,
+    and the spelled-out form is what the check is for."""
+    assert warnings(written("At 750 V, 232 t, 83 dB, 2.9 mm, and 33 tph.")) == []
+    for spelled, symbol in (
+        ("750 volts", "750 V"),
+        ("83 decibels", "83 dB"),
+        ("3 millimeters", "3 mm"),
+        ("232 tonnes", "232 t"),
+        ("1.5 kilovolts", "1.5 kV"),
+        ("60 hertz", "60 Hz"),
+        ("30 trains per hour", "30 tph"),
+    ):
+        assert f"`{symbol}`" in warnings(written(f"It runs at {spelled} today."))[0]
+
+
+def test_a_unit_introduced_with_its_symbol_is_being_defined() -> None:
+    """SAS West writes `30 trains per hour (tph)` once and `33 tph` after it,
+    which is how an abbreviation is handed to a reader."""
+    assert warnings(written("Lines run 30 trains per hour (tph) without tail tracks.")) == []

@@ -13,7 +13,7 @@ rather than quietly making the reports agree.
 """
 
 import re
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 
 from .nodes import SPACE, Document, Highlighted, Shown, plain_text
 
@@ -413,22 +413,62 @@ UNITS = {
     "lbs": "lb",
     "kilograms": "kg",
     "kilogram": "kg",
+    "millimeters": "mm",
+    "millimeter": "mm",
+    "millimetres": "mm",
+    "millimetre": "mm",
+    "centimeters": "cm",
+    "centimeter": "cm",
+    "centimetres": "cm",
+    "centimetre": "cm",
+    "tonnes": "t",
+    "tonne": "t",
+    "decibels": "dB",
+    "decibel": "dB",
+    "hertz": "Hz",
+    "volts": "V",
+    "volt": "V",
+    "kilovolts": "kV",
+    "kilovolt": "kV",
+    "kilowatts": "kW",
+    "kilowatt": "kW",
+    "megawatts": "MW",
+    "megawatt": "MW",
+    "kilometers per hour": "km/h",
+    "kilometres per hour": "km/h",
+    "trains per hour": "tph",
 }
 """How a unit is written after a number, and every spelling that is not it.
 
 A symbol has no plural, which is why `lbs` is in here beside `pounds`:
 `3 lb` is how the unit is written however many of them there are.
 
+The ones the reports already write as symbols are in here too, from the
+other side: `750 V`, `232 t`, `83 dB`, `2.9 mm`, `33 tph`. Each is written
+right today, and the spelled-out form is what the check is for.
+
 `mile` is not, and is the one length these reports spell out:
 `two miles` is a distance a reader pictures,
 where `137 ft` and `1.2 km` are measurements a reader compares.
 """
 
+
+def _spelled_out(units: Iterable[str]) -> str:
+    """The units as one alternation, longest first.
+
+    Longest first so `miles per hour` is read as the unit it is rather than
+    as the `miles` at the front of it. Each space written as a class, since
+    a verbose pattern drops the ones written as themselves and would be
+    looking for `milesperhour`.
+    """
+    return "|".join(unit.replace(" ", "[ ]") for unit in sorted(units, key=len, reverse=True))
+
+
 MEASURED = re.compile(
     rf"""
     (?P<amount>\d[\d,.]*)
     (?P<gap>[ -])
-    (?P<unit>{"|".join(sorted(UNITS, key=len, reverse=True))})\b
+    (?P<unit>{_spelled_out(UNITS)})\b
     """,
     re.VERBOSE,
 )
@@ -442,9 +482,17 @@ A hyphen as well as a space, since `a 600-foot train` spells the unit out
 the same way. What joins them is a rule of its own and is left as it was
 written here, so each warning is about the one thing it is about.
 
-Longest spelling first, so `miles per hour` is read as the unit it is
-rather than as the `miles` at the front of it.
 """
+
+
+def _defines(text: str, end: int, symbol: str) -> bool:
+    """Whether the symbol follows in brackets, which is a unit being introduced.
+
+    SAS West writes `30 trains per hour (tph)` once and `33 tph` after it,
+    which is how an abbreviation is handed to a reader.
+    Spelling it out there is the point rather than the mistake.
+    """
+    return text.startswith(f" ({symbol})", end)
 
 
 def _check_units(doc: Document, text: str) -> None:
@@ -455,6 +503,8 @@ def _check_units(doc: Document, text: str) -> None:
     where the same numbers spelled out are a paragraph to read twice.
     """
     for match in MEASURED.finditer(text):
+        if _defines(text, match.end(), UNITS[match.group("unit")]):
+            continue
         written = match.group()
         correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
@@ -473,7 +523,7 @@ JOINED = re.compile(
     rf"""
     (?P<amount>\d[\d,.]*)
     -
-    (?P<unit>{"|".join(sorted(SYMBOLS | set(UNITS), key=len, reverse=True))})\b
+    (?P<unit>{_spelled_out(SYMBOLS | set(UNITS))})\b
     """,
     re.VERBOSE,
 )
