@@ -75,6 +75,11 @@ SOFT_BREAK = "\v"
 TODO_RE = re.compile(r"\b(?:TODO|FIXME|XXX)\b")
 
 
+def _is_word(text: str) -> bool:
+    """Whether `text` is a single word, the way a word boundary divides one."""
+    return bool(text) and all(c.isalnum() or c == "_" for c in text)
+
+
 # How much of a line a warning quotes back before it is just repeating the document.
 CLIP = 60
 
@@ -499,18 +504,70 @@ class Parser:
     # and, after a caption,
     # either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
     # One optional qualifying word covers all of them and whatever the next one is.
-    #
-    # The trailing `$` admits the bare spelling,
-    # and is why the alternative before it is anchored rather than merely a prefix:
-    # a paragraph beginning "Source of the estimate is ..." is prose,
-    # and only one saying nothing but "Image Source" is a note.
-    SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*(?:[:\]]|$)", re.IGNORECASE)
+    SOURCE_LABEL = "source"
 
     # The same idea for chart assets: `SVG:` and `PNG:` name the file to link beside a figure.
     # Notes to whoever assembles the page; the published report carries real links.
-    ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
+    ASSET_LABELS = frozenset({"svg", "png", "pdf"})
 
-    CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
+    CREDIT_LABEL = "credit"
+
+    # What ends a label: a colon where the line was typed,
+    # a bracket where the label is the text of a link.
+    LABEL_MARKS = ":]"
+
+    @staticmethod
+    def _labelled(line: str) -> tuple[str, str]:
+        """A note line read as the label it is headed with and the mark that ends it.
+
+        `Uncropped Source:` is `("uncropped source", ":")`
+        and `[Image Source]` is `("image source", "]")`.
+        A line with neither mark is all label and an empty mark,
+        which only the bare spelling is allowed to be.
+
+        The opening bracket is optional for every label, not only the linked ones.
+        Wider than the lines the reports actually write,
+        deliberately: a bracketed `[SVG: ...]` is the note it looks like,
+        and publishing it as prose because of the bracket helps nobody.
+        """
+        head = line.lstrip().removeprefix("[").lstrip()
+        for index, character in enumerate(head):
+            if character in Parser.LABEL_MARKS:
+                return head[:index].strip().casefold(), character
+        return head.strip().casefold(), ""
+
+    @classmethod
+    def _is_source(cls, line: str) -> bool:
+        """Whether `line` is a `Source:` note rather than prose.
+
+        The bare spelling needs no mark, which is why the label has to be
+        the whole of what precedes it:
+        a paragraph beginning "Source of the estimate is ..." is prose,
+        and only one saying nothing but "Image Source" is a note.
+        """
+        label, _ = cls._labelled(line)
+        words = label.split()
+        if not words or words[-1] != cls.SOURCE_LABEL:
+            return False
+        # The qualifier is one word: `Uncropped Source`, `Image Source`.
+        # Anything else before the label is a sentence that happens to end in it.
+        return len(words) == 1 or (len(words) == 2 and _is_word(words[0]))
+
+    @classmethod
+    def _is_asset(cls, line: str) -> bool:
+        """Whether `line` is a `SVG:`/`PNG:`/`PDF:` note.
+
+        A colon and nothing else: these are typed, never linked,
+        and a bare `PDF` is a word.
+        """
+        label, mark = cls._labelled(line)
+        return mark == ":" and label in cls.ASSET_LABELS
+
+    @classmethod
+    def _is_credit(cls, line: str) -> bool:
+        """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
+        label, mark = cls._labelled(line)
+        return bool(mark) and label == cls.CREDIT_LABEL
 
     def blocks(self, content: list[JsonObject]) -> list[Block]:
         out: list[Block] = []
@@ -587,7 +644,7 @@ class Parser:
             if TODO_RE.search(text):
                 self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
-            if self.SOURCE_RE.match(text) or self.ASSET_RE.match(text):
+            if self._is_source(text) or self._is_asset(text):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
@@ -626,10 +683,10 @@ class Parser:
                     line_text = plain_text(line).strip()
                     if not line_text:
                         continue
-                    if self.CREDIT_RE.match(line_text):
+                    if self._is_credit(line_text):
                         last.credit = line
                         claimed = True
-                    elif self.SOURCE_RE.match(line_text) or self.ASSET_RE.match(line_text):
+                    elif self._is_source(line_text) or self._is_asset(line_text):
                         last.source = last.source + line
                         self._claim_name(last, line)
                         claimed = True
