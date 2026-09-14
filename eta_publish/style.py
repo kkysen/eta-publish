@@ -33,13 +33,19 @@ and not so much that a warning about two spaces is a paragraph.
 """
 
 
-def _excerpt(text: str, start: int, end: int) -> str:
-    """`text[start:end]` with enough either side of it to be found by eye."""
+def _excerpt(text: str, start: int, end: int, shown: str | None = None) -> str:
+    """`text[start:end]` with enough either side of it to be found by eye.
+
+    `shown` stands in for the part being warned about, for a warning whose
+    subject cannot be seen where it is quoted: two spaces are one space in
+    every output but the log, so an excerpt of them says nothing by itself.
+    """
     before = text[max(0, start - CONTEXT) : start]
     after = text[end : end + CONTEXT]
     lead = "..." if start > len(before) else ""
     trail = "..." if end + len(after) < len(text) else ""
-    return f"{lead}{before}{text[start:end]}{after}{trail}"
+    middle = text[start:end] if shown is None else shown
+    return f"{lead}{before}{middle}{after}{trail}"
 
 
 def _prose(doc: Document) -> Iterator[str]:
@@ -74,6 +80,17 @@ def style(doc: Document) -> None:
 SENTENCE_GAP = re.compile(r"""[.!?]["'”’)\]]*(?P<gap>  +)""")
 
 
+SPACE = "\u00b7"
+"""What one of the offending spaces is shown as.
+
+A space is the one thing a warning cannot quote: HTML collapses the pair,
+`typst` sets it as one, and the reader is shown a line that looks correct
+and told it is not. The middle dot is what an editor draws a space with,
+and it is in the excerpt only, so the words either side are still the
+document's own to search for.
+"""
+
+
 def _check_sentence_spacing(doc: Document, text: str) -> None:
     """Two spaces between sentences, where the house style is one.
 
@@ -82,10 +99,10 @@ def _check_sentence_spacing(doc: Document, text: str) -> None:
     so nothing downstream reports it and the Markdown archive keeps it forever.
     """
     for match in SENTENCE_GAP.finditer(text):
+        gap = match.group("gap")
         doc.warn(
-            "a sentence ends with {} spaces after it, where one is the house style: {}",
-            Shown(str(len(match.group("gap")))),
-            Shown(_excerpt(text, match.start(), match.end())),
+            f"a sentence should end with 1 space, not {len(gap)}: {{}}",
+            Shown(_excerpt(text, match.start("gap"), match.end("gap"), SPACE * len(gap))),
         )
 
 
