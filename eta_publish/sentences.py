@@ -82,18 +82,6 @@ ABBREVIATIONS = frozenset(
     }
 )
 
-# A sentence ends at `.`, `!`, or `?`, optionally closed by a quote or bracket,
-# followed by a space and something that can start a sentence.
-BOUNDARY = re.compile(
-    r"""
-    (?<=[.!?])            # the terminator
-    (?P<close>["'”’)\]]*)   # any closing quote or bracket
-    [ ]                   # exactly one space; newlines are already breaks
-    (?=["'“‘(\[]*[A-Z0-9])  # next sentence starts here
-    """,
-    re.VERBOSE,
-)
-
 # The token immediately before a candidate break.
 LAST_WORD = re.compile(r"([\w.]+)\.$")
 
@@ -109,6 +97,19 @@ def _is_abbreviation(before: str) -> bool:
     # Letters only: `Phase 2.` ends a sentence,
     # and treating the digit as an initial would glue the next one onto it.
     return bool(re.fullmatch(r"[a-z]", word)) or bool(re.fullmatch(r"(?:[a-z]\.)+[a-z]", word))
+
+
+# A sentence ends at `.`, `!`, or `?`, optionally closed by a quote or bracket,
+# followed by a space and something that can start a sentence.
+BOUNDARY = re.compile(
+    r"""
+    (?<=[.!?])            # the terminator
+    (?P<close>["'”’)\]]*)   # any closing quote or bracket
+    [ ]                   # exactly one space; newlines are already breaks
+    (?=["'“‘(\[]*[A-Z0-9])  # next sentence starts here
+    """,
+    re.VERBOSE,
+)
 
 
 def split(text: str) -> list[str]:
