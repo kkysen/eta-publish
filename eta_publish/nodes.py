@@ -16,7 +16,9 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field, replace
 from datetime import datetime
 from enum import Enum
+from string import ascii_letters
 from typing import override
+from urllib.parse import urlsplit
 
 # ---- inline content ------------------------------------------------
 
@@ -781,16 +783,43 @@ def _walk(blocks: list[Block]) -> Iterator[Block]:
                     yield from _walk(cell)
 
 
-SNAPSHOT = re.compile(
-    r"^https?://web\.archive\.org/web/(\d{4,14})[a-z_]*/(?P<url>https?://.+)$",
-    re.IGNORECASE,
-)
-"""A Wayback URL, as the timestamp it was taken at and the page it is of.
+WAYBACK_HOST = "web.archive.org"
+WAYBACK_PATH = "/web/"
+"""Where a Wayback URL keeps its captures, before the timestamp and the page."""
 
-The digits are followed by a modifier on some of these, `id_` for the
-unrewritten original and `im_` for an image, which says how Wayback serves the
-capture rather than which capture it is.
+MODIFIER = ascii_letters + "_"
+"""What may follow the timestamp: `id_` for the unrewritten original,
+`im_` for an image.
+
+Says how Wayback serves the capture rather than which capture it is,
+so it is read off and dropped.
 """
+
+STAMP_DIGITS = range(4, 15)
+"""How long a capture timestamp runs: a bare year through to the second."""
+
+
+def _capture(href: str) -> tuple[str, str] | None:
+    """A Wayback URL read as the timestamp it was taken at and the page it is of.
+
+    The page is taken as written rather than reassembled from its parts.
+    It is not escaped where it sits inside the wrapper,
+    so `urlsplit` reads its query as the wrapper's own
+    and rebuilding from the pieces would drop it.
+    """
+    origin, found, rest = href.partition(WAYBACK_PATH)
+    if not found:
+        return None
+    wrapper = urlsplit(origin)
+    if wrapper.scheme not in ("http", "https") or wrapper.hostname != WAYBACK_HOST:
+        return None
+    capture, slash, url = rest.partition("/")
+    stamp = capture.rstrip(MODIFIER)
+    if not slash or not stamp.isdigit() or len(stamp) not in STAMP_DIGITS:
+        return None
+    if urlsplit(url).scheme not in ("http", "https"):
+        return None
+    return stamp, url
 
 
 def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
@@ -803,10 +832,10 @@ def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
     same article cited bare elsewhere would be a second source saying the same
     thing.
     """
-    found = SNAPSHOT.match(href)
+    found = _capture(href)
     if found is None:
         return href, None
-    stamp, url = found.group(1), found.group("url")
+    stamp, url = found
     # Rebuilt rather than kept as written, so that a capture cited with a
     # modifier and the same capture cited without one are one snapshot.
     # Of the document rather than of the page of it named here, because that is
