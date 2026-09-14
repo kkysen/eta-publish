@@ -31,11 +31,11 @@ August 19, 2026
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
 - style: `5 minutes` should be `5 min`: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
 - style: `5 minutes` should be `5 min`: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
-- style: `125th Street` should be `125 St` in MTA style: `...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...`
-- style: `Second Ave Subway` should be `Second Avenue Subway` in MTA style: `...nflation-adjusted cost of the Second Ave Subway’s first phase, a project that...`
+- style: `125th Street` should be `125 St`: `...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...`
+- style: `Second Ave Subway` should be `Second Avenue Subway`: `...nflation-adjusted cost of the Second Ave Subway’s first phase, a project that...`
 - style: `130 feet` should be `130 ft`: `...with stations between 100 and 130 feet beneath the surface. Accordin...`
 - style: `5 minutes` should be `5 min`: `...escalator transfer times over 5 minutes.`
-- style: `Hunterspoint Avenue` should be `Hunterspoint Av` in MTA style: `...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...`
+- style: `Hunterspoint Avenue` should be `Hunterspoint Av`: `...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...`
 - style: `8 minutes` should be `8 min`: `...normal walking pace, it takes 8 minutes to travel from GCM’s lower me...`
 - style: `10 minutes` should be `10 min`: `... to GCT’s Main Concourse, and 10 minutes to reach the 4/5/6 trains. Gi...`
 - style: `15 minutes` should be `15 min`: `...ven that it only takes around 15 minutes to travel between Penn Statio...`
@@ -44,10 +44,10 @@ August 19, 2026
 - style: `5.1 minutes` should be `5.1 min`: `...cholas Av via escalators, and 5.1 minutes at Broadway via elevators. Th...`
 - style: `5 minutes` should be `5 min`: `...escalator transfer times over 5 minutes.`
 - style: `7 minutes` should be `7 min`: `...posed design, this would take 7 minutes on escalators). Conversely, S...`
-- style: `Second Ave subway` should be `Second Avenue Subway` in MTA style: `... even by the standards of the Second Ave subway. `
+- style: `Second Ave subway` should be `Second Avenue Subway`: `... even by the standards of the Second Ave subway. `
 - style: `30 seconds` should be `30 sec`: `... platform or mezzanine within 30 seconds, which, while certainly nice ...`
 - style: `6 inches` should be `6 in`: `...its ventilation openings only 6 inches above roadway height, obviati...`
-- style: `Second Ave subway` should be `Second Avenue Subway` in MTA style: `...ive, oversize features of the Second Ave subway. The MTA and its contractors ...`
+- style: `Second Ave subway` should be `Second Avenue Subway`: `...ive, oversize features of the Second Ave subway. The MTA and its contractors ...`
 - style: `5 minutes` should be `5 min`: `...tchbacks that would take over 5 minutes to reach the platform. Transf...`
 - style: `2.1 minutes` should be `2.1 min`: `... escalators, only take 1.6 to 2.1 minutes for transfers in the feasibil...`
 - style: `19 seconds` should be `19 sec`: `...se 198 ft to the Blue Line in 19 seconds, door closing to door opening...`

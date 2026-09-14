@@ -363,7 +363,7 @@ def _check_street_names(doc: Document, text: str) -> None:
             continue
         _warn(
             doc,
-            "{} should be {} in MTA style: {}",
+            "{} should be {}: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, start), written, _after(text, start + len(written))),
