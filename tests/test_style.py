@@ -58,3 +58,35 @@ def test_a_footnote_is_quoted_rather_than_written() -> None:
     """A citation is an author and a headline copied from where it was published,
     so how it spaces its sentences says nothing about this report."""
     assert warnings(cited('Barbara Russo-Lennon, "Subway spots.  The ad blitz."')) == []
+
+
+def test_a_closed_up_dash_is_not_warned_about() -> None:
+    assert warnings(written("They are unfixable mistakes—while the debt is not.")) == []
+
+
+def test_a_range_is_not_warned_about() -> None:
+    """`10–20 ft` is how the reports write a range, and it is closed up already."""
+    assert warnings(written("Groundwater is only 10–20 ft deep.")) == []
+
+
+def test_a_spaced_em_dash_is_warned_about() -> None:
+    found = warnings(written("They are unfixable mistakes — while the debt is not."))
+    assert len(found) == 1
+    assert "mistakes — while" in found[0]
+
+
+def test_a_dash_spaced_on_one_side_is_warned_about() -> None:
+    assert len(warnings(written("It is cheaper —and faster."))) == 1
+
+
+def test_a_spaced_en_dash_is_warned_about() -> None:
+    assert len(warnings(written("It spans 125 St, 2 – 3x the station width."))) == 1
+
+
+def test_a_hyphen_is_not_a_dash() -> None:
+    """`pipe-jacking` is one word, and `2 - 3` is a different thing to say."""
+    assert warnings(written("The pipe-jacking at Jing'an Temple station.")) == []
+
+
+def test_a_footnote_dash_is_quoted_rather_than_written() -> None:
+    assert warnings(cited('Barbara Russo-Lennon, "Subway spots — the ad blitz."')) == []

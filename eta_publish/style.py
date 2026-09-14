@@ -54,6 +54,7 @@ def style(doc: Document) -> None:
     """Warn about every line written against the house style."""
     for text in _prose(doc):
         _check_sentence_spacing(doc, text)
+        _check_dash_spacing(doc, text)
 
 
 # A sentence's terminator, whatever closes the quote or bracket around it,
@@ -74,5 +75,30 @@ def _check_sentence_spacing(doc: Document, text: str) -> None:
         doc.warn(
             "a sentence ends with {} spaces after it, where one is the house style: {}",
             Shown(str(len(match.group("gap")))),
+            Shown(_excerpt(text, match.start(), match.end())),
+        )
+
+
+DASHES = "—–"
+"""The two dashes that set a phrase off, em and en.
+
+Not the hyphen: `pipe-jacking` is one word and `10-15` is somebody
+reaching for an en dash, which is a different thing to say about a line.
+"""
+
+SPACED_DASH = re.compile(rf"(?: +[{DASHES}]|[{DASHES}] +)")
+
+
+def _check_dash_spacing(doc: Document, text: str) -> None:
+    """A dash with a space on either side of it, where the house style has none.
+
+    The reports already write it closed up, in every one of the fourteen
+    dashes SAS West and IBX have between them. A spaced one arrives by pasting
+    from somewhere that sets them open, and the one paragraph set the other way
+    is visible on the page next to the rest.
+    """
+    for match in SPACED_DASH.finditer(text):
+        doc.warn(
+            "a dash is written with a space beside it, and the house style closes it up: {}",
             Shown(_excerpt(text, match.start(), match.end())),
         )
