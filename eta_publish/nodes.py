@@ -642,9 +642,17 @@ class Document:
 
         What somebody typed, wherever they typed it,
         for the checks that ask whether a line belongs where it sits.
+
+        A footnote is all one context whatever it holds:
+        these carry citations, which are written to their own rules
+        and are nobody's idea of a `Key: value` line.
         """
-        for block in self._every_block():
+        for block in _walk(self.blocks):
             yield from inlines_in(block)
+        for footnote in self.footnotes:
+            for block in _walk(footnote.content):
+                for run, _ in inlines_in(block):
+                    yield run, Where.FOOTNOTE
 
     def _every_block(self) -> Iterator[Block]:
         """Every block of the report, then every block of its footnotes.
@@ -910,6 +918,7 @@ class Where(Enum):
 
     BODY = "body"
     HEADING = "heading"
+    FOOTNOTE = "footnote"
     SOURCE = "source"
     CAPTION = "caption"
     CREDIT = "credit"
