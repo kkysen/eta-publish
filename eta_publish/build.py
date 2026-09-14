@@ -16,6 +16,7 @@ from .emit.typst import TypstEmitter
 from .naming import ASSET_DIR, IMAGE_DIR, PRINT_DIR
 from .nodes import Document, Shown, Span
 from .parse import parse, read_review
+from .style import style
 
 
 @dataclass(frozen=True)
@@ -532,6 +533,7 @@ def build_one(
     carry_over_review(document, dest / DOC_JSON)
     read_review(doc, document)
     check(doc)
+    style(doc)
 
     # Sorted, as `images.json` is: this file is committed and compared against
     # a fresh build, so any two runs that agree about the document have to
