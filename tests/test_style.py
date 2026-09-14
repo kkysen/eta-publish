@@ -222,10 +222,10 @@ def test_the_project_is_corrected_towards_its_name_rather_than_the_station() -> 
     )
 
 
-def test_the_project_keeps_the_capitalization_it_was_given() -> None:
-    """SAS West writes `Second Ave subway` twice,
-    and which `s` it should be is not what this is about."""
-    assert "is `Second Avenue subway`" in warnings(written("Features of the Second Ave subway."))[0]
+def test_the_project_is_named_however_it_was_written() -> None:
+    """SAS West writes `Second Ave subway` twice, abbreviated and lowercase,
+    and the name it is reaching for is the one it is corrected to."""
+    assert "is `Second Avenue Subway`" in warnings(written("Features of the Second Ave subway."))[0]
 
 
 def test_an_ordinal_that_names_no_street_is_not_a_street() -> None:
@@ -251,3 +251,10 @@ def test_an_ordinary_phrase_is_not_a_street() -> None:
 def test_a_slug_is_not_a_street_name() -> None:
     """A URL and a filename write it without the space that names one."""
     assert warnings(written("Uncropped Source: 96st_station, sas-west-72nd-street.jpg")) == []
+
+
+def test_the_joke_on_the_project_name_keeps_the_name_it_is_on() -> None:
+    """SAS West calls the line the so-called `Second Avenue Stubway`,
+    which only works while it is spelled like what it is playing on."""
+    assert warnings(written("The so-called “Second Avenue Stubway” made three stops.")) == []
+    assert "is `Second Avenue Stubway`" in warnings(written("Riding the Second Ave Stubway."))[0]

@@ -246,22 +246,37 @@ on every sign and in every announcement, so a spelled-out number is
 corrected like an ordinal rather than left standing.
 """
 
-SECOND_AVENUE_SUBWAY = "Second Avenue"
-"""The one place the words stay, when `Subway` follows them.
+PROJECTS = ("Second Avenue Subway", "Second Avenue Stubway")
+"""Names of the line, which are not names of the street under it.
 
-The project is the Second Avenue Subway, which is the MTA's own name for it
-and what these reports say constantly. The street is `2 Av` and the line
-along it is this, so only the full phrase is left alone: `Second Ave Subway`
-is corrected towards it rather than towards the station.
+The Second Avenue Subway is the MTA's own name for the project, and these
+reports say it constantly. The Second Avenue Stubway is what SAS West calls
+it for having `only made it three stops`, a joke that is on the project's
+name and works only while it keeps it.
+
+The street is `2 Av` and the line along it is one of these,
+so each full phrase is left exactly as it is written here,
+and a phrase written any other way is corrected towards it
+rather than towards the station.
 """
 
-SUBWAY = re.compile(r"[ ][Ss]ubway\b")
-"""What makes the words before it the project rather than the street.
 
-The lowercase spelling too, which is how SAS West writes it twice.
-Their own capitalization is kept in what the warning says to write,
-since which one it should be is not what is being warned about.
-"""
+def _spellings() -> dict[str, str]:
+    """Every way one of these names gets written, and the name it is.
+
+    The avenue abbreviated, which is the mistake being corrected, and the
+    line in lowercase, which is how SAS West writes `subway` twice.
+    """
+    spellings = {}
+    for project in PROJECTS:
+        street, _, line = project.rpartition(" ")
+        for name in (street, street.replace("Avenue", "Ave")):
+            for word in (line, line.lower()):
+                spellings[f"{name} {word}"] = project
+    return spellings
+
+
+SPELLED = _spellings()
 
 NOT_A_STREET = ("Rail Road",)
 """Phrases ending in what looks like a kind of street and is not one.
@@ -319,6 +334,14 @@ def _check_street_names(doc: Document, text: str) -> None:
     for match in STREET.finditer(text):
         name = match.group("name")
         kind = match.group("kind")
+        # `The Second Avenue Subway` opens a sentence in prose that is about
+        # nothing else, and the street is `Second Avenue`: a spelled-out
+        # number ends the name, whatever words led up to it.
+        start = match.start() + len(name) - len(name.rpartition(" ")[2])
+        if name.rpartition(" ")[2] in NUMBERED:
+            name = name.rpartition(" ")[2]
+        else:
+            start = match.start()
         written = f"{name} {kind}"
         if (
             written in ELSEWHERE
@@ -326,12 +349,11 @@ def _check_street_names(doc: Document, text: str) -> None:
             or written.endswith(NOT_A_STREET)
         ):
             continue
-        project = SUBWAY.match(text, match.end()) if name in NUMBERED else None
-        if project is not None:
-            # The phrase and the word that makes it one, so the warning is
-            # about the name the project has rather than about half of it.
-            written += project.group()
-            correct = SECOND_AVENUE_SUBWAY + project.group()
+        named = _named_project(text, start)
+        if named is not None:
+            # The whole phrase, so the warning is about the name the project
+            # has rather than about the two words of it that are a street.
+            written, correct = named
         else:
             correct = _mta(name, kind)
         if correct == written:
@@ -341,12 +363,16 @@ def _check_street_names(doc: Document, text: str) -> None:
             "{} is {} in MTA style: {}",
             Shown(written),
             Shown(correct),
-            Highlighted(
-                _before(text, match.start()),
-                written,
-                _after(text, match.start() + len(written)),
-            ),
+            Highlighted(_before(text, start), written, _after(text, start + len(written))),
         )
+
+
+def _named_project(text: str, start: int) -> tuple[str, str] | None:
+    """The line named at `start`, as it is written there and as it is called."""
+    for written, project in SPELLED.items():
+        if text.startswith(written, start):
+            return written, project
+    return None
 
 
 ORDINAL = re.compile(r"(?<=\d)(?:st|nd|rd|th)\b")
