@@ -15,7 +15,7 @@ because they are facts about how the docs are written:
 """
 
 from collections.abc import Iterator
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from datetime import datetime
 from string import ascii_uppercase
 from urllib.parse import parse_qs, urlsplit
@@ -165,24 +165,51 @@ CREDIT_LABEL = "credit"
 LABEL_MARKS = ":]"
 
 
-def note_label(line: str) -> tuple[str, str]:
-    """A note line read as the label it is headed with and the mark that ends it.
+@dataclass(frozen=True)
+class Labelled:
+    """A line read as the label it is headed with and what follows.
 
-    `Uncropped Source:` is `("uncropped source", ":")`
-    and `[Image Source]` is `("image source", "]")`.
-    A line with neither mark is all label and an empty mark,
-    which only the bare spelling is allowed to be.
+    The one shape behind both kinds of labelled line these documents write:
+    a header's `SEO Description: Cheaper, shallower, faster.`
+    and a figure's `Uncropped Source: sas-west-036.jpg`
+    differ in which labels they allow and how they are spelled,
+    not in where the label ends.
+    """
+
+    label: str
+    """As written. Header fields are case-sensitive and figure notes are not,
+    so the casefolding is the caller's to do."""
+
+    mark: str
+    """`:` where the line was typed, `]` where the label is the text of a link,
+    and empty where the line is all label, which only a bare note may be."""
+
+    value: str
+    """What follows the mark, with the space after it dropped."""
+
+    bracketed: bool
+    """Whether the label opened with `[`, which only a linked note does."""
+
+
+def labelled(line: str) -> Labelled:
+    """`line` split at the end of the label it is headed with.
+
+    `Uncropped Source: a.jpg` is `("Uncropped Source", ":", "a.jpg", False)`
+    and `[Image Source]` is `("Image Source", "]", "", True)`.
 
     The opening bracket is optional for every label, not only the linked ones.
     Wider than the lines the reports actually write,
     deliberately: a bracketed `[SVG: ...]` is the note it looks like,
     and publishing it as prose because of the bracket helps nobody.
     """
-    head = line.lstrip().removeprefix("[").lstrip()
+    head = line.lstrip()
+    bracketed = head.startswith("[")
+    if bracketed:
+        head = head[1:].lstrip()
     for index, character in enumerate(head):
         if character in LABEL_MARKS:
-            return head[:index].strip().casefold(), character
-    return head.strip().casefold(), ""
+            return Labelled(head[:index].strip(), character, head[index + 1 :].lstrip(), bracketed)
+    return Labelled(head.strip(), "", "", bracketed)
 
 
 def is_source_note(line: str) -> bool:
@@ -193,8 +220,7 @@ def is_source_note(line: str) -> bool:
     a paragraph beginning "Source of the estimate is ..." is prose,
     and only one saying nothing but "Image Source" is a note.
     """
-    label, _ = note_label(line)
-    words = label.split()
+    words = labelled(line).label.casefold().split()
     if not words or words[-1] != SOURCE_LABEL:
         return False
     # The qualifier is one word: `Uncropped Source`, `Image Source`.
@@ -208,14 +234,14 @@ def is_asset_note(line: str) -> bool:
     A colon and nothing else: these are typed, never linked,
     and a bare `PDF` is a word.
     """
-    label, mark = note_label(line)
-    return mark == ":" and label in ASSET_LABELS
+    note = labelled(line)
+    return note.mark == ":" and note.label.casefold() in ASSET_LABELS
 
 
 def is_credit_note(line: str) -> bool:
     """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
-    label, mark = note_label(line)
-    return bool(mark) and label == CREDIT_LABEL
+    note = labelled(line)
+    return bool(note.mark) and note.label.casefold() == CREDIT_LABEL
 
 
 # How long a field name may run before the line is prose that holds a colon.
@@ -231,13 +257,13 @@ def key_line(line: str) -> tuple[str, str] | None:
     and is short: the first colon ends it,
     and a long run before that is a sentence rather than a name.
     """
-    key, colon, value = line.partition(":")
-    if not colon:
+    field = labelled(line)
+    # A colon and no bracket: `[Image Source]` is a figure's note, not a field.
+    if field.mark != ":" or field.bracketed:
         return None
-    key = key.rstrip()
-    if not key or key[0] not in ascii_uppercase or len(key) > MAX_KEY:
+    if not field.label or field.label[0] not in ascii_uppercase or len(field.label) > MAX_KEY:
         return None
-    return key, value.lstrip()
+    return field.label, field.value
 
 
 def without_note(key: str) -> str:
@@ -334,9 +360,7 @@ def source_name(source: list[Inline]) -> str:
     and a bare URL names a page rather than a file,
     so neither becomes a filename.
     """
-    text = plain_text(source)
-    _, colon, value = text.partition(":")
-    value = value.strip() if colon else ""
+    value = labelled(plain_text(source)).value.strip()
     if not value or unfinished(value) or value.startswith(("http:", "https:", "//")):
         return ""
     return value
