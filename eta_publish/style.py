@@ -85,6 +85,7 @@ def style(doc: Document) -> None:
         _check_dash_spacing(doc, text)
         _check_organization_name(doc, text)
         _check_street_names(doc, text)
+        _check_units(doc, text)
 
 
 GAP = re.compile(r"(?<=\S)(?P<gap>  +)(?=\S)")
@@ -386,3 +387,75 @@ def _mta(name: str, kind: str) -> str:
     are `125 St` and `2 Av`.
     """
     return f"{NUMBERED.get(name, ORDINAL.sub('', name))} {TYPES[kind]}"
+
+
+UNITS = {
+    "feet": "ft",
+    "foot": "ft",
+    "inches": "in",
+    "inch": "in",
+    "meters": "m",
+    "meter": "m",
+    "metres": "m",
+    "metre": "m",
+    "kilometers": "km",
+    "kilometer": "km",
+    "kilometres": "km",
+    "kilometre": "km",
+    "miles per hour": "mph",
+    "minutes": "min",
+    "minute": "min",
+    "seconds": "sec",
+    "second": "sec",
+    "pounds": "lb",
+    "pound": "lb",
+    "lbs": "lb",
+    "kilograms": "kg",
+    "kilogram": "kg",
+}
+"""How a unit is written after a number, and every spelling that is not it.
+
+A symbol has no plural, which is why `lbs` is in here beside `pounds`:
+`3 lb` is how the unit is written however many of them there are.
+
+`mile` is not, and is the one length these reports spell out:
+`two miles` is a distance a reader pictures,
+where `137 ft` and `1.2 km` are measurements a reader compares.
+"""
+
+MEASURED = re.compile(
+    rf"""
+    (?P<amount>\d[\d,.]*)
+    [ ]
+    (?P<unit>{"|".join(sorted(UNITS, key=len, reverse=True))})\b
+    """,
+    re.VERBOSE,
+)
+"""A number and the unit it is counting, spelled some way the MTA's is not.
+
+A digit rather than a word: `ten minutes` is a duration somebody is
+describing and `10 min` is one they are measuring, and `two miles`
+is already the way a distance is written out.
+
+Longest spelling first, so `miles per hour` is read as the unit it is
+rather than as the `miles` at the front of it.
+"""
+
+
+def _check_units(doc: Document, text: str) -> None:
+    """A measurement whose unit is spelled out where the symbol is the style.
+
+    These reports are full of them, and they are read against each other:
+    `137 ft`, `140 ft`, `969 ft` down a column is a comparison,
+    where the same numbers spelled out are a paragraph to read twice.
+    """
+    for match in MEASURED.finditer(text):
+        written = match.group()
+        correct = f"{match.group('amount')} {UNITS[match.group('unit')]}"
+        _warn(
+            doc,
+            "{} is {} in MTA style: {}",
+            Shown(written),
+            Shown(correct),
+            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+        )

@@ -258,3 +258,37 @@ def test_the_joke_on_the_project_name_keeps_the_name_it_is_on() -> None:
     which only works while it is spelled like what it is playing on."""
     assert warnings(written("The so-called “Second Avenue Stubway” made three stops.")) == []
     assert "is `Second Avenue Stubway`" in warnings(written("Riding the Second Ave Stubway."))[0]
+
+
+def test_a_unit_after_a_number_is_the_symbol() -> None:
+    assert "`130 ft`" in warnings(written("Stations between 100 and 130 feet down."))[0]
+    assert "`180 m`" in warnings(written("Trains of 180 meters or longer."))[0]
+    assert "`6 in`" in warnings(written("Openings only 6 inches above the road."))[0]
+    assert "`5 min`" in warnings(written("It cost riders 5 minutes every trip."))[0]
+    assert "`30 sec`" in warnings(written("Reached within 30 seconds of arriving."))[0]
+
+
+def test_a_symbol_has_no_plural() -> None:
+    """`3 lb` is how the unit is written however many of them there are."""
+    assert "`72,000 lb`" in warnings(written("A weight of 72,000 lbs per car."))[0]
+
+
+def test_a_unit_already_written_as_a_symbol_is_left_alone() -> None:
+    assert warnings(written("It is 137 ft deep, 1.2 km long, and 2 kg lighter.")) == []
+
+
+def test_a_mile_stays_a_word() -> None:
+    """The one length these reports spell out:
+    a distance a reader pictures rather than a measurement they compare."""
+    assert warnings(written("It runs two miles north, or about 2 miles.")) == []
+
+
+def test_a_number_written_as_a_word_is_left_alone() -> None:
+    """`ten minutes` is a duration somebody is describing,
+    and `10 min` is one they are measuring."""
+    assert warnings(written("The walk takes ten minutes from the mezzanine.")) == []
+
+
+def test_the_second_avenue_is_not_a_second() -> None:
+    """`second` is a unit and an avenue, and only one of them follows a number."""
+    assert warnings(written("The Second Avenue Subway opened.")) == []

@@ -29,11 +29,28 @@ August 19, 2026
 - 2 comment threads still open on this tab
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
+- style: `5 minutes` is `5 min` in MTA style: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
+- style: `5 minutes` is `5 min` in MTA style: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
 - style: `125th Street` is `125 St` in MTA style: `...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...`
 - style: `Second Ave Subway` is `Second Avenue Subway` in MTA style: `...nflation-adjusted cost of the Second Ave Subway’s first phase, a project that...`
+- style: `130 feet` is `130 ft` in MTA style: `...with stations between 100 and 130 feet beneath the surface. Accordin...`
+- style: `5 minutes` is `5 min` in MTA style: `...escalator transfer times over 5 minutes.`
 - style: `Hunterspoint Avenue` is `Hunterspoint Av` in MTA style: `...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...`
+- style: `8 minutes` is `8 min` in MTA style: `...normal walking pace, it takes 8 minutes to travel from GCM’s lower me...`
+- style: `10 minutes` is `10 min` in MTA style: `... to GCT’s Main Concourse, and 10 minutes to reach the 4/5/6 trains. Gi...`
+- style: `15 minutes` is `15 min` in MTA style: `...ven that it only takes around 15 minutes to travel between Penn Statio...`
+- style: `3.5 minutes` is `3.5 min` in MTA style: `...subway lines along the route: 3.5 minutes at Lenox Av via escalators, 5...`
+- style: `5.1 minutes` is `5.1 min` in MTA style: `...s at Lenox Av via escalators, 5.1 minutes at St Nicholas Av via escalat...`
+- style: `5.1 minutes` is `5.1 min` in MTA style: `...cholas Av via escalators, and 5.1 minutes at Broadway via elevators. Th...`
+- style: `5 minutes` is `5 min` in MTA style: `...escalator transfer times over 5 minutes.`
+- style: `7 minutes` is `7 min` in MTA style: `...posed design, this would take 7 minutes on escalators). Conversely, S...`
 - style: `Second Ave subway` is `Second Avenue Subway` in MTA style: `... even by the standards of the Second Ave subway. `
+- style: `30 seconds` is `30 sec` in MTA style: `... platform or mezzanine within 30 seconds, which, while certainly nice ...`
+- style: `6 inches` is `6 in` in MTA style: `...its ventilation openings only 6 inches above roadway height, obviati...`
 - style: `Second Ave subway` is `Second Avenue Subway` in MTA style: `...ive, oversize features of the Second Ave subway. The MTA and its contractors ...`
+- style: `5 minutes` is `5 min` in MTA style: `...tchbacks that would take over 5 minutes to reach the platform. Transf...`
+- style: `2.1 minutes` is `2.1 min` in MTA style: `... escalators, only take 1.6 to 2.1 minutes for transfers in the feasibil...`
+- style: `19 seconds` is `19 sec` in MTA style: `...se 198 ft to the Blue Line in 19 seconds, door closing to door opening...`
 
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)\
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> and a Grand Central Madison escalator.\
