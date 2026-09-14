@@ -424,6 +424,10 @@ making the reports agree is the writer's, and the build only says where to look.
   `km/h`, `tph`, `dB`, `Hz`, `V`, `kV`, `kW` and `MW`.
   A unit introduced with its symbol after it, `30 trains per hour (tph)`,
   is being defined rather than misspelled, and is left alone.
+- **`$` and `%`, never the word**:
+  `3.5 percent` is `3.5%`, and `7.7 billion dollars` is `$7.7 billion`,
+  with the scale carried across rather than left behind.
+  `in 2026 dollars` is not a sum of money and is left alone.
 - **No hyphen between a number and its unit**, even where English wants one.
   `a 600-foot train` is `a 600 ft train`, so a measurement is written one way
   wherever it appears and a search for `600 ft` finds all of them.
