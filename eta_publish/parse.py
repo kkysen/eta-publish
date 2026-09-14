@@ -14,10 +14,9 @@ because they are facts about how the docs are written:
   with the caption and `Credit:` lines after that
 """
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, replace
 from datetime import datetime
-from string import ascii_uppercase
 from urllib.parse import parse_qs, urlsplit
 
 from .docs_json import JsonObject
@@ -190,29 +189,123 @@ class Labelled:
     bracketed: bool
     """Whether the label opened with `[`, which only a linked note does."""
 
+    underlined: bool
+    """Whether the label is underlined for its whole length.
 
-def labelled(line: str) -> Labelled:
-    """`line` split at the end of the label it is headed with.
+    This is what tells a label from prose that happens to hold a colon.
+    Nothing else does: `The answer was simple: build it shallower`
+    reads as a label by every rule about capitals and length,
+    and reads as the sentence it is by this one."""
 
-    `Uncropped Source: a.jpg` is `("Uncropped Source", ":", "a.jpg", False)`
-    and `[Image Source]` is `("Image Source", "]", "", True)`.
+    linked: bool
+    """Whether the label is the text of a link, for its whole length.
+
+    A figure names its source by linking the file, and Docs underlines
+    every link whatever the writer meant, so `parse.py` drops that underline
+    and the link stands in for it. A header field is never written this way,
+    which is why the two are separate: the `https` of a bare linked URL
+    is not a field name.
+    """
+
+
+@dataclass(frozen=True)
+class Marked:
+    """One character of a line, and the two things about how it is written.
+
+    Underlining is what says a label, and a link is underlined by Docs
+    whatever the writer meant, which is why the two are kept apart:
+    `parse.py` already drops the underline from a linked run for that reason.
+    """
+
+    character: str
+    underlined: bool
+    linked: bool
+
+
+def _marked(content: list[Inline]) -> list[Marked]:
+    """Each character of a line, with how it is written."""
+    out: list[Marked] = []
+    for node in content:
+        if isinstance(node, Text):
+            out.extend(
+                Marked(character, node.underline, node.href is not None) for character in node.text
+            )
+    return out
+
+
+def labelled(content: list[Inline]) -> Labelled:
+    """`content` split at the end of the label it is headed with.
+
+    An underlined `Uncropped Source` before `: a.jpg` is the label
+    `Uncropped Source` with the mark `:`, and a linked `[Image Source]`
+    is the label `Image Source` with the mark `]`.
 
     The opening bracket is optional for every label, not only the linked ones.
     Wider than the lines the reports actually write,
     deliberately: a bracketed `[SVG: ...]` is the note it looks like,
     and publishing it as prose because of the bracket helps nobody.
     """
-    head = line.lstrip()
-    bracketed = head.startswith("[")
+    line = _marked(content)
+    start = 0
+    while start < len(line) and line[start].character.isspace():
+        start += 1
+    bracketed = start < len(line) and line[start].character == "["
     if bracketed:
-        head = head[1:].lstrip()
-    for index, character in enumerate(head):
-        if character in LABEL_MARKS:
-            return Labelled(head[:index].strip(), character, head[index + 1 :].lstrip(), bracketed)
-    return Labelled(head.strip(), "", "", bracketed)
+        start += 1
+        while start < len(line) and line[start].character.isspace():
+            start += 1
+
+    head = line[start:]
+    end = next((i for i, m in enumerate(head) if m.character in LABEL_MARKS), None)
+    label = head if end is None else head[:end]
+    rest = [] if end is None else head[end + 1 :]
+    return Labelled(
+        label=_text(label).strip(),
+        mark="" if end is None else head[end].character,
+        value=_text(rest).lstrip(),
+        bracketed=bracketed,
+        underlined=_every(label, lambda m: m.underlined),
+        linked=_every(label, lambda m: m.linked),
+    )
 
 
-def is_source_note(line: str) -> bool:
+def _text(run: list[Marked]) -> str:
+    return "".join(m.character for m in run)
+
+
+def _every(run: list[Marked], written: Callable[[Marked], bool]) -> bool:
+    """Whether every character of `run` that is not a space is `written` that way.
+
+    An empty run is not: a line with nothing before its colon has no label.
+    """
+    marks = [written(m) for m in run if not m.character.isspace()]
+    return bool(marks) and all(marks)
+
+
+def _written_as_a_label(note: Labelled) -> bool:
+    """Whether a figure's note is written as one: underlined, or linked.
+
+    A figure names its source by linking the file, and the link is the label.
+    A header field is read more strictly, because a bare link to a page
+    would otherwise make a field of the `https` its text starts with.
+    """
+    return note.underlined or note.linked
+
+
+def unmarked(line: list[Inline]) -> list[Inline]:
+    """A claimed label with the underline that marked it taken off.
+
+    The underline says "this is a label" rather than anything to a reader,
+    so publishing it puts a stray rule under the `Credit` of every figure.
+    The same reason `_text_run` drops the underline Docs draws under a link.
+    """
+    return [
+        replace(node, underline=False) if isinstance(node, Text) and node.underline else node
+        for node in line
+    ]
+
+
+def is_source_note(line: list[Inline]) -> bool:
     """Whether `line` is a `Source:` note rather than prose.
 
     The bare spelling needs no mark, which is why the label has to be
@@ -220,7 +313,10 @@ def is_source_note(line: str) -> bool:
     a paragraph beginning "Source of the estimate is ..." is prose,
     and only one saying nothing but "Image Source" is a note.
     """
-    words = labelled(line).label.casefold().split()
+    note = labelled(line)
+    if not _written_as_a_label(note):
+        return False
+    words = note.label.casefold().split()
     if not words or words[-1] != SOURCE_LABEL:
         return False
     # The qualifier is one word: `Uncropped Source`, `Image Source`.
@@ -228,88 +324,40 @@ def is_source_note(line: str) -> bool:
     return len(words) == 1 or (len(words) == 2 and _is_word(words[0]))
 
 
-def is_asset_note(line: str) -> bool:
+def is_asset_note(line: list[Inline]) -> bool:
     """Whether `line` is a `SVG:`/`PNG:`/`PDF:` note.
 
     A colon and nothing else: these are typed, never linked,
     and a bare `PDF` is a word.
     """
     note = labelled(line)
-    return note.mark == ":" and note.label.casefold() in ASSET_LABELS
+    return _written_as_a_label(note) and note.mark == ":" and note.label.casefold() in ASSET_LABELS
 
 
-def is_credit_note(line: str) -> bool:
+def is_credit_note(line: list[Inline]) -> bool:
     """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
     note = labelled(line)
-    return bool(note.mark) and note.label.casefold() == CREDIT_LABEL
+    return _written_as_a_label(note) and bool(note.mark) and note.label.casefold() == CREDIT_LABEL
 
 
-# How long a field name may run before the line is prose that holds a colon.
-# `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
-# is a headline, not a field.
-MAX_KEY = 61
-
-
-def key_line(line: str) -> tuple[str, str] | None:
+def key_line(line: list[Inline]) -> tuple[str, str] | None:
     """One `Key: value` line split in two, or `None` where the line is prose.
 
-    A field name starts with a capital, holds no colon of its own,
-    and is short: the first colon ends it,
-    and a long run before that is a sentence rather than a name.
+    The name is underlined and the colon ends it.
+    That is the whole rule, and it is the document's rule rather than a guess
+    about which runs of capitals read as a name:
+    `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
+    is a headline and `Barbara Russo-Lennon, "Subway spots` is a citation,
+    and neither is underlined, which is all that has to be said about either.
     """
     field = labelled(line)
     # A colon and no bracket: `[Image Source]` is a figure's note, not a field.
-    if field.mark != ":" or field.bracketed:
-        return None
-    if not field.label or field.label[0] not in ascii_uppercase or len(field.label) > MAX_KEY:
+    if not field.underlined or field.mark != ":" or field.bracketed:
         return None
     return field.label, field.value
 
 
-NOT_IN_A_NAME = ",;\"“”'‘’"
-"""Punctuation a field name does not carry, whatever else it looks like.
-
-A citation opens with a name and a comma and quotes the headline after it,
-which capitalization alone reads as a field.
-"""
-
-MAX_FIELD_WORDS = 6
-"""How many words a field name may run to.
-
-`MTA SAS West Feasibility Study` is five and is a field.
-Past this a run before a colon is a sentence.
-"""
-
-
-def names_a_field(key: str) -> bool:
-    """Whether `key` reads as the name of a field rather than as prose.
-
-    A field name is written as a name: short, and capitalized throughout.
-    A clause is written as a sentence: a capital to start it and lower case after,
-    which is what `The answer was simple: build it shallower` is,
-    and what keeps this off the many body sentences holding a colon.
-
-    Punctuation settles the rest. A name has none of a sentence's:
-    `Barbara Russo-Lennon, "Subway spots` is the start of a citation,
-    and the comma says so before any question of capitals arises.
-
-    Not every word, because a name carries small words that stay lower:
-    `Date of Publication` is a name and `of` is not going to be capitalized.
-    So the test is the balance rather than the exception:
-    more of the words after the first in lower case than not, and it is a clause.
-    """
-    if any(character in NOT_IN_A_NAME for character in key):
-        return False
-    words = key.split()
-    if not words or len(words) > MAX_FIELD_WORDS:
-        return False
-    if words[0][0].isalpha() and not words[0][0].isupper():
-        return False
-    rest = [word for word in words[1:] if word[0].isalpha()]
-    return sum(word[0].islower() for word in rest) * 2 <= len(rest)
-
-
-def header_field(line: str) -> str:
+def header_field(line: list[Inline]) -> str:
     """The header field `line` writes, or nothing where it writes none.
 
     The name only, without its value,
@@ -344,7 +392,7 @@ def source_name(source: list[Inline]) -> str:
     and a bare URL names a page rather than a file,
     so neither becomes a filename.
     """
-    value = labelled(plain_text(source)).value.strip()
+    value = labelled(source).value.strip()
     if not value or unfinished(value) or value.startswith(("http:", "https:", "//")):
         return ""
     return value
@@ -825,23 +873,27 @@ class Parser:
             if unfinished(text):
                 self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
-            if is_source_note(text) or is_asset_note(text):
+            # Read once, here: what a line is depends on how it is styled,
+            # and parsing a paragraph twice says everything it has to say twice.
+            inlines = self.inlines(para)
+
+            if is_source_note(inlines) or is_asset_note(inlines):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
                     # its caption, so it belongs to the figure above it.
-                    note = self.inlines(para)
+                    note = unmarked(inlines)
                     last.source = last.source + note
                     self._claim_name(last, note)
                     self._attach_vector(last, para)
                     continue
                 drop_pending()
-                pending_source = self.inlines(para)
+                pending_source = unmarked(inlines)
                 caption_slot = 0
                 continue
 
             if has_image(para):
-                figure = Figure(image=self._only_image(para), source=pending_source or [])
+                figure = Figure(image=self._only_image(inlines), source=pending_source or [])
                 self._claim_name(figure, pending_source or [])
                 out.append(figure)
                 pending_source = None
@@ -857,18 +909,14 @@ class Parser:
                 # A caption and its credit are often one paragraph split by a soft line break,
                 # so each line is classified separately.
                 claimed = False
-                # Read once: a caption that turns out to be prose is emitted below,
-                # and parsing it twice says everything it has to say twice.
-                inlines = self.inlines(para)
                 for line in split_lines(inlines):
-                    line_text = plain_text(line).strip()
-                    if not line_text:
+                    if not plain_text(line).strip():
                         continue
-                    if is_credit_note(line_text):
-                        last.credit = line
+                    if is_credit_note(line):
+                        last.credit = unmarked(line)
                         claimed = True
-                    elif is_source_note(line_text) or is_asset_note(line_text):
-                        last.source = last.source + line
+                    elif is_source_note(line) or is_asset_note(line):
+                        last.source = last.source + unmarked(line)
                         self._claim_name(last, line)
                         claimed = True
                     elif caption_slot:
@@ -877,9 +925,6 @@ class Parser:
                         claimed = True
                 if claimed:
                     continue
-
-            else:
-                inlines = self.inlines(para)
 
             caption_slot = 0
             out.append(Paragraph(content=inlines))
@@ -926,8 +971,7 @@ class Parser:
             return
         figure.image = replace(figure.image, vector=vector)
 
-    def _only_image(self, para: JsonObject) -> Image:
-        inlines = self.inlines(para)
+    def _only_image(self, inlines: list[Inline]) -> Image:
         images = [i for i in inlines if isinstance(i, Image)]
         if len(images) > 1:
             self.doc.warn(
@@ -1043,15 +1087,12 @@ class Parser:
                 end = i + 1
                 continue
 
-            # The header section never reaches `inlines`, so it says this for itself.
-            self._soft_breaks(para)
-
             # A paragraph can hold more than one field:
             # the real brief writes `Short:` and `SEO Description:`
             # with a Shift+Enter between them rather than a paragraph break.
             # The two read alike in the document and are not alike here,
             # so every line of the paragraph is considered, not just the first.
-            lines = text.split("\n")
+            lines = split_lines(self.inlines(para))
             if key_line(lines[0]) is None:
                 break  # prose: the header section is over
 
@@ -1062,7 +1103,8 @@ class Parser:
                     # A line that names no field continues the value above it.
                     # Ending the scan here would drop the rest of the paragraph,
                     # and every field after it, over a value that merely wrapped.
-                    self.doc.meta[key] = f"{self.doc.meta[key]} {line}".strip()
+                    wrapped = plain_text(line).strip()
+                    self.doc.meta[key] = f"{self.doc.meta[key]} {wrapped}".strip()
                     continue
                 key = self._meta_line(*field)
             end = i + 1

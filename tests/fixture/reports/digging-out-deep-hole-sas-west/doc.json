@@ -25,7 +25,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "URL: /reports/digging-out-deep-hole-sas-west\n",
+                "content": "URL",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": /reports/digging-out-deep-hole-sas-west\n",
                 "textStyle": {}
               }
             }
@@ -40,7 +48,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "Short: A 125 St subway should be a slam dunk.\n",
+                "content": "Short",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": A 125 St subway should be a slam dunk.\n",
                 "textStyle": {}
               }
             }
@@ -55,7 +71,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "SEO Description: Cheaper, shallower, faster.\n",
+                "content": "SEO Description",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": Cheaper, shallower, faster.\n",
                 "textStyle": {}
               }
             }
@@ -70,7 +94,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "MTA SAS West Feasibility Study: https://www.mta.info/document/196361\n",
+                "content": "MTA SAS West Feasibility Study",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": https://www.mta.info/document/196361\n",
                 "textStyle": {}
               }
             }
@@ -172,7 +204,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "Source: sas-west-036.jpg\n",
+                "content": "Source",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": sas-west-036.jpg\n",
                 "textStyle": {}
               }
             }
@@ -216,7 +256,15 @@
           "elements": [
             {
               "textRun": {
-                "content": "Credit: MTA\n",
+                "content": "Credit",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "textRun": {
+                "content": ": MTA\n",
                 "textStyle": {}
               }
             }

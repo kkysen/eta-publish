@@ -23,6 +23,24 @@ def para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
     }
 
 
+def field(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
+    """A paragraph whose labels are underlined, which is how the document writes one.
+
+    The name up to the first colon of each line: a label is a label because it
+    is underlined, so a test meaning one has to write it the way the doc does.
+    """
+    runs: list[JsonObject] = []
+    for n, line in enumerate(text.split("\v")):
+        if n:
+            runs.append({"textRun": {"content": "\v", "textStyle": {}}})
+        mark = min((line.find(c) for c in ":]" if c in line), default=-1)
+        if mark >= 0:
+            runs.append({"textRun": {"content": line[:mark], "textStyle": {"underline": True}}})
+        runs.append({"textRun": {"content": line[mark:] if mark >= 0 else line, "textStyle": {}}})
+    runs[-1]["textRun"]["content"] += "\n"
+    return {"paragraph": {"paragraphStyle": {"namedStyleType": style}, "elements": runs}}
+
+
 def image(object_id: str = "io.1") -> JsonObject:
     return {
         "paragraph": {
@@ -66,12 +84,12 @@ def text_of(content: list[Inline]) -> str:
 
 APPENDIX = [
     para("Header", "HEADING_2"),
-    para("URL: /reports/x"),
+    field("URL: /reports/x"),
     para("Headline", "TITLE"),
     image(),
     para("A photo inside the Freedom Tunnel, showing room for 4 tracks."),
-    para("[Image Source](https://www.flickr.com/photo_download.gne?id=4490800374)"),
-    para("[Credit: Logan Hicks](https://www.flickr.com/photos/loganhicks/4490800374/)"),
+    field("[Image Source](https://www.flickr.com/photo_download.gne?id=4490800374)"),
+    field("[Credit: Logan Hicks](https://www.flickr.com/photos/loganhicks/4490800374/)"),
     para("The Freedom Tunnel was formerly the 4-track West Side Line."),
 ]
 
@@ -104,7 +122,8 @@ def test_image_source_never_reaches_a_published_output(
     out = emitter.emit(appendix)
     assert "Image Source" not in out
     assert "flickr.com/photo_download" not in out
-    assert "Credit: Logan Hicks" in out
+    # The label is underlined in the document, so it reaches the page in two runs.
+    assert "Logan Hicks" in out
 
 
 def test_the_description_reaches_the_preview() -> None:
@@ -113,11 +132,46 @@ def test_the_description_reaches_the_preview() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("SEO Description: Cheaper and shallower."),
+            field("SEO Description: Cheaper and shallower."),
             para("Headline", "TITLE"),
         ]
     )
     assert 'content="Cheaper and shallower."' in report_page(doc)
+
+
+def test_a_credit_line_that_is_not_underlined_is_not_a_credit() -> None:
+    """A label is a label because it is underlined.
+    Nothing else tells `Credit: MTA` from a caption that happens to say it."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            field("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("A caption."),
+            para("Credit: MTA"),
+        ]
+    )
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.credit == []
+
+
+def test_the_underline_marking_a_label_is_not_published() -> None:
+    """It says the line is a label rather than anything to a reader,
+    so a figure's credit does not reach the page with a rule under it."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            field("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            para("A caption."),
+            field("Credit: MTA"),
+        ]
+    )
+    out = HtmlEmitter().emit(doc)
+    assert '<figcaption class="figure-credit">Credit: MTA</figcaption>' in out
+    assert "<u>" not in out
 
 
 # ---- alt text -------------------------------------------------------
@@ -147,9 +201,9 @@ def test_a_qualified_source_line_is_still_editorial() -> None:
         doc = build(
             [
                 para("Header", "HEADING_2"),
-                para("URL: /reports/x"),
+                field("URL: /reports/x"),
                 para("Headline", "TITLE"),
-                para(f"{label} sas-west-036.jpg"),
+                field(f"{label} sas-west-036.jpg"),
                 image(),
                 para("A caption."),
             ]
@@ -167,7 +221,7 @@ def test_an_image_styled_as_a_heading_becomes_a_figure() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             para("Tail Tracks", "HEADING_2"),
             {
@@ -190,7 +244,7 @@ def test_unfinished_text_is_reported() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             para("TODO insert PSD image, maybe JFK AirTrain?"),
         ]
@@ -204,11 +258,11 @@ def test_chart_asset_placeholders_are_editorial() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
             para("Station length as a percentage of platform length."),
-            para("SVG: station-length.svg"),
+            field("SVG: station-length.svg"),
         ]
     )
     assert "SVG:" not in HtmlEmitter().emit(doc)
@@ -219,7 +273,7 @@ def test_an_undescribed_image_is_reported() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
         ]
@@ -233,10 +287,10 @@ def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
-            para("Composite image of the station diagram.\v\vCredit: MTA, ETA"),
+            field("Composite image of the station diagram.\v\vCredit: MTA, ETA"),
         ]
     )
     figure = next(b for b in doc.blocks if isinstance(b, Figure))
@@ -248,7 +302,7 @@ def test_soft_line_breaks_do_not_reach_the_output_as_control_characters() -> Non
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             para("One line.\vAnother line."),
         ]
@@ -262,14 +316,15 @@ def _svg_doc(mime: str = "image/svg+xml", uri: str = "https://drive.google.com/o
     return build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
             {
                 "paragraph": {
                     "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
                     "elements": [
-                        {"textRun": {"content": "SVG: ", "textStyle": {}}},
+                        {"textRun": {"content": "SVG", "textStyle": {"underline": True}}},
+                        {"textRun": {"content": ": ", "textStyle": {}}},
                         {
                             "richLink": {
                                 "richLinkProperties": {
@@ -308,10 +363,10 @@ def test_a_source_line_that_links_no_vector_leaves_the_raster() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
-            para("SVG: TODO"),
+            field("SVG: TODO"),
         ]
     )
     figure = next(b for b in doc.blocks if isinstance(b, Figure))
@@ -329,10 +384,10 @@ def test_a_cropped_figure_keeps_its_raster() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
-            para("SVG: chart.svg"),
+            field("SVG: chart.svg"),
         ],
         crop={"offsetLeft": 0.1},
     )
@@ -553,7 +608,7 @@ def test_a_soft_line_break_is_warned_about_wherever_it_is() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             para("One line.\vAnother line."),
         ]
@@ -569,7 +624,7 @@ def test_a_prose_paragraph_after_a_figure_is_warned_about_once() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             image(),
             para("A caption."),
@@ -583,7 +638,7 @@ def test_a_soft_break_with_nothing_on_one_side_is_called_spacing() -> None:
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("URL: /reports/x"),
+            field("URL: /reports/x"),
             para("Headline", "TITLE"),
             para("\vA paragraph pushed down the page."),
         ]

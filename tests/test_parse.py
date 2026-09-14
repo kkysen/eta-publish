@@ -170,14 +170,7 @@ def test_an_image_the_document_names_no_source_for_keeps_its_hashed_name() -> No
 
 def test_a_source_line_with_no_image_is_reported_not_dropped_silently() -> None:
     doc_json = json.loads(json.dumps(FIXTURE))
-    doc_json["body"]["content"].append(
-        {
-            "paragraph": {
-                "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
-                "elements": [{"textRun": {"content": "Source: orphan.jpg\n", "textStyle": {}}}],
-            }
-        }
-    )
+    doc_json["body"]["content"].append(_field_para("Source: orphan.jpg"))
     doc = parse(doc_json)
     assert any("orphan.jpg" in w for w in map(str, doc.warnings))
 
@@ -187,6 +180,39 @@ def _text_para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
         "paragraph": {
             "paragraphStyle": {"namedStyleType": style},
             "elements": [{"textRun": {"content": text + "\n", "textStyle": {}}}],
+        }
+    }
+
+
+def _field_para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
+    """A paragraph whose labels are underlined, which is how the document writes one.
+
+    The name up to the first colon of each line: a label is a label because it
+    is underlined, so a test meaning one has to write it the way the doc does.
+    """
+    runs: list[JsonObject] = []
+    for n, line in enumerate(text.split("\v")):
+        if n:
+            runs.append({"textRun": {"content": "\v", "textStyle": {}}})
+        mark = min((line.find(c) for c in ":]" if c in line), default=-1)
+        if mark >= 0:
+            runs.append({"textRun": {"content": line[:mark], "textStyle": {"underline": True}}})
+        runs.append({"textRun": {"content": line[mark:] if mark >= 0 else line, "textStyle": {}}})
+    runs[-1]["textRun"]["content"] += "\n"
+    return {"paragraph": {"paragraphStyle": {"namedStyleType": style}, "elements": runs}}
+
+
+def _linked_para(text: str, url: str) -> JsonObject:
+    """A paragraph that is nothing but a link, which is one way a figure names its source.
+
+    A link carries no underline of its own: Docs draws one for every link,
+    and the parser drops it for that reason, so the link is what marks the label.
+    """
+    style = {"link": {"url": url}}
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+            "elements": [{"textRun": {"content": text + "\n", "textStyle": style}}],
         }
     }
 
@@ -213,8 +239,8 @@ def test_a_bare_image_source_link_is_still_an_editorial_note() -> None:
                     _text_para("Report", "TITLE"),
                     _image_para("io.1"),
                     _text_para("A caption."),
-                    _text_para("Image Source"),
-                    _text_para("Credit: MTA"),
+                    _linked_para("Image Source", "https://www.flickr.com/photo_download.gne"),
+                    _field_para("Credit: MTA"),
                 ]
             },
             "inlineObjects": {

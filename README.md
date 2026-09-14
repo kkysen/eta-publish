@@ -317,7 +317,13 @@ and `Final Due Date:` becomes the dateline.
 which is the point of the two fields being separate.
 Everything else is carried along and made available to the templates.
 
-Two rules matter, because both are load-bearing:
+Three rules matter, because all three are load-bearing:
+
+**The name is underlined, up to but not including the colon.**
+That is what makes a line a field rather than prose that holds a colon,
+and it is the only thing that does.
+Docs carries the underline forward as you keep typing,
+so turn it off after the name.
 
 **The block ends at the first line that is not `Key: value`.**
 Any heading, the headline, a paragraph containing an image, or ordinary prose.
@@ -328,9 +334,10 @@ each one reported so nothing leaves silently.
 The SAS West tabs open with `Header` directly, so this is defensive.
 
 **The headline must be styled `Title`.**
-Otherwise `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
-looks exactly like a `Key: value` line and gets filed as metadata.
-The converter warns, and falls back to the Drive filename,
+The underline rule already keeps
+`Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
+out of the metadata, but the headline still has to be a headline:
+without the style the converter falls back to the Drive filename,
 a working name (`SAS West Feasibility Response`) and not what should publish.
 Alternatively, put `Title:` in the header block.
 
@@ -348,6 +355,10 @@ so adding a field to a future report is safe.
   a `Source: <file>` paragraph before it,
   or an `[Image Source](<url>)` paragraph after the caption,
   plus the caption and a `Credit:` line.
+  Each of these names is underlined too, for the same reason a field's is;
+  a linked one needs no underline, since Docs draws one under every link.
+  The underline marks the line and is not published:
+  a figure's credit reaches the page with no rule under `Credit`.
   A paragraph whose entire text is the link, reading just `Image Source`,
   counts as the same note;
   a paragraph that merely starts with the word is prose and is left alone.

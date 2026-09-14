@@ -27,6 +27,24 @@ def para(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
     }
 
 
+def field(text: str, style: str = "NORMAL_TEXT") -> JsonObject:
+    """A paragraph whose labels are underlined, which is how the document writes one.
+
+    The name up to the first colon of each line: a label is a label because it
+    is underlined, so a test meaning one has to write it the way the doc does.
+    """
+    runs: list[JsonObject] = []
+    for n, line in enumerate(text.split("\v")):
+        if n:
+            runs.append({"textRun": {"content": "\v", "textStyle": {}}})
+        mark = min((line.find(c) for c in ":]" if c in line), default=-1)
+        if mark >= 0:
+            runs.append({"textRun": {"content": line[:mark], "textStyle": {"underline": True}}})
+        runs.append({"textRun": {"content": line[mark:] if mark >= 0 else line, "textStyle": {}}})
+    runs[-1]["textRun"]["content"] += "\n"
+    return {"paragraph": {"paragraphStyle": {"namedStyleType": style}, "elements": runs}}
+
+
 def image_para() -> JsonObject:
     return {
         "paragraph": {
@@ -41,13 +59,13 @@ REAL_SHAPE: JsonObject = {
     "body": {
         "content": [
             para("Header", "HEADING_2"),  # deeper than the body sections
-            para("Project Manager: Khyber Sen"),
-            para("URL: /reports/digging-out-deep-hole-sas-west"),
-            para("MTA SAS West Feasibility Study: https://www.mta.info/document/196361"),
+            field("Project Manager: Khyber Sen"),
+            field("URL: /reports/digging-out-deep-hole-sas-west"),
+            field("MTA SAS West Feasibility Study: https://www.mta.info/document/196361"),
             para("Digging Out of a Very Deep Hole: Saving Billions on 125th Street", "TITLE"),
             image_para(),
             para("Composite image of the MTA's station diagram."),
-            para("Credit: MTA, ETA (Blair Lorenzo)"),
+            field("Credit: MTA, ETA (Blair Lorenzo)"),
             para("Addendum: clarifying text was added on August 21, 2026."),
             para("The Elephants in the Room", "HEADING_1"),
             para("On paper, this should be a slam dunk."),
@@ -115,7 +133,7 @@ def test_prose_ends_the_header_section_even_without_a_headline() -> None:
             "body": {
                 "content": [
                     para("Header", "HEADING_2"),
-                    para("URL: /reports/x"),
+                    field("URL: /reports/x"),
                     para("This is body prose, not a key."),
                 ]
             },
@@ -136,7 +154,7 @@ def test_an_unstyled_headline_still_does_not_swallow_the_hero_image() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("URL: /reports/digging-out-deep-hole-sas-west"),
+                field("URL: /reports/digging-out-deep-hole-sas-west"),
                 para("Digging Out of a Very Deep Hole: Saving Billions on 125th Street"),
                 image_para(),
                 para("The Elephants in the Room", "HEADING_1"),
@@ -159,8 +177,8 @@ def test_scaffolding_before_the_header_does_not_hide_it() -> None:
                 "content": [
                     para("Draft 2"),
                     para("Header", "HEADING_2"),
-                    para("URL: /reports/digging-out-deep-hole-sas-west"),
-                    para("Short: A 125 St subway should be a slam dunk."),
+                    field("URL: /reports/digging-out-deep-hole-sas-west"),
+                    field("Short: A 125 St subway should be a slam dunk."),
                     para("The Real Headline", "TITLE"),
                     para("The Elephants in the Room", "HEADING_1"),
                 ]
@@ -182,7 +200,7 @@ def test_dropped_scaffolding_is_reported() -> None:
                 "content": [
                     para("Draft 2"),
                     para("Header", "HEADING_2"),
-                    para("URL: /reports/x"),
+                    field("URL: /reports/x"),
                     para("Headline", "TITLE"),
                 ]
             },
@@ -218,7 +236,7 @@ def test_a_headline_before_the_header_stops_the_search() -> None:
                     para("Headline", "TITLE"),
                     para("Body."),
                     para("Header", "HEADING_2"),
-                    para("URL: /reports/x"),
+                    field("URL: /reports/x"),
                 ]
             },
         }
@@ -269,7 +287,7 @@ def test_a_title_header_field_does_not_set_the_headline() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Title: A Headline Nobody Sees"),
+                field("Title: A Headline Nobody Sees"),
                 para("Ordinary prose."),
             ]
         },
@@ -286,7 +304,7 @@ def test_a_title_styled_paragraph_wins_and_says_nothing() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Title: A Headline Nobody Sees"),
+                field("Title: A Headline Nobody Sees"),
                 para("The Real Headline", "TITLE"),
             ]
         },
@@ -304,8 +322,8 @@ def test_a_field_written_twice_says_which_one_won() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Short: The first answer."),
-                para("Short: The second answer."),
+                field("Short: The first answer."),
+                field("Short: The second answer."),
                 para("The Real Headline", "TITLE"),
             ]
         },
@@ -320,15 +338,36 @@ def test_a_field_written_twice_says_which_one_won() -> None:
     )
 
 
+def test_a_line_that_is_not_underlined_is_not_a_field() -> None:
+    """A sentence holding a colon is prose, whatever it looks like.
+
+    This is the whole convention: the name is underlined, and a headline,
+    a citation and `The answer was simple: build it shallower` are not."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                field("URL: /reports/x"),
+                para("Short: A 125 St subway should be a slam dunk."),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta == {"URL": "/reports/x"}
+    assert "Short" not in doc.meta
+
+
 def test_distinct_fields_are_not_a_repeat() -> None:
     document: JsonObject = {
         "title": "SAS West Feasibility Response",
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Draft Due Date: Jul 17, 2026"),
-                para("Press Due Date: Jul 21, 2026"),
-                para("Publish Due Date: Aug 19, 2026"),
+                field("Draft Due Date: Jul 17, 2026"),
+                field("Press Due Date: Jul 21, 2026"),
+                field("Publish Due Date: Aug 19, 2026"),
                 para("The Real Headline", "TITLE"),
             ]
         },
@@ -349,8 +388,8 @@ def test_two_fields_in_one_paragraph_are_two_fields() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Short: Too loud.\vSEO Description: Far too loud."),
-                para("URL: /briefs/too-damn-loud"),
+                field("Short: Too loud.\vSEO Description: Far too loud."),
+                field("URL: /briefs/too-damn-loud"),
                 para("The Real Headline", "TITLE"),
             ]
         },
@@ -368,8 +407,8 @@ def test_a_value_that_wraps_keeps_the_rest_of_itself() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Short: Too loud,\vand too long."),
-                para("URL: /briefs/too-damn-loud"),
+                field("Short: Too loud,\vand too long."),
+                field("URL: /briefs/too-damn-loud"),
             ]
         },
     }
@@ -385,7 +424,7 @@ def test_a_shared_paragraph_says_so() -> None:
         "body": {
             "content": [
                 para("Header", "HEADING_2"),
-                para("Short: Too loud.\vSEO Description: Far too loud."),
+                field("Short: Too loud.\vSEO Description: Far too loud."),
             ]
         },
     }

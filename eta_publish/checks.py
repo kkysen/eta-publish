@@ -10,7 +10,18 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, Where, addressed, plain_text
+from .nodes import (
+    Cut,
+    Document,
+    Figure,
+    Inline,
+    Listed,
+    Quoted,
+    Shown,
+    Where,
+    addressed,
+    plain_text,
+)
 from .parse import (
     KNOWN_FIELDS,
     REQUIRED_FIELDS,
@@ -18,7 +29,6 @@ from .parse import (
     is_credit_note,
     is_source_note,
     key_line,
-    names_a_field,
     split_lines,
     unfinished,
 )
@@ -107,7 +117,7 @@ that opens with an author and quotes a headline after it:
 """
 
 
-def _is_figure_note(line: str) -> bool:
+def _is_figure_note(line: list[Inline]) -> bool:
     """Whether `line` is one of the notes a figure carries."""
     return is_source_note(line) or is_asset_note(line) or is_credit_note(line)
 
@@ -129,7 +139,7 @@ def _check_stray_fields(doc: Document) -> None:
     Under a picture, `Source:`, `Credit:` and `SVG:` are the ordinary spellings
     rather than strays, so those are left alone there and warned about in prose.
 
-    Only lines that read as a field, which `names_a_field` decides.
+    Only lines whose name is underlined, which is what makes one a field.
     A sentence holding a colon is prose, and saying otherwise
     on every `and then: this` would make the check worth turning off.
     """
@@ -137,12 +147,12 @@ def _check_stray_fields(doc: Document) -> None:
         if where in SAYS_NOTHING_ABOUT_FIELDS:
             continue
         for line in split_lines(run):
-            text = plain_text(line).strip()
-            if where is not Where.BODY and _is_figure_note(text):
+            if where is not Where.BODY and _is_figure_note(line):
                 continue
-            found = key_line(text)
+            found = key_line(line)
             if found is None:
                 continue
+            text = plain_text(line).strip()
             field = found[0]
             if field in KNOWN_FIELDS:
                 doc.warn(
@@ -151,7 +161,7 @@ def _check_stray_fields(doc: Document) -> None:
                     Shown("Header"),
                     Shown(text),
                 )
-            elif names_a_field(field):
+            else:
                 doc.warn(
                     "{} reads as a field and is not one: {}",
                     Shown(f"{field}:"),
