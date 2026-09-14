@@ -68,36 +68,11 @@ RESERVED_ANCHORS = frozenset({"footnotes", "contributors"})
 # and has to be a character, and the character set has exactly one spare.
 SOFT_BREAK = "\v"
 
-KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
-# A note to whoever fills the field in, not part of its name.
-# The real doc writes `SEO Description (300 char limit):`,
-# and a lookup for `seo description` finds nothing unless the note is stripped.
-KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
-# Editorial notes naming where an image came from, none of which is published.
-# The real report uses four spellings:
-# `Source:` under an image, `Uncropped Source:` for one that was trimmed,
-# and, after a caption,
-# either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
-# One optional qualifying word covers all of them and whatever the next one is.
-#
-# The trailing `$` admits the bare spelling,
-# and is why the alternative before it is anchored rather than merely a prefix:
-# a paragraph beginning "Source of the estimate is ..." is prose,
-# and only one saying nothing but "Image Source" is a note.
-SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*(?:[:\]]|$)", re.IGNORECASE)
-
-# A Drive file id, from either shape of link Docs produces.
-DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
-
-# The same idea for chart assets: `SVG:` and `PNG:` name the file to link beside a figure.
-# Notes to whoever assembles the page; the published report carries real links.
-ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
 
 # Anything still marked unfinished, e.g. the real doc's `Source: TODO`.
 # Not `TK`: these reports are not written with it,
 # so here it would only ever match a word that happened to be spelled that way.
 TODO_RE = re.compile(r"\bTODO\b|\bFIXME\b|\bXXX\b")
-CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
 
 
 # How much of a line a warning quotes back before it is just repeating the document.
@@ -423,6 +398,9 @@ class Parser:
             crop=crop,
         )
 
+    # A Drive file id, from either shape of link Docs produces.
+    DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
+
     def _vector(self, para: JsonObject) -> Vector | None:
         """The vector original a `SVG:` line links, if it links one.
 
@@ -434,7 +412,7 @@ class Parser:
             uri = props.get("uri", "")
             if not uri or "image/svg" not in props.get("mimeType", ""):
                 continue
-            match = DRIVE_ID_RE.search(uri)
+            match = self.DRIVE_ID_RE.search(uri)
             if match is None:
                 self.doc.warn("cannot read a Drive file id from {}; the raster is used", Shown(uri))
                 continue
@@ -515,6 +493,25 @@ class Parser:
 
     # ---- blocks ------------------------------------------------------
 
+    # Editorial notes naming where an image came from, none of which is published.
+    # The real report uses four spellings:
+    # `Source:` under an image, `Uncropped Source:` for one that was trimmed,
+    # and, after a caption,
+    # either `[Image Source](<url>)` or a bare `Image Source` whose whole text is the link.
+    # One optional qualifying word covers all of them and whatever the next one is.
+    #
+    # The trailing `$` admits the bare spelling,
+    # and is why the alternative before it is anchored rather than merely a prefix:
+    # a paragraph beginning "Source of the estimate is ..." is prose,
+    # and only one saying nothing but "Image Source" is a note.
+    SOURCE_RE = re.compile(r"^\s*\[?\s*(?:\w+\s+)?source\s*(?:[:\]]|$)", re.IGNORECASE)
+
+    # The same idea for chart assets: `SVG:` and `PNG:` name the file to link beside a figure.
+    # Notes to whoever assembles the page; the published report carries real links.
+    ASSET_RE = re.compile(r"^\s*(?:svg|png|pdf)\s*:", re.IGNORECASE)
+
+    CREDIT_RE = re.compile(r"^\s*\[?\s*Credit\s*[:\]]", re.IGNORECASE)
+
     def blocks(self, content: list[JsonObject]) -> list[Block]:
         out: list[Block] = []
         pending_source: list[Inline] | None = None
@@ -590,7 +587,7 @@ class Parser:
             if TODO_RE.search(text):
                 self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
-            if SOURCE_RE.match(text) or ASSET_RE.match(text):
+            if self.SOURCE_RE.match(text) or self.ASSET_RE.match(text):
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
@@ -629,10 +626,10 @@ class Parser:
                     line_text = plain_text(line).strip()
                     if not line_text:
                         continue
-                    if CREDIT_RE.match(line_text):
+                    if self.CREDIT_RE.match(line_text):
                         last.credit = line
                         claimed = True
-                    elif SOURCE_RE.match(line_text) or ASSET_RE.match(line_text):
+                    elif self.SOURCE_RE.match(line_text) or self.ASSET_RE.match(line_text):
                         last.source = last.source + line
                         self._claim_name(last, line)
                         claimed = True
@@ -748,6 +745,8 @@ class Parser:
                     return image
         return None
 
+    KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
+
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
 
@@ -817,12 +816,12 @@ class Parser:
             # The two read alike in the document and are not alike here,
             # so every line of the paragraph is considered, not just the first.
             lines = text.split("\n")
-            if KEY_RE.match(lines[0]) is None:
+            if self.KEY_RE.match(lines[0]) is None:
                 break  # prose: the header section is over
 
             key = ""
             for line in lines:
-                match = KEY_RE.match(line)
+                match = self.KEY_RE.match(line)
                 if match is None:
                     # A line that names no field continues the value above it.
                     # Ending the scan here would drop the rest of the paragraph,
@@ -843,9 +842,14 @@ class Parser:
             )
         return content[end:]
 
+    # A note to whoever fills the field in, not part of its name.
+    # The real doc writes `SEO Description (300 char limit):`,
+    # and a lookup for `seo description` finds nothing unless the note is stripped.
+    KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
+
     def _meta_line(self, match: re.Match[str]) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
-        written = KEY_NOTE_RE.sub("", match.group("key").strip())
+        written = self.KEY_NOTE_RE.sub("", match.group("key").strip())
         key = written.lower()
         value = match.group("value").strip()
         if key in self.doc.meta:
