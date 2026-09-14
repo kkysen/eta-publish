@@ -19,8 +19,8 @@
     [24 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [2 comment threads still open on this tab],
     [#raw("SEO Description:") is 363 characters, over the 300 a search result shows:#quote(block: true)[The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I#strike[t's time to stop the cacophony, and let riders travel in peace.]]],
-    [a sentence ends with #raw("2") spaces after it, where one is the house style: #raw("...y, often one message at a time.  Slowly, by following the path ...")],
-    [a sentence ends with #raw("2") spaces after it, where one is the house style: #raw("...version of the curb cut effect.  In this case, designing announ...")],
+    [style: a sentence should end with 1 space, not 2: #raw("..., often one message at a time.··Slowly, by following the path ...")],
+    [style: a sentence should end with 1 space, not 2: #raw("...ersion of the curb cut effect.··In this case, designing announ...")],
   ),
 )
 

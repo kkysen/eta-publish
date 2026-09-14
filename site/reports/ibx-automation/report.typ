@@ -18,7 +18,9 @@
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
-    [a sentence ends with #raw("2") spaces after it, where one is the house style: #raw("...ut costs are given separately).  This is a Buy America cost, wh...")],
+    [style: two words should be separated by 1 space, not 2: #raw("...common. On such routes, demand··requires both very high freque...")],
+    [style: two words should be separated by 1 space, not 2: #raw("...e Second Avenue Subway opened,··whereas ALM is typically desig...")],
+    [style: a sentence should end with 1 space, not 2: #raw("...t costs are given separately).··This is a Buy America cost, wh...")],
   ),
 )
 
