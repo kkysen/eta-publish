@@ -24,6 +24,7 @@ from ..nodes import (
     Paragraph,
     Quoted,
     Shown,
+    Spaced,
     Span,
     Table,
     Text,
@@ -55,6 +56,10 @@ def warning_markup(
                 out.append(code(value))
             case Cut(value):
                 out.append(cut(value))
+            case Spaced():
+                # Drawn, because every one of these formats is read by
+                # something that collapses a run of spaces into one.
+                out.append(code(part.drawn))
             case Quoted(spans):
                 rendered = _spans(spans, code, cut, text)
                 out.append(quote(rendered) if quote is not None else rendered)
@@ -80,6 +85,8 @@ def _spans(
                 out.append(code(value))
             case Cut(value):
                 out.append(cut(value))
+            case Spaced():
+                out.append(code(span.drawn))
             case _:
                 out.append(text(span))
     return "".join(out)

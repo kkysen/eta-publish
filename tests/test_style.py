@@ -1,6 +1,6 @@
 """How a report is written, as distinct from what it says."""
 
-from eta_publish.nodes import Document, Footnote, Paragraph, Text
+from eta_publish.nodes import Document, Footnote, Paragraph, Spaced, Text
 from eta_publish.style import style
 
 
@@ -159,3 +159,12 @@ def test_every_warning_says_it_is_about_style() -> None:
     found = warnings(written("It is deep.  The ETA said so — twice."))
     assert len(found) == 3
     assert all(w.startswith("style: ") for w in found)
+
+
+def test_the_gap_is_carried_as_spaces_rather_than_as_dots() -> None:
+    """So a terminal can put them back and colour them,
+    and so a document writing a middle dot of its own is never mistaken for one."""
+    doc = written("It is deep.  It is expensive.")
+    style(doc)
+    (part,) = [p for p in doc.warnings[0].parts if isinstance(p, Spaced)]
+    assert (part.before, part.spaces, part.after) == ("It is deep.", 2, "It is expensive.")
