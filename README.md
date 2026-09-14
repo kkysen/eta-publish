@@ -393,13 +393,23 @@ making the reports agree is the writer's, and the build only says where to look.
   The pair is invisible everywhere anybody would catch it:
   Docs shows one space either way and HTML collapses it,
   so only the Markdown archive keeps it, and keeps it forever.
+- **One space between two words.**
+  The same characters and a different mistake, so a different warning:
+  between sentences the pair is a typewriter habit, and mid-clause it is
+  a slipped finger.
 - **No space beside an em or en dash.**
   Every dash in the reports today is closed up;
   a spaced one arrives by pasting from somewhere that sets them open.
 - **`ETA`, not `the ETA`**, the way one writes `NASA said`.
   Spelled out it does take the article: `the Effective Transit Alliance`.
 
-All three read the whole document: the body, the headings, the captions,
+Each warning opens with `style: `,
+because the rest of a document's warnings are things the build could not do
+and these are things somebody may want to write differently.
+The spaces a warning is about are drawn as `·`,
+since quoted as themselves they are a space and the line looks correct.
+
+These read the whole document: the body, the headings, the captions,
 the footnotes, and the header's own prose in `Short:` and `SEO Description:`.
 
 # How it works
