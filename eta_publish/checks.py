@@ -11,7 +11,7 @@ and appear both in the build log and on the site's index page.
 """
 
 from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plain_text
-from .parse import TODO_RE
+from .parse import unfinished
 
 REQUIRED_FIELDS = (
     "project manager",
@@ -68,7 +68,7 @@ def check(doc: Document) -> None:
         elif field not in MAY_BE_EMPTY and not doc.meta[field].strip():
             doc.warn("the {} section leaves {} empty", Shown("Header"), Shown(f"{_titled(field)}:"))
 
-        if TODO_RE.search(doc.meta.get(field, "")):
+        if unfinished(doc.meta.get(field, "")):
             # The header is consumed before the body walk that flags these,
             # so `Short: TODO` would otherwise reach the page unremarked.
             doc.warn("{} is still marked unfinished", Shown(f"{_titled(field)}:"))
