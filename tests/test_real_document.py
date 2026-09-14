@@ -203,6 +203,7 @@ KNOWN_WARNINGS = (
     "unfinished text in the document",
     "rather than `Enter`",
     "standing in for blank space",
+    "has an unrecognized",
 )
 """Every kind of warning this report has been known to raise.
 

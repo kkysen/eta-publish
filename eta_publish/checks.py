@@ -11,26 +11,8 @@ and appear both in the build log and on the site's index page.
 """
 
 from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plain_text
+from .parse import REQUIRED_FIELDS as REQUIRED_FIELDS
 from .parse import unfinished
-
-REQUIRED_FIELDS = (
-    "Project Manager",
-    "Phase",
-    "Discussion Channel",
-    "Publish Due Date",
-    "Public Contributors",
-    "Private Contributors",
-    "URL",
-    "Short",
-    "SEO Description",
-)
-"""Every line the `Header` section is expected to carry, in the order it writes them.
-
-A missing one is warned about by name rather than as a list of nine,
-because a warning naming one line is a line to go and add
-and a warning naming nine is a paragraph nobody reads twice.
-"""
-
 
 SEO_LIMIT = 300
 """How long a `SEO Description:` may be.

@@ -2,6 +2,10 @@
 
 A 125 St subway should be a slam dunk.
 
+**Warnings**
+
+- the `Header` section has an unrecognized `MTA SAS West Feasibility Study:` line; check it for a typo
+
 ## The Elephants in the Room
 
 SAS West is projected to cost **$7.7 billion** for 1.25 miles[^1], per the [MTA study](<https://www.mta.info/document/196361>)<sup>\[1\]</sup>.

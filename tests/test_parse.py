@@ -70,8 +70,13 @@ def test_an_unrecognized_header_key_is_kept_and_does_not_end_the_scan(doc: Docum
     assert doc.meta["SEO Description"] == "Cheaper, shallower, faster."
 
 
-def test_the_fixture_parses_without_warnings(doc: Document) -> None:
-    assert doc.warnings == []
+def test_the_fixture_raises_only_the_unrecognized_field_warning(doc: Document) -> None:
+    """The one warning is the `MTA SAS West Feasibility Study:` line above,
+    which is a reference the header carries and not a field anything reads."""
+    assert [str(w) for w in doc.warnings] == [
+        "the `Header` section has an unrecognized "
+        "`MTA SAS West Feasibility Study:` line; check it for a typo"
+    ]
 
 
 # ---- blocks --------------------------------------------------------
