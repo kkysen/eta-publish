@@ -7,7 +7,6 @@ so without this the captions, table of contents, and footnotes
 render as undifferentiated body text.
 """
 
-import re
 from collections.abc import Callable, Iterable
 from string import ascii_lowercase
 from typing import cast, override
@@ -169,13 +168,16 @@ def phase_markup(phase: str) -> str:
     return markup(tag.p(class_="phase")[tag.span(class_="phase-label")["Phase: "], phase])
 
 
-TEXT_FRAGMENT = re.compile(r"#:~:text=.*$")
-"""A link's text fragment, which tells the browser what to highlight.
+TEXT_FRAGMENT = "#:~:text="
+"""The start of a link's text fragment, which tells the browser what to highlight.
 
 Not part of the address: it is 300 characters of percent-encoded sentence on
 some of these, and a reader checking where a citation goes is reading the host
 and the path. The link still carries it, so the page still opens on the
 sentence it was citing.
+
+Cut on the marker rather than on the `#`: an ordinary fragment is an anchor in
+the page and belongs in what is shown.
 """
 
 
@@ -186,7 +188,7 @@ def shown_url(url: str) -> str:
     it, and so does a text fragment. Only what is shown is shortened; the link
     is the URL the document holds.
     """
-    return TEXT_FRAGMENT.sub("", url.split("://", 1)[-1])
+    return url.split("://", 1)[-1].partition(TEXT_FRAGMENT)[0]
 
 
 class HtmlEmitter(Emitter):
