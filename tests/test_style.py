@@ -203,14 +203,29 @@ def test_every_kind_the_mta_spells_its_own_way() -> None:
         assert f"`{correct}`" in warnings(written(f"It runs along {name} today."))[0]
 
 
-def test_a_spelled_out_number_takes_the_spelled_out_kind() -> None:
-    """`Second Avenue` is the avenue whose station is `2 Av`,
-    so the pair is corrected towards the word rather than the initials."""
-    assert "`Second Avenue`" in warnings(written("The cost of the Second Ave Subway."))[0]
+def test_a_spelled_out_number_is_a_digit_like_any_other() -> None:
+    """The station on Second Avenue is `2 Av`, on every sign the MTA prints."""
+    assert "`2 Av`" in warnings(written("The stations along Second Avenue are deep."))[0]
+    assert "`5 Av`" in warnings(written("It runs under Fifth Ave for a mile."))[0]
 
 
 def test_the_second_avenue_subway_is_left_as_the_mta_names_it() -> None:
     assert warnings(written("The Second Avenue Subway opened in 2017.")) == []
+
+
+def test_the_project_is_corrected_towards_its_name_rather_than_the_station() -> None:
+    """`Second Ave Subway` is the project written short, not a station,
+    so the warning names the whole phrase rather than half of it."""
+    assert (
+        "`Second Ave Subway` is `Second Avenue Subway`"
+        in warnings(written("The cost of the Second Ave Subway."))[0]
+    )
+
+
+def test_the_project_keeps_the_capitalization_it_was_given() -> None:
+    """SAS West writes `Second Ave subway` twice,
+    and which `s` it should be is not what this is about."""
+    assert "is `Second Avenue subway`" in warnings(written("Features of the Second Ave subway."))[0]
 
 
 def test_an_ordinal_that_names_no_street_is_not_a_street() -> None:

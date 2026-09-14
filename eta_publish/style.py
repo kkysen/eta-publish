@@ -225,33 +225,42 @@ not one the system has a station on.
 WRITTEN = frozenset(TYPES.values())
 """The spellings that are already right, which nothing is warned about."""
 
-NUMBER_WORDS = (
-    "First",
-    "Second",
-    "Third",
-    "Fourth",
-    "Fifth",
-    "Sixth",
-    "Seventh",
-    "Eighth",
-    "Ninth",
-    "Tenth",
-    "Eleventh",
-    "Twelfth",
-)
-"""The avenues whose number is a word rather than a digit.
+NUMBERED = {
+    "First": "1",
+    "Second": "2",
+    "Third": "3",
+    "Fourth": "4",
+    "Fifth": "5",
+    "Sixth": "6",
+    "Seventh": "7",
+    "Eighth": "8",
+    "Ninth": "9",
+    "Tenth": "10",
+    "Eleventh": "11",
+    "Twelfth": "12",
+}
+"""The avenues whose number somebody writes as a word.
 
-`Second Avenue` is written out where `2 Av` is the station on it,
-so a spelled-out number keeps the spelled-out kind of street beside it
-and the pair is corrected the other way: towards the word, not the initials.
+The MTA writes the digit: the station on Second Avenue is `2 Av`,
+on every sign and in every announcement, so a spelled-out number is
+corrected like an ordinal rather than left standing.
 """
 
-SECOND_AVENUE_SUBWAY = "Second Avenue Subway"
-"""The project, which is a name rather than a street.
+SECOND_AVENUE_SUBWAY = "Second Avenue"
+"""The one place the words stay, when `Subway` follows them.
 
-The MTA's own, on every page it publishes about it, and the reports say it
-constantly. The station on the line is `2 Av` and the line is this,
-so the phrase is left exactly as it is written here.
+The project is the Second Avenue Subway, which is the MTA's own name for it
+and what these reports say constantly. The street is `2 Av` and the line
+along it is this, so only the full phrase is left alone: `Second Ave Subway`
+is corrected towards it rather than towards the station.
+"""
+
+SUBWAY = re.compile(r"[ ][Ss]ubway\b")
+"""What makes the words before it the project rather than the street.
+
+The lowercase spelling too, which is how SAS West writes it twice.
+Their own capitalization is kept in what the warning says to write,
+since which one it should be is not what is being warned about.
 """
 
 NOT_A_STREET = ("Rail Road",)
@@ -315,10 +324,16 @@ def _check_street_names(doc: Document, text: str) -> None:
             written in ELSEWHERE
             or written.startswith(f"{COMMON_NOUN} ")
             or written.endswith(NOT_A_STREET)
-            or text[match.start() :].startswith(SECOND_AVENUE_SUBWAY)
         ):
             continue
-        correct = _mta(name, kind)
+        project = SUBWAY.match(text, match.end()) if name in NUMBERED else None
+        if project is not None:
+            # The phrase and the word that makes it one, so the warning is
+            # about the name the project has rather than about half of it.
+            written += project.group()
+            correct = SECOND_AVENUE_SUBWAY + project.group()
+        else:
+            correct = _mta(name, kind)
         if correct == written:
             continue
         _warn(
@@ -326,7 +341,11 @@ def _check_street_names(doc: Document, text: str) -> None:
             "{} is {} in MTA style: {}",
             Shown(written),
             Shown(correct),
-            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+            Highlighted(
+                _before(text, match.start()),
+                written,
+                _after(text, match.start() + len(written)),
+            ),
         )
 
 
@@ -336,11 +355,8 @@ ORDINAL = re.compile(r"(?<=\d)(?:st|nd|rd|th)\b")
 def _mta(name: str, kind: str) -> str:
     """`name` and `kind` written the way the MTA writes them.
 
-    A spelled-out number is the one that grows rather than shrinks:
-    `Second Ave` is `Second Avenue`, because that is the avenue whose
-    station is `2 Av`.
+    A number is a digit whether it was written as one or not,
+    and it carries no ordinal suffix: `125th Street` and `Second Avenue`
+    are `125 St` and `2 Av`.
     """
-    if name in NUMBER_WORDS:
-        spelled = next(full for full, short in TYPES.items() if short == TYPES[kind])
-        return f"{name} {spelled}"
-    return f"{ORDINAL.sub('', name)} {TYPES[kind]}"
+    return f"{NUMBERED.get(name, ORDINAL.sub('', name))} {TYPES[kind]}"
