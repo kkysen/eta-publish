@@ -7,7 +7,16 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.checks import check
-from eta_publish.nodes import Block, Document, Figure, Heading, Image, Paragraph, Text
+from eta_publish.nodes import (
+    Block,
+    Document,
+    Figure,
+    Heading,
+    Image,
+    Inline,
+    Paragraph,
+    Text,
+)
 from eta_publish.parse import REQUIRED_FIELDS, parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -19,6 +28,11 @@ def doc() -> Document:
     parsed.warnings.clear()
     parsed.meta = {field: "something" for field in REQUIRED_FIELDS}
     return parsed
+
+
+def _labelled(label: str, rest: str) -> list[Inline]:
+    """A line whose label is underlined, which is how the document writes one."""
+    return [Text(text=label, underline=True), Text(text=rest)]
 
 
 def test_a_complete_header_is_not_warned_about(doc: Document) -> None:
@@ -84,7 +98,7 @@ def figure(*, caption: bool = True, credit: bool = True, named: bool = True) -> 
     return Figure(
         image=Image(object_id="io.9", filename="a-diagram", named=named),
         caption=[Text(text="What it shows.")] if caption else [],
-        credit=[Text(text="Credit: MTA")] if credit else [],
+        credit=_labelled("Credit", ": MTA") if credit else [],
     )
 
 
@@ -261,7 +275,7 @@ def test_a_header_field_in_the_body_is_warned_about(doc: Document) -> None:
     It publishes as a paragraph, and the field it was meant to fill
     is reported missing elsewhere in the same build.
     """
-    doc.blocks = [Paragraph(content=[Text(text="Short: A 125 St subway should be a slam dunk.")])]
+    doc.blocks = [Paragraph(content=_labelled("Short", ": A 125 St subway should be a slam dunk."))]
     check(doc)
     assert [str(w) for w in doc.warnings] == [
         "`Short:` is a `Header` field, and this one is outside it: "
@@ -275,8 +289,8 @@ def test_a_header_field_in_a_caption_is_warned_about(doc: Document) -> None:
     doc.blocks = [
         Figure(
             image=Image(object_id="io.1", filename="x.png", named=True),
-            caption=[Text(text="Phase: Compositing")],
-            credit=[Text(text="Credit: MTA")],
+            caption=_labelled("Phase", ": Compositing"),
+            credit=_labelled("Credit", ": MTA"),
         )
     ]
     check(doc)
@@ -288,7 +302,7 @@ def test_a_header_field_in_a_caption_is_warned_about(doc: Document) -> None:
 def test_an_unrecognized_field_in_the_body_is_warned_about(doc: Document) -> None:
     """`Sort:` in the body is a line nothing reads,
     whether it was meant for the header or meant to be prose."""
-    doc.blocks = [Paragraph(content=[Text(text="Sort: A 125 St subway.")])]
+    doc.blocks = [Paragraph(content=_labelled("Sort", ": A 125 St subway."))]
     check(doc)
     assert [str(w) for w in doc.warnings] == [
         "`Sort:` reads as a field and is not one: `Sort: A 125 St subway.`"
@@ -303,7 +317,7 @@ def test_a_figure_note_is_ordinary_under_a_picture(doc: Document) -> None:
             image=Image(object_id="io.1", filename="x.png", named=True),
             source=[Text(text="Source: sas-west-036.jpg")],
             caption=[Text(text="The SAS West alignment.")],
-            credit=[Text(text="Credit: MTA")],
+            credit=_labelled("Credit", ": MTA"),
         )
     ]
     check(doc)
@@ -312,7 +326,7 @@ def test_a_figure_note_is_ordinary_under_a_picture(doc: Document) -> None:
 
 def test_a_figure_note_loose_in_the_body_is_warned_about(doc: Document) -> None:
     """Nothing claimed it, so it publishes as a paragraph reading `Source: ...`."""
-    doc.blocks = [Paragraph(content=[Text(text="Source: sas-west-036.jpg")])]
+    doc.blocks = [Paragraph(content=_labelled("Source", ": sas-west-036.jpg"))]
     check(doc)
     assert [str(w) for w in doc.warnings] == [
         "`Source:` reads as a field and is not one: `Source: sas-west-036.jpg`"
