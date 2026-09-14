@@ -220,8 +220,8 @@ def test_tables_scroll_rather_than_overflow(out: str) -> None:
 
 def test_the_contributors_section_lists_the_public_contributors(doc: Document) -> None:
     """Alphabetically by surname, which is how `etany.org` credits them."""
-    doc.meta["public contributors"] = "Khyber Sen, Alon Levy"
-    doc.meta["private contributors"] = "Someone Unnamed"
+    doc.meta["Public Contributors"] = "Khyber Sen, Alon Levy"
+    doc.meta["Private Contributors"] = "Someone Unnamed"
     out = HtmlEmitter(inline_css=False).emit(doc)
     assert "<li>Alon Levy</li>\n<li>Khyber Sen</li>" in out
     assert "Someone Unnamed" not in out
@@ -229,25 +229,25 @@ def test_the_contributors_section_lists_the_public_contributors(doc: Document) -
 
 def test_the_contributors_section_comes_last(doc: Document) -> None:
     """After the footnotes, which is where the published report credits them."""
-    doc.meta["public contributors"] = "Khyber Sen"
+    doc.meta["Public Contributors"] = "Khyber Sen"
     out = HtmlEmitter(inline_css=False).emit(doc)
     assert out.index('<section class="footnotes"') < out.index('<section class="contributors"')
 
 
 def test_a_report_with_no_public_contributors_has_no_contributors(doc: Document) -> None:
-    doc.meta.pop("public contributors", None)
+    doc.meta.pop("Public Contributors", None)
     assert 'class="contributors"' not in HtmlEmitter(inline_css=False).emit(doc)
 
 
 def test_the_dateline_is_the_final_due_date(doc: Document) -> None:
     """Written out, which is how `etany.org` dates a report."""
-    doc.meta["publish due date"] = "Aug 19, 2026"
+    doc.meta["Publish Due Date"] = "Aug 19, 2026"
     out = HtmlEmitter(inline_css=False).emit(doc)
     assert '<p class="dateline" id="date">August 19, 2026</p>' in without_marks(out)
 
 
 def test_a_report_with_no_final_due_date_has_no_dateline(doc: Document) -> None:
-    doc.meta.pop("publish due date", None)
+    doc.meta.pop("Publish Due Date", None)
     assert 'class="dateline"' not in HtmlEmitter(inline_css=False).emit(doc)
 
 
@@ -458,9 +458,9 @@ def test_a_hostile_document_opens_no_tag_of_its_own(doc: Document) -> None:
     Reading the finished page back finds either.
     """
     doc.title = EVIL
-    doc.meta["short"] = EVIL
-    doc.meta["seo description"] = EVIL
-    doc.meta["public contributors"] = EVIL
+    doc.meta["Short"] = EVIL
+    doc.meta["SEO Description"] = EVIL
+    doc.meta["Public Contributors"] = EVIL
     doc.warn("a warning about {}", Shown(EVIL))
     # Alt text is the document's too, and it reaches the page inside an attribute.
     # An image is frozen, and this is the one place anything writes to one.
@@ -491,9 +491,9 @@ def test_an_absent_attribute_is_not_an_empty_one() -> None:
 def test_nothing_a_document_says_becomes_markup(doc: Document) -> None:
     """The document is the untrusted half of every page this builds."""
     doc.title = EVIL
-    doc.meta["short"] = EVIL
-    doc.meta["seo description"] = EVIL
-    doc.meta["public contributors"] = EVIL
+    doc.meta["Short"] = EVIL
+    doc.meta["SEO Description"] = EVIL
+    doc.meta["Public Contributors"] = EVIL
     doc.warn("a warning about {}", Shown(EVIL))
     for output in (HtmlEmitter().emit(doc), report_page(doc)):
         assert "<script>alert(1)</script>" not in output

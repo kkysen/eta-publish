@@ -14,15 +14,15 @@ from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plai
 from .parse import unfinished
 
 REQUIRED_FIELDS = (
-    "project manager",
-    "phase",
-    "discussion channel",
-    "publish due date",
-    "public contributors",
-    "private contributors",
-    "url",
-    "short",
-    "seo description",
+    "Project Manager",
+    "Phase",
+    "Discussion Channel",
+    "Publish Due Date",
+    "Public Contributors",
+    "Private Contributors",
+    "URL",
+    "Short",
+    "SEO Description",
 )
 """Every line the `Header` section is expected to carry, in the order it writes them.
 
@@ -40,7 +40,7 @@ so the sentence that decides whether anyone clicks ends mid-word,
 and the writer never sees where it was cut.
 """
 
-MAY_BE_EMPTY = frozenset({"private contributors"})
+MAY_BE_EMPTY = frozenset({"Private Contributors"})
 """Fields whose emptiness says something rather than being an omission.
 
 A report with nobody uncredited has an empty `Private Contributors:` line,
@@ -64,16 +64,16 @@ def check(doc: Document) -> None:
 
     for field in REQUIRED_FIELDS:
         if field not in doc.meta:
-            doc.warn("the {} section has no {} line", Shown("Header"), Shown(f"{_titled(field)}:"))
+            doc.warn("the {} section has no {} line", Shown("Header"), Shown(f"{field}:"))
         elif field not in MAY_BE_EMPTY and not doc.meta[field].strip():
-            doc.warn("the {} section leaves {} empty", Shown("Header"), Shown(f"{_titled(field)}:"))
+            doc.warn("the {} section leaves {} empty", Shown("Header"), Shown(f"{field}:"))
 
         if unfinished(doc.meta.get(field, "")):
             # The header is consumed before the body walk that flags these,
             # so `Short: TODO` would otherwise reach the page unremarked.
-            doc.warn("{} is still marked unfinished", Shown(f"{_titled(field)}:"))
+            doc.warn("{} is still marked unfinished", Shown(f"{field}:"))
 
-    seo = doc.meta.get("seo description", "")
+    seo = doc.meta.get("SEO Description", "")
     if len(seo) > SEO_LIMIT:
         # The whole description, with the part that will not survive struck
         # through: which words are lost is the thing to fix.
@@ -84,23 +84,6 @@ def check(doc: Document) -> None:
         )
 
 
-ACRONYMS = frozenset({"seo", "url"})
-"""Words the header writes in capitals, which `str.title` would not."""
-
-
-def _titled(field: str) -> str:
-    """A header key as the document writes it: `seo description` is `SEO Description`.
-
-    The keys are lowercased on the way in, so that a document writing `Url:`
-    and one writing `URL:` are the same field.
-    They are written back out the way the document asks for them,
-    because the warning is telling somebody which line to go and look at.
-    """
-    return " ".join(
-        word.upper() if word in ACRONYMS else word.capitalize() for word in field.split()
-    )
-
-
 def _check_contributors(doc: Document) -> None:
     """Two contributors with no comma between them, which reads as one person.
 
@@ -109,7 +92,7 @@ def _check_contributors(doc: Document) -> None:
     Two bare names run together are two words, and nothing here can tell
     those from a double-barrelled surname.
     """
-    for entry in doc.meta.get("public contributors", "").split(","):
+    for entry in doc.meta.get("Public Contributors", "").split(","):
         found = addressed(entry)
         if found is not None and found[1]:
             doc.warn(

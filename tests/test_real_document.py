@@ -182,13 +182,13 @@ def test_smart_chips_resolve(doc: Document) -> None:
     """Person and date chips are not text runs.
     Reading only text runs left every one of these empty,
     including the publication date."""
-    assert doc.meta["project manager"] == "Khyber Sen"
-    assert doc.meta["publish due date"] == "Aug 19, 2026"
+    assert doc.meta["Project Manager"] == "Khyber Sen"
+    assert doc.meta["Publish Due Date"] == "Aug 19, 2026"
     # The field has been renamed once, silently, and the date simply stopped
     # appearing. This is the assertion that would have said so.
     assert doc.dateline == "August 19, 2026"
-    assert doc.meta["public contributors"].startswith("Khyber Sen, Darius Jankauskas")
-    assert doc.meta["seo description"].startswith("A 125 St subway should be a slam dunk")
+    assert doc.meta["Public Contributors"].startswith("Khyber Sen, Darius Jankauskas")
+    assert doc.meta["SEO Description"].startswith("A 125 St subway should be a slam dunk")
 
 
 KNOWN_WARNINGS = (

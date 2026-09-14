@@ -434,7 +434,7 @@ def index_page(site: Site) -> str:
             tag.li[
                 *phase,
                 tag.a(href=f"{built.path}/")[tag.strong[doc.title]],
-                tag.div(class_="short")[doc.meta.get("short", "")],
+                tag.div(class_="short")[doc.meta.get("Short", "")],
                 tag.div(class_="meta")[" · ".join(meta), warned],
             ]
         )

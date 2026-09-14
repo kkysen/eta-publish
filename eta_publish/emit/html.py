@@ -955,7 +955,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR, asset_base: str = AS
     body = HtmlEmitter(
         image_base=image_base, inline_css=False, inline_js=False, inline_phase=False
     ).emit(doc)
-    short = doc.meta.get("short", "")
+    short = doc.meta.get("Short", "")
     # The share card is what a link to the report unfurls as, and the only place it appears:
     # a picture of the title, which a reader who has arrived does not need.
     card: list[Piece] = []
@@ -978,7 +978,7 @@ def report_page(doc: Document, image_base: str = IMAGE_DIR, asset_base: str = AS
         # Remove this, and `site/robots.txt`, when the reports go out.
         htpy.meta(name="robots", content="noindex, nofollow"),
         tag.title[doc.title],
-        htpy.meta(name="description", content=doc.meta.get("seo description", "")),
+        htpy.meta(name="description", content=doc.meta.get("SEO Description", "")),
         *card,
         # Linked rather than inlined: every report page carries the same
         # stylesheets and the same script, and `asset_base` is where the

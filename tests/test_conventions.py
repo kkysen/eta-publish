@@ -120,7 +120,7 @@ def test_a_parenthetical_note_is_not_part_of_the_key() -> None:
             para("Headline", "TITLE"),
         ]
     )
-    assert doc.meta["seo description"] == "Cheaper and shallower."
+    assert doc.meta["SEO Description"] == "Cheaper and shallower."
 
 
 def test_the_description_reaches_the_preview() -> None:

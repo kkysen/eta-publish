@@ -60,14 +60,14 @@ def test_a_title_containing_a_colon_is_not_eaten_as_front_matter(doc: Document) 
     """`Digging Out...: Saving Billions...` matches `Key: value`,
     so a front-matter scan that does not stop at TITLE swallows the headline."""
     assert "digging out of a very deep hole" not in doc.meta
-    assert doc.meta["url"] == "/reports/digging-out-deep-hole-sas-west"
+    assert doc.meta["URL"] == "/reports/digging-out-deep-hole-sas-west"
 
 
 def test_an_unrecognized_header_key_is_kept_and_does_not_end_the_scan(doc: Document) -> None:
     """The real doc has an `MTA SAS West Feasibility Study:` line,
     which a whitelist would have leaked into the body."""
-    assert doc.meta["mta sas west feasibility study"] == "https://www.mta.info/document/196361"
-    assert doc.meta["seo description"] == "Cheaper, shallower, faster."
+    assert doc.meta["MTA SAS West Feasibility Study"] == "https://www.mta.info/document/196361"
+    assert doc.meta["SEO Description"] == "Cheaper, shallower, faster."
 
 
 def test_the_fixture_parses_without_warnings(doc: Document) -> None:
