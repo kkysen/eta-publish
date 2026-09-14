@@ -699,18 +699,45 @@ def _long_date(text: str) -> str:
     return text
 
 
-EMAILED = re.compile(r"\s*\(\s*[^()\s]+@[^()\s]+\s*\)")
-"""An address in brackets after a name, which a byline does not carry.
+def addressed(entry: str) -> tuple[str, str] | None:
+    """One listed contributor split around the address written beside their name.
 
-Written that way when Docs cannot resolve a person chip to a display name:
-the chip renders as the address, so the name is typed and the chip put beside it.
-The name is the half worth publishing, and `etany.org` credits names.
-"""
+    The name, and whatever was written after the closing bracket,
+    which is a second contributor whose comma is missing.
+    `None` where the entry carries no address, which is the ordinary case:
+    a resolved person chip is a name and nothing else.
+
+    Docs writes an address beside a name when it cannot resolve a person chip
+    to a display name: the chip renders as the address,
+    so the name is typed and the chip put beside it.
+    The name is the half worth publishing, and `etany.org` credits names.
+
+    Not an address by any standard, deliberately:
+    a bracketed run with no spaces and something either side of an `@`.
+    What is being recognized is the Docs spelling, not an email,
+    and a stricter reading would drop a name
+    over an address this has no business having an opinion about.
+    """
+    name, bracket, rest = entry.partition("(")
+    if not bracket:
+        return None
+    address, closed, after = rest.partition(")")
+    address = address.strip()
+    local, at, domain = address.partition("@")
+    if not closed or not at or not local or not domain:
+        return None
+    if any(character.isspace() for character in address):
+        return None
+    return name.strip(), after.strip()
 
 
 def _named(entry: str) -> str:
     """One listed contributor, as a byline writes them."""
-    return EMAILED.sub("", entry).strip()
+    found = addressed(entry)
+    if found is None:
+        return entry.strip()
+    name, after = found
+    return f"{name} {after}".strip()
 
 
 def _by_surname(name: str) -> tuple[str, str]:
