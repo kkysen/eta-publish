@@ -15,6 +15,7 @@ because they are facts about how the docs are written:
 """
 
 import re
+from collections.abc import Iterator
 from dataclasses import replace
 from datetime import datetime
 from urllib.parse import parse_qs, urlsplit
@@ -73,11 +74,35 @@ SOFT_BREAK = "\v"
 # Anything still marked unfinished, e.g. the real doc's `Source: TODO`.
 # Not `TK`: these reports are not written with it,
 # so here it would only ever match a word that happened to be spelled that way.
-TODO_RE = re.compile(r"\b(?:TODO|FIXME|XXX)\b")
+UNFINISHED = frozenset({"TODO", "FIXME", "XXX"})
+
+
+def _words(text: str) -> Iterator[str]:
+    """`text` split into words, the way a word boundary divides one.
+
+    A word is letters, digits, and underscores;
+    everything else separates, so `Source: TODO` and `TODO,` each carry one
+    and `TODOS` carries none of them.
+    """
+    word: list[str] = []
+    for character in text:
+        if character.isalnum() or character == "_":
+            word.append(character)
+            continue
+        if word:
+            yield "".join(word)
+            word = []
+    if word:
+        yield "".join(word)
+
+
+def unfinished(text: str) -> bool:
+    """Whether `text` still carries a marker saying it is not done."""
+    return any(word in UNFINISHED for word in _words(text))
 
 
 def _is_word(text: str) -> bool:
-    """Whether `text` is a single word, the way a word boundary divides one."""
+    """Whether `text` is a single word, by the same rule `_words` splits on."""
     return bool(text) and all(c.isalnum() or c == "_" for c in text)
 
 
@@ -104,7 +129,7 @@ def source_name(source: list[Inline]) -> str:
     text = plain_text(source)
     _, colon, value = text.partition(":")
     value = value.strip() if colon else ""
-    if not value or TODO_RE.search(value) or value.startswith(("http:", "https:", "//")):
+    if not value or unfinished(value) or value.startswith(("http:", "https:", "//")):
         return ""
     return value
 
@@ -652,7 +677,7 @@ class Parser:
                 )
                 continue
 
-            if TODO_RE.search(text):
+            if unfinished(text):
                 self.doc.warn("unfinished text in the document: {}", Shown(text[:80]))
 
             if self._is_source(text) or self._is_asset(text):
