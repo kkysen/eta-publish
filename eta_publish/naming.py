@@ -79,15 +79,6 @@ def print_href(href: str) -> str:
     return href if extension.lower() == "svg" else f"{stem}.jpg"
 
 
-# What a filename may keep: a dot is as much a part of a name as a letter,
-# and `-` and `_` are what people join names with.
-_NON_FILENAME = re.compile(r"[^\w.-]")
-# A source line's extension names the format rather than the picture,
-# and the one that publishes is whatever the download fetches,
-# so it is dropped and the real one appended.
-_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
-
-
 # GitHub's rule for a heading anchor, from `pymdown-extensions` rather than
 # rewritten here: a second copy agrees until a heading has an accent in it,
 # and then whichever copy is wrong is wrong in published URLs.
@@ -111,6 +102,15 @@ def slugify(text: str) -> str:
     which `_ascii_name` keeps.
     """
     return _github_slug(text, "-") or "section"
+
+
+# What a filename may keep: a dot is as much a part of a name as a letter,
+# and `-` and `_` are what people join names with.
+_NON_FILENAME = re.compile(r"[^\w.-]")
+# A source line's extension names the format rather than the picture,
+# and the one that publishes is whatever the download fetches,
+# so it is dropped and the real one appended.
+_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
 
 
 def _ascii_name(name: str) -> str:
