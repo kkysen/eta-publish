@@ -402,7 +402,7 @@
         "startIndex": 320
       },
       {
-        "endIndex": 915,
+        "endIndex": 534,
         "paragraph": {
           "elements": [
             {
@@ -419,10 +419,22 @@
               "endIndex": 534,
               "startIndex": 352,
               "textRun": {
-                "content": ": The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be.\u000b",
+                "content": ": The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be.\n",
                 "textStyle": {}
               }
-            },
+            }
+          ],
+          "paragraphStyle": {
+            "direction": "LEFT_TO_RIGHT",
+            "namedStyleType": "NORMAL_TEXT"
+          }
+        },
+        "startIndex": 347
+      },
+      {
+        "endIndex": 915,
+        "paragraph": {
+          "elements": [
             {
               "endIndex": 549,
               "startIndex": 534,
@@ -447,7 +459,7 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 347
+        "startIndex": 534
       },
       {
         "endIndex": 1183,
@@ -4055,7 +4067,7 @@
     "kix.89naddigwtva": {
       "content": [
         {
-          "endIndex": 39,
+          "endIndex": 16,
           "paragraph": {
             "elements": [
               {
@@ -4091,20 +4103,22 @@
                 "endIndex": 16,
                 "startIndex": 15,
                 "textRun": {
-                  "content": "\u000b",
-                  "textStyle": {
-                    "foregroundColor": {
-                      "color": {
-                        "rgbColor": {
-                          "blue": 0.105882354,
-                          "green": 0.105882354,
-                          "red": 0.105882354
-                        }
-                      }
-                    }
-                  }
+                  "content": "\n",
+                  "textStyle": {}
                 }
-              },
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        },
+        {
+          "endIndex": 39,
+          "paragraph": {
+            "elements": [
               {
                 "endIndex": 38,
                 "startIndex": 16,
@@ -4141,7 +4155,8 @@
               "lineSpacing": 100,
               "namedStyleType": "NORMAL_TEXT"
             }
-          }
+          },
+          "startIndex": 16
         }
       ],
       "footnoteId": "kix.89naddigwtva"
@@ -5828,7 +5843,7 @@
       }
     }
   },
-  "modifiedTime": "2026-09-13T23:33:59.913Z",
+  "modifiedTime": "2026-09-14T00:43:27.604Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [

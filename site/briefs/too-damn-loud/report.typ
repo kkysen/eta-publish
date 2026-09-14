@@ -8,10 +8,8 @@
   contributors: ("Madison Feinberg", "Elijah Fischer", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
-    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("Short: The seemingly-endless onslaught of announcements on...")], [#raw("SEO Description: The seemingly-endless onslaught of...")], )],
     [2 images share one paragraph; only the first becomes a figure],
     [image #raw("kix.djm0a1aand4k") has no alt text and no caption; add a description to it in the doc],
-    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("36 CFR 1192.35")], [#raw("49 CFR 37.167(b) & (c)")], )],
     [the image #raw("img-831248b1") has no caption],
     [the image #raw("img-831248b1") has no #raw("Credit:") line],
     [the image #raw("img-b17aa21a") has no #raw("Credit:") line],
@@ -150,7 +148,7 @@ Audio announcements should remain solely the domain of important, actionable inf
 #strong[Accessibility]
 
 Audio announcements are a vital tool for creating transit systems that are accessible and usable for all.
-Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.#footnote[#link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[36 CFR 1192.35]#super[#link(<src7>)[\[7\]]] \ #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[49 CFR 37.167(b) & (c)]#super[#link(<src8>)[\[8\]]]] The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.
+Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.#footnote[#link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[36 CFR 1192.35]#super[#link(<src7>)[\[7\]]] #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[49 CFR 37.167(b) & (c)]#super[#link(<src8>)[\[8\]]]] The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.
 
 Proper design is critical for announcements to serve as an effective accessibility aid.
 The key is to keep the needs of various different groups in mind when designing announcements.

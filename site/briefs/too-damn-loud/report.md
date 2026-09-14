@@ -6,14 +6,8 @@ September 9, 2026
 
 **Warnings**
 
-- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
-  - `Short: The seemingly-endless onslaught of announcements on...`
-  - `SEO Description: The seemingly-endless onslaught of...`
 - 2 images share one paragraph; only the first becomes a figure
 - image `kix.djm0a1aand4k` has no alt text and no caption; add a description to it in the doc
-- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
-  - `36 CFR 1192.35`
-  - `49 CFR 37.167(b) & (c)`
 - the image `img-831248b1` has no caption
 - the image `img-831248b1` has no `Credit:` line
 - the image `img-b17aa21a` has no `Credit:` line
@@ -244,7 +238,8 @@ It hurts usability, and it damages the reputation of transit in general.
 Transit in New York is too damn loud.
 It's time to let riders travel in peace.
 
-[^1]: [36 CFR 1192.35](<https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)<sup>\[7\]</sup>\
+[^1]: [36 CFR 1192.35](<https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)<sup>\[7\]</sup>
+
     [49 CFR 37.167(b) & (c)](<https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)<sup>\[8\]</sup>
 
 [^2]: Yu, Shaolu, 2016. "’I am like a deaf, dumb and blind person’: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,” *Journal of Transport Geography*, 54(C) (June 2016): 10–21. [https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393](<https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)<sup>\[9\]</sup>

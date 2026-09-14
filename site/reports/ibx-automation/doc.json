@@ -4152,7 +4152,7 @@
     "kix.nlj3ixqelkiy": {
       "content": [
         {
-          "endIndex": 226,
+          "endIndex": 145,
           "paragraph": {
             "elements": [
               {
@@ -4194,21 +4194,28 @@
                 }
               },
               {
-                "endIndex": 146,
+                "endIndex": 145,
                 "startIndex": 144,
                 "textRun": {
-                  "content": "\u000b\u000b",
-                  "textStyle": {
-                    "fontSize": {
-                      "magnitude": 10,
-                      "unit": "PT"
-                    }
-                  }
+                  "content": "\n",
+                  "textStyle": {}
                 }
-              },
+              }
+            ],
+            "paragraphStyle": {
+              "direction": "LEFT_TO_RIGHT",
+              "lineSpacing": 100,
+              "namedStyleType": "NORMAL_TEXT"
+            }
+          }
+        },
+        {
+          "endIndex": 225,
+          "paragraph": {
+            "elements": [
               {
-                "endIndex": 225,
-                "startIndex": 146,
+                "endIndex": 224,
+                "startIndex": 145,
                 "textRun": {
                   "content": "https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/",
                   "textStyle": {
@@ -4233,8 +4240,8 @@
                 }
               },
               {
-                "endIndex": 226,
-                "startIndex": 225,
+                "endIndex": 225,
+                "startIndex": 224,
                 "textRun": {
                   "content": "\n",
                   "textStyle": {
@@ -4251,7 +4258,8 @@
               "lineSpacing": 100,
               "namedStyleType": "NORMAL_TEXT"
             }
-          }
+          },
+          "startIndex": 145
         }
       ],
       "footnoteId": "kix.nlj3ixqelkiy"
@@ -5001,7 +5009,7 @@
       }
     }
   },
-  "modifiedTime": "2026-09-13T17:39:10.399Z",
+  "modifiedTime": "2026-09-14T00:50:53.487Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [
