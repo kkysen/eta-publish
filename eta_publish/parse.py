@@ -270,7 +270,7 @@ def without_note(key: str) -> str:
     """A field name without the note to whoever fills it in.
 
     The real doc writes `SEO Description (300 char limit):`,
-    and a lookup for `seo description` finds nothing unless the note is stripped.
+    and a lookup for `SEO Description` finds nothing unless the note is stripped.
     """
     text = key.rstrip()
     if not text.endswith(")"):
