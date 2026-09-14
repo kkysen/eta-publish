@@ -57,7 +57,7 @@ def test_two_spaces_mid_clause_are_a_different_warning() -> None:
     so it is said differently even though the characters are the same."""
     found = warnings(written("On such routes, demand  requires high frequency."))
     assert found == [
-        "two words should be separated by 1 space, not 2: "
+        "style: two words should be separated by 1 space, not 2: "
         "`On such routes, demand\u00b7\u00b7requires high frequency.`"
     ]
 
@@ -150,3 +150,12 @@ def test_a_header_field_saying_the_initials_is_warned_about() -> None:
     doc = Document()
     doc.meta = {"SEO Description": "The ETA outlines the best practices."}
     assert len(warnings(doc)) == 1
+
+
+def test_every_warning_says_it_is_about_style() -> None:
+    """The rest of a document's warnings are things the build could not do,
+    and these are things somebody may want to write differently,
+    which is a different thing to go and fix."""
+    found = warnings(written("It is deep.  The ETA said so — twice."))
+    assert len(found) == 3
+    assert all(w.startswith("style: ") for w in found)

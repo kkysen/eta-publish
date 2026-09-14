@@ -40,6 +40,23 @@ def _excerpt(text: str, start: int, end: int, shown: str | None = None) -> str:
     return f"{lead}{before}{middle}{after}{trail}"
 
 
+PREFIX = "style: "
+"""What every warning here opens with.
+
+A document's warnings are one list, and the rest of that list is something
+the build could not do: a missing field, an unnamed image, a line nothing
+read. These are things it did, correctly, that somebody may still want to
+write differently, and a reader sorting the list by what to fix first
+should be able to tell the two apart without reading to the end of the line.
+"""
+
+
+def _warn(doc: Document, template: str, *values: Shown) -> None:
+    """Warn about how something is written, said as one of these rather than
+    as one of the document's other warnings."""
+    doc.warn(PREFIX + template, *values)
+
+
 def _prose(doc: Document) -> Iterator[str]:
     """Every run of the document's own words, as one string each.
 
@@ -112,9 +129,9 @@ def _check_spacing(doc: Document, text: str) -> None:
         gap = match.group("gap")
         drawn = Shown(_excerpt(text, match.start("gap"), match.end("gap"), SPACE * len(gap)))
         if ENDS_A_SENTENCE.search(text[: match.start("gap")]):
-            doc.warn(f"a sentence should end with 1 space, not {len(gap)}: {{}}", drawn)
+            _warn(doc, f"a sentence should end with 1 space, not {len(gap)}: {{}}", drawn)
         else:
-            doc.warn(f"two words should be separated by 1 space, not {len(gap)}: {{}}", drawn)
+            _warn(doc, f"two words should be separated by 1 space, not {len(gap)}: {{}}", drawn)
 
 
 DASHES = "—–"
@@ -136,7 +153,8 @@ def _check_dash_spacing(doc: Document, text: str) -> None:
     is visible on the page next to the rest.
     """
     for match in SPACED_DASH.finditer(text):
-        doc.warn(
+        _warn(
+            doc,
             "a dash is written with a space beside it, and the house style closes it up: {}",
             Shown(_excerpt(text, match.start(), match.end())),
         )
@@ -169,7 +187,8 @@ def _check_organization_name(doc: Document, text: str) -> None:
     the initials.
     """
     for match in ARTICLED.finditer(text):
-        doc.warn(
+        _warn(
+            doc,
             "{} is written {}; it is {} on its own, and {} spelled out: {}",
             Shown("ETA"),
             Shown(text[match.start() : match.end() + len("ETA")]),
