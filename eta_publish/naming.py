@@ -110,7 +110,9 @@ _NON_FILENAME = re.compile(r"[^\w.-]")
 # A source line's extension names the format rather than the picture,
 # and the one that publishes is whatever the download fetches,
 # so it is dropped and the real one appended.
-_ASSET_EXTENSION = re.compile(r"\.(?:jpe?g|png|gif|webp|svg|pdf|tiff?|heic)$", re.IGNORECASE)
+_ASSET_EXTENSIONS = frozenset(
+    {"jpg", "jpeg", "png", "gif", "webp", "svg", "pdf", "tif", "tiff", "heic"}
+)
 
 
 def _ascii_name(name: str) -> str:
@@ -123,8 +125,11 @@ def _ascii_name(name: str) -> str:
     which is the whole reason for reading the source line.
     """
     name = unicodedata.normalize("NFKD", name)
-    name = name.encode("ascii", "ignore").decode()
-    return _NON_FILENAME.sub("_", _ASSET_EXTENSION.sub("", name.strip()))
+    name = name.encode("ascii", "ignore").decode().strip()
+    stem, dot, extension = name.rpartition(".")
+    if dot and extension.lower() in _ASSET_EXTENSIONS:
+        name = stem
+    return _NON_FILENAME.sub("_", name)
 
 
 class AnchorAllocator:
