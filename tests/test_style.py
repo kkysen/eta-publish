@@ -30,13 +30,14 @@ def test_one_space_after_a_sentence_is_not_warned_about() -> None:
 def test_two_spaces_after_a_sentence_are_warned_about() -> None:
     found = warnings(written("It is deep.  It is also expensive."))
     assert len(found) == 1
-    assert "two spaces" not in found[0]
-    assert "`2`" in found[0]
+    assert "1 space, not 2" in found[0]
 
 
-def test_the_warning_shows_where_to_look() -> None:
+def test_the_warning_shows_which_spaces_it_means() -> None:
+    """The spaces themselves, drawn: quoted as spaces they are a space,
+    in HTML and in the PDF alike, and the line reads as already correct."""
     found = warnings(written("It is deep.  It is also expensive."))
-    assert "It is deep.  It is also expensive." in found[0]
+    assert "It is deep.\u00b7\u00b7It is also expensive." in found[0]
 
 
 def test_a_closing_bracket_does_not_hide_the_gap() -> None:
@@ -46,7 +47,9 @@ def test_a_closing_bracket_does_not_hide_the_gap() -> None:
 
 
 def test_three_spaces_are_counted_rather_than_rounded_to_two() -> None:
-    assert "`3`" in warnings(written("It is deep.   It is expensive."))[0]
+    found = warnings(written("It is deep.   It is expensive."))[0]
+    assert "1 space, not 3" in found
+    assert "deep.\u00b7\u00b7\u00b7It" in found
 
 
 def test_two_spaces_that_end_no_sentence_are_left_alone() -> None:
