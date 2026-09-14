@@ -86,6 +86,7 @@ def style(doc: Document) -> None:
         _check_organization_name(doc, text)
         _check_street_names(doc, text)
         _check_units(doc, text)
+        _check_hyphenated_units(doc, text)
 
 
 GAP = re.compile(r"(?<=\S)(?P<gap>  +)(?=\S)")
@@ -455,6 +456,46 @@ def _check_units(doc: Document, text: str) -> None:
         _warn(
             doc,
             "{} is {} in MTA style: {}",
+            Shown(written),
+            Shown(correct),
+            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+        )
+
+
+SYMBOLS = frozenset(UNITS.values())
+"""The symbols themselves, for a measurement that is already spelled right."""
+
+JOINED = re.compile(
+    rf"""
+    (?P<amount>\d[\d,.]*)
+    -
+    (?P<unit>{"|".join(sorted(SYMBOLS | set(UNITS), key=len, reverse=True))})\b
+    """,
+    re.VERBOSE,
+)
+"""A number joined to its unit by a hyphen: `a 20-foot cavern`, `1-min headways`.
+
+Only where the word after the hyphen is a unit.
+`2-track`, `4-car` and `NFPA 130-compliant` are hyphenated for the ordinary
+reason, and the reports are full of them.
+"""
+
+
+def _check_hyphenated_units(doc: Document, text: str) -> None:
+    """A measurement hyphenated into the phrase it modifies.
+
+    The hyphen is right, as English: `a 20-foot cavern` is one adjective.
+    It is dropped all the same, so that a measurement is written one way
+    wherever it appears and a search for `20 ft` finds every one of them
+    rather than the ones that happened not to be describing anything.
+    """
+    for match in JOINED.finditer(text):
+        written = match.group()
+        unit = match.group("unit")
+        correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
+        _warn(
+            doc,
+            "{} is {} in MTA style, hyphen and all: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, match.start()), written, _after(text, match.end())),

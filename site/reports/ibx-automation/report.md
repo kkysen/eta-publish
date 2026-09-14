@@ -19,6 +19,7 @@
 - style: `6 minutes` is `6 min` in MTA style: `...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...`
 - style: `6 minutes` is `6 min` in MTA style: `...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...`
 - style: `15 minutes` is `15 min` in MTA style: `...Marseille Metro runs every 10-15 minutes.`
+- style: `3-minute` is `3 min` in MTA style, hyphen and all: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
 - style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
 - style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
 - style: `Fordham Road` is `Fordham Rd` in MTA style: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
@@ -26,12 +27,20 @@
 - style: `2 minutes` is `2 min` in MTA style: `... peak headways are reduced to 2 minutes instead, with off-peak headwa...`
 - style: `3 minutes` is `3 min` in MTA style: `...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...`
 - style: `5 minutes` is `5 min` in MTA style: `...ging from 3 minutes midday to 5 minutes in the evening, ridership ris...`
+- style: `5-minute` is `5 min` in MTA style, hyphen and all: `...time and the currently stated 5-minute peak headways. If peak headwa...`
 - style: `66 seconds` is `66 sec` in MTA style: `...rains, but it runs them every 66 seconds, and can run up to 60 seconds...`
 - style: `60 seconds` is `60 sec` in MTA style: `...66 seconds, and can run up to 60 seconds. While a light metro can be a...`
+- style: `1-min` is `1 min` in MTA style, hyphen and all: `...frequencies, like the extreme 1-min headways of Lille to the more...`
+- style: `2-min` is `2 min` in MTA style, hyphen and all: `... Lille to the more normal 1.5-2-min minimum technical headways of...`
 - style: `2 minutes` is `2 min` in MTA style: `...sist) at very high frequency (2 minutes apart or less), trading per-t...`
 - style: `2 minutes` is `2 min` in MTA style: `...trains as frequently as every 2 minutes or less thus benefits the pla...`
+- style: `600-foot` is `600 ft` in MTA style, hyphen and all: `...equire the high capacity of a 600-foot subway train. Since most IBX ...`
 - style: `180 meters` is `180 m` in MTA style: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a sentence should end with 1 space, not 2: `...t costs are given separately).··This is a Buy America cost, wh...`
+- style: `32-min` is `32 min` in MTA style, hyphen and all: `With a 32-min runtime, 2-min turns, and a 9...`
+- style: `2-min` is `2 min` in MTA style, hyphen and all: `With a 32-min runtime, 2-min turns, and a 90% utilization ...`
+- style: `2-min` is `2 min` in MTA style, hyphen and all: `... fleet cost. But this is with 2-min peak headways, not 5-min peak...`
+- style: `5-min` is `5 min` in MTA style, hyphen and all: `...with 2-min peak headways, not 5-min peak headways. And with a 92%...`
 - style: `72,000 lbs` is `72,000 lb` in MTA style: `weight: 72,000 lbs per 65 ft AW0 car`
 - style: `72,000 lbs` is `72,000 lb` in MTA style: `AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m`
 - style: `175 lbs` is `175 lb` in MTA style: `AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 223...`
