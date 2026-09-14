@@ -402,6 +402,16 @@ making the reports agree is the writer's, and the build only says where to look.
   a spaced one arrives by pasting from somewhere that sets them open.
 - **`ETA`, not `the ETA`**, the way one writes `NASA said`.
   Spelled out it does take the article: `the Effective Transit Alliance`.
+- **Stations and streets as the MTA writes them**:
+  `125 St`, not `125th Street`; `2 Av`, not `2nd Ave`;
+  `Queens Blvd`, `Fordham Rd`, `Henry Hudson Pkwy`.
+  A reader who goes looking for the station should be looking for what the
+  platform says. A spelled-out number is the exception and grows instead:
+  `Second Avenue` is the avenue whose station is `2 Av`,
+  and `Second Avenue Subway` is the project's own name.
+  A street somewhere else has no MTA spelling,
+  so `Nanba Road` and `Heping South Street` are listed in `ELSEWHERE`
+  in `eta_publish/style.py`, which is where the next one goes.
 
 Each warning opens with `style: `,
 because the rest of a document's warnings are things the build could not do
