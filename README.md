@@ -406,8 +406,10 @@ making the reports agree is the writer's, and the build only says where to look.
 Each warning opens with `style: `,
 because the rest of a document's warnings are things the build could not do
 and these are things somebody may want to write differently.
-The spaces a warning is about are drawn as `·`,
-since quoted as themselves they are a space and the line looks correct.
+In a terminal the spaces a warning is about are left as spaces and marked in
+reverse video, which is the only mark a space can carry.
+Everywhere else they are drawn as `·`: HTML collapses a run of spaces and
+`typst` sets it as one, so a gap quoted as itself is a line that looks correct.
 
 These read the whole document: the body, the headings, the captions,
 the footnotes, and the header's own prose in `Short:` and `SEO Description:`.
