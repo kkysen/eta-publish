@@ -14,7 +14,9 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
-- a sentence ends with `2` spaces after it, where one is the house style: `...ut costs are given separately).  This is a Buy America cost, wh...`
+- style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
+- style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
+- style: a sentence should end with 1 space, not 2: `...t costs are given separately).··This is a Buy America cost, wh...`
 
 ## No Need to Wait: Automated Light Metro is Right for the IBX
 
