@@ -68,14 +68,23 @@ They cannot drift out of sync, because nothing maintains them by hand.
 
 ## Setup
 
+[`mise`](https://mise.jdx.dev) is required, not optional:
+it installs `uv`, `pre-commit`, and `biome` at the versions `mise.toml` pins,
+and `biome` lays out every emitted page, so a build without it writes nothing.
+Install `mise` itself first,
+then [activate it in your shell](https://mise.jdx.dev/getting-started.html#activate-mise)
+so the tools it installs are on `$PATH`:
+
 ```sh
-uv sync
+curl https://mise.run | sh
 ```
 
-[`mise`](https://mise.jdx.dev) is required, not optional:
-it is how `biome` is resolved, and `biome` lays out every emitted page.
-A build without it writes nothing.
-`biome` itself needs no step of its own: the first build installs it.
+Then, from the repository:
+
+```sh
+mise install
+uv sync
+```
 
 ### Authentication
 
@@ -627,9 +636,10 @@ and exceeding it returns HTTP 429 rather than costing anything.
 
 # Development
 
+After [setup](#setup):
+
 ```sh
-uv sync
-uv run pre-commit install
+pre-commit install
 uv run pytest
 ```
 
