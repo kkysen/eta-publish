@@ -18,6 +18,7 @@
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
+    [a sentence ends with #raw("2") spaces after it, where one is the house style: #raw("...ut costs are given separately).  This is a Buy America cost, wh...")],
   ),
 )
 
