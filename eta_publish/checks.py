@@ -10,7 +10,7 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import EMAILED, Cut, Document, Figure, Listed, Quoted, Shown, plain_text
+from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plain_text
 from .parse import TODO_RE
 
 REQUIRED_FIELDS = (
@@ -110,8 +110,8 @@ def _check_contributors(doc: Document) -> None:
     those from a double-barrelled surname.
     """
     for entry in doc.meta.get("public contributors", "").split(","):
-        emailed = EMAILED.search(entry)
-        if emailed is not None and entry[emailed.end() :].strip():
+        found = addressed(entry)
+        if found is not None and found[1]:
             doc.warn(
                 "the {} line reads {} as one contributor; a comma is missing after the address",
                 Shown("Public Contributors:"),
