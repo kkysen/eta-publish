@@ -338,6 +338,17 @@ def test_a_field_written_twice_says_which_one_won() -> None:
     )
 
 
+def bled(text: str) -> JsonObject:
+    """A paragraph whose underline ran past the colon, as Docs leaves it
+    when the writer keeps typing after the name."""
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+            "elements": [{"textRun": {"content": text + "\n", "textStyle": {"underline": True}}}],
+        }
+    }
+
+
 def test_a_line_that_is_not_underlined_is_not_a_field() -> None:
     """A sentence holding a colon is prose, whatever it looks like.
 
@@ -357,6 +368,55 @@ def test_a_line_that_is_not_underlined_is_not_a_field() -> None:
     doc = parse(document)
     assert doc.meta == {"URL": "/reports/x"}
     assert "Short" not in doc.meta
+
+
+def test_an_underline_running_into_the_value_is_warned_about() -> None:
+    """Docs carries the style forward as the writer keeps typing,
+    which is the one mistake underlining a name invites."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                bled("Short: A 125 St subway should be a slam dunk."),
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    # Still the field it looks like: the underline is what needs fixing.
+    assert doc.meta["Short"] == "A 125 St subway should be a slam dunk."
+    assert any("runs past it into the value" in w for w in map(str, doc.warnings))
+
+
+def test_a_linked_value_is_not_a_bled_underline() -> None:
+    """Docs underlines every link, so a linked value looks bled and is not."""
+    document: JsonObject = {
+        "title": "SAS West Feasibility Response",
+        "body": {
+            "content": [
+                para("Header", "HEADING_2"),
+                {
+                    "paragraph": {
+                        "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                        "elements": [
+                            {"textRun": {"content": "URL", "textStyle": {"underline": True}}},
+                            {
+                                "textRun": {
+                                    "content": ": /reports/x\n",
+                                    "textStyle": {"link": {"url": "https://eta.info/reports/x"}},
+                                }
+                            },
+                        ],
+                    }
+                },
+                para("The Real Headline", "TITLE"),
+            ]
+        },
+    }
+    doc = parse(document)
+    assert doc.meta["URL"] == "/reports/x"
+    assert not [w for w in map(str, doc.warnings) if "runs past it" in w]
 
 
 def test_distinct_fields_are_not_a_repeat() -> None:
