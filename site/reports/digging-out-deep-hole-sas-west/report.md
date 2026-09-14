@@ -6,15 +6,7 @@ August 19, 2026
 
 **Warnings**
 
-- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
-  - `Composite image of the MTA’s SAS West St Nicholas Av...`
-  - `Credit: MTA, ETA (Blair Lorenzo)`
-- a paragraph has a stray `Shift+Enter` standing in for blank space; it is dropped, and a paragraph's spacing belongs in its style: `Many decisions created this mammoth price tag, a number of...`
 - unfinished text in the document: `SVG: TODO`
-- a paragraph is broken with `Shift+Enter` rather than `Enter`, so lines that look separate are one paragraph; give each line its own:
-  - `($7.7 billion / 1.25 miles) * (1 - 3.5%) / $2.56 billion/km...`
-  - `The figure of $7.7 billion was deflated by 3.5% from 2027...`
-  - `The figure of $2.56 billion/km is from the Transit Costs...`
 - the image `img-44bf278f` has no `Credit:` line
 - the image `project_cost_comparison` has no `Credit:` line
 - 17 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
@@ -608,8 +600,10 @@ A rendering of the short below-mezzanine and elevator-only entrance to the 116 S
 A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.\
 [Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)<sup>\[103\]</sup>
 
-[^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44\
-    The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>)<sup>\[104\]</sup>.\
+[^1]: ($7.7 billion / 1.25 miles) \* (1 - 3.5%) / $2.56 billion/km = 1.44
+
+    The figure of $7.7 billion was deflated by 3.5% from 2027 USD to 2026 USD in line with MTA practice as indicated in the [20 Year Needs Assessment](<https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf#page=188>)<sup>\[104\]</sup>.
+
     The figure of $2.56 billion/km is from the [Transit Costs Project](<https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092#gid=1828904092>)<sup>\[105\]</sup> and is in 2026 USD, inflation-adjusted using CPI.
 
 [^2]: ($7.7 billion / 1.25 miles) / ($530 million/mile) = 11.7

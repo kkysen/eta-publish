@@ -12,7 +12,6 @@
     [no #raw("Title")-styled paragraph, so the document name #raw("IBX Automation") is being used as the headline; style the headline as #raw("Title") in the doc],
     [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
     [unfinished text in the document: #raw("TODO didn’t finish")],
-    [a paragraph is broken with #raw("Shift+Enter") rather than #raw("Enter"), so lines that look separate are one paragraph; give each line its own:#list([#raw("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath...")], [#raw("https://www.6sqft.com/mta-awards-166m-design-contract-for-in...")], )],
     [4 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [1 comment thread still open on this tab],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
@@ -101,7 +100,7 @@ This has been driven by all of the following factors:
 
 - Refinement of the ridership model as more details have been decided
 - Improved station locations
-- A reduction in runtime after ETA successfully pressured the MTA to drop street running around All Faiths Cemetery#footnote[#link("https://www.etany.org/ibx-all-faiths-tunnel")[https://www.etany.org/ibx-all-faiths-tunnel]] #footnote[#link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/]#super[#link(<src20>)[\[20\]]] \ \ #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/]#super[#link(<src21>)[\[21\]]]]
+- A reduction in runtime after ETA successfully pressured the MTA to drop street running around All Faiths Cemetery#footnote[#link("https://www.etany.org/ibx-all-faiths-tunnel")[https://www.etany.org/ibx-all-faiths-tunnel]] #footnote[#link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/]#super[#link(<src20>)[\[20\]]] #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/]#super[#link(<src21>)[\[21\]]]]
 
 An independent study (#link("https://arxiv.org/abs/2408.01562")[https://arxiv.org/abs/2408.01562]#super[#link(<src1>)[\[1\]]]) by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day.
 Another independent study by Tang at NYU Marron using the FTA’s STOPS open-source ridership modeling software#footnote[STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
