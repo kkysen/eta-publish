@@ -14,10 +14,10 @@ because they are facts about how the docs are written:
   with the caption and `Credit:` lines after that
 """
 
-import re
 from collections.abc import Iterator
 from dataclasses import replace
 from datetime import datetime
+from string import ascii_uppercase
 from urllib.parse import parse_qs, urlsplit
 
 from .docs_json import JsonObject
@@ -838,7 +838,26 @@ class Parser:
                     return image
         return None
 
-    KEY_RE = re.compile(r"^(?P<key>[A-Z][^:\n]{0,60}?)\s*:\s*(?P<value>.*)$")
+    # How long a field name may run before the line is prose that holds a colon.
+    # `Digging Out of a Very Deep Hole: Saving Billions on 125th Street`
+    # is a headline, not a field.
+    MAX_KEY = 61
+
+    @staticmethod
+    def _key_line(line: str) -> tuple[str, str] | None:
+        """One `Key: value` line split in two, or `None` where the line is prose.
+
+        A field name starts with a capital, holds no colon of its own,
+        and is short: the first colon ends it,
+        and a long run before that is a sentence rather than a name.
+        """
+        key, colon, value = line.partition(":")
+        if not colon:
+            return None
+        key = key.rstrip()
+        if not key or key[0] not in ascii_uppercase or len(key) > Parser.MAX_KEY:
+            return None
+        return key, value.lstrip()
 
     def front_matter(self, content: list[JsonObject]) -> list[JsonObject]:
         """Consume the leading `Header` section into `doc.meta`.
@@ -909,19 +928,19 @@ class Parser:
             # The two read alike in the document and are not alike here,
             # so every line of the paragraph is considered, not just the first.
             lines = text.split("\n")
-            if self.KEY_RE.match(lines[0]) is None:
+            if self._key_line(lines[0]) is None:
                 break  # prose: the header section is over
 
             key = ""
             for line in lines:
-                match = self.KEY_RE.match(line)
-                if match is None:
+                field = self._key_line(line)
+                if field is None:
                     # A line that names no field continues the value above it.
                     # Ending the scan here would drop the rest of the paragraph,
                     # and every field after it, over a value that merely wrapped.
                     self.doc.meta[key] = f"{self.doc.meta[key]} {line}".strip()
                     continue
-                key = self._meta_line(match)
+                key = self._meta_line(*field)
             end = i + 1
 
         if not self.doc.meta:
@@ -935,16 +954,27 @@ class Parser:
             )
         return content[end:]
 
-    # A note to whoever fills the field in, not part of its name.
-    # The real doc writes `SEO Description (300 char limit):`,
-    # and a lookup for `seo description` finds nothing unless the note is stripped.
-    KEY_NOTE_RE = re.compile(r"\s*\([^)]*\)\s*$")
+    @staticmethod
+    def _without_note(key: str) -> str:
+        """A field name without the note to whoever fills it in.
 
-    def _meta_line(self, match: re.Match[str]) -> str:
+        The real doc writes `SEO Description (300 char limit):`,
+        and a lookup for `seo description` finds nothing unless the note is stripped.
+        """
+        text = key.rstrip()
+        if not text.endswith(")"):
+            return key.strip()
+        # The note is the bracketed run the name ends with.
+        # Its opening bracket is the first one after any earlier closing bracket,
+        # so a name carrying brackets of its own keeps them.
+        opened = text.find("(", text.rfind(")", 0, len(text) - 1) + 1)
+        return key.strip() if opened < 0 else text[:opened].strip()
+
+    def _meta_line(self, written: str, value: str) -> str:
         """Record one `Key: value` header line, and answer which key it set."""
-        written = self.KEY_NOTE_RE.sub("", match.group("key").strip())
+        written = self._without_note(written)
         key = written.lower()
-        value = match.group("value").strip()
+        value = value.strip()
         if key in self.doc.meta:
             # The later line wins, and says so: a corrected line pasted
             # below the original and a duplicate nobody meant look
