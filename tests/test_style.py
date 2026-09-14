@@ -181,7 +181,8 @@ def test_a_station_written_the_way_the_mta_writes_it_is_left_alone() -> None:
 def test_an_ordinal_loses_its_suffix_and_the_kind_is_abbreviated() -> None:
     found = warnings(written("The proposed 125th Street extension."))
     assert found == [
-        "style: `125th Street` is `125 St` in MTA style: `The proposed 125th Street extension.`"
+        "style: `125th Street` should be `125 St` in MTA style: "
+        "`The proposed 125th Street extension.`"
     ]
 
 
@@ -217,7 +218,7 @@ def test_the_project_is_corrected_towards_its_name_rather_than_the_station() -> 
     """`Second Ave Subway` is the project written short, not a station,
     so the warning names the whole phrase rather than half of it."""
     assert (
-        "`Second Ave Subway` is `Second Avenue Subway`"
+        "`Second Ave Subway` should be `Second Avenue Subway`"
         in warnings(written("The cost of the Second Ave Subway."))[0]
     )
 
@@ -225,7 +226,10 @@ def test_the_project_is_corrected_towards_its_name_rather_than_the_station() -> 
 def test_the_project_is_named_however_it_was_written() -> None:
     """SAS West writes `Second Ave subway` twice, abbreviated and lowercase,
     and the name it is reaching for is the one it is corrected to."""
-    assert "is `Second Avenue Subway`" in warnings(written("Features of the Second Ave subway."))[0]
+    assert (
+        "should be `Second Avenue Subway`"
+        in warnings(written("Features of the Second Ave subway."))[0]
+    )
 
 
 def test_an_ordinal_that_names_no_street_is_not_a_street() -> None:
@@ -257,7 +261,10 @@ def test_the_joke_on_the_project_name_keeps_the_name_it_is_on() -> None:
     """SAS West calls the line the so-called `Second Avenue Stubway`,
     which only works while it is spelled like what it is playing on."""
     assert warnings(written("The so-called “Second Avenue Stubway” made three stops.")) == []
-    assert "is `Second Avenue Stubway`" in warnings(written("Riding the Second Ave Stubway."))[0]
+    assert (
+        "should be `Second Avenue Stubway`"
+        in warnings(written("Riding the Second Ave Stubway."))[0]
+    )
 
 
 def test_a_unit_after_a_number_is_the_symbol() -> None:
@@ -300,7 +307,7 @@ def test_a_measurement_is_not_hyphenated_into_what_it_describes() -> None:
     that happened not to be describing anything."""
     found = warnings(written("The extreme 1-min headways of Lille."))
     assert found == [
-        "style: `1-min` is `1 min`, with no hyphen: `The extreme 1-min headways of Lille.`"
+        "style: `1-min` should be `1 min`, with no hyphen: `The extreme 1-min headways of Lille.`"
     ]
 
 
@@ -310,8 +317,8 @@ def test_the_hyphen_and_the_spelling_are_two_warnings() -> None:
     somebody to write `600 foot` and be told about it on the next build."""
     found = warnings(written("The capacity of a 600-foot train."))
     assert len(found) == 2
-    assert "`600-foot` is `600-ft`" in found[0]
-    assert "`600-foot` is `600 ft`, with no hyphen" in found[1]
+    assert "`600-foot` should be `600-ft`" in found[0]
+    assert "`600-foot` should be `600 ft`, with no hyphen" in found[1]
 
 
 def test_an_ordinary_hyphenated_phrase_is_not_a_measurement() -> None:

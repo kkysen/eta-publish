@@ -363,7 +363,7 @@ def _check_street_names(doc: Document, text: str) -> None:
             continue
         _warn(
             doc,
-            "{} is {} in MTA style: {}",
+            "{} should be {} in MTA style: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, start), written, _after(text, start + len(written))),
@@ -513,7 +513,7 @@ def _check_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
             doc,
-            "{} is {}: {}",
+            "{} should be {}: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, match.start()), written, _after(text, match.end())),
@@ -557,7 +557,7 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
         _warn(
             doc,
-            "{} is {}, with no hyphen: {}",
+            "{} should be {}, with no hyphen: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
@@ -616,7 +616,7 @@ def _check_spelled_out_symbols(doc: Document, text: str) -> None:
         correct = f"${amount}{scale}" if money else f"{amount}%"
         _warn(
             doc,
-            "{} is {}: {}",
+            "{} should be {}: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
