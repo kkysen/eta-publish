@@ -577,11 +577,12 @@ and it is what the amount is carried through to the symbol with:
 """
 
 DATED = re.compile(r"\bin[ ]$", re.IGNORECASE)
-"""What a sum of money is never preceded by, and dated dollars always are.
+"""What says the number dates the dollars rather than counting them.
 
-`in 2026 dollars` is the year a cost is inflated to, and the `in` is what
-says so: nothing counts money as `in 5 dollars`. It is the clearer half of
-the test, and the one that holds for a year these reports have not reached.
+`in 2026 dollars` is the year a cost is inflated to, and the `in` says so
+whatever the number is: `in 5 dollars` is the year 5, not five dollars.
+That is what makes it the clearer half of the test:
+it holds for years no pattern over four digits would recognize.
 """
 
 YEAR = re.compile(r"(?:19|20)\d\d")
