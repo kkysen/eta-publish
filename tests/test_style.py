@@ -300,7 +300,7 @@ def test_a_measurement_is_not_hyphenated_into_what_it_describes() -> None:
     that happened not to be describing anything."""
     found = warnings(written("The extreme 1-min headways of Lille."))
     assert found == [
-        "style: `1-min` is `1 min` in MTA style, with no hyphen: "
+        "style: `1-min` is `1 min`, with no hyphen between a number and its unit: "
         "`The extreme 1-min headways of Lille.`"
     ]
 
@@ -312,7 +312,7 @@ def test_the_hyphen_and_the_spelling_are_two_warnings() -> None:
     found = warnings(written("The capacity of a 600-foot train."))
     assert len(found) == 2
     assert "`600-foot` is `600-ft`" in found[0]
-    assert "`600-foot` is `600 ft` in MTA style, with no hyphen" in found[1]
+    assert "`600-foot` is `600 ft`, with no hyphen" in found[1]
 
 
 def test_an_ordinary_hyphenated_phrase_is_not_a_measurement() -> None:

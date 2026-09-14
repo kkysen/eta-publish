@@ -208,6 +208,8 @@ KNOWN_WARNINGS = (
     "has an unrecognized",
     "runs past it into the value",
     "in MTA style",
+    "how a report writes a measurement",
+    "with no hyphen between a number and its unit",
 )
 """Every kind of warning this report has been known to raise.
 

@@ -502,6 +502,9 @@ def _check_units(doc: Document, text: str) -> None:
     These reports are full of them, and they are read against each other:
     `137 ft`, `140 ft`, `969 ft` down a column is a comparison,
     where the same numbers spelled out are a paragraph to read twice.
+
+    The house's own, unlike the station names: the MTA writes `125 St` on its
+    signs, and how a report abbreviates a kilogram is nothing to do with it.
     """
     for match in MEASURED.finditer(text):
         if _defines(text, match.end(), UNITS[match.group("unit")]):
@@ -510,7 +513,7 @@ def _check_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
             doc,
-            "{} is {} in MTA style: {}",
+            "{} is {}, which is how a report writes a measurement: {}",
             Shown(written),
             Shown(correct),
             Highlighted(_before(text, match.start()), written, _after(text, match.end())),
@@ -554,7 +557,7 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
         correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
         _warn(
             doc,
-            "{} is {} in MTA style, with no hyphen: {}",
+            "{} is {}, with no hyphen between a number and its unit: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
