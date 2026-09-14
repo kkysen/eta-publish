@@ -419,9 +419,16 @@ making the reports agree is the writer's, and the build only says where to look.
   the same numbers spelled out is a paragraph to read twice.
   `mile` is the one length written out, and a number written as a word is
   left alone: `ten minutes` is a duration being described rather than measured.
+  The units `eta_publish/style.py` knows are the ones these reports use:
+  `ft`, `in`, `m`, `km`, `mm`, `cm`, `t`, `lb`, `kg`, `min`, `sec`, `mph`,
+  `km/h`, `tph`, `dB`, `Hz`, `V`, `kV`, `kW` and `MW`.
+  A unit introduced with its symbol after it, `30 trains per hour (tph)`,
+  is being defined rather than misspelled, and is left alone.
 - **No hyphen between a number and its unit**, even where English wants one.
   `a 600-foot train` is `a 600 ft train`, so a measurement is written one way
   wherever it appears and a search for `600 ft` finds all of them.
+  The hyphen and the spelling are separate warnings,
+  since a measurement can have either mistake without the other.
 
 Each warning opens with `style: `,
 because the rest of a document's warnings are things the build could not do
