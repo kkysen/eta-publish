@@ -35,9 +35,12 @@ uv run eta-publish all
 
 # The whole diff, not a summary:
 # reading it is the review the commit stands for.
+# `--no-pager` because `pre-commit` runs hooks under a pseudo-terminal:
+# `git` would see a TTY, start `less`, and wait forever for a keypress,
+# with `pre-commit` holding back the output until the hook exits.
 if ! git diff --quiet HEAD -- site; then
-    git diff --stat HEAD -- site >&2
-    git diff HEAD -- site >&2
+    git --no-pager diff --stat HEAD -- site >&2
+    git --no-pager diff HEAD -- site >&2
     fail "the documents have changed since site/ was committed; \
 read the diff above, and commit the rebuilt files now in the working tree"
 fi
