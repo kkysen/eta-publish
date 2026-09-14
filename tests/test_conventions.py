@@ -112,7 +112,7 @@ def test_image_source_never_reaches_a_published_output(
 
 def test_a_parenthetical_note_is_not_part_of_the_key() -> None:
     """The doc writes `SEO Description (300 char limit):`,
-    and a lookup for `seo description` finds nothing unless the note is stripped."""
+    and a lookup for `SEO Description` finds nothing unless the note is stripped."""
     doc = build(
         [
             para("Header", "HEADING_2"),
