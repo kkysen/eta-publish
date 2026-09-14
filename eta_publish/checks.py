@@ -11,8 +11,7 @@ and appear both in the build log and on the site's index page.
 """
 
 from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plain_text
-from .parse import REQUIRED_FIELDS as REQUIRED_FIELDS
-from .parse import unfinished
+from .parse import REQUIRED_FIELDS, unfinished
 
 SEO_LIMIT = 300
 """How long a `SEO Description:` may be.

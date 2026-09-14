@@ -6,9 +6,9 @@ from dataclasses import replace
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.checks import REQUIRED_FIELDS, check
+from eta_publish.checks import check
 from eta_publish.nodes import Block, Document, Figure, Image, Paragraph, Text
-from eta_publish.parse import parse
+from eta_publish.parse import REQUIRED_FIELDS, parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
 
