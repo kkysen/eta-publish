@@ -413,6 +413,15 @@ making the reports agree is the writer's, and the build only says where to look.
   A street somewhere else has no MTA spelling,
   so `Nanba Road` and `Heping South Street` are listed in `ELSEWHERE`
   in `eta_publish/style.py`, which is where the next one goes.
+- **Units as symbols after a number**:
+  `137 ft`, `180 m`, `5 min`, `30 sec`, `3 lb`.
+  A column of `137 ft`, `140 ft`, `969 ft` is a comparison;
+  the same numbers spelled out is a paragraph to read twice.
+  `mile` is the one length written out, and a number written as a word is
+  left alone: `ten minutes` is a duration being described rather than measured.
+- **No hyphen between a number and its unit**, even where English wants one.
+  `a 600-foot train` is `a 600 ft train`, so a measurement is written one way
+  wherever it appears and a search for `600 ft` finds all of them.
 
 Each warning opens with `style: `,
 because the rest of a document's warnings are things the build could not do
