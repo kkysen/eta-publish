@@ -57,10 +57,10 @@ def test_two_spaces_that_end_no_sentence_are_left_alone() -> None:
     assert warnings(written("On such routes, demand  requires high frequency.")) == []
 
 
-def test_a_footnote_is_quoted_rather_than_written() -> None:
-    """A citation is an author and a headline copied from where it was published,
-    so how it spaces its sentences says nothing about this report."""
-    assert warnings(cited('Barbara Russo-Lennon, "Subway spots.  The ad blitz."')) == []
+def test_a_footnote_is_read_like_the_body() -> None:
+    """A footnote carries the report's own prose as often as a citation,
+    and a citation is published here under this report's name too."""
+    assert len(warnings(cited('Barbara Russo-Lennon, "Subway spots.  The ad blitz."'))) == 1
 
 
 def test_a_closed_up_dash_is_not_warned_about() -> None:
@@ -91,8 +91,8 @@ def test_a_hyphen_is_not_a_dash() -> None:
     assert warnings(written("The pipe-jacking at Jing'an Temple station.")) == []
 
 
-def test_a_footnote_dash_is_quoted_rather_than_written() -> None:
-    assert warnings(cited('Barbara Russo-Lennon, "Subway spots — the ad blitz."')) == []
+def test_a_footnote_dash_is_read_like_the_body() -> None:
+    assert len(warnings(cited('Barbara Russo-Lennon, "Subway spots — the ad blitz."'))) == 1
 
 
 def test_the_initials_on_their_own_are_not_warned_about() -> None:
@@ -122,8 +122,8 @@ def test_a_word_beginning_with_the_initials_is_not_them() -> None:
     assert warnings(written("The ETAs quoted were all optimistic.")) == []
 
 
-def test_a_quoted_headline_is_left_as_it_was_published() -> None:
-    assert warnings(cited('Barbara Russo-Lennon, "What the ETA wants."')) == []
+def test_a_footnote_saying_the_initials_is_warned_about() -> None:
+    assert len(warnings(cited('Barbara Russo-Lennon, "What the ETA wants."'))) == 1
 
 
 def test_the_header_is_read_like_the_body() -> None:

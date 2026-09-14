@@ -399,9 +399,8 @@ making the reports agree is the writer's, and the build only says where to look.
 - **`ETA`, not `the ETA`**, the way one writes `NASA said`.
   Spelled out it does take the article: `the Effective Transit Alliance`.
 
-Footnotes are left out of all three.
-A footnote is a citation, an author and a headline copied from where it was
-published, and restyling a quoted headline misquotes it.
+All three read the whole document: the body, the headings, the captions,
+the footnotes, and the header's own prose in `Short:` and `SEO Description:`.
 
 # How it works
 
