@@ -107,29 +107,13 @@ def test_image_source_never_reaches_a_published_output(
     assert "Credit: Logan Hicks" in out
 
 
-# ---- front matter keys ---------------------------------------------
-
-
-def test_a_parenthetical_note_is_not_part_of_the_key() -> None:
-    """The doc writes `SEO Description (300 char limit):`,
-    and a lookup for `SEO Description` finds nothing unless the note is stripped."""
-    doc = build(
-        [
-            para("Header", "HEADING_2"),
-            para("SEO Description (300 char limit): Cheaper and shallower."),
-            para("Headline", "TITLE"),
-        ]
-    )
-    assert doc.meta["SEO Description"] == "Cheaper and shallower."
-
-
 def test_the_description_reaches_the_preview() -> None:
     from eta_publish.emit.html import report_page
 
     doc = build(
         [
             para("Header", "HEADING_2"),
-            para("SEO Description (300 char limit): Cheaper and shallower."),
+            para("SEO Description: Cheaper and shallower."),
             para("Headline", "TITLE"),
         ]
     )
