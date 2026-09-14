@@ -15,11 +15,26 @@
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: `125th Street` is `125 St` in MTA style: `...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...`
+- style: `8 minutes` is `8 min` in MTA style: `...l city. SkyTrain runs every 6-8 minutes off-peak on each of two branc...`
+- style: `6 minutes` is `6 min` in MTA style: `...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...`
+- style: `6 minutes` is `6 min` in MTA style: `...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...`
+- style: `15 minutes` is `15 min` in MTA style: `...Marseille Metro runs every 10-15 minutes.`
 - style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
 - style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
 - style: `Fordham Road` is `Fordham Rd` in MTA style: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
 - style: `Main Street` is `Main St` in MTA style: `...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...`
+- style: `2 minutes` is `2 min` in MTA style: `... peak headways are reduced to 2 minutes instead, with off-peak headwa...`
+- style: `3 minutes` is `3 min` in MTA style: `...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...`
+- style: `5 minutes` is `5 min` in MTA style: `...ging from 3 minutes midday to 5 minutes in the evening, ridership ris...`
+- style: `66 seconds` is `66 sec` in MTA style: `...rains, but it runs them every 66 seconds, and can run up to 60 seconds...`
+- style: `60 seconds` is `60 sec` in MTA style: `...66 seconds, and can run up to 60 seconds. While a light metro can be a...`
+- style: `2 minutes` is `2 min` in MTA style: `...sist) at very high frequency (2 minutes apart or less), trading per-t...`
+- style: `2 minutes` is `2 min` in MTA style: `...trains as frequently as every 2 minutes or less thus benefits the pla...`
+- style: `180 meters` is `180 m` in MTA style: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a sentence should end with 1 space, not 2: `...t costs are given separately).··This is a Buy America cost, wh...`
+- style: `72,000 lbs` is `72,000 lb` in MTA style: `weight: 72,000 lbs per 65 ft AW0 car`
+- style: `72,000 lbs` is `72,000 lb` in MTA style: `AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m`
+- style: `175 lbs` is `175 lb` in MTA style: `AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 223...`
 
 ## No Need to Wait: Automated Light Metro is Right for the IBX
 
