@@ -62,16 +62,27 @@ def _prose(doc: Document) -> Iterator[str]:
 def style(doc: Document) -> None:
     """Warn about every line written against the house style."""
     for text in _prose(doc):
-        _check_sentence_spacing(doc, text)
+        _check_spacing(doc, text)
         _check_dash_spacing(doc, text)
         _check_organization_name(doc, text)
 
 
-# A sentence's terminator, whatever closes the quote or bracket around it,
-# and the gap after it. The closers are `sentences.py`'s, because the two are
-# answering the same question about the same prose: `separately).  This`
-# ends a sentence, and the paren is not what the spaces come after.
-SENTENCE_GAP = re.compile(r"""[.!?]["'”’)\]]*(?P<gap>  +)""")
+GAP = re.compile(r"(?<=\S)(?P<gap>  +)(?=\S)")
+"""Two or more spaces with a word either side of them.
+
+A word either side because a run at the start or the end of a line
+is indentation or something left trailing, which is neither of the two
+mistakes here and would be described wrongly by both.
+"""
+
+ENDS_A_SENTENCE = re.compile(r"""[.!?]["'”’)\]]*$""")
+"""What comes before a gap that separates two sentences.
+
+The terminator and whatever closes the quote or bracket around it.
+The closers are `sentences.py`'s, because the two are answering the same
+question about the same prose: `separately).  This` ends a sentence,
+and the paren is not what the spaces come after.
+"""
 
 
 SPACE = "\u00b7"
@@ -85,19 +96,25 @@ document's own to search for.
 """
 
 
-def _check_sentence_spacing(doc: Document, text: str) -> None:
-    """Two spaces between sentences, where the house style is one.
+def _check_spacing(doc: Document, text: str) -> None:
+    """A gap of more than one space, described by what sits either side of it.
 
-    It is a typewriter habit, invisible in the doc and invisible on the page:
-    HTML collapses the pair and Squarespace never sees it,
-    so nothing downstream reports it and the Markdown archive keeps it forever.
+    Between sentences it is the typewriter habit, and mid-clause it is a
+    slipped finger: the same characters, but one is how somebody was taught
+    to type and the other is a typo, so they are not one warning.
+
+    Neither is visible anywhere somebody would catch it.
+    The doc shows one space either way, HTML collapses the run, and
+    Squarespace never sees it, so nothing downstream reports either one
+    and the Markdown archive keeps both forever.
     """
-    for match in SENTENCE_GAP.finditer(text):
+    for match in GAP.finditer(text):
         gap = match.group("gap")
-        doc.warn(
-            f"a sentence should end with 1 space, not {len(gap)}: {{}}",
-            Shown(_excerpt(text, match.start("gap"), match.end("gap"), SPACE * len(gap))),
-        )
+        drawn = Shown(_excerpt(text, match.start("gap"), match.end("gap"), SPACE * len(gap)))
+        if ENDS_A_SENTENCE.search(text[: match.start("gap")]):
+            doc.warn(f"a sentence should end with 1 space, not {len(gap)}: {{}}", drawn)
+        else:
+            doc.warn(f"two words should be separated by 1 space, not {len(gap)}: {{}}", drawn)
 
 
 DASHES = "—–"

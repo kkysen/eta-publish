@@ -52,9 +52,20 @@ def test_three_spaces_are_counted_rather_than_rounded_to_two() -> None:
     assert "deep.\u00b7\u00b7\u00b7It" in found
 
 
-def test_two_spaces_that_end_no_sentence_are_left_alone() -> None:
-    """`demand  requires` is a different mistake, and this rule is not about it."""
-    assert warnings(written("On such routes, demand  requires high frequency.")) == []
+def test_two_spaces_mid_clause_are_a_different_warning() -> None:
+    """`demand  requires` is a slipped finger rather than the typewriter habit,
+    so it is said differently even though the characters are the same."""
+    found = warnings(written("On such routes, demand  requires high frequency."))
+    assert found == [
+        "two words should be separated by 1 space, not 2: "
+        "`On such routes, demand\u00b7\u00b7requires high frequency.`"
+    ]
+
+
+def test_indentation_is_neither_mistake() -> None:
+    """A run at the start or the end of a line is not two words run together."""
+    assert warnings(written("  It is deep.")) == []
+    assert warnings(written("It is deep.  ")) == []
 
 
 def test_a_footnote_is_read_like_the_body() -> None:
