@@ -72,7 +72,7 @@ SOFT_BREAK = "\v"
 # Anything still marked unfinished, e.g. the real doc's `Source: TODO`.
 # Not `TK`: these reports are not written with it,
 # so here it would only ever match a word that happened to be spelled that way.
-TODO_RE = re.compile(r"\bTODO\b|\bFIXME\b|\bXXX\b")
+TODO_RE = re.compile(r"\b(?:TODO|FIXME|XXX)\b")
 
 
 # How much of a line a warning quotes back before it is just repeating the document.
