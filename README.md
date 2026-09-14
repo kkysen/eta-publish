@@ -7,6 +7,19 @@ Reports are drafted in Google Docs and published on Squarespace.
 That hand-off is entirely manual today,
 and it is the source of both the tedium and the mistakes.
 
+- [Why this exists](#why-this-exists)
+- [What it does](#what-it-does)
+- [Using it](#using-it):
+  [setup](#setup), [building](#building), [adding a report](#adding-a-report),
+  [publishing to GitHub Pages](#publishing-to-github-pages),
+  [writing a report](#writing-a-report)
+- [How it works](#how-it-works):
+  [design decisions](#design-decisions), [source archiving](#source-archiving),
+  [builds](#builds), [the Pages pipeline](#the-pages-pipeline),
+  [Squarespace constraints](#squarespace-constraints), [rate limits](#rate-limits)
+- [Development](#development)
+- [Status](#status), [TODO](#todo), [possible directions](#possible-directions)
+
 ## Why this exists
 
 The most recent report,
@@ -51,270 +64,18 @@ Headings, anchors, the table of contents, footnote numbering,
 the `Sources` section, and the `↑` backlinks are all generated.
 They cannot drift out of sync, because nothing maintains them by hand.
 
-## Design decisions worth knowing
+# Using it
 
-### The Google Docs API, not an HTML export
-
-We read the doc with the Docs API (`documents.get`),
-not Drive's HTML export.
-The export is `<span class="c12">` soup with no semantics.
-The API JSON gives us the three things a report actually needs:
-
-- `footnotes` as first-class objects, with `footnoteReference` inline,
-  so numbering and backlinks are derived rather than typed
-- real named paragraph styles, so headings are headings
-- `inlineObjects`, so images carry their alt text
-
-### One tree, three emitters
-
-Every output is emitted from the same document tree.
-In particular, the HTML is **not** rendered from the Markdown.
-Chaining them would add a lossy hop
-(the source/caption/credit triple, superscripts, exact link targets)
-and would create two sources of truth
-the moment someone hand-edited the `.md`.
-
-### Determinism is a feature, not a nicety
-
-Unchanged input must produce byte-identical output.
-The `.md` is committed to git, so every accidental difference
-becomes noise in a diff that someone has to read.
-
-So image filenames are keyed on what the document says about an image
-rather than on a counter:
-the file its `Source:` line names,
-and the stable Docs object id where there is no such line.
-Inserting one image into a 54-image report
-must not rename the other 53 or move their published URLs.
-The same applies to heading anchors.
-
-A paragraph has no name of its own,
-so it is named by the section it is in and its place in that section:
-`#ground-conditions-p2`.
-That is a link worth reading before following it,
-and it survives the copy edits that are most of what happens to a published report.
-It does not survive an insertion above it in the same section,
-a smaller blast radius than numbering the page as a whole
-and a larger one than hashing the text,
-which moved the id of every paragraph anyone corrected.
-
-### Every source is archived, and cited as archived
-
-A link is a claim about a page nobody promised to keep.
-*Digging Out of a Very Deep Hole* cites 113 of them:
-33 on `www.mta.info`, 12 on `transitcosts.com`, 9 on `mp.weixin.qq.com`,
-the rest agency press releases and news sites,
-which are exactly the pages that get reorganized.
-The report is supposed to outlive them.
-
-So every external link carries a `[n]` into a `Sources` section at the end,
-where the entry names the page and the capture of it,
-with a `↑` back to each citation.
-Hovering a citation does show the pair, built from the entry by `report.js`,
-but it is not the way to it:
-a phone has no hover and a printed page has no links at all,
-so the number and the section are what always work.
-
-`archives.json`, committed beside `report.md`, is the record of
-which capture belongs to which source, keyed by the original URL
-without its fragment.
-A fragment never reaches a server: `#page=28` is an instruction to the PDF
-viewer once the file has arrived, so the fifteen pages of one MTA PDF that
-SAS West cites are one file to capture, and the page goes back on the
-archived link so it still opens where the citation meant.
-
-A `#page=` citation is archived with Wayback's `id_` modifier,
-which is what makes that work.
-The ordinary Wayback URL for a PDF is not the PDF:
-it is an HTML page carrying the capture toolbar with the file inside it,
-so the browser applies `#page=50` to that wrapper and the reader gets the cover.
-Asked for raw, the same capture comes back as the PDF itself.
-An HTML capture is the archived document,
-so an anchor in one already resolves and it keeps the ordinary URL.
-A build submits only what is missing from it,
-so a source keeps the capture it has:
-the point of a snapshot is that it is of the page as the report read it,
-and recapturing would quietly move it forward to whatever the page says now.
-A document that already writes a link as `web.archive.org/web/<ts>/<url>`
-has it unwrapped on the way in and seeds the record with the capture it named,
-so a source archived by hand and a source archived here are one source.
-
-Every build asks the Wayback Machine what it already holds,
-which needs no account and is most of the answer:
-11 of IBX Automation's 14 sources were already archived by somebody else.
-Only the newest capture that came back `200` counts,
-because a page that has been taken down still gets crawled
-and its newest captures are of the 404.
-The replay is asked first and the index only if it did not answer.
-`web.archive.org/web/2099/<url>` redirects to the capture closest to a date
-nothing is archived past, which is the newest one,
-and asking for that capture says whether it serves the page:
-a point lookup of about 200 ms against a filtered scan of a URL's whole row set,
-which took anywhere from 0.5s to 31s for the same query.
-Sixteen sources took 11.7s that way and 47.3s through the index.
-`wayback/available` would be a third way to ask and answers `429` outright.
-
-`200` from the replay is the answer the index is asked for,
-arrived at the other way round, and on one point it is better evidence:
-the index says a crawler once logged `200`,
-while this says the URL the report is about to publish serves the page.
-It is looser on `warc/revisit`, a capture recording that the bytes
-had not changed, which carries no status in the index and is filtered out
-but which the replay resolves and serves.
-`hsr.ca.gov`'s 2026 business plan is one, five weeks newer
-than the newest row the index allows and the same digest.
-Anything but `200` falls through to the index,
-because the newest capture that *was* the page is a different question:
-the NYT's 125th Street piece is captured daily
-and its newest capture replays `403`.
-A source with no capture falls through too,
-so `not archived` still rests on the index rather than on a `404`.
-
-A lookup that finds nothing is remembered for a week,
-in `~/.cache/eta-publish/archive-lookups.json` and never committed.
-The index takes seconds per source and sometimes half a minute,
-so a report with twenty unarchived sources spent minutes on every build
-to write down the same nothing;
-and nothing is what it writes, because a source with no capture
-has no entry in `archives.json` either way.
-So the cache cannot change what a build produces,
-which is what lets it expire, be thrown away, or be missing on a fresh clone
-without `scripts/check-committed-site.sh` noticing.
-What changes the answer is somebody else archiving the page,
-which happens on the scale of weeks if it happens at all.
-CI keeps the same file through `actions/cache`,
-because a runner starts with nothing and would re-ask about all of them.
-A build that has keys skips the cache:
-that one submits a capture instead, and the source leaves the record for good.
-
-Asking for a *new* capture goes through
-[Save Page Now](https://archive.org/account/s3.php),
-which does need an archive.org account:
-put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`.
-Without them a build says how many sources it could not ask about,
-and those publish saying they have no archive, which is true.
-`--no-archive` skips both halves.
-
-What cannot be checked: a capture that answered `200`
-with a login wall or a site's own "page not found"
-is a capture of a page that loaded,
-and nothing in the index tells it from the real thing.
-
-### Semantic line breaks in the Markdown
-
-The `.md` breaks lines at sentence and clause boundaries
-rather than wrapping to a fixed width.
-Wrapped, a paragraph is a single line
-and correcting one word shows up as the whole paragraph changing.
-Broken at sentences, the August 21 addendum to the SAS West report
-is a three-line diff.
-
-The splitter is conservative,
-because the text is full of `125 St.`, `Phase 2.`, and `$7.7 billion.`,
-and an over-eager one would churn the diff on every regeneration.
-Changing it reflows every file, and should be its own commit.
-
-## Squarespace constraints
-
-These are load-bearing.
-The block counts, the 7.1 version, and the two documented limits
-were verified against the live site and Squarespace's own documentation;
-the one estimate below is marked as such.
-
-- **There is no content API.** The public Squarespace API covers commerce only.
-  Nothing can create or update a page from a script,
-  so the final step is necessarily a human paste.
-  The goal is to make it *one* paste instead of 162 placements.
-- **`etany.org` runs Squarespace 7.1**,
-  so Developer Mode, Git, and SFTP are unavailable; those are 7.0-only.
-  A single code block on an otherwise empty page
-  is the closest thing to a pure HTML page, and it is close enough.
-- **A code block holds 400 KB (~300,000 characters).**
-  Two measurements bracket the SAS West report: its source text is 69 KB,
-  and the live page's rendered text blocks come to 226 KB
-  including Squarespace's own markup, which this emitter does not produce.
-  The fragment should land between them, comfortably inside the limit,
-  but it has not been generated from the real document yet.
-  `--split` cuts at `h2` boundaries for a report that does not fit.
-- **There is no file upload API.**
-  Custom Files is a manual GUI that accepts images and fonts only.
-  Host report images elsewhere and reference absolute URLs;
-  the PDF needs those same local files anyway,
-  so one upload serves both outputs.
-
-## Usage
+## Setup
 
 ```sh
-# Every report in `reports.toml`, into `site/`.
-uv run eta-publish all
-
-# Or one document, before it is on the list, somewhere scratch.
-uv run eta-publish one <google-doc-url> -o out
-
-# Or a different list.
-uv run eta-publish all drafts.toml -o preview
-
-# Add a document to the list, named as the document names itself.
-uv run eta-publish add <google-doc-url>
-
-# Without the slowest question a build asks, when the counts can wait.
-uv run eta-publish all --no-comments
-
-# Rebuild what is committed, from the responses saved beside it. No network.
-uv run eta-publish all --offline
+uv sync
 ```
 
-`all` takes a list and `one` takes a document, so nothing has to be told apart:
-which of the two a reference is used to be worked out from how it was spelled,
-and the command name says it instead.
-A document can also be a directory a previous build wrote,
-which holds the API response as `doc.json` beside its outputs,
-so anything built once rebuilds with no network and no credentials.
-One at a time either way: building several in one run is what a list is for,
-and a list is a file that can be committed and reviewed
-rather than a shell line that was right once.
-
-A build spends nearly all its time waiting on Google.
-Most of that it now skips on its own: before fetching a document it asks Drive
-when the document was last edited, which takes half a second against two for
-the document and two more for its suggestions, and reuses the response saved
-beside the last build when the answer has not moved. Editing is what moves it,
-and proposing or resolving a suggestion is editing, so both are safe to reuse.
-Commenting is not, so comments are counted every time.
-A saved response also records how it read the document's suggestions
-and which shape a build wrote it in, and a build reuses only what it would
-have written itself: changing either is a change Drive cannot see,
-since the document did not move, the code did.
-
-Beyond that, a rebuild that has to be quicker still has two ways to be:
-`--no-comments` skips the text export, which costs more than fetching the
-document does and answers a question that changes slowly, leaving the last
-count standing; `--offline` skips the network altogether and rebuilds each
-report from the `doc.json` saved beside its outputs, which is the whole of a
-build apart from asking Google for the text. Offline cannot notice a document
-that changed, so it is for a change to this code rather than to a document,
-and it is not what the workflow runs.
-
-Reports are built several at a time, since a build is nearly all waiting,
-so a list takes about as long as its slowest document rather than as long as
-all of them. They are still reported in the order the list gives them.
-
-A publish is always a site, whether it holds one report or four:
-each lands under the path its own front matter names,
-alongside an `index.html` listing them.
-One report failing to build does not stop the rest;
-the run exits non-zero and the index names what failed.
-
-Pass the full URL including its `?tab=` id.
-ETA reports live in multi-tab documents,
-and the Docs API defaults to the first tab, usually an earlier draft.
-A multi-tab document with no tab specified refuses to guess and lists its tabs.
-The URL is the only way to name a tab, on the command line and in `reports.toml` alike.
-
-Outputs land in `out/<the report's path>/`,
-each report's images in an `images/` directory beside its pages.
-Add `--split` for a report over the code block limit,
-and `--no-images` to skip the download while iterating on the text.
+[`mise`](https://mise.jdx.dev) is required, not optional:
+it is how `biome` is resolved, and `biome` lays out every emitted page.
+A build without it writes nothing.
+`biome` itself needs no step of its own: the first build installs it.
 
 ### Authentication
 
@@ -341,19 +102,73 @@ so this happens once.
 Both files are secrets;
 the repository ignores them by name, but they belong outside it anyway.
 
-### Publishing the preview to GitHub Pages
+### Archiving new sources (optional)
 
-`.github/workflows/pages.yml` runs `eta-publish all`,
-which builds **every report in `reports.toml`**
-from its live document and deploys them as one site.
-Each lands at the path its own front matter names,
-so `/reports/digging-out-deep-hole-sas-west` in the header
-becomes `kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/`,
-serving `index.html` there
-alongside `report.html`, `report.pdf`, and its images.
-The site's front page lists them,
-with each report's date, byline, and warning count,
-and names any report that failed to build.
+Every build looks up existing Wayback Machine captures of the sources a report cites,
+which needs no account.
+Asking for a *new* capture goes through
+[Save Page Now](https://archive.org/account/s3.php),
+which does need an archive.org account:
+put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`.
+Without them a build says how many sources it could not ask about,
+and those publish saying they have no archive, which is true.
+`--no-archive` skips both halves.
+[Source archiving](#source-archiving) explains what a build does with them.
+
+## Building
+
+```sh
+# Every report in `reports.toml`, into `site/`.
+uv run eta-publish all
+
+# Or one document, before it is on the list, somewhere scratch.
+uv run eta-publish one <google-doc-url> -o out
+
+# Or a different list.
+uv run eta-publish all drafts.toml -o preview
+
+# Add a document to the list, named as the document names itself.
+uv run eta-publish add <google-doc-url>
+
+# Without the slowest question a build asks, when the counts can wait.
+uv run eta-publish all --no-comments
+
+# Rebuild what is committed, from the responses saved beside it. No network.
+uv run eta-publish all --offline
+```
+
+`all` takes a list and `one` takes a document.
+A document can also be a directory a previous build wrote,
+which holds the API response as `doc.json` beside its outputs,
+so anything built once rebuilds with no network and no credentials.
+
+Pass the full URL including its `?tab=` id.
+ETA reports live in multi-tab documents,
+and the Docs API defaults to the first tab, usually an earlier draft.
+A multi-tab document with no tab specified refuses to guess and lists its tabs.
+The URL is the only way to name a tab, on the command line and in `reports.toml` alike.
+
+A publish is always a site, whether it holds one report or four:
+each lands under the path its own front matter names,
+alongside an `index.html` listing them.
+Outputs land in `out/<the report's path>/`,
+each report's images in an `images/` directory beside its pages.
+One report failing to build does not stop the rest;
+the run exits non-zero and the index names what failed.
+
+Flags worth knowing:
+
+- `--split` cuts at `h2` boundaries, for a report over the
+  [code block limit](#squarespace-constraints).
+- `--no-images` skips the image download while iterating on the text.
+- `--no-comments` skips counting comments, leaving the last count standing.
+- `--offline` skips the network altogether, for a change to this code rather than to a document;
+  see [builds](#builds) for what it cannot notice.
+- `--no-archive` skips looking up and submitting archive captures.
+- `--suggestions accepted` previews the document with its open suggestions accepted
+  instead of rejected.
+
+## Adding a report
 
 Adding the next report is an entry in `reports.toml` and nothing else,
 which `eta-publish add <url>` writes:
@@ -373,38 +188,28 @@ A build holds both up against the document it fetched
 and refuses the report when they disagree,
 a blank one included: no document is called nothing.
 
-Nothing else in the repository or the workflow names a document,
-and one report failing to build does not take the others with it;
-the run still exits non-zero, and the failure is on the front page.
+Putting a report on the list is the act that says it is ready:
+nothing published is built from anything else.
+Build a document on its own first with `uv run eta-publish one <url> -o out`.
 
-Nothing published is built from anything but that list.
-Building one document on its own, before it is on the list,
-is a local `uv run eta-publish one <url> -o out`:
-a report the list does not name has nothing committed
-for the build check to compare against,
-so publishing it from CI would publish what nobody had reviewed.
-Putting it on the list is the act that says it is ready.
+## Publishing to GitHub Pages
+
+`.github/workflows/pages.yml` runs `eta-publish all`,
+which builds **every report in `reports.toml`**
+from its live document and deploys them as one site.
+Each lands at the path its own front matter names,
+so `/reports/digging-out-deep-hole-sas-west` in the header
+becomes `kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/`,
+serving `index.html` there
+alongside `report.html`, `report.pdf`, and its images.
+The site's front page lists them,
+with each report's date, byline, and warning count,
+and names any report that failed to build.
 
 It runs on a push to `main`,
-and on `workflow_dispatch` to redeploy the same list on demand:
-a report publishes when someone decides it is ready,
-where a schedule would put whatever the doc said at 3 a.m.
-onto a public URL with nobody looking.
-
-The job fetches the document rather than deploying the committed
-`site/`, because the images are not in the repository
-and cannot be recovered from what is:
-the `contentUri` values in a saved `doc.json` are signed and short-lived,
-and are already `403` the next day.
-
-So CI needs credentials, and they are a **service account**, not a person.
-A service account is an identity inside the Cloud project, with no inbox,
-no password, and an empty Drive of its own,
-so its key grants read access to exactly what has been shared with it
-and to nothing else in anyone's Drive.
-The interactive flow is unchanged and still the default:
-`_credentials` uses a service account only when
-`$GOOGLE_APPLICATION_CREDENTIALS` names one.
+and on `workflow_dispatch` to redeploy the same list on demand.
+CI authenticates as a **service account**, not a person;
+[the Pages pipeline](#the-pages-pipeline) explains why.
 
 Set it up once:
 
@@ -464,88 +269,7 @@ build it as a plain artifact instead
 (swap the last two steps for `actions/upload-artifact`)
 if a report should stay inside the repository until it ships.
 
-### Rate limits
-
-Not a concern at this scale.
-The Docs API allows
-[3,000 read requests per minute per project, and 300 per minute per user](https://developers.google.com/workspace/docs/api/limits).
-One publish is one request,
-so an afternoon of rebuilding sits orders of magnitude under the limit,
-and exceeding it returns HTTP 429 rather than costing anything.
-
-Every build saves the response as `doc.json` in the report's own directory,
-so the pipeline re-runs against the last fetch with no network: pass the directory.
-That is what the tests do,
-and `tests/fixture/` is a document folder with nothing else in it.
-
-## Development
-
-```sh
-uv sync
-uv run pre-commit install
-uv run pytest
-```
-
-[`mise`](https://mise.jdx.dev) is required, not optional:
-it is how `biome` is resolved, and `biome` lays out every emitted page.
-A build without it writes nothing.
-`biome` itself needs no step of its own: the first build installs it.
-The version is pinned in `mise.toml` and nowhere else,
-because the emitted HTML is committed
-and a formatter that changed its mind between versions
-would rewrite every report without a report having changed.
-
-`ruff format`, `ruff check`, `ty`, `pyrefly`, and `pytest`
-run as pre-commit hooks and again in CI.
-Tests run against checked-in Docs API responses,
-so neither ever needs Google credentials or the network.
-
-One more hook runs on push rather than on commit:
-`scripts/check-committed-site.sh` rebuilds `site/` by fetching the documents
-and fails if that differs from what is committed.
-The Pages workflow runs the same script before it deploys,
-so this is the deploy's own check,
-run on the way out rather than after the push.
-It runs on every branch, not only `main`:
-a branch whose site is already stale is a merge that will fail.
-
-It needs credentials and the network, unlike everything else here,
-and `git push --no-verify` skips it when those are what is missing.
-When it fails, the rebuilt files are left in the working tree,
-which is what to read and commit.
-
-`site/` is the published site, committed:
-a report at its published path with its `doc.json` and everything emitted from it,
-and `site/assets/` holding the one copy of the stylesheets and script
-that every report page links.
-It doubles as the project's main test corpus,
-because an actual `documents.get` response for a real report
-is where every bug that mattered came from.
-
-`tests/fixture/` is the same directory in miniature,
-from a hand-written document,
-for the tests that want to be fast rather than real.
-
-Either can be rebuilt by passing its report directory back,
-which reads the saved response and needs no credentials:
-
-```sh
-uv run eta-publish one site/reports/digging-out-deep-hole-sas-west
-```
-
-Add `--no-images` and it needs no network at all.
-The one thing a no-network rebuild cannot reproduce is the image extensions:
-a Docs `inlineObject` says nothing about what kind of file it is,
-so `.jpg` and `.png` are learned by fetching, and without that the links lose them.
-The names come from the document,
-and each image's shape is read from the committed `images.json`,
-so the page is otherwise the page that publishes.
-
-When a snapshot changes, read the diff before accepting it:
-it is exactly what the change does to a real published report.
-Regenerate with `uv run pytest --regenerate-snapshots`.
-
-## Document conventions
+## Writing a report
 
 The converter reads structure, so the doc has to carry it.
 Anything it cannot classify is reported as a warning rather than silently dropped.
@@ -637,7 +361,337 @@ so adding a field to a future report is safe.
   so publishing the wrong draft is a real possibility rather than a theoretical one.
   A multi-tab document with no tab named refuses to guess and lists what it found.
 
-## Status
+# How it works
+
+## Design decisions
+
+### The Google Docs API, not an HTML export
+
+We read the doc with the Docs API (`documents.get`),
+not Drive's HTML export.
+The export is `<span class="c12">` soup with no semantics.
+The API JSON gives us the three things a report actually needs:
+
+- `footnotes` as first-class objects, with `footnoteReference` inline,
+  so numbering and backlinks are derived rather than typed
+- real named paragraph styles, so headings are headings
+- `inlineObjects`, so images carry their alt text
+
+### One tree, three emitters
+
+Every output is emitted from the same document tree.
+In particular, the HTML is **not** rendered from the Markdown.
+Chaining them would add a lossy hop
+(the source/caption/credit triple, superscripts, exact link targets)
+and would create two sources of truth
+the moment someone hand-edited the `.md`.
+
+### Determinism is a feature, not a nicety
+
+Unchanged input must produce byte-identical output.
+The `.md` is committed to git, so every accidental difference
+becomes noise in a diff that someone has to read.
+
+So image filenames are keyed on what the document says about an image
+rather than on a counter:
+the file its `Source:` line names,
+and the stable Docs object id where there is no such line.
+Inserting one image into a 54-image report
+must not rename the other 53 or move their published URLs.
+The same applies to heading anchors.
+
+A paragraph has no name of its own,
+so it is named by the section it is in and its place in that section:
+`#ground-conditions-p2`.
+That is a link worth reading before following it,
+and it survives the copy edits that are most of what happens to a published report.
+It does not survive an insertion above it in the same section,
+a smaller blast radius than numbering the page as a whole
+and a larger one than hashing the text,
+which moved the id of every paragraph anyone corrected.
+
+### Semantic line breaks in the Markdown
+
+The `.md` breaks lines at sentence and clause boundaries
+rather than wrapping to a fixed width.
+Wrapped, a paragraph is a single line
+and correcting one word shows up as the whole paragraph changing.
+Broken at sentences, the August 21 addendum to the SAS West report
+is a three-line diff.
+
+The splitter is conservative,
+because the text is full of `125 St.`, `Phase 2.`, and `$7.7 billion.`,
+and an over-eager one would churn the diff on every regeneration.
+Changing it reflows every file, and should be its own commit.
+
+## Source archiving
+
+A link is a claim about a page nobody promised to keep.
+*Digging Out of a Very Deep Hole* cites 113 of them:
+33 on `www.mta.info`, 12 on `transitcosts.com`, 9 on `mp.weixin.qq.com`,
+the rest agency press releases and news sites,
+which are exactly the pages that get reorganized.
+The report is supposed to outlive them.
+
+So every external link carries a `[n]` into a `Sources` section at the end,
+where the entry names the page and the capture of it,
+with a `↑` back to each citation.
+Hovering a citation does show the pair, built from the entry by `report.js`,
+but it is not the way to it:
+a phone has no hover and a printed page has no links at all,
+so the number and the section are what always work.
+
+`archives.json`, committed beside `report.md`, is the record of
+which capture belongs to which source, keyed by the original URL
+without its fragment.
+A fragment never reaches a server: `#page=28` is an instruction to the PDF
+viewer once the file has arrived, so the fifteen pages of one MTA PDF that
+SAS West cites are one file to capture, and the page goes back on the
+archived link so it still opens where the citation meant.
+
+A `#page=` citation is archived with Wayback's `id_` modifier,
+which is what makes that work.
+The ordinary Wayback URL for a PDF is not the PDF:
+it is an HTML page carrying the capture toolbar with the file inside it,
+so the browser applies `#page=50` to that wrapper and the reader gets the cover.
+Asked for raw, the same capture comes back as the PDF itself.
+An HTML capture is the archived document,
+so an anchor in one already resolves and it keeps the ordinary URL.
+A build submits only what is missing from it,
+so a source keeps the capture it has:
+the point of a snapshot is that it is of the page as the report read it,
+and recapturing would quietly move it forward to whatever the page says now.
+A document that already writes a link as `web.archive.org/web/<ts>/<url>`
+has it unwrapped on the way in and seeds the record with the capture it named,
+so a source archived by hand and a source archived here are one source.
+
+### Finding an existing capture
+
+Every build asks the Wayback Machine what it already holds,
+which needs no account and is most of the answer:
+11 of IBX Automation's 14 sources were already archived by somebody else.
+Only the newest capture that came back `200` counts,
+because a page that has been taken down still gets crawled
+and its newest captures are of the 404.
+The replay is asked first and the index only if it did not answer.
+`web.archive.org/web/2099/<url>` redirects to the capture closest to a date
+nothing is archived past, which is the newest one,
+and asking for that capture says whether it serves the page:
+a point lookup of about 200 ms against a filtered scan of a URL's whole row set,
+which took anywhere from 0.5s to 31s for the same query.
+Sixteen sources took 11.7s that way and 47.3s through the index.
+`wayback/available` would be a third way to ask and answers `429` outright.
+
+`200` from the replay is the answer the index is asked for,
+arrived at the other way round, and on one point it is better evidence:
+the index says a crawler once logged `200`,
+while this says the URL the report is about to publish serves the page.
+It is looser on `warc/revisit`, a capture recording that the bytes
+had not changed, which carries no status in the index and is filtered out
+but which the replay resolves and serves.
+`hsr.ca.gov`'s 2026 business plan is one, five weeks newer
+than the newest row the index allows and the same digest.
+Anything but `200` falls through to the index,
+because the newest capture that *was* the page is a different question:
+the NYT's 125th Street piece is captured daily
+and its newest capture replays `403`.
+A source with no capture falls through too,
+so `not archived` still rests on the index rather than on a `404`.
+
+What cannot be checked: a capture that answered `200`
+with a login wall or a site's own "page not found"
+is a capture of a page that loaded,
+and nothing in the index tells it from the real thing.
+
+### Remembering what was not found
+
+A lookup that finds nothing is remembered for a week,
+in `~/.cache/eta-publish/archive-lookups.json` and never committed.
+The index takes seconds per source and sometimes half a minute,
+so a report with twenty unarchived sources spent minutes on every build
+to write down the same nothing;
+and nothing is what it writes, because a source with no capture
+has no entry in `archives.json` either way.
+So the cache cannot change what a build produces,
+which is what lets it expire, be thrown away, or be missing on a fresh clone
+without `scripts/check-committed-site.sh` noticing.
+What changes the answer is somebody else archiving the page,
+which happens on the scale of weeks if it happens at all.
+CI keeps the same file through `actions/cache`,
+because a runner starts with nothing and would re-ask about all of them.
+A build that has [Save Page Now keys](#archiving-new-sources-optional) skips the cache:
+that one submits a capture instead, and the source leaves the record for good.
+
+## Builds
+
+`all` takes a list and `one` takes a document, so nothing has to be told apart:
+which of the two a reference is used to be worked out from how it was spelled,
+and the command name says it instead.
+One at a time either way: building several in one run is what a list is for,
+and a list is a file that can be committed and reviewed
+rather than a shell line that was right once.
+
+A build spends nearly all its time waiting on Google.
+Most of that it now skips on its own: before fetching a document it asks Drive
+when the document was last edited, which takes half a second against two for
+the document and two more for its suggestions, and reuses the response saved
+beside the last build when the answer has not moved. Editing is what moves it,
+and proposing or resolving a suggestion is editing, so both are safe to reuse.
+Commenting is not, so comments are counted every time.
+A saved response also records how it read the document's suggestions
+and which shape a build wrote it in, and a build reuses only what it would
+have written itself: changing either is a change Drive cannot see,
+since the document did not move, the code did.
+
+Beyond that, a rebuild that has to be quicker still has two ways to be:
+`--no-comments` skips the text export, which costs more than fetching the
+document does and answers a question that changes slowly, leaving the last
+count standing; `--offline` skips the network altogether and rebuilds each
+report from the `doc.json` saved beside its outputs, which is the whole of a
+build apart from asking Google for the text. Offline cannot notice a document
+that changed, so it is for a change to this code rather than to a document,
+and it is not what the workflow runs.
+
+Reports are built several at a time, since a build is nearly all waiting,
+so a list takes about as long as its slowest document rather than as long as
+all of them. They are still reported in the order the list gives them.
+
+## The Pages pipeline
+
+Nothing else in the repository or the workflow names a document
+but `reports.toml`,
+and one report failing to build does not take the others with it;
+the run still exits non-zero, and the failure is on the front page.
+
+Nothing published is built from anything but that list.
+A report the list does not name has nothing committed
+for the build check to compare against,
+so publishing it from CI would publish what nobody had reviewed.
+
+It runs on a push rather than a schedule:
+a report publishes when someone decides it is ready,
+where a schedule would put whatever the doc said at 3 a.m.
+onto a public URL with nobody looking.
+
+The job fetches the document rather than deploying the committed
+`site/`, because the images are not in the repository
+and cannot be recovered from what is:
+the `contentUri` values in a saved `doc.json` are signed and short-lived,
+and are already `403` the next day.
+
+So CI needs credentials, and they are a service account, not a person.
+A service account is an identity inside the Cloud project, with no inbox,
+no password, and an empty Drive of its own,
+so its key grants read access to exactly what has been shared with it
+and to nothing else in anyone's Drive.
+The interactive flow is unchanged and still the default:
+`_credentials` uses a service account only when
+`$GOOGLE_APPLICATION_CREDENTIALS` names one.
+
+## Squarespace constraints
+
+These are load-bearing.
+The block counts, the 7.1 version, and the two documented limits
+were verified against the live site and Squarespace's own documentation;
+the one estimate below is marked as such.
+
+- **There is no content API.** The public Squarespace API covers commerce only.
+  Nothing can create or update a page from a script,
+  so the final step is necessarily a human paste.
+  The goal is to make it *one* paste instead of 162 placements.
+- **`etany.org` runs Squarespace 7.1**,
+  so Developer Mode, Git, and SFTP are unavailable; those are 7.0-only.
+  A single code block on an otherwise empty page
+  is the closest thing to a pure HTML page, and it is close enough.
+- **A code block holds 400 KB (~300,000 characters).**
+  Two measurements bracket the SAS West report: its source text is 69 KB,
+  and the live page's rendered text blocks come to 226 KB
+  including Squarespace's own markup, which this emitter does not produce.
+  The fragment should land between them, comfortably inside the limit,
+  but it has not been generated from the real document yet.
+  `--split` cuts at `h2` boundaries for a report that does not fit.
+- **There is no file upload API.**
+  Custom Files is a manual GUI that accepts images and fonts only.
+  Host report images elsewhere and reference absolute URLs;
+  the PDF needs those same local files anyway,
+  so one upload serves both outputs.
+
+## Rate limits
+
+Not a concern at this scale.
+The Docs API allows
+[3,000 read requests per minute per project, and 300 per minute per user](https://developers.google.com/workspace/docs/api/limits).
+One publish is one request,
+so an afternoon of rebuilding sits orders of magnitude under the limit,
+and exceeding it returns HTTP 429 rather than costing anything.
+
+# Development
+
+```sh
+uv sync
+uv run pre-commit install
+uv run pytest
+```
+
+`mise` pins the `biome` version in `mise.toml` and nowhere else,
+because the emitted HTML is committed
+and a formatter that changed its mind between versions
+would rewrite every report without a report having changed.
+
+`ruff format`, `ruff check`, `ty`, `pyrefly`, and `pytest`
+run as pre-commit hooks and again in CI.
+Tests run against checked-in Docs API responses,
+so neither ever needs Google credentials or the network.
+
+One more hook runs on push rather than on commit:
+`scripts/check-committed-site.sh` rebuilds `site/` by fetching the documents
+and fails if that differs from what is committed.
+The Pages workflow runs the same script before it deploys,
+so this is the deploy's own check,
+run on the way out rather than after the push.
+It runs on every branch, not only `main`:
+a branch whose site is already stale is a merge that will fail.
+
+It needs credentials and the network, unlike everything else here,
+and `git push --no-verify` skips it when those are what is missing.
+When it fails, the rebuilt files are left in the working tree,
+which is what to read and commit.
+
+`site/` is the published site, committed:
+a report at its published path with its `doc.json` and everything emitted from it,
+and `site/assets/` holding the one copy of the stylesheets and script
+that every report page links.
+It doubles as the project's main test corpus,
+because an actual `documents.get` response for a real report
+is where every bug that mattered came from.
+
+`tests/fixture/` is the same directory in miniature,
+from a hand-written document,
+for the tests that want to be fast rather than real.
+
+Every build saves the response as `doc.json` in the report's own directory,
+so the pipeline re-runs against the last fetch with no network: pass the directory.
+That is what the tests do.
+Either `site/` or `tests/fixture/` can be rebuilt that way,
+which reads the saved response and needs no credentials:
+
+```sh
+uv run eta-publish one site/reports/digging-out-deep-hole-sas-west
+```
+
+Add `--no-images` and it needs no network at all.
+The one thing a no-network rebuild cannot reproduce is the image extensions:
+a Docs `inlineObject` says nothing about what kind of file it is,
+so `.jpg` and `.png` are learned by fetching, and without that the links lose them.
+The names come from the document,
+and each image's shape is read from the committed `images.json`,
+so the page is otherwise the page that publishes.
+
+When a snapshot changes, read the diff before accepting it:
+it is exactly what the change does to a real published report.
+Regenerate with `uv run pytest --regenerate-snapshots`.
+
+# Status
 
 The parser and all three emitters work, against a fixture.
 
@@ -648,9 +702,9 @@ rather than from the fixture, and there are almost certainly more.
 It will also settle the code block size estimate,
 the one unmeasured number here.
 
-## TODO
+# TODO
 
-### Preserve the anchors of already-published reports
+## Preserve the anchors of already-published reports
 
 Existing reports have short, hand-chosen anchors.
 The live SAS West table of contents links to `#elephants` and
@@ -679,7 +733,7 @@ Wherever the overrides live, they have to be in the Google Doc,
 since that is the source of truth
 and the person republishing a report will be working there, not here.
 
-## Possible directions
+# Possible directions
 
 **Version history.** Because the `.md` is regenerated and committed
 on every publish, git accumulates a usable history for free.
