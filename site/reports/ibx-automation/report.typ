@@ -18,8 +18,11 @@
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
+    [style: #raw("125th Street") is #raw("125 St") in MTA style: #raw("...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...")],
     [style: two words should be separated by 1 space, not 2: #raw("...common. On such routes, demand··requires both very high freque...")],
     [style: two words should be separated by 1 space, not 2: #raw("...e Second Avenue Subway opened,··whereas ALM is typically desig...")],
+    [style: #raw("Fordham Road") is #raw("Fordham Rd") in MTA style: #raw("...ircumferential routes such as Fordham Road in the Bronx and Main Street ...")],
+    [style: #raw("Main Street") is #raw("Main St") in MTA style: #raw("...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...")],
     [style: a sentence should end with 1 space, not 2: #raw("...t costs are given separately).··This is a Buy America cost, wh...")],
   ),
 )

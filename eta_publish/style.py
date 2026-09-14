@@ -84,6 +84,7 @@ def style(doc: Document) -> None:
         _check_spacing(doc, text)
         _check_dash_spacing(doc, text)
         _check_organization_name(doc, text)
+        _check_street_names(doc, text)
 
 
 GAP = re.compile(r"(?<=\S)(?P<gap>  +)(?=\S)")
@@ -188,3 +189,156 @@ def _check_organization_name(doc: Document, text: str) -> None:
             Shown(SPELLED_OUT),
             Shown(_excerpt(text, match.start(), match.end() + len("ETA"))),
         )
+
+
+TYPES = {
+    "Street": "St",
+    "Avenue": "Av",
+    "Ave": "Av",
+    "Boulevard": "Blvd",
+    "Place": "Pl",
+    "Road": "Rd",
+    "Drive": "Dr",
+    "Lane": "Ln",
+    "Court": "Ct",
+    "Terrace": "Ter",
+    "Parkway": "Pkwy",
+    "Turnpike": "Tpke",
+    "Plaza": "Plz",
+    "Square": "Sq",
+    "Expressway": "Expy",
+    "Highway": "Hwy",
+}
+"""How the MTA writes each kind of street, and every spelling that is not it.
+
+Its own signs, maps and announcements are where these come from:
+`125 St`, `2 Av`, `Queens Blvd`, `Henry Hudson Pkwy`.
+A report is about the system, so it should name a station the way the system
+names it, and the reader who goes looking for the sign finds the sign.
+
+Singular only. There is no MTA spelling of `116th and 125th Streets`,
+and a rule that invents one would be worse than the one it corrects.
+"""
+
+WRITTEN = frozenset(TYPES.values())
+"""The spellings that are already right, which nothing is warned about."""
+
+NUMBER_WORDS = (
+    "First",
+    "Second",
+    "Third",
+    "Fourth",
+    "Fifth",
+    "Sixth",
+    "Seventh",
+    "Eighth",
+    "Ninth",
+    "Tenth",
+    "Eleventh",
+    "Twelfth",
+)
+"""The avenues whose number is a word rather than a digit.
+
+`Second Avenue` is written out where `2 Av` is the station on it,
+so a spelled-out number keeps the spelled-out kind of street beside it
+and the pair is corrected the other way: towards the word, not the initials.
+"""
+
+SECOND_AVENUE_SUBWAY = "Second Avenue Subway"
+"""The project, which is a name rather than a street.
+
+The MTA's own, on every page it publishes about it, and the reports say it
+constantly. The station on the line is `2 Av` and the line is this,
+so the phrase is left exactly as it is written here.
+"""
+
+NOT_A_STREET = ("Rail Road",)
+"""Phrases ending in what looks like a kind of street and is not one.
+
+The Long Island Rail Road is a railroad, spelled as two words since 1876,
+and `Long Island Rail Rd` is not a thing anybody has ever called it.
+"""
+
+COMMON_NOUN = "The"
+"""What a name starts with when it is a phrase rather than a street.
+
+`The Wrong Place to Scale Back` is a heading in SAS West, and `Place`,
+`Square`, `Court` and `Drive` are all ordinary words as well as kinds of
+street. No street is `The` anything, so this is the one that can be told
+apart by reading it.
+"""
+
+ELSEWHERE = frozenset({"Nanba Road", "Heping South Street"})
+"""Streets these reports name that are not in New York.
+
+`Nanba Road` is in Shanghai and `Heping South Street` in Beijing, and neither
+is a street the MTA has a spelling for: restyling them to `Nanba Rd` would be
+inventing a name nothing anywhere calls it.
+Nothing in the text says which city a street is in,
+so a report naming another one adds it here.
+"""
+
+STREET = re.compile(
+    rf"""
+    (?P<name>
+        (?:[A-Z][a-z]+[ ])*            # `Henry Hudson`, `Heping South`
+        (?:\d+(?:st|nd|rd|th)?|[A-Z][a-z]+)  # `125th`, `2`, `Fordham`
+    )
+    [ ]
+    (?P<kind>{"|".join(TYPES)})\b
+    """,
+    re.VERBOSE,
+)
+"""A street named the way a street is named: what it is called, then its kind.
+
+The kind is spelled as one of the ones there is something to say about, so a
+`125 St` already written that way never reaches the check at all.
+Capitalized, and separated by a real space, which is what keeps a URL's
+`72nd-street-station` and a filename's `96st_station` out of it.
+"""
+
+
+def _check_street_names(doc: Document, text: str) -> None:
+    """A station or a street named some way other than the MTA's.
+
+    The reports are about what the MTA builds, and a reader who goes looking
+    for `125th Street` on a map finds `125 St`, which is the sign on the
+    platform, the name in the app, and what the announcement says.
+    """
+    for match in STREET.finditer(text):
+        name = match.group("name")
+        kind = match.group("kind")
+        written = f"{name} {kind}"
+        if (
+            written in ELSEWHERE
+            or written.startswith(f"{COMMON_NOUN} ")
+            or written.endswith(NOT_A_STREET)
+            or text[match.start() :].startswith(SECOND_AVENUE_SUBWAY)
+        ):
+            continue
+        correct = _mta(name, kind)
+        if correct == written:
+            continue
+        _warn(
+            doc,
+            "{} is {} in MTA style: {}",
+            Shown(written),
+            Shown(correct),
+            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+        )
+
+
+ORDINAL = re.compile(r"(?<=\d)(?:st|nd|rd|th)\b")
+
+
+def _mta(name: str, kind: str) -> str:
+    """`name` and `kind` written the way the MTA writes them.
+
+    A spelled-out number is the one that grows rather than shrinks:
+    `Second Ave` is `Second Avenue`, because that is the avenue whose
+    station is `2 Av`.
+    """
+    if name in NUMBER_WORDS:
+        spelled = next(full for full, short in TYPES.items() if short == TYPES[kind])
+        return f"{name} {spelled}"
+    return f"{ORDINAL.sub('', name)} {TYPES[kind]}"

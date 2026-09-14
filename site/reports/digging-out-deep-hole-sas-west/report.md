@@ -29,6 +29,11 @@ August 19, 2026
 - 2 comment threads still open on this tab
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
+- style: `125th Street` is `125 St` in MTA style: `...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...`
+- style: `Second Ave` is `Second Avenue` in MTA style: `...nflation-adjusted cost of the Second Ave Subway’s first phase, a proje...`
+- style: `Hunterspoint Avenue` is `Hunterspoint Av` in MTA style: `...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...`
+- style: `Second Ave` is `Second Avenue` in MTA style: `... even by the standards of the Second Ave subway. `
+- style: `Second Ave` is `Second Avenue` in MTA style: `...ive, oversize features of the Second Ave subway. The MTA and its contr...`
 
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)\
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> and a Grand Central Madison escalator.\
