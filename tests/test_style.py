@@ -172,3 +172,67 @@ def test_the_gap_is_carried_as_its_own_piece_of_the_excerpt() -> None:
         "\u00b7\u00b7",
         "It is expensive.",
     )
+
+
+def test_a_station_written_the_way_the_mta_writes_it_is_left_alone() -> None:
+    assert warnings(written("The ventilation structure at 69 St and 2 Av.")) == []
+
+
+def test_an_ordinal_loses_its_suffix_and_the_kind_is_abbreviated() -> None:
+    found = warnings(written("The proposed 125th Street extension."))
+    assert found == [
+        "style: `125th Street` is `125 St` in MTA style: `The proposed 125th Street extension.`"
+    ]
+
+
+def test_an_avenue_is_av_rather_than_ave() -> None:
+    assert "`2 Av`" in warnings(written("Blasting at the 2nd Ave site."))[0]
+
+
+def test_a_named_street_is_abbreviated_too() -> None:
+    assert "`Fordham Rd`" in warnings(written("Circumferential routes such as Fordham Road."))[0]
+
+
+def test_every_kind_the_mta_spells_its_own_way() -> None:
+    for name, correct in (
+        ("Queens Boulevard", "Queens Blvd"),
+        ("Henry Hudson Parkway", "Henry Hudson Pkwy"),
+        ("Union Square", "Union Sq"),
+        ("Sutphin Place", "Sutphin Pl"),
+    ):
+        assert f"`{correct}`" in warnings(written(f"It runs along {name} today."))[0]
+
+
+def test_a_spelled_out_number_takes_the_spelled_out_kind() -> None:
+    """`Second Avenue` is the avenue whose station is `2 Av`,
+    so the pair is corrected towards the word rather than the initials."""
+    assert "`Second Avenue`" in warnings(written("The cost of the Second Ave Subway."))[0]
+
+
+def test_the_second_avenue_subway_is_left_as_the_mta_names_it() -> None:
+    assert warnings(written("The Second Avenue Subway opened in 2017.")) == []
+
+
+def test_an_ordinal_that_names_no_street_is_not_a_street() -> None:
+    """`the 4th grade` is a slope in the IBX report, and `4 grade` is nothing."""
+    assert warnings(written("The steepest of these grades is the 4th grade.")) == []
+
+
+def test_a_street_in_another_city_keeps_its_own_name() -> None:
+    """`Nanba Rd` is a name nothing anywhere calls it."""
+    assert warnings(written("Cross-traffic on Nanba Road could move underground.")) == []
+
+
+def test_a_railroad_is_not_a_road() -> None:
+    assert warnings(written("Metro-North and the Long Island Rail Road both.")) == []
+
+
+def test_an_ordinary_phrase_is_not_a_street() -> None:
+    """`Place`, `Square`, `Court` and `Drive` are words as well as streets,
+    and no street is `The` anything."""
+    assert warnings(written("Ruling Grade: The Wrong Place to Scale Back")) == []
+
+
+def test_a_slug_is_not_a_street_name() -> None:
+    """A URL and a filename write it without the space that names one."""
+    assert warnings(written("Uncropped Source: 96st_station, sas-west-72nd-street.jpg")) == []

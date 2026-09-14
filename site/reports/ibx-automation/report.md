@@ -14,8 +14,11 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
+- style: `125th Street` is `125 St` in MTA style: `...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...`
 - style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
 - style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
+- style: `Fordham Road` is `Fordham Rd` in MTA style: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
+- style: `Main Street` is `Main St` in MTA style: `...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...`
 - style: a sentence should end with 1 space, not 2: `...t costs are given separately).··This is a Buy America cost, wh...`
 
 ## No Need to Wait: Automated Light Metro is Right for the IBX

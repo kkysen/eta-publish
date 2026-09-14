@@ -13,6 +13,11 @@
     [7 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [2 comment threads still open on this tab],
     [#raw("SEO Description:") is 398 characters, over the 300 a search result shows:#quote(block: true)[A 125 St subway should be a slam dunk. But at \$7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how#strike[ever, NY would not only be able to build more for less, but would also save riders time every day.]]],
+    [style: #raw("125th Street") is #raw("125 St") in MTA style: #raw("...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...")],
+    [style: #raw("Second Ave") is #raw("Second Avenue") in MTA style: #raw("...nflation-adjusted cost of the Second Ave Subway’s first phase, a proje...")],
+    [style: #raw("Hunterspoint Avenue") is #raw("Hunterspoint Av") in MTA style: #raw("...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...")],
+    [style: #raw("Second Ave") is #raw("Second Avenue") in MTA style: #raw("... even by the standards of the Second Ave subway. ")],
+    [style: #raw("Second Ave") is #raw("Second Avenue") in MTA style: #raw("...ive, oversize features of the Second Ave subway. The MTA and its contr...")],
   ),
   hero: [
 #figure(

@@ -54,6 +54,7 @@ from eta_publish.emit.typst import TypstEmitter
 from eta_publish.naming import IMAGE_DIR
 from eta_publish.nodes import Document, Figure, Heading
 from eta_publish.parse import parse
+from eta_publish.style import style
 
 ASSET_BASE = "../../assets"
 """What a build links from a report at `reports/<slug>/`."""
@@ -107,6 +108,7 @@ def doc(regenerate_snapshots: bool) -> Document:
     # and these snapshots are the pages a build writes.
     # `run_checks` rather than `check`, which is this module's snapshot comparison.
     run_checks(parsed)
+    style(parsed)
     return parsed
 
 
@@ -205,6 +207,7 @@ KNOWN_WARNINGS = (
     "standing in for blank space",
     "has an unrecognized",
     "runs past it into the value",
+    "in MTA style",
 )
 """Every kind of warning this report has been known to raise.
 
