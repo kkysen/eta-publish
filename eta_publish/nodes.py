@@ -11,7 +11,6 @@ It carries what ETA reports use, not what a Google Doc can express.
 Anything the parser cannot place here becomes a warning rather than a silent drop.
 """
 
-import re
 from collections.abc import Iterator
 from dataclasses import dataclass, field, replace
 from datetime import datetime
@@ -614,8 +613,9 @@ class Document:
         if found is None or not found.snapshot or not hash_:
             return found
         snapshot = found.snapshot
-        if fragment.startswith(PDF_PAGE):
-            snapshot = RAW.sub(r"\1id_/", snapshot, count=1)
+        capture = _capture(snapshot)
+        if fragment.startswith(PDF_PAGE) and capture is not None:
+            snapshot = wayback_url(*capture, modifier=UNREWRITTEN)
         return replace(found, snapshot=f"{snapshot}{hash_}{fragment}")
 
     @property
@@ -822,6 +822,15 @@ def _capture(href: str) -> tuple[str, str] | None:
     return stamp, url
 
 
+def wayback_url(timestamp: str, url: str, modifier: str = "") -> str:
+    """The Wayback address of one capture of `url`.
+
+    The one place that knows the shape, so the address this builds
+    and the address `_capture` reads cannot drift apart.
+    """
+    return f"https://{WAYBACK_HOST}{WAYBACK_PATH}{timestamp}{modifier}/{url}"
+
+
 def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
     """A link split into the page it is of and the capture it is, if it is one.
 
@@ -840,10 +849,7 @@ def unwrap_snapshot(href: str) -> tuple[str, Archived | None]:
     # modifier and the same capture cited without one are one snapshot.
     # Of the document rather than of the page of it named here, because that is
     # what a capture is, and `Document.archived` puts the fragment back.
-    document = document_url(url)
-    return url, Archived(
-        snapshot=f"https://web.archive.org/web/{stamp}/{document}", timestamp=stamp
-    )
+    return url, Archived(snapshot=wayback_url(stamp, document_url(url)), timestamp=stamp)
 
 
 PDF_PAGE = "page="
@@ -853,12 +859,9 @@ An instruction to the PDF viewer rather than an anchor in a document, which is
 why it is the one fragment the ordinary Wayback URL swallows.
 """
 
-RAW = re.compile(r"(https?://web\.archive\.org/web/\d{4,14})/")
-"""Where the modifier goes in a Wayback URL, between the timestamp and the page.
-
-`id_` is the one that says to serve the capture as it was rather than rewritten
-and wrapped.
-"""
+UNREWRITTEN = "id_"
+"""The modifier asking Wayback for the capture as it was, rather than rewritten
+and wrapped in the archive's own page."""
 
 
 def document_url(url: str) -> str:
