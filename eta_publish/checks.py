@@ -10,8 +10,20 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
-from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, addressed, plain_text
-from .parse import REQUIRED_FIELDS, unfinished
+from .nodes import Cut, Document, Figure, Listed, Quoted, Shown, Where, addressed, plain_text
+from .parse import (
+    KNOWN_FIELDS,
+    REQUIRED_FIELDS,
+    is_asset_note,
+    is_credit_note,
+    is_source_note,
+    key_line,
+    names_a_field,
+    split_lines,
+    unfinished,
+    without_note,
+)
+from .sentences import split as sentences
 
 SEO_LIMIT = 300
 """How long a `SEO Description:` may be.
@@ -37,6 +49,7 @@ def check(doc: Document) -> None:
     _check_review(doc)
     _check_contributors(doc)
     _check_tracked(doc)
+    _check_stray_fields(doc)
 
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
@@ -81,6 +94,69 @@ def _check_contributors(doc: Document) -> None:
                 Shown("Public Contributors:"),
                 Shown(entry.strip()),
             )
+
+
+SAYS_NOTHING_ABOUT_FIELDS = frozenset({Where.HEADING})
+"""Where a `Key: value` line is not a field however much it reads like one.
+
+A heading is styled as one, so it is never a field:
+`Appendix A: Freedom Tunnel` and `Ruling Grade: The Wrong Place to Scale Back`
+are section names, and the report is full of them.
+"""
+
+
+def _is_figure_note(line: str) -> bool:
+    """Whether `line` is one of the notes a figure carries."""
+    return is_source_note(line) or is_asset_note(line) or is_credit_note(line)
+
+
+def _check_stray_fields(doc: Document) -> None:
+    """A `Key: value` line written somewhere it does not belong.
+
+    The header is consumed before the body, so a `Short:` line that ended up
+    under the headline, or inside a caption, is not the header's `Short:`.
+    It publishes as a paragraph reading `Short: ...`,
+    and the field it was meant to fill is reported missing somewhere else
+    in the same build, with nothing saying the two are the same line.
+
+    An unrecognized one is worth the same warning, and for the same reason:
+    `Sort:` in the body is a line nothing reads,
+    whether it was meant for the header or meant to be prose.
+
+    What counts depends on where it sits.
+    Under a picture, `Source:`, `Credit:` and `SVG:` are the ordinary spellings
+    rather than strays, so those are left alone there and warned about in prose.
+
+    Only lines that read as a field: short, and every word capitalized.
+    A sentence holding a colon is prose, and saying otherwise
+    on every `and then: this` would make the check worth turning off.
+    """
+    for run, where in doc.text_runs():
+        if where in SAYS_NOTHING_ABOUT_FIELDS:
+            continue
+        for line in split_lines(run):
+            text = plain_text(line).strip()
+            if where is not Where.BODY and _is_figure_note(text):
+                continue
+            found = key_line(text)
+            if found is None:
+                continue
+            field = without_note(found[0])
+            if field in KNOWN_FIELDS:
+                doc.warn(
+                    "{} is a {} field, and this one is outside it: {}",
+                    Shown(f"{field}:"),
+                    Shown("Header"),
+                    Shown(text),
+                )
+            elif names_a_field(field) and len(sentences(found[1])) <= 1:
+                # A field holds a value, not a passage.
+                # A label introducing three sentences of prose is how prose is written.
+                doc.warn(
+                    "{} reads as a field and is not one: {}",
+                    Shown(f"{field}:"),
+                    Shown(text),
+                )
 
 
 def _check_figures(doc: Document) -> None:

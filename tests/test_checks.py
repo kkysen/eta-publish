@@ -7,7 +7,7 @@ import pytest
 from paths import FIXTURE_DIR
 
 from eta_publish.checks import check
-from eta_publish.nodes import Block, Document, Figure, Image, Paragraph, Text
+from eta_publish.nodes import Block, Document, Figure, Heading, Image, Paragraph, Text
 from eta_publish.parse import REQUIRED_FIELDS, parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -253,3 +253,87 @@ def test_all_the_tagged_sources_are_listed_together(doc: Document) -> None:
     check(doc)
     assert len(doc.warnings) == 1
     assert str(doc.warnings[0]).startswith("2 sources still carry the tag")
+
+
+def test_a_header_field_in_the_body_is_warned_about(doc: Document) -> None:
+    """A `Short:` line under the headline is not the header's `Short:`.
+
+    It publishes as a paragraph, and the field it was meant to fill
+    is reported missing elsewhere in the same build.
+    """
+    doc.blocks = [Paragraph(content=[Text(text="Short: A 125 St subway should be a slam dunk.")])]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "`Short:` is a `Header` field, and this one is outside it: "
+        "`Short: A 125 St subway should be a slam dunk.`"
+    ]
+
+
+def test_a_header_field_in_a_caption_is_warned_about(doc: Document) -> None:
+    """`Credit:` and `Phase:` look alike enough in a document
+    that one lands where the other belongs."""
+    doc.blocks = [
+        Figure(
+            image=Image(object_id="io.1", filename="x.png", named=True),
+            caption=[Text(text="Phase: Compositing")],
+            credit=[Text(text="Credit: MTA")],
+        )
+    ]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "`Phase:` is a `Header` field, and this one is outside it: `Phase: Compositing`"
+    ]
+
+
+def test_an_unrecognized_field_in_the_body_is_warned_about(doc: Document) -> None:
+    """`Sort:` in the body is a line nothing reads,
+    whether it was meant for the header or meant to be prose."""
+    doc.blocks = [Paragraph(content=[Text(text="Sort: A 125 St subway.")])]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "`Sort:` reads as a field and is not one: `Sort: A 125 St subway.`"
+    ]
+
+
+def test_a_figure_note_is_ordinary_under_a_picture(doc: Document) -> None:
+    """`Source:` and `Credit:` are how a figure is written,
+    so they are strays only in prose."""
+    doc.blocks = [
+        Figure(
+            image=Image(object_id="io.1", filename="x.png", named=True),
+            source=[Text(text="Source: sas-west-036.jpg")],
+            caption=[Text(text="The SAS West alignment.")],
+            credit=[Text(text="Credit: MTA")],
+        )
+    ]
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_a_figure_note_loose_in_the_body_is_warned_about(doc: Document) -> None:
+    """Nothing claimed it, so it publishes as a paragraph reading `Source: ...`."""
+    doc.blocks = [Paragraph(content=[Text(text="Source: sas-west-036.jpg")])]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "`Source:` reads as a field and is not one: `Source: sas-west-036.jpg`"
+    ]
+
+
+def test_a_heading_holding_a_colon_is_not_a_stray_field(doc: Document) -> None:
+    """`Appendix A: Freedom Tunnel` is a section name, and the report is full of them."""
+    doc.blocks = [
+        Heading(level=2, anchor="appendix-a", content=[Text(text="Appendix A: Freedom Tunnel")])
+    ]
+    check(doc)
+    assert doc.warnings == []
+
+
+def test_prose_holding_a_colon_is_not_a_stray_field(doc: Document) -> None:
+    """Warning on every `and then: this` would make the check worth turning off."""
+    doc.blocks = [
+        Paragraph(content=[Text(text="The answer was simple: build it shallower.")]),
+        Paragraph(content=[Text(text="Phases of the project: three.")]),
+        Paragraph(content=[Text(text="Addendum: One sentence. Then a second one.")]),
+    ]
+    check(doc)
+    assert doc.warnings == []
