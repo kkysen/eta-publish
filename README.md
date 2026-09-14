@@ -382,6 +382,27 @@ so adding a field to a future report is safe.
   so publishing the wrong draft is a real possibility rather than a theoretical one.
   A multi-tab document with no tab named refuses to guess and lists what it found.
 
+### House style
+
+The build also reads prose that parsed cleanly, and says where it is spelled
+against the way every other report spells the same thing.
+None of these is rewritten on the way out:
+making the reports agree is the writer's, and the build only says where to look.
+
+- **One space after a sentence**, not two.
+  The pair is invisible everywhere anybody would catch it:
+  Docs shows one space either way and HTML collapses it,
+  so only the Markdown archive keeps it, and keeps it forever.
+- **No space beside an em or en dash.**
+  Every dash in the reports today is closed up;
+  a spaced one arrives by pasting from somewhere that sets them open.
+- **`ETA`, not `the ETA`**, the way one writes `NASA said`.
+  Spelled out it does take the article: `the Effective Transit Alliance`.
+
+Footnotes are left out of all three.
+A footnote is a citation, an author and a headline copied from where it was
+published, and restyling a quoted headline misquotes it.
+
 # How it works
 
 ## Design decisions
