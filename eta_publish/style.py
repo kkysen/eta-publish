@@ -576,12 +576,20 @@ and it is what the amount is carried through to the symbol with:
 `7.7 billion dollars` is `$7.7 billion`, not `$7.7 billion dollars`.
 """
 
+DATED = re.compile(r"\bin[ ]$", re.IGNORECASE)
+"""What a sum of money is never preceded by, and dated dollars always are.
+
+`in 2026 dollars` is the year a cost is inflated to, and the `in` is what
+says so: nothing counts money as `in 5 dollars`. It is the clearer half of
+the test, and the one that holds for a year these reports have not reached.
+"""
+
 YEAR = re.compile(r"(?:19|20)\d\d")
 """A number that dates the dollars rather than counting them.
 
-`in 2026 dollars` and `from 2027 USD` are what a cost is inflated to,
-which is the one place the word follows a number and means nothing like
-`$2026`. A year is only a year here where no scale follows it:
+Beside `DATED` rather than instead of it, for `2026 dollars` written with no
+`in` in front. Either way `$2026` is nothing.
+A year is only a year here where no scale follows it:
 `2026 million dollars` would be a sum of money written strangely.
 """
 
@@ -598,7 +606,8 @@ def _check_spelled_out_symbols(doc: Document, text: str) -> None:
         amount = match.group("amount")
         scale = match.group("scale") or ""
         money = not match.group("word").lower().startswith("per")
-        if money and not scale and YEAR.fullmatch(amount):
+        dated = DATED.search(text[: match.start()]) is not None or YEAR.fullmatch(amount)
+        if money and not scale and dated:
             continue
         correct = f"${amount}{scale}" if money else f"{amount}%"
         _warn(
