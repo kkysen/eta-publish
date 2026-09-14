@@ -87,6 +87,7 @@ def style(doc: Document) -> None:
         _check_street_names(doc, text)
         _check_units(doc, text)
         _check_hyphenated_units(doc, text)
+        _check_spelled_out_symbols(doc, text)
 
 
 GAP = re.compile(r"(?<=\S)(?P<gap>  +)(?=\S)")
@@ -554,6 +555,55 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
         _warn(
             doc,
             "{} is {} in MTA style, with no hyphen: {}",
+            Shown(match.group()),
+            Shown(correct),
+            Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
+        )
+
+
+SPELLED_OUT_SYMBOLS = re.compile(
+    r"""
+    (?P<amount>\d[\d,.]*)
+    (?P<scale>[ ](?:thousand|million|billion|trillion))?
+    [ ](?P<word>percent|per[ ]cent|dollars|dollar)\b
+    """,
+    re.VERBOSE | re.IGNORECASE,
+)
+"""A number followed by the word for a symbol: `3.5 percent`, `7.7 billion dollars`.
+
+The scale sits between them for money and never for a percentage,
+and it is what the amount is carried through to the symbol with:
+`7.7 billion dollars` is `$7.7 billion`, not `$7.7 billion dollars`.
+"""
+
+YEAR = re.compile(r"(?:19|20)\d\d")
+"""A number that dates the dollars rather than counting them.
+
+`in 2026 dollars` and `from 2027 USD` are what a cost is inflated to,
+which is the one place the word follows a number and means nothing like
+`$2026`. A year is only a year here where no scale follows it:
+`2026 million dollars` would be a sum of money written strangely.
+"""
+
+
+def _check_spelled_out_symbols(doc: Document, text: str) -> None:
+    """A percentage or a sum of money written as a word.
+
+    These reports are an argument about costs, and the costs are read against
+    each other: `$7.7 billion`, `$4.5 billion per mile`, `92%` are what a
+    reader compares at a glance, where the same numbers in words are prose to
+    work through. The symbol is also what every figure in them already uses.
+    """
+    for match in SPELLED_OUT_SYMBOLS.finditer(text):
+        amount = match.group("amount")
+        scale = match.group("scale") or ""
+        money = not match.group("word").lower().startswith("per")
+        if money and not scale and YEAR.fullmatch(amount):
+            continue
+        correct = f"${amount}{scale}" if money else f"{amount}%"
+        _warn(
+            doc,
+            "{} is {}, which is how a report writes it: {}",
             Shown(match.group()),
             Shown(correct),
             Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),

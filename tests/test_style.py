@@ -341,3 +341,27 @@ def test_a_unit_introduced_with_its_symbol_is_being_defined() -> None:
     """SAS West writes `30 trains per hour (tph)` once and `33 tph` after it,
     which is how an abbreviation is handed to a reader."""
     assert warnings(written("Lines run 30 trains per hour (tph) without tail tracks.")) == []
+
+
+def test_a_percentage_is_a_symbol() -> None:
+    assert "`3.5%`" in warnings(written("Costs rose 3.5 percent last year."))[0]
+    assert "`92%`" in warnings(written("Utilization of 92 per cent is assumed."))[0]
+
+
+def test_money_is_a_symbol_in_front_of_the_number() -> None:
+    """The scale comes with it: `$7.7 billion`, not `$7.7 billion dollars`."""
+    assert "`$7.7 billion`" in warnings(written("A cost of 7.7 billion dollars."))[0]
+    assert "`$5`" in warnings(written("It would cost 5 dollars a ride."))[0]
+
+
+def test_a_symbol_already_written_is_left_alone() -> None:
+    assert warnings(written("At $7.7 billion and 92%, it is the most expensive.")) == []
+
+
+def test_a_year_dates_the_dollars_rather_than_counting_them() -> None:
+    """`in 2026 dollars` is what a cost is inflated to, and `$2026` is nothing."""
+    assert warnings(written("That is $4.5 billion per mile in 2026 dollars.")) == []
+
+
+def test_a_scale_says_a_year_is_a_sum_after_all() -> None:
+    assert "`$2026 million`" in warnings(written("A cost of 2026 million dollars."))[0]
