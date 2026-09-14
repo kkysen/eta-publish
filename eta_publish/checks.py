@@ -95,12 +95,16 @@ def _check_contributors(doc: Document) -> None:
             )
 
 
-SAYS_NOTHING_ABOUT_FIELDS = frozenset({Where.HEADING})
+SAYS_NOTHING_ABOUT_FIELDS = frozenset({Where.HEADING, Where.FOOTNOTE})
 """Where a `Key: value` line is not a field however much it reads like one.
 
 A heading is styled as one, so it is never a field:
 `Appendix A: Freedom Tunnel` and `Ruling Grade: The Wrong Place to Scale Back`
 are section names, and the report is full of them.
+
+A footnote is a citation, written to a convention of its own
+that opens with an author and quotes a headline after it:
+`Barbara Russo-Lennon, "Subway spots: MTA's ad blitz ..."`.
 """
 
 
