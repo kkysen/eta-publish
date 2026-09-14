@@ -8,6 +8,8 @@
   contributors: ("Madison Feinberg", "Elijah Fischer", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
+    [the #raw("Header") section has an unrecognized #raw("Related Document:") line; check it for a typo],
+    [the #raw("Header") section has an unrecognized #raw("Video:") line; check it for a typo],
     [2 images share one paragraph; only the first becomes a figure],
     [image #raw("kix.djm0a1aand4k") has no alt text and no caption; add a description to it in the doc],
     [the image #raw("img-831248b1") has no caption],

@@ -71,6 +71,46 @@ RESERVED_ANCHORS = frozenset({"footnotes", "contributors"})
 SOFT_BREAK = "\v"
 
 
+REQUIRED_FIELDS = (
+    "Project Manager",
+    "Phase",
+    "Discussion Channel",
+    "Publish Due Date",
+    "Public Contributors",
+    "Private Contributors",
+    "URL",
+    "Short",
+    "SEO Description",
+)
+"""Every field the `Header` section must carry, in the order it writes them.
+
+Spelled as the document spells them, because the spelling is the name:
+a key is recorded exactly as typed, so `Url:` is not `URL:`
+but an unrecognized field, and says so.
+That is the point of checking at all,
+since a misspelled field is silently missing everywhere it is read.
+
+A missing one is warned about by name rather than as a list of nine,
+because a warning naming one line is a line to go and add
+and a warning naming nine is a paragraph nobody reads twice.
+"""
+
+# Fields the header may carry and nothing requires.
+# The three due dates are the schedule the editors keep;
+# nothing publishes them, and a report that has shipped no longer needs them.
+# `Title` is a second answer to a question the headline already answers,
+# which `title` warns about separately.
+OPTIONAL_FIELDS = ("Draft Due Date", "Press Due Date", "Final Due Date", "Title")
+
+KNOWN_FIELDS = frozenset(REQUIRED_FIELDS) | frozenset(OPTIONAL_FIELDS)
+"""Every field name the header is allowed to use.
+
+A key outside this is kept and warned about rather than dropped:
+the likeliest reason for one is a misspelling,
+and a misspelled `Short:` is a report that publishes with no short at all
+and says nothing about why.
+"""
+
 # Anything still marked unfinished, e.g. the real doc's `Source: TODO`.
 # Not `TK`: these reports are not written with it,
 # so here it would only ever match a word that happened to be spelled that way.
@@ -974,6 +1014,16 @@ class Parser:
         """Record one `Key: value` header line, and answer which key it set."""
         key = self._without_note(written)
         value = value.strip()
+        if key not in KNOWN_FIELDS:
+            # A field nothing reads is a field nobody notices is missing.
+            # Worth a warning even though the value is kept,
+            # because the likeliest reason for one is a misspelling,
+            # and a misspelled `Short:` publishes as no short at all.
+            self.doc.warn(
+                "the {} section has an unrecognized {} line; check it for a typo",
+                Shown("Header"),
+                Shown(f"{key}:"),
+            )
         if key in self.doc.meta:
             # The later line wins, and says so: a corrected line pasted
             # below the original and a duplicate nobody meant look

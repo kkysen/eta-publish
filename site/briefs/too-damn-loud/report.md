@@ -6,6 +6,8 @@ September 9, 2026
 
 **Warnings**
 
+- the `Header` section has an unrecognized `Related Document:` line; check it for a typo
+- the `Header` section has an unrecognized `Video:` line; check it for a typo
 - 2 images share one paragraph; only the first becomes a figure
 - image `kix.djm0a1aand4k` has no alt text and no caption; add a description to it in the doc
 - the image `img-831248b1` has no caption

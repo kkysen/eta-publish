@@ -8,6 +8,7 @@
   contributors: ("Madison Feinberg", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "William Meehan", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
+    [the #raw("Header") section has an unrecognized #raw("MTA SAS West Feasibility Study:") line; check it for a typo],
     [unfinished text in the document: #raw("SVG: TODO")],
     [the image #raw("img-44bf278f") has no #raw("Credit:") line],
     [the image #raw("project_cost_comparison") has no #raw("Credit:") line],

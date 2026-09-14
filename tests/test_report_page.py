@@ -84,7 +84,9 @@ def test_warnings_are_shown_where_someone_will_see_them() -> None:
 
 
 def test_no_warnings_means_no_warning_box(doc: Document) -> None:
-    assert doc.warnings == []
+    # The fixture's header carries one unrecognized field on purpose;
+    # what is under test is the box, not the warning.
+    doc.warnings.clear()
     assert 'class="warnings"' not in report_page(doc)
 
 

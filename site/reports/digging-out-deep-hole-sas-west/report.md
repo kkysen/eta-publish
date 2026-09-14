@@ -6,6 +6,7 @@ August 19, 2026
 
 **Warnings**
 
+- the `Header` section has an unrecognized `MTA SAS West Feasibility Study:` line; check it for a typo
 - unfinished text in the document: `SVG: TODO`
 - the image `img-44bf278f` has no `Credit:` line
 - the image `project_cost_comparison` has no `Credit:` line
