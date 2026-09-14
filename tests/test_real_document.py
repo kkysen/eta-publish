@@ -207,7 +207,6 @@ KNOWN_WARNINGS = (
     "standing in for blank space",
     "has an unrecognized",
     "runs past it into the value",
-    "in MTA style",
     # Every house-style warning, as one kind. They say what to write and not
     # why, so the words in one are the document's rather than the check's,
     # and there is nothing else in them to match on.

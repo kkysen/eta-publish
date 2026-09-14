@@ -181,8 +181,7 @@ def test_a_station_written_the_way_the_mta_writes_it_is_left_alone() -> None:
 def test_an_ordinal_loses_its_suffix_and_the_kind_is_abbreviated() -> None:
     found = warnings(written("The proposed 125th Street extension."))
     assert found == [
-        "style: `125th Street` should be `125 St` in MTA style: "
-        "`The proposed 125th Street extension.`"
+        "style: `125th Street` should be `125 St`: `The proposed 125th Street extension.`"
     ]
 
 

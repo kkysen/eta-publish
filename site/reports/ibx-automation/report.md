@@ -14,7 +14,7 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
-- style: `125th Street` should be `125 St` in MTA style: `...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...`
+- style: `125th Street` should be `125 St`: `...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...`
 - style: `8 minutes` should be `8 min`: `...l city. SkyTrain runs every 6-8 minutes off-peak on each of two branc...`
 - style: `6 minutes` should be `6 min`: `...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...`
 - style: `3-minute` should be `3-min`: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
@@ -23,8 +23,8 @@
 - style: `3-minute` should be `3 min`, with no hyphen: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
 - style: two words should be separated by 1 space, not 2: `...common. On such routes, demand··requires both very high freque...`
 - style: two words should be separated by 1 space, not 2: `...e Second Avenue Subway opened,··whereas ALM is typically desig...`
-- style: `Fordham Road` should be `Fordham Rd` in MTA style: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
-- style: `Main Street` should be `Main St` in MTA style: `...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...`
+- style: `Fordham Road` should be `Fordham Rd`: `...ircumferential routes such as Fordham Road in the Bronx and Main Street ...`
+- style: `Main Street` should be `Main St`: `...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...`
 - style: `5-minute` should be `5-min`: `...time and the currently stated 5-minute peak headways. If peak headwa...`
 - style: `2 minutes` should be `2 min`: `... peak headways are reduced to 2 minutes instead, with off-peak headwa...`
 - style: `3 minutes` should be `3 min`: `...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...`
