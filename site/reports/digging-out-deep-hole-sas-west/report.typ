@@ -26,7 +26,9 @@
   ],
 )
 
-#strong[Addendum: The following clarifying text was added to “]#link("#station-depth")[#strong[Station Depth]]#strong[” on August 21, 2026: ]Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
+= Addendum
+
+#strong[The following clarifying text was added to “]#link("#station-depth")[#strong[Station Depth]]#strong[” on August 21, 2026: ]Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
 = The Elephants in the Room

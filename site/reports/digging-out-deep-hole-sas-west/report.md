@@ -37,7 +37,9 @@ August 19, 2026
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> and a Grand Central Madison escalator.\
 [Credit: MTA](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup>, ETA (Blair Lorenzo)
 
-**Addendum: The following clarifying text was added to “**[**Station Depth**](<#station-depth>)**” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
+## Addendum
+
+**The following clarifying text was added to “**[**Station Depth**](<#station-depth>)**” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
 ## The Elephants in the Room
