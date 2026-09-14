@@ -17,6 +17,7 @@ because they are facts about how the docs are written:
 import re
 from dataclasses import replace
 from datetime import datetime
+from urllib.parse import parse_qs, urlsplit
 
 from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename, image_filenames, names_nothing
@@ -403,8 +404,19 @@ class Parser:
             crop=crop,
         )
 
-    # A Drive file id, from either shape of link Docs produces.
-    DRIVE_ID_RE = re.compile(r"/file/d/([\w-]+)|[?&]id=([\w-]+)")
+    # Where a Drive link keeps the file id, in either shape Docs produces.
+    DRIVE_PATH = "/file/d/"
+    DRIVE_QUERY = "id"
+
+    @classmethod
+    def _drive_id(cls, uri: str) -> str:
+        """The Drive file id a link names, or nothing where it names none."""
+        split = urlsplit(uri)
+        _, found, rest = split.path.partition(cls.DRIVE_PATH)
+        if found:
+            return rest.partition("/")[0]
+        ids = parse_qs(split.query).get(cls.DRIVE_QUERY, [])
+        return ids[0] if ids else ""
 
     def _vector(self, para: JsonObject) -> Vector | None:
         """The vector original a `SVG:` line links, if it links one.
@@ -417,11 +429,10 @@ class Parser:
             uri = props.get("uri", "")
             if not uri or "image/svg" not in props.get("mimeType", ""):
                 continue
-            match = self.DRIVE_ID_RE.search(uri)
-            if match is None:
+            file_id = self._drive_id(uri)
+            if not file_id:
                 self.doc.warn("cannot read a Drive file id from {}; the raster is used", Shown(uri))
                 continue
-            file_id = match.group(1) or match.group(2)
             title = props.get("title", "")
             return Vector(
                 file_id=file_id,
