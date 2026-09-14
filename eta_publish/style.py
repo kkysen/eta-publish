@@ -201,10 +201,8 @@ TYPES = {
     "Drive": "Dr",
     "Lane": "Ln",
     "Court": "Ct",
-    "Terrace": "Ter",
     "Parkway": "Pkwy",
     "Turnpike": "Tpke",
-    "Plaza": "Plz",
     "Square": "Sq",
     "Expressway": "Expy",
     "Highway": "Hwy",
@@ -218,6 +216,10 @@ names it, and the reader who goes looking for the sign finds the sign.
 
 Singular only. There is no MTA spelling of `116th and 125th Streets`,
 and a rule that invents one would be worse than the one it corrects.
+
+No `Plaza`, which the MTA writes out: `Grand Army Plaza` is the station.
+No `Terrace` either, which is not a kind of street these reports name and
+not one the system has a station on.
 """
 
 WRITTEN = frozenset(TYPES.values())
