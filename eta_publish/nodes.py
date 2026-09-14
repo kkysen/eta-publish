@@ -320,7 +320,7 @@ class Cut:
 
 
 SPACE = "\u00b7"
-"""What one of a `Spaced` value's spaces is drawn as away from a terminal.
+"""What a space is drawn as inside a `Highlighted` value.
 
 A space is the one thing a warning cannot quote as itself: HTML collapses a
 run of them, `typst` sets it as one, and Markdown is read by something that
@@ -330,22 +330,22 @@ is not. The middle dot is what an editor draws a space with.
 
 
 @dataclass(frozen=True)
-class Spaced:
-    """A shown value with a run of spaces in it that has to be seen.
+class Highlighted:
+    """A shown value with the part it is about picked out of the middle of it.
 
-    Carried as its three pieces rather than as a string with the dots already
-    in it, so a terminal can put the spaces back and colour them, and so a
-    document that writes a middle dot of its own is never mistaken for one.
+    Carried as its three pieces rather than as one string, so a terminal can
+    mark the middle without having to find it again, and so a value holding
+    whatever the middle happens to be is never mistaken for it.
     """
 
     before: str
-    spaces: int
+    marked: str
     after: str
 
     @property
-    def drawn(self) -> str:
-        """The value with each of its spaces drawn, for anything but a terminal."""
-        return f"{self.before}{SPACE * self.spaces}{self.after}"
+    def value(self) -> str:
+        """The three pieces as the one value they read as."""
+        return f"{self.before}{self.marked}{self.after}"
 
 
 @dataclass(frozen=True)
@@ -377,7 +377,7 @@ class Listed:
         object.__setattr__(self, "items", items)
 
 
-type Span = str | Shown | Cut | Spaced
+type Span = str | Shown | Cut | Highlighted
 type Part = Span | Quoted | Listed
 
 
@@ -408,8 +408,8 @@ def _written(part: Part) -> str:
             return f"`{value}`"
         case Cut(value):
             return f"~~{value}~~"
-        case Spaced():
-            return f"`{part.drawn}`"
+        case Highlighted():
+            return f"`{part.value}`"
         case Quoted(spans):
             return "\n> " + "".join(_written(span) for span in spans)
         case Listed(items):

@@ -15,7 +15,7 @@ rather than quietly making the reports agree.
 import re
 from collections.abc import Iterator
 
-from .nodes import Document, Shown, Spaced, plain_text
+from .nodes import SPACE, Document, Highlighted, Shown, plain_text
 
 CONTEXT = 30
 """How much of the line to show on either side of what is being warned about.
@@ -53,7 +53,7 @@ should be able to tell the two apart without reading to the end of the line.
 """
 
 
-def _warn(doc: Document, template: str, *values: Shown | Spaced) -> None:
+def _warn(doc: Document, template: str, *values: Shown | Highlighted) -> None:
     """Warn about how something is written, said as one of these rather than
     as one of the document's other warnings."""
     doc.warn(PREFIX + template, *values)
@@ -119,7 +119,7 @@ def _check_spacing(doc: Document, text: str) -> None:
     for match in GAP.finditer(text):
         gap = match.group("gap")
         start, end = match.span("gap")
-        drawn = Spaced(_before(text, start), len(gap), _after(text, end))
+        drawn = Highlighted(_before(text, start), SPACE * len(gap), _after(text, end))
         if ENDS_A_SENTENCE.search(text[: match.start("gap")]):
             _warn(doc, f"a sentence should end with 1 space, not {len(gap)}: {{}}", drawn)
         else:

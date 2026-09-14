@@ -36,7 +36,7 @@ from rich.console import Console, Group, RenderableType
 from rich.table import Table
 from rich.text import Text
 
-from .nodes import Cut, Listed, Notice, Quoted, Shown, Spaced, Span, filled
+from .nodes import Cut, Highlighted, Listed, Notice, Quoted, Shown, Span, filled
 
 SHOWN = "cyan"
 """A value to go and find in the document, marked the way code is marked."""
@@ -49,13 +49,13 @@ not every terminal draws one, and a warning whose whole point is where a
 sentence stops cannot rest on a terminal that does not.
 """
 
-GAP = "reverse"
-"""A run of spaces a warning is about, left as spaces and made visible.
+MARKED = "black on yellow"
+"""The part of a value a warning is pointing at, highlighted.
 
-Reverse video rather than a colour: what has to be seen is the width of the
-gap, which nothing drawn inside it can say, and a background is the only
-mark a space can carry. Away from a terminal the spaces are drawn as middle
-dots instead, since a piped log is read by eye and not by a renderer.
+Yellow because it is a highlighter, and because reverse video is whatever
+the terminal's foreground happens to be: white on a white-on-black theme,
+which is a mark nobody reads as one. Black on top of it rather than the
+theme's own foreground, which can be too pale to sit on yellow.
 """
 
 LINK = "underline"
@@ -195,13 +195,13 @@ def _spans(spans: tuple[Span | Linked, ...], console: Console, plain: str = "") 
                 text.append(value if console.is_terminal else f"`{value}`", style=SHOWN)
             case Cut(value):
                 text.append(f"~~{value}~~", style=CUT)
-            case Spaced(before, spaces, after):
+            case Highlighted(before, marked, after):
                 if console.is_terminal:
                     text.append(before, style=SHOWN)
-                    text.append(" " * spaces, style=GAP)
+                    text.append(marked, style=MARKED)
                     text.append(after, style=SHOWN)
                 else:
-                    text.append(f"`{span.drawn}`", style=SHOWN)
+                    text.append(f"`{span.value}`", style=SHOWN)
             case Linked(value):
                 # Left exactly as written either way: a URL is already the
                 # thing it names, so there is nothing to take out on a
