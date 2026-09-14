@@ -36,7 +36,7 @@ from rich.console import Console, Group, RenderableType
 from rich.table import Table
 from rich.text import Text
 
-from .nodes import Cut, Listed, Notice, Quoted, Shown, Span, filled
+from .nodes import Cut, Listed, Notice, Quoted, Shown, Spaced, Span, filled
 
 SHOWN = "cyan"
 """A value to go and find in the document, marked the way code is marked."""
@@ -47,6 +47,15 @@ CUT = "dim red strike"
 The `~~` around it is kept as well as the strike:
 not every terminal draws one, and a warning whose whole point is where a
 sentence stops cannot rest on a terminal that does not.
+"""
+
+GAP = "reverse"
+"""A run of spaces a warning is about, left as spaces and made visible.
+
+Reverse video rather than a colour: what has to be seen is the width of the
+gap, which nothing drawn inside it can say, and a background is the only
+mark a space can carry. Away from a terminal the spaces are drawn as middle
+dots instead, since a piped log is read by eye and not by a renderer.
 """
 
 LINK = "underline"
@@ -186,6 +195,13 @@ def _spans(spans: tuple[Span | Linked, ...], console: Console, plain: str = "") 
                 text.append(value if console.is_terminal else f"`{value}`", style=SHOWN)
             case Cut(value):
                 text.append(f"~~{value}~~", style=CUT)
+            case Spaced(before, spaces, after):
+                if console.is_terminal:
+                    text.append(before, style=SHOWN)
+                    text.append(" " * spaces, style=GAP)
+                    text.append(after, style=SHOWN)
+                else:
+                    text.append(f"`{span.drawn}`", style=SHOWN)
             case Linked(value):
                 # Left exactly as written either way: a URL is already the
                 # thing it names, so there is nothing to take out on a

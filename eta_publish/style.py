@@ -15,7 +15,7 @@ rather than quietly making the reports agree.
 import re
 from collections.abc import Iterator
 
-from .nodes import Document, Shown, plain_text
+from .nodes import Document, Shown, Spaced, plain_text
 
 CONTEXT = 30
 """How much of the line to show on either side of what is being warned about.
@@ -25,19 +25,21 @@ and not so much that a warning about two spaces is a paragraph.
 """
 
 
-def _excerpt(text: str, start: int, end: int, shown: str | None = None) -> str:
-    """`text[start:end]` with enough either side of it to be found by eye.
+def _before(text: str, start: int) -> str:
+    """What runs up to `start`, with enough of it to be found by eye."""
+    lead = "..." if start > CONTEXT else ""
+    return lead + text[max(0, start - CONTEXT) : start]
 
-    `shown` stands in for the part being warned about, for a warning whose
-    subject cannot be seen where it is quoted: two spaces are one space in
-    every output but the log, so an excerpt of them says nothing by itself.
-    """
-    before = text[max(0, start - CONTEXT) : start]
-    after = text[end : end + CONTEXT]
-    lead = "..." if start > len(before) else ""
-    trail = "..." if end + len(after) < len(text) else ""
-    middle = text[start:end] if shown is None else shown
-    return f"{lead}{before}{middle}{after}{trail}"
+
+def _after(text: str, end: int) -> str:
+    """What follows `end`, with enough of it to be found by eye."""
+    trail = "..." if end + CONTEXT < len(text) else ""
+    return text[end : end + CONTEXT] + trail
+
+
+def _excerpt(text: str, start: int, end: int) -> str:
+    """`text[start:end]` with enough either side of it to be found by eye."""
+    return f"{_before(text, start)}{text[start:end]}{_after(text, end)}"
 
 
 PREFIX = "style: "
@@ -51,7 +53,7 @@ should be able to tell the two apart without reading to the end of the line.
 """
 
 
-def _warn(doc: Document, template: str, *values: Shown) -> None:
+def _warn(doc: Document, template: str, *values: Shown | Spaced) -> None:
     """Warn about how something is written, said as one of these rather than
     as one of the document's other warnings."""
     doc.warn(PREFIX + template, *values)
@@ -102,17 +104,6 @@ and the paren is not what the spaces come after.
 """
 
 
-SPACE = "\u00b7"
-"""What one of the offending spaces is shown as.
-
-A space is the one thing a warning cannot quote: HTML collapses the pair,
-`typst` sets it as one, and the reader is shown a line that looks correct
-and told it is not. The middle dot is what an editor draws a space with,
-and it is in the excerpt only, so the words either side are still the
-document's own to search for.
-"""
-
-
 def _check_spacing(doc: Document, text: str) -> None:
     """A gap of more than one space, described by what sits either side of it.
 
@@ -127,7 +118,8 @@ def _check_spacing(doc: Document, text: str) -> None:
     """
     for match in GAP.finditer(text):
         gap = match.group("gap")
-        drawn = Shown(_excerpt(text, match.start("gap"), match.end("gap"), SPACE * len(gap)))
+        start, end = match.span("gap")
+        drawn = Spaced(_before(text, start), len(gap), _after(text, end))
         if ENDS_A_SENTENCE.search(text[: match.start("gap")]):
             _warn(doc, f"a sentence should end with 1 space, not {len(gap)}: {{}}", drawn)
         else:

@@ -15,7 +15,7 @@ import pytest
 from rich.console import Console, RenderableType
 
 from eta_publish import console as log
-from eta_publish.nodes import Cut, Listed, Notice, Quoted, Shown
+from eta_publish.nodes import Cut, Listed, Notice, Quoted, Shown, Spaced
 
 KEYS = "https://archive.org/account/s3.php"
 
@@ -239,3 +239,28 @@ def test_a_title_is_a_title_and_not_markup() -> None:
     and a document is named by whoever named it rather than by this."""
     written = rendered(log.built("A [bold]Draft[/] :construction:", "b/x", [], plain()), plain())
     assert "A [bold]Draft[/] :construction:" in written
+
+
+GAPPED = Notice((Spaced("It is deep.", 2, "It is expensive."),))
+
+
+def test_a_gap_keeps_its_spaces_on_a_terminal() -> None:
+    """The width of the gap is the thing to see,
+    and nothing drawn inside it says how wide it is."""
+    console = terminal(width=log.UNWRAPPED)
+    written = _visible(rendered(log.notice(GAPPED, console), console))
+    assert "It is deep.  It is expensive." in written
+
+
+def test_a_gap_is_drawn_as_dots_off_a_terminal() -> None:
+    """A piped log has no reverse video to give it, and a pair of spaces in a
+    file is a pair of spaces nobody sees."""
+    assert "`It is deep.\u00b7\u00b7It is expensive.`" in rendered(
+        log.notice(GAPPED, plain()), plain()
+    )
+
+
+def test_the_gap_on_a_terminal_is_marked_rather_than_left_bare() -> None:
+    console = terminal(width=log.UNWRAPPED)
+    written = rendered(log.notice(GAPPED, console), console)
+    assert "\x1b[7m  \x1b[0m" in written

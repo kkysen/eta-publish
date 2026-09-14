@@ -319,6 +319,35 @@ class Cut:
     value: str
 
 
+SPACE = "\u00b7"
+"""What one of a `Spaced` value's spaces is drawn as away from a terminal.
+
+A space is the one thing a warning cannot quote as itself: HTML collapses a
+run of them, `typst` sets it as one, and Markdown is read by something that
+does the same, so the reader is shown a line that looks correct and told it
+is not. The middle dot is what an editor draws a space with.
+"""
+
+
+@dataclass(frozen=True)
+class Spaced:
+    """A shown value with a run of spaces in it that has to be seen.
+
+    Carried as its three pieces rather than as a string with the dots already
+    in it, so a terminal can put the spaces back and colour them, and so a
+    document that writes a middle dot of its own is never mistaken for one.
+    """
+
+    before: str
+    spaces: int
+    after: str
+
+    @property
+    def drawn(self) -> str:
+        """The value with each of its spaces drawn, for anything but a terminal."""
+        return f"{self.before}{SPACE * self.spaces}{self.after}"
+
+
 @dataclass(frozen=True)
 class Quoted:
     """A value given a line of its own.
@@ -348,7 +377,7 @@ class Listed:
         object.__setattr__(self, "items", items)
 
 
-type Span = str | Shown | Cut
+type Span = str | Shown | Cut | Spaced
 type Part = Span | Quoted | Listed
 
 
@@ -379,6 +408,8 @@ def _written(part: Part) -> str:
             return f"`{value}`"
         case Cut(value):
             return f"~~{value}~~"
+        case Spaced():
+            return f"`{part.drawn}`"
         case Quoted(spans):
             return "\n> " + "".join(_written(span) for span in spans)
         case Listed(items):
