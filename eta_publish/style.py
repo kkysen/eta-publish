@@ -55,6 +55,7 @@ def style(doc: Document) -> None:
     for text in _prose(doc):
         _check_sentence_spacing(doc, text)
         _check_dash_spacing(doc, text)
+        _check_organization_name(doc, text)
 
 
 # A sentence's terminator, whatever closes the quote or bracket around it,
@@ -101,4 +102,41 @@ def _check_dash_spacing(doc: Document, text: str) -> None:
         doc.warn(
             "a dash is written with a space beside it, and the house style closes it up: {}",
             Shown(_excerpt(text, match.start(), match.end())),
+        )
+
+
+SPELLED_OUT = "the Effective Transit Alliance"
+"""The name written out, which does take an article.
+
+Only the initials go bare, so a line spelling the name out is already right
+and this rule has nothing to say about it.
+"""
+
+ARTICLED = re.compile(r"\bthe[ \u00a0]+(?=ETA\b)", re.IGNORECASE)
+"""An article before the initials, which is what is being warned about.
+
+The initials themselves are left to the sentence: `ETA recommended` and
+`ETA members` are how both reports write it, and the only thing wrong with
+`the ETA` is the word in front. Case-insensitively, because a sentence
+opening `The ETA` is the same mistake as one saying it mid-line.
+"""
+
+
+def _check_organization_name(doc: Document, text: str) -> None:
+    """`the ETA`, where the initials are written on their own.
+
+    It is the name rather than a description of one, the way somebody writes
+    `NASA said` and not `the NASA said`, and both reports already say
+    `ETA recommended` and `ETA members` in the places they say it at all.
+    Spelled out it does take the article, which is why this looks only at
+    the initials.
+    """
+    for match in ARTICLED.finditer(text):
+        doc.warn(
+            "{} is written {}; it is {} on its own, and {} spelled out: {}",
+            Shown("ETA"),
+            Shown(text[match.start() : match.end() + len("ETA")]),
+            Shown("ETA"),
+            Shown(SPELLED_OUT),
+            Shown(_excerpt(text, match.start(), match.end() + len("ETA"))),
         )

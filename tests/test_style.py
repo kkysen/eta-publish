@@ -90,3 +90,34 @@ def test_a_hyphen_is_not_a_dash() -> None:
 
 def test_a_footnote_dash_is_quoted_rather_than_written() -> None:
     assert warnings(cited('Barbara Russo-Lennon, "Subway spots — the ad blitz."')) == []
+
+
+def test_the_initials_on_their_own_are_not_warned_about() -> None:
+    assert warnings(written("ETA recommended reducing the scope.")) == []
+
+
+def test_an_article_before_the_initials_is_warned_about() -> None:
+    found = warnings(written("For the same reason, the ETA recommended reducing the scope."))
+    assert len(found) == 1
+    assert "`the ETA`" in found[0]
+    assert "`the Effective Transit Alliance`" in found[0]
+
+
+def test_a_sentence_opening_with_it_is_the_same_mistake() -> None:
+    assert len(warnings(written("The ETA recommended reducing the scope."))) == 1
+
+
+def test_the_name_spelled_out_keeps_its_article() -> None:
+    assert warnings(written("The Effective Transit Alliance recommended reducing it.")) == []
+
+
+def test_a_possessive_is_still_the_initials() -> None:
+    assert len(warnings(written("Read the ETA’s response to the MTA."))) == 1
+
+
+def test_a_word_beginning_with_the_initials_is_not_them() -> None:
+    assert warnings(written("The ETAs quoted were all optimistic.")) == []
+
+
+def test_a_quoted_headline_is_left_as_it_was_published() -> None:
+    assert warnings(cited('Barbara Russo-Lennon, "What the ETA wants."')) == []
