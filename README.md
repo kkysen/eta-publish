@@ -589,7 +589,7 @@ and nothing in the index tells it from the real thing.
 
 ### Remembering what was not found
 
-A lookup that finds nothing is remembered for a week,
+An index lookup that finds nothing is remembered for a week,
 in `archive.json` in the user cache directory `platformdirs` finds
 (`~/.cache/eta-publish` on Linux) and never committed.
 The index takes seconds per source and sometimes half a minute,
