@@ -30,7 +30,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
-from threading import Lock
+from threading import Lock, RLock
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
@@ -356,7 +356,7 @@ scroll past, and a hundred and nine is the log.
 """
 
 _BAR: Progress | None = None
-_BAR_LOCK = Lock()
+_BAR_LOCK = RLock()
 """The one bar a build draws, however many reports are being built at once.
 
 `rich` draws by taking over the bottom of the screen, and two displays cannot
@@ -381,6 +381,10 @@ def _bar(console: Console) -> Progress:
             # Gone once it is done, because the line that follows says the
             # same thing in the past tense and two of them is one too many.
             transient=True,
+            # Redrawn where it is advanced instead, under the lock every
+            # other line is written under: a timer of its own is a writer
+            # nothing else can wait for.
+            auto_refresh=False,
         )
         _BAR.start()
     return _BAR
@@ -396,6 +400,8 @@ def _done(task: TaskID) -> None:
         if not _BAR.tasks:
             _BAR.stop()
             _BAR = None
+        else:
+            _BAR.refresh()
 
 
 @contextmanager
@@ -404,7 +410,8 @@ def progress(
 ) -> Iterator[Callable[[], None]]:
     """Say how far along something long is, and yield what to call as it goes.
 
-    Archiving a report is a hundred and nine questions to a service that
+    Checking a report against the archive is a hundred and nine questions
+    to a service that
     answers in its own time, and a build that says nothing for two minutes is
     one somebody kills. What it says is the same either way; how it says it
     depends on whether anybody is watching it happen.
@@ -438,10 +445,12 @@ def progress(
     with _BAR_LOCK:
         bar = _bar(console)
         task = bar.add_task(said, total=total)
+        bar.refresh()
 
     def advance() -> None:
-        with lock:
+        with lock, _BAR_LOCK:
             bar.advance(task)
+            bar.refresh()
 
     try:
         yield advance
@@ -506,5 +515,8 @@ def write(renderable: RenderableType | None, console: Console | None = None) -> 
     if renderable is None:
         return
     console = console or for_stream()
-    console.print(renderable, soft_wrap=not console.is_terminal)
+    # Under the bar's lock, so a line is never written into the gap between
+    # the bar erasing its row and drawing it again.
+    with _BAR_LOCK:
+        console.print(renderable, soft_wrap=not console.is_terminal)
     console.file.flush()

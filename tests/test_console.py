@@ -278,24 +278,24 @@ def _written(console: Console) -> str:
 def test_a_long_job_draws_a_bar_on_a_terminal() -> None:
     """A build that says nothing for two minutes is one somebody kills."""
     console = terminal()
-    with log.progress("asking the archive", 4, console) as along:
+    with log.progress("checking the archive", 4, console) as along:
         for _ in range(4):
             along()
         bar = log._BAR
         assert bar is not None
         (row,) = bar.tasks
-        assert (row.description, row.completed, row.total) == ("asking the archive", 4, 4)
-    assert "asking the archive" in _written(console)
+        assert (row.description, row.completed, row.total) == ("checking the archive", 4, 4)
+    assert "checking the archive" in _written(console)
 
 
 def test_every_report_shares_the_one_bar() -> None:
     """Two displays cannot both have the bottom of the screen,
     and a second one opening its own is what pushes the first one around."""
     console = terminal()
-    with log.progress("asking the archive", 2, console):
+    with log.progress("checking the archive", 2, console):
         first = log._BAR
         assert first is not None
-        with log.progress("asking the archive", 3, console):
+        with log.progress("checking the archive", 3, console):
             assert log._BAR is first
             assert len(first.tasks) == 2
         assert len(first.tasks) == 1
@@ -306,19 +306,19 @@ def test_a_long_job_says_where_it_is_in_a_file() -> None:
     """A redirected log has no in place to redraw,
     so it gets a line at every tenth instead of a hundred and nine of them."""
     console = plain()
-    with log.progress("asking the archive", 20, console) as along:
+    with log.progress("checking the archive", 20, console) as along:
         for _ in range(20):
             along()
     lines = _written(console).splitlines()
-    assert lines[0] == "· asking the archive: 2 of 20"
-    assert lines[-1] == "· asking the archive: 20 of 20"
+    assert lines[0] == "· checking the archive: 2 of 20"
+    assert lines[-1] == "· checking the archive: 20 of 20"
     assert len(lines) == 10
 
 
 def test_a_bar_leaves_nothing_behind_to_read() -> None:
     """The line after it says the same thing in the past tense."""
     console = terminal()
-    with log.progress("asking the archive", 2, console) as along:
+    with log.progress("checking the archive", 2, console) as along:
         along()
         along()
-    assert "asking the archive" not in _written(console).splitlines()[-1]
+    assert "checking the archive" not in _written(console).splitlines()[-1]
