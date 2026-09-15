@@ -194,6 +194,70 @@ def _check_organization_name(doc: Document, text: str) -> None:
         )
 
 
+EDGES = "\"'“”‘’()[]{}.,;:!?…"
+"""What a word is quoted, bracketed or punctuated with at either end.
+
+Stripped before a word is looked up, so `Street.` at the end of a sentence
+and `(88.5` inside a spec table are the words they are.
+Only the ends: `72,000` and `1.6` are one word each,
+and a hyphen is left alone because it joins two.
+"""
+
+
+def _words(text: str) -> list[tuple[str, int]]:
+    """Each run of non-space characters, with where it starts.
+
+    A style rule is about words next to each other: a number then its unit,
+    a name then its kind of street. Scanning them once and looking each up
+    says that directly, where a pattern has to describe what a word looks
+    like and then be walked back for every word that looks like one and is not.
+    """
+    words: list[tuple[str, int]] = []
+    start: int | None = None
+    for i, char in enumerate(text):
+        if char.isspace():
+            if start is not None:
+                words.append((text[start:i], start))
+                start = None
+        elif start is None:
+            start = i
+    if start is not None:
+        words.append((text[start:], start))
+    return words
+
+
+def _bare(word: str) -> str:
+    """`word` without whatever punctuation is around it."""
+    return word.strip(EDGES)
+
+
+def _at(word: str, start: int) -> int:
+    """Where the word itself starts, past anything quoting it."""
+    return start + len(word) - len(word.lstrip(EDGES))
+
+
+def _number(word: str) -> str | None:
+    """`word` as a number, or `None` where it is not one.
+
+    Commas and points are part of it: `72,000` and `1.6` are each one number.
+    """
+    bare = _bare(word)
+    if not bare or not any(c.isdigit() for c in bare):
+        return None
+    return bare if all(c.isdigit() or c in ",." for c in bare) else None
+
+
+ORDINALS = ("st", "nd", "rd", "th")
+
+
+def _counted(word: str) -> str | None:
+    """A number with its ordinal ending taken off: `125th` is `125`."""
+    for ending in ORDINALS:
+        if word.endswith(ending) and _number(word[: -len(ending)]):
+            return word[: -len(ending)]
+    return None
+
+
 TYPES = {
     "Street": "St",
     "Avenue": "Av",
@@ -307,24 +371,43 @@ Nothing in the text says which city a street is in,
 so a report naming another one adds it here.
 """
 
-STREET = re.compile(
-    rf"""
-    (?P<name>
-        (?:[A-Z][a-z]+[ ])*            # `Henry Hudson`, `Heping South`
-        (?:\d+(?:st|nd|rd|th)?|[A-Z][a-z]+)  # `125th`, `2`, `Fordham`
-    )
-    [ ]
-    (?P<kind>{"|".join(TYPES)})\b
-    """,
-    re.VERBOSE,
-)
-"""A street named the way a street is named: what it is called, then its kind.
 
-The kind is spelled as one of the ones there is something to say about, so a
-`125 St` already written that way never reaches the check at all.
-Capitalized, and separated by a real space, which is what keeps a URL's
-`72nd-street-station` and a filename's `96st_station` out of it.
-"""
+def _street_name(word: str) -> str | None:
+    """`word` as the name of a street, or `None` where it names nothing.
+
+    A number, written as digits or as the word for one, or a capitalized
+    word. `Fordham Road` and `125th Street` are named; `the Road` is not.
+    """
+    if _number(word) or _counted(word) or word in NUMBERED:
+        return word
+    return word if word[:1].isupper() and word[1:].islower() else None
+
+
+def _ends_a_phrase(word: str) -> bool:
+    """Whether the punctuation after `word` closes what it was part of.
+
+    `Ruling Grade: The Wrong Place` is a heading whose name does not run back
+    past the colon, which is what keeps `The` at the front of the phrase that
+    is then recognized as no street at all.
+    """
+    return word.rstrip(EDGES) != word
+
+
+def _named(words: list[tuple[str, int]], kind: int) -> int:
+    """Where the name ending at `kind` starts.
+
+    The run of capitalized words and numbers leading up to the kind of street,
+    stopping at whatever punctuation ends a phrase:
+    `Henry Hudson Parkway` is named for two of them.
+    """
+    first = kind
+    while (
+        first
+        and _street_name(_bare(words[first - 1][0])) is not None
+        and not _ends_a_phrase(words[first - 1][0])
+    ):
+        first -= 1
+    return first
 
 
 def _check_street_names(doc: Document, text: str) -> None:
@@ -334,24 +417,28 @@ def _check_street_names(doc: Document, text: str) -> None:
     for `125th Street` on a map finds `125 St`, which is the sign on the
     platform, the name in the app, and what the announcement says.
     """
-    for match in STREET.finditer(text):
-        name = match.group("name")
-        kind = match.group("kind")
-        # `The Second Avenue Subway` opens a sentence in prose that is about
-        # nothing else, and the street is `Second Avenue`: a spelled-out
-        # number ends the name, whatever words led up to it.
-        start = match.start() + len(name) - len(name.rpartition(" ")[2])
-        if name.rpartition(" ")[2] in NUMBERED:
-            name = name.rpartition(" ")[2]
-        else:
-            start = match.start()
-        written = f"{name} {kind}"
+    words = _words(text)
+    for i, (word, _) in enumerate(words):
+        kind = _bare(word)
+        if kind not in TYPES or not i:
+            continue
+        last = _street_name(_bare(words[i - 1][0]))
+        if last is None:
+            continue
+        first = _named(words, i)
+        phrase = " ".join(_bare(word) for word, _ in words[first : i + 1])
         if (
-            written in ELSEWHERE
-            or written.startswith(f"{COMMON_NOUN} ")
-            or written.endswith(NOT_A_STREET)
+            phrase in ELSEWHERE
+            or phrase.startswith(f"{COMMON_NOUN} ")
+            or phrase.endswith(NOT_A_STREET)
         ):
             continue
+        # A spelled-out number or a digit ends the name whatever led up to it:
+        # the street in `The Second Avenue Subway` is `Second Avenue`.
+        counted = last in NUMBERED or _number(last) or _counted(last)
+        name = last if counted else " ".join(_bare(word) for word, _ in words[first:i])
+        start = _at(*words[i - 1 if counted else first])
+        written = f"{name} {kind}"
         named = _named_project(text, start)
         if named is not None:
             # The whole phrase, so the warning is about the name the project
@@ -378,9 +465,6 @@ def _named_project(text: str, start: int) -> tuple[str, str] | None:
     return None
 
 
-ORDINAL = re.compile(r"(?<=\d)(?:st|nd|rd|th)\b")
-
-
 def _mta(name: str, kind: str) -> str:
     """`name` and `kind` written the way the MTA writes them.
 
@@ -388,7 +472,7 @@ def _mta(name: str, kind: str) -> str:
     and it carries no ordinal suffix: `125th Street` and `Second Avenue`
     are `125 St` and `2 Av`.
     """
-    return f"{NUMBERED.get(name, ORDINAL.sub('', name))} {TYPES[kind]}"
+    return f"{NUMBERED.get(name) or _counted(name) or name} {TYPES[kind]}"
 
 
 UNITS = {
