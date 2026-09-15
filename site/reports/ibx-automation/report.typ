@@ -50,7 +50,11 @@
     [style: #raw("5-min") should be #raw("5 min"), with no hyphen: #raw("...with 2-min peak headways, not 5-min peak headways. And with a 92%...")],
     [style: #raw("72,000 lbs") should be #raw("72,000 lb"): #raw("weight: 72,000 lbs per 65 ft AW0 car")],
     [style: #raw("72,000 lbs") should be #raw("72,000 lb"): #raw("AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m")],
+    [style: #raw("88.5 kmh") should be #raw("88.5 km/h"): #raw("speed: 55 mph (88.5 kmh) service, 65 mph (104.6 kmh) ...")],
+    [style: #raw("104.6 kmh") should be #raw("104.6 km/h"): #raw("...h (88.5 kmh) service, 65 mph (104.6 kmh) design")],
     [style: #raw("175 lbs") should be #raw("175 lb"): #raw("AW0 weight/length: (232 t - (175 lbs * 780)) / (19.05 m * 4) = 223...")],
+    [style: #raw("90 kmh") should be #raw("90 km/h"): #raw("speed: 90 kmh service (100 kmh design)")],
+    [style: #raw("100 kmh") should be #raw("100 km/h"): #raw("speed: 90 kmh service (100 kmh design)")],
   ),
 )
 
