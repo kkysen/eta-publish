@@ -229,7 +229,11 @@ def archive_cache_path() -> Path:
     override = os.environ.get(ARCHIVE_CACHE)
     if override:
         return Path(override)
-    return platformdirs.user_cache_path("eta-publish") / "archive.json"
+    # `eta_publish` spelled the way the distribution and the command are,
+    # which `packages_distributions` cannot say of an editable install.
+    return (
+        platformdirs.user_cache_path(__name__.partition(".")[0].replace("_", "-")) / "archive.json"
+    )
 
 
 def _cached() -> dict[str, dict[str, str]]:
