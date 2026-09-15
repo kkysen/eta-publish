@@ -25,14 +25,16 @@ holds no escape sequences to search past and no line broken mid-sentence.
 """
 
 import sys
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Lock
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
+from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn
 from rich.table import Table
 from rich.text import Text
 
@@ -319,6 +321,67 @@ def note(template: str, *values: Span | Linked, console: Console | None = None) 
     text.append("· ", style="dim")
     text.append_text(_sentence(template, values, console, plain="dim"))
     return text
+
+
+STEP = 10
+"""How often a build with no terminal says how far along it is, as a percentage.
+
+A bar redraws in place and costs a terminal nothing. A redirected log has no
+in place, so it gets a line at every tenth instead: ten lines is a thing to
+scroll past, and a hundred and nine is the log.
+"""
+
+
+@contextmanager
+def progress(
+    template: str, total: int, console: Console | None = None
+) -> Iterator[Callable[[], None]]:
+    """Say how far along something long is, and yield what to call as it goes.
+
+    Archiving a report is a hundred and nine questions to a service that
+    answers in its own time, and a build that says nothing for two minutes is
+    one somebody kills. What it says is the same either way; how it says it
+    depends on whether anybody is watching it happen.
+
+    The returned callable is called from the threads doing the work,
+    so what it counts is kept under a lock.
+    """
+    console = console or for_stream()
+    counted = 0
+    lock = Lock()
+    if not console.is_terminal:
+        said = 0
+
+        def along() -> None:
+            nonlocal counted, said
+            with lock:
+                counted += 1
+                percent = counted * 100 // total
+                if percent >= said + STEP or counted == total:
+                    said = percent - percent % STEP
+                    write(note(f"{template}: {counted} of {total}", console=console), console)
+
+        yield along
+        return
+
+    with Progress(
+        # The words first, as every other line of a build reads: what is
+        # happening, then how far along it is.
+        TextColumn("  [dim]{task.description}[/dim]"),
+        BarColumn(bar_width=24),
+        TaskProgressColumn(),
+        console=console,
+        # Gone once it is done, because the line that follows says the same
+        # thing in the past tense and two of them is one too many.
+        transient=True,
+    ) as bar:
+        task = bar.add_task(template, total=total)
+
+        def advance() -> None:
+            with lock:
+                bar.advance(task)
+
+        yield advance
 
 
 def warning(template: str, *values: Span | Linked, console: Console | None = None) -> Text:

@@ -397,7 +397,8 @@ def archive_sources(doc: Document) -> None:
     if not wanted:
         return
     console.write(console.note(f"looking up {plural(len(wanted), 'source')} in the archive"))
-    found, submitted = capture(doc)
+    with console.progress("asking the archive", len(wanted)) as along:
+        found, submitted = capture(doc, along=along)
     # A list of clauses and the values in them, joined once at the end: a
     # value is handed to the log as the value it is, so a clause is a template
     # and its values rather than a finished string.
