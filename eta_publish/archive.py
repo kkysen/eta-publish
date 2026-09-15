@@ -180,8 +180,8 @@ with no archive forever.
 
 POLL_EVERY = 5
 
-LOOKUP_CACHE_DAYS = 7
-"""How long a lookup that found nothing stands before it is asked again.
+INDEX_CACHE_DAYS = 7
+"""How long an index lookup that found nothing stands before it is asked again.
 
 What changes a `no capture` answer is somebody else archiving the page, which
 happens on the scale of weeks if it happens at all. A week of not re-asking is
@@ -207,7 +207,7 @@ runs, this file with it, so two Pages runs inside an hour share it too.
 ARCHIVE_CACHE = "ETA_ARCHIVE_CACHE"
 """Where to keep the cache instead, named like `ETA_TOKEN` and for tests."""
 
-LIFETIMES = {"index": LOOKUP_CACHE_DAYS * 24 * 60 * 60, "replay": REPLAY_CACHE_SECONDS}
+LIFETIMES = {"index": INDEX_CACHE_DAYS * 24 * 60 * 60, "replay": REPLAY_CACHE_SECONDS}
 """How many seconds a lookup of each kind that found nothing stands for."""
 
 
@@ -506,7 +506,7 @@ def capture(
     answered = list(zip(wanted, results, strict=True))
     _remember(
         {
-            "index": [url for url, result in answered if result.nothing],
+            "index": [url for url, result in answered if result.unindexed],
             "replay": [url for url, result in answered if result.unserved],
         }
     )
@@ -539,7 +539,7 @@ class Lookup:
     `already` says the capture was there to be found, which is the half of this
     that needs no account.
 
-    `nothing` is the third case and the reason this is not a pair: the index
+    `unindexed` is the third case and the reason this is not a pair: the index
     answered, and the answer was that there is no capture. That is worth
     remembering for a week so the next build does not ask again, and it is not
     the same as an answer that never came.
@@ -547,7 +547,7 @@ class Lookup:
 
     archived: Archived | None = None
     already: bool = False
-    nothing: bool = False
+    unindexed: bool = False
     unserved: bool = False
     """The replay was asked and served nothing, which stands for an hour."""
 
@@ -571,10 +571,10 @@ def _archive(
         if found is not None:
             return Lookup(found, already=True)
         if headers is None:
-            # `nothing` only where the index was the one that said so. Where it
+            # `unindexed` only where the index was the one that said so. Where it
             # was held back, this build learned nothing, and writing today's
             # date would renew the entry on every build and expire it never.
-            return Lookup(nothing=index, unserved=replay)
+            return Lookup(unindexed=index, unserved=replay)
         return Lookup(_patiently(lambda: _submit(http, headers, url)))
     except Busy, requests.RequestException:
         # Nothing about the source. A read that timed out, a connection that
