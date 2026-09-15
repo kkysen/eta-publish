@@ -39,6 +39,7 @@ def warning_markup(
     text: Callable[[str], str],
     quote: Callable[[str], str] | None = None,
     bullets: Callable[[list[str]], str] | None = None,
+    marked: Callable[[str, str, str], str] | None = None,
 ) -> str:
     """`notice` rendered: its shown values, its quoted and listed lines, the rest as `text`.
 
@@ -48,6 +49,11 @@ def warning_markup(
 
     An emitter that cannot set a quotation or a list apart passes neither,
     and gets the lines run together as the text they are.
+
+    `marked` is the same bargain for the part of a value a warning is pointing
+    at: an emitter that can draw a highlight takes the three pieces and draws
+    one, and an emitter that cannot gets the value whole, with the middle dot
+    standing in for what it cannot show.
     """
     out: list[str] = []
     for part in notice.parts:
@@ -57,18 +63,27 @@ def warning_markup(
             case Cut(value):
                 out.append(cut(value))
             case Highlighted():
-                # As one value: none of these formats has a mark to put on
-                # part of one, and the pieces are for a terminal that has.
-                out.append(code(part.value))
+                out.append(_highlighted(part, code, marked))
             case Quoted(spans):
-                rendered = _spans(spans, code, cut, text)
+                rendered = _spans(spans, code, cut, text, marked)
                 out.append(quote(rendered) if quote is not None else rendered)
             case Listed(items):
-                lines = [_spans(item, code, cut, text) for item in items]
+                lines = [_spans(item, code, cut, text, marked) for item in items]
                 out.append(bullets(lines) if bullets is not None else "".join(lines))
             case _:
                 out.append(text(part))
     return "".join(out)
+
+
+def _highlighted(
+    part: Highlighted,
+    code: Callable[[str], str],
+    marked: Callable[[str, str, str], str] | None,
+) -> str:
+    """One highlighted value, marked where the emitter can mark part of one."""
+    if marked is None:
+        return code(part.value)
+    return marked(part.before, part.marked, part.after)
 
 
 def _spans(
@@ -76,6 +91,7 @@ def _spans(
     code: Callable[[str], str],
     cut: Callable[[str], str],
     text: Callable[[str], str],
+    marked: Callable[[str, str, str], str] | None = None,
 ) -> str:
     """The spans of one line, which hold no lines of their own."""
     out = []
@@ -86,7 +102,7 @@ def _spans(
             case Cut(value):
                 out.append(cut(value))
             case Highlighted():
-                out.append(code(span.value))
+                out.append(_highlighted(span, code, marked))
             case _:
                 out.append(text(span))
     return "".join(out)

@@ -71,6 +71,13 @@
    dark one, so one rule serves both. */
 .eta-report code { background: rgba(127, 127, 127, .15); border-radius: .25em;
                    padding: .1em .3em; font-size: .9em; }
+/* The part of a value a warning is pointing at. Two spaces are one space in a
+   browser however they are written, so the dots inside say how many there are
+   and this says which characters they are. Coloured here rather than left to
+   the browser's own `mark`, which is black on yellow and unreadable against a
+   dark page. */
+.eta-report .warnings mark { background: rgba(230, 180, 0, .35); color: inherit;
+                             border-radius: .2em; }
 /* A value the warning is about, indented so that a long one is read as the
    quotation it is and not as more of the sentence above it. */
 .eta-report .warnings blockquote { margin: .5em 0 .5em 1em; padding-left: .8em;
