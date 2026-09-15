@@ -29,6 +29,7 @@ from urllib.parse import urlsplit
 
 import requests
 
+from .checks import plural
 from .nodes import Archived, Document, document_url
 
 ARCHIVES_JSON = "archives.json"
@@ -368,8 +369,9 @@ def capture(
     def archive(url: str) -> Lookup:
         return _archive(http, headers, url, index=not _fresh(lately.get(url, "")))
 
-    with ThreadPoolExecutor(max_workers=MAX_AT_ONCE) as pool:
-        asked = [pool.submit(archive, url) for url in wanted]
+    pool = ThreadPoolExecutor(max_workers=MAX_AT_ONCE)
+    asked = [pool.submit(archive, url) for url in wanted]
+    try:
         if along is not None:
             # As each answer arrives rather than as the list is read back:
             # the results are read in document order, which says nothing
@@ -377,6 +379,18 @@ def capture(
             for _ in as_completed(asked):
                 along()
         results = [answer.result() for answer in asked]
+    except KeyboardInterrupt:
+        # Cancelled and not waited on. Every request here has a timeout in
+        # the tens of seconds, so waiting is a minute of a build that has
+        # been told to stop, and the person who said so says it again and
+        # again into what looks like nothing happening.
+        pool.shutdown(wait=False, cancel_futures=True)
+        raise Stopped(
+            f"asked about {sum(answer.done() for answer in asked)} of "
+            f"{plural(len(wanted), 'source')}, and was waiting on "
+            + ", ".join(url for url, answer in zip(wanted, asked, strict=True) if answer.running())
+        ) from None
+    pool.shutdown()
     # Written in document order rather than as each answer arrives, so that two
     # builds that captured the same sources write the same file.
     found = submitted = 0
@@ -469,6 +483,15 @@ def _archive(
 
 class Busy(RuntimeError):
     """The service declined to answer right now, which is not about the page."""
+
+
+class Stopped(KeyboardInterrupt):
+    """Somebody stopped the build, and this says what it was waiting on.
+
+    A `KeyboardInterrupt` still, so nothing treats it as a failure of the
+    report: what a run that was told to stop should print is where it had
+    got to, not a traceback through the machinery that was waiting.
+    """
 
 
 def _checked(response: requests.Response) -> requests.Response:

@@ -626,3 +626,23 @@ def test_being_told_to_slow_down_is_asked_again(
     doc = cites("https://a.example/1")
     assert archive.capture(doc, session=Relenting()) == (1, 0)
     assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
+
+
+def test_being_stopped_says_what_it_was_waiting_on(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`Ctrl+C` in the middle of the archiving is answered with how far it got
+    and which sources it is still asking about, rather than with a traceback
+    through the machinery that was waiting."""
+    doc = cites("https://example.com/one", "https://example.com/two")
+
+    def looked_up(*_args: object, **_kwargs: object) -> archive.Lookup:
+        return archive.Lookup()
+
+    monkeypatch.setattr(archive, "_archive", looked_up)
+
+    def interrupt() -> None:
+        raise KeyboardInterrupt
+
+    with pytest.raises(archive.Stopped) as stopped:
+        archive.capture(doc, along=interrupt)
+    assert "of 2 sources" in str(stopped.value)
+    assert isinstance(stopped.value, KeyboardInterrupt)
