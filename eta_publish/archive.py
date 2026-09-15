@@ -24,7 +24,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from threading import Lock
+from threading import Lock, Semaphore
 from urllib.parse import urlsplit
 
 import requests
@@ -100,15 +100,47 @@ Out of the environment rather than a file in the repository, because they are
 credentials and this repository is public.
 """
 
-MAX_AT_ONCE = 2
-"""How many sources to be asking about at once.
+INDEX_AT_ONCE = 2
+"""How many index queries to have in flight, which is the strict limit.
 
-Save Page Now allows an authenticated account twelve captures in flight. Well
-under it, because the index is the part that runs on every build and it is
-stricter: 81 lookups four at a time answered `429` to nearly all of them, and
+81 lookups four at a time answered `429` to nearly all of them, and the index
 went on refusing single queries two seconds apart for minutes afterwards. What
 that build recorded was that 72 of 81 sources were unarchived, when what had
 happened was that it had been told to stop asking.
+"""
+
+SUBMIT_AT_ONCE = 12
+"""How many captures to ask for at once, which is what the account allows.
+
+Save Page Now gives an authenticated account twelve in flight, and a capture
+is the slowest thing here: a page fetch somebody else queues, waited on for up
+to `CAPTURE_TIMEOUT`. Sixteen of those two at a time is eight waits long, and
+twelve at a time is two.
+
+Asking for a thirteenth is answered rather than punished: the service says the
+session limit is reached, which `_submitted` reads as being told to wait
+rather than as anything about the page.
+"""
+
+REPLAY_AT_ONCE = 8
+"""How many replay lookups to have in flight.
+
+Not a limit the archive asks for; a limit on how much of it to ask for at
+once. This is the part that runs on every build for every source without a
+capture, and it is two `HEAD`s of about 200 ms, so the width decides the
+wait: SAS West's sixteen take two round trips at eight and eight at two.
+
+Eight rather than one thread a source, which for SAS West would be 83 of them
+opening 166 requests on `web.archive.org` at once. Nothing here is in enough
+of a hurry to find out what that does.
+"""
+
+_INDEXING = Semaphore(INDEX_AT_ONCE)
+_SUBMITTING = Semaphore(SUBMIT_AT_ONCE)
+"""The two narrow gates, held for the length of one question each.
+
+A gate rather than a smaller pool: what has to be limited is the asking, and
+the thread that is waiting to ask is not the thing the limit is about.
 """
 
 PATIENCE = (5, 20, 60)
@@ -369,7 +401,7 @@ def capture(
     def archive(url: str) -> Lookup:
         return _archive(http, headers, url, index=not _fresh(lately.get(url, "")))
 
-    pool = ThreadPoolExecutor(max_workers=MAX_AT_ONCE)
+    pool = ThreadPoolExecutor(max_workers=REPLAY_AT_ONCE)
     asked = [pool.submit(archive, url) for url in wanted]
     try:
         if along is not None:
@@ -463,7 +495,7 @@ def _archive(
             # was held back, this build learned nothing, and writing today's
             # date would renew the entry on every build and expire it never.
             return Lookup(nothing=index)
-        return Lookup(_submit(http, headers, url))
+        return Lookup(_patiently(lambda: _submit(http, headers, url)))
     except Busy, requests.RequestException:
         # Nothing about the source. A read that timed out, a connection that
         # dropped, a name that would not resolve: all of them are about getting
@@ -683,7 +715,16 @@ def _indexed(http: requests.Session, url: str) -> Archived | None:
     `200` with a login wall, or with a site's own "page not found", is a
     capture of a page that loaded, and nothing in the index tells it from the
     real thing.
+
+    Under `_INDEXING`, which is the limit this whole module is careful about:
+    it is held for this question and not for the replay lookup that came first.
     """
+    with _INDEXING:
+        return _index_answer(http, url)
+
+
+def _index_answer(http: requests.Session, url: str) -> Archived | None:
+    """What the index said, asked for while holding the gate."""
     response = _checked(
         http.get(
             INDEX,
@@ -716,11 +757,23 @@ def _submit(http: requests.Session, headers: dict[str, str], url: str) -> Archiv
     Save Page Now answers with a job rather than a snapshot, so the wait is the
     ordinary shape of this rather than a retry.
     """
+    with _SUBMITTING:
+        return _submitted(http, headers, url)
+
+
+def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Archived:
+    """Ask for the capture and wait for it, while holding the gate."""
     started = _checked(http.post(SAVE, headers=headers, data={"url": url}, timeout=60))
     answer = started.json()
     job = answer.get("job_id")
     if not job:
-        return Archived(timestamp=today(), error=_refused(answer))
+        refused = _refused(answer)
+        if SESSION_LIMIT in refused:
+            # Being told the account already has twelve captures going is a
+            # fact about the build, not about the page: recorded as a failure
+            # it would leave this source with no archive forever.
+            raise Busy(refused)
+        return Archived(timestamp=today(), error=refused)
     deadline = time.monotonic() + CAPTURE_TIMEOUT
     while time.monotonic() < deadline:
         time.sleep(POLL_EVERY)
@@ -732,6 +785,14 @@ def _submit(http: requests.Session, headers: dict[str, str], url: str) -> Archiv
         if status == "error":
             return Archived(timestamp=today(), error=_refused(state))
     return Archived(timestamp=today(), error=f"no answer within {CAPTURE_TIMEOUT} seconds")
+
+
+SESSION_LIMIT = "session"
+"""What the service says when the account already has twelve captures going.
+
+`error:user-session-limit`, which is the one refusal that is about how fast
+this build is asking rather than about the page it asked for.
+"""
 
 
 def _refused(answer: dict[str, object]) -> str:
