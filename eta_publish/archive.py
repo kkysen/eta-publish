@@ -123,12 +123,13 @@ session limit is reached, which `_submitted` reads as being told to wait
 rather than as anything about the page.
 """
 
-REPLAY_AT_ONCE = 8
+REPLAY_AT_ONCE = 10
 """How many replay lookups to have in flight, and how wide the connection pool is.
 
 Measured, over all 150 documents the five reports cite:
 
 - 8 at once: every one answered, in 20.5 seconds.
+- 10 at once: every one answered, the same answers, in 15.1 seconds.
 - 32 at once: 27 answered and 123 could not connect.
 - 150 at once: none answered.
 
@@ -138,7 +139,7 @@ at all, a single request included, for a while afterwards. That is worse than a
 since both are the same host.
 
 Only sources without a capture are asked on a build, which is sixteen at most
-today, so eight is two round trips of waiting rather than the twenty seconds
+today, so ten is two round trips of waiting rather than the fifteen seconds
 above.
 """
 
@@ -309,7 +310,7 @@ def _session() -> requests.Session:
 
     `requests` keeps ten a host and discards the rest, so a pool wider than
     that pays a fresh TLS handshake for every request past the tenth, which
-    takes longer than the `HEAD` it is for. At eight that changes nothing; it
+    takes longer than the `HEAD` it is for. At ten that changes nothing; it
     is here so that whoever widens `REPLAY_AT_ONCE` widens the pool with it,
     rather than finding out from a log full of discarded connections.
     """
