@@ -646,3 +646,35 @@ def test_being_stopped_says_what_it_was_waiting_on(monkeypatch: pytest.MonkeyPat
         archive.capture(doc, along=interrupt)
     assert "of 2 sources" in str(stopped.value)
     assert isinstance(stopped.value, KeyboardInterrupt)
+
+
+def test_a_session_limit_is_waited_out_rather_than_written_down(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Twelve captures already going is a fact about the build, not the page:
+    recorded as a failure it would leave the source with no archive forever."""
+    monkeypatch.setattr(archive, "PATIENCE", (0, 0, 0))
+    answers = [
+        {"status": "error", "status_ext": "error:user-session-limit"},
+        {"job_id": "job-1"},
+        {"status": "success", "timestamp": "20240503123456"},
+    ]
+
+    class Limiting(requests.Session):
+        @override
+        def request(self, *args: object, **kwargs: object) -> requests.Response:
+            response = requests.Response()
+            response.status_code = 200
+            response.url = "https://web.archive.org/save"
+            response._content = json.dumps(answers.pop(0) if answers else {}).encode()
+            return response
+
+    def instantly(_seconds: float) -> None:
+        return None
+
+    monkeypatch.setattr(archive.time, "sleep", instantly)
+    # Through `_patiently`, which is how `_archive` asks: the refusal is a
+    # `Busy`, and waiting it out is what the caller does with one.
+    session, headers = Limiting(), {"Authorization": "LOW a:b"}
+    captured = archive._patiently(lambda: archive._submit(session, headers, "https://a.example/1"))
+    assert (captured.error, captured.timestamp) == ("", "20240503123456")
