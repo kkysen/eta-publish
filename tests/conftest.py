@@ -73,6 +73,4 @@ def _fresh_lookup_cache(
     """
     from eta_publish.archive import ARCHIVE_CACHE
 
-    monkeypatch.setenv(
-        ARCHIVE_CACHE, str(tmp_path_factory.mktemp("cache") / "archive-lookups.json")
-    )
+    monkeypatch.setenv(ARCHIVE_CACHE, str(tmp_path_factory.mktemp("cache") / "archive.json"))

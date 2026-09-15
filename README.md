@@ -590,7 +590,7 @@ and nothing in the index tells it from the real thing.
 ### Remembering what was not found
 
 A lookup that finds nothing is remembered for a week,
-in `~/.cache/eta-publish/archive-lookups.json` and never committed.
+in `~/.cache/eta-publish/archive.json` and never committed.
 The index takes seconds per source and sometimes half a minute,
 so a report with twenty unarchived sources spent minutes on every build
 to write down the same nothing;
@@ -606,7 +606,7 @@ because a runner starts with nothing and would re-ask about all of them.
 A build that has [Save Page Now keys](#archiving-new-sources-optional) skips the cache:
 that one submits a capture instead, and the source leaves the record for good.
 
-The replay is remembered too, for an hour, in `replay-lookups.json` beside it.
+The replay is remembered too, for an hour, in the same file.
 It is the half that notices a capture somebody else has just made,
 so it cannot be held back for a week the way the index is;
 an hour is long enough that rebuilding twice in a row asks nothing twice.
