@@ -13,7 +13,7 @@
     [no #raw("Title")-styled paragraph, so the document name #raw("IBX Automation") is being used as the headline; style the headline as #raw("Title") in the doc],
     [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
     [unfinished text in the document: #raw("TODO didn’t finish")],
-    [4 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [7 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [1 comment thread still open on this tab],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
