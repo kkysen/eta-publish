@@ -31,6 +31,7 @@ import platformdirs
 import requests
 from requests.adapters import HTTPAdapter
 
+from . import PACKAGE_NAME
 from .checks import plural
 from .nodes import Archived, Document, document_url
 
@@ -229,11 +230,7 @@ def archive_cache_path() -> Path:
     override = os.environ.get(ARCHIVE_CACHE)
     if override:
         return Path(override)
-    # `eta_publish` spelled the way the distribution and the command are,
-    # which `packages_distributions` cannot say of an editable install.
-    return (
-        platformdirs.user_cache_path(__name__.partition(".")[0].replace("_", "-")) / "archive.json"
-    )
+    return platformdirs.user_cache_path(PACKAGE_NAME) / "archive.json"
 
 
 def _cached() -> dict[str, dict[str, str]]:
