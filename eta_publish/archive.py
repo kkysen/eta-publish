@@ -284,7 +284,7 @@ def _remember(found_nothing: dict[str, list[str]]) -> None:
             kind: {url: when for url, when in entries.items() if _stands(kind, when)}
             for kind, entries in _cached().items()
         }
-        now = _iso(datetime.now(UTC))
+        now = datetime.now(UTC).isoformat(timespec="seconds")
         for kind, urls in found_nothing.items():
             known[kind].update(dict.fromkeys(urls, now))
         path = archive_cache_path()
@@ -303,20 +303,18 @@ def _remember(found_nothing: dict[str, list[str]]) -> None:
             pass
 
 
-def _iso(when: datetime) -> str:
-    """A moment as ISO 8601, in UTC, to the second."""
-    return when.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
 def _stands(kind: str, when: str) -> bool:
     """Whether a lookup of this kind made at `when` still stands.
 
     A time nothing can read was not recent, so the source is asked about
-    again, which is the harmless direction.
+    again, which is the harmless direction. Nor was one with no zone, which
+    cannot be compared with now.
     """
     try:
-        asked = datetime.strptime(when, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
+        asked = datetime.fromisoformat(when)
     except ValueError:
+        return False
+    if asked.tzinfo is None:
         return False
     return (datetime.now(UTC) - asked).total_seconds() < LIFETIMES[kind]
 
