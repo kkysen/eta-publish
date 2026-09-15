@@ -15,6 +15,8 @@ so the common case and the real case stay on the same code.
 Each report lands under the path its own front matter gives it.
 """
 
+import os
+import sys
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -234,8 +236,27 @@ def add(
     console.write(console.added(reports, added.name or "", added.tab or "", log), log)
 
 
+STOPPED = 130
+"""What a program that was interrupted exits with, by long convention."""
+
+
 def main() -> None:
-    app()
+    try:
+        app()
+    except KeyboardInterrupt as stopped:
+        log = console.for_stream()
+        # What it was waiting on, where whatever raised this knew:
+        # `Ctrl+C` in the middle of the archiving is answered with how far it
+        # had got and which sources it was still asking about.
+        console.write(console.note("{}", str(stopped) or "stopped"), log)
+        sys.stdout.flush()
+        sys.stderr.flush()
+        # Not a `return`, which would run the pools' own exit hook: it joins
+        # every worker thread, and a worker waiting a minute on a request the
+        # build no longer wants is a minute of nothing happening,
+        # into which somebody presses `Ctrl+C` twice more and gets a
+        # traceback through the joining rather than through the waiting.
+        os._exit(STOPPED)
 
 
 if __name__ == "__main__":

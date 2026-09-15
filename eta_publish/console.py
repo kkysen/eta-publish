@@ -34,7 +34,14 @@ from threading import Lock
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
-from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn
+from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
+    Progress,
+    TaskID,
+    TextColumn,
+    TimeElapsedColumn,
+)
 from rich.table import Table
 from rich.text import Text
 
@@ -78,6 +85,19 @@ and a warning searched for is one that has to be on one line to be found.
 """
 
 
+_CONSOLES: dict[IO[str], Console] = {}
+"""One console per stream, so everything written to a stream goes through one.
+
+`rich` draws a bar by taking over the bottom of the screen, and it can only
+do that for lines it is given: a line printed through a second console of its
+own knows nothing about the bar and lands on top of it.
+
+Kept by stream rather than one for the process, because `pytest` replaces the
+stream after this module is imported, and a console built on the old one
+writes where nothing is looking.
+"""
+
+
 def for_stream(stream: IO[str] | None = None) -> Console:
     """How to write to that stream.
 
@@ -93,10 +113,14 @@ def for_stream(stream: IO[str] | None = None) -> Console:
     warned about keeps its colon and its word.
     """
     file = stream or sys.stderr
+    kept = _CONSOLES.get(file)
+    if kept is not None:
+        return kept
     asked = Console(file=file, highlight=False, markup=False, emoji=False)
-    if asked.is_terminal:
-        return asked
-    return Console(file=file, width=UNWRAPPED, highlight=False, markup=False, emoji=False)
+    if not asked.is_terminal:
+        asked = Console(file=file, width=UNWRAPPED, highlight=False, markup=False, emoji=False)
+    _CONSOLES[file] = asked
+    return asked
 
 
 _ABOUT: ContextVar[str | None] = ContextVar("about", default=None)
@@ -331,6 +355,48 @@ in place, so it gets a line at every tenth instead: ten lines is a thing to
 scroll past, and a hundred and nine is the log.
 """
 
+_BAR: Progress | None = None
+_BAR_LOCK = Lock()
+"""The one bar a build draws, however many reports are being built at once.
+
+`rich` draws by taking over the bottom of the screen, and two displays cannot
+both have it: a second report opening its own bar is what overwrites the
+first one's line and pushes everything else around. One bar with a row per
+report says the same thing and is the only one drawing.
+"""
+
+
+def _bar(console: Console) -> Progress:
+    """The build's bar, started if this is the first thing to want one."""
+    global _BAR
+    if _BAR is None:
+        _BAR = Progress(
+            # The words first, as every other line of a build reads: what is
+            # happening, then how far along it is, then how long it has been.
+            TextColumn("  [dim]{task.description}[/dim]"),
+            BarColumn(bar_width=24),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            console=console,
+            # Gone once it is done, because the line that follows says the
+            # same thing in the past tense and two of them is one too many.
+            transient=True,
+        )
+        _BAR.start()
+    return _BAR
+
+
+def _done(task: TaskID) -> None:
+    """Take that row off the bar, and the bar away when it holds no more."""
+    global _BAR
+    with _BAR_LOCK:
+        if _BAR is None:
+            return
+        _BAR.remove_task(task)
+        if not _BAR.tasks:
+            _BAR.stop()
+            _BAR = None
+
 
 @contextmanager
 def progress(
@@ -343,45 +409,44 @@ def progress(
     one somebody kills. What it says is the same either way; how it says it
     depends on whether anybody is watching it happen.
 
+    The elapsed time is on the row because the count is not enough to tell a
+    slow answer from a stuck one: two sources in flight and a service taking
+    a minute over each is a bar that sits at 24% and is working.
+
     The returned callable is called from the threads doing the work,
     so what it counts is kept under a lock.
     """
     console = console or for_stream()
     counted = 0
     lock = Lock()
+    said = f"{_ABOUT.get()} · {template}" if _ABOUT.get() else template
     if not console.is_terminal:
-        said = 0
+        reported = 0
 
         def along() -> None:
-            nonlocal counted, said
+            nonlocal counted, reported
             with lock:
                 counted += 1
                 percent = counted * 100 // total
-                if percent >= said + STEP or counted == total:
-                    said = percent - percent % STEP
-                    write(note(f"{template}: {counted} of {total}", console=console), console)
+                if percent >= reported + STEP or counted == total:
+                    reported = percent - percent % STEP
+                    write(note(f"{said}: {counted} of {total}", console=console), console)
 
         yield along
         return
 
-    with Progress(
-        # The words first, as every other line of a build reads: what is
-        # happening, then how far along it is.
-        TextColumn("  [dim]{task.description}[/dim]"),
-        BarColumn(bar_width=24),
-        TaskProgressColumn(),
-        console=console,
-        # Gone once it is done, because the line that follows says the same
-        # thing in the past tense and two of them is one too many.
-        transient=True,
-    ) as bar:
-        task = bar.add_task(template, total=total)
+    with _BAR_LOCK:
+        bar = _bar(console)
+        task = bar.add_task(said, total=total)
 
-        def advance() -> None:
-            with lock:
-                bar.advance(task)
+    def advance() -> None:
+        with lock:
+            bar.advance(task)
 
+    try:
         yield advance
+    finally:
+        _done(task)
 
 
 def warning(template: str, *values: Span | Linked, console: Console | None = None) -> Text:
@@ -433,9 +498,10 @@ def write(renderable: RenderableType | None, console: Console | None = None) -> 
     redirected one held back in a buffer arrives after the other, which puts
     the summary above the paths it is summarising.
 
-    The console is asked for here where the caller has none of its own, and
-    asked for each time rather than kept: it holds the stream it was built
-    with, and `pytest` replaces the stream after this module is imported.
+    The console is asked for here where the caller has none of its own.
+    One console per stream, kept: a bar is drawn by taking over the bottom of
+    the screen, and a line written through a console that does not know about
+    it lands on top of it.
     """
     if renderable is None:
         return
