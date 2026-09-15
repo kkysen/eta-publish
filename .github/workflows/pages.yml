@@ -55,6 +55,8 @@ jobs:
       # cache, a stale one and a missing one all build the same bytes and
       # `check-committed-site.sh` compares the same.
       #
+      # `~/.cache/eta-publish` is where `platformdirs` puts it on Linux.
+      #
       # The key carries the run id so each run saves its own, and `restore-keys`
       # is what makes the previous one the starting point: a key that never
       # changes would restore the first run's cache forever and never save
