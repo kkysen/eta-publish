@@ -20,7 +20,7 @@ import json
 import os
 import time
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -321,7 +321,12 @@ def today() -> str:
     return datetime.now(UTC).strftime("%Y%m%d")
 
 
-def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[int, int]:
+def capture(
+    doc: Document,
+    *,
+    session: requests.Session | None = None,
+    along: Callable[[], None] | None = None,
+) -> tuple[int, int]:
     """Archive every source of `doc` that nothing has tried yet.
 
     Returns how many were found already captured and how many were captured on
@@ -338,6 +343,10 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[
     with a login page, and the nine `mp.weixin.qq.com` links are not reachable
     by the crawler. Left missing, every build from here to forever would submit
     them again.
+
+    `along` is called once per source as the answer arrives, for a build that
+    wants to say how far along it is: this is the slowest thing a build does,
+    and it is slow in a way nothing here controls.
 
     A source the service would not answer about at all is the exception, and
     stays missing. Being told to slow down is not a fact about the page, and
@@ -360,7 +369,14 @@ def capture(doc: Document, *, session: requests.Session | None = None) -> tuple[
         return _archive(http, headers, url, index=not _fresh(lately.get(url, "")))
 
     with ThreadPoolExecutor(max_workers=MAX_AT_ONCE) as pool:
-        results = list(pool.map(archive, wanted))
+        asked = [pool.submit(archive, url) for url in wanted]
+        if along is not None:
+            # As each answer arrives rather than as the list is read back:
+            # the results are read in document order, which says nothing
+            # about when the service answered.
+            for _ in as_completed(asked):
+                along()
+        results = [answer.result() for answer in asked]
     # Written in document order rather than as each answer arrives, so that two
     # builds that captured the same sources write the same file.
     found = submitted = 0

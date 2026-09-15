@@ -266,3 +266,43 @@ def test_a_marked_value_is_one_quoted_value_off_a_terminal() -> None:
     assert "`It is deep.\u00b7\u00b7It is expensive.`" in rendered(
         log.notice(GAPPED, plain()), plain()
     )
+
+
+def _written(console: Console) -> str:
+    """Everything that console was given, with the colour taken back out."""
+    file = console.file
+    assert isinstance(file, io.StringIO)
+    return _visible(file.getvalue())
+
+
+def test_a_long_job_draws_a_bar_on_a_terminal() -> None:
+    """A build that says nothing for two minutes is one somebody kills."""
+    console = terminal()
+    with log.progress("asking the archive", 4, console) as along:
+        for _ in range(4):
+            along()
+    written = _written(console)
+    assert "asking the archive" in written
+    assert "100%" in written
+
+
+def test_a_long_job_says_where_it_is_in_a_file() -> None:
+    """A redirected log has no in place to redraw,
+    so it gets a line at every tenth instead of a hundred and nine of them."""
+    console = plain()
+    with log.progress("asking the archive", 20, console) as along:
+        for _ in range(20):
+            along()
+    lines = _written(console).splitlines()
+    assert lines[0] == "· asking the archive: 2 of 20"
+    assert lines[-1] == "· asking the archive: 20 of 20"
+    assert len(lines) == 10
+
+
+def test_a_bar_leaves_nothing_behind_to_read() -> None:
+    """The line after it says the same thing in the past tense."""
+    console = terminal()
+    with log.progress("asking the archive", 2, console) as along:
+        along()
+        along()
+    assert "asking the archive" not in _written(console).splitlines()[-1]
