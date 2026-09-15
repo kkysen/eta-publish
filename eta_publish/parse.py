@@ -1044,8 +1044,9 @@ class Parser:
 
         Front matter is the run of `Key: value` paragraphs following the `Header` heading.
         It ends at the first paragraph that is not one:
-        a heading of any level, the `Title`-styled headline,
-        a paragraph holding an image, or ordinary prose.
+        a heading of any level, the `Title`-styled headline, or ordinary prose.
+        A picture does not end it. It is kept for the body where it was, and the
+        fields after it are still the header's.
 
         Not "until the next heading of the same or higher level".
         In the real doc `Header` is an `h2` while the body sections are `h1`,
@@ -1084,6 +1085,9 @@ class Parser:
                 )
 
         end = start + 1
+        # Pictures the header section holds, which are the report's and not
+        # the header's: stepped over rather than ending it, and handed back.
+        pictures: list[int] = []
         for i in range(start + 1, len(content)):
             para = content[i].get("paragraph")
             if para is None:
@@ -1092,8 +1096,16 @@ class Parser:
             style = style_of(para)
             text = plain(para)
 
-            if style == "TITLE" or HEADING_LEVELS.get(style) is not None or has_image(para):
+            if style == "TITLE" or HEADING_LEVELS.get(style) is not None:
                 break
+
+            if has_image(para):
+                # Monthly Passes puts its picture in the `Header` section with a
+                # `Description:` line after it. Ending the section at the picture
+                # left that line in the body, warned about as a field somewhere
+                # no field goes, when it is a header field nothing recognizes.
+                pictures.append(i)
+                continue
 
             if not text:
                 end = i + 1
@@ -1107,6 +1119,13 @@ class Parser:
             lines = split_lines(self.inlines(para))
             if key_line(lines[0]) is None:
                 break  # prose: the header section is over
+            if pictures and (
+                is_source_note(lines[0]) or is_asset_note(lines[0]) or is_credit_note(lines[0])
+            ):
+                # A `Credit:` or `Source:` under a picture is that picture's,
+                # however much it reads like a field, so the header ends here
+                # and the picture keeps its notes.
+                break
 
             key = ""
             for line in lines:
@@ -1131,7 +1150,7 @@ class Parser:
                 Shown("Short:"),
                 Shown("SEO Description:"),
             )
-        return content[end:]
+        return [content[i] for i in pictures if i < end] + content[end:]
 
     def _bleed(self, line: list[Inline]) -> None:
         """Warn where the underline marking a label ran on into its value.
