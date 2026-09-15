@@ -267,7 +267,6 @@ TYPES = {
     "Road": "Rd",
     "Drive": "Dr",
     "Lane": "Ln",
-    "Court": "Ct",
     "Parkway": "Pkwy",
     "Turnpike": "Tpke",
     "Square": "Sq",
@@ -285,6 +284,8 @@ Singular only. There is no MTA spelling of `116th and 125th Streets`,
 and a rule that invents one would be worse than the one it corrects.
 
 No `Plaza`, which the MTA writes out: `Grand Army Plaza` is the station.
+No `Court` either: the station is `Court Sq`, where the court is the name
+and the square is the kind, so a rule abbreviating it would rename it.
 No `Terrace` either, which is not a kind of street these reports name and
 not one the system has a station on.
 """
@@ -356,8 +357,8 @@ COMMON_NOUN = "The"
 """What a name starts with when it is a phrase rather than a street.
 
 `The Wrong Place to Scale Back` is a heading in SAS West, and `Place`,
-`Square`, `Court` and `Drive` are all ordinary words as well as kinds of
-street. No street is `The` anything, so this is the one that can be told
+`Square` and `Drive` are all ordinary words as well as kinds of street.
+No street is `The` anything, so this is the one that can be told
 apart by reading it.
 """
 

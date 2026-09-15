@@ -241,12 +241,20 @@ def test_a_street_in_another_city_keeps_its_own_name() -> None:
     assert warnings(written("Cross-traffic on Nanba Road could move underground.")) == []
 
 
+def test_a_court_is_a_name_rather_than_a_kind_of_street() -> None:
+    """The station is `Court Sq`: the court is the name and the square is the
+    kind, so abbreviating the court would rename it."""
+    assert warnings(written("The train terminates at Court Square today.")) == [
+        "style: `Court Square` should be `Court Sq`: `The train terminates at Court Square today.`"
+    ]
+
+
 def test_a_railroad_is_not_a_road() -> None:
     assert warnings(written("Metro-North and the Long Island Rail Road both.")) == []
 
 
 def test_an_ordinary_phrase_is_not_a_street() -> None:
-    """`Place`, `Square`, `Court` and `Drive` are words as well as streets,
+    """`Place`, `Square` and `Drive` are words as well as streets,
     and no street is `The` anything."""
     assert warnings(written("Ruling Grade: The Wrong Place to Scale Back")) == []
 
