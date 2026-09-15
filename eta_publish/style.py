@@ -13,7 +13,7 @@ rather than quietly making the reports agree.
 """
 
 import re
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
 
 from .nodes import SPACE, Document, Highlighted, Shown, plain_text
 
@@ -544,36 +544,70 @@ where `137 ft` and `1.2 km` are measurements a reader compares.
 """
 
 
-def _spelled_out(units: Iterable[str]) -> str:
-    """The units as one alternation, longest first.
+SYMBOLS = frozenset(UNITS.values())
+"""The symbols themselves, for a measurement that is already spelled right."""
 
-    Longest first so `miles per hour` is read as the unit it is rather than
-    as the `miles` at the front of it. Each space written as a class, since
-    a verbose pattern drops the ones written as themselves and would be
-    looking for `milesperhour`.
+LONGEST_UNIT = max(len(unit.split()) for unit in UNITS)
+"""How many words a unit can be: `miles per hour` is the long one."""
+
+
+def _unit(words: list[tuple[str, int]], first: int) -> tuple[str, int] | None:
+    """The unit the words from `first` spell, and where it ends.
+
+    The longest reading wins, so `miles per hour` is the unit it is
+    rather than the `miles` at the front of it.
     """
-    return "|".join(unit.replace(" ", "[ ]") for unit in sorted(units, key=len, reverse=True))
+    for length in range(LONGEST_UNIT, 0, -1):
+        taken = words[first : first + length]
+        if len(taken) < length:
+            continue
+        unit = " ".join(_bare(word) for word, _ in taken)
+        if unit in UNITS or unit in SYMBOLS:
+            word, at = taken[-1]
+            return unit, _at(word, at) + len(_bare(word))
+    return None
 
 
-MEASURED = re.compile(
-    rf"""
-    (?P<amount>\d[\d,.]*)
-    (?P<gap>[ -])
-    (?P<unit>{_spelled_out(UNITS)})\b
-    """,
-    re.VERBOSE,
-)
-"""A number and the unit it is counting, spelled some way the MTA's is not.
+def _measurements(text: str) -> Iterator[tuple[int, int, str, str, str]]:
+    """Every number written next to a unit: where it is, and its three pieces.
 
-A digit rather than a word: `ten minutes` is a duration somebody is
-describing and `10 min` is one they are measuring, and `two miles`
-is already the way a distance is written out.
+    The gap says which of the two rules has something to say about it,
+    a space or the hyphen of `a 600-foot train`,
+    and the unit is yielded as written, symbol or word,
+    because the hyphen is worth saying either way.
+    """
+    words = _words(text)
+    for i, (word, at) in enumerate(words):
+        yield from _hyphenated(word, at)
+        amount = _trailing_number(_bare(word))
+        if amount is None:
+            continue
+        found = _unit(words, i + 1)
+        if found is None:
+            continue
+        unit, end = found
+        start = _at(word, at) + len(_bare(word)) - len(amount)
+        yield start, end, amount, " ", unit
 
-A hyphen as well as a space, since `a 600-foot train` spells the unit out
-the same way. What joins them is a rule of its own and is left as it was
-written here, so each warning is about the one thing it is about.
 
-"""
+def _trailing_number(word: str) -> str | None:
+    """The number `word` ends with, which is the one a unit after it counts.
+
+    `6-8 minutes` is a range, and the eight is what the minutes are:
+    the reports write four of these.
+    """
+    return _number(word.rpartition("-")[2])
+
+
+def _hyphenated(word: str, at: int) -> Iterator[tuple[int, int, str, str, str]]:
+    """Each number joined to a unit inside one word: `600-foot`, `1.5-2-min`."""
+    parts = _bare(word).split("-")
+    offset = _at(word, at)
+    for first, second in zip(parts, parts[1:], strict=False):
+        amount = _number(first)
+        if amount is not None and (second in UNITS or second in SYMBOLS):
+            yield offset, offset + len(first) + 1 + len(second), amount, "-", second
+        offset += len(first) + 1
 
 
 def _defines(text: str, end: int, symbol: str) -> bool:
@@ -591,42 +625,22 @@ def _check_units(doc: Document, text: str) -> None:
 
     These reports are full of them, and they are read against each other:
     `137 ft`, `140 ft`, `969 ft` down a column is a comparison,
-    where the same numbers spelled out are a paragraph to read twice.
+    where the same numbers spelled out is a paragraph to read twice.
 
     The house's own, unlike the station names: the MTA writes `125 St` on its
     signs, and how a report abbreviates a kilogram is nothing to do with it.
     """
-    for match in MEASURED.finditer(text):
-        if _defines(text, match.end(), UNITS[match.group("unit")]):
+    for start, end, amount, gap, unit in _measurements(text):
+        symbol = UNITS.get(unit)
+        if symbol is None or _defines(text, end, symbol):
             continue
-        written = match.group()
-        correct = f"{match.group('amount')}{match.group('gap')}{UNITS[match.group('unit')]}"
         _warn(
             doc,
             "{} should be {}: {}",
-            Shown(written),
-            Shown(correct),
-            Highlighted(_before(text, match.start()), written, _after(text, match.end())),
+            Shown(text[start:end]),
+            Shown(f"{amount}{gap}{symbol}"),
+            Highlighted(_before(text, start), text[start:end], _after(text, end)),
         )
-
-
-SYMBOLS = frozenset(UNITS.values())
-"""The symbols themselves, for a measurement that is already spelled right."""
-
-JOINED = re.compile(
-    rf"""
-    (?P<amount>\d[\d,.]*)
-    -
-    (?P<unit>{_spelled_out(SYMBOLS | set(UNITS))})\b
-    """,
-    re.VERBOSE,
-)
-"""A number joined to its unit by a hyphen: `a 20-foot cavern`, `1-min headways`.
-
-Only where the word after the hyphen is a unit.
-`2-track`, `4-car` and `NFPA 130-compliant` are hyphenated for the ordinary
-reason, and the reports are full of them.
-"""
 
 
 def _check_hyphenated_units(doc: Document, text: str) -> None:
@@ -642,50 +656,63 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
     make, and this one says it too rather than leaving somebody to write
     `600 foot` and be told about it on the next build.
     """
-    for match in JOINED.finditer(text):
-        unit = match.group("unit")
-        correct = f"{match.group('amount')} {UNITS.get(unit, unit)}"
+    for start, end, amount, gap, unit in _measurements(text):
+        if gap != "-":
+            continue
         _warn(
             doc,
             "{} should be {}, with no hyphen: {}",
-            Shown(match.group()),
-            Shown(correct),
-            Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
+            Shown(text[start:end]),
+            Shown(f"{amount} {UNITS.get(unit, unit)}"),
+            Highlighted(_before(text, start), text[start:end], _after(text, end)),
         )
 
 
-SPELLED_OUT_SYMBOLS = re.compile(
-    r"""
-    (?P<amount>\d[\d,.]*)
-    (?P<scale>[ ](?:thousand|million|billion|trillion))?
-    [ ](?P<word>percent|per[ ]cent|dollars|dollar)\b
-    """,
-    re.VERBOSE | re.IGNORECASE,
-)
-"""A number followed by the word for a symbol: `3.5 percent`, `7.7 billion dollars`.
+SCALES = ("thousand", "million", "billion", "trillion")
+"""What sits between a sum and the word `dollars`, and never inside a percentage.
 
-The scale sits between them for money and never for a percentage,
-and it is what the amount is carried through to the symbol with:
+The amount is carried through to the symbol with it:
 `7.7 billion dollars` is `$7.7 billion`, not `$7.7 billion dollars`.
 """
 
-DATED = re.compile(r"\bin[ ]$", re.IGNORECASE)
+PERCENT = ("percent", "per cent")
+MONEY = ("dollars", "dollar")
+
+DATED = "in"
 """What says the number dates the dollars rather than counting them.
 
 `in 2026 dollars` is the year a cost is inflated to, and the `in` says so
 whatever the number is: `in 5 dollars` is the year 5, not five dollars.
 That is what makes it the clearer half of the test:
-it holds for years no pattern over four digits would recognize.
+it holds for years no rule about four digits would recognize.
 """
 
-YEAR = re.compile(r"(?:19|20)\d\d")
-"""A number that dates the dollars rather than counting them.
+YEARS = range(1900, 2100)
+"""Numbers that date the dollars rather than counting them.
 
 Beside `DATED` rather than instead of it, for `2026 dollars` written with no
 `in` in front. Either way `$2026` is nothing.
 A year is only a year here where no scale follows it:
 `2026 million dollars` would be a sum of money written strangely.
 """
+
+
+def _spelled_out_symbol(words: list[tuple[str, int]], first: int) -> tuple[str, str, int] | None:
+    """The scale and the word for a symbol that follow `first`, and where they end."""
+    scale = ""
+    at = first
+    if at < len(words) and _bare(words[at][0]).lower() in SCALES:
+        scale = f" {_bare(words[at][0]).lower()}"
+        at += 1
+    for length in (2, 1):
+        taken = words[at : at + length]
+        if len(taken) < length:
+            continue
+        word = " ".join(_bare(w).lower() for w, _ in taken)
+        if word in PERCENT or word in MONEY:
+            last, where = taken[-1]
+            return scale, word, _at(last, where) + len(_bare(last))
+    return None
 
 
 def _check_spelled_out_symbols(doc: Document, text: str) -> None:
@@ -696,18 +723,29 @@ def _check_spelled_out_symbols(doc: Document, text: str) -> None:
     reader compares at a glance, where the same numbers in words are prose to
     work through. The symbol is also what every figure in them already uses.
     """
-    for match in SPELLED_OUT_SYMBOLS.finditer(text):
-        amount = match.group("amount")
-        scale = match.group("scale") or ""
-        money = not match.group("word").lower().startswith("per")
-        dated = DATED.search(text[: match.start()]) is not None or YEAR.fullmatch(amount)
+    words = _words(text)
+    for i, (word, at) in enumerate(words):
+        amount = _number(word)
+        if amount is None:
+            continue
+        found = _spelled_out_symbol(words, i + 1)
+        if found is None:
+            continue
+        scale, said, end = found
+        money = said in MONEY
+        dated = (i and _bare(words[i - 1][0]).lower() == DATED) or _is_year(amount)
         if money and not scale and dated:
             continue
-        correct = f"${amount}{scale}" if money else f"{amount}%"
+        start = _at(word, at)
         _warn(
             doc,
             "{} should be {}: {}",
-            Shown(match.group()),
-            Shown(correct),
-            Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
+            Shown(text[start:end]),
+            Shown(f"${amount}{scale}" if money else f"{amount}%"),
+            Highlighted(_before(text, start), text[start:end], _after(text, end)),
         )
+
+
+def _is_year(amount: str) -> bool:
+    """Whether a number reads as a year rather than as a quantity."""
+    return amount.isdigit() and int(amount) in YEARS
