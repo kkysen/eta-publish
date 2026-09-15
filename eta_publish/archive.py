@@ -188,6 +188,24 @@ a capture somebody else made is not a cost a reader can see.
 """
 
 
+REPLAY_CACHE_SECONDS = 60 * 60
+"""How long a replay lookup that found nothing stands before it is asked again.
+
+An hour, where the index's answer stands a week, because the replay is the
+half that notices a capture somebody else has just made: held back for a week,
+a source would go on publishing as unarchived long after it was not.
+An hour is the length of an afternoon's rebuilding, which is what this is for:
+running `eta-publish all` twice in a row should not ask the same question twice.
+
+The cost is the one the week had, an hour long instead: a capture made inside
+the hour is not seen until it is up. CI restores `~/.cache/eta-publish` between
+runs, this file with it, so two Pages runs inside an hour share it too.
+"""
+
+REPLAY_CACHE = "replay-lookups.json"
+"""The replay's cache, beside the index's and wherever that one is pointed."""
+
+
 ARCHIVE_CACHE = "ETA_ARCHIVE_CACHE"
 """Where to keep the cache instead, named like `ETA_TOKEN` and for tests."""
 
@@ -300,6 +318,64 @@ def _session() -> requests.Session:
     http.mount("https://", adapter)
     http.mount("http://", adapter)
     return http
+
+
+def replay_cache_path() -> Path:
+    """Where the replay lookups that found nothing are remembered, for an hour."""
+    return archive_cache_path().with_name(REPLAY_CACHE)
+
+
+def _cached_unserved() -> dict[str, str]:
+    """The sources the replay served nothing for, by when each was asked.
+
+    Read the way the index's cache is read, and for the same reason: a file
+    nothing can read is an empty cache, and the answer to that is to ask again.
+    """
+    try:
+        loaded = json.loads(replay_cache_path().read_text())
+    except OSError, ValueError:
+        return {}
+    if not isinstance(loaded, dict):
+        return {}
+    return {url: str(when) for url, when in loaded.items() if isinstance(url, str)}
+
+
+def _remember_unserved(urls: list[str]) -> None:
+    """Write down that the replay served nothing for these, just now.
+
+    Kept like `_remember_nothing`: only these are refreshed, the expired are
+    dropped, and the file is written beside itself and moved into place.
+    """
+    if not urls:
+        return
+    with _REMEMBERING:
+        known = {url: when for url, when in _cached_unserved().items() if _recent(when)}
+        known.update(dict.fromkeys(urls, _now()))
+        path = replay_cache_path()
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temp = path.with_suffix(".writing")
+            temp.write_text(json.dumps(known, indent=2, sort_keys=True) + "\n")
+            temp.replace(path)
+        except OSError:
+            pass
+
+
+def _now() -> str:
+    """This moment, to the second, in the form the archive dates captures in."""
+    return datetime.now(UTC).strftime("%Y%m%d%H%M%S")
+
+
+def _recent(when: str) -> bool:
+    """Whether a replay lookup made at `when` still stands.
+
+    A time nothing can read was not recent, so the source is asked about again.
+    """
+    try:
+        asked = datetime.strptime(when, "%Y%m%d%H%M%S").replace(tzinfo=UTC)
+    except ValueError:
+        return False
+    return (datetime.now(UTC) - asked).total_seconds() < REPLAY_CACHE_SECONDS
 
 
 def read_archive_index(dest: Path, doc: Document) -> None:
@@ -420,9 +496,18 @@ def capture(
     # Only a build with no keys defers anything: one with keys submits a source
     # the replay found nothing for, which records an answer either way.
     lately = _cached_nothing() if headers is None else {}
+    # The replay's answer too, for an hour, and on the same condition: a build
+    # with keys goes on to ask for a capture, which is an answer either way.
+    just = _cached_unserved() if headers is None else {}
 
     def archive(url: str) -> Lookup:
-        return _archive(http, headers, url, index=not _fresh(lately.get(url, "")))
+        return _archive(
+            http,
+            headers,
+            url,
+            index=not _fresh(lately.get(url, "")),
+            replay=not _recent(just.get(url, "")),
+        )
 
     pool = ThreadPoolExecutor(max_workers=REPLAY_AT_ONCE)
     asked = [pool.submit(archive, url) for url in wanted]
@@ -460,6 +545,9 @@ def capture(
         else:
             submitted += 1
     _remember_nothing([url for url, result in zip(wanted, results, strict=True) if result.nothing])
+    _remember_unserved(
+        [url for url, result in zip(wanted, results, strict=True) if result.unserved]
+    )
     return found, submitted
 
 
@@ -498,10 +586,17 @@ class Lookup:
     archived: Archived | None = None
     already: bool = False
     nothing: bool = False
+    unserved: bool = False
+    """The replay was asked and served nothing, which stands for an hour."""
 
 
 def _archive(
-    http: requests.Session, headers: dict[str, str] | None, url: str, *, index: bool = True
+    http: requests.Session,
+    headers: dict[str, str] | None,
+    url: str,
+    *,
+    index: bool = True,
+    replay: bool = True,
 ) -> Lookup:
     """One source: the capture it already has, or a new one, or why neither."""
     try:
@@ -510,14 +605,14 @@ def _archive(
             # Nothing to look up and nothing to ask for: it is already archived,
             # and asking the Wayback Machine about it only ever answers `403`.
             return Lookup(_patiently(lambda: _added(http, url, item)), already=True)
-        found = _patiently(lambda: _existing(http, url, index=index))
+        found = _patiently(lambda: _existing(http, url, index=index, replay=replay))
         if found is not None:
             return Lookup(found, already=True)
         if headers is None:
             # `nothing` only where the index was the one that said so. Where it
             # was held back, this build learned nothing, and writing today's
             # date would renew the entry on every build and expire it never.
-            return Lookup(nothing=index)
+            return Lookup(nothing=index, unserved=replay)
         return Lookup(_patiently(lambda: _submit(http, headers, url)))
     except Busy, requests.RequestException:
         # Nothing about the source. A read that timed out, a connection that
@@ -572,7 +667,9 @@ def _patiently[T](ask: Callable[[], T]) -> T:
     return ask()
 
 
-def _existing(http: requests.Session, url: str, *, index: bool = True) -> Archived | None:
+def _existing(
+    http: requests.Session, url: str, *, index: bool = True, replay: bool = True
+) -> Archived | None:
     """The newest capture of `url` that is the page, if there is one.
 
     Asked of the replay first and of the index only if that did not answer.
@@ -588,7 +685,8 @@ def _existing(http: requests.Session, url: str, *, index: bool = True) -> Archiv
     `not archived` because this machine had cached the older answer, and CI,
     which had no cache, found the capture and failed the check.
     """
-    served = _served(http, url)
+    # `replay` is the hour's cache, and holds back the replay for that long only.
+    served = _served(http, url) if replay else None
     if served is not None:
         return served
     return _indexed(http, url) if index else None

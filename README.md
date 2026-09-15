@@ -606,6 +606,12 @@ because a runner starts with nothing and would re-ask about all of them.
 A build that has [Save Page Now keys](#archiving-new-sources-optional) skips the cache:
 that one submits a capture instead, and the source leaves the record for good.
 
+The replay is remembered too, for an hour, in `replay-lookups.json` beside it.
+It is the half that notices a capture somebody else has just made,
+so it cannot be held back for a week the way the index is;
+an hour is long enough that rebuilding twice in a row asks nothing twice.
+A capture made inside that hour is not seen until the hour is up.
+
 ## Builds
 
 `all` takes a list and `one` takes a document, so nothing has to be told apart:
