@@ -27,6 +27,7 @@ from pathlib import Path
 from threading import Lock, Semaphore
 from urllib.parse import urlsplit
 
+import platformdirs
 import requests
 from requests.adapters import HTTPAdapter
 
@@ -228,8 +229,7 @@ def archive_cache_path() -> Path:
     override = os.environ.get(ARCHIVE_CACHE)
     if override:
         return Path(override)
-    root = os.environ.get("XDG_CACHE_HOME")
-    return (Path(root) if root else Path.home() / ".cache") / "eta-publish" / "archive.json"
+    return platformdirs.user_cache_path("eta-publish") / "archive.json"
 
 
 def _cached() -> dict[str, dict[str, str]]:

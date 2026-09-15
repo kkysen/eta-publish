@@ -590,7 +590,8 @@ and nothing in the index tells it from the real thing.
 ### Remembering what was not found
 
 A lookup that finds nothing is remembered for a week,
-in `~/.cache/eta-publish/archive.json` and never committed.
+in `archive.json` in the user cache directory `platformdirs` finds
+(`~/.cache/eta-publish` on Linux) and never committed.
 The index takes seconds per source and sometimes half a minute,
 so a report with twenty unarchived sources spent minutes on every build
 to write down the same nothing;
