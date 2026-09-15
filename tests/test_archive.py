@@ -702,3 +702,20 @@ def test_a_session_limit_is_waited_out_rather_than_written_down(
     session, headers = Limiting(), {"Authorization": "LOW a:b"}
     captured = archive._patiently(lambda: archive._submit(session, headers, "https://a.example/1"))
     assert (captured.error, captured.timestamp) == ("", "20240503123456")
+
+
+def test_a_build_with_keys_captures_only_what_has_no_capture(keyed: None) -> None:
+    """A capture is somebody else's page fetch, and asking for one of a page the
+    archive already holds spends it on nothing: the lookup comes first."""
+    posted: list[str] = []
+
+    class Watching(Replaying):
+        @override
+        def request(self, method: object, url: object, *args: object, **kwargs: object):
+            if str(url).startswith(archive.SAVE):
+                posted.append(str(url))
+            return super().request(method, url, *args, **kwargs)
+
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=Watching([("20240503123456", 200)])) == (1, 0)
+    assert posted == []
