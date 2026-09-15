@@ -25,12 +25,13 @@ holds no escape sequences to search past and no line broken mid-sentence.
 """
 
 import sys
+import time
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
-from threading import Lock, RLock
+from threading import Lock, RLock, Thread
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
@@ -366,6 +367,32 @@ report says the same thing and is the only one drawing.
 """
 
 
+TICKER = "eta-publish bar"
+"""What the redrawing thread is called, for anything looking at threads."""
+
+TICK = 0.2
+"""How often the bar redraws itself while nothing is finishing.
+
+The elapsed time is the half of the row that says a slow answer is still an
+answer, and a row that only redraws when something completes is a clock that
+stops for exactly as long as the thing worth watching takes.
+
+Its own thread rather than the one `rich` runs, so the redraw happens under
+the lock every line is written under: a timer nothing else can wait for is
+what put a note halfway through a bar.
+"""
+
+
+def _ticking(console: Console) -> None:
+    """Redraw the bar until there is no bar to redraw."""
+    while True:
+        time.sleep(TICK)
+        with _BAR_LOCK:
+            if _BAR is None or _BAR.console is not console:
+                return
+            _BAR.refresh()
+
+
 def _bar(console: Console) -> Progress:
     """The build's bar, started if this is the first thing to want one."""
     global _BAR
@@ -387,6 +414,8 @@ def _bar(console: Console) -> Progress:
             auto_refresh=False,
         )
         _BAR.start()
+        # A daemon, so a build that is stopping is never waiting on a clock.
+        Thread(target=_ticking, args=(console,), name=TICKER, daemon=True).start()
     return _BAR
 
 

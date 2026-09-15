@@ -9,6 +9,8 @@ line with nothing in it that is not a word.
 
 import io
 import re
+import threading
+import time
 from pathlib import Path
 
 import pytest
@@ -322,3 +324,23 @@ def test_a_bar_leaves_nothing_behind_to_read() -> None:
         along()
         along()
     assert "checking the archive" not in _written(console).splitlines()[-1]
+
+
+def test_the_clock_keeps_moving_while_nothing_finishes() -> None:
+    """The elapsed time is the half of the row that says a slow answer is
+    still an answer, and a row that redraws only when something completes
+    stops for exactly as long as the thing worth watching takes."""
+    console = terminal()
+    with log.progress("checking the archive", 3, console) as along:
+        along()
+        time.sleep(log.TICK * 6)
+    drawn = set(re.findall(r"0:00:0\d", _written(console)))
+    assert len(drawn) > 1
+
+
+def test_the_clock_is_not_something_a_build_waits_on() -> None:
+    """A build that is stopping has better things to join than a timer."""
+    console = terminal()
+    with log.progress("checking the archive", 1, console):
+        ticking = [t for t in threading.enumerate() if t.name == log.TICKER]
+        assert ticking and all(t.daemon for t in ticking)
