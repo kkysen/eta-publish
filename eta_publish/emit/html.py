@@ -427,7 +427,13 @@ class HtmlEmitter(Emitter):
         )
 
     def marked_up(self, warning: Notice) -> str:
-        """One warning as HTML: names as code, and what gets cut struck through."""
+        """One warning as HTML: names as code, what gets cut struck through,
+        and what the warning is pointing at highlighted inside the value.
+
+        The highlight is what a browser has and a file does not:
+        a pair of spaces is a space here, however it is written,
+        so the dots say how many there are and the mark says which they are.
+        """
         return Markup(
             warning_markup(
                 warning,
@@ -436,6 +442,7 @@ class HtmlEmitter(Emitter):
                 text=lambda t: markup(t),
                 quote=lambda q: markup(tag.blockquote[Markup(q)]),
                 bullets=lambda items: markup(tag.ul[[tag.li[Markup(i)] for i in items]]),
+                marked=lambda before, mark, after: markup(tag.code[before, tag.mark[mark], after]),
             )
         )
 

@@ -128,6 +128,16 @@
   padding: 0.1em 0.3em;
   font-size: 0.9em;
 }
+/* The part of a value a warning is pointing at. Two spaces are one space in a
+   browser however they are written, so the dots inside say how many there are
+   and this says which characters they are. Coloured here rather than left to
+   the browser's own `mark`, which is black on yellow and unreadable against a
+   dark page. */
+.eta-report .warnings mark {
+  background: rgba(230, 180, 0, 0.35);
+  color: inherit;
+  border-radius: 0.2em;
+}
 /* A value the warning is about, indented so that a long one is read as the
    quotation it is and not as more of the sentence above it. */
 .eta-report .warnings blockquote {
@@ -490,32 +500,34 @@
       >
       <li
         >style: <code>10 minutes</code> should be <code>10 min</code>: <code
-          >... Flushing-Main St, and nearly 10 minutes out of a 40 minute ride
-          compr...</code
+          >... Flushing-Main St, and nearly <mark>10 minutes</mark> out of a 40
+          minute ride compr...</code
         ></li
       >
       <li
         >style: <code>40 minute</code> should be <code>40 min</code>: <code
-          >...nd nearly 10 minutes out of a 40 minute ride comprised
-          announcements....</code
+          >...nd nearly 10 minutes out of a <mark>40 minute</mark> ride
+          comprised announcements....</code
         ></li
       >
       <li
         >style: <code>15 seconds</code> should be <code>15 sec</code>: <code
-          >... the door closing warning—are 15 seconds per interstation segment,
-          onl...</code
+          >... the door closing warning—are <mark>15 seconds</mark> per
+          interstation segment, onl...</code
         ></li
       >
       <li
         >style: a sentence should end with 1 space, not 2:
         <code
-          >..., often one message at a time.··Slowly, by following the path ...</code
+          >..., often one message at a time.<mark>··</mark>Slowly, by following
+          the path ...</code
         ></li
       >
       <li
         >style: a sentence should end with 1 space, not 2:
         <code
-          >...ersion of the curb cut effect.··In this case, designing announ...</code
+          >...ersion of the curb cut effect.<mark>··</mark>In this case,
+          designing announ...</code
         ></li
       ></ul
     ></div
