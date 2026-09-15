@@ -492,3 +492,43 @@ def test_a_shared_paragraph_says_so() -> None:
     warning = next(w for w in map(str, doc.warnings) if "Shift+Enter" in w)
     assert "Short: Too loud." in warning
     assert "SEO Description: Far too loud." in warning
+
+
+def _picture_in_the_header(*after: JsonObject) -> Document:
+    """A `Header` section with a picture in it, the way Monthly Passes writes one."""
+    return parse(
+        {
+            **REAL_SHAPE,
+            "body": {
+                "content": [
+                    para("Header", "HEADING_2"),
+                    field("URL: /reports/monthly-passes"),
+                    image_para(),
+                    *after,
+                    para("Bring Back the Monthly", "HEADING_1"),
+                    para("When the MTA retired the MetroCard."),
+                ]
+            },
+        }
+    )
+
+
+def test_a_picture_does_not_end_the_header_section() -> None:
+    """The line after it is still a header field, and one nothing recognizes
+    is warned about as that rather than as a field somewhere no field goes."""
+    doc = _picture_in_the_header(field("Description: Reasonably-priced monthly passes."))
+    assert doc.meta["Description"] == "Reasonably-priced monthly passes."
+    assert any("unrecognized `Description:`" in str(w) for w in doc.warnings)
+
+
+def test_the_picture_in_the_header_section_is_still_the_reports() -> None:
+    doc = _picture_in_the_header(field("Description: Reasonably-priced monthly passes."))
+    assert [b.image.object_id for b in doc.blocks if isinstance(b, Figure)] == ["io.hero"]
+
+
+def test_a_credit_under_a_picture_in_the_header_is_the_pictures() -> None:
+    """It reads like a field, and it is the note of the picture above it."""
+    doc = _picture_in_the_header(field("Credit: Blair Lorenzo, ETA"))
+    assert "Credit" not in doc.meta
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert _text(figure.credit) == "Credit: Blair Lorenzo, ETA"

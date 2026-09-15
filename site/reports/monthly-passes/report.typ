@@ -8,22 +8,23 @@
   contributors: ("John Ericson", "Madison Feinberg", "Elijah Fischer", "Robert Hale", "Darius Jankauskas", "Tim Lazaroff", "Alon Levy", "Blair Lorenzo", "Samuel Santaella", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
+    [the #raw("Header") section has an unrecognized #raw("Description:") line; check it for a typo],
     [no #raw("Title")-styled paragraph, so the document name #raw("Monthly Passes") is being used as the headline; style the headline as #raw("Title") in the doc],
+    [image #raw("kix.a8pybogzdcax") has no alt text and no caption; add a description to it in the doc],
+    [the image #raw("img-ae6ddd33") has no caption],
     [the image #raw("img-ae6ddd33") has no #raw("Credit:") line],
     [the image #raw("img-cf3f2056") has no #raw("Credit:") line],
     [the image #raw("img-6b5eb7d1") has no #raw("Credit:") line],
-    [3 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-ae6ddd33"): Description: Reasonably-priced monthly passes are an international bes...], [#raw("img-cf3f2056"): Image: Tapping onto the subway with OMNY], [#raw("img-6b5eb7d1"): A comparison of monthly fare pass ratios. Note: for cities with multip...], )],
+    [3 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-ae6ddd33")], [#raw("img-cf3f2056"): Image: Tapping onto the subway with OMNY], [#raw("img-6b5eb7d1"): A comparison of monthly fare pass ratios. Note: for cities with multip...], )],
     [1 suggestion still open on this tab; the build publishes the document without them, as it reads today],
     [26 comment threads still open on this tab],
-    [#raw("Description:") reads as a field and is not one: #raw("Description: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.")],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
   ),
   hero: [
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/monthly-passes/images/img-ae6ddd33.jpg")[#capped_image("print/img-ae6ddd33.jpg", alt: "Description: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.")],
-  caption: [#underline[Description]: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.],
+  link("https://kkysen.github.io/eta-publish/reports/monthly-passes/images/img-ae6ddd33.jpg")[#capped_image("print/img-ae6ddd33.jpg")],
 )
   ],
 )

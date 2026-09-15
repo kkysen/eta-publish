@@ -2,23 +2,24 @@
 
 **Warnings**
 
+- the `Header` section has an unrecognized `Description:` line; check it for a typo
 - no `Title`-styled paragraph, so the document name `Monthly Passes` is being used as the headline; style the headline as `Title` in the doc
+- image `kix.a8pybogzdcax` has no alt text and no caption; add a description to it in the doc
+- the image `img-ae6ddd33` has no caption
 - the image `img-ae6ddd33` has no `Credit:` line
 - the image `img-cf3f2056` has no `Credit:` line
 - the image `img-6b5eb7d1` has no `Credit:` line
 - 3 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
-  - `img-ae6ddd33`: Description: Reasonably-priced monthly passes are an international bes...
+  - `img-ae6ddd33`
   - `img-cf3f2056`: Image: Tapping onto the subway with OMNY
   - `img-6b5eb7d1`: A comparison of monthly fare pass ratios. Note: for cities with multip...
 - 1 suggestion still open on this tab; the build publishes the document without them, as it reads today
 - 26 comment threads still open on this tab
-- `Description:` reads as a field and is not one: `Description: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.`
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 
-![Description: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.](<images/img-ae6ddd33.jpg>)\
-Description: Reasonably-priced monthly passes are an international best practice for a reason: they are one of the strongest ways to encourage transit ridership, reduce fare evasion, and make proof-of-payment fare collection far easier.
+![](<images/img-ae6ddd33.jpg>)
 
 ## Bring Back the Monthly: The Value of Affordable Transit Passes
 
