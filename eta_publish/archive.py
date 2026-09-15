@@ -153,7 +153,7 @@ A gate rather than a smaller pool: what has to be limited is the asking, and
 the thread that is waiting to ask is not the thing the limit is about.
 """
 
-PATIENCE = (5, 20, 60)
+PATIENCE = (timedelta(seconds=5), timedelta(seconds=20), timedelta(minutes=1))
 """How long to wait before asking again, after being told to slow down.
 
 Three tries and then the source is left for the next build. Growing, because a
@@ -161,7 +161,7 @@ rate limit that is still there after five seconds is not one more seconds will
 clear; and finite, because a build should end.
 """
 
-CAPTURE_TIMEOUT = 180
+CAPTURE_TIMEOUT = timedelta(minutes=3)
 """How long to wait for one capture before giving up on it.
 
 Save Page Now caps a page capture at 50 seconds, and a job queued behind others
@@ -179,7 +179,7 @@ not a fact about a source, and writing it down as one would leave that source
 with no archive forever.
 """
 
-POLL_EVERY = 5
+POLL_EVERY = timedelta(seconds=5)
 
 INDEX_LIFETIME = timedelta(days=7)
 """How long an index lookup that found nothing stands before it is asked again.
@@ -622,7 +622,7 @@ def _patiently[T](ask: Callable[[], T]) -> T:
         try:
             return ask()
         except Busy:
-            time.sleep(wait)
+            time.sleep(wait.total_seconds())
     return ask()
 
 
@@ -854,9 +854,9 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
             # it would leave this source with no archive forever.
             raise Busy(refused)
         return Archived(timestamp=today(), error=refused)
-    deadline = time.monotonic() + CAPTURE_TIMEOUT
+    deadline = time.monotonic() + CAPTURE_TIMEOUT.total_seconds()
     while time.monotonic() < deadline:
-        time.sleep(POLL_EVERY)
+        time.sleep(POLL_EVERY.total_seconds())
         state = _checked(http.get(f"{SAVE}/status/{job}", headers=headers, timeout=30)).json()
         status = state.get("status")
         if status == "success" and state.get("timestamp"):
@@ -864,7 +864,9 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
             return Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
         if status == "error":
             return Archived(timestamp=today(), error=_refused(state))
-    return Archived(timestamp=today(), error=f"no answer within {CAPTURE_TIMEOUT} seconds")
+    return Archived(
+        timestamp=today(), error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds"
+    )
 
 
 SESSION_LIMIT = "session"

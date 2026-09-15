@@ -333,7 +333,7 @@ def test_the_clock_keeps_moving_while_nothing_finishes() -> None:
     console = terminal()
     with log.progress("checking the archive", 3, console) as along:
         along()
-        time.sleep(log.TICK * 6)
+        time.sleep((log.TICK * 6).total_seconds())
     drawn = set(re.findall(r"0:00:0\d", _written(console)))
     assert len(drawn) > 1
 

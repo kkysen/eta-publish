@@ -30,6 +30,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
+from datetime import timedelta
 from pathlib import Path
 from threading import Lock, RLock, Thread
 from typing import IO
@@ -370,7 +371,7 @@ report says the same thing and is the only one drawing.
 TICKER = "eta-publish bar"
 """What the redrawing thread is called, for anything looking at threads."""
 
-TICK = 0.2
+TICK = timedelta(milliseconds=200)
 """How often the bar redraws itself while nothing is finishing.
 
 The elapsed time is the half of the row that says a slow answer is still an
@@ -386,7 +387,7 @@ what put a note halfway through a bar.
 def _ticking(console: Console) -> None:
     """Redraw the bar until there is no bar to redraw."""
     while True:
-        time.sleep(TICK)
+        time.sleep(TICK.total_seconds())
         with _BAR_LOCK:
             if _BAR is None or _BAR.console is not console:
                 return
