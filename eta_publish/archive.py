@@ -28,6 +28,7 @@ from threading import Lock, Semaphore
 from urllib.parse import urlsplit
 
 import requests
+from requests.adapters import HTTPAdapter
 
 from .checks import plural
 from .nodes import Archived, Document, document_url
@@ -123,16 +124,22 @@ rather than as anything about the page.
 """
 
 REPLAY_AT_ONCE = 8
-"""How many replay lookups to have in flight.
+"""How many replay lookups to have in flight, and how wide the connection pool is.
 
-Not a limit the archive asks for; a limit on how much of it to ask for at
-once. This is the part that runs on every build for every source without a
-capture, and it is two `HEAD`s of about 200 ms, so the width decides the
-wait: SAS West's sixteen take two round trips at eight and eight at two.
+Measured, over all 150 documents the five reports cite:
 
-Eight rather than one thread a source, which for SAS West would be 83 of them
-opening 166 requests on `web.archive.org` at once. Nothing here is in enough
-of a hurry to find out what that does.
+- 8 at once: every one answered, in 20.5 seconds.
+- 32 at once: 27 answered and 123 could not connect.
+- 150 at once: none answered.
+
+Past that point `web.archive.org` stops accepting connections from the address
+at all, a single request included, for a while afterwards. That is worse than a
+`429`: nothing about it says to slow down, and it takes the index down with it,
+since both are the same host.
+
+Only sources without a capture are asked on a build, which is sixteen at most
+today, so eight is two round trips of waiting rather than the twenty seconds
+above.
 """
 
 _INDEXING = Semaphore(INDEX_AT_ONCE)
@@ -279,6 +286,22 @@ def _fresh(date: str) -> bool:
     return (datetime.now(UTC) - when).days < LOOKUP_CACHE_DAYS
 
 
+def _session() -> requests.Session:
+    """A session holding as many connections open as there are lookups at once.
+
+    `requests` keeps ten a host and discards the rest, so a pool wider than
+    that pays a fresh TLS handshake for every request past the tenth, which
+    takes longer than the `HEAD` it is for. At eight that changes nothing; it
+    is here so that whoever widens `REPLAY_AT_ONCE` widens the pool with it,
+    rather than finding out from a log full of discarded connections.
+    """
+    http = requests.Session()
+    adapter = HTTPAdapter(pool_connections=REPLAY_AT_ONCE, pool_maxsize=REPLAY_AT_ONCE)
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
+    return http
+
+
 def read_archive_index(dest: Path, doc: Document) -> None:
     """Tell `doc` which of its sources already have a capture.
 
@@ -386,7 +409,7 @@ def capture(
     recording it as one would mean a rate limit hit on a Tuesday permanently
     left a source with no archive.
     """
-    http = session or requests.Session()
+    http = session or _session()
     # Looking up what the archive already holds needs no account, so a build
     # without keys still does the half it can: most of what a report cites is
     # already in the Wayback Machine, put there by somebody else.
