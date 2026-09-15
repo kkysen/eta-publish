@@ -28,6 +28,7 @@ from . import console
 from .assets import read
 from .build import DOC_JSON, BuildOptions, build_one, has_its_images
 from .emit.html import Piece, lines, markup, phase_markup, tag
+from .fetch import document_url, parse_ref
 from .nodes import Document
 
 REPORTS = Path("reports.toml")
@@ -129,6 +130,27 @@ def entry_text(url: str, name: str, tab: str) -> str:
     )
 
 
+def canonical(url: str) -> str:
+    """A Docs URL with nothing in it but the document and the tab.
+
+    A URL copied out of the address bar carries whatever the browser had:
+    `?pli=1` says the reader is signed into more than one account, and
+    `#heading=h.mkzkbxod1acf` is where their cursor was. Neither says
+    anything about the document, and the fetch already ignores both.
+
+    They are dropped here so that `reports.toml` is a list of documents
+    rather than a list of the moments they were copied,
+    and so that the same document pasted twice is recognized as listed.
+
+    Anything that is not a Docs URL is left alone: a bare document id and
+    a path to a saved response are both accepted, and neither has parts to drop.
+    """
+    if "docs.google.com" not in url:
+        return url
+    doc_id, tab = parse_ref(url)
+    return document_url(doc_id, tab or "")
+
+
 def add_report(url: str, path: Path = REPORTS) -> Report:
     """Append the document at `url` to the report list, named as it names itself.
 
@@ -143,7 +165,8 @@ def add_report(url: str, path: Path = REPORTS) -> Report:
     """
     from .build import load
 
-    if any(report.url == url for report in load_reports(path)):
+    url = canonical(url)
+    if any(canonical(report.url) == url for report in load_reports(path)):
         raise ValueError(f"{path}: already lists {url}")
 
     document = load(url)
