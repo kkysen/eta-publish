@@ -443,9 +443,11 @@ def test_the_replay_is_asked_again_once_the_hour_is_up(unkeyed: None) -> None:
     finds a new capture: held back for a week, a source would publish as
     unarchived long after it was not, which is what `masstransitmag.com` did."""
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
-    path = archive.replay_cache_path()
+    path = archive.archive_cache_path()
+    cached = json.loads(path.read_text())
     stale = datetime.now(UTC) - timedelta(seconds=archive.REPLAY_CACHE_SECONDS + 1)
-    path.write_text(json.dumps({"https://a.example/1": stale.strftime("%Y%m%d%H%M%S")}))
+    cached["replay"]["https://a.example/1"] = archive._iso(stale)
+    path.write_text(json.dumps(cached))
     session = Replaying([("20240503123456", 200)])
     doc = cites("https://a.example/1")
     assert archive.capture(doc, session=session) == (1, 0)
@@ -459,9 +461,9 @@ def test_an_hour_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
     Refreshed on a build that never asked, the entry would never reach an hour old.
     """
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
-    cached = json.loads(archive.replay_cache_path().read_text())
+    cached = json.loads(archive.archive_cache_path().read_text())["replay"]
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
-    assert json.loads(archive.replay_cache_path().read_text()) == cached
+    assert json.loads(archive.archive_cache_path().read_text())["replay"] == cached
 
 
 def test_a_week_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
@@ -471,9 +473,9 @@ def test_a_week_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
     forever and the index would never be asked again.
     """
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
-    cached = json.loads(archive.archive_cache_path().read_text())
+    cached = json.loads(archive.archive_cache_path().read_text())["index"]
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
-    assert json.loads(archive.archive_cache_path().read_text()) == cached
+    assert json.loads(archive.archive_cache_path().read_text())["index"] == cached
 
 
 def test_it_is_looked_up_again_once_the_week_is_up(
@@ -483,7 +485,7 @@ def test_it_is_looked_up_again_once_the_week_is_up(
     session = Counting(200, [["timestamp"]])
     archive.capture(doc, session=session)
     asked = session.asked
-    monkeypatch.setattr(archive, "LOOKUP_CACHE_DAYS", 0)
+    monkeypatch.setitem(archive.LIFETIMES, "index", 0)
     archive.capture(cites("https://a.example/1"), session=session)
     assert session.asked > asked
 
@@ -523,7 +525,7 @@ def test_with_keys_nothing_is_held_back(keyed: None, monkeypatch: pytest.MonkeyP
         return refused
 
     monkeypatch.setattr(archive, "_submit", refuse)
-    archive._remember_nothing(["https://a.example/1"])
+    archive._remember({"index": ["https://a.example/1"]})
     session = Replaying([])
     archive.capture(cites("https://a.example/1"), session=session)
     assert session.index_asked == 1
@@ -533,7 +535,7 @@ def test_a_cache_that_cannot_be_read_is_an_empty_one(
     unkeyed: None, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """A truncated write is a slower build, not a failed one."""
-    broken = tmp_path / "archive-lookups.json"
+    broken = tmp_path / "archive.json"
     broken.write_text("{not json")
     monkeypatch.setenv(archive.ARCHIVE_CACHE, str(broken))
     session = Counting(200, [["timestamp"]])

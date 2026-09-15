@@ -203,12 +203,11 @@ the hour is not seen until it is up. CI restores `~/.cache/eta-publish` between
 runs, this file with it, so two Pages runs inside an hour share it too.
 """
 
-REPLAY_CACHE = "replay-lookups.json"
-"""The replay's cache, beside the index's and wherever that one is pointed."""
-
-
 ARCHIVE_CACHE = "ETA_ARCHIVE_CACHE"
 """Where to keep the cache instead, named like `ETA_TOKEN` and for tests."""
+
+LIFETIMES = {"index": LOOKUP_CACHE_DAYS * 24 * 60 * 60, "replay": REPLAY_CACHE_SECONDS}
+"""How many seconds a lookup of each kind that found nothing stands for."""
 
 
 def archive_cache_path() -> Path:
@@ -220,6 +219,9 @@ def archive_cache_path() -> Path:
     thrown away, or be absent on a fresh clone, and the build writes the same
     `site/` regardless. That is the whole reason it is a cache and not a record.
 
+    One file, with the index's lookups under `index` and the replay's under
+    `replay`, each source by when it was asked.
+
     Read on each call rather than resolved once, so a test can point it
     somewhere else.
     """
@@ -227,25 +229,29 @@ def archive_cache_path() -> Path:
     if override:
         return Path(override)
     root = os.environ.get("XDG_CACHE_HOME")
-    return (Path(root) if root else Path.home() / ".cache") / "eta-publish" / "archive-lookups.json"
+    return (Path(root) if root else Path.home() / ".cache") / "eta-publish" / "archive.json"
 
 
-def _cached_nothing() -> dict[str, str]:
-    """The sources looked up and not found, by the date each was looked up.
+def _cached() -> dict[str, dict[str, str]]:
+    """Each kind of lookup that found nothing, by source, by when it was asked.
 
     A cache nothing can read is an empty one: a truncated write, a file from an
     older layout, a directory somebody's backup tool replaced. None of them are
     worth failing a build over, because the answer to all of them is to ask the
-    index again.
+    archive again.
     """
-    path = archive_cache_path()
     try:
-        loaded = json.loads(path.read_text())
+        loaded = json.loads(archive_cache_path().read_text())
     except OSError, ValueError:
-        return {}
+        loaded = None
+    cached: dict[str, dict[str, str]] = {kind: {} for kind in LIFETIMES}
     if not isinstance(loaded, dict):
-        return {}
-    return {url: str(date) for url, date in loaded.items() if isinstance(url, str)}
+        return cached
+    for kind in LIFETIMES:
+        entries = loaded.get(kind)
+        if isinstance(entries, dict):
+            cached[kind] = {url: str(when) for url, when in entries.items() if isinstance(url, str)}
+    return cached
 
 
 _REMEMBERING = Lock()
@@ -261,21 +267,26 @@ a read-modify-write atomic.
 """
 
 
-def _remember_nothing(urls: list[str]) -> None:
-    """Write down that these were looked up today and had no capture.
+def _remember(found_nothing: dict[str, list[str]]) -> None:
+    """Write down that these lookups, by kind, were just made and found nothing.
 
     Only the ones asked about on this build are refreshed; the rest keep the
-    date they had, so they expire when they were going to. Except the ones
+    time they had, so they expire when they were going to. Except the ones
     already expired, which are dropped: they are no longer holding anything
     back, and a file that kept every URL a draft ever cited would grow forever.
 
     Sorted, like every other file here, so that looking at it is possible.
     """
-    if not urls:
+    if not any(found_nothing.values()):
         return
     with _REMEMBERING:
-        known = {url: date for url, date in _cached_nothing().items() if _fresh(date)}
-        known.update(dict.fromkeys(urls, today()))
+        known = {
+            kind: {url: when for url, when in entries.items() if _stands(kind, when)}
+            for kind, entries in _cached().items()
+        }
+        now = _iso(datetime.now(UTC))
+        for kind, urls in found_nothing.items():
+            known[kind].update(dict.fromkeys(urls, now))
         path = archive_cache_path()
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -292,17 +303,22 @@ def _remember_nothing(urls: list[str]) -> None:
             pass
 
 
-def _fresh(date: str) -> bool:
-    """Whether a lookup made on `date` still stands.
+def _iso(when: datetime) -> str:
+    """A moment as ISO 8601, in UTC, to the second."""
+    return when.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    A date nothing can read has not been made recently, so the source is asked
-    about again, which is the harmless direction.
+
+def _stands(kind: str, when: str) -> bool:
+    """Whether a lookup of this kind made at `when` still stands.
+
+    A time nothing can read was not recent, so the source is asked about
+    again, which is the harmless direction.
     """
     try:
-        when = datetime.strptime(date, "%Y%m%d").replace(tzinfo=UTC)
+        asked = datetime.strptime(when, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
     except ValueError:
         return False
-    return (datetime.now(UTC) - when).days < LOOKUP_CACHE_DAYS
+    return (datetime.now(UTC) - asked).total_seconds() < LIFETIMES[kind]
 
 
 def _session() -> requests.Session:
@@ -319,64 +335,6 @@ def _session() -> requests.Session:
     http.mount("https://", adapter)
     http.mount("http://", adapter)
     return http
-
-
-def replay_cache_path() -> Path:
-    """Where the replay lookups that found nothing are remembered, for an hour."""
-    return archive_cache_path().with_name(REPLAY_CACHE)
-
-
-def _cached_unserved() -> dict[str, str]:
-    """The sources the replay served nothing for, by when each was asked.
-
-    Read the way the index's cache is read, and for the same reason: a file
-    nothing can read is an empty cache, and the answer to that is to ask again.
-    """
-    try:
-        loaded = json.loads(replay_cache_path().read_text())
-    except OSError, ValueError:
-        return {}
-    if not isinstance(loaded, dict):
-        return {}
-    return {url: str(when) for url, when in loaded.items() if isinstance(url, str)}
-
-
-def _remember_unserved(urls: list[str]) -> None:
-    """Write down that the replay served nothing for these, just now.
-
-    Kept like `_remember_nothing`: only these are refreshed, the expired are
-    dropped, and the file is written beside itself and moved into place.
-    """
-    if not urls:
-        return
-    with _REMEMBERING:
-        known = {url: when for url, when in _cached_unserved().items() if _recent(when)}
-        known.update(dict.fromkeys(urls, _now()))
-        path = replay_cache_path()
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            temp = path.with_suffix(".writing")
-            temp.write_text(json.dumps(known, indent=2, sort_keys=True) + "\n")
-            temp.replace(path)
-        except OSError:
-            pass
-
-
-def _now() -> str:
-    """This moment, to the second, in the form the archive dates captures in."""
-    return datetime.now(UTC).strftime("%Y%m%d%H%M%S")
-
-
-def _recent(when: str) -> bool:
-    """Whether a replay lookup made at `when` still stands.
-
-    A time nothing can read was not recent, so the source is asked about again.
-    """
-    try:
-        asked = datetime.strptime(when, "%Y%m%d%H%M%S").replace(tzinfo=UTC)
-    except ValueError:
-        return False
-    return (datetime.now(UTC) - asked).total_seconds() < REPLAY_CACHE_SECONDS
 
 
 def read_archive_index(dest: Path, doc: Document) -> None:
@@ -494,20 +452,18 @@ def capture(
     wanted = missing(doc)
     if not wanted:
         return 0, 0
-    # Only a build with no keys defers anything: one with keys submits a source
-    # the replay found nothing for, which records an answer either way.
-    lately = _cached_nothing() if headers is None else {}
-    # The replay's answer too, for an hour, and on the same condition: a build
-    # with keys goes on to ask for a capture, which is an answer either way.
-    just = _cached_unserved() if headers is None else {}
+    # Only a build with no keys defers anything, the index's answer for a week
+    # and the replay's for an hour: one with keys submits a source the replay
+    # found nothing for, which records an answer either way.
+    cached = _cached() if headers is None else {"index": {}, "replay": {}}
 
     def archive(url: str) -> Lookup:
         return _archive(
             http,
             headers,
             url,
-            index=not _fresh(lately.get(url, "")),
-            replay=not _recent(just.get(url, "")),
+            index=not _stands("index", cached["index"].get(url, "")),
+            replay=not _stands("replay", cached["replay"].get(url, "")),
         )
 
     pool = ThreadPoolExecutor(max_workers=REPLAY_AT_ONCE)
@@ -545,9 +501,12 @@ def capture(
             found += 1
         else:
             submitted += 1
-    _remember_nothing([url for url, result in zip(wanted, results, strict=True) if result.nothing])
-    _remember_unserved(
-        [url for url, result in zip(wanted, results, strict=True) if result.unserved]
+    answered = list(zip(wanted, results, strict=True))
+    _remember(
+        {
+            "index": [url for url, result in answered if result.nothing],
+            "replay": [url for url, result in answered if result.unserved],
+        }
     )
     return found, submitted
 
