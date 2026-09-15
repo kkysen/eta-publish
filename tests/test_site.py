@@ -30,6 +30,7 @@ from eta_publish.site import (
     Site,
     add_report,
     build_site,
+    canonical,
     index_page,
     load_reports,
     report_path,
@@ -671,3 +672,35 @@ def test_reports_are_separated_from_each_other(
     assert len(headings) == 2
     assert headings[0] == 0
     assert lines[headings[1] - 1] == ""
+
+
+def test_a_url_is_listed_without_what_the_browser_added() -> None:
+    """`?pli=1` says the reader is signed into more than one account and
+    `#heading=` is where their cursor was, and neither names the document."""
+    copied = (
+        "https://docs.google.com/document/d/1GB5qDuIjDB/edit?pli=1&tab=t.0#heading=h.mkzkbxod1acf"
+    )
+    assert canonical(copied) == "https://docs.google.com/document/d/1GB5qDuIjDB/edit?tab=t.0"
+
+
+def test_a_document_named_without_a_tab_keeps_its_url_whole() -> None:
+    assert canonical("https://docs.google.com/document/d/1GB5qDuIjDB/edit?pli=1") == (
+        "https://docs.google.com/document/d/1GB5qDuIjDB/edit"
+    )
+
+
+def test_what_is_not_a_docs_url_is_left_alone() -> None:
+    """A bare document id and a path to a saved response
+    are both things `one` accepts, and neither has parts to drop."""
+    assert canonical("1GB5qDuIjDB") == "1GB5qDuIjDB"
+    assert canonical("site/reports/ibx-automation") == "site/reports/ibx-automation"
+
+
+def test_the_same_document_copied_twice_is_recognized_as_listed(tmp_path: Path) -> None:
+    """The second copy carries a different `?pli=` and a different heading,
+    and it is the same document, which is what the refusal is about."""
+    path = tmp_path / "reports.toml"
+    listed = "https://docs.google.com/document/d/1GB5qDuIjDB/edit?tab=t.0"
+    path.write_text(f'[[report]]\nname = "A"\ntab = "B"\nurl = "{listed}"\n')
+    with pytest.raises(ValueError, match="already lists"):
+        add_report(f"{listed}&pli=1#heading=h.mkzkbxod1acf", path)
