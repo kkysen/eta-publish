@@ -1,6 +1,7 @@
 """What the report cites, and the record of where each of those is archived."""
 
 import json
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import override
 
@@ -426,18 +427,41 @@ def test_the_index_is_not_asked_again_the_same_week(unkeyed: None) -> None:
     assert session.index_asked == 1, "the index was asked again inside the week"
 
 
-def test_the_replay_is_asked_every_build(unkeyed: None) -> None:
-    """It costs half a second and it is the half that finds a new capture.
-
-    Held back with the index, a source would publish as unarchived for a week
-    after somebody archived it, which is what `masstransitmag.com` did.
-    """
+def test_the_replay_is_held_back_for_an_hour(unkeyed: None) -> None:
+    """Running `eta-publish all` twice in a row should not ask the same question
+    twice, and the second run within the hour asks the archive nothing."""
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    session = Replaying([("20240503123456", 200)])
+    doc = cites("https://a.example/1")
+    assert archive.capture(doc, session=session) == (0, 0)
+    assert doc.archives == {}
+    assert session.index_asked == 0
+
+
+def test_the_replay_is_asked_again_once_the_hour_is_up(unkeyed: None) -> None:
+    """An hour rather than the index's week, because the replay is the half that
+    finds a new capture: held back for a week, a source would publish as
+    unarchived long after it was not, which is what `masstransitmag.com` did."""
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    path = archive.replay_cache_path()
+    stale = datetime.now(UTC) - timedelta(seconds=archive.REPLAY_CACHE_SECONDS + 1)
+    path.write_text(json.dumps({"https://a.example/1": stale.strftime("%Y%m%d%H%M%S")}))
     session = Replaying([("20240503123456", 200)])
     doc = cites("https://a.example/1")
     assert archive.capture(doc, session=session) == (1, 0)
     assert doc.archives["https://a.example/1"].timestamp == "20240503123456"
     assert session.index_asked == 0
+
+
+def test_an_hour_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
+    """The time is when the replay was asked, not when it was skipped.
+
+    Refreshed on a build that never asked, the entry would never reach an hour old.
+    """
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    cached = json.loads(archive.replay_cache_path().read_text())
+    archive.capture(cites("https://a.example/1"), session=Replaying([]))
+    assert json.loads(archive.replay_cache_path().read_text()) == cached
 
 
 def test_a_week_of_holding_back_does_not_renew_itself(unkeyed: None) -> None:
