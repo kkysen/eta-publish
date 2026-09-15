@@ -637,7 +637,7 @@ def test_being_told_to_slow_down_is_asked_again(
     keyed: None, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Two `429`s and then an answer, which is the shape a real build meets."""
-    monkeypatch.setattr(archive, "PATIENCE", (0, 0, 0))
+    monkeypatch.setattr(archive, "PATIENCE", (timedelta(),) * 3)
     answers = [429, 429, 200]
 
     class Relenting(requests.Session):
@@ -679,7 +679,7 @@ def test_a_session_limit_is_waited_out_rather_than_written_down(
 ) -> None:
     """Twelve captures already going is a fact about the build, not the page:
     recorded as a failure it would leave the source with no archive forever."""
-    monkeypatch.setattr(archive, "PATIENCE", (0, 0, 0))
+    monkeypatch.setattr(archive, "PATIENCE", (timedelta(),) * 3)
     answers = [
         {"status": "error", "status_ext": "error:user-session-limit"},
         {"job_id": "job-1"},
