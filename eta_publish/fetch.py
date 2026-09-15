@@ -26,6 +26,7 @@ import json
 import os
 import re
 from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from functools import cache
 from pathlib import Path
 from threading import Lock
@@ -572,52 +573,62 @@ def fetch(
 ) -> JsonObject:
     doc_id, url_tab = parse_ref(ref)
     wanted = tab or url_tab
-    document = unchanged(doc_id, cached, suggestions) if cached is not None else None
-    reused = document is not None
-    if document is None:
-        document = select_tab(fetch_document(doc_id, suggestions), wanted)
-        # What this response is of, so the next build can tell whether it is
-        # the one it wants. Read after the fetch, so a document edited while
-        # it was in flight reads as changed next time rather than as current.
-        document["suggestions"] = suggestions
-        current = modified_time(doc_id)
-        if current:
-            document["modifiedTime"] = current
-    # Recorded into the response rather than warned about here, so a build from
-    # a saved response writes the same page as the build that fetched it.
-    # Only what could actually be read: a key left out is one the last answer
-    # stands for, which `build_one` carries over from the saved response.
-    if _ambient_credentials() is not None:
-        # A service account is refused the suggestions outright, and for
-        # comments the export answers with a document it cannot see any in,
-        # which is a confident nought no retry would catch.
-        #
-        # Said out loud, because `google.auth.default` finds
-        # `gcloud auth application-default login` as well as a key named by
-        # the environment, so a machine that acquires one would otherwise stop
-        # counting these silently.
-        console.write(
-            console.note(
-                "not asking about suggestions or comments: this is a service account, "
-                "which cannot see either; keeping the counts from the last build that could"
-            ),
+    ambient = _ambient_credentials() is not None
+    # The questions about a document overlap, because none of them waits on
+    # another's answer and each is most of a second to Google and back.
+    # Two workers: the comments and the suggestions, alongside the document
+    # this thread asks for itself.
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        # Not asked when the caller said not to, and a key left out is a key
+        # `carry_over_review` fills in from the last build that did ask,
+        # which is the same shape as being unable to ask.
+        counting = (
+            pool.submit(open_comments_on_tab, doc_id, wanted) if comments and not ambient else None
         )
-        return document
-
-    # Not asked again about a document that has not been edited:
-    # proposing, accepting, or rejecting a suggestion is editing it,
-    # so the count in the response being reused is still the count.
-    if not reused:
-        suggested = open_suggestions(doc_id, wanted)
-        if suggested is not None:
-            document["openSuggestions"] = suggested
-    # Not asked when the caller said not to, and a key left out is a key
-    # `carry_over_review` fills in from the last build that did ask,
-    # which is the same shape as being unable to ask.
-    if comments:
-        open_threads = open_comments_on_tab(doc_id, wanted)
-        if open_threads is not None:
-            document["openComments"] = open_threads
+        document = unchanged(doc_id, cached, suggestions) if cached is not None else None
+        # Not asked again about a document that has not been edited:
+        # proposing, accepting, or rejecting a suggestion is editing it,
+        # so the count in the response being reused is still the count.
+        suggesting = None
+        if document is None:
+            if not ambient:
+                suggesting = pool.submit(open_suggestions, doc_id, wanted)
+            document = select_tab(fetch_document(doc_id, suggestions), wanted)
+            # What this response is of, so the next build can tell whether it is
+            # the one it wants. Read after the fetch, so a document edited while
+            # it was in flight reads as changed next time rather than as current.
+            document["suggestions"] = suggestions
+            current = modified_time(doc_id)
+            if current:
+                document["modifiedTime"] = current
+        # Recorded into the response rather than warned about here, so a build from
+        # a saved response writes the same page as the build that fetched it.
+        # Only what could actually be read: a key left out is one the last answer
+        # stands for, which `build_one` carries over from the saved response.
+        if ambient:
+            # A service account is refused the suggestions outright, and for
+            # comments the export answers with a document it cannot see any in,
+            # which is a confident nought no retry would catch.
+            #
+            # Said out loud, because `google.auth.default` finds
+            # `gcloud auth application-default login` as well as a key named by
+            # the environment, so a machine that acquires one would otherwise stop
+            # counting these silently.
+            console.write(
+                console.note(
+                    "not asking about suggestions or comments: this is a service account, "
+                    "which cannot see either; keeping the counts from the last build that could"
+                ),
+            )
+            return document
+        if suggesting is not None:
+            suggested = suggesting.result()
+            if suggested is not None:
+                document["openSuggestions"] = suggested
+        if counting is not None:
+            open_threads = counting.result()
+            if open_threads is not None:
+                document["openComments"] = open_threads
     return document
 
 
