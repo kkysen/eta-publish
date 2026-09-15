@@ -445,7 +445,7 @@ def test_the_replay_is_asked_again_once_the_hour_is_up(unkeyed: None) -> None:
     archive.capture(cites("https://a.example/1"), session=Replaying([]))
     path = archive.archive_cache_path()
     cached = json.loads(path.read_text())
-    stale = datetime.now(UTC) - timedelta(seconds=archive.REPLAY_CACHE_SECONDS + 1)
+    stale = datetime.now(UTC) - archive.REPLAY_LIFETIME - timedelta(seconds=1)
     cached["replay"]["https://a.example/1"] = stale.isoformat(timespec="seconds")
     path.write_text(json.dumps(cached))
     session = Replaying([("20240503123456", 200)])
@@ -485,7 +485,7 @@ def test_it_is_looked_up_again_once_the_week_is_up(
     session = Counting(200, [["timestamp"]])
     archive.capture(doc, session=session)
     asked = session.asked
-    monkeypatch.setitem(archive.LIFETIMES, "index", 0)
+    monkeypatch.setitem(archive.LIFETIMES, "index", timedelta())
     archive.capture(cites("https://a.example/1"), session=session)
     assert session.asked > asked
 
