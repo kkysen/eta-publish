@@ -446,7 +446,7 @@ def test_the_replay_is_asked_again_once_the_hour_is_up(unkeyed: None) -> None:
     path = archive.archive_cache_path()
     cached = json.loads(path.read_text())
     stale = datetime.now(UTC) - timedelta(seconds=archive.REPLAY_CACHE_SECONDS + 1)
-    cached["replay"]["https://a.example/1"] = archive._iso(stale)
+    cached["replay"]["https://a.example/1"] = stale.isoformat(timespec="seconds")
     path.write_text(json.dumps(cached))
     session = Replaying([("20240503123456", 200)])
     doc = cites("https://a.example/1")
