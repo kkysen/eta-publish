@@ -22,7 +22,7 @@ import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from threading import Lock, Semaphore
 from urllib.parse import urlsplit
@@ -180,7 +180,7 @@ with no archive forever.
 
 POLL_EVERY = 5
 
-INDEX_CACHE_DAYS = 7
+INDEX_LIFETIME = timedelta(days=7)
 """How long an index lookup that found nothing stands before it is asked again.
 
 What changes a `no capture` answer is somebody else archiving the page, which
@@ -190,7 +190,7 @@ a capture somebody else made is not a cost a reader can see.
 """
 
 
-REPLAY_CACHE_SECONDS = 60 * 60
+REPLAY_LIFETIME = timedelta(hours=1)
 """How long a replay lookup that found nothing stands before it is asked again.
 
 An hour, where the index's answer stands a week, because the replay is the
@@ -207,8 +207,8 @@ runs, this file with it, so two Pages runs inside an hour share it too.
 ARCHIVE_CACHE = "ETA_ARCHIVE_CACHE"
 """Where to keep the cache instead, named like `ETA_TOKEN` and for tests."""
 
-LIFETIMES = {"index": INDEX_CACHE_DAYS * 24 * 60 * 60, "replay": REPLAY_CACHE_SECONDS}
-"""How many seconds a lookup of each kind that found nothing stands for."""
+LIFETIMES = {"index": INDEX_LIFETIME, "replay": REPLAY_LIFETIME}
+"""How long a lookup of each kind that found nothing stands for."""
 
 
 def archive_cache_path() -> Path:
@@ -320,7 +320,7 @@ def _stands(kind: str, when: str) -> bool:
         return False
     if asked.tzinfo is None:
         return False
-    return (datetime.now(UTC) - asked).total_seconds() < LIFETIMES[kind]
+    return datetime.now(UTC) - asked < LIFETIMES[kind]
 
 
 def _session() -> requests.Session:
