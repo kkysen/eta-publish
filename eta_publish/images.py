@@ -15,6 +15,7 @@ The PDF needs these same files,
 so one download serves both the web and the print output.
 """
 
+import os
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -40,6 +41,13 @@ The transfer is the whole cost: 16 MB over 29 requests,
 none of which is waiting on any other.
 Bounded rather than unbounded because `build_site` is already
 running reports concurrently, and the two multiply.
+"""
+
+MAX_ENCODING_AT_ONCE = os.process_cpu_count() or 1
+"""How many images to re-encode for print at once.
+
+The opposite of fetching: the cost is a core's worth of decoding and encoding
+each, so a thread past the cores this process may use only waits for one.
 """
 
 
@@ -275,14 +283,19 @@ def write_print_copies(written: dict[str, Path], dest: Path) -> dict[str, Path]:
 
     dest.mkdir(parents=True, exist_ok=True)
     copies: dict[str, Path] = {}
-    for object_id, path in written.items():
-        out = dest / print_href(path.name)
-        copies[object_id] = out
-        data = _for_print(path)
-        if data is None:
-            shutil.copyfile(path, out)
-        else:
-            out.write_bytes(data)
+    if not written:
+        return copies
+    # Several at once, because Pillow lets go of the GIL while it decodes and
+    # encodes, which is nearly all of the time a picture takes here.
+    with ThreadPoolExecutor(max_workers=min(len(written), MAX_ENCODING_AT_ONCE)) as pool:
+        encoded = pool.map(_for_print, written.values())
+        for (object_id, path), data in zip(written.items(), encoded, strict=True):
+            out = dest / print_href(path.name)
+            copies[object_id] = out
+            if data is None:
+                shutil.copyfile(path, out)
+            else:
+                out.write_bytes(data)
     return copies
 
 
