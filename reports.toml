@@ -43,3 +43,8 @@ url = "https://docs.google.com/document/d/1--AKo1YU2iyFZzKh-DZxU5UlVOURySG2XlfKX
 name = "Deinterlining"
 tab = "Tab 1"
 url = "https://docs.google.com/document/d/1GB5qDuIjDB-Od7kmpmIgTtVDT7pCH5m02WVQ3aG_kRM/edit?tab=t.0"
+
+[[report]]
+name = "Monthly Passes"
+tab = "Current v2 Draft (2026-04-21)"
+url = "https://docs.google.com/document/d/1DAySJvDse2ccdWFupVtTkD6bGxd_-ggwovVwXsVuHO0/edit?tab=t.coq3cg52up6c"
