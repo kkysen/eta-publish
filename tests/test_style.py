@@ -378,3 +378,10 @@ def test_the_in_is_what_says_the_dollars_are_dated() -> None:
     assert warnings(written("That is $4.5 billion per mile in 2050 dollars.")) == []
     assert warnings(written("Costs are given in 2026 dollars throughout.")) == []
     assert warnings(written("A denarius bought more in 5 dollars than today.")) == []
+
+
+def test_a_speed_is_written_as_the_two_units_it_is_made_of() -> None:
+    """`kmh` and `kph` are what somebody reaches for, and neither is the symbol."""
+    for written_as in ("80 kmh", "80 kph", "80 kilometers per hour"):
+        assert "`80 km/h`" in warnings(written(f"It runs at {written_as} today."))[0]
+    assert warnings(written("It runs at 80 km/h today.")) == []

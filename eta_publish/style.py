@@ -437,12 +437,18 @@ UNITS = {
     "megawatt": "MW",
     "kilometers per hour": "km/h",
     "kilometres per hour": "km/h",
+    "kmh": "km/h",
+    "kph": "km/h",
     "trains per hour": "tph",
 }
 """How a unit is written after a number, and every spelling that is not it.
 
 A symbol has no plural, which is why `lbs` is in here beside `pounds`:
 `3 lb` is how the unit is written however many of them there are.
+
+`kmh` and `kph` are in here for the same reason as `lbs`: they are the
+spellings somebody reaches for, and neither is the symbol.
+The symbol is `km/h`, which is the two units it is made of.
 
 The ones the reports already write as symbols are in here too, from the
 other side: `750 V`, `232 t`, `83 dB`, `2.9 mm`, `33 tph`. Each is written
