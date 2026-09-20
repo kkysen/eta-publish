@@ -413,6 +413,16 @@ def _bar(console: Console) -> Progress:
             # other line is written under: a timer of its own is a writer
             # nothing else can wait for.
             auto_refresh=False,
+            # `sys.stdout` and `sys.stderr` left as they are.
+            # A bar otherwise puts a proxy of its own in their place for as
+            # long as it is drawing, so that a bare `print` lands above it
+            # rather than on it. Nothing here prints bare; what it does
+            # instead is give `for_stream` a stream it has never seen, so
+            # the next note is written through a second console that knows
+            # nothing about the bar and lands on top of the thing the
+            # redirection exists to protect.
+            redirect_stdout=False,
+            redirect_stderr=False,
         )
         _BAR.start()
         # A daemon, so a build that is stopping is never waiting on a clock.
