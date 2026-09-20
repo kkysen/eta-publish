@@ -1,47 +1,50 @@
 #import "template.typ": capped_image, report
 
 #show: report.with(
-  title: "IBX Automation",
+  title: "No Need to Wait: Automated Light Metro is Right for the IBX",
   short: "",
   phase: "Composition",
   dateline: "",
-  contributors: ("Madison Feinberg", "Robert Hale", "Alon Levy", "Khyber Sen", "Franklin Tang", ),
+  contributors: ("dariusj@etany.org", "Madison Feinberg", "Robert Hale", "Alon Levy", "Khyber Sen", "Franklin Tang", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
     [dropped a line before the #raw("Header") section: #raw("IBX Automation")],
     [the #raw("Header") section has an unrecognized #raw("Before:") line; check it for a typo],
-    [no #raw("Title")-styled paragraph, so the document name #raw("IBX Automation") is being used as the headline; style the headline as #raw("Title") in the doc],
-    [unfinished text in the document: #raw("But automation and PSDs mean a lot more than safety. Runtimes are highly reliabl")],
-    [unfinished text in the document: #raw("TODO didn’t finish")],
-    [7 suggestions still open on this tab; the build publishes the document without them, as it reads today],
-    [1 comment thread still open on this tab],
+    [unfinished text in the document: #raw("Caption: TODO")],
+    [unfinished text in the document: #raw("On the IBX, in contrast, light rail has little cost advantages, and in fact may ")],
+    [the image #raw("img-e3ef182e") has no #raw("Credit:") line],
+    [1 image is unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): Caption: TODO], )],
+    [5 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [7 comment threads still open on this tab],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
-    [style: #raw("125th Street") should be #raw("125 St"): #raw("...cond Avenue Subway’s proposed 125th Street extension to avoid extraneous...")],
-    [style: #raw("8 minutes") should be #raw("8 min"): #raw("...l city. SkyTrain runs every 6-8 minutes off-peak on each of two branc...")],
-    [style: #raw("6 minutes") should be #raw("6 min"): #raw("...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...")],
-    [style: #raw("3-minute") should be #raw("3-min"): #raw("...f city center, offering about 3-minute frequencies on a lengthy trun...")],
-    [style: #raw("6 minutes") should be #raw("6 min"): #raw("...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...")],
-    [style: #raw("15 minutes") should be #raw("15 min"): #raw("...Marseille Metro runs every 10-15 minutes.")],
-    [style: #raw("3-minute") should be #raw("3 min"), with no hyphen: #raw("...f city center, offering about 3-minute frequencies on a lengthy trun...")],
-    [style: two words should be separated by 1 space, not 2: #raw("...common. On such routes, demand··requires both very high freque...")],
-    [style: two words should be separated by 1 space, not 2: #raw("...e Second Avenue Subway opened,··whereas ALM is typically desig...")],
-    [style: #raw("Fordham Road") should be #raw("Fordham Rd"): #raw("...ircumferential routes such as Fordham Road in the Bronx and Main Street ...")],
-    [style: #raw("Main Street") should be #raw("Main St"): #raw("...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...")],
     [style: #raw("5-minute") should be #raw("5-min"): #raw("...time and the currently stated 5-minute peak headways. If peak headwa...")],
     [style: #raw("2 minutes") should be #raw("2 min"): #raw("... peak headways are reduced to 2 minutes instead, with off-peak headwa...")],
     [style: #raw("3 minutes") should be #raw("3 min"): #raw("...ff-peak headways ranging from 3 minutes midday to 5 minutes in the ev...")],
     [style: #raw("5 minutes") should be #raw("5 min"): #raw("...ging from 3 minutes midday to 5 minutes in the evening, ridership ris...")],
     [style: #raw("5-minute") should be #raw("5 min"), with no hyphen: #raw("...time and the currently stated 5-minute peak headways. If peak headwa...")],
-    [style: #raw("66 seconds") should be #raw("66 sec"): #raw("...rains, but it runs them every 66 seconds, and can run up to 60 seconds...")],
-    [style: #raw("60 seconds") should be #raw("60 sec"): #raw("...66 seconds, and can run up to 60 seconds. While a light metro can be a...")],
-    [style: #raw("1-min") should be #raw("1 min"), with no hyphen: #raw("...frequencies, like the extreme 1-min headways of Lille to the more...")],
-    [style: #raw("2-min") should be #raw("2 min"), with no hyphen: #raw("... Lille to the more normal 1.5-2-min minimum technical headways of...")],
-    [style: #raw("2 minutes") should be #raw("2 min"): #raw("...sist) at very high frequency (2 minutes apart or less), trading per-t...")],
-    [style: #raw("600-foot") should be #raw("600-ft"): #raw("...equire the high capacity of a 600-foot subway train. Since most IBX ...")],
-    [style: #raw("2 minutes") should be #raw("2 min"): #raw("...trains as frequently as every 2 minutes or less thus benefits the pla...")],
-    [style: #raw("600-foot") should be #raw("600 ft"), with no hyphen: #raw("...equire the high capacity of a 600-foot subway train. Since most IBX ...")],
+    [style: #raw("90 seconds") should be #raw("90 sec"): #raw("...ways could go as low as every 90 seconds, as seen in existing systems ...")],
+    [style: a dash is written with a space beside it, and the house style closes it up: #raw("...ibly cheap metro systems ($200 – 300 million/mile) that run tr...")],
+    [style: #raw("2 minutes") should be #raw("2 min"): #raw("...t high frequency, often every 2 minutes. Automation eliminates the la...")],
+    [style: #raw("100 meters") should be #raw("100 m"): #raw("...le) that run trains less than 100 meters long and build stations barel...")],
+    [style: #raw("8 minutes") should be #raw("8 min"): #raw("...ership. SkyTrain runs every 6-8 minutes off-peak on each of two branc...")],
+    [style: #raw("6 minutes") should be #raw("6 min"): #raw("...Copenhagen Metro runs every 4-6 minutes off-peak on each of two branc...")],
+    [style: #raw("3-minute") should be #raw("3-min"): #raw("...f city center, offering about 3-minute frequencies on a lengthy trun...")],
+    [style: #raw("6 minutes") should be #raw("6 min"): #raw("...ss VAL technology run every 3-6 minutes off-peak in Lille, Rennes, To...")],
+    [style: #raw("15 minutes") should be #raw("15 min"): #raw("...Marseille Metro runs every 10-15 minutes.")],
+    [style: #raw("3-minute") should be #raw("3 min"), with no hyphen: #raw("...f city center, offering about 3-minute frequencies on a lengthy trun...")],
+    [style: #raw("72.5 percent") should be #raw("72.5%"): #raw("...ency and ridership increases. 72.5 percent of NYCT operating costs today...")],
+    [style: #raw("5-minute") should be #raw("5-min"): #raw("...ously publicly planned around 5-minute peak frequencies, and has con...")],
+    [style: #raw("3-minute") should be #raw("3-min"): #raw("...equencies, and has considered 3-minute peak frequencies. Automated o...")],
+    [style: #raw("3-minute") should be #raw("3-min"): #raw("...instead permit, at a minimum, 3-minute peak and 6-minute off-peak se...")],
+    [style: #raw("6-minute") should be #raw("6-min"): #raw("... a minimum, 3-minute peak and 6-minute off-peak service, increasing ...")],
+    [style: #raw("5-minute") should be #raw("5 min"), with no hyphen: #raw("...ously publicly planned around 5-minute peak frequencies, and has con...")],
+    [style: #raw("3-minute") should be #raw("3 min"), with no hyphen: #raw("...equencies, and has considered 3-minute peak frequencies. Automated o...")],
+    [style: #raw("3-minute") should be #raw("3 min"), with no hyphen: #raw("...instead permit, at a minimum, 3-minute peak and 6-minute off-peak se...")],
+    [style: #raw("6-minute") should be #raw("6 min"), with no hyphen: #raw("... a minimum, 3-minute peak and 6-minute off-peak service, increasing ...")],
+    [style: #raw("Fordham Road") should be #raw("Fordham Rd"): #raw("...ircumferential routes such as Fordham Road in the Bronx and Main Street ...")],
+    [style: #raw("Main Street") should be #raw("Main St"): #raw("...Fordham Road in the Bronx and Main Street in Queens are appropriate to ...")],
     [style: #raw("180 meters") should be #raw("180 m"): #raw("... on the New York City Subway (180 meters) or longer exclusively use hi...")],
     [style: a sentence should end with 1 space, not 2: #raw("...t costs are given separately).··This is a Buy America cost, wh...")],
     [style: #raw("32-min") should be #raw("32 min"), with no hyphen: #raw("With a 32-min runtime, 2-min turns, and a 9...")],
@@ -56,11 +59,123 @@
     [style: #raw("90 kmh") should be #raw("90 km/h"): #raw("speed: 90 kmh service (100 kmh design)")],
     [style: #raw("100 kmh") should be #raw("100 km/h"): #raw("speed: 90 kmh service (100 kmh design)")],
   ),
+  hero: [
+#figure(
+  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/img-e3ef182e.jpg")[#capped_image("print/img-e3ef182e.jpg", alt: "Caption: TODO")],
+  caption: [Caption: TODO],
+)
+  ],
 )
 
-= No Need to Wait: Automated Light Metro is Right for the IBX
+Credit: MTA, #link("https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out")[via Gothamist]#super[#link(<src1>)[\[1\]]]
+
+#emph[The MTA recently released new renderings of the IBX.
+They appear to show high-level trains and platforms, an excellent decision if accurate.
+The canopies and station entrances look very sleek and modern, but the stations are missing one crucial thing: platform screen doors (PSDs), which are now the standard for new build metro lines across the world.
+Moreover, this once again indicates that MTA remains hesitant to commit to automating the IBX.]
+
+== Draft Environmental Impact Statement looming
+
+Now is the time to decide how the IBX should be built.
+Later this fall, the MTA is slated to release the draft environmental impact statement for the IBX.
+The public response to that will be one of the last times to shape the broadest contours of the project design, as the final environmental impact statement will lock in major decisions.
+
+We’ve had some 
+
+After the decision to tunnel under the All Faiths Cemetery, the IBX right-of-way will already be completely grade-separated, significantly improving the levels of system reliability possible to achieve.
+
+== Rising Ridership
+
+Projections for the ridership of the IBX have steadily risen as plans materialize and improve.
+Ridership projections have risen 84%#footnote[(160,000/day) / (87,800/day) = 1.839], all the way from #link("https://www.mta.info/document/72081#page=16")[87,800/day]#super[#link(<src2>)[\[2\]]] in the #link("https://www.mta.info/document/72081")[initial feasibility study in 2022]#super[#link(<src3>)[\[3\]]] to #link("https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up")[160,000/day]#super[#link(<src4>)[\[4\]]] in the more detailed and higher-speed 2025 design, higher than both the #link("https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml#:~:text=130%2C000%20vehicles%20use%20the%20BQE%20daily")[BQE (130k/day)]#super[#link(<src5>)[\[5\]]] and #link("https://anita.garden/nycriders/")[G train (148k/day)]#super[#link(<src6>)[\[6\]]], which also connect Brooklyn and Queens.
+This has been driven by all of the following factors:
+
+- Refinement of the ridership model as more details have been decided
+- Improved station locations
+- A #link("https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=This%20refinement%20has%20reduced%20projected%20running%20times%20of%20the%20new%20line%20from%2039%20minutes%20to%2032%20minutes")[31% reduction in runtime]#super[#link(<src7>)[\[7\]]] after #link("https://www.etany.org/ibx-all-faiths-tunnel")[ETA successfully pressured the MTA to drop street running] around All Faiths Cemetery#footnote[#link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/]#super[#link(<src19>)[\[19\]]] #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/]#super[#link(<src20>)[\[20\]]]]
+
+An independent study by #link("https://arxiv.org/abs/2408.01562")[Yang et al]#super[#link(<src8>)[\[8\]]] found that the maximum ridership, barring land-use changes, should be 254k riders/day.
+Another independent study by Tang at NYU Marron using the FTA’s STOPS ridership modeling software#footnote[STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
+Thus, there is a limit to its accuracy.
+But the fact that it found a very similar number to the MTA’s closed-source Regional Transit Forecasting Model (RTFM) bodes well, and it also quite accurately predicted SAS Phase 1 ridership.
+Including detailed ridership in open data would enable more accurate independent analyses confirming higher ridership potential.] found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways.
+If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k.
+Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway’s Phase 1, which saw about 200k daily riders as well.
+
+Ridership could rise even further with additional transit-oriented development (TOD) beyond current conditions.
+All studies above look purely at present-day land use, as the FTA forbids the use of promises of future upzoning in ridership analysis.
+However, the Mamdani administration is interested in extending City of Yes upzoning to IBX, and ongoing analysis by Ensari at Marron is finding that a large number of additional housing units could be built profitably in the area if current programs were extended and IBX were built.
+
+It is imperative that the IBX be future-proofed for much higher ridership in the future.
+Luckily, there is a cost-effective solution to this that will also deliver unparalleled service to riders.
 
 == Automated Light Metro
+
+Automated light metro technology would enable the IBX to feature significantly higher frequencies from day one by lowering operating costs.
+It would also allow for future ridership growth by enabling raising frequencies to the point that headways could go as low as every 90 seconds, as seen in existing systems today internationally.
+
+Modern metro technology increasingly runs automatically.
+This is classified in the following grades of automation (GoA):
+
+- GoA1: manual operation
+- GoA2: automated driving: the train drives automatically, but the operator opens the doors, closes the doors, and presses a button to start the automatic driving until the next station
+- GoA3: driverless operation: the train runs automatically, but there is an on-board attendant to operate the train in emergencies
+- GoA4: unattended operation: the train runs automatically, with no crew on board except perhaps for security
+
+New subway lines in developed and even middle-income countries are usually driverless in the sense of GoA 4, unless they are extensions of older lines.
+The technology is mature enough that the additional capital costs of systems are lower than the lifetime labor costs of drivers.
+
+Automated light metro (ALM) systems have become popular worldwide.
+These systems run short, driverless trains at high frequency, often every 2 minutes.
+Automation eliminates the largest cost of operating a metro system: onboard personnel while using systems like platform screen doors and cameras to keep people safe.
+Shrinking the station sizes minimizes capital costs.
+Small and medium cities in Italy have delivered incredibly cheap metro systems (\$200 – 300 million/mile) that run trains less than 100 meters long and build stations barely any longer than the trains.#footnote[#link("https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf")[https://transitcosts.com/wp-content/uploads/Italian\_Case\_Study.pdf]#super[#link(<src21>)[\[21\]]]] 
+
+ALM is an intermediate-capacity system.
+It relies on a combination of short trains to allow cheap underground station construction and driverless trains to allow the very high frequency required for sufficient throughput.
+On IBX, most stations will be above ground, so any cost savings from shortening platform length will be lesser, but still present in reducing material costs.
+For the one underground station planned at Atlantic Av, shortening the platform and thus reducing the dig volume may be more significant where existing MTA practices lead to stations costing around 75% of overall hard underground construction costs.
+On IBX, most stations will be above ground, so any cost savings from shortening platform length will be lesser, but still present in reducing material costs.
+For the one underground station planned at Atlantic Av, shortening the platform and thus reducing the dig volume may be more significant where existing MTA practices lead to stations costing around 75% of overall hard underground construction costs.
+
+The core value of driverless operation is that it permits high off-peak frequency, even in smaller cities with lower possible ridership or lines with lower ridership.
+SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk.
+The systems using driverless VAL technology run every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in contrast, the non-driverless Marseille Metro runs every 10-15 minutes.
+
+Thus, the earliest adopters of the technology have historically been smaller cities, which looked for medium capacity at low cost while still maintaining the high speed of a fully grade-separated metro system.
+Larger cities have more recently started applying ALM technology on lines that do not expect to have ridership that warrants metro or regional rail.
+In all cases, the comparison is not with a conventional subway, but with a light rail system.
+A conventional subway on such routes is usually rejected because it would be overkill for the expected ridership.
+
+The tradeoff between light rail (which has a driver) and ALM is generally that light rail is cheaper if it can be done on the street in dedicated lanes, but ALM offers the higher speed of a subway, much lower operating costs due to driverless operations, and, because of those low costs, high frequency all day.
+The cost increase stemming from complete grade separation is defrayed by shrinking the footprint of the stations.#footnote[In Italy, where many urban subway lines have been built this century, some driverless and some not, the cost of station construction has been fairly consistent at €500 per cubic meter outside the most difficult environments (such as Classical Roman sites), producing smaller driverless stations in Turin and Milan at €15 million per station and larger ones in more modern parts of Rome at €40 million.\# Nonetheless, with soft costs included, the construction cost of ALM is about four to five times as high as that of on-street tramways.]
+
+On the IBX, in contrast, light rail has little cost advantages, and in fact may be more expensive.
+After the decision to tunnel under the All Faiths Cemetery, the IBX right-of-way will already be completely grade-separated, significantly improving the levels of system reliability possible to achieve.
+As a result, however, the light rail mode thus does not save on grade separation costs, as it would have in earlier project designs.
+Thus, the implementation of ALM only requires the installation of a CBTC signaling system, like those used on the subway, enabling automated operation.
+Since CBTC is the MTA’s choice of signaling technology on the subway moving forward, maintaining this choice on the IBX enables economies of scale with existing expertise and industry relationships.
+It also usually includes installing platform screen doors, which are discussed more in TODO.
+These requirements are defrayed by the shorter platform lengths enabled by improving system throughput by enabling higher frequencies. 
+
+As the costs for opting for ALM technology are very low or even negative, it would be a missed opportunity to forgo the operational cost decreases and frequency and ridership increases.
+72.5 percent of NYCT operating costs today are labor expenditures.
+Not all of this goes to onboard train staff, since other roles, like maintenance, are also critical to operate the system.
+Nonetheless, about one-third to two-fifths of subway personnel operate trains.
+As a ballpark estimate, avoiding the need to hire operators would reduce long-term operating costs by about 25%, enabling additional frequency at no extra cost.
+Future frequency improvements serving higher potential ridership would be even cheaper by reducing marginal operating costs.
+This would also insulate the system from further operational cost increases due to potential legislative requirements to increase staffing levels, a threat that the subway system’s shuttles currently face.
+
+Meanwhile, in terms of frequency, the MTA has previously publicly planned around 5-minute peak frequencies, and has considered 3-minute peak frequencies.
+Automated operations would instead permit, at a minimum, 3-minute peak and 6-minute off-peak service, increasing system ridership and overall value to regional mobility.
+
+Elsewhere in New York, ALM may be appropriate on other lines that have no expectation of more than 15,000-25,000 passengers per hour per direction, and that do not make sense as short extensions of existing subway lines.
+Circumferential routes such as Fordham Road in the Bronx and Main Street in Queens are appropriate to study for this technology.
+These routes have never been studied as rail routes, because light rail may be too slow for their needs and a full-size subway too expensive.
+The IBX offers the best testing ground for expanding the use of ALM as an enabling technology for lower-cost and higher-quality transit construction technology.
+The IBX thus has the potential to open the door to more interborough connectivity in the future.
+
+== Safety and Platform Screen Doors
 
 \[Discuss Honolulu Skyline.
 Only US example.
@@ -73,127 +188,10 @@ Would be ~\$31M for the IBX if adjusted for inflation and number of stations, wh
 Might be a good strategy.
 Also for subway surfing and open gangways.\]
 
-\[Introduce what the driverless metro is.
-Talk about metro automation as a technology, used on busy main lines like Paris M1/M4/M14, all new Singapore lines, increasingly new Chinese lines, etc.\]
-
-\[Go into ALM.
-Explain that once the metro is driverless, costs can be reduced by shrinking station footprint, and using very high frequency, which would be unaffordable otherwise, to maintain a reasonable capacity.
-Cite Marco’s Italy case study and talk about how small cities in Italy build incredibly cheap metros this way, and also talk about secondary cities in France and the stations on the lower-ridership GPE lines.\]
-
-\[Get into advantages and disadvantages—the latter including scaling up problems.
-Mention that in Vancouver, the Canada Line is having this issue due to its going well over ridership projections, but say that the outer terminals are single-track to save money so it’s capped at 20 trunk tph, whereas the Expo Line is capable of 33 tph and Parisian lines 42.\]
-
-\[possibly mention that IBX should be future proofed for platform extension if it proves necessary, eg through station sitting that does not preclude it.
-Is there a way to cost effectively preserve this option at Atlantic Av?\]
-
-\[Say that multi-line systems in China can pool rolling stock; maybe mention the Expo+Millennium line system.\]
-
-== Where ALM is Appropriate
-
-ALM is an intermediate-capacity system.
-It relies on a combination of short trains to allow cheap underground construction and driverless trains to allow the very high frequency required for sufficient throughput.
-This, in turn, is because station costs are a considerable proportion of overall subway construction costs: the ratio of station to tunnel costs ranges from a little less than 1:1 in some low-cost French examples to more than 3:1 for Second Avenue Subway.
-As far as the Transit Costs Project has been able to tell from detailed American and Italian data, station costs within each environment are proportional to the dig volume; for the same reason, ETA recommended reducing the station dig volumes for Second Avenue Subway’s proposed 125th Street extension to avoid extraneous mezzanines.
-Shrinking the size of the train on a new-build line allows further reduction in station footprint and thus considerably lower costs.
-
-The value of driverless operation is that it permits high off-peak frequency, even in a small city.
-SkyTrain runs every 6-8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4-6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk.
-The systems using driverless VAL technology run every 3-6 minutes off-peak in Lille, Rennes, Toulouse, and Turin; in contrast, the non-driverless Marseille Metro runs every 10-15 minutes.
-
-Nevertheless, on the strongest routes in major cities ALM systems are not common.
-On such routes, demand  requires both very high frequency and long trains.
-The 4 and 5 trains handled 30,000 passengers from the Upper East Side to Midtown during the peak hour before Second Avenue Subway opened,#footnote[#link("https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM_TDS_Hub_Bound_Travel_2016-FINAL.pdf")[https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM\_TDS\_Hub\_Bound\_Travel\_2016-FINAL.pdf]#super[#link(<src15>)[\[15\]]]] #footnote[\[We should cite the SAS EIS.\]] whereas ALM is typically designed for 15,000-25,000.#footnote[#link("https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity")[https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity]#super[#link(<src16>)[\[16\]]] #link("https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/")[https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/]#super[#link(<src17>)[\[17\]]] \[Multiply REM derated to 4/m^2 by design frequency\]]
-
-Thus, the earliest adopters of the technology have historically been smaller cities, which looked for medium capacity at low cost while still maintaining the high speed of a fully grade-separated metro system.
-The first driverless metro system deployed as ordinary urban mass transit, as opposed to an airport people mover, was the VAL system for the Lille Metro, opened 1983, from which it rapidly spread across provincial France.
-Vancouver, at the time a metro region of only 1.5 million people, opened SkyTrain in 1986.
-
-Larger cities have more recently started applying ALM technology on lines that do not expect to have ridership that warrants metro or regional rail.
-In all cases, the comparison is not with a conventional subway, but with a light rail system.
-A conventional subway on such routes is usually rejected because it would be overkill for the expected ridership.
-
-The tradeoff between light rail and ALM is that light rail is cheaper if it can be done on the street in dedicated lanes, but ALM offers the higher speed of a subway, much lower operating costs due to driverless operations, and, because of those low costs, high frequency all day.
-The cost increase stemming from complete grade separation is defrayed by shrinking the footprint of the stations.
-In Italy, where many urban subway lines have been built this century, some driverless and some not, the cost of station construction has been fairly consistent at €500 per cubic meter outside the most difficult environments (such as Classical Roman sites), producing smaller driverless stations in Turin and Milan at €15 million per station and larger ones in more modern parts of Rome at €40 million.#footnote[All numbers come from the Italian case of the Transit Costs Project. #link("https://transitcosts.com/cases/")[https://transitcosts.com/cases/]#super[#link(<src18>)[\[18\]]]] Nonetheless, with soft costs included, the construction cost of ALM is about four to five times as high as that of on-street tramways.
-
-However, when light rail cannot be built on the street, its cost advantage over ALM is greatly reduced.
-In truth, the costs of light and heavy rail are the same if both are built of the same type: underground, or elevated, or at-grade.
-Light rail is cheaper only when it can be built at-grade and heavy rail cannot, as light rail technology is designed to handle frequent grade crossings whereas driverless metro must be built entirely grade-separated.
-In a private right-of-way such as that of IBX, the construction costs of ALM, which would not incur any additional tunneling, are the same as those of light rail or any other non-driverless solution.
-IBX is the perfect place for New York to experiment with ALM technology and reduce costs further by shrinking station footprints.
-Elsewhere, the tradeoff is that ALM has somewhat higher initial costs but lower operating costs.
-But the IBX right-of-way is such that ALM costs less because the stations can be shrunk without any requirement for additional tunnels or elevated guideways.
-
-Elsewhere in New York, ALM may be appropriate on other lines that have no expectation of more than 15,000-25,000 passengers per hour per direction, and that do not make sense as short extensions of existing subway lines.
-Circumferential routes such as Fordham Road in the Bronx and Main Street in Queens are appropriate to study for this technology.
-These routes have never been studied as rail routes, because light rail may be too slow for their needs and a full-size subway too expensive.
-
-== Rising Ridership
-
-IBX has seen a steady rise in projected ridership as plans materialize and improve.
-Ridership projections have risen from 87,000 per day in the initial feasibility study in 2022 to 160,000 per day in the more detailed and higher-speed 2025 design.#footnote[#link("https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase")[https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase]#super[#link(<src19>)[\[19\]]]] The PEL study saw that rise to 115k.
-Then the 20-Year Needs Assessment Comparative Evaluation increased it to 118.7k.
-And now it has risen to 160k.
-This has been driven by all of the following factors:
-
-- Refinement of the ridership model as more details have been decided
-- Improved station locations
-- A reduction in runtime after ETA successfully pressured the MTA to drop street running around All Faiths Cemetery#footnote[#link("https://www.etany.org/ibx-all-faiths-tunnel")[https://www.etany.org/ibx-all-faiths-tunnel]] #footnote[#link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/]#super[#link(<src20>)[\[20\]]] #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/]#super[#link(<src21>)[\[21\]]]]
-
-An independent study (#link("https://arxiv.org/abs/2408.01562")[https://arxiv.org/abs/2408.01562]#super[#link(<src1>)[\[1\]]]) by Yang et al found that the maximum ridership, barring land-use changes, should be 254k riders/day.
-Another independent study by Tang at NYU Marron using the FTA’s STOPS open-source ridership modeling software#footnote[STOPS depends on extensive calibration with existing ridership, which includes statistics like per-platform ridership, which the MTA does not make available.
-Thus, there is a limit to its accuracy.
-But the fact that it found a very similar number to the MTA’s closed-source Regional Transit Forecasting Model (RTFM) bodes well, and it also quite accurately predicted SAS Phase 1 ridership.
-Including detailed ridership in open data would enable more accurate independent analyses confirming higher ridership potential.] found the same 160k figure, albeit with the old runtime and the currently stated 5-minute peak headways.
-If peak headways are reduced to 2 minutes instead, with off-peak headways ranging from 3 minutes midday to 5 minutes in the evening, ridership rises to 200k.
-Combined with the recent trip time reductions, this could climb even higher, putting the IBX even above the Second Avenue Subway’s Phase 1, which saw about 200k daily riders as well.
-
-Ridership could rise even further with additional transit-oriented development (TOD) beyond current conditions.
-All studies above look purely at present-day land use, as the FTA forbids the use of promises of future upzoning in ridership analysis.
-However, the Mamdani administration is interested in extending City of Yes upzoning to IBX, and ongoing analysis by Ensari at Marron is finding that a large number of additional housing units could be built profitably in the area if current programs were extended and IBX were built. 
-
-It is imperative that the IBX be future-proofed for much higher ridership in the future.
-Luckily, there is a cost-effective solution to this that will also deliver unparalleled service to riders.
-
-== Light Metro
-
-The MTA had previously always described the IBX as light rail transit (LRT), but ever since the All Faiths tunnel announcement, they have increasingly begun describing it more as a light metro.
-Jamie Torres-Springer, head of MTA Construction & Development, described the IBX at that press conference as a “light rail metro,” and at IBX Open Houses, MTA staff also said that the IBX will now be a lot closer to a light metro.
-
-To begin with, light rail is a fairly expansive concept.
-It is often not fully grade-separated and spans from full street-running to median-running with grade crossings to fully grade-separated, or any mix of those.
-Thus, it also includes light metro.
-Thanks to the All Faiths tunnel, the IBX lands squarely in the category of full grade separation.
-
-So what is light metro?
-Light, in contrast to heavy, refers to the capacity of a trainset.
-So it is generally shorter than heavy metro, and often narrower and/or physically lighter as well.
-Metro generally means that it is fully grade-separated.
-So light metro means a grade-separated rapid transit line using smaller trainsets.
-
-Low capacity vehicles do not necessarily make for a low capacity line, however.
-A small trainset can allow for smaller stations and tunnels, thereby drastically reducing construction cost.
-But it can often make up capacity by running extremely frequently.
-Lille’s Metro, for example, runs very tiny 26 m long, 2 m wide trains, but it runs them every 66 seconds, and can run up to 60 seconds.
-While a light metro can be as small and limited as an airport’s people mover system, it can also be as large as the #link("https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[narrow 6B trains]#super[#link(<src2>)[\[2\]]] serving Guangzhou Metro Line 3, which carried #link("http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[2.76 million riders a day]#super[#link(<src3>)[\[3\]]] in 2019 and is perhaps the busiest metro line in the world.#footnote[As far as we are aware, the only rapid transit lines that carry more riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai Suburban Railway’s Western Line (~3 million/day).
-However, both are technically mainline rail lines, and Mumbai’s Western Line is quad-tracked for much of its length.]
-To be fair, Guangzhou Metro Line 3 is ridiculously over-capacity (it makes the pre-Second Avenue Subway phase 1 opening Lexington Av line look roomy, and has needed multiple relief lines and faces crowding limitations at many stations) and should have been heavy metro for sure, but it is a testament to the potential of light metro that it can carry the busiest metro line in the world.
-
-That said, while ridership keeps climbing, the IBX will never be as busy as Guangzhou Metro Line 3.
-With the current 160k daily ridership projection, however, it will already be #link("https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.")[the busiest light rail system (not line, whole system) in the US]#super[#link(<src4>)[\[4\]]].
-So it makes perfect sense to future-proof the IBX with the most cost-effective type of operation available: automated light metro (ALM).
-
-== Automation
-
-Automated light metro simply combines light metro with automation.
-Now, what does automation mean?
-Automation generally refers to a Grade of Automation 4 (GoA4), in which a train is unattended and runs, stops, and opens and closes doors fully automatically.
-Sometimes there is a non-driver attendant, but if the attendant is also a backup driver, then the system is only GoA3.
-The MTA’s existing CBTC lines, like the 7 and L, use GoA2, in which CBTC allows for Automatic Train Operation (ATO).
-With ATO, the train driving is automatic, but there is still a driver/conductor who oversees it and opens and closes doors.
+Old text:
 
 GoA4 automation generally requires platform screen doors (PSDs) with only a few grandfathered exceptions worldwide (Vancouver and Nuremberg).
-This ensures the train operation is exceptionally safe.
+This ensures the train operation is exceptionally safe, and no people, or objects are at risk of getting hit by trains.
 No one can be pushed or fall into the tracks, and if open-gangways are used, no one can subway surf.
 And crashes are exceedingly rare.
 Of the handful of crashes, all but one were when human drivers took over control.
@@ -201,51 +199,17 @@ Of the handful of crashes, all but one were when human drivers took over control
 But automation and PSDs mean a lot more than safety.
 Runtimes are highly reliable, as there is no operator variability and nothing can fall onto the tracks.
 Precise acceleration and braking curves mean speed is increased, all while the ride is smoother, too.
-And then high reliability means schedule padding can be reduced, further cutting runtimes.
-For example, WMATA estimates that automation would save TODO.
+And then high reliability means#footnote[#link("https://en.wikipedia.org/wiki/Automatic_train_operation#Accidents_and_incidents_involving_ATO")[https://en.wikipedia.org/wiki/Automatic\_train\_operation\#Accidents\_and\_incidents\_involving\_ATO]#super[#link(<src22>)[\[22\]]]] schedule padding can be reduced, further cutting runtimes.
 
-#strong[TODO didn’t finish]
+== Light Metro
 
-This allows for the highest possible frequencies, like the extreme 1-min headways of Lille to the more normal 1.5-2-min minimum technical headways of ALMs like Montreal’s REM, Honolulu’s Skyline, Copenhagen’s Metro, Vancouver’s SkyTrain, London’s DLR, and all of the many airport people movers in the US, including NYC’s own JFK AirTrain.
-By squeezing capacity out of frequency, expensive fixed infrastructure like stations can be minimized.
-Riders are rewarded by very high frequency, reliability, and speed, and operating costs are reduced by not having to employ train drivers.
-This is especially helpful off-peak, where the large marginal operating cost savings help maintain frequent service all day long.
-
-This is a perfect fit for the IBX.
-As a circumferential line, most (70%) of trips will involve a transfer to the subway, and many will involve multiple.
-Thus, frequency is critical.
-Moreover, the IBX will serve more non-work trips than a radial line into Manhattan, so excellent off-peak service is crucial as well.
-And this can be clearly seen in the FTA STOPS ridership model, which estimates a 25% ridership increase from more frequent all-day service.
-
-#underline[#strong[\[below is more just notes or old stuff\]]]
-
-only 24/7 metro systems are NYC subway, PATH, and Copenhagen’s Metro. the subway has numerous 4-track and 3-track sections that help immensely, and everyone can feel the weight of weekend maintenance.
-PATH on the other hand has much fewer 3- or 4-track segments, and well, everyone can see how good their maintenance is.
-Copenhagen, on the other hand, has 2-track lines, but still runs 24/7 without huge maintenance backlogs or weekend shutdowns because automation is such a huge help.
-
-=== Automated Light Metro
-
-Light rail is an expansive category that includes automated light metro (ALM), which would suit the IBX particularly well.
-ALM refers to a proven form of rolling stock and service delivery in use on many newer systems, such as the new REM in Montreal, and Vancouver Skytrain, as well as lines in numerous Italian cities.
-In the United States, ALM trains have long been used on numerous airport “people mover” systems, including the JFK AirTrain.
-As the name suggests, ALM systems run short trains (typically no longer than four cars per consist) at very high frequency (2 minutes apart or less), trading per-trainset capacity for higher throughput of trains per hour.
-They are thus ideal for grade-separated train services that need to run frequently but do not require the high capacity of a 600-foot subway train.
-Since most IBX riders will be making short trips either that stand alone or require one or more transfers, trains must run frequently around the clock; the ability to run trains as frequently as every 2 minutes or less thus benefits the planned line immensely.
-Additionally, ALM trains require smaller station footprints, an essential benefit given the outsized role #link("https://transitcosts.com/city/newyork-case-study/")[station size]#super[#link(<src5>)[\[5\]]] plays in the MTA’s high construction costs.
-Finally, ALM trains can also climb steep grades, reducing the construction costs for tunnel and bridge approaches.
-
-What exactly does the “automated” in “automated light metro” mean?
-There are international standards for different #link("https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation")[#emph[grades of automation]]#super[#link(<src6>)[\[6\]]], signifying exactly how automated a transit line’s operations is.
-The most automated of these grades is the 4th grade (#emph[GoA4)].
-The MTA should also proactively study full GoA4 automation for the IBX.
-On top of controlling operating costs, automated trains accelerate and brake more smoothly than manually controlled ones, and they can be stopped at platforms precisely.
-Thus, they enable platform screen doors, which improve safety and increase comfort on the platform since people can confidently stand beside the platform edge.
-Increasing the effective usable platform area is important for cost-effectiveness. 
+While a light metro can be as small and limited as an airport’s people mover system, it can also be as large as the #link("https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[narrow 6B trains]#super[#link(<src9>)[\[9\]]] serving Guangzhou Metro Line 3, which carried #link("http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[2.76 million riders a day]#super[#link(<src10>)[\[10\]]] in 2019 and is perhaps the busiest metro line in the world.#footnote[As far as we are aware, the only rapid transit lines that carry more riders per day are Tokyo’s Yamanote Line (~5 million/day) and Mumbai Suburban Railway’s Western Line (~3 million/day).
+However, both are technically mainline rail lines, and Mumbai’s Western Line is quad-tracked for much of its length.]
 
 === Off-the-shelf rolling stock
 
 Importantly, the MTA has its pick of makers for standardized light metro railcars and seems intent on selecting an off-the-shelf design.
-If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the #link("https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[R46 truck-cracking debacle]#super[#link(<src7>)[\[7\]]].
+If it follows through, it would, happily, break a trend of insisting carmakers comply with exacting standards, which started back in 1977 in the wake of the #link("https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[R46 truck-cracking debacle]#super[#link(<src11>)[\[11\]]].
 As we have#link("https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train")[ ]#link("https://www.etany.org/a-not-so-capital-plan-1-most-expensive-subway-train")[chronicled], trusting experienced firms to meet their needs is what most other transit agencies do, and it is a major reason why they have generally beaten out New York City on subway costs, especially as of late.
 
 === High platforms
@@ -264,13 +228,13 @@ Hitachi Driverless Metro railcars are used on Honolulu’s Skyline, are proven i
 
 With a 32-min runtime, 2-min turns, and a 90% utilization rate, 38 trainsets are needed.
 At 4 cars/trainset and using Honolulu’s costs of \$2.2 million/car inflation-adjusted to June 2025, this fleet would cost \$421 million.
-Assuming #link("https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[3.5% future inflation]#super[#link(<src8>)[\[8\]]] (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be \$444 million in 2027,#footnote[ceil(((32 min + 2 min) \* 2) / 2 min / 90%) trainsets \* 4 cars/trainset \* \$2.2 million/car \* 124% (Apr 2020 to Jan 2025 inflation) \* 103.5%^(2027-2025)] only slightly higher than the MTA’s estimated \$432 million for fleet cost.
+Assuming #link("https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[3.5% future inflation]#super[#link(<src12>)[\[12\]]] (used by the MTA’s 20-Year Needs Comparative Evaluation), this would be \$444 million in 2027,#footnote[ceil(((32 min + 2 min) \* 2) / 2 min / 90%) trainsets \* 4 cars/trainset \* \$2.2 million/car \* 124% (Apr 2020 to Jan 2025 inflation) \* 103.5%^(2027-2025)] only slightly higher than the MTA’s estimated \$432 million for fleet cost.
 But this is with 2-min peak headways, not 5-min peak headways.
 And with a 92% utilization rate, the cost comes down to exactly \$432 million.
 
 #underline[Hitachi Driverless Metro Honolulu]
 
-cost: #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[\$2.2 million/car]#super[#link(<src9>)[\[9\]]] (#link("http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[contract in 2011]#super[#link(<src10>)[\[10\]]], #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[first delivered on March 25, 2016]#super[#link(<src11>)[\[11\]]], #link("https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[last delivered on April 24, 2024]#super[#link(<src12>)[\[12\]]])
+cost: #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[\$2.2 million/car]#super[#link(<src13>)[\[13\]]] (#link("http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[contract in 2011]#super[#link(<src14>)[\[14\]]], #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[first delivered on March 25, 2016]#super[#link(<src15>)[\[15\]]], #link("https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[last delivered on April 24, 2024]#super[#link(<src16>)[\[16\]]])
 
 fleet: 80 cars
 
@@ -280,7 +244,7 @@ length: 65 ft (19.81 m)
 
 width: 10 ft (3.048 m)
 
-weight: #link("http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[72,000 lbs per 65 ft AW0 car]#super[#link(<src13>)[\[13\]]]
+weight: #link("http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[72,000 lbs per 65 ft AW0 car]#super[#link(<src17>)[\[17\]]]
 
 AW0 weight/length: 72,000 lbs / 65 ft = 1648 kg/m
 
@@ -310,7 +274,7 @@ length: 19.05 m
 
 width: 2.94 m
 
-weight: #link("https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[232 t per 76.2 m AW3 4-car trainset]#super[#link(<src14>)[\[14\]]]
+weight: #link("https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[232 t per 76.2 m AW3 4-car trainset]#super[#link(<src18>)[\[18\]]]
 
 AW0 weight/length: (232 t - (175 lbs \* 780)) / (19.05 m \* 4) = 2232 kg/m
 
@@ -330,24 +294,25 @@ seating: longitudinal
 
 = Sources
 
-+ #link("https://arxiv.org/abs/2408.01562")[https://arxiv.org/abs/2408.01562] (archived #link("https://web.archive.org/web/20260416140808/https://arxiv.org/abs/2408.01562")[April 16, 2026]) <src1>
-+ #link("https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/] (archived #link("https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[May 15, 2026]) <src2>
-+ #link("http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html] (archived #link("https://web.archive.org/web/20250828081856/http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[August 28, 2025]) <src3>
-+ #link("https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.")[https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase\#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.] (archived #link("https://web.archive.org/web/20260518022508/https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=IBX%E2%80%99s%20projected%20annual%20ridership%20is%20higher%20than%20the%20current%20ridership%20of%20any%20other%20light%20rail%20system%20in%20the%20country%20at%2048%20million%20riders%20%E2%80%94%20the%20next%20largest%20is%20Los%20Angeles%20at%2046%20million%20riders%20per%20year.")[May 18, 2026]) <src4>
-+ #link("https://transitcosts.com/city/newyork-case-study/")[https://transitcosts.com/city/newyork-case-study/] (archived #link("https://web.archive.org/web/20260908151115/https://transitcosts.com/city/newyork-case-study/")[September 8, 2026]) <src5>
-+ #link("https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation")[https://en.wikipedia.org/wiki/Automatic\_train\_operation\#Grades\_of\_automation] (archived #link("https://web.archive.org/web/20260906195011/https://en.wikipedia.org/wiki/Automatic_train_operation#Grades_of_automation")[September 6, 2026]) <src6>
-+ #link("https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16] (archived #link("https://web.archive.org/web/20251008074227/https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[October 8, 2025]) <src7>
-+ #link("https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[https://future.mta.info/documents/20-YearNeedsAssessment\_ComparativeEvaluation.pdf\#page=3] (archived #link("https://web.archive.org/web/20260821175057id_/https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[August 21, 2026]) <src8>
-+ #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html\#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to] (archived #link("https://web.archive.org/web/20210120105720/https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[January 20, 2021]) <src9>
-+ #link("http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf] (archived #link("https://web.archive.org/web/20251013003705/http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[October 13, 2025]) <src10>
-+ #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html] (archived #link("https://web.archive.org/web/20210120105720/https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[January 20, 2021]) <src11>
-+ #link("https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train] (archived #link("https://web.archive.org/web/20260419060929/https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[April 19, 2026]) <src12>
-+ #link("http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[http://www.staradvertiser.com/news/20110322\_Have\_a\_seat.html\#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.] (archived #link("https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[August 8, 2014]) <src13>
-+ #link("https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[https://rem.info/en/rolling-stock\#:~:text=Maximum%20weight%3A%20232%20tonnes] (archived #link("https://web.archive.org/web/20260616144315/https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[June 16, 2026]) <src14>
-+ #link("https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM_TDS_Hub_Bound_Travel_2016-FINAL.pdf")[https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM\_TDS\_Hub\_Bound\_Travel\_2016-FINAL.pdf] (archived #link("https://web.archive.org/web/20260227082914/https://www.nymtc.org/Portals/0/Pdf/Hub%20Bound/2016%20Hub%20Bound/DM_TDS_Hub_Bound_Travel_2016-FINAL.pdf")[February 27, 2026]) <src15>
-+ #link("https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity")[https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity] (archived #link("https://web.archive.org/web/20250829145842/https://dailyhive.com/vancouver/short-platforms-and-trains-is-the-skytrain-canada-line-under-built-and-nearing-capacity")[August 29, 2025]) <src16>
-+ #link("https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/")[https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/] (archived #link("https://web.archive.org/web/20260814173645/https://buzzer.translink.ca/2025/12/skytrain-at-40-a-region-shaped-by-transportation/")[August 14, 2026]) <src17>
-+ #link("https://transitcosts.com/cases/")[https://transitcosts.com/cases/] (archived #link("https://web.archive.org/web/20260908151113/https://transitcosts.com/cases/")[September 8, 2026]) <src18>
-+ #link("https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase")[https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase] (archived #link("https://web.archive.org/web/20260829123215/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase")[August 29, 2026]) <src19>
-+ #link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/] (archived #link("https://web.archive.org/web/20260719213805/https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[July 19, 2026]) <src20>
-+ #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/] (archived #link("https://web.archive.org/web/20260513035917/https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[May 13, 2026]) <src21>
++ #link("https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out")[https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out] (archived #link("https://web.archive.org/web/20260910231933/https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out")[September 10, 2026]) <src1>
++ #link("https://www.mta.info/document/72081#page=16")[https://www.mta.info/document/72081\#page=16] (archived #link("https://web.archive.org/web/20260518002035id_/https://www.mta.info/document/72081#page=16")[May 18, 2026]) <src2>
++ #link("https://www.mta.info/document/72081")[https://www.mta.info/document/72081] (archived #link("https://web.archive.org/web/20260518002035/https://www.mta.info/document/72081")[May 18, 2026]) <src3>
++ #link("https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up")[https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase\#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up] (archived #link("https://web.archive.org/web/20260829123215/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up")[August 29, 2026]) <src4>
++ #link("https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml#:~:text=130%2C000%20vehicles%20use%20the%20BQE%20daily")[https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml\#:~:text=130%2C000%20vehicles%20use%20the%20BQE%20daily] (archived #link("https://web.archive.org/web/20260912070442/https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml#:~:text=130%2C000%20vehicles%20use%20the%20BQE%20daily")[September 12, 2026]) <src5>
++ #link("https://anita.garden/nycriders/")[https://anita.garden/nycriders/] (archived #link("https://web.archive.org/web/20260822120542/https://anita.garden/nycriders/")[August 22, 2026]) <src6>
++ #link("https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=This%20refinement%20has%20reduced%20projected%20running%20times%20of%20the%20new%20line%20from%2039%20minutes%20to%2032%20minutes")[https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase\#:~:text=This%20refinement%20has%20reduced%20projected%20running%20times%20of%20the%20new%20line%20from%2039%20minutes%20to%2032%20minutes] (archived #link("https://web.archive.org/web/20260518022508/https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=This%20refinement%20has%20reduced%20projected%20running%20times%20of%20the%20new%20line%20from%2039%20minutes%20to%2032%20minutes")[May 18, 2026]) <src7>
++ #link("https://arxiv.org/abs/2408.01562")[https://arxiv.org/abs/2408.01562] (archived #link("https://web.archive.org/web/20260416140808/https://arxiv.org/abs/2408.01562")[April 16, 2026]) <src8>
++ #link("https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/] (archived #link("https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/")[May 15, 2026]) <src9>
++ #link("http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html] (archived #link("https://web.archive.org/web/20250828081856/http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html")[August 28, 2025]) <src10>
++ #link("https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16] (archived #link("https://web.archive.org/web/20251008074227/https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16")[October 8, 2025]) <src11>
++ #link("https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[https://future.mta.info/documents/20-YearNeedsAssessment\_ComparativeEvaluation.pdf\#page=3] (archived #link("https://web.archive.org/web/20260821175057id_/https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf#page=3")[August 21, 2026]) <src12>
++ #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html\#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to] (archived #link("https://web.archive.org/web/20210120105720/https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html#:~:text=cars%2C%20valued%20at-,%242.2%20million%20each,-and%20designed%20to")[January 20, 2021]) <src13>
++ #link("http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf] (archived #link("https://web.archive.org/web/20251013003705/http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf")[October 13, 2025]) <src14>
++ #link("https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html] (archived #link("https://web.archive.org/web/20210120105720/https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html")[January 20, 2021]) <src15>
++ #link("https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train] (archived #link("https://web.archive.org/web/20260419060929/https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train")[April 19, 2026]) <src16>
++ #link("http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[http://www.staradvertiser.com/news/20110322\_Have\_a\_seat.html\#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.] (archived #link("https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html#:~:text=to%20weigh%20about-,72%2C000%20pounds,-.")[August 8, 2014]) <src17>
++ #link("https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[https://rem.info/en/rolling-stock\#:~:text=Maximum%20weight%3A%20232%20tonnes] (archived #link("https://web.archive.org/web/20260616144315/https://rem.info/en/rolling-stock#:~:text=Maximum%20weight%3A%20232%20tonnes")[June 16, 2026]) <src18>
++ #link("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/] (archived #link("https://web.archive.org/web/20260719213805/https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")[July 19, 2026]) <src19>
++ #link("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/] (archived #link("https://web.archive.org/web/20260513035917/https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")[May 13, 2026]) <src20>
++ #link("https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf")[https://transitcosts.com/wp-content/uploads/Italian\_Case\_Study.pdf] (archived #link("https://web.archive.org/web/20260512184237/https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf")[May 12, 2026]) <src21>
++ #link("https://en.wikipedia.org/wiki/Automatic_train_operation#Accidents_and_incidents_involving_ATO")[https://en.wikipedia.org/wiki/Automatic\_train\_operation\#Accidents\_and\_incidents\_involving\_ATO] (archived #link("https://web.archive.org/web/20260906195011/https://en.wikipedia.org/wiki/Automatic_train_operation#Accidents_and_incidents_involving_ATO")[September 6, 2026]) <src22>
