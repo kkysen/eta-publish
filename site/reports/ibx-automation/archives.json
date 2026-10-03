@@ -11,6 +11,10 @@
     "snapshot": "https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html",
     "timestamp": "20140808010159"
   },
+  "http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf": {
+    "snapshot": "https://web.archive.org/web/20130515042955/http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf",
+    "timestamp": "20130515042955"
+  },
   "https://anita.garden/nycriders/": {
     "snapshot": "https://web.archive.org/web/20260822120542/https://anita.garden/nycriders/",
     "timestamp": "20260822120542"
@@ -27,9 +31,17 @@
     "snapshot": "https://web.archive.org/web/20260821175057/https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf",
     "timestamp": "20260821175057"
   },
+  "https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park": {
+    "snapshot": "https://web.archive.org/web/20260902012928/https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park",
+    "timestamp": "20260902012928"
+  },
   "https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out": {
     "snapshot": "https://web.archive.org/web/20260910231933/https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out",
     "timestamp": "20260910231933"
+  },
+  "https://ibx.transitcosts.com/ibx-1/": {
+    "snapshot": "https://web.archive.org/web/20260512184007/https://ibx.transitcosts.com/ibx-1/",
+    "timestamp": "20260512184007"
   },
   "https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/": {
     "snapshot": "https://web.archive.org/web/20260719213805/https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/",
@@ -78,5 +90,9 @@
   "https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml": {
     "snapshot": "https://web.archive.org/web/20260912070442/https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml",
     "timestamp": "20260912070442"
+  },
+  "https://www.nyc.gov/mayors-office/news/2026/05/mamdani-administration-advances-first-neighborhood-plans-for-whi": {
+    "snapshot": "https://web.archive.org/web/20260918152353/https://www.nyc.gov/mayors-office/news/2026/05/mamdani-administration-advances-first-neighborhood-plans-for-whi",
+    "timestamp": "20260918152353"
   }
 }

@@ -227,7 +227,7 @@ After all, the easiest transit trip to make is the one that you don't have to th
 5. <https://transitcenter.org/monthly-fare-capping-is-the-ticket-to-fare-equity/> (archived [May 17, 2026](<https://web.archive.org/web/20260517114557/https://transitcenter.org/monthly-fare-capping-is-the-ticket-to-fare-equity/>))
 6. <https://www.ridersalliance.org/news/its-time-to-expand-fair-fares> (archived [March 16, 2026](<https://web.archive.org/web/20260316022857/https://www.ridersalliance.org/news/its-time-to-expand-fair-fares>))
 7. <https://pcac.org/report/fairfares25/> (archived [May 17, 2026](<https://web.archive.org/web/20260517234603/https://pcac.org/report/fairfares25/>))
-8. <https://www.ironmanturnstile.com/transportation-and-smart-hubs/> (not archived)
+8. <https://www.ironmanturnstile.com/transportation-and-smart-hubs/> (archived [April 29, 2026](<https://web.archive.org/web/20260429163851/https://www.ironmanturnstile.com/transportation-and-smart-hubs/>))
 9. <https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection> (archived [February 14, 2026](<https://web.archive.org/web/20260214174558/https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection>))
 10. <https://youtu.be/OVq1SRBy3aY?si=JyTyJlIe4zqtKe60> (not archived)
 
