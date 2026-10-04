@@ -232,6 +232,29 @@ def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
     assert missing(doc) == ["https://a.example/1"]
 
 
+class Refusing(Answering):
+    """An `Answering` that refuses the connection the first `refusals` times."""
+
+    def __init__(self, refusals: int, status: int, body: object = None) -> None:
+        super().__init__(status, body)
+        self.refusals = refusals
+
+    @override
+    def request(self, *args: object, **kwargs: object) -> requests.Response:
+        if self.refusals:
+            self.refusals -= 1
+            raise requests.ConnectionError("refused")
+        return super().request(*args, **kwargs)
+
+
+def test_a_refused_connection_is_asked_again(keyed: None, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Being refused is how `web.archive.org` says to slow down when it says nothing."""
+    monkeypatch.setattr(archive, "PATIENCE", (timedelta(0),))
+    doc = cites("https://a.example/1")
+    session = Refusing(1, 200, [["timestamp"], ["20240503123456"]])
+    assert archive.capture(doc, session=session) == (1, 0)
+
+
 # ---- a source that is already an Internet Archive item ---------------
 
 

@@ -625,11 +625,16 @@ def _patiently[T](ask: Callable[[], T]) -> T:
     The waiting is what makes the count mean anything: a source recorded as
     unarchived because the index was busy is a source that will publish saying
     so, and nothing later goes back to check.
+
+    A connection that was refused or a read that timed out is waited out the
+    same way: `web.archive.org` refuses connections rather than answering `429`
+    when it is asked too much at once, so that is being told to slow down too.
+    Not every `RequestException`, though: an `HTTPError` is an answer.
     """
     for wait in PATIENCE:
         try:
             return ask()
-        except Busy:
+        except Busy, requests.ConnectionError, requests.Timeout:
             time.sleep(wait.total_seconds())
     return ask()
 
