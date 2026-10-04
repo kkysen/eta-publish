@@ -1,19 +1,15 @@
 {
-  "http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf": {
-    "snapshot": "https://web.archive.org/web/20251013003705/http://hartdocs.honolulu.gov/docushare/dsweb/Get/Document-14729/Agreement.pdf",
-    "timestamp": "20251013003705"
-  },
   "http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html": {
     "snapshot": "https://web.archive.org/web/20250828081856/http://sn.people.com.cn/n2/2020/0102/c378296-33682040.html",
     "timestamp": "20250828081856"
   },
-  "http://www.staradvertiser.com/news/20110322_Have_a_seat.html": {
-    "snapshot": "https://web.archive.org/web/20140808010159/http://www.staradvertiser.com/news/20110322_Have_a_seat.html",
-    "timestamp": "20140808010159"
-  },
   "http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf": {
     "snapshot": "https://web.archive.org/web/20130515042955/http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf",
     "timestamp": "20130515042955"
+  },
+  "http://www.wmata.com/business/procurement_and_contracting/solicitations/uploads/RFP%20Energy%20Storage-Attachment%20B-Rail%20Car%20Performance%20for%20Design-Simulation.pdf": {
+    "snapshot": "https://web.archive.org/web/20160114052554/http://www.wmata.com/business/procurement_and_contracting/solicitations/uploads/RFP%20Energy%20Storage-Attachment%20B-Rail%20Car%20Performance%20for%20Design-Simulation.pdf",
+    "timestamp": "20160114052554"
   },
   "https://anita.garden/nycriders/": {
     "snapshot": "https://web.archive.org/web/20260822120542/https://anita.garden/nycriders/",
@@ -27,13 +23,9 @@
     "snapshot": "https://web.archive.org/web/20260422232822/https://communityofmetros.org/research-enhancing-platform-safety-without-platform-doors/",
     "timestamp": "20260422232822"
   },
-  "https://en.wikipedia.org/wiki/Automatic_train_operation": {
-    "snapshot": "https://web.archive.org/web/20260906195011/https://en.wikipedia.org/wiki/Automatic_train_operation",
-    "timestamp": "20260906195011"
-  },
-  "https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf": {
-    "snapshot": "https://web.archive.org/web/20260821175057/https://future.mta.info/documents/20-YearNeedsAssessment_ComparativeEvaluation.pdf",
-    "timestamp": "20260821175057"
+  "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_NAMAIN10%40DF_TABLE4&df[ag]=OECD.SDD.NAD&df[vs]=2.0&dq=A.AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA...PPP_B1GQ.......&lom=LASTNPERIODS&lo=10&to[TIME_PERIOD]=false&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA,COMBINED_UNIT_MEASURE&vw=tb": {
+    "snapshot": "https://web.archive.org/web/20260313233214/https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_NAMAIN10%40DF_TABLE4&df[ag]=OECD.SDD.NAD&df[vs]=2.0&dq=A.AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA...PPP_B1GQ.......&lom=LASTNPERIODS&lo=10&to[TIME_PERIOD]=false&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA,COMBINED_UNIT_MEASURE&vw=tb",
+    "timestamp": "20260313233214"
   },
   "https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park": {
     "snapshot": "https://web.archive.org/web/20260902012928/https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park",
@@ -42,6 +34,10 @@
   "https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out": {
     "snapshot": "https://web.archive.org/web/20260910231933/https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out",
     "timestamp": "20260910231933"
+  },
+  "https://ibx.mta.info/about/": {
+    "snapshot": "https://web.archive.org/web/20260921162613/https://ibx.mta.info/about/",
+    "timestamp": "20260921162613"
   },
   "https://ibx.transitcosts.com/ibx-1/": {
     "snapshot": "https://web.archive.org/web/20260512184007/https://ibx.transitcosts.com/ibx-1/",
@@ -55,14 +51,6 @@
     "snapshot": "https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/",
     "timestamp": "20260515114508"
   },
-  "https://rem.info/en/rolling-stock": {
-    "snapshot": "https://web.archive.org/web/20260616144315/https://rem.info/en/rolling-stock",
-    "timestamp": "20260616144315"
-  },
-  "https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16": {
-    "snapshot": "https://web.archive.org/web/20251008074227/https://timesmachine.nytimes.com/timesmachine/1980/09/27/111295852.html?pageNumber=16",
-    "timestamp": "20251008074227"
-  },
   "https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf": {
     "snapshot": "https://web.archive.org/web/20260512184237/https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf",
     "timestamp": "20260512184237"
@@ -71,17 +59,17 @@
     "snapshot": "https://web.archive.org/web/20260513035917/https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/",
     "timestamp": "20260513035917"
   },
+  "https://www.civilbeat.org/2013/09/19830-honolulu-rails-new-27-million-safety-feature-to-avert-track-fatalities/": {
+    "snapshot": "https://web.archive.org/web/20180704003258/https://www.civilbeat.org/2013/09/19830-honolulu-rails-new-27-million-safety-feature-to-avert-track-fatalities/",
+    "timestamp": "20180704003258"
+  },
   "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase": {
     "snapshot": "https://web.archive.org/web/20260829123215/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase",
     "timestamp": "20260829123215"
   },
-  "https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html": {
-    "snapshot": "https://web.archive.org/web/20210120105720/https://www.govtech.com/fs/honolulus-first-two-rail-cars-for-new-transit-system-arrive-on-oahu.html",
-    "timestamp": "20210120105720"
-  },
-  "https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train": {
-    "snapshot": "https://web.archive.org/web/20260419060929/https://www.masstransitmag.com/rail/vehicles/press-release/55021467/honolulu-authority-for-rapid-transportation-hart-honolulu-accepts-delivery-of-20th-train",
-    "timestamp": "20260419060929"
+  "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review": {
+    "snapshot": "https://web.archive.org/web/20260914114804/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review",
+    "timestamp": "20260914114804"
   },
   "https://www.mta.info/document/103691": {
     "snapshot": "https://web.archive.org/web/20260518002014/https://www.mta.info/document/103691",
@@ -90,6 +78,10 @@
   "https://www.mta.info/document/114891": {
     "snapshot": "https://web.archive.org/web/20260518002024/https://www.mta.info/document/114891",
     "timestamp": "20260518002024"
+  },
+  "https://www.mta.info/document/172206": {
+    "snapshot": "https://web.archive.org/web/20260519070421/https://www.mta.info/document/172206",
+    "timestamp": "20260519070421"
   },
   "https://www.mta.info/document/72081": {
     "snapshot": "https://web.archive.org/web/20260518002035/https://www.mta.info/document/72081",
@@ -106,5 +98,17 @@
   "https://www.nyc.gov/mayors-office/news/2026/05/mamdani-administration-advances-first-neighborhood-plans-for-whi": {
     "snapshot": "https://web.archive.org/web/20260918152353/https://www.nyc.gov/mayors-office/news/2026/05/mamdani-administration-advances-first-neighborhood-plans-for-whi",
     "timestamp": "20260918152353"
+  },
+  "https://www.nycsubway.org/wiki/Chapter_03._General_Arrangement_for_Construction": {
+    "snapshot": "https://web.archive.org/web/20251205012113/https://www.nycsubway.org/wiki/Chapter_03._General_Arrangement_for_Construction",
+    "timestamp": "20251205012113"
+  },
+  "https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf": {
+    "snapshot": "https://web.archive.org/web/20260910171300/https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf",
+    "timestamp": "20260910171300"
+  },
+  "https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf": {
+    "snapshot": "https://web.archive.org/web/20260215035655/https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf",
+    "timestamp": "20260215035655"
   }
 }
