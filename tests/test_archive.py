@@ -189,7 +189,8 @@ class Answering(requests.Session):
 def test_being_told_to_slow_down_is_not_an_answer_about_the_page(keyed: None) -> None:
     """A rate limit leaves the source missing, so the next build asks again."""
     doc = cites("https://a.example/1")
-    assert archive.capture(doc, session=Answering(429)) == (0, 0)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=Answering(429))
     assert doc.archives == {}
     assert missing(doc) == ["https://a.example/1"]
 
@@ -203,7 +204,8 @@ def test_a_capture_somebody_else_already_made_is_used(keyed: None) -> None:
 
 def test_a_server_error_is_not_recorded_as_a_fact_about_the_source(keyed: None) -> None:
     doc = cites("https://a.example/1")
-    assert archive.capture(doc, session=Answering(503)) == (0, 0)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=Answering(503))
     assert doc.archives == {}
 
 
@@ -253,6 +255,14 @@ def test_a_refused_connection_is_asked_again(keyed: None, monkeypatch: pytest.Mo
     doc = cites("https://a.example/1")
     session = Refusing(1, 200, [["timestamp"], ["20240503123456"]])
     assert archive.capture(doc, session=session) == (1, 0)
+
+
+def test_a_source_the_archive_could_not_be_asked_about_stops_the_build(keyed: None) -> None:
+    """Published, it would read `not archived`, and the next build might not agree."""
+    doc = cites("https://a.example/1", "https://b.example/2")
+    with pytest.raises(archive.Unanswered, match="b.example"):
+        archive.capture(doc, session=Refusing(1_000, 200))
+    assert doc.archives == {}
 
 
 # ---- a source that is already an Internet Archive item ---------------
@@ -569,9 +579,11 @@ def test_being_told_to_slow_down_is_not_cached(unkeyed: None) -> None:
     """Nothing was learned, so there is nothing to remember for a week."""
     doc = cites("https://a.example/1")
     session = Counting(429)
-    archive.capture(doc, session=session)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=session)
     asked = session.asked
-    archive.capture(cites("https://a.example/1"), session=session)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(cites("https://a.example/1"), session=session)
     assert session.asked > asked
 
 
@@ -690,7 +702,8 @@ def test_a_request_that_never_arrived_says_nothing_about_the_source(keyed: None)
             raise requests.Timeout("read timed out")
 
     doc = cites("https://a.example/1")
-    assert archive.capture(doc, session=Timing()) == (0, 0)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=Timing())
     assert doc.archives == {}
     assert missing(doc) == ["https://a.example/1"]
 

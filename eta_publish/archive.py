@@ -515,6 +515,12 @@ def capture(
             "replay": [url for url, result in answered if result.unserved],
         }
     )
+    unanswered = [url for url, result in answered if result.unanswered]
+    if unanswered:
+        raise Unanswered(
+            f"could not ask the archive about {plural(len(unanswered), 'source')}, "
+            "so they would publish as not archived; build again: " + ", ".join(unanswered)
+        )
     return found, submitted
 
 
@@ -555,6 +561,8 @@ class Lookup:
     unindexed: bool = False
     unserved: bool = False
     """The replay was asked and served nothing, which stands for an hour."""
+    unanswered: bool = False
+    """The archive could not be asked at all, so nothing is known either way."""
 
 
 def _archive(
@@ -595,7 +603,20 @@ def _archive(
         #
         # Not remembered either, for the same reason: a cache of this would be a
         # week of not asking about a page nothing ever learned anything about.
-        return Lookup()
+        #
+        # Nor published: `capture` stops the build over it, because the source
+        # would otherwise publish as `not archived`, which is a claim about it.
+        return Lookup(unanswered=True)
+
+
+class Unanswered(RuntimeError):
+    """The archive could not be asked about some sources, so the build stops.
+
+    Published anyway, those sources would read `not archived`, and a build an
+    hour later that got through would publish something different from the
+    same document. Stopping keeps the build saying the same thing every time
+    it says anything, and the next one asks again.
+    """
 
 
 class Busy(RuntimeError):
