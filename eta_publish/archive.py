@@ -147,10 +147,18 @@ above.
 
 _INDEXING = Semaphore(INDEX_AT_ONCE)
 _SUBMITTING = Semaphore(SUBMIT_AT_ONCE)
-"""The two narrow gates, held for the length of one question each.
+_REPLAYING = Semaphore(REPLAY_AT_ONCE)
+"""The three gates, held for the length of one question each.
 
 A gate rather than a smaller pool: what has to be limited is the asking, and
 the thread that is waiting to ask is not the thing the limit is about.
+
+Module-wide rather than one per `capture`, because reports are built in
+parallel and each one has its own pool. Eight reports with a pool of ten each
+is eighty replay lookups in flight, past the point where `web.archive.org`
+stops accepting connections, and a lookup that cannot connect publishes its
+source as `not archived`. IBX Automation published sources that way that
+had been captured weeks before, and the next build found every one.
 """
 
 PATIENCE = (timedelta(seconds=5), timedelta(seconds=20), timedelta(minutes=1))
@@ -645,10 +653,16 @@ def _existing(
     which had no cache, found the capture and failed the check.
     """
     # `replay` is the hour's cache, and holds back the replay for that long only.
-    served = _served(http, url) if replay else None
+    served = _replayed(http, url) if replay else None
     if served is not None:
         return served
     return _indexed(http, url) if index else None
+
+
+def _replayed(http: requests.Session, url: str) -> Archived | None:
+    """`_served`, asked while holding `_REPLAYING`."""
+    with _REPLAYING:
+        return _served(http, url)
 
 
 def _served(http: requests.Session, url: str) -> Archived | None:

@@ -1,6 +1,9 @@
 """What the report cites, and the record of where each of those is archived."""
 
 import json
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import override
@@ -392,6 +395,42 @@ def test_no_capture_at_all_is_confirmed_with_the_index(
     session = Replaying([])
     archive.capture(doc, session=session)
     assert session.index_asked == 1
+
+
+class Overlapping(Replaying):
+    """A `Replaying` that notes the most replay lookups it had in flight at once."""
+
+    def __init__(self, captures: list[tuple[str, int]]) -> None:
+        super().__init__(captures)
+        self.lock = threading.Lock()
+        self.in_flight = 0
+        self.most = 0
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        with self.lock:
+            self.in_flight += 1
+            self.most = max(self.most, self.in_flight)
+        try:
+            # Long enough for every thread that could get in to have got in.
+            time.sleep(0.01)
+            return super().request(method, url, *args, **kwargs)
+        finally:
+            with self.lock:
+                self.in_flight -= 1
+
+
+def test_reports_built_at_once_share_the_replay_limit(
+    keyed: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Each report has its own pool, so the limit has to be wider than any one of them."""
+    monkeypatch.setattr(archive, "_REPLAYING", threading.Semaphore(2))
+    session = Overlapping([("20240503123456", 200)])
+    docs = [cites(*(f"https://{report}.example/{n}" for n in range(6))) for report in "abc"]
+    with ThreadPoolExecutor(max_workers=len(docs)) as pool:
+        for answer in [pool.submit(archive.capture, doc, session=session) for doc in docs]:
+            assert answer.result() == (6, 0)
+    assert session.most == 2
 
 
 # ---- not asking again about the same nothing -------------------------
