@@ -911,3 +911,15 @@ def test_the_page_count_survives_the_record(tmp_path: Path) -> None:
     again = cites("https://a.example/a.pdf#page=2")
     read_archive_index(tmp_path, again)
     assert again.archives["https://a.example/a.pdf"].pages == 6
+
+
+def test_a_capture_the_document_names_keeps_its_recorded_page_count(tmp_path: Path) -> None:
+    """The R211 spec is cited as its Wayback URL, which seeds its entry before the record."""
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = replace(CAPTURED, pages=6)
+    write_archive_index(tmp_path, doc)
+    again = cites("https://a.example/a.pdf#page=2")
+    # What parsing the Wayback URL seeds, which is there before the record is read.
+    again.archives["https://a.example/a.pdf"] = CAPTURED
+    read_archive_index(tmp_path, again)
+    assert again.archives["https://a.example/a.pdf"].pages == 6

@@ -361,15 +361,19 @@ def read_archive_index(dest: Path, doc: Document) -> None:
     if not index.exists():
         return
     for url, entry in json.loads(index.read_text()).items():
-        doc.archives.setdefault(
-            url,
-            Archived(
-                snapshot=entry.get("snapshot", ""),
-                timestamp=entry.get("timestamp", ""),
-                error=entry.get("error", ""),
-                pages=entry.get("pages", 0),
-            ),
+        recorded = Archived(
+            snapshot=entry.get("snapshot", ""),
+            timestamp=entry.get("timestamp", ""),
+            error=entry.get("error", ""),
+            pages=entry.get("pages", 0),
         )
+        cited = doc.archives.get(url)
+        if cited is None:
+            doc.archives[url] = recorded
+        elif cited.timestamp == recorded.timestamp and not cited.pages:
+            # The same capture, so the record's count of its pages is still
+            # true of it. The document names the capture and nothing more.
+            doc.archives[url] = replace(cited, pages=recorded.pages)
 
 
 def write_archive_index(dest: Path, doc: Document) -> None:
