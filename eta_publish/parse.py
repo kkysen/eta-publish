@@ -140,6 +140,32 @@ def unfinished(text: str) -> bool:
     return any(word in UNFINISHED for word in _words(text))
 
 
+def bold_brackets(inlines: list[Inline]) -> list[str]:
+    """Every `[...]` in `inlines` whose text is bold, brackets included.
+
+    A bold note in brackets is a placeholder for whoever comes back to it,
+    as unfinished as a `TODO`. Whether the brackets themselves are bold does not matter;
+    whether everything between them is does, so a bracketed aside with one
+    bold word in it is still prose.
+    """
+    characters: list[tuple[str, bool]] = [
+        (character, run.bold) for run in inlines if isinstance(run, Text) for character in run.text
+    ]
+    found: list[str] = []
+    opened: int | None = None
+    for i, (character, _) in enumerate(characters):
+        if character == "[":
+            opened = i
+        elif character == "]" and opened is not None:
+            inside = characters[opened + 1 : i]
+            if any(not c.isspace() for c, _ in inside) and all(
+                bold or c.isspace() for c, bold in inside
+            ):
+                found.append("".join(c for c, _ in characters[opened : i + 1]))
+            opened = None
+    return found
+
+
 def _is_word(text: str) -> bool:
     """Whether `text` is a single word, by the same rule `_words` splits on."""
     return bool(text) and all(c.isalnum() or c == "_" for c in text)
@@ -885,6 +911,9 @@ class Parser:
             # Read once, here: what a line is depends on how it is styled,
             # and parsing a paragraph twice says everything it has to say twice.
             inlines = self.inlines(para)
+
+            for placeholder in bold_brackets(inlines):
+                self.doc.warn("unfinished text in the document: {}", Shown(placeholder[:80]))
 
             if is_source_note(inlines) or is_asset_note(inlines):
                 self._bleed(inlines)

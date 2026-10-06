@@ -252,6 +252,48 @@ def test_unfinished_text_is_reported() -> None:
     assert any("unfinished text" in w for w in map(str, doc.warnings))
 
 
+def bolded(*pieces: tuple[str, bool]) -> JsonObject:
+    """A paragraph of text runs, each either bold or not."""
+    return {
+        "paragraph": {
+            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+            "elements": [
+                {"textRun": {"content": text, "textStyle": {"bold": True} if bold else {}}}
+                for text, bold in pieces
+            ],
+        }
+    }
+
+
+def _unfinished(doc: Document) -> list[str]:
+    return [w for w in map(str, doc.warnings) if "unfinished text" in w]
+
+
+def _with_header(*body: JsonObject) -> Document:
+    return build(
+        [para("Header", "HEADING_2"), field("URL: /reports/x"), para("Headline", "TITLE"), *body]
+    )
+
+
+def test_bold_text_in_brackets_is_unfinished() -> None:
+    """A bold bracketed note is a placeholder, as much as a `TODO` is."""
+    doc = _with_header(bolded(("Ridership grew ", False), ("[need a source]", True), (".", False)))
+    assert _unfinished(doc) == ["unfinished text in the document: `[need a source]`"]
+
+
+def test_brackets_around_bold_text_need_not_be_bold() -> None:
+    doc = _with_header(bolded(("Grew [", False), ("cite", True), ("].", False)))
+    assert _unfinished(doc) == ["unfinished text in the document: `[cite]`"]
+
+
+def test_brackets_that_are_not_all_bold_are_prose() -> None:
+    doc = _with_header(
+        bolded(("A [quoted ", False), ("emphasis", True), (" aside].", False)),
+        bolded(("Plain [brackets] and ", False), ("bold", True), (" apart.", False)),
+    )
+    assert _unfinished(doc) == []
+
+
 def test_chart_asset_placeholders_are_editorial() -> None:
     """`SVG:` and `PNG:` name a chart file for whoever assembles the page.
     The published report carries real download links instead."""
