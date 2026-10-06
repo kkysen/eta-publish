@@ -16,27 +16,18 @@ repos:
     hooks:
       - id: ty
 
-  - repo: https://github.com/facebook/pyrefly-pre-commit
-    rev: "1.2.0"
-    hooks:
-      - id: pyrefly-check
-        additional_dependencies:
-          [
-            "google-api-python-client>=2.130",
-            "pillow>=11.0",
-            "google-auth-oauthlib>=1.2",
-            "requests>=2.32",
-            "types-requests>=2.32",
-            "markupsafe>=3.0",
-            "htpy>=26.5.1",
-            "pytest>=9.1.1",
-            "typer>=0.27",
-            "platformdirs>=4.11.8",
-            "pypdf>=6.19.0",
-          ]
-
   - repo: local
     hooks:
+      # From the project's own environment rather than pre-commit's,
+      # so it sees exactly the dependencies `uv` installs
+      # instead of a list here that has to be kept in step with `pyproject.toml`.
+      - id: pyrefly
+        name: pyrefly
+        entry: uv run pyrefly check
+        language: system
+        types: [python]
+        pass_filenames: false
+
       - id: pytest
         name: pytest
         entry: uv run pytest
