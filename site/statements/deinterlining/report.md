@@ -23,6 +23,18 @@
   - `img-96810135`
   - `img-5a4ea5b9`
 - 3 comment threads still open on this tab
+- 11 links show their URL as their text; give each words in the doc:
+  - `https://images-prod.gothamist.com/images/Nostr.2e16d0ba.fill-1336x852.format-webp.webpquality-60.webp`
+  - `https://www.mta.info/document/174186`
+  - `https://nyc.streetsblog.org/2025/06/03/mta-to-finally-untangle-notorious-brooklyn-subway-pinch-point`
+  - `https://rooseveltislander.com/2025/06/03/mta-plans-big-changes-coming-to-roosevelt-island-subway-service/`
+  - `https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf`
+  - `https://ia601408.us.archive.org/15/items/irt-capacity-study-final-reportt-redacted/IRT%20Capacity%20Study%20Final%20Reportt_Redacted_.pdf`
+  - `https://www.youtube.com/live/0AEaaKvpMQw`
+  - `https://www.mta.info/document/179856`
+  - `https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn`
+  - `https://www.mta.info/map/40511`
+  - `https://www.etany.org/statements/deinterlining`
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line

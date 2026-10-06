@@ -27,6 +27,8 @@ August 19, 2026
   - `img-ed748d24`: A station diagram of Montreal’s Édouard-Montpetit station, showing the...
 - 7 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 2 comment threads still open on this tab
+- 1 link shows its URL as its text; give it words in the doc:
+  - `https://link.nfpa.org/free-access/publications/130/2026`
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
 - style: `5 minutes` should be `5 min`: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`

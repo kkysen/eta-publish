@@ -18,6 +18,7 @@
     [22 comment threads still open on this tab],
     [1 source still carries the tag it was copied with; take it off the link in the doc:#list([#raw("utm_source=chatgpt.com") on #raw("https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056&utm_source=chatgpt.com")], )],
     [1 URL typed out but not linked; link it in the doc:#list([#raw("https://www.mta.info/agency/new-york-city-transit/ridership/2025")], )],
+    [3 links show their URL as their text; give each words in the doc:#list([#raw("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")], [#raw("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")], [#raw("https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf")], )],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
     [style: #raw("465 feet") should be #raw("465 ft"): #raw("...us on the IBX right-of-way is 465 feet, twice as much as that of the...")],

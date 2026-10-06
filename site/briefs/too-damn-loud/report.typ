@@ -18,6 +18,7 @@
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-831248b1")], [#raw("img-b17aa21a"): PNG SVG], )],
     [24 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [2 comment threads still open on this tab],
+    [3 links show their URL as their text; give each words in the doc:#list([#raw("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")], [#raw("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")], [#raw("https://sbahn.berlin/fahren/bauen-stoerung/")], )],
     [#raw("SEO Description:") is 363 characters, over the 300 a search result shows:#quote(block: true)[The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I#strike[t's time to stop the cacophony, and let riders travel in peace.]]],
     [style: #raw("10 minutes") should be #raw("10 min"): #raw("... Flushing-Main St, and nearly 10 minutes out of a 40 minute ride compr...")],
     [style: #raw("40 minute") should be #raw("40 min"): #raw("...nd nearly 10 minutes out of a 40 minute ride comprised announcements....")],

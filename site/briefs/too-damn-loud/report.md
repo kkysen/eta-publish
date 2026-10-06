@@ -18,6 +18,10 @@ September 9, 2026
   - `img-b17aa21a`: PNG SVG
 - 24 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 2 comment threads still open on this tab
+- 3 links show their URL as their text; give each words in the doc:
+  - `https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393`
+  - `https://www.amny.com/news/mta-nyc-subway-ads-and-money/`
+  - `https://sbahn.berlin/fahren/bauen-stoerung/`
 - `SEO Description:` is 363 characters, over the 300 a search result shows:
   > The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I~~t's time to stop the cacophony, and let riders travel in peace.~~
 - style: `10 minutes` should be `10 min`: `... Flushing-Main St, and nearly 10 minutes out of a 40 minute ride compr...`

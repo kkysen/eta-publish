@@ -214,8 +214,8 @@ def test_names_without_addresses_are_left_alone(doc: Document) -> None:
 
 
 def citing(*hrefs: str) -> list[Block]:
-    """A body that is one paragraph of links."""
-    return [Paragraph(content=[Text(text=href, href=href) for href in hrefs])]
+    """A body that is one paragraph of links, each written as words."""
+    return [Paragraph(content=[Text(text="a source", href=href) for href in hrefs])]
 
 
 def test_a_tracking_tag_left_on_a_source_is_flagged(doc: Document) -> None:
@@ -389,7 +389,7 @@ def test_a_url_typed_out_but_not_linked_is_named() -> None:
                 content=[
                     Text(text="Badoe. https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242). "),
                     Text(text="See (https://a.example/x), and "),
-                    Text(text="https://linked.example/", href="https://linked.example/"),
+                    Text(text="a linked page", href="https://linked.example/"),
                     Text(text="."),
                 ]
             )
@@ -409,3 +409,24 @@ def test_a_url_split_across_styles_is_one_url() -> None:
     )
     check(doc)
     assert "`https://a.example/x`" in str(doc.warnings[0])
+
+
+def test_a_link_that_shows_its_url_is_named() -> None:
+    doc = Document(
+        blocks=[
+            Paragraph(
+                content=[
+                    Text(text="See "),
+                    Text(text="https://a.example/", href="https://a.example/"),
+                    Text(text="x", href="https://a.example/", bold=True),
+                    Text(text=" and "),
+                    Text(text="the ridership figures", href="https://b.example/"),
+                    Text(text="."),
+                ]
+            )
+        ]
+    )
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "1 link shows its URL as its text; give it words in the doc:\n- `https://a.example/x`"
+    ]

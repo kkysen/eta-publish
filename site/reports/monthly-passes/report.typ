@@ -19,6 +19,7 @@
     [1 suggestion still open on this tab; the build publishes the document without them, as it reads today],
     [26 comment threads still open on this tab],
     [2 URLs typed out but not linked; link each in the doc:#list([#raw("https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242)")], [#raw("https://doi.org/10.3141/1735-13")], )],
+    [3 links show their URL as their text; give each words in the doc:#list([#raw("https://www.ironmanturnstile.com/transportation-and-smart-hubs/")], [#raw("https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection")], [#raw("https://www.etany.org/modernizing-new-york-commuter-rail")], )],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],

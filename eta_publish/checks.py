@@ -11,6 +11,7 @@ and appear both in the build log and on the site's index page.
 """
 
 import re
+from itertools import groupby
 
 from .nodes import (
     Cut,
@@ -64,6 +65,7 @@ def check(doc: Document) -> None:
     _check_contributors(doc)
     _check_tracked(doc)
     _check_bare_urls(doc)
+    _check_url_text(doc)
     _check_stray_fields(doc)
 
     if not doc.meta:
@@ -339,6 +341,44 @@ def _check_bare_urls(doc: Document) -> None:
         f"link {'it' if len(bare) == 1 else 'each'} in the doc:{{}}",
         listed,
     )
+
+
+URL_TEXT = re.compile(r"(https?://|www\.)", re.IGNORECASE)
+
+
+def _check_url_text(doc: Document) -> None:
+    """Which links show their own address rather than words.
+
+    A link is written as text that says what it is, `the 2025 ridership
+    figures`, and the address is what clicking it is for. Shown as the URL it
+    is a string to read past, and a long one runs across the column.
+
+    A link split across runs by a change of style is one link, so runs are
+    taken together while they share an address.
+
+    One warning for all of them, like `_check_tracked`.
+    """
+    shown: list[str] = []
+    for runs, _ in doc.text_runs():
+        for href, linked in groupby(runs, key=_href):
+            if not href:
+                continue
+            text = "".join(run.text for run in linked if isinstance(run, Text)).strip()
+            if URL_TEXT.match(text):
+                shown.append(text)
+    if not shown:
+        return
+    listed = Listed(*((Shown(text),) for text in shown))
+    one = len(shown) == 1
+    doc.warn(
+        f"{plural(len(shown), 'link')} {'shows its' if one else 'show their'} URL as "
+        f"{'its' if one else 'their'} text; give {'it' if one else 'each'} words in the doc:{{}}",
+        listed,
+    )
+
+
+def _href(run: Inline) -> str | None:
+    return run.href if isinstance(run, Text) else None
 
 
 def _bare(text: str) -> list[str]:
