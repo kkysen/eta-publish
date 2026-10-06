@@ -40,6 +40,13 @@ class Archived:
     """When the snapshot was taken, as the 14 digits Wayback writes, or the
     date the attempt failed."""
     error: str = ""
+    pages: int = 0
+    """How many pages the document has, if it is a PDF cited by page, or 0.
+
+    Counted once from the capture and recorded with it, because a capture does
+    not change and an offline build has to be able to check a `#page=` against
+    it. A source nothing has counted, or that is not a PDF, is 0.
+    """
 
     @property
     def date(self) -> str:
@@ -906,6 +913,21 @@ PDF_PAGE = "page="
 An instruction to the PDF viewer rather than an anchor in a document, which is
 why it is the one fragment the ordinary Wayback URL swallows.
 """
+
+
+def cited_page(source: str) -> str | None:
+    """The page a `#page=` citation names, as written, or `None` if it names none.
+
+    As written rather than as a number, so that a check can say what is wrong
+    with `#page=` or `#page=iv` rather than reading either as no citation at all.
+    A viewer reads the fragment as `&`-separated, so `#page=5&zoom=80` is page 5.
+    """
+    fragment = source.partition("#")[2]
+    for part in fragment.split("&"):
+        if part.startswith(PDF_PAGE):
+            return part.removeprefix(PDF_PAGE)
+    return None
+
 
 UNREWRITTEN = "id_"
 """The modifier asking Wayback for the capture as it was, rather than rewritten

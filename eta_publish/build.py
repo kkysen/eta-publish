@@ -7,7 +7,14 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from . import console
-from .archive import ACCESS_KEY, KEYS_PAGE, SECRET_KEY, read_archive_index, write_archive_index
+from .archive import (
+    ACCESS_KEY,
+    KEYS_PAGE,
+    SECRET_KEY,
+    count_pages,
+    read_archive_index,
+    write_archive_index,
+)
 from .checks import check, plural
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
@@ -563,6 +570,7 @@ def build_one(
     read_archive_index(dest, doc)
     if options.archive and not options.offline:
         archive_sources(doc)
+        count_pages(doc)
     write_archive_index(dest, doc)
 
     # Written here rather than once per site, so that building a single

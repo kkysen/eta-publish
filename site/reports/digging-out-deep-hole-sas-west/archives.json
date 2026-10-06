@@ -40,14 +40,17 @@
     "timestamp": "20260512024343"
   },
   "https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf": {
+    "pages": 222,
     "snapshot": "https://web.archive.org/web/20260531195109/https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf",
     "timestamp": "20260531195109"
   },
   "https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf": {
+    "pages": 112,
     "snapshot": "https://web.archive.org/web/20260827040025/https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf",
     "timestamp": "20260827040025"
   },
   "https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf": {
+    "pages": 121,
     "snapshot": "https://web.archive.org/web/20260711145153/https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf",
     "timestamp": "20260711145153"
   },
@@ -76,6 +79,7 @@
     "timestamp": "20260623220918"
   },
   "https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf": {
+    "pages": 72,
     "snapshot": "https://web.archive.org/web/20251205025049/https://onlinepubs.trb.org/onlinepubs/tcrp/docs/tcrp100/Part7.pdf",
     "timestamp": "20251205025049"
   },
@@ -100,10 +104,12 @@
     "timestamp": "20260908151113"
   },
   "https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf": {
+    "pages": 124,
     "snapshot": "https://web.archive.org/web/20260819134125/https://transitcosts.com/wp-content/uploads/Istanbul_Case_Study.pdf",
     "timestamp": "20260819134125"
   },
   "https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf": {
+    "pages": 152,
     "snapshot": "https://web.archive.org/web/20260512184237/https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf",
     "timestamp": "20260512184237"
   },
@@ -112,10 +118,12 @@
     "timestamp": "20260617222645"
   },
   "https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf": {
+    "pages": 52,
     "snapshot": "https://web.archive.org/web/20260512184232/https://transitcosts.com/wp-content/uploads/Sweden_Case_Study.pdf",
     "timestamp": "20260512184232"
   },
   "https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf": {
+    "pages": 424,
     "snapshot": "https://web.archive.org/web/20260909150154/https://transitcosts.com/wp-content/uploads/TCP_Final_Report.pdf",
     "timestamp": "20260909150154"
   },
@@ -128,6 +136,7 @@
     "timestamp": "20260420155225"
   },
   "https://www.governor.ny.gov/sites/default/files/2025-08/Presentation_2025-08-15_SAS2_NOTES_SCRUBBED.pdf": {
+    "pages": 30,
     "snapshot": "https://web.archive.org/web/20260110174553/https://www.governor.ny.gov/sites/default/files/2025-08/Presentation_2025-08-15_SAS2_NOTES_SCRUBBED.pdf",
     "timestamp": "20260110174553"
   },
@@ -168,34 +177,42 @@
     "timestamp": "20251112044545"
   },
   "https://www.mta.info/document/114626": {
+    "pages": 5,
     "snapshot": "https://web.archive.org/web/20260518003240/https://www.mta.info/document/114626",
     "timestamp": "20260518003240"
   },
   "https://www.mta.info/document/131306": {
+    "pages": 26,
     "snapshot": "https://web.archive.org/web/20260821134859/https://www.mta.info/document/131306",
     "timestamp": "20260821134859"
   },
   "https://www.mta.info/document/167606": {
+    "pages": 70,
     "snapshot": "https://web.archive.org/web/20260518045753/https://www.mta.info/document/167606",
     "timestamp": "20260518045753"
   },
   "https://www.mta.info/document/172206": {
+    "pages": 6,
     "snapshot": "https://web.archive.org/web/20260519070421/https://www.mta.info/document/172206",
     "timestamp": "20260519070421"
   },
   "https://www.mta.info/document/179396": {
+    "pages": 63,
     "snapshot": "https://web.archive.org/web/20260518003244/https://www.mta.info/document/179396",
     "timestamp": "20260518003244"
   },
   "https://www.mta.info/document/196361": {
+    "pages": 40,
     "snapshot": "https://web.archive.org/web/20260518003215/https://www.mta.info/document/196361",
     "timestamp": "20260518003215"
   },
   "https://www.mta.info/document/22201": {
+    "pages": 51,
     "snapshot": "https://web.archive.org/web/20251231130623/https://www.mta.info/document/22201",
     "timestamp": "20251231130623"
   },
   "https://www.mta.info/document/75876": {
+    "pages": 3,
     "snapshot": "https://web.archive.org/web/20250930012103/https://www.mta.info/document/75876",
     "timestamp": "20250930012103"
   },
@@ -256,10 +273,12 @@
     "timestamp": "20260817144244"
   },
   "https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf": {
+    "pages": 71,
     "snapshot": "https://web.archive.org/web/20250711075929/https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-05/OP40-Risk-Contingency-Review-Mar-2022.pdf",
     "timestamp": "20250711075929"
   },
   "https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf": {
+    "pages": 40,
     "snapshot": "https://web.archive.org/web/20260905012114/https://www.transit.dot.gov/sites/fta.dot.gov/files/2025-10/PMOC-Comprehensive-Monitoring-Report-NY-SAS-08-2025_0.pdf",
     "timestamp": "20260905012114"
   },

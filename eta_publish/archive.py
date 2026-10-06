@@ -21,19 +21,22 @@ import os
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from threading import Lock, Semaphore
 from urllib.parse import urlsplit
 
 import platformdirs
 import requests
+from pypdf import PdfReader
+from pypdf.errors import PyPdfError
 from requests.adapters import HTTPAdapter
 
 from . import PACKAGE_NAME
 from .checks import plural
-from .nodes import Archived, Document, document_url
+from .nodes import UNREWRITTEN, Archived, Document, cited_page, document_url, wayback_url
 
 ARCHIVES_JSON = "archives.json"
 
@@ -364,6 +367,7 @@ def read_archive_index(dest: Path, doc: Document) -> None:
                 snapshot=entry.get("snapshot", ""),
                 timestamp=entry.get("timestamp", ""),
                 error=entry.get("error", ""),
+                pages=entry.get("pages", 0),
             ),
         )
 
@@ -384,9 +388,14 @@ def write_archive_index(dest: Path, doc: Document) -> None:
         archived = doc.archives.get(url)
         if archived is None:
             continue
-        entry = {"snapshot": archived.snapshot, "timestamp": archived.timestamp}
+        entry: dict[str, str | int] = {
+            "snapshot": archived.snapshot,
+            "timestamp": archived.timestamp,
+        }
         if archived.error:
             entry = {"timestamp": archived.timestamp, "error": archived.error}
+        if archived.pages:
+            entry["pages"] = archived.pages
         index[url] = entry
     if not index:
         return
@@ -921,3 +930,72 @@ def _refused(answer: dict[str, object]) -> str:
     """What the service said, short enough to publish beside the source."""
     said = answer.get("status_ext") or answer.get("message") or answer.get("status")
     return str(said) if said else "the capture failed without saying why"
+
+
+COUNT_AT_ONCE = 4
+"""How many PDFs are downloaded at once to count their pages.
+
+Fewer than the lookups, because these are whole files rather than `HEAD`s,
+and some of what the reports cite runs to hundreds of pages and tens of MB.
+"""
+
+
+def count_pages(doc: Document, session: requests.Session | None = None) -> int:
+    """Record how many pages each PDF cited by page has, returning how many were counted.
+
+    Counted from the capture, asked for raw, because that is the file the
+    archived link opens and a capture never changes, so one count stands for
+    good. A source with no capture, or whose capture is not a PDF, is counted
+    live, and one nothing has tried
+    to capture yet is left until something has, since its entry is what the
+    count is recorded on.
+
+    Whatever cannot be counted is left uncounted rather than recorded: a
+    download that failed is not a fact about the document, and a page that
+    turns out not to be a PDF has no pages to check a citation against.
+    """
+    wanted = [
+        url
+        for url in dict.fromkeys(
+            document_url(source) for source in doc.sources if cited_page(source) is not None
+        )
+        if url in doc.archives and not doc.archives[url].pages
+    ]
+    if not wanted:
+        return 0
+    http = session or _session()
+
+    def count(url: str) -> int:
+        archived = doc.archives[url]
+        if archived.snapshot and not archived.error:
+            pages = _pages(http, wayback_url(archived.timestamp, url, modifier=UNREWRITTEN))
+            if pages:
+                return pages
+        # The live file when the capture is not a PDF either: the capture of
+        # `TCP_Final_Report.pdf` is the site's "One moment, please..." wall.
+        return _pages(http, url)
+
+    with ThreadPoolExecutor(max_workers=COUNT_AT_ONCE) as pool:
+        counted = list(pool.map(count, wanted))
+    for url, pages in zip(wanted, counted, strict=True):
+        if pages:
+            doc.archives[url] = replace(doc.archives[url], pages=pages)
+    return sum(1 for pages in counted if pages)
+
+
+PDF_MAGIC = b"%PDF"
+"""What every PDF starts with, and what a login wall or an error page does not."""
+
+
+def _pages(http: requests.Session, url: str) -> int:
+    """How many pages the PDF at `url` has, or 0 if it could not be read as one."""
+    try:
+        response = _patiently(lambda: _checked(http.get(url, timeout=120)))
+    except requests.RequestException, Busy:
+        return 0
+    if not response.content.startswith(PDF_MAGIC):
+        return 0
+    try:
+        return len(PdfReader(BytesIO(response.content)).pages)
+    except PyPdfError:
+        return 0

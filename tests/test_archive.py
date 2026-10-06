@@ -4,12 +4,15 @@ import json
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from typing import override
 
 import pytest
 import requests
+from pypdf import PdfWriter
 
 from eta_publish import archive
 from eta_publish.archive import (
@@ -796,3 +799,85 @@ def test_a_build_with_keys_captures_only_what_has_no_capture(keyed: None) -> Non
     doc = cites("https://a.example/1")
     assert archive.capture(doc, session=Watching([("20240503123456", 200)])) == (1, 0)
     assert posted == []
+
+
+def _pdf(pages: int) -> bytes:
+    """A PDF of `pages` blank pages."""
+    writer = PdfWriter()
+    for _ in range(pages):
+        writer.add_blank_page(width=72, height=72)
+    out = BytesIO()
+    writer.write(out)
+    return out.getvalue()
+
+
+class Serving(requests.Session):
+    """A session that answers each URL with its own body, and 404 for any other."""
+
+    def __init__(self, bodies: dict[str, bytes]) -> None:
+        super().__init__()
+        self.bodies = bodies
+        self.asked: list[str] = []
+
+    @override
+    def request(
+        self, method: object, url: object, *args: object, **kwargs: object
+    ) -> requests.Response:
+        self.asked.append(str(url))
+        response = requests.Response()
+        response.url = str(url)
+        body = self.bodies.get(str(url))
+        response.status_code = 404 if body is None else 200
+        response._content = body or b""
+        return response
+
+
+CAPTURED = Archived(
+    snapshot="https://web.archive.org/web/20240503123456/https://a.example/a.pdf",
+    timestamp="20240503123456",
+)
+
+
+def test_a_pdf_cited_by_page_is_counted_from_its_raw_capture() -> None:
+    doc = cites("https://a.example/a.pdf#page=2", "https://a.example/a.pdf#page=3")
+    doc.archives["https://a.example/a.pdf"] = CAPTURED
+    raw = "https://web.archive.org/web/20240503123456id_/https://a.example/a.pdf"
+    session = Serving({raw: _pdf(6)})
+    assert archive.count_pages(doc, session=session) == 1
+    assert doc.archives["https://a.example/a.pdf"].pages == 6
+    # One document, counted once, however many of its pages are cited.
+    assert session.asked == [raw]
+
+
+def test_a_capture_that_is_not_the_pdf_is_counted_live() -> None:
+    """The capture of `TCP_Final_Report.pdf` is a bot wall, not the report."""
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = CAPTURED
+    raw = "https://web.archive.org/web/20240503123456id_/https://a.example/a.pdf"
+    session = Serving({raw: b"<!DOCTYPE html>", "https://a.example/a.pdf": _pdf(4)})
+    archive.count_pages(doc, session=session)
+    assert doc.archives["https://a.example/a.pdf"].pages == 4
+
+
+def test_what_cannot_be_counted_is_not_recorded() -> None:
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = CAPTURED
+    assert archive.count_pages(doc, session=Serving({})) == 0
+    assert doc.archives["https://a.example/a.pdf"].pages == 0
+
+
+def test_a_counted_pdf_is_not_downloaded_again() -> None:
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = replace(CAPTURED, pages=6)
+    session = Serving({})
+    assert archive.count_pages(doc, session=session) == 0
+    assert session.asked == []
+
+
+def test_the_page_count_survives_the_record(tmp_path: Path) -> None:
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = replace(CAPTURED, pages=6)
+    write_archive_index(tmp_path, doc)
+    again = cites("https://a.example/a.pdf#page=2")
+    read_archive_index(tmp_path, again)
+    assert again.archives["https://a.example/a.pdf"].pages == 6
