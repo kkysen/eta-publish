@@ -18,8 +18,11 @@ from .nodes import (
     Listed,
     Quoted,
     Shown,
+    Span,
     Where,
     addressed,
+    cited_page,
+    document_url,
     plain_text,
 )
 from .parse import (
@@ -257,6 +260,40 @@ def _check_tracked(doc: Document) -> None:
         f"{plural(len(tracked), 'source')} still {carry} the tag it was copied with; "
         f"take it off the link in the doc:{{}}",
         listed,
+    )
+
+
+def check_pages(doc: Document) -> None:
+    """Which `#page=` citations name a page their PDF does not have.
+
+    Separate from `check`, because the page counts it reads are recorded with
+    the archive, and that is read after the document is checked.
+
+    A citation of page 150 of a 6-page PDF cannot open where it says it does,
+    and the reader is left on some other page with nothing saying why.
+    A PDF nothing has counted yet is left alone:
+    there is nothing to check the citation against.
+
+    One warning for all of them, like `_check_named`.
+    """
+    wrong: list[tuple[Span, ...]] = []
+    for source in doc.sources:
+        page = cited_page(source)
+        if page is None:
+            continue
+        if not page.isdigit() or int(page) < 1:
+            wrong.append((Shown(source), " names no page"))
+            continue
+        found = doc.archives.get(document_url(source))
+        pages = found.pages if found is not None else 0
+        if pages and int(page) > pages:
+            wrong.append((Shown(source), f" cites page {page} of {plural(pages, 'page')}"))
+    if not wrong:
+        return
+    cites = "cites" if len(wrong) == 1 else "cite"
+    doc.warn(
+        f"{plural(len(wrong), 'PDF citation')} {cites} a page the PDF does not have:{{}}",
+        Listed(*wrong),
     )
 
 

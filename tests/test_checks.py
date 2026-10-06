@@ -6,8 +6,9 @@ from dataclasses import replace
 import pytest
 from paths import FIXTURE_DIR
 
-from eta_publish.checks import check
+from eta_publish.checks import check, check_pages
 from eta_publish.nodes import (
+    Archived,
     Block,
     Document,
     Figure,
@@ -350,4 +351,32 @@ def test_prose_holding_a_colon_is_not_a_stray_field(doc: Document) -> None:
         Paragraph(content=[Text(text='Barbara Russo-Lennon, "Subway spots: the ad blitz."')]),
     ]
     check(doc)
+    assert doc.warnings == []
+
+
+def _citing(*hrefs: str) -> Document:
+    return Document(blocks=[Paragraph(content=[Text(text=href, href=href) for href in hrefs])])
+
+
+def test_a_page_past_the_end_of_the_pdf_is_named() -> None:
+    doc = _citing("https://a.example/a.pdf#page=150", "https://a.example/a.pdf#page=6")
+    doc.archives["https://a.example/a.pdf"] = Archived(snapshot="s", timestamp="t", pages=6)
+    check_pages(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "1 PDF citation cites a page the PDF does not have:\n"
+        "- `https://a.example/a.pdf#page=150` cites page 150 of 6 pages"
+    ]
+
+
+def test_a_page_that_is_not_a_number_is_named() -> None:
+    doc = _citing("https://a.example/a.pdf#page=0", "https://a.example/a.pdf#page=iv&zoom=80")
+    check_pages(doc)
+    assert len(doc.warnings) == 1
+    assert "`https://a.example/a.pdf#page=0` names no page" in str(doc.warnings[0])
+    assert "`https://a.example/a.pdf#page=iv&zoom=80` names no page" in str(doc.warnings[0])
+
+
+def test_an_uncounted_pdf_is_left_alone() -> None:
+    doc = _citing("https://a.example/a.pdf#page=150&zoom=80")
+    check_pages(doc)
     assert doc.warnings == []

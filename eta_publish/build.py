@@ -15,7 +15,7 @@ from .archive import (
     read_archive_index,
     write_archive_index,
 )
-from .checks import check, plural
+from .checks import check, check_pages, plural
 from .docs_json import JsonObject
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
@@ -572,6 +572,8 @@ def build_one(
         archive_sources(doc)
         count_pages(doc)
     write_archive_index(dest, doc)
+    # After the record is read, because the page counts it checks against are in it.
+    check_pages(doc)
 
     # Written here rather than once per site, so that building a single
     # report produces a page with everything it links.

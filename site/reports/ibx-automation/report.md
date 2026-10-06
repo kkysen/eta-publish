@@ -30,6 +30,8 @@
 - style: `Jersey Avenue` should be `Jersey Av`: `...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...`
 - style: `180 meters` should be `180 m`: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a dash is written with a space beside it, and the house style closes it up: `...urage walking across the track — note this doesn’t matter so m...`
+- 1 PDF citation cites a page the PDF does not have:
+  - `https://www.mta.info/document/103691#page=150` cites page 150 of 6 pages
 
 ![Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/img-e3ef182e.jpg>)\
 Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).

@@ -32,6 +32,7 @@
     [style: #raw("Jersey Avenue") should be #raw("Jersey Av"): #raw("...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...")],
     [style: #raw("180 meters") should be #raw("180 m"): #raw("... on the New York City Subway (180 meters) or longer exclusively use hi...")],
     [style: a dash is written with a space beside it, and the house style closes it up: #raw("...urage walking across the track — note this doesn’t matter so m...")],
+    [1 PDF citation cites a page the PDF does not have:#list([#raw("https://www.mta.info/document/103691#page=150") cites page 150 of 6 pages], )],
   ),
   hero: [
 #figure(
