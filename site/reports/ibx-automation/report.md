@@ -17,6 +17,8 @@ October 12, 2026
 - 22 comment threads still open on this tab
 - 1 source still carries the tag it was copied with; take it off the link in the doc:
   - `utm_source=chatgpt.com` on `https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056&utm_source=chatgpt.com`
+- 1 URL typed out but not linked; link it in the doc:
+  - `https://www.mta.info/agency/new-york-city-transit/ridership/2025`
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: `465 feet` should be `465 ft`: `...us on the IBX right-of-way is 465 feet, twice as much as that of the...`

@@ -380,3 +380,32 @@ def test_an_uncounted_pdf_is_left_alone() -> None:
     doc = _citing("https://a.example/a.pdf#page=150&zoom=80")
     check_pages(doc)
     assert doc.warnings == []
+
+
+def test_a_url_typed_out_but_not_linked_is_named() -> None:
+    doc = Document(
+        blocks=[
+            Paragraph(
+                content=[
+                    Text(text="Badoe. https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242). "),
+                    Text(text="See (https://a.example/x), and "),
+                    Text(text="https://linked.example/", href="https://linked.example/"),
+                    Text(text="."),
+                ]
+            )
+        ]
+    )
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [
+        "2 URLs typed out but not linked; link each in the doc:\n"
+        "- `https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242)`\n"
+        "- `https://a.example/x`"
+    ]
+
+
+def test_a_url_split_across_styles_is_one_url() -> None:
+    doc = Document(
+        blocks=[Paragraph(content=[Text(text="At https://a.exam"), Text(text="ple/x", bold=True)])]
+    )
+    check(doc)
+    assert "`https://a.example/x`" in str(doc.warnings[0])

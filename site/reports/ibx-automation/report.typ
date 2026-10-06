@@ -17,6 +17,7 @@
     [20 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [22 comment threads still open on this tab],
     [1 source still carries the tag it was copied with; take it off the link in the doc:#list([#raw("utm_source=chatgpt.com") on #raw("https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056&utm_source=chatgpt.com")], )],
+    [1 URL typed out but not linked; link it in the doc:#list([#raw("https://www.mta.info/agency/new-york-city-transit/ridership/2025")], )],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
     [style: #raw("465 feet") should be #raw("465 ft"): #raw("...us on the IBX right-of-way is 465 feet, twice as much as that of the...")],

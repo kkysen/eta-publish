@@ -18,6 +18,7 @@
     [3 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-ae6ddd33")], [#raw("img-cf3f2056"): Image: Tapping onto the subway with OMNY], [#raw("img-6b5eb7d1"): A comparison of monthly fare pass ratios. Note: for cities with multip...], )],
     [1 suggestion still open on this tab; the build publishes the document without them, as it reads today],
     [26 comment threads still open on this tab],
+    [2 URLs typed out but not linked; link each in the doc:#list([#raw("https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242)")], [#raw("https://doi.org/10.3141/1735-13")], )],
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],

@@ -15,6 +15,9 @@
   - `img-6b5eb7d1`: A comparison of monthly fare pass ratios. Note: for cities with multip...
 - 1 suggestion still open on this tab; the build publishes the document without them, as it reads today
 - 26 comment threads still open on this tab
+- 2 URLs typed out but not linked; link each in the doc:
+  - `https://doi.org/10.1061/(ASCE)0733-9488(2007)133:4(242)`
+  - `https://doi.org/10.3141/1735-13`
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line

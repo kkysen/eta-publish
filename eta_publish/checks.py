@@ -10,6 +10,8 @@ which is why they are warnings on the document
 and appear both in the build log and on the site's index page.
 """
 
+import re
+
 from .nodes import (
     Cut,
     Document,
@@ -19,6 +21,7 @@ from .nodes import (
     Quoted,
     Shown,
     Span,
+    Text,
     Where,
     addressed,
     cited_page,
@@ -60,6 +63,7 @@ def check(doc: Document) -> None:
     _check_review(doc)
     _check_contributors(doc)
     _check_tracked(doc)
+    _check_bare_urls(doc)
     _check_stray_fields(doc)
 
     if not doc.meta:
@@ -295,6 +299,60 @@ def check_pages(doc: Document) -> None:
         f"{plural(len(wrong), 'PDF citation')} {cites} a page the PDF does not have:{{}}",
         Listed(*wrong),
     )
+
+
+BARE_URL = re.compile(r"https?://\S+")
+
+TRAILING = ".,;:!?\"'”’"
+"""What ends the sentence a URL sits in rather than the URL."""
+
+
+def _check_bare_urls(doc: Document) -> None:
+    """Which URLs the document typed out without linking.
+
+    Each output treats one differently: the HTML prints it as text, Typst links
+    it, and the Markdown leaves it for whatever renders it to guess where it
+    ends, which for a DOI like `10.1061/(ASCE)0733-9488(2007)133:4(242)` is a
+    guess. Nor is it a source, so it is never archived or listed. Linked in
+    the document, it is all of those and the same in every output.
+
+    Read off runs of unlinked text only, joined between links, so a URL split
+    across two runs by a change of style is still one URL, and the text of a
+    link that happens to be its own address is not bare.
+
+    One warning for all of them, like `_check_tracked`.
+    """
+    bare: list[str] = []
+    for runs, _ in doc.text_runs():
+        stretch: list[str] = []
+        for run in [*runs, None]:
+            if isinstance(run, Text) and not run.href:
+                stretch.append(run.text)
+                continue
+            bare.extend(_bare("".join(stretch)))
+            stretch = []
+    if not bare:
+        return
+    listed = Listed(*((Shown(url),) for url in bare))
+    doc.warn(
+        f"{plural(len(bare), 'URL')} typed out but not linked; "
+        f"link {'it' if len(bare) == 1 else 'each'} in the doc:{{}}",
+        listed,
+    )
+
+
+def _bare(text: str) -> list[str]:
+    """The URLs in `text`, without the punctuation of the sentence around them.
+
+    A `)` is the URL's own while it closes a `(` inside it, as the DOIs' do.
+    """
+    found: list[str] = []
+    for match in BARE_URL.finditer(text):
+        url = match.group().rstrip(TRAILING)
+        while url.endswith(")") and url.count(")") > url.count("("):
+            url = url[:-1].rstrip(TRAILING)
+        found.append(url)
+    return found
 
 
 def _tag(source: str) -> str:

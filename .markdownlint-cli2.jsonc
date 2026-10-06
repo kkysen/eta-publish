@@ -24,7 +24,8 @@
     // Footnotes are not something `markdownlint` reads:
     // it takes `[^1]: ...` for an unused link definition.
     "MD053": false,
-    // A bare URL in a footnote is how the document wrote it, and GitHub links it anyway.
+    // A bare URL is a build warning, and the fix is linking it in the document.
+    // Back on once no report has one.
     "MD034": false
   }
 }
