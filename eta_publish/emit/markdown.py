@@ -319,7 +319,16 @@ class MarkdownEmitter(Emitter):
 
     @override
     def text(self, node: Text) -> str:
-        out = escape(node.text)
+        # The run's own edge whitespace goes outside its markers.
+        # `**done: **` is not bold: a `**` after a space cannot close,
+        # so the asterisks are printed, as SAS West's August 21 note was.
+        # A link keeps its text to the words, too, rather than `[saving ]`.
+        # A run that is only whitespace is written plain, since `** **` would print too.
+        if not node.text.strip():
+            return node.text
+        core = node.text.strip()
+        lead, _, rest = node.text.partition(core)
+        out = escape(core)
         # HTML rather than Pandoc's `^x^` and `~x~`, which both accept.
         # GitHub renders `^x^` literally and `~x~` as strikethrough, which is wrong.
         if node.sup:
@@ -332,7 +341,7 @@ class MarkdownEmitter(Emitter):
             out = f"*{out}*"
         if node.href:
             out = f"[{out}]({url(node.href)}){self.source_ref(node.href)}"
-        return out
+        return f"{lead}{out}{rest}"
 
     @override
     def line_break(self, node: LineBreak) -> str:

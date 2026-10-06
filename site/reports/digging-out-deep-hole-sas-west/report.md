@@ -58,7 +58,7 @@ Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https:
 
 ## Addendum
 
-**The following clarifying text was added to “**[**Station Depth**](<#station-depth>)**” on August 21, 2026: **Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
+**The following clarifying text was added to “**[**Station Depth**](<#station-depth>)**” on August 21, 2026:** Note that while various cut-and-cover techniques should be investigated for SAS West stations, using TBMs for tunnels between stations is generally the most cost-effective option and global norm.
 Despite their name, deep-bored tunnels need not be that deep under the street, just deep enough to avoid most utilities and the existing stations they cross under.
 
 ## The Elephants in the Room
@@ -466,7 +466,7 @@ Credit: historic design document, [via David Rogoff (NYCSubway.org)](<https://ww
 Using NYCT’s actual ruling grade, or at least something far closer, could be a trivial adjustment to make the Broadway station far shallower and thus cheaper than currently planned.
 
 As an example of how such grade requirements can make a huge cost difference, California High-Speed Rail (CAHSR) recently made a similar adjustment.
-By updating its [design criteria to allow 4% grades](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> (with a 3.5% baseline), up from the original 2.5% (with a 1.25% baseline), CAHSR has [reduced tunneling length](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> by a massive 50%, [saving ](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[*tens of billions *](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[of](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>[ dollars](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>.
+By updating its [design criteria to allow 4% grades](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> (with a 3.5% baseline), up from the original 2.5% (with a 1.25% baseline), CAHSR has [reduced tunneling length](<https://hsr.ca.gov/wp-content/uploads/2025/08/2025-Project-Update-Report-SUP-FINAL-081925-A11Y.pdf#page=91>)<sup>\[86\]</sup> by a massive 50%, [saving](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup> [*tens of billions*](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup> [of](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup> [dollars](<https://hsr.ca.gov/wp-content/uploads/2026/02/2026-HSR-Draft-Business-Plan-02282026.pdf#page=44>)<sup>\[87\]</sup>.
 In NYCT’s case, they only need to follow their current maximum sustained grade to reap these benefits.
 
 ### Tail Tracks

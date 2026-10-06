@@ -7,7 +7,7 @@ from paths import FIXTURE_DIR, named_images
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.markdown import MarkdownEmitter
-from eta_publish.nodes import Document
+from eta_publish.nodes import Document, Text
 from eta_publish.parse import parse
 
 FIXTURE = json.loads((FIXTURE_DIR / "doc.json").read_text())
@@ -174,3 +174,19 @@ def test_a_value_holding_a_backtick_is_still_one_span() -> None:
     assert "using ``a ` b`` and ignoring `c`" in rendered
     assert fence("`leading") == "`` `leading ``"
     assert fence("plain") == "`plain`"
+
+
+@pytest.mark.parametrize(
+    ("run", "written"),
+    [
+        # A `**` after a space cannot close, so this would print its asterisks.
+        (Text(text="on August 21, 2026: ", bold=True), "**on August 21, 2026:** "),
+        (Text(text=" stressed", italic=True), " *stressed*"),
+        (Text(text=" both ", bold=True, italic=True), " ***both*** "),
+        (Text(text="saving ", href="https://a.example/"), "[saving](<https://a.example/>) "),
+        (Text(text=" ", bold=True), " "),
+        (Text(text=" plain "), " plain "),
+    ],
+)
+def test_edge_whitespace_goes_outside_the_markers(run: Text, written: str) -> None:
+    assert MarkdownEmitter().text(run) == written

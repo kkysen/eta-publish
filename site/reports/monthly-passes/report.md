@@ -49,7 +49,7 @@ This would still leave a deeper issue than merely the lack of a monthly pass or 
 
 Even before it was discontinued, the MTA’s unlimited-ride pass was one of the most expensive transit passes in the world as measured by the number of rides required for the pass to break even.
 This made the monthly pass a far less attractive option to riders than it should have been—and that was before the rise of hybrid and remote work and the decline of regular commuting.
-The MTA pitched fare capping in part as a solution to ensure that riders weren’t wasting their investment. **But this solved the wrong problem: rather than make passes less expensive, it only made it possible to purchase an overpriced pass piecemeal. **
+The MTA pitched fare capping in part as a solution to ensure that riders weren’t wasting their investment. **But this solved the wrong problem: rather than make passes less expensive, it only made it possible to purchase an overpriced pass piecemeal.**
 
 Other transit systems around both the country and the world not only continue to use monthly passes, but craft policies specifically designed to encourage as many riders to use them as possible.
 For transit agencies, monthly passes provide regular, reliable revenue, reduce fare evasion, and reduce the cost of fare enforcement.
