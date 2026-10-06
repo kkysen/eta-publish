@@ -296,7 +296,7 @@ and copyright notice, as distinct from the body.
 
 ETA reports already have one, under the `Header` heading:
 
-```
+```text
 Header
 Project Manager: Khyber Sen
 Phase: published

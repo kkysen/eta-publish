@@ -16,6 +16,12 @@ repos:
     hooks:
       - id: ty
 
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.3
+    hooks:
+      # The rules it skips, and why, are in `.markdownlint-cli2.jsonc`.
+      - id: markdownlint-cli2
+
   - repo: local
     hooks:
       # From the project's own environment rather than pre-commit's,
