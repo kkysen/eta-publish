@@ -35,6 +35,10 @@
     "snapshot": "https://web.archive.org/web/20260910231933/https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out",
     "timestamp": "20260910231933"
   },
+  "https://ibx.mta.info/": {
+    "snapshot": "https://web.archive.org/web/20261004181426/https://ibx.mta.info/",
+    "timestamp": "20261004181426"
+  },
   "https://ibx.mta.info/about/": {
     "snapshot": "https://web.archive.org/web/20260921162613/https://ibx.mta.info/about/",
     "timestamp": "20260921162613"
@@ -70,6 +74,10 @@
   "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review": {
     "snapshot": "https://web.archive.org/web/20260914114804/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review",
     "timestamp": "20260914114804"
+  },
+  "https://www.mta.info/agency/new-york-city-transit/ridership/2019": {
+    "snapshot": "https://web.archive.org/web/20261003214735/https://www.mta.info/agency/new-york-city-transit/ridership/2019",
+    "timestamp": "20261003214735"
   },
   "https://www.mta.info/document/103691": {
     "snapshot": "https://web.archive.org/web/20260518002014/https://www.mta.info/document/103691",
@@ -110,5 +118,9 @@
   "https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf": {
     "snapshot": "https://web.archive.org/web/20260215035655/https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf",
     "timestamp": "20260215035655"
+  },
+  "https://www.youtube.com/watch?v=HEfH7R6j6QY": {
+    "snapshot": "https://web.archive.org/web/20241213120427/https://www.youtube.com/watch?v=HEfH7R6j6QY",
+    "timestamp": "20241213120427"
   }
 }
