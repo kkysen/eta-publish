@@ -569,6 +569,10 @@ def build_one(
     # and before the emitters, which write the Sources section off it.
     read_archive_index(dest, doc)
     if options.archive and not options.offline:
+        # Before the lookups as well as after, because counting is what finds a
+        # recorded capture that is not the PDF, and dropping it is what has
+        # this build's lookups find one that is.
+        count_pages(doc)
         archive_sources(doc)
         count_pages(doc)
     write_archive_index(dest, doc)

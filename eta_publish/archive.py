@@ -468,6 +468,7 @@ def capture(
     wanted = missing(doc)
     if not wanted:
         return 0, 0
+    pdfs = pdfs_cited(doc)
     # Only a build with no keys defers anything, the index's answer for a week
     # and the replay's for an hour: one with keys submits a source the replay
     # found nothing for, which records an answer either way.
@@ -478,6 +479,7 @@ def capture(
             http,
             headers,
             url,
+            pdf=url in pdfs,
             index=not _stands("index", cached["index"].get(url, "")),
             replay=not _stands("replay", cached["replay"].get(url, "")),
         )
@@ -579,6 +581,7 @@ def _archive(
     headers: dict[str, str] | None,
     url: str,
     *,
+    pdf: bool = False,
     index: bool = True,
     replay: bool = True,
 ) -> Lookup:
@@ -589,7 +592,7 @@ def _archive(
             # Nothing to look up and nothing to ask for: it is already archived,
             # and asking the Wayback Machine about it only ever answers `403`.
             return Lookup(_patiently(lambda: _added(http, url, item)), already=True)
-        found = _patiently(lambda: _existing(http, url, index=index, replay=replay))
+        found = _patiently(lambda: _existing(http, url, pdf=pdf, index=index, replay=replay))
         if found is not None:
             return Lookup(found, already=True)
         if headers is None:
@@ -670,7 +673,12 @@ def _patiently[T](ask: Callable[[], T]) -> T:
 
 
 def _existing(
-    http: requests.Session, url: str, *, index: bool = True, replay: bool = True
+    http: requests.Session,
+    url: str,
+    *,
+    pdf: bool = False,
+    index: bool = True,
+    replay: bool = True,
 ) -> Archived | None:
     """The newest capture of `url` that is the page, if there is one.
 
@@ -688,19 +696,19 @@ def _existing(
     which had no cache, found the capture and failed the check.
     """
     # `replay` is the hour's cache, and holds back the replay for that long only.
-    served = _replayed(http, url) if replay else None
+    served = _replayed(http, url, pdf=pdf) if replay else None
     if served is not None:
         return served
-    return _indexed(http, url) if index else None
+    return _indexed(http, url, pdf=pdf) if index else None
 
 
-def _replayed(http: requests.Session, url: str) -> Archived | None:
+def _replayed(http: requests.Session, url: str, *, pdf: bool = False) -> Archived | None:
     """`_served`, asked while holding `_REPLAYING`."""
     with _REPLAYING:
-        return _served(http, url)
+        return _served(http, url, pdf=pdf)
 
 
-def _served(http: requests.Session, url: str) -> Archived | None:
+def _served(http: requests.Session, url: str, *, pdf: bool = False) -> Archived | None:
     """The newest capture, if the archive serves it as the page.
 
     Two `HEAD`s where the index takes one query, and still far cheaper: the
@@ -726,6 +734,10 @@ def _served(http: requests.Session, url: str) -> Archived | None:
     wall. The NYT's 125th Street piece is captured daily and the newest replays
     `403`. Then the index is asked, because the newest capture that *was* the
     page is a different question and only the index can answer it.
+
+    For a `pdf`, also `None` where the capture is not one, whatever its status.
+    `transitcosts.com` answers some crawls of `TCP_Final_Report.pdf` with a
+    "One moment, please..." bot check, and Save Page Now archived that as `200`.
     """
     landed = _checked_service(
         http.head(f"{REPLAY}/{NEWEST}/{url}", timeout=30, allow_redirects=False)
@@ -738,7 +750,10 @@ def _served(http: requests.Session, url: str) -> Archived | None:
     if stamp is None:
         return None
     snapshot = f"{REPLAY}/{stamp}/{url}"
-    if _checked_service(http.head(snapshot, timeout=60, allow_redirects=False)).status_code != OK:
+    served = _checked_service(http.head(snapshot, timeout=60, allow_redirects=False))
+    if served.status_code != OK:
+        return None
+    if pdf and not served.headers.get("content-type", "").startswith(PDF_TYPE):
         return None
     return Archived(snapshot=snapshot, timestamp=stamp)
 
@@ -832,7 +847,7 @@ def _checked_service(response: requests.Response) -> requests.Response:
     return response
 
 
-def _indexed(http: requests.Session, url: str) -> Archived | None:
+def _indexed(http: requests.Session, url: str, *, pdf: bool = False) -> Archived | None:
     """The newest capture of `url` that the index says came back `200`.
 
     `200` and nothing else. A page that has been taken down still gets crawled,
@@ -843,16 +858,16 @@ def _indexed(http: requests.Session, url: str) -> Archived | None:
     That is the whole of what can be checked here. A capture that answered
     `200` with a login wall, or with a site's own "page not found", is a
     capture of a page that loaded, and nothing in the index tells it from the
-    real thing.
+    real thing. Except by type: for a `pdf`, only a capture that was one.
 
     Under `_INDEXING`, which is the limit this whole module is careful about:
     it is held for this question and not for the replay lookup that came first.
     """
     with _INDEXING:
-        return _index_answer(http, url)
+        return _index_answer(http, url, pdf=pdf)
 
 
-def _index_answer(http: requests.Session, url: str) -> Archived | None:
+def _index_answer(http: requests.Session, url: str, *, pdf: bool = False) -> Archived | None:
     """What the index said, asked for while holding the gate."""
     response = _checked(
         http.get(
@@ -861,7 +876,7 @@ def _index_answer(http: requests.Session, url: str) -> Archived | None:
                 "url": url,
                 "output": "json",
                 "fl": "timestamp",
-                "filter": "statuscode:200",
+                "filter": ["statuscode:200", *([f"mimetype:{PDF_TYPE}"] if pdf else [])],
                 # The last row is the newest, and the only one wanted: this is
                 # asked once per source, and a report has 113 of them.
                 "limit": "-1",
@@ -932,6 +947,23 @@ def _refused(answer: dict[str, object]) -> str:
     return str(said) if said else "the capture failed without saying why"
 
 
+PDF_TYPE = "application/pdf"
+
+
+def pdfs_cited(doc: Document) -> set[str]:
+    """The documents `doc` cites as PDFs: by page, or by a `.pdf` path.
+
+    These are the ones whose capture has to be a PDF to be a capture of them.
+    `mta.info/document/179396` has no extension and is a PDF all the same,
+    which only its `#page=` says.
+    """
+    return {
+        document_url(source)
+        for source in doc.sources
+        if cited_page(source) is not None or urlsplit(source).path.lower().endswith(".pdf")
+    }
+
+
 COUNT_AT_ONCE = 4
 """How many PDFs are downloaded at once to count their pages.
 
@@ -945,14 +977,17 @@ def count_pages(doc: Document, session: requests.Session | None = None) -> int:
 
     Counted from the capture, asked for raw, because that is the file the
     archived link opens and a capture never changes, so one count stands for
-    good. A source with no capture, or whose capture is not a PDF, is counted
-    live, and one nothing has tried
-    to capture yet is left until something has, since its entry is what the
-    count is recorded on.
+    good. A source whose capture failed is counted live, and one nothing has
+    tried to capture yet is left until something has, since its entry is what
+    the count is recorded on.
 
-    Whatever cannot be counted is left uncounted rather than recorded: a
-    download that failed is not a fact about the document, and a page that
-    turns out not to be a PDF has no pages to check a citation against.
+    A capture that turns out not to be a PDF is dropped from the record, so
+    that the next lookup finds one that is. Every capture recorded before
+    lookups checked the type was accepted on its status alone, and that is how
+    `TCP_Final_Report.pdf` came to be archived as a bot check.
+
+    A download that failed is left uncounted rather than recorded: it is not a
+    fact about the document.
     """
     wanted = [
         url
@@ -965,14 +1000,10 @@ def count_pages(doc: Document, session: requests.Session | None = None) -> int:
         return 0
     http = session or _session()
 
-    def count(url: str) -> int:
+    def count(url: str) -> int | None:
         archived = doc.archives[url]
         if archived.snapshot and not archived.error:
-            pages = _pages(http, wayback_url(archived.timestamp, url, modifier=UNREWRITTEN))
-            if pages:
-                return pages
-        # The live file when the capture is not a PDF either: the capture of
-        # `TCP_Final_Report.pdf` is the site's "One moment, please..." wall.
+            return _pages(http, wayback_url(archived.timestamp, url, modifier=UNREWRITTEN))
         return _pages(http, url)
 
     with ThreadPoolExecutor(max_workers=COUNT_AT_ONCE) as pool:
@@ -980,6 +1011,8 @@ def count_pages(doc: Document, session: requests.Session | None = None) -> int:
     for url, pages in zip(wanted, counted, strict=True):
         if pages:
             doc.archives[url] = replace(doc.archives[url], pages=pages)
+        elif pages == 0 and doc.archives[url].snapshot:
+            del doc.archives[url]
     return sum(1 for pages in counted if pages)
 
 
@@ -987,12 +1020,12 @@ PDF_MAGIC = b"%PDF"
 """What every PDF starts with, and what a login wall or an error page does not."""
 
 
-def _pages(http: requests.Session, url: str) -> int:
-    """How many pages the PDF at `url` has, or 0 if it could not be read as one."""
+def _pages(http: requests.Session, url: str) -> int | None:
+    """The pages of the PDF at `url`: 0 if it is not one, `None` if it could not be fetched."""
     try:
         response = _patiently(lambda: _checked(http.get(url, timeout=120)))
     except requests.RequestException, Busy:
-        return 0
+        return None
     if not response.content.startswith(PDF_MAGIC):
         return 0
     try:

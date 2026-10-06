@@ -8,7 +8,7 @@ from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
-from typing import override
+from typing import cast, override
 
 import pytest
 import requests
@@ -358,6 +358,8 @@ class Replaying(requests.Session):
         self.captures = captures
         self.rows = rows
         self.index_asked = 0
+        self.index_params: dict[str, object] = {}
+        self.content_type = "text/html"
 
     @override
     def request(self, method: object, url: object, *args: object, **kwargs: object):
@@ -366,6 +368,7 @@ class Replaying(requests.Session):
         asked = str(url)
         if asked.startswith(archive.INDEX):
             self.index_asked += 1
+            self.index_params = cast("dict[str, object]", kwargs.get("params"))
             response.status_code = 200
             response._content = json.dumps(self.rows or [["timestamp"]]).encode()
             return response
@@ -378,6 +381,7 @@ class Replaying(requests.Session):
             response.headers["location"] = f"{archive.REPLAY}/{stamp}/whatever"
             return response
         response.status_code = status
+        response.headers["content-type"] = self.content_type
         return response
 
 
@@ -849,14 +853,40 @@ def test_a_pdf_cited_by_page_is_counted_from_its_raw_capture() -> None:
     assert session.asked == [raw]
 
 
-def test_a_capture_that_is_not_the_pdf_is_counted_live() -> None:
-    """The capture of `TCP_Final_Report.pdf` is a bot wall, not the report."""
+def test_a_recorded_capture_that_is_not_the_pdf_is_dropped() -> None:
+    """The capture of `TCP_Final_Report.pdf` is a bot check, not the report.
+
+    Dropped, the next lookup finds a capture that is the PDF.
+    """
     doc = cites("https://a.example/a.pdf#page=2")
     doc.archives["https://a.example/a.pdf"] = CAPTURED
     raw = "https://web.archive.org/web/20240503123456id_/https://a.example/a.pdf"
-    session = Serving({raw: b"<!DOCTYPE html>", "https://a.example/a.pdf": _pdf(4)})
-    archive.count_pages(doc, session=session)
+    assert archive.count_pages(doc, session=Serving({raw: b"<!DOCTYPE html>"})) == 0
+    assert "https://a.example/a.pdf" not in doc.archives
+
+
+def test_a_pdf_whose_capture_failed_is_counted_live() -> None:
+    doc = cites("https://a.example/a.pdf#page=2")
+    doc.archives["https://a.example/a.pdf"] = Archived(timestamp="20240503", error="refused")
+    archive.count_pages(doc, session=Serving({"https://a.example/a.pdf": _pdf(4)}))
     assert doc.archives["https://a.example/a.pdf"].pages == 4
+
+
+def test_a_pdf_whose_newest_capture_is_not_one_is_looked_up_in_the_index(keyed: None) -> None:
+    """For a PDF, a `200` that is a bot check is not a capture of it."""
+    doc = cites("https://a.example/document/1#page=2")
+    session = Replaying([("20260909150154", 200)], rows=[["timestamp"], ["20260905012630"]])
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert doc.archives["https://a.example/document/1"].timestamp == "20260905012630"
+    assert "mimetype:application/pdf" in cast("list[str]", session.index_params["filter"])
+
+
+def test_a_pdf_capture_the_replay_serves_as_one_is_taken(keyed: None) -> None:
+    doc = cites("https://a.example/a.pdf")
+    session = Replaying([("20260930025658", 200)])
+    session.content_type = "application/pdf"
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert session.index_asked == 0
 
 
 def test_what_cannot_be_counted_is_not_recorded() -> None:
