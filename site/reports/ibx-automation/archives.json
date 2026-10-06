@@ -7,10 +7,6 @@
     "snapshot": "https://web.archive.org/web/20130515042955/http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf",
     "timestamp": "20130515042955"
   },
-  "http://www.wmata.com/business/procurement_and_contracting/solicitations/uploads/RFP%20Energy%20Storage-Attachment%20B-Rail%20Car%20Performance%20for%20Design-Simulation.pdf": {
-    "snapshot": "https://web.archive.org/web/20160114052554/http://www.wmata.com/business/procurement_and_contracting/solicitations/uploads/RFP%20Energy%20Storage-Attachment%20B-Rail%20Car%20Performance%20for%20Design-Simulation.pdf",
-    "timestamp": "20160114052554"
-  },
   "https://anita.garden/nycriders/": {
     "snapshot": "https://web.archive.org/web/20260822120542/https://anita.garden/nycriders/",
     "timestamp": "20260822120542"
@@ -75,9 +71,9 @@
     "snapshot": "https://web.archive.org/web/20260914114804/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review",
     "timestamp": "20260914114804"
   },
-  "https://www.mta.info/agency/new-york-city-transit/ridership/2019": {
-    "snapshot": "https://web.archive.org/web/20261003214735/https://www.mta.info/agency/new-york-city-transit/ridership/2019",
-    "timestamp": "20261003214735"
+  "https://www.grandparisexpress.fr/ligne-15": {
+    "snapshot": "https://web.archive.org/web/20260313040341/https://www.grandparisexpress.fr/ligne-15",
+    "timestamp": "20260313040341"
   },
   "https://www.mta.info/document/103691": {
     "pages": 6,
@@ -115,6 +111,10 @@
     "snapshot": "https://web.archive.org/web/20251205012113/https://www.nycsubway.org/wiki/Chapter_03._General_Arrangement_for_Construction",
     "timestamp": "20251205012113"
   },
+  "https://www.transit.dot.gov/funding/grant-programs/capital-investments/stops": {
+    "snapshot": "https://web.archive.org/web/20260512184009/https://www.transit.dot.gov/funding/grant-programs/capital-investments/stops",
+    "timestamp": "20260512184009"
+  },
   "https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf": {
     "snapshot": "https://web.archive.org/web/20260910171300/https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf",
     "timestamp": "20260910171300"
@@ -122,6 +122,11 @@
   "https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf": {
     "snapshot": "https://web.archive.org/web/20260215035655/https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf",
     "timestamp": "20260215035655"
+  },
+  "https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf": {
+    "pages": 15,
+    "snapshot": "https://web.archive.org/web/20221022205203/https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf",
+    "timestamp": "20221022205203"
   },
   "https://www.youtube.com/watch?v=HEfH7R6j6QY": {
     "snapshot": "https://web.archive.org/web/20241213120427/https://www.youtube.com/watch?v=HEfH7R6j6QY",
