@@ -16,14 +16,16 @@ repos:
     hooks:
       - id: ty
 
-  - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.3
-    hooks:
-      # The rules it skips, and why, are in `.markdownlint-cli2.jsonc`.
-      - id: markdownlint-cli2
-
   - repo: local
     hooks:
+      # From `mise.toml`, where its version is pinned.
+      # The rules it skips, and why, are in `.markdownlint-cli2.jsonc`.
+      - id: markdownlint-cli2
+        name: markdownlint-cli2
+        entry: mise x -- markdownlint-cli2
+        language: system
+        types: [markdown]
+
       # From the project's own environment rather than pre-commit's,
       # so it sees exactly the dependencies `uv` installs
       # instead of a list here that has to be kept in step with `pyproject.toml`.

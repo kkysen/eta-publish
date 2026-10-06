@@ -31,8 +31,8 @@ jobs:
       - name: pyrefly
         run: uv run pyrefly check
 
-      # Through its pre-commit hook, so the version is pinned in one place.
-      # `pre-commit` itself comes from `mise.toml`.
+      # Through its pre-commit hook, which lints the tracked files and no others:
+      # a glob would also find the Markdown inside `.venv/`.
       - name: markdownlint
         run: pre-commit run markdownlint-cli2 --all-files
 
