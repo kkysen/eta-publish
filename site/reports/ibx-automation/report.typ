@@ -11,6 +11,7 @@
     [the #raw("Header") section has an unrecognized #raw("SME/Liaison:") line; check it for a typo],
     [the #raw("Header") section has an unrecognized #raw("Goals:") line; check it for a typo],
     [the #raw("Header") section has an unrecognized #raw("Audience:") line; check it for a typo],
+    [the caption of image #raw("img-e3ef182e") starts with #raw("Caption:"), which is published as part of it; take it out in the doc],
     [unfinished text in the document: #raw("[car-mile operating costs graph NYCT vs Vancouver]")],
     [the image #raw("img-e3ef182e") has no #raw("Credit:") line],
     [1 image is unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): Caption: A new artistic rendering of the IBX at New Utrecht Av. They a...], )],

@@ -369,6 +369,15 @@ def is_asset_note(line: list[Inline]) -> bool:
     return _written_as_a_label(note) and note.mark == ":" and note.label.casefold() in ASSET_LABELS
 
 
+CAPTION_LABEL = "caption"
+
+
+def starts_with_label(line: list[Inline], label: str) -> bool:
+    """Whether `line` begins `Label:`, however it is styled."""
+    head, colon, _ = plain_text(line).lstrip().partition(":")
+    return bool(colon) and head.strip().casefold() == label
+
+
 def is_credit_note(line: list[Inline]) -> bool:
     """Whether `line` is a `Credit:` note. Never bare, for the same reason."""
     note = labelled(line)
@@ -961,6 +970,15 @@ class Parser:
                         self._claim_name(last, line)
                         claimed = True
                     elif caption_slot:
+                        if starts_with_label(line, CAPTION_LABEL):
+                            # Nothing reads a `Caption:` label, so the word is
+                            # published as the first of the caption.
+                            self.doc.warn(
+                                "the caption of image {} starts with {}, which is published "
+                                "as part of it; take it out in the doc",
+                                Shown(last.image.filename),
+                                Shown("Caption:"),
+                            )
                         last.caption = line
                         caption_slot = 0
                         claimed = True

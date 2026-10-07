@@ -323,6 +323,16 @@ def test_an_undescribed_image_is_reported() -> None:
     assert any("no alt text and no caption" in w for w in map(str, doc.warnings))
 
 
+def test_a_caption_labelled_caption_is_warned_about() -> None:
+    """Nothing reads a `Caption:` label, so IBX published the word in its caption."""
+    doc = build([image(), para("Caption: A rendering."), field("Credit: MTA")])
+    [warning] = [w for w in map(str, doc.warnings) if "Caption:" in w]
+    assert warning.startswith("the caption of image `img-")
+    assert warning.endswith(
+        "starts with `Caption:`, which is published as part of it; take it out in the doc"
+    )
+
+
 def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
     """The hero image's caption and credit are one paragraph split by Shift+Enter,
     which Docs encodes as a vertical tab inside the run."""

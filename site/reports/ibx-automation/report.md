@@ -9,6 +9,7 @@ October 12, 2026
 - the `Header` section has an unrecognized `SME/Liaison:` line; check it for a typo
 - the `Header` section has an unrecognized `Goals:` line; check it for a typo
 - the `Header` section has an unrecognized `Audience:` line; check it for a typo
+- the caption of image `img-e3ef182e` starts with `Caption:`, which is published as part of it; take it out in the doc
 - unfinished text in the document: `[car-mile operating costs graph NYCT vs Vancouver]`
 - the image `img-e3ef182e` has no `Credit:` line
 - 1 image is unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
