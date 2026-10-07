@@ -13,8 +13,8 @@ October 12, 2026
 - the image `img-e3ef182e` has no `Credit:` line
 - 1 image is unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: Caption: A new artistic rendering of the IBX at New Utrecht Av. They a...
-- 20 suggestions still open on this tab; the build publishes the document without them, as it reads today
-- 22 comment threads still open on this tab
+- 31 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 26 comment threads still open on this tab
 - 1 source still carries the tag it was copied with; take it off the link in the doc:
   - `utm_source=chatgpt.com` on `https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056&utm_source=chatgpt.com`
 - 1 URL typed out but not linked; link it in the doc:
@@ -36,14 +36,12 @@ October 12, 2026
 - style: `8 minutes` should be `8 min`: `...ging from 3 minutes midday to 8 minutes in the evening, ridership ris...`
 - style: two words should be separated by 1 space, not 2: `...metro can scale from something··as small and limited as an air...`
 - style: `100 meters` should be `100 m`: `...le) that run trains less than 100 meters long and build stations barel...`
-- style: `3-minute` should be `3-min`: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
-- style: `3-minute` should be `3 min`, with no hyphen: `...f city center, offering about 3-minute frequencies on a lengthy trun...`
+- style: `3-minute` should be `3-min`: `...te far out of city center, so 3-minute frequencies are offered on a ...`
+- style: `3-minute` should be `3 min`, with no hyphen: `...te far out of city center, so 3-minute frequencies are offered on a ...`
 - style: `Ball Square` should be `Ball Sq`: `...ville, Massachusetts designed Ball Square and East Somerville to requir...`
 - style: `Jersey Avenue` should be `Jersey Av`: `...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...`
 - style: `180 meters` should be `180 m`: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a dash is written with a space beside it, and the house style closes it up: `...urage walking across the track — note this doesn’t matter so m...`
-- 1 PDF citation cites a page the PDF does not have:
-  - `https://www.mta.info/document/103691#page=150` cites page 150 of 6 pages
 
 ![Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/img-e3ef182e.jpg>)\
 Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).
@@ -54,8 +52,8 @@ Credit: MTA, [via Gothamist](<https://gothamist.com/news/new-renderings-of-the-m
 ### Introduction
 
 Now is the time to decide how the IBX should be built.
-The MTA is slated to release the draft environmental impact statement for the IBX in [late 2026](<https://ibx.mta.info/#:~:text=anticipated%20release%20in-,late%202026,-)>)<sup>\[2\]</sup>.
-The public response to that will be one of the last times to shape the broadest contours of the project design, as the final environmental impact statement will lock in major decisions.
+The MTA is slated to release the draft environmental impact statement (DEIS) for the IBX in [late 2026](<https://ibx.mta.info/#:~:text=anticipated%20release%20in-,late%202026,-)>)<sup>\[2\]</sup>.
+The public response to that will be one of the last times to shape the broadest contours of the project design, as the final environmental impact statement (FEIS) will lock in major decisions.
 What broad type of service should be run, and what type of construction is needed to enable that service, should be decided now.
 
 The original design for the IBX was forced to be light rail by a street-running section with genuinely tight curves.
@@ -87,7 +85,7 @@ It would also mean installing platform screen doors (PSDs) to protect riders fro
 IBX ridership projections have steadily risen as plans materialize and improve.
 The design of the IBX must be future-proofed to accommodate this rising ridership, and utilizing ALM technology is critical to do so in a cost-effective manner.
 
-In particular, ridership projections have risen 84%[^1], from [87,800/day](<https://www.mta.info/document/72081#page=16>)<sup>\[7\]</sup> in the [initial feasibility study in 2022](<https://www.mta.info/document/72081>)<sup>\[8\]</sup>, to [115,000/day](<https://www.mta.info/document/103691#page=150>)<sup>\[9\]</sup> in the [PEL study](<https://www.mta.info/document/114891>)<sup>\[10\]</sup>, and to [160,000/day](<https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up>)<sup>\[11\]</sup> in the more detailed and higher-speed 2025 design.
+In particular, ridership projections have risen 84%[^1], from [87,800/day](<https://www.mta.info/document/72081#page=16>)<sup>\[7\]</sup> in the [initial feasibility study in 2022](<https://www.mta.info/document/72081>)<sup>\[8\]</sup>, to [115,000/day](<https://www.mta.info/document/103691#page=5>)<sup>\[9\]</sup> in the [PEL study](<https://www.mta.info/document/114891>)<sup>\[10\]</sup>, and to [160,000/day](<https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up>)<sup>\[11\]</sup> in the more detailed and higher-speed 2025 design.
 This is higher than the ridership of the [G train (149,000/day)](<https://anita.garden/nycriders/>)<sup>\[12\]</sup> and the vehicle count on the [BQE (130,000/day)](<https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml#:~:text=130%2C000%20vehicles%20use%20the%20BQE%20daily>)<sup>\[13\]</sup>, both of which also connect Brooklyn and Queens.
 This has been driven by all of the following factors:
 
@@ -110,14 +108,13 @@ Light metro can scale from something  as small and limited as an airport’s peo
 
 ### Automation
 
-It’s important to understand that modern metro technology increasingly runs automated, and ALM is merely the culmination of a trend.
+Modern metro technology increasingly runs automated, and ALM is merely the culmination of that trend.
 Today, entirely new metro lines in developed and even middle-income countries are usually driverless.
-In fact, when talking to major rolling stock vendors at InnoTrans 2026 who were bidding on the IBX, they could not understand why the MTA would ever consider building the IBX as not automated.
-The default for a new build metro line these days, light or heavy, is simply automated.
-They have told the MTA this, and hopefully the MTA follows their advice.
-Moreover, even the MTA IBX staff have told us they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision.
+In fact, when talking to major rolling stock vendors at InnoTrans 2026 who were bidding on the IBX, they could not understand why the MTA would ever consider building the IBX unautomated.
+The default for a new-build metro line these days, light or heavy, simply is to be automated.
+They have told the MTA this, and hopefully the MTA follows their advice.Moreover, even the MTA IBX staff have told us they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision.
 
-This is classified in the following internationally standardized grades of automation (GoA):
+Automation is classified in the following internationally standardized grades, each called *grades of automation* (GoA) with an associated number:
 
 - GoA1: manual operation
 - GoA2: automated driving: the train drives automatically, but the operator opens the doors, closes the doors, and presses a button to start the automatic driving until the next station
@@ -134,11 +131,11 @@ Indeed, the [largest share of new jobs made accessible to commuters by the IBX i
 High frequency and reliability is especially important for facilitating transfers, since the wait between trains can make or break riders’ willingness to transfer.
 
 Driverless operation also has the unique benefit of permitting high off-peak frequency without incurring a commensurate increase in operating cost, even in smaller cities with lower possible ridership or lines with lower ridership.
-Vancouver’s SkyTrain runs every 6–8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4–6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, offering about 3-minute frequencies on a lengthy trunk.
+Vancouver’s SkyTrain runs every 6–8 minutes off-peak on each of two branches, and the Copenhagen Metro runs every 4–6 minutes off-peak on each of two branches, and in all cases the branches separate quite far out of city center, so 3-minute frequencies are offered on a lengthy trunk.
 The systems using driverless VAL[^7] technology run every 3–6 minutes off-peak in Lille, Rennes, Toulouse, and Turin.
 In contrast, the non-driverless Marseille Metro runs every 10–15 minutes.
 
-The costs of operating ALM technology in these cities are impressively low: the Expo and Millennium Lines of SkyTrain in Vancouver [averaged US$8.11/car-mile in 2025](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup>,[^8] less than half as much as New York City Transit (NYCT), [which averaged $18.63 in 2024](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>.
+The costs of operating ALM technology in these cities are impressively low: the Expo and Millennium Lines of SkyTrain in Vancouver [averaged US$8.11/car-mile in 2025](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup>,[^8] less than half as much as New York City Transit (NYCT), [which averaged $18.63](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>[/car-mile](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup> [in 2024](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>.
 This is important, as 72.5% of NYCT operating costs today are labor expenditures, and about 20% of subway workers are train operators.
 In contrast, [SkyTrain is very light on employees, and expanded service dramatically in the late 2000s with little increase in the number of workers](<http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf>)<sup>\[25\]</sup>.
 This also insulates the system from fiscal pressure to cut service in order to save small amounts of money during a funding crisis.
@@ -149,12 +146,13 @@ ALM can not only do better at the peak, but is more resilient to cuts off-peak t
 
 For the IBX, achieving these operational benefits requires a minimal upfront increase in construction costs.
 Since the corridor will already be grade separated, the only remaining requirement is protecting passengers from automatically driven trains.
+Existing American practice demonstrates this can be done at minimal cost, so that protection will quickly pay for itself with automation.
+Furthermore, as discussed in the next section, it is also good for its own sake and so should be pursued no matter what.
+
+Safety and Platform Screen Doors
+
 In almost every ALM system, this protection is provided by platform screen doors, which physically prevent passengers from falling onto the tracks, preventing these collisions.
-Existing American practice demonstrates this can be done at minimal cost.
-
-### Safety and Platform Screen Doors
-
-Automation is enabled with the installation of platform screen doors (PSDs) and sensors, but these also provide the additional benefit of making impossible intrusion and unintentional falls onto tracks, eliminating the [largest source of risk to passenger safety](<https://communityofmetros.org/research-enhancing-platform-safety-without-platform-doors/>)<sup>\[26\]</sup>.
+But passenger safety is an issue with or without automation, and these mechanisms eliminate the [largest source of risk to passenger safety](<https://communityofmetros.org/research-enhancing-platform-safety-without-platform-doors/>)<sup>\[26\]</sup>.
 The safety benefits of PSDs are so strong that they should be installed on the IBX regardless of automation.
 
 Honolulu provides virtually the only US example pertinent to IBX.
@@ -246,7 +244,7 @@ In addition to the immense benefits for IBX itself, it would serve as a proof-of
 6. <https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4> (archived [October 22, 2022](<https://web.archive.org/web/20221022205203id_/https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4>))
 7. <https://www.mta.info/document/72081#page=16> (archived [May 18, 2026](<https://web.archive.org/web/20260518002035id_/https://www.mta.info/document/72081#page=16>))
 8. <https://www.mta.info/document/72081> (archived [May 18, 2026](<https://web.archive.org/web/20260518002035/https://www.mta.info/document/72081>))
-9. <https://www.mta.info/document/103691#page=150> (archived [May 18, 2026](<https://web.archive.org/web/20260518002014id_/https://www.mta.info/document/103691#page=150>))
+9. <https://www.mta.info/document/103691#page=5> (archived [May 18, 2026](<https://web.archive.org/web/20260518002014id_/https://www.mta.info/document/103691#page=5>))
 10. <https://www.mta.info/document/114891> (archived [May 18, 2026](<https://web.archive.org/web/20260518002024/https://www.mta.info/document/114891>))
 11. <https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up> (archived [August 29, 2026](<https://web.archive.org/web/20260829123215/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase#:~:text=ridership%20projections%20to-,160%2C000,-per%20day%2C%20up>))
 12. <https://anita.garden/nycriders/> (archived [August 22, 2026](<https://web.archive.org/web/20260822120542/https://anita.garden/nycriders/>))
