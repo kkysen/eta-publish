@@ -19,6 +19,7 @@ from .nodes import (
     Figure,
     Inline,
     Listed,
+    Paragraph,
     Quoted,
     Shown,
     Span,
@@ -30,6 +31,7 @@ from .nodes import (
     plain_text,
 )
 from .parse import (
+    CREDIT_LABEL,
     KNOWN_FIELDS,
     REQUIRED_FIELDS,
     is_asset_note,
@@ -37,6 +39,7 @@ from .parse import (
     is_source_note,
     key_line,
     split_lines,
+    starts_with_label,
     unfinished,
 )
 
@@ -184,18 +187,30 @@ def _check_figures(doc: Document) -> None:
     Named by the file it is written as rather than by its Docs object id,
     which nothing in the document shows anybody.
     """
-    for block in doc.blocks:
+    for block, after in zip(doc.blocks, [*doc.blocks[1:], None], strict=True):
         if not isinstance(block, Figure):
             continue
         named = Shown(block.image.filename)
-        # The template and its values together, because the two warnings differ
-        # in both: one names a `Credit:` line and the other names nothing.
-        for template, values, content in (
-            ("the image {} has no caption", (named,), block.caption),
-            ("the image {} has no {} line", (named, Shown("Credit:")), block.credit),
+        if not block.caption:
+            doc.warn("the image {} has no caption", named)
+        if block.credit:
+            continue
+        # A label is read only where it is underlined, so an unmarked `Credit:`
+        # is the caption when it is the only line under the image, and a
+        # paragraph of prose after it otherwise. Either way the image publishes
+        # uncredited, with its credit printed under it as something else.
+        if starts_with_label(block.caption, CREDIT_LABEL) or (
+            isinstance(after, Paragraph) and starts_with_label(after.content, CREDIT_LABEL)
         ):
-            if not content:
-                doc.warn(template, *values)
+            doc.warn(
+                "the image {} has a {} line under it that is not read as its credit, "
+                "because {} is not underlined; underline it in the doc",
+                named,
+                Shown("Credit:"),
+                Shown("Credit"),
+            )
+        else:
+            doc.warn("the image {} has no {} line", named, Shown("Credit:"))
 
 
 def _check_named(doc: Document) -> None:

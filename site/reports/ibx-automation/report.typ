@@ -13,7 +13,7 @@
     [the #raw("Header") section has an unrecognized #raw("Audience:") line; check it for a typo],
     [the caption of image #raw("img-e3ef182e") starts with #raw("Caption:"), which is published as part of it; take it out in the doc],
     [unfinished text in the document: #raw("[car-mile operating costs graph NYCT vs Vancouver]")],
-    [the image #raw("img-e3ef182e") has no #raw("Credit:") line],
+    [the image #raw("img-e3ef182e") has a #raw("Credit:") line under it that is not read as its credit, because #raw("Credit") is not underlined; underline it in the doc],
     [1 image is unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): Caption: A new artistic rendering of the IBX at New Utrecht Av. They a...], )],
     [31 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [26 comment threads still open on this tab],

@@ -7,10 +7,10 @@
 - the `Header` section has an unrecognized `Thesis:` line; check it for a typo
 - image `kix.r5dr7c744w41` has no alt text and no caption; add a description to it in the doc
 - image `kix.ltdn9d3lr6ci` has no alt text and no caption; add a description to it in the doc
-- the image `img-a199edea` has no `Credit:` line
+- the image `img-a199edea` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
 - the image `img-da01ab69` has no `Credit:` line
-- the image `img-5f0a3a08` has no `Credit:` line
-- the image `img-c1aacb22` has no `Credit:` line
+- the image `img-5f0a3a08` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
+- the image `img-c1aacb22` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
 - the image `img-96810135` has no caption
 - the image `img-96810135` has no `Credit:` line
 - the image `img-5a4ea5b9` has no caption

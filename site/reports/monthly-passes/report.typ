@@ -13,7 +13,7 @@
     [image #raw("kix.a8pybogzdcax") has no alt text and no caption; add a description to it in the doc],
     [the image #raw("img-ae6ddd33") has no caption],
     [the image #raw("img-ae6ddd33") has no #raw("Credit:") line],
-    [the image #raw("img-cf3f2056") has no #raw("Credit:") line],
+    [the image #raw("img-cf3f2056") has a #raw("Credit:") line under it that is not read as its credit, because #raw("Credit") is not underlined; underline it in the doc],
     [the image #raw("img-6b5eb7d1") has no #raw("Credit:") line],
     [3 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-ae6ddd33")], [#raw("img-cf3f2056"): Image: Tapping onto the subway with OMNY], [#raw("img-6b5eb7d1"): A comparison of monthly fare pass ratios. Note: for cities with multip...], )],
     [1 suggestion still open on this tab; the build publishes the document without them, as it reads today],

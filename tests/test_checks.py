@@ -109,6 +109,27 @@ def test_a_figure_with_both_is_not_warned_about(doc: Document) -> None:
     assert doc.warnings == []
 
 
+UNREAD_CREDIT = (
+    "the image `a-diagram` has a `Credit:` line under it that is not read as its credit, "
+    "because `Credit` is not underlined; underline it in the doc"
+)
+
+
+def test_a_credit_left_as_prose_under_a_figure_says_why(doc: Document) -> None:
+    """IBX's lead image: its `Credit:` is not underlined, so it publishes as a
+    paragraph, after the table of contents the image is moved above."""
+    doc.blocks = [figure(credit=False), Paragraph(content=[Text(text="Credit: MTA")])]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [UNREAD_CREDIT]
+
+
+def test_a_credit_taken_for_the_caption_says_why(doc: Document) -> None:
+    """The only line under the image is the caption, whatever it says."""
+    doc.blocks = [replace(figure(credit=False), caption=[Text(text="Credit: MTA")])]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [UNREAD_CREDIT]
+
+
 def test_an_uncaptioned_figure_is_named_by_its_file(doc: Document) -> None:
     """The Docs object id is not something the document shows anybody."""
     doc.blocks = [figure(caption=False)]

@@ -7,7 +7,7 @@
 - image `kix.a8pybogzdcax` has no alt text and no caption; add a description to it in the doc
 - the image `img-ae6ddd33` has no caption
 - the image `img-ae6ddd33` has no `Credit:` line
-- the image `img-cf3f2056` has no `Credit:` line
+- the image `img-cf3f2056` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
 - the image `img-6b5eb7d1` has no `Credit:` line
 - 3 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-ae6ddd33`
