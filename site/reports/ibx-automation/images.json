@@ -4,5 +4,23 @@
     "height": 1365,
     "sha256": "ad6508e0aab56a67dca99c02ad2e42879f7ee534727eab3075131df014aa2f7e",
     "width": 2048
+  },
+  "kix.jgxhj1hqsf1i": {
+    "file": "automated_share_by_year_2016_to_2026.png",
+    "height": 872,
+    "sha256": "82a6cd9f850eb19a0dfd0e5b11896ce1695193259829bc53f56c58ba603c6d0a",
+    "width": 1520
+  },
+  "kix.ngnc6vb5jx8e": {
+    "file": "img-dfdefb85.png",
+    "height": 1536,
+    "sha256": "e70a0e68cf8eddb2dbe93127906886a5be67ac788b4dc29437544251ad4448df",
+    "width": 2048
+  },
+  "kix.tx1fjdbmxbaz": {
+    "file": "automated_share_by_year_ex_china_2016_to_2026.png",
+    "height": 872,
+    "sha256": "b170e8f15a5fde1237e47fc76e616c6bb1d8c8054dce1ed597a733e57787e9e8",
+    "width": 1520
   }
 }
