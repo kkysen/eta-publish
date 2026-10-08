@@ -9,11 +9,9 @@ October 12, 2026
 - the `Header` section has an unrecognized `SME/Liaison:` line; check it for a typo
 - the `Header` section has an unrecognized `Goals:` line; check it for a typo
 - the `Header` section has an unrecognized `Audience:` line; check it for a typo
-- the caption of image `img-e3ef182e` starts with `Caption:`, which is published as part of it; take it out in the doc
 - unfinished text in the document: `[car-mile operating costs graph NYCT vs Vancouver]`
-- the image `img-e3ef182e` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
 - 1 image is unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
-  - `img-e3ef182e`: Caption: A new artistic rendering of the IBX at New Utrecht Av. They a...
+  - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
 - 31 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 26 comment threads still open on this tab
 - 1 source still carries the tag it was copied with; take it off the link in the doc:
@@ -26,7 +24,7 @@ October 12, 2026
   - `https://transitcosts.com/wp-content/uploads/Italian_Case_Study.pdf`
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
-- style: `465 feet` should be `465 ft`: `...us on the IBX right-of-way is 465 feet, twice as much as that of the...`
+- style: `465 feet` should be `465 ft`: `...us on the IBX right-of-way is 465 feet, exceptionally gentle and twi...`
 - style: `90 seconds` should be `90 sec`: `...lows headways as low as every 90 seconds, as seen in many existing sys...`
 - style: `90 second` should be `90 sec`: `...ial ridership may not warrant 90 second headways, but ALM would allow...`
 - style: `5 minute` should be `5 min`: `...000 with the currently stated 5 minute peak headway, with off-peak h...`
@@ -44,11 +42,10 @@ October 12, 2026
 - style: `180 meters` should be `180 m`: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
 - style: a dash is written with a space beside it, and the house style closes it up: `...urage walking across the track — note this doesn’t matter so m...`
 
-![Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/img-e3ef182e.jpg>)\
-Caption: A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).
-<!-- [Image Source](<https://images-prod.gothamist.com/images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg>) -->
-
+![A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/img-e3ef182e.jpg>)\
+A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).\
 Credit: MTA, [via Gothamist](<https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out>)<sup>\[1\]</sup>
+<!-- [Image Source](<https://images-prod.gothamist.com/images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg>) -->
 
 ### Introduction
 
@@ -58,7 +55,7 @@ The public response to that will be one of the last times to shape the broadest 
 What broad type of service should be run, and what type of construction is needed to enable that service, should be decided now.
 
 The original design for the IBX was forced to be light rail by a street-running section with genuinely tight curves.
-That section, by All Faiths Cemetery, was [thankfully removed](<https://www.youtube.com/watch?v=HEfH7R6j6QY>)<sup>\[3\]</sup>, as [ETA had suggested](<https://www.etany.org/ibx-all-faiths-tunnel>) before this change was made.
+That section, by All Faiths Cemetery, will [thankfully be](<https://www.youtube.com/watch?v=HEfH7R6j6QY>)<sup>\[3\]</sup> built as a tunnel, as [ETA had suggested](<https://www.etany.org/ibx-all-faiths-tunnel>) before this change was made.
 This is a huge improvement: the IBX right-of-way is now guaranteed to be completely grade-separated, significantly improving speed, reliability, and achievable frequency.
 It also raises the question of what service and rolling stock design is now best for the project, since the original factors motivating the choice of light rail have since changed dramatically.
 Since announcing the All Faiths tunnel, the MTA has started to describe the IBX more as a light metro.
@@ -66,7 +63,7 @@ Jamie Torres-Springer, head of MTA Construction & Development, described the IBX
 However, while the words have been a welcoming and encouraging sign, the MTA has yet to commit to the concrete details underlying this: high-floor light metro vehicles.
 And more importantly, they are missing one crucial piece: automation.
 
-The MTA [claims light rail is necessary to deal with tight curves](<https://ibx.mta.info/about/#:~:text=to%20travel%20through-,tight%20curves,-Fit%20through%20the>)<sup>\[5\]</sup>, but in fact, due to the removal of the street-running segment, the minimum curve radius on the IBX right-of-way is 465 feet, [twice as much as that of the Washington Metro](<https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4>)<sup>\[6\]</sup>, more than enough to permit any type of train at over 30 mph (see [Rolling Stock](<#rolling-stock>) for more detail).
+The MTA [claims light rail is necessary to deal with tight curves](<https://ibx.mta.info/about/#:~:text=to%20travel%20through-,tight%20curves,-Fit%20through%20the>)<sup>\[5\]</sup>, but in fact, due to the removal of the street-running segment, the minimum curve radius on the IBX right-of-way is 465 feet, exceptionally gentle and [twice as much as that of the Washington Metro](<https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4>)<sup>\[6\]</sup>, more than enough to permit any type of train at over 30 mph (see [Rolling Stock](<#rolling-stock>) for more detail).
 Failure to cull unneeded constraints like from from the rolling stock procurement process will likely drive up costs without benefiting IBX riders in any way.
 
 We believe the solution is *automated light metro* (ALM).
@@ -136,7 +133,7 @@ Vancouver’s SkyTrain runs every 6–8 minutes off-peak on each of two branches
 The systems using driverless VAL[^7] technology run every 3–6 minutes off-peak in Lille, Rennes, Toulouse, and Turin.
 In contrast, the non-driverless Marseille Metro runs every 10–15 minutes.
 
-The costs of operating ALM technology in these cities are impressively low: the Expo and Millennium Lines of SkyTrain in Vancouver [averaged US$8.11/car-mile in 2025](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup>,[^8] less than half as much as New York City Transit (NYCT), [which averaged $18.63](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>[/car-mile](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup> [in 2024](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>.
+The costs of operating ALM technology in these cities are impressively low: the Expo and Millennium Lines of SkyTrain in Vancouver [averaged USD $8.11/car-mile in 2025](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup>,[^8] less than half as much as New York City Transit (NYCT), [which averaged $18.63](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>[/car-mile](<https://www.translink.ca/-/media/translink/documents/about-translink/corporate-reports/quarterly_reports/2025/2025-q2-financial-and-performance-report.pdf>)<sup>\[23\]</sup> [in 2024](<https://www.transit.dot.gov/sites/fta.dot.gov/files/transit_agency_profile_doc/2024/20008.pdf>)<sup>\[24\]</sup>.
 This is important, as 72.5% of NYCT operating costs today are labor expenditures, and about 20% of subway workers are train operators.
 In contrast, [SkyTrain is very light on employees, and expanded service dramatically in the late 2000s with little increase in the number of workers](<http://www.th.gov.bc.ca/publications/reports_and_studies/Review_of_TransLink.pdf>)<sup>\[25\]</sup>.
 This also insulates the system from fiscal pressure to cut service in order to save small amounts of money during a funding crisis.
