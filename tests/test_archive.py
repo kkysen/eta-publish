@@ -889,6 +889,60 @@ def test_a_pdf_capture_the_replay_serves_as_one_is_taken(keyed: None) -> None:
     assert session.index_asked == 0
 
 
+class Redirecting(Replaying):
+    """A replay whose capture redirects through `hops` before it is served.
+
+    The Substack shape: the cited URL was captured as a `302` to a signed S3
+    URL, which was captured too.
+    """
+
+    def __init__(self, hops: list[str], content_type: str) -> None:
+        super().__init__([("20240921120558", 200)], rows=[["timestamp"], ["20240101000000"]])
+        self.hops = hops
+        self.content_type = content_type
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        asked = str(url)
+        if asked.startswith(f"{archive.REPLAY}/20240921120558/") and asked != self.hops[-1]:
+            response = requests.Response()
+            response.url = asked
+            response.status_code = 302
+            hop = self.hops.index(asked) + 1 if asked in self.hops else 0
+            response.headers["location"] = self.hops[hop]
+            return response
+        return super().request(method, url, *args, **kwargs)
+
+
+SIGNED = [
+    f"{archive.REPLAY}/20240921120558/https://s3.example/a.pdf?signed=1",
+    f"{archive.REPLAY}/20240921120558/https://s3.example/a.pdf",
+]
+
+
+def test_a_pdf_capture_that_redirects_to_the_pdf_is_taken(keyed: None) -> None:
+    doc = cites("https://a.example/a.pdf")
+    session = Redirecting(SIGNED, "application/pdf")
+    assert archive.capture(doc, session=session) == (1, 0)
+    assert doc.archives["https://a.example/a.pdf"].snapshot == (
+        "https://web.archive.org/web/20240921120558/https://a.example/a.pdf"
+    )
+    assert session.index_asked == 0
+
+
+def test_a_page_capture_that_redirects_is_not_taken(keyed: None) -> None:
+    """A dead page sent to a site's front page also ends in `200`."""
+    session = Redirecting(SIGNED, "text/html")
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert session.index_asked == 1
+
+
+def test_a_redirect_out_of_the_archive_is_not_followed(keyed: None) -> None:
+    session = Redirecting(["https://s3.example/a.pdf"], "application/pdf")
+    archive.capture(cites("https://a.example/a.pdf"), session=session)
+    assert session.index_asked == 1
+
+
 def test_what_cannot_be_counted_is_not_recorded() -> None:
     doc = cites("https://a.example/a.pdf#page=2")
     doc.archives["https://a.example/a.pdf"] = CAPTURED

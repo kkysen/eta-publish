@@ -26,7 +26,7 @@ from datetime import UTC, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
 from threading import Lock, Semaphore
-from urllib.parse import urlsplit
+from urllib.parse import urljoin, urlsplit
 
 import platformdirs
 import requests
@@ -54,6 +54,9 @@ about 200 ms rather than seconds, and the answer is about the URL this publishes
 
 NEWEST = "2099"
 """A date nothing is archived past, so the capture closest to it is the newest."""
+
+ARCHIVE_HOST = "web.archive.org"
+"""Where the captures are, and so where a capture's redirect has to stay."""
 
 REDIRECT = 302
 """What the replay says when it has a capture, naming it in `Location`."""
@@ -755,11 +758,43 @@ def _served(http: requests.Session, url: str, *, pdf: bool = False) -> Archived 
         return None
     snapshot = f"{REPLAY}/{stamp}/{url}"
     served = _checked_service(http.head(snapshot, timeout=60, allow_redirects=False))
+    if pdf:
+        served = _followed(http, served)
     if served.status_code != OK:
         return None
     if pdf and not served.headers.get("content-type", "").startswith(PDF_TYPE):
         return None
     return Archived(snapshot=snapshot, timestamp=stamp)
+
+
+FOLLOW_AT_MOST = 5
+"""How many redirects a PDF's capture is followed through before it is not one."""
+
+
+def _followed(http: requests.Session, served: requests.Response) -> requests.Response:
+    """`served`, or where its redirects inside the archive end up.
+
+    For a PDF only, whose content type then says whether the redirect landed
+    on the document. Substack serves a post's file by redirecting to a signed
+    S3 URL, and the archive captured both: the capture of the URL the report
+    cites answers `302`, twice, before the PDF. A reader clicking it lands on
+    the PDF, so it is one, and without this the index was asked about it on
+    every build. A page's redirect proves nothing like that, since a dead page
+    sent to a site's front page also ends in `200`.
+
+    Only within `web.archive.org`: a redirect out of the archive is the live
+    web, and that is not a capture.
+    """
+    for _ in range(FOLLOW_AT_MOST):
+        if served.status_code != REDIRECT:
+            return served
+        location = urlsplit(served.headers.get("location", ""))
+        if location.hostname not in (None, ARCHIVE_HOST):
+            return served
+        served = _checked_service(
+            http.head(urljoin(served.url, location.geturl()), timeout=60, allow_redirects=False)
+        )
+    return served
 
 
 def _item(url: str) -> str | None:
