@@ -699,12 +699,30 @@
         "startIndex": 1570
       },
       {
-        "endIndex": 1634,
+        "endIndex": 1641,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1633,
+              "endIndex": 1576,
               "startIndex": 1571,
+              "textRun": {
+                "content": "Video",
+                "textStyle": {
+                  "underline": true
+                }
+              }
+            },
+            {
+              "endIndex": 1578,
+              "startIndex": 1576,
+              "textRun": {
+                "content": ": ",
+                "textStyle": {}
+              }
+            },
+            {
+              "endIndex": 1640,
+              "startIndex": 1578,
               "textRun": {
                 "content": "Too Damn Loud: Announcements on NYC Transit are Out of Control",
                 "textStyle": {
@@ -725,8 +743,8 @@
               }
             },
             {
-              "endIndex": 1634,
-              "startIndex": 1633,
+              "endIndex": 1641,
+              "startIndex": 1640,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -741,12 +759,12 @@
         "startIndex": 1571
       },
       {
-        "endIndex": 1635,
+        "endIndex": 1642,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1635,
-              "startIndex": 1634,
+              "endIndex": 1642,
+              "startIndex": 1641,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -758,31 +776,31 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1634
+        "startIndex": 1641
       },
       {
-        "endIndex": 1638,
+        "endIndex": 1645,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1636,
+              "endIndex": 1643,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.djm0a1aand4k",
                 "textStyle": {}
               },
-              "startIndex": 1635
+              "startIndex": 1642
             },
             {
-              "endIndex": 1637,
+              "endIndex": 1644,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.ir9gl4tqd2i2",
                 "textStyle": {}
               },
-              "startIndex": 1636
+              "startIndex": 1643
             },
             {
-              "endIndex": 1638,
-              "startIndex": 1637,
+              "endIndex": 1645,
+              "startIndex": 1644,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -794,15 +812,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1635
+        "startIndex": 1642
       },
       {
-        "endIndex": 1639,
+        "endIndex": 1646,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1639,
-              "startIndex": 1638,
+              "endIndex": 1646,
+              "startIndex": 1645,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -814,15 +832,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1638
+        "startIndex": 1645
       },
       {
-        "endIndex": 1653,
+        "endIndex": 1660,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1653,
-              "startIndex": 1639,
+              "endIndex": 1660,
+              "startIndex": 1646,
               "textRun": {
                 "content": "Too Damn Loud\n",
                 "textStyle": {}
@@ -835,15 +853,15 @@
             "namedStyleType": "HEADING_1"
           }
         },
-        "startIndex": 1639
+        "startIndex": 1646
       },
       {
-        "endIndex": 1707,
+        "endIndex": 1714,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1707,
-              "startIndex": 1653,
+              "endIndex": 1714,
+              "startIndex": 1660,
               "textRun": {
                 "content": "Transit in and around New York is just too damn loud.\n",
                 "textStyle": {}
@@ -855,15 +873,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1653
+        "startIndex": 1660
       },
       {
-        "endIndex": 1708,
+        "endIndex": 1715,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1708,
-              "startIndex": 1707,
+              "endIndex": 1715,
+              "startIndex": 1714,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -875,15 +893,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1707
+        "startIndex": 1714
       },
       {
-        "endIndex": 1901,
+        "endIndex": 1908,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1901,
-              "startIndex": 1708,
+              "endIndex": 1908,
+              "startIndex": 1715,
               "textRun": {
                 "content": "Some of this is unavoidable. Providing transit can be a noisy endeavor, and things like the squeal of a train around a tight curve or the roar of a diesel engine can be difficult to eliminate.\n",
                 "textStyle": {}
@@ -895,15 +913,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1708
+        "startIndex": 1715
       },
       {
-        "endIndex": 1902,
+        "endIndex": 1909,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 1902,
-              "startIndex": 1901,
+              "endIndex": 1909,
+              "startIndex": 1908,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -915,15 +933,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1901
+        "startIndex": 1908
       },
       {
-        "endIndex": 2264,
+        "endIndex": 2271,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2264,
-              "startIndex": 1902,
+              "endIndex": 2271,
+              "startIndex": 1909,
               "textRun": {
                 "content": "But far too much of the noise that bombards New Yorkers\u2019 ears, is not the product of a loud environment, but rather a deliberate assault on riders\u2019 attention. Whether waiting on a platform or traveling on a bus or on the subway, transit riders rarely get more than a few moments of peace before being inundated in a stream of unnecessary, verbose announcements.\n",
                 "textStyle": {}
@@ -935,15 +953,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 1902
+        "startIndex": 1909
       },
       {
-        "endIndex": 2265,
+        "endIndex": 2272,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2265,
-              "startIndex": 2264,
+              "endIndex": 2272,
+              "startIndex": 2271,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -955,23 +973,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 2264
+        "startIndex": 2271
       },
       {
-        "endIndex": 2833,
+        "endIndex": 2840,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2630,
-              "startIndex": 2265,
+              "endIndex": 2637,
+              "startIndex": 2272,
               "textRun": {
                 "content": "From incessant \u201cImportant reminder[s] from the NYPD\u201d about theft, to repeated \u201cIt is against New York State law to smoke on platforms and waiting areas\u201d on commuter trains to endless repetitions of \u201cNew York has more than 100 accessible stations,\u201d riders\u2019 ears are constantly assailed with messages that have little or no bearing on their travels. The MTA has even ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 2669,
-              "startIndex": 2630,
+              "endIndex": 2676,
+              "startIndex": 2637,
               "textRun": {
                 "content": "begun to experiment with advertisements",
                 "textStyle": {
@@ -992,24 +1010,24 @@
               }
             },
             {
-              "endIndex": 2811,
-              "startIndex": 2669,
+              "endIndex": 2818,
+              "startIndex": 2676,
               "textRun": {
                 "content": " played to a captive audience over its PA systems. This cacophony has reached the point that it is noticeably degrading the riding experience,",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 2830,
-              "startIndex": 2811,
+              "endIndex": 2837,
+              "startIndex": 2818,
               "textRun": {
                 "content": " for no gain at all",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 2833,
-              "startIndex": 2830,
+              "endIndex": 2840,
+              "startIndex": 2837,
               "textRun": {
                 "content": ". \n",
                 "textStyle": {}
@@ -1021,15 +1039,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 2265
+        "startIndex": 2272
       },
       {
-        "endIndex": 2834,
+        "endIndex": 2841,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 2834,
-              "startIndex": 2833,
+              "endIndex": 2841,
+              "startIndex": 2840,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1041,15 +1059,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 2833
+        "startIndex": 2840
       },
       {
-        "endIndex": 3393,
+        "endIndex": 3400,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3393,
-              "startIndex": 2834,
+              "endIndex": 3400,
+              "startIndex": 2841,
               "textRun": {
                 "content": "Indeed, ETA recorded a one-way ride from 34 St-Hudson Yards to Flushing-Main St, and nearly 10 minutes out of a 40 minute ride comprised announcements. Riders should not be subjected to constant sound for 25% of their ride. On the Berlin S-Bahn, a complex branched system that must announce train numbers and destinations, the announcements\u2014all short snippets of information about the train\u2019s identity and destination or the door closing warning\u2014are 15 seconds per interstation segment, only about 12.5% of the ride, half as long as on New York City Transit.\n",
                 "textStyle": {}
@@ -1061,15 +1079,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 2834
+        "startIndex": 2841
       },
       {
-        "endIndex": 3394,
+        "endIndex": 3401,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3394,
-              "startIndex": 3393,
+              "endIndex": 3401,
+              "startIndex": 3400,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1081,23 +1099,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3393
+        "startIndex": 3400
       },
       {
-        "endIndex": 3396,
+        "endIndex": 3403,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3395,
+              "endIndex": 3402,
               "inlineObjectElement": {
                 "inlineObjectId": "kix.9htcorb8042p",
                 "textStyle": {}
               },
-              "startIndex": 3394
+              "startIndex": 3401
             },
             {
-              "endIndex": 3396,
-              "startIndex": 3395,
+              "endIndex": 3403,
+              "startIndex": 3402,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1109,15 +1127,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3394
+        "startIndex": 3401
       },
       {
-        "endIndex": 3404,
+        "endIndex": 3411,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3399,
-              "startIndex": 3396,
+              "endIndex": 3406,
+              "startIndex": 3403,
               "textRun": {
                 "content": "PNG",
                 "textStyle": {
@@ -1138,16 +1156,16 @@
               }
             },
             {
-              "endIndex": 3400,
-              "startIndex": 3399,
+              "endIndex": 3407,
+              "startIndex": 3406,
               "textRun": {
                 "content": " ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 3403,
-              "startIndex": 3400,
+              "endIndex": 3410,
+              "startIndex": 3407,
               "textRun": {
                 "content": "SVG",
                 "textStyle": {
@@ -1168,8 +1186,8 @@
               }
             },
             {
-              "endIndex": 3404,
-              "startIndex": 3403,
+              "endIndex": 3411,
+              "startIndex": 3410,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1181,15 +1199,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3396
+        "startIndex": 3403
       },
       {
-        "endIndex": 3495,
+        "endIndex": 3502,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3494,
-              "startIndex": 3404,
+              "endIndex": 3501,
+              "startIndex": 3411,
               "textRun": {
                 "content": "Hands over ears icon created by Gan Khoon Lay from the Noun Project, used with permission.",
                 "textStyle": {
@@ -1201,8 +1219,8 @@
               }
             },
             {
-              "endIndex": 3495,
-              "startIndex": 3494,
+              "endIndex": 3502,
+              "startIndex": 3501,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -1219,15 +1237,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3404
+        "startIndex": 3411
       },
       {
-        "endIndex": 3496,
+        "endIndex": 3503,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3496,
-              "startIndex": 3495,
+              "endIndex": 3503,
+              "startIndex": 3502,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1239,47 +1257,47 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3495
+        "startIndex": 3502
       },
       {
-        "endIndex": 4030,
+        "endIndex": 4037,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 3585,
-              "startIndex": 3496,
+              "endIndex": 3592,
+              "startIndex": 3503,
               "textRun": {
                 "content": "This misuse of public address systems is particularly frustrating because announcements, ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 3604,
-              "startIndex": 3585,
+              "endIndex": 3611,
+              "startIndex": 3592,
               "textRun": {
                 "content": "when done correctly",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 3815,
-              "startIndex": 3604,
+              "endIndex": 3822,
+              "startIndex": 3611,
               "textRun": {
                 "content": ", are a key part of any transit system. Announcements are critical for increasing riders\u2019 situational awareness, ensuring that they always know where they are, where they are going, what\u2019s going on around them, ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 3853,
-              "startIndex": 3815,
+              "endIndex": 3860,
+              "startIndex": 3822,
               "textRun": {
                 "content": "and what to do if service is disrupted",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 4030,
-              "startIndex": 3853,
+              "endIndex": 4037,
+              "startIndex": 3860,
               "textRun": {
                 "content": ". Audio announcements are especially vital for visually impaired riders, who rely on their presence and their clarity to navigate the transit system with minimal visual input. \n",
                 "textStyle": {}
@@ -1291,15 +1309,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 3496
+        "startIndex": 3503
       },
       {
-        "endIndex": 4031,
+        "endIndex": 4038,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 4031,
-              "startIndex": 4030,
+              "endIndex": 4038,
+              "startIndex": 4037,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1311,39 +1329,39 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4030
+        "startIndex": 4037
       },
       {
-        "endIndex": 4675,
+        "endIndex": 4682,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 4317,
-              "startIndex": 4031,
+              "endIndex": 4324,
+              "startIndex": 4038,
               "textRun": {
                 "content": "This noise pollution has proliferated gradually, often one message at a time.  Slowly, by following the path of least resistance, best practices were eroded. What began as relatively clear announcements designed around riders' needs has slowly accreted more and more unnecessary pieces.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 4448,
-              "startIndex": 4317,
+              "endIndex": 4455,
+              "startIndex": 4324,
               "textRun": {
                 "content": " One manager may have wanted to push a safety campaign. Another may have seen an opportunity for ad revenue. Another organization, ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 4460,
-              "startIndex": 4448,
+              "endIndex": 4467,
+              "startIndex": 4455,
               "textRun": {
                 "content": "for instance",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 4675,
-              "startIndex": 4460,
+              "endIndex": 4682,
+              "startIndex": 4467,
               "textRun": {
                 "content": ", the NYPD, asks to have safety announcements. Each ask is minor\u2014after all, who would complain about just one more brief message? However, over time, announcements have snowballed, burying riders in a sea of noise.\n",
                 "textStyle": {}
@@ -1355,15 +1373,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4031
+        "startIndex": 4038
       },
       {
-        "endIndex": 4676,
+        "endIndex": 4683,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 4676,
-              "startIndex": 4675,
+              "endIndex": 4683,
+              "startIndex": 4682,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1375,15 +1393,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4675
+        "startIndex": 4682
       },
       {
-        "endIndex": 5056,
+        "endIndex": 5063,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5056,
-              "startIndex": 4676,
+              "endIndex": 5063,
+              "startIndex": 4683,
               "textRun": {
                 "content": "Restoring clarity and concision in announcements is not difficult. Less important communication like public service announcements should be moved to posters and digital information boards, and even necessary announcements can be shortened. It is time for the region to create a travel environment that is not only more accessible, but respects the public\u2019s wish to ride in peace.\n",
                 "textStyle": {}
@@ -1395,15 +1413,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 4676
+        "startIndex": 4683
       },
       {
-        "endIndex": 5089,
+        "endIndex": 5096,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5089,
-              "startIndex": 5056,
+              "endIndex": 5096,
+              "startIndex": 5063,
               "textRun": {
                 "content": "The Proper Role of Announcements\n",
                 "textStyle": {}
@@ -1416,15 +1434,15 @@
             "namedStyleType": "HEADING_1"
           }
         },
-        "startIndex": 5056
+        "startIndex": 5063
       },
       {
-        "endIndex": 5314,
+        "endIndex": 5321,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5314,
-              "startIndex": 5089,
+              "endIndex": 5321,
+              "startIndex": 5096,
               "textRun": {
                 "content": "Transit announcements are a balancing act. On the one hand, they must convey the vital information that riders need. On the other hand, if they are too frequent or too verbose, they can bring a host of negative consequences:\n",
                 "textStyle": {}
@@ -1436,15 +1454,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5089
+        "startIndex": 5096
       },
       {
-        "endIndex": 5315,
+        "endIndex": 5322,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5315,
-              "startIndex": 5314,
+              "endIndex": 5322,
+              "startIndex": 5321,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1456,10 +1474,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5314
+        "startIndex": 5321
       },
       {
-        "endIndex": 5480,
+        "endIndex": 5487,
         "paragraph": {
           "bullet": {
             "listId": "kix.hh43iqfg82el",
@@ -1469,8 +1487,8 @@
           },
           "elements": [
             {
-              "endIndex": 5480,
-              "startIndex": 5315,
+              "endIndex": 5487,
+              "startIndex": 5322,
               "textRun": {
                 "content": "Incessant announcements cause riders to tune out as much as possible. This means they are primed to miss critical information during service changes or emergencies.\n",
                 "textStyle": {}
@@ -1490,10 +1508,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5315
+        "startIndex": 5322
       },
       {
-        "endIndex": 5580,
+        "endIndex": 5587,
         "paragraph": {
           "bullet": {
             "listId": "kix.hh43iqfg82el",
@@ -1503,16 +1521,16 @@
           },
           "elements": [
             {
-              "endIndex": 5579,
-              "startIndex": 5480,
+              "endIndex": 5586,
+              "startIndex": 5487,
               "textRun": {
                 "content": "They make it much more difficult for non-English speakers to pick out key destinations and phrases.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 5580,
-              "startIndex": 5579,
+              "endIndex": 5587,
+              "startIndex": 5586,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1532,10 +1550,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5480
+        "startIndex": 5487
       },
       {
-        "endIndex": 5689,
+        "endIndex": 5696,
         "paragraph": {
           "bullet": {
             "listId": "kix.hh43iqfg82el",
@@ -1545,8 +1563,8 @@
           },
           "elements": [
             {
-              "endIndex": 5689,
-              "startIndex": 5580,
+              "endIndex": 5696,
+              "startIndex": 5587,
               "textRun": {
                 "content": "They increase the cognitive load on riders with vision impairment who are relying on audio cues to navigate.\n",
                 "textStyle": {}
@@ -1566,10 +1584,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5580
+        "startIndex": 5587
       },
       {
-        "endIndex": 5778,
+        "endIndex": 5785,
         "paragraph": {
           "bullet": {
             "listId": "kix.hh43iqfg82el",
@@ -1579,8 +1597,8 @@
           },
           "elements": [
             {
-              "endIndex": 5778,
-              "startIndex": 5689,
+              "endIndex": 5785,
+              "startIndex": 5696,
               "textRun": {
                 "content": "Constant noise simply makes transit a louder and more unpleasant place for riders to be.\n",
                 "textStyle": {}
@@ -1600,15 +1618,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5689
+        "startIndex": 5696
       },
       {
-        "endIndex": 5779,
+        "endIndex": 5786,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 5779,
-              "startIndex": 5778,
+              "endIndex": 5786,
+              "startIndex": 5785,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1626,15 +1644,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5778
+        "startIndex": 5785
       },
       {
-        "endIndex": 6071,
+        "endIndex": 6078,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6071,
-              "startIndex": 5779,
+              "endIndex": 6078,
+              "startIndex": 5786,
               "textRun": {
                 "content": "Announcement design must keep in mind that passengers can\u2019t just choose what to listen to the way they can choose where to cast their eyes. The best they can do is try to tune out the entire environment, which means if there is too much noise, they will not listen even for important things.\n",
                 "textStyle": {}
@@ -1646,15 +1664,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 5779
+        "startIndex": 5786
       },
       {
-        "endIndex": 6072,
+        "endIndex": 6079,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6072,
-              "startIndex": 6071,
+              "endIndex": 6079,
+              "startIndex": 6078,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1666,15 +1684,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6071
+        "startIndex": 6078
       },
       {
-        "endIndex": 6695,
+        "endIndex": 6702,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6695,
-              "startIndex": 6072,
+              "endIndex": 6702,
+              "startIndex": 6079,
               "textRun": {
                 "content": "This is made worse by the fact that transit stations and vehicles are already loud places, so that understanding announcements can often be difficult even in the best of times. The automatic announcements used on most modern MTA trains and buses have improved clarity, but the fundamental problem of distractions remains. Announcements that are either verbose or, worse, irrelevant only make the situation harder. This is especially difficult for passengers who don\u2019t speak fluent English, as they need to be listening carefully to extract information, which is far more difficult to do with too much auditory distraction.\n",
                 "textStyle": {}
@@ -1686,15 +1704,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6072
+        "startIndex": 6079
       },
       {
-        "endIndex": 6696,
+        "endIndex": 6703,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 6696,
-              "startIndex": 6695,
+              "endIndex": 6703,
+              "startIndex": 6702,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1706,15 +1724,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6695
+        "startIndex": 6702
       },
       {
-        "endIndex": 7311,
+        "endIndex": 7318,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7311,
-              "startIndex": 6696,
+              "endIndex": 7318,
+              "startIndex": 6703,
               "textRun": {
                 "content": "A similar problem exists in a very different context for industries that use radio communication, such as air traffic control, emergency services, and even transit dispatching. Analog radios are often noisy and low fidelity, not unlike announcements in a noisy transit environment, making communication difficult. As clear understanding can often be a matter of life or death in these industries, they have developed systems to ensure messages are understood: radio discipline. The key is that listeners know what to expect: communication sticks to simple, key phrases and unnecessary chatter is kept to a minimum.\n",
                 "textStyle": {}
@@ -1726,15 +1744,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 6696
+        "startIndex": 6703
       },
       {
-        "endIndex": 7312,
+        "endIndex": 7319,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7312,
-              "startIndex": 7311,
+              "endIndex": 7319,
+              "startIndex": 7318,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1746,15 +1764,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7311
+        "startIndex": 7318
       },
       {
-        "endIndex": 7710,
+        "endIndex": 7717,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7710,
-              "startIndex": 7312,
+              "endIndex": 7717,
+              "startIndex": 7319,
               "textRun": {
                 "content": "The MTA and other transit operators can take a page from radio discipline and reconcile all these issues by emphasizing focus and concision. Clear and concentrated announcements serve all riders best: they are simpler for non-English speakers to understand, create a less cluttered aural environment for visually-impaired travelers, and are less likely to grate on regular riders and be tuned out.\n",
                 "textStyle": {}
@@ -1766,15 +1784,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7312
+        "startIndex": 7319
       },
       {
-        "endIndex": 7711,
+        "endIndex": 7718,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7711,
-              "startIndex": 7710,
+              "endIndex": 7718,
+              "startIndex": 7717,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1786,15 +1804,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7710
+        "startIndex": 7717
       },
       {
-        "endIndex": 7778,
+        "endIndex": 7785,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7778,
-              "startIndex": 7711,
+              "endIndex": 7785,
+              "startIndex": 7718,
               "textRun": {
                 "content": "To that end, audio messages should focus on a small set of topics:\n",
                 "textStyle": {}
@@ -1806,15 +1824,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7711
+        "startIndex": 7718
       },
       {
-        "endIndex": 7779,
+        "endIndex": 7786,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7779,
-              "startIndex": 7778,
+              "endIndex": 7786,
+              "startIndex": 7785,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -1826,10 +1844,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7778
+        "startIndex": 7785
       },
       {
-        "endIndex": 7805,
+        "endIndex": 7812,
         "paragraph": {
           "bullet": {
             "listId": "kix.cu4atbypp1s8",
@@ -1839,8 +1857,8 @@
           },
           "elements": [
             {
-              "endIndex": 7805,
-              "startIndex": 7779,
+              "endIndex": 7812,
+              "startIndex": 7786,
               "textRun": {
                 "content": "The current and next stop\n",
                 "textStyle": {}
@@ -1860,10 +1878,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7779
+        "startIndex": 7786
       },
       {
-        "endIndex": 7827,
+        "endIndex": 7834,
         "paragraph": {
           "bullet": {
             "listId": "kix.cu4atbypp1s8",
@@ -1873,8 +1891,8 @@
           },
           "elements": [
             {
-              "endIndex": 7827,
-              "startIndex": 7805,
+              "endIndex": 7834,
+              "startIndex": 7812,
               "textRun": {
                 "content": "Available connections\n",
                 "textStyle": {}
@@ -1894,10 +1912,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7805
+        "startIndex": 7812
       },
       {
-        "endIndex": 7843,
+        "endIndex": 7850,
         "paragraph": {
           "bullet": {
             "listId": "kix.cu4atbypp1s8",
@@ -1907,8 +1925,8 @@
           },
           "elements": [
             {
-              "endIndex": 7843,
-              "startIndex": 7827,
+              "endIndex": 7850,
+              "startIndex": 7834,
               "textRun": {
                 "content": "Service changes\n",
                 "textStyle": {}
@@ -1928,10 +1946,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7827
+        "startIndex": 7834
       },
       {
-        "endIndex": 7882,
+        "endIndex": 7889,
         "paragraph": {
           "bullet": {
             "listId": "kix.cu4atbypp1s8",
@@ -1941,8 +1959,8 @@
           },
           "elements": [
             {
-              "endIndex": 7882,
-              "startIndex": 7843,
+              "endIndex": 7889,
+              "startIndex": 7850,
               "textRun": {
                 "content": "Real-time updates on unexpected delays\n",
                 "textStyle": {}
@@ -1962,10 +1980,10 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7843
+        "startIndex": 7850
       },
       {
-        "endIndex": 7961,
+        "endIndex": 7968,
         "paragraph": {
           "bullet": {
             "listId": "kix.cu4atbypp1s8",
@@ -1975,8 +1993,8 @@
           },
           "elements": [
             {
-              "endIndex": 7961,
-              "startIndex": 7882,
+              "endIndex": 7968,
+              "startIndex": 7889,
               "textRun": {
                 "content": "Elevator location, on vehicles that cannot display such information on screens\n",
                 "textStyle": {}
@@ -1996,15 +2014,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7882
+        "startIndex": 7889
       },
       {
-        "endIndex": 7962,
+        "endIndex": 7969,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 7962,
-              "startIndex": 7961,
+              "endIndex": 7969,
+              "startIndex": 7968,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2016,15 +2034,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7961
+        "startIndex": 7968
       },
       {
-        "endIndex": 8143,
+        "endIndex": 8150,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8143,
-              "startIndex": 7962,
+              "endIndex": 8150,
+              "startIndex": 7969,
               "textRun": {
                 "content": "Greater New York\u2019s transit network is already one of the most complicated in the world; its announcements should do everything they can to simplify the experience of navigating it.\n",
                 "textStyle": {}
@@ -2036,15 +2054,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 7962
+        "startIndex": 7969
       },
       {
-        "endIndex": 8177,
+        "endIndex": 8184,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8177,
-              "startIndex": 8143,
+              "endIndex": 8184,
+              "startIndex": 8150,
               "textRun": {
                 "content": "Constructing Better Announcements\n",
                 "textStyle": {}
@@ -2057,15 +2075,15 @@
             "namedStyleType": "HEADING_1"
           }
         },
-        "startIndex": 8143
+        "startIndex": 8150
       },
       {
-        "endIndex": 8194,
+        "endIndex": 8201,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8194,
-              "startIndex": 8177,
+              "endIndex": 8201,
+              "startIndex": 8184,
               "textRun": {
                 "content": "Basic Principles\n",
                 "textStyle": {}
@@ -2078,15 +2096,15 @@
             "namedStyleType": "HEADING_3"
           }
         },
-        "startIndex": 8177
+        "startIndex": 8184
       },
       {
-        "endIndex": 8195,
+        "endIndex": 8202,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8195,
-              "startIndex": 8194,
+              "endIndex": 8202,
+              "startIndex": 8201,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2098,15 +2116,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8194
+        "startIndex": 8201
       },
       {
-        "endIndex": 8702,
+        "endIndex": 8709,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8702,
-              "startIndex": 8195,
+              "endIndex": 8709,
+              "startIndex": 8202,
               "textRun": {
                 "content": "For the same reason that announcements should only include the most critical information, they should also be made with the minimum number of words necessary. Short, simple messages allow non-fluent English speakers to pick out vital words more easily. The same holds true for the visually impaired: shorter messages mean less time and less mental energy expended on parsing information. Finally, short announcements minimize annoyance for frequent transit riders, who will hear them dozens of times daily.\n",
                 "textStyle": {}
@@ -2118,15 +2136,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8195
+        "startIndex": 8202
       },
       {
-        "endIndex": 8703,
+        "endIndex": 8710,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8703,
-              "startIndex": 8702,
+              "endIndex": 8710,
+              "startIndex": 8709,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2138,23 +2156,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8702
+        "startIndex": 8709
       },
       {
-        "endIndex": 9390,
+        "endIndex": 9397,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 8728,
-              "startIndex": 8703,
+              "endIndex": 8735,
+              "startIndex": 8710,
               "textRun": {
                 "content": "This is why in the 1960s ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 8806,
-              "startIndex": 8728,
+              "endIndex": 8813,
+              "startIndex": 8735,
               "textRun": {
                 "content": "London Transport spent so long developing the now-iconic phrase \u201cMind the Gap\u201d",
                 "textStyle": {
@@ -2175,8 +2193,8 @@
               }
             },
             {
-              "endIndex": 9390,
-              "startIndex": 8806,
+              "endIndex": 9397,
+              "startIndex": 8813,
               "textRun": {
                 "content": ": it was short, clear, and to the point. Similarly, in Berlin, the phrase \u201cZur\u00fcckbleiben bitte\u201d\u2014\u201cplease stay back\u201d\u2014is very short and understandable even by people with middling German. In contrast, New York\u2019s \u201cStand clear of the closing doors please\u201d sentence, while iconic to many, is so long that conductors often interrupt it to close the doors faster. It\u2019s even longer than Ottawa\u2019s bilingual announcements. Bernie Wagenblast\u2019s announcements have become iconic in New York, and it would be ideal for the MTA to bring her back to record new, shorter versions of her original work.\n",
                 "textStyle": {}
@@ -2188,15 +2206,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 8703
+        "startIndex": 8710
       },
       {
-        "endIndex": 9391,
+        "endIndex": 9398,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9391,
-              "startIndex": 9390,
+              "endIndex": 9398,
+              "startIndex": 9397,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2208,15 +2226,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9390
+        "startIndex": 9397
       },
       {
-        "endIndex": 9446,
+        "endIndex": 9453,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9446,
-              "startIndex": 9391,
+              "endIndex": 9453,
+              "startIndex": 9398,
               "textRun": {
                 "content": "[audio files of NYC, Berlin, and Ottawa door closings]\n",
                 "textStyle": {}
@@ -2228,15 +2246,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9391
+        "startIndex": 9398
       },
       {
-        "endIndex": 9447,
+        "endIndex": 9454,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9447,
-              "startIndex": 9446,
+              "endIndex": 9454,
+              "startIndex": 9453,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2248,23 +2266,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9446
+        "startIndex": 9453
       },
       {
-        "endIndex": 9660,
+        "endIndex": 9667,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9580,
-              "startIndex": 9447,
+              "endIndex": 9587,
+              "startIndex": 9454,
               "textRun": {
                 "content": "The audio announcements on today\u2019s subway trains are far too verbose. Compare the normal announcements used on these trains with the ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 9598,
-              "startIndex": 9580,
+              "endIndex": 9605,
+              "startIndex": 9587,
               "textRun": {
                 "content": "shortened versions",
                 "textStyle": {
@@ -2285,8 +2303,8 @@
               }
             },
             {
-              "endIndex": 9660,
-              "startIndex": 9598,
+              "endIndex": 9667,
+              "startIndex": 9605,
               "textRun": {
                 "content": " that the MTA created around 2015 but never put into service.\n",
                 "textStyle": {}
@@ -2298,15 +2316,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9447
+        "startIndex": 9454
       },
       {
-        "endIndex": 9661,
+        "endIndex": 9668,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9661,
-              "startIndex": 9660,
+              "endIndex": 9668,
+              "startIndex": 9667,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2318,47 +2336,47 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9660
+        "startIndex": 9667
       },
       {
-        "endIndex": 10214,
+        "endIndex": 10221,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 9818,
-              "startIndex": 9661,
+              "endIndex": 9825,
+              "startIndex": 9668,
               "textRun": {
                 "content": "Beyond verbosity, automated announcements should also be designed to communicate common reroutes and changes. This is especially true in New York, where the ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 9829,
-              "startIndex": 9818,
+              "endIndex": 9836,
+              "startIndex": 9825,
               "textRun": {
                 "content": "complicated",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 10021,
-              "startIndex": 9829,
+              "endIndex": 10028,
+              "startIndex": 9836,
               "textRun": {
                 "content": " subway system enables many potential reroutes. Right now, conductors must manually announce changes, often leading to garbled, unclear messages that confuse riders. While some more intensive ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 10032,
-              "startIndex": 10021,
+              "endIndex": 10039,
+              "startIndex": 10028,
               "textRun": {
                 "content": "maintenance",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 10214,
-              "startIndex": 10032,
+              "endIndex": 10221,
+              "startIndex": 10039,
               "textRun": {
                 "content": " regimes might call for reroutes that are difficult to communicate, systems should be designed to inform riders of common changes, like trains running local or express unexpectedly.\n",
                 "textStyle": {}
@@ -2370,15 +2388,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 9661
+        "startIndex": 9668
       },
       {
-        "endIndex": 10215,
+        "endIndex": 10222,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10215,
-              "startIndex": 10214,
+              "endIndex": 10222,
+              "startIndex": 10221,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2390,15 +2408,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10214
+        "startIndex": 10221
       },
       {
-        "endIndex": 10776,
+        "endIndex": 10783,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10776,
-              "startIndex": 10215,
+              "endIndex": 10783,
+              "startIndex": 10222,
               "textRun": {
                 "content": "The announcements on both Metro-North and the Long Island Rail Road\u2019s recent rolling stock are even worse, both in length and design. This is especially true of the announcements made at terminals before trains depart, where the system must inform riders of complex stopping patterns that often change. Conductors often feel the need to provide their own supplementary descriptions, a clear sign that the announcements need further attention and design. Significant information, such as informing riders of short platforms, must be made manually by conductors.\n",
                 "textStyle": {}
@@ -2410,15 +2428,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10215
+        "startIndex": 10222
       },
       {
-        "endIndex": 10777,
+        "endIndex": 10784,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 10777,
-              "startIndex": 10776,
+              "endIndex": 10784,
+              "startIndex": 10783,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2430,15 +2448,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10776
+        "startIndex": 10783
       },
       {
-        "endIndex": 11237,
+        "endIndex": 11244,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11237,
-              "startIndex": 10777,
+              "endIndex": 11244,
+              "startIndex": 10784,
               "textRun": {
                 "content": "Of course, transit systems obviously need and want to communicate things other than destinations, connections, and immediate service disruptions. Thankfully, LCD screens across the region\u2019s transit network and increasingly on trains give operators the perfect place to present such information. Using screens for PSAs, announcements about future service changes, and other less-critical pieces of information would keep the transit soundscape free of clutter.\n",
                 "textStyle": {}
@@ -2450,15 +2468,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 10777
+        "startIndex": 10784
       },
       {
-        "endIndex": 11238,
+        "endIndex": 11245,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11238,
-              "startIndex": 11237,
+              "endIndex": 11245,
+              "startIndex": 11244,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2470,15 +2488,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11237
+        "startIndex": 11244
       },
       {
-        "endIndex": 11982,
+        "endIndex": 11989,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11982,
-              "startIndex": 11238,
+              "endIndex": 11989,
+              "startIndex": 11245,
               "textRun": {
                 "content": "Once transit operators have established a system of high-quality, clear, concise announcements, it is then important they remain consistent. There will always be pressure to add just one more announcement, be it for a new PSA, or from an outside agency, or a message from a politician. Allowing one could quickly open the floodgates, recreating the loud, chaotic audio situation greater New York faces today. Transit operators should make clear guidelines akin to those presented here, and stick to them as much as possible. Ensuring accessible and pleasant trips for all users means constantly being on guard against erosion of announcement principles. Audio announcements should remain solely the domain of important, actionable information.\n",
                 "textStyle": {}
@@ -2490,15 +2508,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11238
+        "startIndex": 11245
       },
       {
-        "endIndex": 11983,
+        "endIndex": 11990,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11983,
-              "startIndex": 11982,
+              "endIndex": 11990,
+              "startIndex": 11989,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2510,15 +2528,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11982
+        "startIndex": 11989
       },
       {
-        "endIndex": 11997,
+        "endIndex": 12004,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11996,
-              "startIndex": 11983,
+              "endIndex": 12003,
+              "startIndex": 11990,
               "textRun": {
                 "content": "Accessibility",
                 "textStyle": {
@@ -2527,8 +2545,8 @@
               }
             },
             {
-              "endIndex": 11997,
-              "startIndex": 11996,
+              "endIndex": 12004,
+              "startIndex": 12003,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2540,15 +2558,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11983
+        "startIndex": 11990
       },
       {
-        "endIndex": 11998,
+        "endIndex": 12005,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 11998,
-              "startIndex": 11997,
+              "endIndex": 12005,
+              "startIndex": 12004,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2560,32 +2578,32 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11997
+        "startIndex": 12004
       },
       {
-        "endIndex": 12397,
+        "endIndex": 12404,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12207,
-              "startIndex": 11998,
+              "endIndex": 12214,
+              "startIndex": 12005,
               "textRun": {
                 "content": "Audio announcements are a vital tool for creating transit systems that are accessible and usable for all. Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 12208,
+              "endIndex": 12215,
               "footnoteReference": {
                 "footnoteId": "kix.89naddigwtva",
                 "footnoteNumber": "1",
                 "textStyle": {}
               },
-              "startIndex": 12207
+              "startIndex": 12214
             },
             {
-              "endIndex": 12397,
-              "startIndex": 12208,
+              "endIndex": 12404,
+              "startIndex": 12215,
               "textRun": {
                 "content": " The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.\n",
                 "textStyle": {}
@@ -2597,15 +2615,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 11998
+        "startIndex": 12005
       },
       {
-        "endIndex": 12398,
+        "endIndex": 12405,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12398,
-              "startIndex": 12397,
+              "endIndex": 12405,
+              "startIndex": 12404,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2617,15 +2635,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12397
+        "startIndex": 12404
       },
       {
-        "endIndex": 12780,
+        "endIndex": 12787,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12780,
-              "startIndex": 12398,
+              "endIndex": 12787,
+              "startIndex": 12405,
               "textRun": {
                 "content": "Proper design is critical for announcements to serve as an effective accessibility aid. The key is to keep the needs of various different groups in mind when designing announcements. Thankfully, the needs of most disabled riders line up with the general principles presented above: announcements should be clear, concise, and limited to the most important information about travel.\n",
                 "textStyle": {}
@@ -2637,15 +2655,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12398
+        "startIndex": 12405
       },
       {
-        "endIndex": 12781,
+        "endIndex": 12788,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12781,
-              "startIndex": 12780,
+              "endIndex": 12788,
+              "startIndex": 12787,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2657,15 +2675,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12780
+        "startIndex": 12787
       },
       {
-        "endIndex": 12811,
+        "endIndex": 12818,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12810,
-              "startIndex": 12781,
+              "endIndex": 12817,
+              "startIndex": 12788,
               "textRun": {
                 "content": "The blind and vision-impaired",
                 "textStyle": {
@@ -2674,8 +2692,8 @@
               }
             },
             {
-              "endIndex": 12811,
-              "startIndex": 12810,
+              "endIndex": 12818,
+              "startIndex": 12817,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2687,15 +2705,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12781
+        "startIndex": 12788
       },
       {
-        "endIndex": 12812,
+        "endIndex": 12819,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 12812,
-              "startIndex": 12811,
+              "endIndex": 12819,
+              "startIndex": 12818,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2707,15 +2725,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12811
+        "startIndex": 12818
       },
       {
-        "endIndex": 13299,
+        "endIndex": 13306,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 13299,
-              "startIndex": 12812,
+              "endIndex": 13306,
+              "startIndex": 12819,
               "textRun": {
                 "content": "Traditionally, it has been difficult for those with significant vision impairments to navigate transit systems without outside aid. Most transit systems have been designed for people to navigate primarily by sight, using either signs or landmarks. The advent of audio announcements\u2014and especially of pre-recorded announcements\u2014has significantly improved the situation for travelers with impaired vision. Announcement design, however, is required to maximize the benefit to these riders.\n",
                 "textStyle": {}
@@ -2727,15 +2745,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 12812
+        "startIndex": 12819
       },
       {
-        "endIndex": 13300,
+        "endIndex": 13307,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 13300,
-              "startIndex": 13299,
+              "endIndex": 13307,
+              "startIndex": 13306,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2747,15 +2765,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 13299
+        "startIndex": 13306
       },
       {
-        "endIndex": 14098,
+        "endIndex": 14105,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14098,
-              "startIndex": 13300,
+              "endIndex": 14105,
+              "startIndex": 13307,
               "textRun": {
                 "content": "A subway system is a loud and complex place. Keeping audio announcements clear and concise helps declutter the auditory environment. Unnecessary announcements like PSAs, general safety or rules information, and advertisements force blind and vision-impaired riders to pay attention to a near-endless list of comparatively unimportant information to pick out the vital information that they need to navigate. It also takes a fair amount of concentration to separate announcements from loud background noises such as moving trains and large crowds of people. Similar to how radio discipline makes noisy communications understandable, a clear, concise system of announcements with a minimum of unnecessary noise reduces the amount of information that blind and vision-impaired riders need to process.\n",
                 "textStyle": {}
@@ -2767,15 +2785,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 13300
+        "startIndex": 13307
       },
       {
-        "endIndex": 14099,
+        "endIndex": 14106,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14099,
-              "startIndex": 14098,
+              "endIndex": 14106,
+              "startIndex": 14105,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2787,15 +2805,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14098
+        "startIndex": 14105
       },
       {
-        "endIndex": 14150,
+        "endIndex": 14157,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14149,
-              "startIndex": 14099,
+              "endIndex": 14156,
+              "startIndex": 14106,
               "textRun": {
                 "content": "Riders who don\u2019t speak English as a first language",
                 "textStyle": {
@@ -2804,8 +2822,8 @@
               }
             },
             {
-              "endIndex": 14150,
-              "startIndex": 14149,
+              "endIndex": 14157,
+              "startIndex": 14156,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2817,15 +2835,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14099
+        "startIndex": 14106
       },
       {
-        "endIndex": 14151,
+        "endIndex": 14158,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14151,
-              "startIndex": 14150,
+              "endIndex": 14158,
+              "startIndex": 14157,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2837,15 +2855,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14150
+        "startIndex": 14157
       },
       {
-        "endIndex": 14577,
+        "endIndex": 14584,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14577,
-              "startIndex": 14151,
+              "endIndex": 14584,
+              "startIndex": 14158,
               "textRun": {
                 "content": "It is a similar story for passengers who do not speak English as their first language, and especially those who don\u2019t speak it fluently. New York is a world city of the highest order, welcoming untold numbers of visitors and immigrants from around the world, speaking every language on the planet. As such, the needs of non-native and non-fluent English speakers needs to be taken into account in any system of announcements.\n",
                 "textStyle": {}
@@ -2857,15 +2875,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14151
+        "startIndex": 14158
       },
       {
-        "endIndex": 14578,
+        "endIndex": 14585,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14578,
-              "startIndex": 14577,
+              "endIndex": 14585,
+              "startIndex": 14584,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2877,32 +2895,32 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14577
+        "startIndex": 14584
       },
       {
-        "endIndex": 15151,
+        "endIndex": 15158,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 14983,
-              "startIndex": 14578,
+              "endIndex": 14990,
+              "startIndex": 14585,
               "textRun": {
                 "content": "Unfortunately, the subway\u2019s current user interface is not at all legible to passengers who speak poor English, especially if they only speak languages that don\u2019t use the Latin alphabet, like Mandarin. They can\u2019t parse the verbal announcements and often can\u2019t even read the station names; an ethnography found that one Chinese rider navigated by the first letters of the station names on the Flushing Line.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 14984,
+              "endIndex": 14991,
               "footnoteReference": {
                 "footnoteId": "kix.2g3q0xb0f2bz",
                 "footnoteNumber": "2",
                 "textStyle": {}
               },
-              "startIndex": 14983
+              "startIndex": 14990
             },
             {
-              "endIndex": 15151,
-              "startIndex": 14984,
+              "endIndex": 15158,
+              "startIndex": 14991,
               "textRun": {
                 "content": " In countries used to either illiteracy or tourism by people who can\u2019t read the alphabet, such as Japan or China, stations are numbered sequentially within each line.\n",
                 "textStyle": {}
@@ -2914,15 +2932,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 14578
+        "startIndex": 14585
       },
       {
-        "endIndex": 15152,
+        "endIndex": 15159,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15152,
-              "startIndex": 15151,
+              "endIndex": 15159,
+              "startIndex": 15158,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -2934,15 +2952,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15151
+        "startIndex": 15158
       },
       {
-        "endIndex": 15195,
+        "endIndex": 15202,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15195,
-              "startIndex": 15152,
+              "endIndex": 15202,
+              "startIndex": 15159,
               "textRun": {
                 "content": "Things that should be Avoided or Minimized\n",
                 "textStyle": {
@@ -2956,15 +2974,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15152
+        "startIndex": 15159
       },
       {
-        "endIndex": 15196,
+        "endIndex": 15203,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15196,
-              "startIndex": 15195,
+              "endIndex": 15203,
+              "startIndex": 15202,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -2984,15 +3002,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15195
+        "startIndex": 15202
       },
       {
-        "endIndex": 15211,
+        "endIndex": 15218,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15211,
-              "startIndex": 15196,
+              "endIndex": 15218,
+              "startIndex": 15203,
               "textRun": {
                 "content": "Advertisements\n",
                 "textStyle": {
@@ -3012,15 +3030,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15196
+        "startIndex": 15203
       },
       {
-        "endIndex": 15212,
+        "endIndex": 15219,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15212,
-              "startIndex": 15211,
+              "endIndex": 15219,
+              "startIndex": 15218,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -3040,15 +3058,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15211
+        "startIndex": 15218
       },
       {
-        "endIndex": 15808,
+        "endIndex": 15815,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15808,
-              "startIndex": 15212,
+              "endIndex": 15815,
+              "startIndex": 15219,
               "textRun": {
                 "content": "In a disturbing precedent, the MTA recently experimented with playing commercial advertisements over subway station PA systems. For all the reasons listed above, this is an inappropriate use of passenger information systems. Unlike normal visual advertisements, riders can't simply choose to look away from the sound surrounding them. Commercials further incentivize passengers to tune out as much as possible, make life harder for the visually impaired, who have no choice but to listen for critical information, and make the system harder to navigate for those who do not speak fluent English.\n",
                 "textStyle": {}
@@ -3066,15 +3084,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15212
+        "startIndex": 15219
       },
       {
-        "endIndex": 15809,
+        "endIndex": 15816,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15809,
-              "startIndex": 15808,
+              "endIndex": 15816,
+              "startIndex": 15815,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3092,32 +3110,32 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15808
+        "startIndex": 15815
       },
       {
-        "endIndex": 16281,
+        "endIndex": 16288,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 15893,
-              "startIndex": 15809,
+              "endIndex": 15900,
+              "startIndex": 15816,
               "textRun": {
                 "content": "More fundamentally, while these advertisements have brought in a modicum of revenue,",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 15894,
+              "endIndex": 15901,
               "footnoteReference": {
                 "footnoteId": "kix.hsnw89mvovs7",
                 "footnoteNumber": "3",
                 "textStyle": {}
               },
-              "startIndex": 15893
+              "startIndex": 15900
             },
             {
-              "endIndex": 16281,
-              "startIndex": 15894,
+              "endIndex": 16288,
+              "startIndex": 15901,
               "textRun": {
                 "content": " they have arguably cost the system more in riders and long-term reputation. They cheapen transit, treating riders not as the customers or as citizens, but as the product. It screams that the MTA doesn\u2019t care about the experience of its riders. In the long run, such maneuvers could well push riders away from transit towards other modes of travel that respect their time and attention.\n",
                 "textStyle": {}
@@ -3135,15 +3153,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 15809
+        "startIndex": 15816
       },
       {
-        "endIndex": 16282,
+        "endIndex": 16289,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16282,
-              "startIndex": 16281,
+              "endIndex": 16289,
+              "startIndex": 16288,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3161,15 +3179,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16281
+        "startIndex": 16288
       },
       {
-        "endIndex": 16355,
+        "endIndex": 16362,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16355,
-              "startIndex": 16282,
+              "endIndex": 16362,
+              "startIndex": 16289,
               "textRun": {
                 "content": "Announcements exist to inform passengers, not to take advantage of them.\n",
                 "textStyle": {}
@@ -3187,15 +3205,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16282
+        "startIndex": 16289
       },
       {
-        "endIndex": 16356,
+        "endIndex": 16363,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16356,
-              "startIndex": 16355,
+              "endIndex": 16363,
+              "startIndex": 16362,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3213,15 +3231,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16355
+        "startIndex": 16362
       },
       {
-        "endIndex": 16377,
+        "endIndex": 16384,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16377,
-              "startIndex": 16356,
+              "endIndex": 16384,
+              "startIndex": 16363,
               "textRun": {
                 "content": "Hiring Announcements\n",
                 "textStyle": {
@@ -3241,15 +3259,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16356
+        "startIndex": 16363
       },
       {
-        "endIndex": 16378,
+        "endIndex": 16385,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16378,
-              "startIndex": 16377,
+              "endIndex": 16385,
+              "startIndex": 16384,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3267,15 +3285,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16377
+        "startIndex": 16384
       },
       {
-        "endIndex": 16732,
+        "endIndex": 16739,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16732,
-              "startIndex": 16378,
+              "endIndex": 16739,
+              "startIndex": 16385,
               "textRun": {
                 "content": "Hiring announcements have recently become common on the MTA. Staff who spoke to ETA not for attribution indicated that it generated a raft of consumer complaints. These announcements are essentially a hiring advertisement for the MTA itself, and should be treated as such. Riders should not be subjected to such messages simply in order to ride transit.\n",
                 "textStyle": {}
@@ -3293,15 +3311,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16378
+        "startIndex": 16385
       },
       {
-        "endIndex": 16733,
+        "endIndex": 16740,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16733,
-              "startIndex": 16732,
+              "endIndex": 16740,
+              "startIndex": 16739,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3319,15 +3337,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16732
+        "startIndex": 16739
       },
       {
-        "endIndex": 16762,
+        "endIndex": 16769,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16762,
-              "startIndex": 16733,
+              "endIndex": 16769,
+              "startIndex": 16740,
               "textRun": {
                 "content": "Public Service Announcements\n",
                 "textStyle": {
@@ -3347,15 +3365,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16733
+        "startIndex": 16740
       },
       {
-        "endIndex": 16763,
+        "endIndex": 16770,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 16763,
-              "startIndex": 16762,
+              "endIndex": 16770,
+              "startIndex": 16769,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3373,15 +3391,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16762
+        "startIndex": 16769
       },
       {
-        "endIndex": 17072,
+        "endIndex": 17079,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17072,
-              "startIndex": 16763,
+              "endIndex": 17079,
+              "startIndex": 16770,
               "textRun": {
                 "content": "New York straphangers have been subjected to more and more dubiously effective public service announcements (PSAs). These began with the now ubiquitous important messages from the NYPD, and have in recent years have expanded to include things like continual announcements about the dangers of subway surfing.\n",
                 "textStyle": {}
@@ -3399,15 +3417,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 16763
+        "startIndex": 16770
       },
       {
-        "endIndex": 17073,
+        "endIndex": 17080,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17073,
-              "startIndex": 17072,
+              "endIndex": 17080,
+              "startIndex": 17079,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3425,15 +3443,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17072
+        "startIndex": 17079
       },
       {
-        "endIndex": 17666,
+        "endIndex": 17673,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17666,
-              "startIndex": 17073,
+              "endIndex": 17673,
+              "startIndex": 17080,
               "textRun": {
                 "content": "Just as with advertising, these PSAs assume that passengers are simply blank slates with no interest in reading, talking to traveling companions, or simply riding in peace. They affect usability, and make transit simply a far less pleasant place than it ought to be. Constant NYPD reminders about pickpockets reinforce false stereotypes about the dangers of transit that have no basis in reality. Such announcements only hurt the perception of transit over the long term. A private automobile never forces its driver to listen to such messages, or even messages about the risk of car crashes.\n",
                 "textStyle": {}
@@ -3451,15 +3469,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17073
+        "startIndex": 17080
       },
       {
-        "endIndex": 17667,
+        "endIndex": 17674,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 17667,
-              "startIndex": 17666,
+              "endIndex": 17674,
+              "startIndex": 17673,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3477,15 +3495,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17666
+        "startIndex": 17673
       },
       {
-        "endIndex": 18032,
+        "endIndex": 18039,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18032,
-              "startIndex": 17667,
+              "endIndex": 18039,
+              "startIndex": 17674,
               "textRun": {
                 "content": "If PSAs are to be a part of the subway experience, they should be limited to the digital screens, as with all other non-essentially pieces of travel information. Indeed, the MTA already has a successful history of both print and digital PSAs about such courtesy norms as using headphones, taking one\u2019s bag off, not taking up multiple seats, and not blocking doors.\n",
                 "textStyle": {}
@@ -3503,15 +3521,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 17667
+        "startIndex": 17674
       },
       {
-        "endIndex": 18033,
+        "endIndex": 18040,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18033,
-              "startIndex": 18032,
+              "endIndex": 18040,
+              "startIndex": 18039,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3529,15 +3547,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18032
+        "startIndex": 18039
       },
       {
-        "endIndex": 18048,
+        "endIndex": 18055,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18048,
-              "startIndex": 18033,
+              "endIndex": 18055,
+              "startIndex": 18040,
               "textRun": {
                 "content": "Long-Term Work\n",
                 "textStyle": {
@@ -3557,15 +3575,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18033
+        "startIndex": 18040
       },
       {
-        "endIndex": 18049,
+        "endIndex": 18056,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18049,
-              "startIndex": 18048,
+              "endIndex": 18056,
+              "startIndex": 18055,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3583,32 +3601,32 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18048
+        "startIndex": 18055
       },
       {
-        "endIndex": 18530,
+        "endIndex": 18537,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18528,
-              "startIndex": 18049,
+              "endIndex": 18535,
+              "startIndex": 18056,
               "textRun": {
                 "content": "One of the key things that audio announcements may be appropriate for is to communicate reroutes and/or delays caused by temporary work. When work is scheduled to take around two weeks or more, however, it can generally be assumed that riders are aware of service changes. Indeed, Berlin, which sometimes shuts down segments of the subway for long-term renewal work and regularly shuts down commuter rail segments on weekends, announces those changes purely visually and on maps.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18529,
+              "endIndex": 18536,
               "footnoteReference": {
                 "footnoteId": "kix.teb3u68jk46",
                 "footnoteNumber": "4",
                 "textStyle": {}
               },
-              "startIndex": 18528
+              "startIndex": 18535
             },
             {
-              "endIndex": 18530,
-              "startIndex": 18529,
+              "endIndex": 18537,
+              "startIndex": 18536,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3626,15 +3644,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18049
+        "startIndex": 18056
       },
       {
-        "endIndex": 18531,
+        "endIndex": 18538,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18531,
-              "startIndex": 18530,
+              "endIndex": 18538,
+              "startIndex": 18537,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3652,32 +3670,32 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18530
+        "startIndex": 18537
       },
       {
-        "endIndex": 18921,
+        "endIndex": 18928,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18919,
-              "startIndex": 18531,
+              "endIndex": 18926,
+              "startIndex": 18538,
               "textRun": {
                 "content": "It is good practice to announce major changes for the week before they happen and then the first week they occur. After that point, LCD screens and other information systems are a far better way to keep riders informed than the constant repetition of announcements. For example, riders do not need constant audio announcements about elevator replacements scheduled to take months or more.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 18920,
+              "endIndex": 18927,
               "footnoteReference": {
                 "footnoteId": "kix.pb5ckggpleeh",
                 "footnoteNumber": "5",
                 "textStyle": {}
               },
-              "startIndex": 18919
+              "startIndex": 18926
             },
             {
-              "endIndex": 18921,
-              "startIndex": 18920,
+              "endIndex": 18928,
+              "startIndex": 18927,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3695,15 +3713,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18531
+        "startIndex": 18538
       },
       {
-        "endIndex": 18922,
+        "endIndex": 18929,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18922,
-              "startIndex": 18921,
+              "endIndex": 18929,
+              "startIndex": 18928,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3715,15 +3733,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18921
+        "startIndex": 18928
       },
       {
-        "endIndex": 18947,
+        "endIndex": 18954,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18947,
-              "startIndex": 18922,
+              "endIndex": 18954,
+              "startIndex": 18929,
               "textRun": {
                 "content": "In Short, Respect Riders\n",
                 "textStyle": {
@@ -3737,15 +3755,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18922
+        "startIndex": 18929
       },
       {
-        "endIndex": 18948,
+        "endIndex": 18955,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 18948,
-              "startIndex": 18947,
+              "endIndex": 18955,
+              "startIndex": 18954,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3757,15 +3775,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18947
+        "startIndex": 18954
       },
       {
-        "endIndex": 19342,
+        "endIndex": 19349,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19342,
-              "startIndex": 18948,
+              "endIndex": 19349,
+              "startIndex": 18955,
               "textRun": {
                 "content": "Announcement design is a balancing act. Getting it right will require an ongoing process of trial, evolution, and improvement. However, the current state of announcements is very far from any reasonable optimum. The constant barrage of PSAs and lengthy messages about the system disrespects the riders\u2019 attention. Transit should strive to be a positive part of a rider's day, not an annoyance.\n",
                 "textStyle": {}
@@ -3777,15 +3795,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 18948
+        "startIndex": 18955
       },
       {
-        "endIndex": 19343,
+        "endIndex": 19350,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19343,
-              "startIndex": 19342,
+              "endIndex": 19350,
+              "startIndex": 19349,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3797,23 +3815,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19342
+        "startIndex": 19349
       },
       {
-        "endIndex": 19698,
+        "endIndex": 19705,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19424,
-              "startIndex": 19343,
+              "endIndex": 19431,
+              "startIndex": 19350,
               "textRun": {
                 "content": "Announcements that treat riders with respect are almost a reverse version of the ",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 19439,
-              "startIndex": 19424,
+              "endIndex": 19446,
+              "startIndex": 19431,
               "textRun": {
                 "content": "curb cut effect",
                 "textStyle": {
@@ -3834,8 +3852,8 @@
               }
             },
             {
-              "endIndex": 19698,
-              "startIndex": 19439,
+              "endIndex": 19705,
+              "startIndex": 19446,
               "textRun": {
                 "content": ".  In this case, designing announcements that do not grate and do not waste straphangers\u2019 time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.\n",
                 "textStyle": {}
@@ -3847,15 +3865,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19343
+        "startIndex": 19350
       },
       {
-        "endIndex": 19699,
+        "endIndex": 19706,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 19699,
-              "startIndex": 19698,
+              "endIndex": 19706,
+              "startIndex": 19705,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3867,15 +3885,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19698
+        "startIndex": 19705
       },
       {
-        "endIndex": 20343,
+        "endIndex": 20350,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 20343,
-              "startIndex": 19699,
+              "endIndex": 20350,
+              "startIndex": 19706,
               "textRun": {
                 "content": "There is much more about announcements beyond the scope of this piece. This includes equipment design, ensuring that ongoing improvement is easy to implement, operator training, both on automated equipment and on improved techniques for manual announcements, and on the design of the passenger experience, in general. Solving these problems will take time and effort. Regardless, the situation in New York has become intolerable. The region's transit agencies, and the MTA in particular, can no longer assume it is okay to fill every quiet second with unimportant noise. It hurts usability, and it damages the reputation of transit in general.\n",
                 "textStyle": {}
@@ -3887,15 +3905,15 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 19699
+        "startIndex": 19706
       },
       {
-        "endIndex": 20344,
+        "endIndex": 20351,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 20344,
-              "startIndex": 20343,
+              "endIndex": 20351,
+              "startIndex": 20350,
               "textRun": {
                 "content": "\n",
                 "textStyle": {}
@@ -3907,23 +3925,23 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 20343
+        "startIndex": 20350
       },
       {
-        "endIndex": 20423,
+        "endIndex": 20430,
         "paragraph": {
           "elements": [
             {
-              "endIndex": 20422,
-              "startIndex": 20344,
+              "endIndex": 20429,
+              "startIndex": 20351,
               "textRun": {
                 "content": "Transit in New York is too damn loud. It's time to let riders travel in peace.",
                 "textStyle": {}
               }
             },
             {
-              "endIndex": 20423,
-              "startIndex": 20422,
+              "endIndex": 20430,
+              "startIndex": 20429,
               "textRun": {
                 "content": "\n",
                 "textStyle": {
@@ -3940,7 +3958,7 @@
             "namedStyleType": "NORMAL_TEXT"
           }
         },
-        "startIndex": 20344
+        "startIndex": 20351
       }
     ]
   },
@@ -5865,7 +5883,7 @@
       }
     }
   },
-  "modifiedTime": "2026-10-09T21:08:12.371Z",
+  "modifiedTime": "2026-10-09T21:33:52.017Z",
   "namedRanges": {},
   "namedStyles": {
     "styles": [
