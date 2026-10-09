@@ -1,11 +1,13 @@
 """The build itself: fetch, emit, compile, and the checks around them."""
 
-import functools
 import hashlib
 import json
+import threading
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
+
+from rich.console import RenderableType
 
 from . import console
 from .archive import (
@@ -378,30 +380,48 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
     return written
 
 
-@functools.cache
-def warn_anonymous() -> None:
-    """Say, once a run however many reports it builds, what capturing without keys costs."""
+ANONYMOUS_WARNED = threading.Event()
+"""Set once the run has said it is capturing anonymously, to say it again at the end."""
+
+
+def anonymous_warning() -> RenderableType:
+    """What capturing without keys costs, and how not to."""
     from .archive import ANONYMOUS_EVERY, IA_CONFIG
 
-    console.write(
-        console.warning(
-            "no archive.org keys, so new captures are asked for anonymously, which is:\n"
-            "    • slow: one every {} seconds, so a dozen new sources is minutes\n"
-            "    • rate-limited much harder: a build is likelier to stop over sources "
-            "it could not ask about, and need building again\n"
-            "    • vaguer: a failed capture says less about why\n"
-            "    • never done in CI, where those sources stay unarchived\n"
-            "  To use an account, set {} and {} from {},\n"
-            "  or run {} (or point {} at its {}).",
-            str(int(ANONYMOUS_EVERY.total_seconds())),
-            Shown(f"${ACCESS_KEY}"),
-            Shown(f"${SECRET_KEY}"),
-            console.Linked(KEYS_PAGE),
-            Shown("ia configure"),
-            Shown(f"${IA_CONFIG}"),
-            Shown("ia.ini"),
-        )
+    return console.alarm(
+        "Capturing sources WITHOUT archive.org keys",
+        "No archive.org keys were found, so new captures are asked for anonymously:\n"
+        "  • slow: one every {} seconds, so a dozen new sources is minutes\n"
+        "  • rate-limited much harder: builds stop more often and need rerunning\n"
+        "  • vaguer: a failed capture says less about why\n"
+        "  • never done in CI, where those sources stay unarchived\n"
+        "\n"
+        "To use an account, set {} and {} from {},\n"
+        "or run {} (or point {} at its {}).",
+        str(int(ANONYMOUS_EVERY.total_seconds())),
+        Shown(f"${ACCESS_KEY}"),
+        Shown(f"${SECRET_KEY}"),
+        console.Linked(KEYS_PAGE),
+        Shown("ia configure"),
+        Shown(f"${IA_CONFIG}"),
+        Shown("ia.ini"),
     )
+
+
+def warn_anonymous() -> None:
+    """Say, once a run however many reports it builds, what capturing without keys costs.
+
+    Again after the summary, from `__main__`: said while the first report with a
+    new source was building, it scrolls away under every report after it.
+    """
+    with _WARNING_ANONYMOUS:
+        if ANONYMOUS_WARNED.is_set():
+            return
+        ANONYMOUS_WARNED.set()
+    console.write(anonymous_warning())
+
+
+_WARNING_ANONYMOUS = threading.Lock()
 
 
 def archive_sources(doc: Document) -> None:

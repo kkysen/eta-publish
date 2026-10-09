@@ -36,6 +36,7 @@ from threading import Lock, RLock, Thread
 from typing import IO
 
 from rich.console import Console, Group, RenderableType
+from rich.panel import Panel
 from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
@@ -510,6 +511,30 @@ def warning(template: str, *values: Span | Linked, console: Console | None = Non
     text.append("! ", style="bold yellow")
     text.append_text(_sentence(template, values, console))
     return text
+
+
+def alarm(
+    title: str, template: str, *values: Span | Linked, console: Console | None = None
+) -> RenderableType:
+    """Something about the whole run that must not be read past.
+
+    Boxed and red, where a warning is one `!` line among a document's dozens:
+    this is about how the build itself is running, not about a document, and
+    a reader scanning those for what to fix in the doc would skip it.
+
+    Not named for a report, though it may be said while building one: it is
+    about every report the run builds.
+    """
+    console = console or for_stream()
+    body = _spans(filled(template, values), console)
+    return Panel(
+        body,
+        title=Text(f" ⚠ {title} ", style="bold red"),
+        title_align="left",
+        border_style="bold red",
+        padding=(0, 1),
+        expand=False,
+    )
 
 
 def added(reports: Path, name: str, tab: str, console: Console) -> Text:

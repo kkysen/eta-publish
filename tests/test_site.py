@@ -744,3 +744,27 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
     assert record[answered[0]]["timestamp"] == "20261009000000"
     # Counted before it was written, as a build that got through would.
     assert record[answered[0]]["pages"] == 3
+
+
+def test_capturing_without_keys_is_said_once_and_again_after_the_summary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Said among a document's warnings, it scrolled away under the next report."""
+    from eta_publish import __main__, archive, build
+
+    def capture(doc: Document, **_: object) -> tuple[int, int]:
+        return 0, 0
+
+    monkeypatch.setattr(archive, "capture", capture)
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+    monkeypatch.delenv(archive.CI, raising=False)
+    monkeypatch.setattr(build, "ANONYMOUS_WARNED", build.ANONYMOUS_WARNED.__class__())
+    monkeypatch.setattr(__main__, "ANONYMOUS_WARNED", build.ANONYMOUS_WARNED)
+    doc = parse(FIXTURE)
+    doc.archives.clear()
+    build.archive_sources(doc)
+    build.archive_sources(doc)
+    assert capsys.readouterr().err.count("WITHOUT archive.org keys") == 1
+    __main__.report_outcome(Site(built=[], failed=[]))
+    assert "WITHOUT archive.org keys" in capsys.readouterr().err

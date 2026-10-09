@@ -24,7 +24,7 @@ from typing import Annotated
 from typer import Argument, BadParameter, Exit, Option, Typer
 
 from . import console, format
-from .build import BuildOptions, check_code_block_size
+from .build import ANONYMOUS_WARNED, BuildOptions, anonymous_warning, check_code_block_size
 from .site import REPORTS, Report, Site, add_report, build_site, index_page, load_reports
 
 
@@ -197,6 +197,10 @@ def report_outcome(site: Site) -> None:
         ),
         log,
     )
+    if ANONYMOUS_WARNED.is_set():
+        # Last, so it is what is on screen when the build ends.
+        log.line()
+        console.write(anonymous_warning(), log)
     # Non-zero when anything failed, even though the rest of the site was written,
     # so an unattended run cannot fail quietly.
     if site.failed:
