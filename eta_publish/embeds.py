@@ -26,6 +26,10 @@ TIMEOUT = 30
 
 THUMBNAIL_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
 
+GONE = frozenset({403, 404, 410})
+"""What a platform answers about a post that is not there to be shown:
+deleted, never was, or made private."""
+
 PAGES_FILE_LIMIT = 100_000_000
 """The largest file GitHub Pages will publish."""
 
@@ -77,6 +81,15 @@ def look_up(doc: Document, http: requests.Session | None = None) -> None:
             continue
         try:
             card = _describe(embed, http)
+        except requests.RequestException as e:
+            # Only an answer about the post is recorded. A timeout, a 429, or
+            # a 5xx is about the moment, and recorded it would make the post
+            # a plain link for good over one bad minute; unrecorded, the next
+            # build asks again.
+            status = e.response.status_code if e.response is not None else None
+            if status not in GONE:
+                continue
+            card = Card(error=str(e))
         # Broad, because Drive's errors are its client library's own
         # and a malformed answer is a `KeyError` as often as anything.
         except Exception as e:

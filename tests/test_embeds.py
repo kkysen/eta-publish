@@ -1,9 +1,13 @@
 """Videos and posts, from a paragraph that is nothing but a link to one."""
 
+from typing import cast
+
 import pytest
+import requests
 from test_conventions import build, image, para
 
 from eta_publish.docs_json import JsonObject
+from eta_publish.embeds import look_up
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.nodes import Card, Embed, Figure, Paragraph, Platform
@@ -139,3 +143,25 @@ def test_a_drive_file_that_is_not_a_video_is_a_link() -> None:
     doc = build([para("Headline", "TITLE"), linked((url, url))])
     doc.cards[url] = Card(mime="image/png")
     assert "<video " not in HtmlEmitter(image_base="images").emit(doc)
+
+
+class Answering:
+    """A session that answers every request with one status."""
+
+    def __init__(self, status: int) -> None:
+        self.status = status
+
+    def get(self, url: str, timeout: int) -> requests.Response:
+        response = requests.Response()
+        response.status_code = self.status
+        response.url = url
+        return response
+
+
+@pytest.mark.parametrize(("status", "recorded"), [(404, True), (429, False), (503, False)])
+def test_only_an_answer_about_the_post_is_recorded(status: int, recorded: bool) -> None:
+    """A deleted post stays a link; a busy platform is asked again next build."""
+    url = "https://www.youtube.com/watch?v=abc"
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    look_up(doc, cast(requests.Session, Answering(status)))
+    assert (url in doc.cards) is recorded
