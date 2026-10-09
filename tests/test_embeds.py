@@ -65,7 +65,9 @@ def test_a_titled_link_on_a_line_of_its_own_is_embedded() -> None:
     """Too Damn Loud's video, which Docs shows by its title rather than its address."""
     url = "https://youtube.com/shorts/o90JQBWdgTI?is=I4"
     doc = build([para("Headline", "TITLE"), linked(("Too Damn Loud", url))])
-    assert isinstance(doc.blocks[0], Embed)
+    embed = doc.blocks[0]
+    assert isinstance(embed, Embed)
+    assert embed.vertical
 
 
 def test_a_link_in_a_sentence_is_a_citation() -> None:

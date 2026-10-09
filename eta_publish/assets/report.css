@@ -90,6 +90,11 @@
 .eta-report .embed-x .embed-frame,
 .eta-report .embed-bluesky .embed-frame { height: 32rem; }
 .eta-report .embed video { width: 100%; height: auto; display: block; }
+/* A Short is filmed upright, so its card and its player are too, and narrow
+   enough that the whole of it fits on a laptop's screen at once. */
+.eta-report .embed-vertical { max-width: 20rem; }
+.eta-report .embed-vertical .embed-card img,
+.eta-report .embed-vertical .embed-frame { aspect-ratio: 9 / 16; max-height: none; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
 /* The build's own notes about this report. A colour and a face of their own,
    because they are the one thing on the page that is not the report and

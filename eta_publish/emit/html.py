@@ -909,7 +909,8 @@ class HtmlEmitter(Emitter):
         return markup(
             tag.figure(
                 id=anchor,
-                class_=f"embed embed-{node.platform.value}",
+                class_=f"embed embed-{node.platform.value}"
+                + (" embed-vertical" if node.vertical else ""),
                 data_player=player_url(node, card),
                 data_title=f"{card.author} on {where}",
             )[

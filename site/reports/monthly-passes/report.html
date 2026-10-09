@@ -180,6 +180,16 @@
   height: auto;
   display: block;
 }
+/* A Short is filmed upright, so its card and its player are too, and narrow
+   enough that the whole of it fits on a laptop's screen at once. */
+.eta-report .embed-vertical {
+  max-width: 20rem;
+}
+.eta-report .embed-vertical .embed-card img,
+.eta-report .embed-vertical .embed-frame {
+  aspect-ratio: 9 / 16;
+  max-height: none;
+}
 .eta-report .dateline {
   font-size: 0.95rem;
   opacity: 0.75;

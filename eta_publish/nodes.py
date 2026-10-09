@@ -289,6 +289,10 @@ class Embed:
     start: int = 0
     """Where a YouTube link asks to start, in seconds, from its `t=`."""
 
+    vertical: bool = False
+    """Whether it is a YouTube Short, which is taller than it is wide.
+    Played in a landscape frame, it is a strip down the middle of one."""
+
 
 @dataclass(frozen=True)
 class Card:

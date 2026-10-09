@@ -159,7 +159,8 @@ def embed_of(inlines: list[Inline]) -> Embed | None:
     if found is None:
         return None
     platform, key, start = found
-    return Embed(url=href, platform=platform, key=key, start=start)
+    vertical = platform is Platform.YOUTUBE and urlsplit(href).path.startswith("/shorts/")
+    return Embed(url=href, platform=platform, key=key, start=start, vertical=vertical)
 
 
 YOUTUBE_HOSTS = frozenset({"youtube.com", "www.youtube.com", "m.youtube.com"})
