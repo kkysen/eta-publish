@@ -983,34 +983,48 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
     answer = started.json()
     job = answer.get("job_id")
     if not job:
-        refused = _refused(answer)
-        if SESSION_LIMIT in refused:
-            # Being told the account already has twelve captures going is a
-            # fact about the build, not about the page: recorded as a failure
-            # it would leave this source with no archive forever.
-            raise Busy(refused)
-        return Archived(timestamp=today(), error=refused)
+        return _failed(_refused(answer))
     deadline = time.monotonic() + CAPTURE_TIMEOUT.total_seconds()
     while time.monotonic() < deadline:
         time.sleep(POLL_EVERY.total_seconds())
-        state = _checked(http.get(f"{SAVE}/status/{job}", headers=headers, timeout=30)).json()
+        try:
+            state = _checked(http.get(f"{SAVE}/status/{job}", headers=headers, timeout=30)).json()
+        except Busy, requests.ConnectionError, requests.Timeout:
+            # Asked again at the next poll, rather than raised to `_patiently`,
+            # which would submit the page again: the capture this is waiting on
+            # is still going, and a second one is a second capture of the page.
+            continue
         status = state.get("status")
         if status == "success" and state.get("timestamp"):
             stamp = state["timestamp"]
             return Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
         if status == "error":
-            return Archived(timestamp=today(), error=_refused(state))
+            return _failed(_refused(state))
     return Archived(
         timestamp=today(), error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds"
     )
 
 
-SESSION_LIMIT = "session"
-"""What the service says when the account already has twelve captures going.
+RETRY_LATER = (
+    "error:user-session-limit",
+    "error:too-many-daily-captures",
+    "error:gateway-timeout",
+)
+"""Refusals that are about when the page was asked for, not about the page.
 
-`error:user-session-limit`, which is the one refusal that is about how fast
-this build is asking rather than about the page it asked for.
+The account already having twelve captures going; the URL having been captured
+as many times today as Save Page Now allows, which repeated builds that could
+not yet see their own captures ran into; and the page's server being slow that
+once. Recorded as a failure, each would leave the source with no archive
+forever, so each is left unanswered for a later build to ask again.
 """
+
+
+def _failed(refused: str) -> Archived:
+    """The refusal recorded against the source, or `Busy` if it was about the moment."""
+    if any(later in refused for later in RETRY_LATER):
+        raise Busy(refused)
+    return Archived(timestamp=today(), error=refused)
 
 
 def _refused(answer: dict[str, object]) -> str:

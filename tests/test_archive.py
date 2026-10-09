@@ -3,6 +3,7 @@
 import json
 import threading
 import time
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
@@ -822,6 +823,71 @@ def test_a_session_limit_is_waited_out_rather_than_written_down(
     session, headers = Limiting(), {"Authorization": "LOW a:b"}
     captured = archive._patiently(lambda: archive._submit(session, headers, "https://a.example/1"))
     assert (captured.error, captured.timestamp) == ("", "20240503123456")
+
+
+class Saving(requests.Session):
+    """Save Page Now answering each request in turn from `answers`.
+
+    An `int` in place of an answer is a status with no body, for the service
+    failing that one request. Counts the submissions, which is what a test of
+    capturing a page only once is about.
+    """
+
+    def __init__(self, answers: Sequence[dict[str, str] | int]) -> None:
+        super().__init__()
+        self.answers = list(answers)
+        self.submitted = 0
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        if method == "POST":
+            self.submitted += 1
+        response = requests.Response()
+        response.url = str(url)
+        nothing: dict[str, str] = {}
+        answer = self.answers.pop(0) if self.answers else nothing
+        response.status_code = answer if isinstance(answer, int) else 200
+        response._content = b"" if isinstance(answer, int) else json.dumps(answer).encode()
+        return response
+
+
+@pytest.fixture
+def no_waiting(monkeypatch: pytest.MonkeyPatch) -> None:
+    def instantly(_seconds: float) -> None:
+        return None
+
+    monkeypatch.setattr(archive, "PATIENCE", (timedelta(),) * 3)
+    monkeypatch.setattr(archive.time, "sleep", instantly)
+
+
+@pytest.mark.parametrize("refusal", archive.RETRY_LATER)
+@pytest.mark.parametrize("when", ["submitted", "polled"])
+def test_a_refusal_about_the_moment_is_not_written_down(
+    no_waiting: None, refusal: str, when: str
+) -> None:
+    """`too-many-daily-captures` was recorded against four sources for good, after
+    a day of builds that could not yet see their own captures used it up."""
+    refused = {"status": "error", "status_ext": refusal}
+    job = {"job_id": "job-1"}
+    answers = ([refused] if when == "submitted" else [job, refused]) * 4
+    with pytest.raises(archive.Busy):
+        archive._patiently(
+            lambda: archive._submit(
+                Saving(answers), {"Authorization": "LOW a:b"}, "https://a.example/1"
+            )
+        )
+
+
+def test_a_status_poll_that_fails_does_not_submit_the_page_again(no_waiting: None) -> None:
+    """The capture is still going: a second submission is a second capture."""
+    session = Saving(
+        [{"job_id": "job-1"}, 503, 503, {"status": "success", "timestamp": "20261009120000"}]
+    )
+    captured = archive._patiently(
+        lambda: archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    )
+    assert captured.timestamp == "20261009120000"
+    assert session.submitted == 1
 
 
 def test_a_build_with_keys_captures_only_what_has_no_capture(keyed: None) -> None:
