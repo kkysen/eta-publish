@@ -710,6 +710,8 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Sixteen sources that all had to get through one build together never did."""
+    from dataclasses import replace
+
     from eta_publish import archive, build
     from eta_publish.nodes import Archived
 
@@ -727,6 +729,8 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
     monkeypatch.setattr(archive, "capture", capture)
 
     def count_pages(doc: Document, *_: object) -> int:
+        for url, archived in doc.archives.items():
+            doc.archives[url] = replace(archived, pages=archived.pages or 3)
         return 0
 
     monkeypatch.setattr(build, "count_pages", count_pages)
@@ -738,3 +742,5 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
     assert not site.built
     record = json.loads((out / SLUG / "archives.json").read_text())
     assert record[answered[0]]["timestamp"] == "20261009000000"
+    # Counted before it was written, as a build that got through would.
+    assert record[answered[0]]["pages"] == 3

@@ -582,6 +582,9 @@ def build_one(
             # to the others, and a report citing sixteen that all had to get
             # through one build together was a report that kept failing on a
             # different few. The next build asks only for what is left.
+            # Counted first, as a build that got through would: a PDF it
+            # cannot count is left uncounted rather than failing anything.
+            count_pages(doc)
             write_archive_index(dest, doc)
             raise
         count_pages(doc)
