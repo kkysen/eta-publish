@@ -704,3 +704,37 @@ def test_the_same_document_copied_twice_is_recognized_as_listed(tmp_path: Path) 
     path.write_text(f'[[report]]\nname = "A"\ntab = "B"\nurl = "{listed}"\n')
     with pytest.raises(ValueError, match="already lists"):
         add_report(f"{listed}&pli=1#heading=h.mkzkbxod1acf", path)
+
+
+def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Sixteen sources that all had to get through one build together never did."""
+    from eta_publish import archive, build
+    from eta_publish.nodes import Archived
+
+    answered: list[str] = []
+
+    def capture(doc: Document, **_: object) -> tuple[int, int]:
+        url = archive.missing(doc)[0]
+        answered.append(url)
+        doc.archives[url] = Archived(
+            snapshot=f"https://web.archive.org/web/20261009000000/{url}",
+            timestamp="20261009000000",
+        )
+        raise archive.Unanswered("could not ask the archive about another")
+
+    monkeypatch.setattr(archive, "capture", capture)
+
+    def count_pages(doc: Document, *_: object) -> int:
+        return 0
+
+    monkeypatch.setattr(build, "count_pages", count_pages)
+    saved = tmp_path / "doc.json"
+    saved.write_text(json.dumps(FIXTURE))
+    out = tmp_path / "site"
+    seed_image_index(out)
+    site = build_site([Report(url=str(saved))], out, BuildOptions(images=False))
+    assert not site.built
+    record = json.loads((out / SLUG / "archives.json").read_text())
+    assert record[answered[0]]["timestamp"] == "20261009000000"

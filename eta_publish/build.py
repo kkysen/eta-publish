@@ -11,6 +11,7 @@ from .archive import (
     ACCESS_KEY,
     KEYS_PAGE,
     SECRET_KEY,
+    Unanswered,
     count_pages,
     read_archive_index,
     write_archive_index,
@@ -573,7 +574,16 @@ def build_one(
         # recorded capture that is not the PDF, and dropping it is what has
         # this build's lookups find one that is.
         count_pages(doc)
-        archive_sources(doc)
+        try:
+            archive_sources(doc)
+        except Unanswered:
+            # What was answered is kept, though the build stops over the
+            # rest: each answer is a fact about its source whatever happened
+            # to the others, and a report citing sixteen that all had to get
+            # through one build together was a report that kept failing on a
+            # different few. The next build asks only for what is left.
+            write_archive_index(dest, doc)
+            raise
         count_pages(doc)
     write_archive_index(dest, doc)
     # After the record is read, because the page counts it checks against are in it.
