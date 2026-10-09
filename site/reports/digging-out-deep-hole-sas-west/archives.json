@@ -15,6 +15,11 @@
     "snapshot": "https://archive.org/details/slurrywallsasstr0000xant/page/658/mode/2up",
     "timestamp": "20230504005139"
   },
+  "https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf": {
+    "error": "error:too-many-daily-captures",
+    "pages": 83,
+    "timestamp": "20261009"
+  },
   "https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22": {
     "snapshot": "https://web.archive.org/web/20260411224025/https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22",
     "timestamp": "20260411224025"
@@ -26,6 +31,10 @@
   "https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092": {
     "snapshot": "https://web.archive.org/web/20260819134125/https://docs.google.com/spreadsheets/d/16GoHcbW-eVzHUUP_XCWVXS1s_i3ZBnmZh4kvdSX7muU/edit?gid=1828904092",
     "timestamp": "20260819134125"
+  },
+  "https://doi.org/10.1016/j.cscm.2025.e05615": {
+    "error": "error:not-found",
+    "timestamp": "20261009"
   },
   "https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29": {
     "snapshot": "https://web.archive.org/web/20260909003054/https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29",
@@ -65,6 +74,46 @@
   "https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/": {
     "snapshot": "https://web.archive.org/web/20260413015629/https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/",
     "timestamp": "20260413015629"
+  },
+  "https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external": {
+    "snapshot": "https://web.archive.org/web/20261009034858/https://m.blog.naver.com/PostView.naver?blogId=krriblog&logNo=220778326895&proxyReferer=https:%2F%2Fwww.google.com%2F&trackingCode=external",
+    "timestamp": "20261009034858"
+  },
+  "https://media.discordapp.net/attachments/1299887947335602177/1465474065421828273/Screenshot_2026-01-26_at_5.23.25_PM.png?ex=69793c94&is=6977eb14&hm=09f30fcd5aa50cbdcea00cf5c1c9586fe26c6d454275dbd35942a7febdac7a58": {
+    "error": "error:not-found",
+    "timestamp": "20261009"
+  },
+  "https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/": {
+    "snapshot": "https://web.archive.org/web/20261009034402/https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZDEZoDp8r03hqSf32rQ8sC8poo18ZicPdd2e3RCMhCgKibrXHdwWEibmd29jWrRWxpgE8hf25f9FA/",
+    "timestamp": "20261009034402"
+  },
+  "https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/": {
+    "snapshot": "https://web.archive.org/web/20261009033614/https://mmbiz.qpic.cn/mmbiz_png/ZHDc6XLp5hBdZC053hhqPT42S3vG38tCIgluQfqJmxdOIARqrQMFiaFWFeX6MNEhx8mibVnB36mrTicQicNA5Jzh0Q/",
+    "timestamp": "20261009033614"
+  },
+  "https://mp.weixin.qq.com/s/4l7RbnS01yLp1p2Zdee_yA": {
+    "error": "error:too-many-daily-captures",
+    "timestamp": "20261009"
+  },
+  "https://mp.weixin.qq.com/s/E93D6tELgYmRYaiNY6hhAw": {
+    "snapshot": "https://web.archive.org/web/20261009155000/https://mp.weixin.qq.com/s/E93D6tELgYmRYaiNY6hhAw",
+    "timestamp": "20261009155000"
+  },
+  "https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw": {
+    "error": "error:too-many-daily-captures",
+    "timestamp": "20261009"
+  },
+  "https://mp.weixin.qq.com/s/SBoJE69QTtuc8mzZgKiWwQ": {
+    "snapshot": "https://web.archive.org/web/20261009155055/https://mp.weixin.qq.com/s/SBoJE69QTtuc8mzZgKiWwQ",
+    "timestamp": "20261009155055"
+  },
+  "https://mp.weixin.qq.com/s/fE7l03P3F4j28NoO6eoegA": {
+    "snapshot": "https://web.archive.org/web/20261009155007/https://mp.weixin.qq.com/s/fE7l03P3F4j28NoO6eoegA",
+    "timestamp": "20261009155007"
+  },
+  "https://mp.weixin.qq.com/s/nJyWc3B0LYJPGPE1Up5iCA": {
+    "snapshot": "https://web.archive.org/web/20261009155145/https://mp.weixin.qq.com/s/nJyWc3B0LYJPGPE1Up5iCA",
+    "timestamp": "20261009155145"
   },
   "https://nypost.com/2011/09/27/second-ave-subway-dust-harmless-says-mta/": {
     "snapshot": "https://web.archive.org/web/20230602031434/https://nypost.com/2011/09/27/second-ave-subway-dust-harmless-says-mta/",
@@ -135,6 +184,18 @@
   "https://urbanny.com/project/mta-second-avenue-subway-tunneling-structural-geotechnical/": {
     "snapshot": "https://web.archive.org/web/20260420155225/https://urbanny.com/project/mta-second-avenue-subway-tunneling-structural-geotechnical/",
     "timestamp": "20260420155225"
+  },
+  "https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/": {
+    "snapshot": "https://web.archive.org/web/20261009034220/https://www.flickr.com/photos/loganhicks/4490800374/in/photostream/",
+    "timestamp": "20261009034220"
+  },
+  "https://www.flickr.com/photos/mtaphotos/8475914281/in/album-72157632775809340": {
+    "snapshot": "https://web.archive.org/web/20261009033711/https://www.flickr.com/photos/mtaphotos/8475914281/in/album-72157632775809340",
+    "timestamp": "20261009033711"
+  },
+  "https://www.google.com/maps/@40.8155549,-73.9580419,3a,75y,303.51h,90.96t/data=!3m7!1e1!3m5!1s435DcOmetEdoxLraSju-2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.9596236859238161%26panoid%3D435DcOmetEdoxLraSju-2Q%26yaw%3D303.5128416340331!7i16384!8i8192!5m1!1e2?entry=ttu&g_ep=EgoyMDI2MDEyMS4wIKXMDSoASAFQAw%3D%3D": {
+    "error": "error:blocked-url",
+    "timestamp": "20261009"
   },
   "https://www.governor.ny.gov/sites/default/files/2025-08/Presentation_2025-08-15_SAS2_NOTES_SCRUBBED.pdf": {
     "pages": 30,
@@ -286,5 +347,9 @@
   "https://www.youtube.com/live/syjWBXSAbyM?t=2940s": {
     "snapshot": "https://web.archive.org/web/20260821170758/https://www.youtube.com/live/syjWBXSAbyM?t=2940s",
     "timestamp": "20260821170758"
+  },
+  "https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137": {
+    "error": "error:too-many-daily-captures",
+    "timestamp": "20261009"
   }
 }

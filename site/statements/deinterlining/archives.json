@@ -96,6 +96,10 @@
     "snapshot": "https://web.archive.org/web/20251209081606/https://www.nerdynel.me/2019/02/nytip104bkirt/",
     "timestamp": "20251209081606"
   },
+  "https://www.railtech-europe.com/wp-content/uploads/2024/03/03.-Case-study-New-York_-Propelling-into-a-digital-era-David-Chabanon.pdf": {
+    "error": "error:gateway-timeout",
+    "timestamp": "20261009"
+  },
   "https://www.vanshnookenraggen.com/_index/2020/10/deinterlining-with-one-switch/": {
     "snapshot": "https://web.archive.org/web/20250925011114/https://www.vanshnookenraggen.com/_index/2020/10/deinterlining-with-one-switch/",
     "timestamp": "20250925011114"
@@ -104,6 +108,10 @@
     "pages": 44,
     "snapshot": "https://web.archive.org/web/20260730214717/https://www.vanshnookenraggen.com/_index/wp-content/uploads/2018/03/IRT-Nostrand-Junction-Report.pdf",
     "timestamp": "20260730214717"
+  },
+  "https://www.youtube.com/live/0AEaaKvpMQw": {
+    "snapshot": "https://web.archive.org/web/20261009033515/https://www.youtube.com/live/0AEaaKvpMQw",
+    "timestamp": "20261009033515"
   },
   "https://www.youtube.com/watch?v=ew4LOZq6Eqo": {
     "snapshot": "https://web.archive.org/web/20250725023654/https://www.youtube.com/watch?v=ew4LOZq6Eqo",

@@ -368,10 +368,10 @@ Tweets:
 26. <https://www.mta.info/document/179856> (archived [August 12, 2025](<https://web.archive.org/web/20250812203733/https://www.mta.info/document/179856>))
 27. <https://images-prod.gothamist.com/images/DE_KAL.2e16d0ba.fill-700x467.format-webp.webpquality-70.webp> (archived [September 2, 2026](<https://web.archive.org/web/20260902194302/https://images-prod.gothamist.com/images/DE_KAL.2e16d0ba.fill-700x467.format-webp.webpquality-70.webp>))
 28. <https://gothamist.com/news/every-nyc-subway-signal-upgrade-is-far-behind-schedule-mta-consultant-says#:~:text=there%20aren%E2%80%99t%20enough%20people%20who%20know%20how%20to%20work%20on%20the%20older%20equipment.> (archived [April 23, 2026](<https://web.archive.org/web/20260423010831/https://gothamist.com/news/every-nyc-subway-signal-upgrade-is-far-behind-schedule-mta-consultant-says#:~:text=there%20aren%E2%80%99t%20enough%20people%20who%20know%20how%20to%20work%20on%20the%20older%20equipment.>))
-29. <https://www.railtech-europe.com/wp-content/uploads/2024/03/03.-Case-study-New-York_-Propelling-into-a-digital-era-David-Chabanon.pdf> (not archived)
+29. <https://www.railtech-europe.com/wp-content/uploads/2024/03/03.-Case-study-New-York_-Propelling-into-a-digital-era-David-Chabanon.pdf> (not archived: error:gateway-timeout)
 30. <https://www.mta.info/document/174186> (archived [May 18, 2026](<https://web.archive.org/web/20260518015538/https://www.mta.info/document/174186>))
 31. <https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf> (archived [May 31, 2026](<https://web.archive.org/web/20260531195109/https://future.mta.info/documents/20-YearNeedsAssessment_ReportandAppendix.pdf>))
-32. <https://www.youtube.com/live/0AEaaKvpMQw> (not archived)
+32. <https://www.youtube.com/live/0AEaaKvpMQw> (archived [October 9, 2026](<https://web.archive.org/web/20261009033515/https://www.youtube.com/live/0AEaaKvpMQw>))
 33. <https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn> (archived [June 15, 2026](<https://web.archive.org/web/20260615050241/https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn>))
 34. <https://www.mta.info/map/40511> (archived [May 18, 2026](<https://web.archive.org/web/20260518011635/https://www.mta.info/map/40511>))
 

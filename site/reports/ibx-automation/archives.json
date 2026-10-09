@@ -15,6 +15,11 @@
     "snapshot": "https://web.archive.org/web/20260416140808/https://arxiv.org/abs/2408.01562",
     "timestamp": "20260416140808"
   },
+  "https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf": {
+    "pages": 12,
+    "snapshot": "https://web.archive.org/web/20240921120558/https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf",
+    "timestamp": "20240921120558"
+  },
   "https://bqrail.substack.com/p/interborough-express-progress-reports": {
     "snapshot": "https://web.archive.org/web/20260304064215/https://bqrail.substack.com/p/interborough-express-progress-reports",
     "timestamp": "20260304064215"
@@ -30,6 +35,10 @@
   "https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_NAMAIN10%40DF_TABLE4&df[ag]=OECD.SDD.NAD&df[vs]=2.0&dq=A.AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA...PPP_B1GQ.......&lom=LASTNPERIODS&lo=10&to[TIME_PERIOD]=false&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA,COMBINED_UNIT_MEASURE&vw=tb": {
     "snapshot": "https://web.archive.org/web/20260313233214/https://data-explorer.oecd.org/vis?df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_NAMAIN10%40DF_TABLE4&df[ag]=OECD.SDD.NAD&df[vs]=2.0&dq=A.AUS%2BAUT%2BBEL%2BCAN%2BCHL%2BCOL%2BCRI%2BCZE%2BDNK%2BEST%2BFIN%2BFRA%2BDEU%2BGRC%2BHUN%2BISL%2BIRL%2BISR%2BITA%2BJPN%2BKOR%2BLVA%2BLTU%2BLUX%2BMEX%2BNLD%2BNZL%2BNOR%2BPOL%2BPRT%2BSVK%2BSVN%2BESP%2BSWE%2BCHE%2BTUR%2BGBR%2BUSA...PPP_B1GQ.......&lom=LASTNPERIODS&lo=10&to[TIME_PERIOD]=false&ly[cl]=TIME_PERIOD&ly[rw]=REF_AREA,COMBINED_UNIT_MEASURE&vw=tb",
     "timestamp": "20260313233214"
+  },
+  "https://github.com/kkysen/automated-metro-data": {
+    "snapshot": "https://web.archive.org/web/20261009033813/https://github.com/kkysen/automated-metro-data",
+    "timestamp": "20261009033813"
   },
   "https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park": {
     "snapshot": "https://web.archive.org/web/20260902012928/https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park",
@@ -50,6 +59,10 @@
   "https://ibx.transitcosts.com/ibx-1/": {
     "snapshot": "https://web.archive.org/web/20260512184007/https://ibx.transitcosts.com/ibx-1/",
     "timestamp": "20260512184007"
+  },
+  "https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056": {
+    "snapshot": "https://web.archive.org/web/20261009033703/https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056",
+    "timestamp": "20261009033703"
   },
   "https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn": {
     "snapshot": "https://web.archive.org/web/20260708134117/https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn",
@@ -146,6 +159,11 @@
     "snapshot": "https://web.archive.org/web/20251205012113/https://www.nycsubway.org/wiki/Chapter_03._General_Arrangement_for_Construction",
     "timestamp": "20251205012113"
   },
+  "https://www.nymtc.org/sites/default/files/rfp/2024%20Hub%20Bound%20Report%20%282%29.pdf": {
+    "pages": 130,
+    "snapshot": "https://web.archive.org/web/20261009033606/https://www.nymtc.org/sites/default/files/rfp/2024%20Hub%20Bound%20Report%20%282%29.pdf",
+    "timestamp": "20261009033606"
+  },
   "https://www.transit.dot.gov/funding/grant-programs/capital-investments/stops": {
     "snapshot": "https://web.archive.org/web/20260512184009/https://www.transit.dot.gov/funding/grant-programs/capital-investments/stops",
     "timestamp": "20260512184009"
@@ -172,8 +190,16 @@
     "snapshot": "https://web.archive.org/web/20221022205203/https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf",
     "timestamp": "20221022205203"
   },
+  "https://www.youtube.com/live/HEfH7R6j6QY?t=911s": {
+    "snapshot": "https://web.archive.org/web/20261009033625/https://www.youtube.com/live/HEfH7R6j6QY?t=911s",
+    "timestamp": "20261009033625"
+  },
   "https://www.youtube.com/watch?v=HEfH7R6j6QY": {
     "snapshot": "https://web.archive.org/web/20241213120427/https://www.youtube.com/watch?v=HEfH7R6j6QY",
     "timestamp": "20241213120427"
+  },
+  "https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1": {
+    "error": "error:blocked-url",
+    "timestamp": "20261009"
   }
 }

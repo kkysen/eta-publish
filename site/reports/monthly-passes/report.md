@@ -236,7 +236,7 @@ After all, the easiest transit trip to make is the one that you don't have to th
 7. <https://pcac.org/report/fairfares25/> (archived [May 17, 2026](<https://web.archive.org/web/20260517234603/https://pcac.org/report/fairfares25/>))
 8. <https://www.ironmanturnstile.com/transportation-and-smart-hubs/> (archived [April 29, 2026](<https://web.archive.org/web/20260429163851/https://www.ironmanturnstile.com/transportation-and-smart-hubs/>))
 9. <https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection> (archived [February 14, 2026](<https://web.archive.org/web/20260214174558/https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection>))
-10. <https://youtu.be/OVq1SRBy3aY?si=JyTyJlIe4zqtKe60> (not archived)
+10. <https://youtu.be/OVq1SRBy3aY?si=JyTyJlIe4zqtKe60> (archived [October 9, 2026](<https://web.archive.org/web/20261009033532/https://youtu.be/OVq1SRBy3aY?si=JyTyJlIe4zqtKe60>))
 
 ## Contributors
 

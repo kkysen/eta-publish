@@ -264,8 +264,8 @@ It's time to let riders travel in peace.
 ## Sources
 
 1. <https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/> (archived [April 10, 2026](<https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>))
-2. <https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link> (not archived)
-3. <https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link> (not archived)
+2. <https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link> (archived [October 9, 2026](<https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>))
+3. <https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link> (archived [October 9, 2026](<https://web.archive.org/web/20261009034236/https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>))
 4. <https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement> (archived [May 5, 2024](<https://web.archive.org/web/20240505072338/https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>))
 5. <https://www.youtube.com/watch?v=KDaRRmUWUZI> (archived [June 6, 2024](<https://web.archive.org/web/20240606135521/https://www.youtube.com/watch?v=KDaRRmUWUZI>))
 6. <https://en.wikipedia.org/wiki/Curb_cut_effect> (archived [September 11, 2026](<https://web.archive.org/web/20260911062544/https://en.wikipedia.org/wiki/Curb_cut_effect>))
