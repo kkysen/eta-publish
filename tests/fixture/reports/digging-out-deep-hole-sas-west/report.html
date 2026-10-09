@@ -59,6 +59,38 @@
    does: both are small text, and neither is italic. The classes stay
    distinct so they can be told apart without reading them. */
 .eta-report figcaption { font-size: .85rem; opacity: .75; margin-top: .6em; }
+/* An embed is a card until it is clicked: the thumbnail, what the post says
+   or what the video is called, and who posted it. Drawn in `currentColor`
+   rather than a colour of its own, so that it takes the site's around it.
+
+   A video is the column's width and a post is the width the platforms set
+   their own to, so the player that replaces either is the size of its card. */
+.eta-report .embed { max-width: 34rem; }
+.eta-report .embed-card { display: block; text-decoration: none; color: inherit;
+                          border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+                          border-radius: .5em; overflow: hidden; }
+.eta-report .embed-card:hover,
+.eta-report .embed-card:focus-visible {
+  border-color: color-mix(in srgb, currentColor 60%, transparent); }
+.eta-report .embed-youtube .embed-card img { aspect-ratio: 16 / 9; object-fit: cover; }
+.eta-report .embed-card img { max-height: 24rem; object-fit: cover; }
+.eta-report .embed-text { display: block; padding: .8em 1em 0; }
+.eta-report .embed-youtube .embed-text { font-weight: bold; }
+.eta-report .embed-meta { display: flex; flex-wrap: wrap; justify-content: space-between;
+                          gap: .25em 1em; padding: .5em 1em .8em; font-size: .85rem; }
+.eta-report .embed-author { opacity: .75; }
+.eta-report .embed-play { text-decoration: underline; }
+/* The text presentation selector keeps a phone from drawing the triangle as
+   a coloured emoji button. */
+.eta-report .embed-play::before { content: "▶︎"; margin-right: .4em;
+                                  display: inline-block; text-decoration: none; }
+.eta-report .embed-frame { display: block; width: 100%; border: 0; }
+.eta-report .embed-youtube .embed-frame { aspect-ratio: 16 / 9; height: auto; }
+/* A post's frame says how tall it is once it has loaded; until then it is
+   given room for a short one, rather than the 150px every frame starts at. */
+.eta-report .embed-x .embed-frame,
+.eta-report .embed-bluesky .embed-frame { height: 32rem; }
+.eta-report .embed video { width: 100%; height: auto; display: block; }
 .eta-report .dateline { font-size: .95rem; opacity: .75; }
 /* The build's own notes about this report. A colour and a face of their own,
    because they are the one thing on the page that is not the report and
@@ -292,6 +324,49 @@
       }, HOLD),
     );
   };
+  // An embed is a card until the reader asks for the player: the card is a
+  // link to the post, and the click is what swaps it for the platform's own
+  // frame. Nothing of the platform's loads before then.
+  let frames = 0;
+  document.addEventListener("click", (event) => {
+    if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const card = event.target.closest?.(".eta-report .embed[data-player] .embed-card");
+    if (!card) return;
+    event.preventDefault();
+    const figure = card.closest(".embed");
+    const frame = document.createElement("iframe");
+    // Bluesky's frame says how tall its post is only to a frame that gave it
+    // an id to say it with.
+    const id = String(++frames);
+    const player = figure.dataset.player;
+    frame.src = figure.classList.contains("embed-bluesky") ? `${player}?id=${id}` : player;
+    frame.dataset.frame = id;
+    frame.title = figure.dataset.title || "";
+    frame.className = "embed-frame";
+    frame.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+    frame.allowFullscreen = true;
+    card.replaceWith(frame);
+    frame.focus();
+  });
+  // A post is as tall as what it says, which only the frame knows: X and
+  // Bluesky each send it up in their own words.
+  addEventListener("message", (event) => {
+    let data = event.data;
+    if (typeof data === "string") {
+      try {
+        data = JSON.parse(data);
+      } catch {
+        return;
+      }
+    }
+    for (const frame of document.querySelectorAll(".eta-report .embed-frame")) {
+      if (frame.contentWindow !== event.source) continue;
+      const resize = data?.["twttr.embed"];
+      const height =
+        resize?.method === "twttr.private.resize" ? resize.params?.[0]?.height : data?.height;
+      if (Number.isFinite(height) && height > 0) frame.style.height = `${height}px`;
+    }
+  });
   for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
   for (const name of ["pointerout", "focusout"]) document.addEventListener(name, release);
 })();

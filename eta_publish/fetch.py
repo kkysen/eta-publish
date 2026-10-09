@@ -642,3 +642,19 @@ def download_drive_file(file_id: str) -> bytes:
         return files.get_media(fileId=file_id).execute()
     except Exception as e:
         raise FetchFailed(_explain(e)) from e
+
+
+def drive_file_type(file_id: str) -> str:
+    """What kind of file a Drive file is, as its MIME type.
+
+    A Drive link says nothing about what it links: an embed needs to know it
+    is a video before it can play one.
+    """
+    from googleapiclient.discovery import build
+
+    service = build("drive", "v3", credentials=_credentials())
+    files = service.files()  # pyrefly: ignore[missing-attribute]
+    try:
+        return files.get(fileId=file_id, fields="mimeType").execute()["mimeType"]
+    except Exception as e:
+        raise FetchFailed(_explain(e)) from e

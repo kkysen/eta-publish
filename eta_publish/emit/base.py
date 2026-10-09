@@ -10,8 +10,10 @@ from collections.abc import Callable
 
 from ..nodes import (
     Block,
+    Card,
     Cut,
     Document,
+    Embed,
     Figure,
     FootnoteRef,
     Heading,
@@ -23,6 +25,7 @@ from ..nodes import (
     Listed,
     Notice,
     Paragraph,
+    Platform,
     Quoted,
     Shown,
     Span,
@@ -181,6 +184,12 @@ class Emitter(ABC):
                 return self.figure(node)
             case Table():
                 return self.table(node)
+            case Embed():
+                card = self.doc.playable(node)
+                if card is None:
+                    # What it was before anything could embed it, and still a citation.
+                    return self.paragraph(Paragraph([Text(node.url, href=node.url)]))
+                return self.embed(node, card)
 
     def inlines(self, content: list[Inline]) -> str:
         return "".join(self.inline(i) for i in content)
@@ -220,6 +229,10 @@ class Emitter(ABC):
     def table(self, node: Table) -> str: ...
 
     @abstractmethod
+    def embed(self, node: Embed, card: Card) -> str:
+        """A video or post its platform described, which `playable` vouches for."""
+
+    @abstractmethod
     def text(self, node: Text) -> str: ...
 
     @abstractmethod
@@ -230,3 +243,27 @@ class Emitter(ABC):
 
     @abstractmethod
     def image(self, node: Image) -> str: ...
+
+
+PLATFORM_NAMES = {
+    Platform.YOUTUBE: "YouTube",
+    Platform.X: "X",
+    Platform.BLUESKY: "Bluesky",
+    Platform.DRIVE: "",
+}
+
+
+def embed_label(node: Embed, card: Card) -> str:
+    """One line saying what an embed is, for an output that cannot play it.
+
+    A video is its title and who posted it; a post is who posted it and what it says,
+    in full, because on paper there is no clicking through to read the rest.
+    """
+    where = PLATFORM_NAMES[node.platform]
+    match node.platform:
+        case Platform.YOUTUBE:
+            return f"Video: {card.text} ({card.author} on {where})"
+        case Platform.DRIVE:
+            return "Video"
+        case _:
+            return f"{card.author} on {where}: \u201c{card.text}\u201d"

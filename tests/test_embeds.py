@@ -1,0 +1,141 @@
+"""Videos and posts, from a paragraph that is nothing but a link to one."""
+
+import pytest
+from test_conventions import build, image, para
+
+from eta_publish.docs_json import JsonObject
+from eta_publish.emit.html import HtmlEmitter
+from eta_publish.emit.markdown import MarkdownEmitter
+from eta_publish.nodes import Card, Embed, Figure, Paragraph, Platform
+from eta_publish.parse import embedded
+
+
+def linked(*runs: tuple[str, str | None], underline: str = "") -> JsonObject:
+    """A paragraph of runs, each linked to its href or to nothing."""
+    elements: list[JsonObject] = []
+    if underline:
+        elements.append({"textRun": {"content": underline, "textStyle": {"underline": True}}})
+    for text, href in runs:
+        style: JsonObject = {"link": {"url": href}} if href else {}
+        elements.append({"textRun": {"content": text, "textStyle": style}})
+    elements[-1]["textRun"]["content"] += "\n"
+    return {
+        "paragraph": {"paragraphStyle": {"namedStyleType": "NORMAL_TEXT"}, "elements": elements}
+    }
+
+
+@pytest.mark.parametrize(
+    ("href", "expected"),
+    [
+        ("https://www.youtube.com/watch?v=KDaRRmUWUZI", (Platform.YOUTUBE, "KDaRRmUWUZI", 0)),
+        ("https://www.youtube.com/live/HEfH7R6j6QY?t=911s", (Platform.YOUTUBE, "HEfH7R6j6QY", 911)),
+        ("https://youtu.be/h6-MVzb58E4?si=rJ&t=137", (Platform.YOUTUBE, "h6-MVzb58E4", 137)),
+        ("https://youtube.com/shorts/o90JQBWdgTI?is=I4", (Platform.YOUTUBE, "o90JQBWdgTI", 0)),
+        ("https://www.youtube.com/watch?v=abc&t=1h2m3s", (Platform.YOUTUBE, "abc", 3723)),
+        (
+            "https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1",
+            (Platform.X, "1874861375857541619", 0),
+        ),
+        ("https://twitter.com/someone/status/123", (Platform.X, "123", 0)),
+        (
+            "https://bsky.app/profile/bsky.app/post/3l6oveex3ii2l",
+            (Platform.BLUESKY, "bsky.app/3l6oveex3ii2l", 0),
+        ),
+        ("https://drive.google.com/file/d/1abc/view?usp=drive_link", (Platform.DRIVE, "1abc", 0)),
+        ("https://www.youtube.com/@MrRailfan", None),
+        ("https://x.com/ThoughtPolic3HQ", None),
+        ("https://www.mta.info/document/196361", None),
+    ],
+)
+def test_what_a_link_is_a_link_to(href: str, expected: tuple[Platform, str, int] | None) -> None:
+    assert embedded(href) == expected
+
+
+def test_a_link_on_a_line_of_its_own_is_embedded() -> None:
+    url = "https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1"
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    assert doc.blocks == [Embed(url=url, platform=Platform.X, key="1874861375857541619")]
+
+
+def test_a_titled_link_on_a_line_of_its_own_is_embedded() -> None:
+    """Too Damn Loud's video, which Docs shows by its title rather than its address."""
+    url = "https://youtube.com/shorts/o90JQBWdgTI?is=I4"
+    doc = build([para("Headline", "TITLE"), linked(("Too Damn Loud", url))])
+    assert isinstance(doc.blocks[0], Embed)
+
+
+def test_a_link_in_a_sentence_is_a_citation() -> None:
+    """IBX cites the same press conference three times, on the words of a sentence."""
+    url = "https://www.youtube.com/watch?v=HEfH7R6j6QY"
+    doc = build(
+        [para("Headline", "TITLE"), linked(("The MTA ", None), ("announced", url), (" it.", None))]
+    )
+    assert isinstance(doc.blocks[0], Paragraph)
+
+
+def test_a_credit_linked_to_a_video_stays_a_credit() -> None:
+    """SAS West credits a still to the board meeting it was taken from,
+    with the whole `Credit: MTA` linked to the video."""
+    url = "https://www.youtube.com/live/syjWBXSAbyM?t=2940s"
+    doc = build(
+        [
+            para("Headline", "TITLE"),
+            image(),
+            para("The tail tracks the MTA proposed."),
+            linked((": MTA", url), underline="Credit"),
+        ]
+    )
+    figure = doc.blocks[0]
+    assert isinstance(figure, Figure)
+    assert figure.credit
+    assert not doc.embeds
+
+
+def card_page(platform: Platform, url: str, key: str, card: Card | None) -> tuple[str, str]:
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    assert doc.embeds == [Embed(url=url, platform=platform, key=key)]
+    if card is not None:
+        doc.cards[url] = card
+    doc.media_files[url] = "embed-1.jpg"
+    return HtmlEmitter(image_base="images").emit(doc), MarkdownEmitter().emit(doc)
+
+
+def test_a_card_loads_nothing_until_clicked() -> None:
+    url = "https://bsky.app/profile/bsky.app/post/3l6oveex3ii2l"
+    html, markdown = card_page(
+        Platform.BLUESKY,
+        url,
+        "bsky.app/3l6oveex3ii2l",
+        Card(author="Bluesky (@bsky.app)", text="Hello", did="did:plc:z72"),
+    )
+    assert (
+        'data-player="https://embed.bsky.app/embed/did:plc:z72/app.bsky.feed.post/3l6oveex3ii2l"'
+        in html
+    )
+    assert f'class="embed-card" href="{url}"' in html
+    assert 'src="images/embed-1.jpg"' in html
+    assert "<iframe" not in html
+    assert "[Bluesky (@bsky.app) on Bluesky: “Hello”]" in markdown
+
+
+def test_an_embed_nothing_could_describe_is_the_link_it_was() -> None:
+    url = "https://x.com/someone/status/123"
+    html, markdown = card_page(Platform.X, url, "123", Card(error="404"))
+    assert 'class="embed-card"' not in html
+    assert f"[{url}](<{url}>)" in markdown
+
+
+def test_a_drive_video_plays_from_the_site() -> None:
+    url = "https://drive.google.com/file/d/1abc/view"
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc.cards[url] = Card(mime="video/mp4")
+    doc.media_files[url] = "embed-1.mp4"
+    html = HtmlEmitter(image_base="images").emit(doc)
+    assert '<video src="videos/embed-1.mp4" controls preload="metadata">' in html
+
+
+def test_a_drive_file_that_is_not_a_video_is_a_link() -> None:
+    url = "https://drive.google.com/file/d/1abc/view"
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc.cards[url] = Card(mime="image/png")
+    assert "<video " not in HtmlEmitter(image_base="images").emit(doc)

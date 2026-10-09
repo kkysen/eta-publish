@@ -25,6 +25,7 @@ from .nodes import (
     Block,
     Crop,
     Document,
+    Embed,
     Figure,
     Footnote,
     FootnoteRef,
@@ -37,6 +38,7 @@ from .nodes import (
     ListItem,
     ListKind,
     Paragraph,
+    Platform,
     Shown,
     Table,
     Text,
@@ -138,6 +140,78 @@ def _words(text: str) -> Iterator[str]:
 def unfinished(text: str) -> bool:
     """Whether `text` still carries a marker saying it is not done."""
     return any(word in UNFINISHED for word in _words(text))
+
+
+def embed_of(inlines: list[Inline]) -> Embed | None:
+    """The embed a paragraph is, if it is nothing but one link to a video or a post.
+
+    Nothing but: every run with text in it carries the same link, and nothing
+    else is there. A YouTube link on the words of a sentence is a citation of
+    the video, and IBX cites the same press conference three times that way.
+    """
+    hrefs = {i.href for i in inlines if isinstance(i, Text) and i.text.strip()}
+    if len(hrefs) != 1 or any(not isinstance(i, Text) for i in inlines):
+        return None
+    href = hrefs.pop()
+    if href is None:
+        return None
+    found = embedded(href)
+    if found is None:
+        return None
+    platform, key, start = found
+    return Embed(url=href, platform=platform, key=key, start=start)
+
+
+YOUTUBE_HOSTS = frozenset({"youtube.com", "www.youtube.com", "m.youtube.com"})
+X_HOSTS = frozenset({"x.com", "www.x.com", "twitter.com", "www.twitter.com", "mobile.twitter.com"})
+
+
+def embedded(href: str) -> tuple[Platform, str, int] | None:
+    """What `href` is a link to, if it is a video or a post this can embed.
+
+    The platform, its own name for the thing, and for YouTube where to start.
+    Everything else about the URL is ignored: `?si=` tracking, `/video/1` on a
+    post, a `?usp=` on a Drive link.
+    """
+    parts = urlsplit(href)
+    host = (parts.hostname or "").lower()
+    path = [segment for segment in parts.path.split("/") if segment]
+    query = parse_qs(parts.query)
+    if host in YOUTUBE_HOSTS or host == "youtu.be":
+        if host == "youtu.be" and path:
+            video = path[0]
+        elif path == ["watch"]:
+            video = query.get("v", [""])[0]
+        elif len(path) >= 2 and path[0] in ("live", "shorts", "embed"):
+            video = path[1]
+        else:
+            return None
+        if not video:
+            return None
+        return Platform.YOUTUBE, video, _seconds((query.get("t") or query.get("start") or [""])[0])
+    if host in X_HOSTS and len(path) >= 3 and path[1] == "status" and path[2].isdigit():
+        return Platform.X, path[2], 0
+    if host == "bsky.app" and len(path) >= 4 and path[0] == "profile" and path[2] == "post":
+        return Platform.BLUESKY, f"{path[1]}/{path[3]}", 0
+    if host == "drive.google.com" and len(path) >= 3 and path[:2] == ["file", "d"]:
+        return Platform.DRIVE, path[2], 0
+    return None
+
+
+def _seconds(t: str) -> int:
+    """A YouTube `t=` as seconds: `911`, `911s`, or `15m11s`."""
+    total = 0
+    number = ""
+    for character in t:
+        if character.isdigit():
+            number += character
+            continue
+        unit = {"h": 3600, "m": 60, "s": 1}.get(character)
+        if unit is None or not number:
+            return 0
+        total += int(number) * unit
+        number = ""
+    return total + int(number or 0)
 
 
 def bold_brackets(inlines: list[Inline]) -> list[str]:
@@ -986,6 +1060,14 @@ class Parser:
                     continue
 
             caption_slot = 0
+            # After the figure has had its pick, because a credit is often a
+            # link to the video a still was taken from: `Credit: MTA`, linked
+            # whole to the board meeting, is SAS West's credit and not a video.
+            embed = embed_of(inlines)
+            if embed is not None:
+                drop_pending()
+                out.append(embed)
+                continue
             out.append(Paragraph(content=inlines))
 
         drop_pending()

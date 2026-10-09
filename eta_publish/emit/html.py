@@ -17,11 +17,13 @@ from htpy._types import Renderable
 from markupsafe import Markup
 
 from ..assets import read
-from ..naming import ASSET_DIR, IMAGE_DIR, content_anchor
+from ..naming import ASSET_DIR, IMAGE_DIR, VIDEO_DIR, content_anchor
 from ..nodes import (
     Archived,
     Block,
+    Card,
     Document,
+    Embed,
     Figure,
     Footnote,
     FootnoteRef,
@@ -34,11 +36,12 @@ from ..nodes import (
     ListKind,
     Notice,
     Paragraph,
+    Platform,
     Table,
     Text,
     plain_text,
 )
-from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
+from .base import CONTRIBUTORS_NOTE, PLATFORM_NAMES, Emitter, warning_markup
 
 # Only styles what the emitter produces, inheriting the rest from the theme,
 # so a report does not fight the site around it.
@@ -179,6 +182,27 @@ sentence it was citing.
 Cut on the marker rather than on the `#`: an ordinary fragment is an anchor in
 the page and belongs in what is shown.
 """
+
+
+def player_url(node: Embed, card: Card) -> str:
+    """The platform's own player for `node`, which the script loads on click.
+
+    Each is an `iframe` of the platform's, rather than its embed script,
+    so nothing of theirs runs in the report's page even once it is playing.
+    `youtube-nocookie.com` is YouTube's own address for a player that sets
+    no cookie until the video is played.
+    """
+    match node.platform:
+        case Platform.YOUTUBE:
+            start = f"&start={node.start}" if node.start else ""
+            return f"https://www.youtube-nocookie.com/embed/{node.key}?autoplay=1{start}"
+        case Platform.X:
+            return f"https://platform.twitter.com/embed/Tweet.html?id={node.key}&dnt=true"
+        case Platform.BLUESKY:
+            rkey = node.key.split("/", 1)[1]
+            return f"https://embed.bsky.app/embed/{card.did}/app.bsky.feed.post/{rkey}"
+        case Platform.DRIVE:
+            return ""
 
 
 def shown_url(url: str) -> str:
@@ -842,6 +866,67 @@ class HtmlEmitter(Emitter):
         shape = f"--aspect: {aspect:.3f}" if aspect is not None else None
         anchor = self.take(node.image.filename)
         return markup(tag.figure(id=anchor, style=shape)[self.mark(anchor, "figure"), parts])
+
+    @override
+    def embed(self, node: Embed, card: Card) -> str:
+        """A card for the video or post, which becomes the platform's player when clicked.
+
+        A card rather than the player, so reading the report asks nothing of
+        YouTube, X, or Bluesky until the reader does. The card is a link to the
+        post, so without the script, or in a reader that strips it, it is still
+        the way there. The player's address rides on the figure for the script.
+
+        A video in Drive is served from here, so it has nobody to keep out and
+        plays where it is.
+        """
+        file = self.doc.media_files.get(node.url)
+        anchor = self.take(f"embed-{node.platform.value}-{node.key.replace('/', '-')}")
+        ref = self.source_ref(node.url)
+        if node.platform is Platform.DRIVE and file is not None:
+            video = tag.video(
+                src=self.media_src(file, VIDEO_DIR), controls=True, preload="metadata"
+            )[tag.a(href=node.url)["Watch the video"]]
+            return markup(
+                tag.figure(id=anchor, class_="embed embed-video")[
+                    self.mark(anchor, "video"), video, ref
+                ]
+            )
+        where = PLATFORM_NAMES[node.platform]
+        picture = None
+        if file is not None:
+            picture = htpy.img(src=self.media_src(file, IMAGE_DIR), alt="", loading="lazy")
+        verb = "Play on" if node.platform is Platform.YOUTUBE else "View on"
+        card_link = tag.a(class_="embed-card", href=node.url)[
+            picture,
+            # A post's own line breaks as `br`, since the formatter that lays
+            # out the page is free to break the text anywhere else.
+            tag.span(class_="embed-text")[joined(htpy.br, card.text.split("\n"))],
+            tag.span(class_="embed-meta")[
+                tag.span(class_="embed-author")[card.author],
+                tag.span(class_="embed-play")[f"{verb} {where}"],
+            ],
+        ]
+        return markup(
+            tag.figure(
+                id=anchor,
+                class_=f"embed embed-{node.platform.value}",
+                data_player=player_url(node, card),
+                data_title=f"{card.author} on {where}",
+            )[
+                self.mark(
+                    anchor, "post" if node.platform in (Platform.X, Platform.BLUESKY) else "video"
+                ),
+                card_link,
+                ref,
+            ]
+        )
+
+    def media_src(self, file: str, directory: str) -> str:
+        """Where an embed's file is served from, beside the images wherever they are."""
+        if not self.image_base:
+            return f"{directory}/{file}"
+        base = self.image_base.removesuffix(IMAGE_DIR).rstrip("/")
+        return f"{base}/{directory}/{file}" if base else f"{directory}/{file}"
 
     @override
     def table(self, node: Table) -> str:

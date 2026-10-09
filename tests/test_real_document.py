@@ -334,7 +334,10 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
     # And from 205,000 when the warnings started highlighting the part of a
     # value they are about: `<mark>` around a run of middle dots, 66 bytes a
     # warning and only on the ones that point at characters.
-    assert size < 210_000, f"grown to {size:,} bytes; still fits, worth a look"
+    #
+    # And from 210,000 when embedded videos and posts landed: about 3 KB of
+    # stylesheet and script that every fragment carries, embeds or none.
+    assert size < 215_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:

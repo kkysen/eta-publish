@@ -21,6 +21,8 @@ from .archive import (
 )
 from .checks import check, check_pages, plural
 from .docs_json import JsonObject
+from .embeds import check_embeds, look_up, read_embed_index, write_embed_index
+from .embeds import download as download_embeds
 from .emit.html import HtmlEmitter, report_page
 from .emit.markdown import MarkdownEmitter
 from .emit.typst import TypstEmitter
@@ -614,6 +616,17 @@ def build_one(
         else:
             require_image_index(dest, doc)
     read_image_index(dest, doc)
+
+    # Every build, embeds or none, so a report that loses its last one loses
+    # its record too. Only what is missing is asked about, so the cost after
+    # the first build is nothing; offline, the record is all there is.
+    read_embed_index(dest, doc)
+    if not options.offline:
+        look_up(doc)
+        if options.images:
+            download_embeds(doc, dest)
+    write_embed_index(dest, doc)
+    check_embeds(doc)
 
     # After the document is parsed, because what it cites is what it cites,
     # and before the emitters, which write the Sources section off it.

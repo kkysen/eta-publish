@@ -106,6 +106,49 @@
       }, HOLD),
     );
   };
+  // An embed is a card until the reader asks for the player: the card is a
+  // link to the post, and the click is what swaps it for the platform's own
+  // frame. Nothing of the platform's loads before then.
+  let frames = 0;
+  document.addEventListener("click", (event) => {
+    if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const card = event.target.closest?.(".eta-report .embed[data-player] .embed-card");
+    if (!card) return;
+    event.preventDefault();
+    const figure = card.closest(".embed");
+    const frame = document.createElement("iframe");
+    // Bluesky's frame says how tall its post is only to a frame that gave it
+    // an id to say it with.
+    const id = String(++frames);
+    const player = figure.dataset.player;
+    frame.src = figure.classList.contains("embed-bluesky") ? `${player}?id=${id}` : player;
+    frame.dataset.frame = id;
+    frame.title = figure.dataset.title || "";
+    frame.className = "embed-frame";
+    frame.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+    frame.allowFullscreen = true;
+    card.replaceWith(frame);
+    frame.focus();
+  });
+  // A post is as tall as what it says, which only the frame knows: X and
+  // Bluesky each send it up in their own words.
+  addEventListener("message", (event) => {
+    let data = event.data;
+    if (typeof data === "string") {
+      try {
+        data = JSON.parse(data);
+      } catch {
+        return;
+      }
+    }
+    for (const frame of document.querySelectorAll(".eta-report .embed-frame")) {
+      if (frame.contentWindow !== event.source) continue;
+      const resize = data?.["twttr.embed"];
+      const height =
+        resize?.method === "twttr.private.resize" ? resize.params?.[0]?.height : data?.height;
+      if (Number.isFinite(height) && height > 0) frame.style.height = `${height}px`;
+    }
+  });
   for (const name of ["pointerover", "focusin"]) document.addEventListener(name, place);
   for (const name of ["pointerout", "focusout"]) document.addEventListener(name, release);
 })();

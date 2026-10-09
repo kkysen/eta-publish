@@ -20,12 +20,14 @@ token.json
 # rebuilt by CI before deploying, so nothing here is needed to publish.
 /site/**/images/
 /site/**/print/
+/site/**/videos/
 /site/**/report.pdf
 /site/**/template.typ
 /site/index.html
 /site/robots.txt
 /tests/fixture/**/images/
 /tests/fixture/**/print/
+/tests/fixture/**/videos/
 /tests/fixture/**/report.pdf
 /tests/fixture/**/template.typ
 /tests/fixture/index.html

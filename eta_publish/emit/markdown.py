@@ -23,7 +23,9 @@ from typing import override
 
 from ..naming import IMAGE_DIR
 from ..nodes import (
+    Card,
     Document,
+    Embed,
     Figure,
     Footnote,
     FootnoteRef,
@@ -39,7 +41,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
+from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, warning_markup
 
 
 def fence(value: str) -> str:
@@ -298,6 +300,12 @@ class MarkdownEmitter(Emitter):
         if node.source:
             out += f"\n<!-- {self.inlines(node.source)} -->"
         return out
+
+    @override
+    def embed(self, node: Embed, card: Card) -> str:
+        # Nothing here plays anything, so the embed is what it says,
+        # linked to where it does play.
+        return self.paragraph(Paragraph([Text(embed_label(node, card), href=node.url)]))
 
     @override
     def table(self, node: Table) -> str:

@@ -44,6 +44,13 @@ Serving them from somewhere else is an emitter's `image_base`,
 which is a decision about hosting rather than about a build.
 """
 
+VIDEO_DIR = "videos"
+"""The directory a build writes the videos it serves itself into, beside `IMAGE_DIR`.
+
+Separate because a video is a different order of size,
+and a glance at the directory should say where the space went.
+"""
+
 PRINT_DIR = "print"
 """The directory the PDF's copies of the images go in, beside `IMAGE_DIR`.
 

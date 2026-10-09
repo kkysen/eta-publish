@@ -260,7 +260,73 @@ class Table:
     header: bool = False
 
 
-Block = Paragraph | Heading | List | Figure | Table
+class Platform(Enum):
+    """Where an embedded video or post lives, which decides how it is played."""
+
+    YOUTUBE = "youtube"
+    X = "x"
+    BLUESKY = "bluesky"
+    DRIVE = "drive"
+    """A video file in Drive, which the build downloads and the site serves itself."""
+
+
+@dataclass
+class Embed:
+    """A video or a post, from a paragraph that is nothing but a link to one.
+
+    Written that way in the document because that is what pasting a link gives:
+    Docs has no way to place a video, and a link on its own line is the one
+    thing a writer does that says "show this here" rather than "cite this".
+    A link inside a sentence is a citation, and stays one.
+
+    `key` is what the platform calls it: a video id, a post id,
+    `handle/rkey` for Bluesky, or a Drive file id.
+    """
+
+    url: str
+    platform: Platform
+    key: str
+    start: int = 0
+    """Where a YouTube link asks to start, in seconds, from its `t=`."""
+
+
+@dataclass(frozen=True)
+class Card:
+    """What the platform said about an embed, which is what the page shows until it is played.
+
+    Recorded in `embeds.json` and read back by every later build,
+    so an offline build writes the same card and a post deleted since still has one.
+    """
+
+    author: str = ""
+    text: str = ""
+    """The video's title, or the post's text."""
+
+    thumbnail: str = ""
+    """Where the platform serves the picture, which is downloaded rather than linked:
+    linking it would have every reader's browser ask the platform for it,
+    which is what click-to-load is for not doing."""
+
+    did: str = ""
+    """The Bluesky account's permanent id, which its embed is addressed by
+    and its handle is not."""
+
+    mime: str = ""
+    """What kind of file a Drive link is, which is the only way to know it is a video."""
+
+    error: str = ""
+    """Why there is no card: a looked-up embed that could not be described
+    is not asked about again by every build."""
+
+
+VIDEO_TYPES = {"video/mp4": ".mp4", "video/webm": ".webm", "video/quicktime": ".mov"}
+"""What a Drive file has to be to play in a `video` element, and what it is called.
+
+`.mov` plays in Safari and, as H.264, in Chrome; it is here because a phone
+records one, and refusing it would only send somebody off to convert it."""
+
+
+Block = Paragraph | Heading | List | Figure | Table | Embed
 
 
 # ---- document ------------------------------------------------------
@@ -509,6 +575,25 @@ class Document:
     an archive is one already archived rather than one to archive again.
     """
 
+    cards: dict[str, Card] = field(default_factory=dict)
+    """Embed URL to what its platform said about it, from `embeds.json`."""
+
+    media_files: dict[str, str] = field(default_factory=dict)
+    """Embed URL to the file written for it: a thumbnail under `IMAGE_DIR`,
+    or the video itself under `VIDEO_DIR` for one in Drive.
+
+    Recorded in `embeds.json` for the same reason as `image_files`:
+    the extension is learned by fetching."""
+
+    @property
+    def embeds(self) -> list[Embed]:
+        """Every embed in the document, in order, deduplicated by URL."""
+        seen: dict[str, Embed] = {}
+        for block in self._every_block():
+            if isinstance(block, Embed):
+                seen.setdefault(block.url, block)
+        return list(seen.values())
+
     @property
     def hero(self) -> Figure | None:
         """The figure a report opens with, if it opens with one.
@@ -721,6 +806,22 @@ class Document:
                 f"without one is not a picture anything can serve"
             )
         return written
+
+    def playable(self, embed: Embed) -> Card | None:
+        """What to show for `embed`, or `None` where it can only be the link it was.
+
+        A card that records a failure is none, and so is a Drive file that is
+        not a video, or one whose file was never written: a `video` element
+        with nothing to play is worse than the link.
+        """
+        card = self.cards.get(embed.url)
+        if card is None or card.error:
+            return None
+        if embed.platform is Platform.DRIVE and (
+            card.mime not in VIDEO_TYPES or embed.url not in self.media_files
+        ):
+            return None
+        return card
 
     def image_aspect(self, image: Image) -> float | None:
         """The written file's width over its height, if that was recorded."""
@@ -1018,6 +1119,10 @@ def _links_in(block: Block) -> list[str]:
             return _hrefs(block.content)
         case List():
             return [href for item in _items(block.items) for href in _hrefs(item.content)]
+        case Embed():
+            # Still a source: a post can be deleted like any other page,
+            # and the archived copy is how a reader sees what it said.
+            return [block.url]
     return []
 
 

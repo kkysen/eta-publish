@@ -21,7 +21,9 @@ from typing import override
 
 from ..naming import IMAGE_DIR, PRINT_DIR, SITE, print_href
 from ..nodes import (
+    Card,
     Document,
+    Embed,
     Figure,
     FootnoteRef,
     Heading,
@@ -36,7 +38,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter, warning_markup
+from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, warning_markup
 
 # Typst's markup characters.
 # `#` and `@` start code and references, and the rest delimit markup,
@@ -204,6 +206,12 @@ class TypstEmitter(Emitter):
         if caption:
             return f"#figure(\n{body}\n  caption: [{caption}],\n)"
         return f"#figure(\n{body}\n)"
+
+    @override
+    def embed(self, node: Embed, card: Card) -> str:
+        # Nothing here plays anything, so the embed is what it says,
+        # linked to where it does play.
+        return self.paragraph(Paragraph([Text(embed_label(node, card), href=node.url)]))
 
     @override
     def table(self, node: Table) -> str:
