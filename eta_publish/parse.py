@@ -142,12 +142,35 @@ def unfinished(text: str) -> bool:
     return any(word in UNFINISHED for word in _words(text))
 
 
+VIDEO_LABEL = "video"
+
+
+def is_video_note(line: list[Inline]) -> bool:
+    """Whether `line` is a `Video:` line, which embeds the link after it.
+
+    Labelled like `Credit:`, underlined and ended by a colon, because a link
+    on its own line is not enough to go on: SAS West credits two stills with
+    a `Credit: MTA` linked whole to the video each was taken from, and a link
+    pasted on a line of its own is as often a citation nobody gave words to.
+    """
+    note = labelled(line)
+    return note.underlined and note.mark == ":" and note.label.casefold() == VIDEO_LABEL
+
+
+def after_label(line: list[Inline]) -> list[Inline]:
+    """What follows a label's colon, as the runs it was written in."""
+    for i, node in enumerate(line):
+        if isinstance(node, Text) and ":" in node.text:
+            rest = node.text.partition(":")[2]
+            return ([replace(node, text=rest)] if rest else []) + line[i + 1 :]
+    return []
+
+
 def embed_of(inlines: list[Inline]) -> Embed | None:
-    """The embed a paragraph is, if it is nothing but one link to a video or a post.
+    """The embed a `Video:` line names, if it names nothing but one link to a video or a post.
 
     Nothing but: every run with text in it carries the same link, and nothing
-    else is there. A YouTube link on the words of a sentence is a citation of
-    the video, and IBX cites the same press conference three times that way.
+    else is there.
     """
     hrefs = {i.href for i in inlines if isinstance(i, Text) and i.text.strip()}
     if len(hrefs) != 1 or any(not isinstance(i, Text) for i in inlines):
@@ -1015,6 +1038,23 @@ class Parser:
                 caption_slot = 0
                 continue
 
+            if is_video_note(inlines):
+                self._bleed(inlines)
+                embed = embed_of(after_label(inlines))
+                if embed is None:
+                    self.doc.warn(
+                        "a {} line has to be followed by one link to a YouTube video, "
+                        "an X or Bluesky post, or a video in Drive; publishing it as text: {}",
+                        Shown("Video:"),
+                        Shown(text[:80]),
+                    )
+                    out.append(Paragraph(content=unmarked(inlines)))
+                    continue
+                drop_pending()
+                caption_slot = 0
+                out.append(embed)
+                continue
+
             if has_image(para):
                 figure = Figure(image=self._only_image(inlines), source=pending_source or [])
                 self._claim_name(figure, pending_source or [])
@@ -1061,14 +1101,6 @@ class Parser:
                     continue
 
             caption_slot = 0
-            # After the figure has had its pick, because a credit is often a
-            # link to the video a still was taken from: `Credit: MTA`, linked
-            # whole to the board meeting, is SAS West's credit and not a video.
-            embed = embed_of(inlines)
-            if embed is not None:
-                drop_pending()
-                out.append(embed)
-                continue
             out.append(Paragraph(content=inlines))
 
         drop_pending()

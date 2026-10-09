@@ -28,6 +28,11 @@ def linked(*runs: tuple[str, str | None], underline: str = "") -> JsonObject:
     }
 
 
+def video(url: str) -> JsonObject:
+    """A `Video:` line, as the documents write one."""
+    return linked((": ", None), (url, url), underline="Video")
+
+
 @pytest.mark.parametrize(
     ("href", "expected"),
     [
@@ -55,19 +60,44 @@ def test_what_a_link_is_a_link_to(href: str, expected: tuple[Platform, str, int]
     assert embedded(href) == expected
 
 
-def test_a_link_on_a_line_of_its_own_is_embedded() -> None:
+def test_a_video_line_is_embedded() -> None:
     url = "https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1"
-    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc = build([para("Headline", "TITLE"), linked((": ", None), (url, url), underline="Video")])
     assert doc.blocks == [Embed(url=url, platform=Platform.X, key="1874861375857541619")]
 
 
-def test_a_titled_link_on_a_line_of_its_own_is_embedded() -> None:
+def test_a_titled_link_is_embedded() -> None:
     """Too Damn Loud's video, which Docs shows by its title rather than its address."""
     url = "https://youtube.com/shorts/o90JQBWdgTI?is=I4"
-    doc = build([para("Headline", "TITLE"), linked(("Too Damn Loud", url))])
+    doc = build(
+        [para("Headline", "TITLE"), linked((": ", None), ("Too Damn Loud", url), underline="Video")]
+    )
     embed = doc.blocks[0]
     assert isinstance(embed, Embed)
     assert embed.vertical
+
+
+def test_a_video_line_right_under_a_figure_is_not_its_caption() -> None:
+    url = "https://www.youtube.com/watch?v=abc"
+    doc = build(
+        [para("Headline", "TITLE"), image(), linked((": ", None), (url, url), underline="Video")]
+    )
+    assert isinstance(doc.blocks[0], Figure)
+    assert not doc.blocks[0].caption
+    assert doc.blocks[1] == Embed(url=url, platform=Platform.YOUTUBE, key="abc")
+
+
+def test_a_link_on_a_line_of_its_own_is_a_citation() -> None:
+    """Without the label, a pasted link is a link: nothing says it is meant to play."""
+    url = "https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1"
+    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    assert isinstance(doc.blocks[0], Paragraph)
+
+
+def test_a_video_line_without_a_video_is_text_and_said() -> None:
+    doc = build([para("Headline", "TITLE"), linked((": coming soon", None), underline="Video")])
+    assert isinstance(doc.blocks[0], Paragraph)
+    assert any("Video:" in str(w) for w in doc.warnings)
 
 
 def test_a_link_in_a_sentence_is_a_citation() -> None:
@@ -98,7 +128,7 @@ def test_a_credit_linked_to_a_video_stays_a_credit() -> None:
 
 
 def card_page(platform: Platform, url: str, key: str, card: Card | None) -> tuple[str, str]:
-    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc = build([para("Headline", "TITLE"), video(url)])
     assert doc.embeds == [Embed(url=url, platform=platform, key=key)]
     if card is not None:
         doc.cards[url] = card
@@ -133,7 +163,7 @@ def test_an_embed_nothing_could_describe_is_the_link_it_was() -> None:
 
 def test_a_drive_video_plays_from_the_site() -> None:
     url = "https://drive.google.com/file/d/1abc/view"
-    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc = build([para("Headline", "TITLE"), video(url)])
     doc.cards[url] = Card(mime="video/mp4")
     doc.media_files[url] = "embed-1.mp4"
     html = HtmlEmitter(image_base="images").emit(doc)
@@ -142,7 +172,7 @@ def test_a_drive_video_plays_from_the_site() -> None:
 
 def test_a_drive_file_that_is_not_a_video_is_a_link() -> None:
     url = "https://drive.google.com/file/d/1abc/view"
-    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc = build([para("Headline", "TITLE"), video(url)])
     doc.cards[url] = Card(mime="image/png")
     assert "<video " not in HtmlEmitter(image_base="images").emit(doc)
 
@@ -164,6 +194,6 @@ class Answering:
 def test_only_an_answer_about_the_post_is_recorded(status: int, recorded: bool) -> None:
     """A deleted post stays a link; a busy platform is asked again next build."""
     url = "https://www.youtube.com/watch?v=abc"
-    doc = build([para("Headline", "TITLE"), linked((url, url))])
+    doc = build([para("Headline", "TITLE"), video(url)])
     look_up(doc, cast(requests.Session, Answering(status)))
     assert (url in doc.cards) is recorded
