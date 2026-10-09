@@ -1,5 +1,6 @@
 """The build itself: fetch, emit, compile, and the checks around them."""
 
+import functools
 import hashlib
 import json
 from collections.abc import Callable
@@ -377,6 +378,32 @@ def emit(doc: Document, outdir: Path, assets: str = ASSET_DIR) -> dict[str, Path
     return written
 
 
+@functools.cache
+def warn_anonymous() -> None:
+    """Say, once a run however many reports it builds, what capturing without keys costs."""
+    from .archive import ANONYMOUS_EVERY, IA_CONFIG
+
+    console.write(
+        console.warning(
+            "no archive.org keys, so new captures are asked for anonymously, which is:\n"
+            "    • slow: one every {} seconds, so a dozen new sources is minutes\n"
+            "    • rate-limited much harder: a build is likelier to stop over sources "
+            "it could not ask about, and need building again\n"
+            "    • vaguer: a failed capture says less about why\n"
+            "    • never done in CI, where those sources stay unarchived\n"
+            "  To use an account, set {} and {} from {},\n"
+            "  or run {} (or point {} at its {}).",
+            str(int(ANONYMOUS_EVERY.total_seconds())),
+            Shown(f"${ACCESS_KEY}"),
+            Shown(f"${SECRET_KEY}"),
+            console.Linked(KEYS_PAGE),
+            Shown("ia configure"),
+            Shown(f"${IA_CONFIG}"),
+            Shown("ia.ini"),
+        )
+    )
+
+
 def archive_sources(doc: Document) -> None:
     """Find or make a capture of every source nothing has one for yet.
 
@@ -399,11 +426,13 @@ def archive_sources(doc: Document) -> None:
     Asking for a new capture needs keys, and without them the sources nothing
     has captured are left as they are, to be asked for by a build that can.
     """
-    from .archive import capture, have_keys, missing
+    from .archive import anonymous_allowed, capture, have_keys, missing
 
     wanted = missing(doc)
     if not wanted:
         return
+    if not have_keys() and anonymous_allowed():
+        warn_anonymous()
     console.write(console.note(f"looking up {plural(len(wanted), 'source')} in the archive"))
     with console.progress("checking the archive", len(wanted)) as along:
         found, submitted = capture(doc, along=along)

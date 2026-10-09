@@ -89,3 +89,15 @@ def _no_ia_config(
     from eta_publish.archive import IA_CONFIG
 
     monkeypatch.setenv(IA_CONFIG, str(tmp_path_factory.mktemp("ia") / "ia.ini"))
+
+
+@pytest.fixture(autouse=True)
+def _no_anonymous_capture(monkeypatch: pytest.MonkeyPatch) -> None:
+    """As in CI, so a test without keys is the lookup-only build it was written as.
+
+    Otherwise every one of them would ask Save Page Now for real, thirty seconds
+    apart. The tests of anonymous capture unset it themselves.
+    """
+    from eta_publish.archive import CI
+
+    monkeypatch.setenv(CI, "true")

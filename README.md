@@ -117,11 +117,13 @@ Every build looks up existing Wayback Machine captures of the sources a report c
 which needs no account.
 Asking for a *new* capture goes through
 [Save Page Now](https://archive.org/account/s3.php),
-which does need an archive.org account:
+which works best with an archive.org account:
 put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`,
 or run `ia configure` once, whose `ia.ini` is read when those are unset.
-Without them a build says how many sources it could not ask about,
-and those publish saying they have no archive, which is true.
+Without them a build asks for captures anonymously, and warns that it is:
+one every 30 seconds, rate-limited much harder, and vaguer about failures.
+In CI (wherever `$CI` is set) it does not,
+and sources with no capture publish saying they have no archive, which is true.
 `--no-archive` skips both halves.
 [Source archiving](#source-archiving) explains what a build does with them.
 

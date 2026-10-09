@@ -1013,3 +1013,93 @@ def test_a_capture_the_document_names_keeps_its_recorded_page_count(tmp_path: Pa
     again.archives["https://a.example/a.pdf"] = CAPTURED
     read_archive_index(tmp_path, again)
     assert again.archives["https://a.example/a.pdf"].pages == 6
+
+
+# ---- capturing without an account ------------------------------------
+
+
+class SavingAnonymously(Replaying):
+    """No capture anywhere, and anonymous Save Page Now answering `status` and `body`."""
+
+    def __init__(self, status: int, body: str = "", location: str = "") -> None:
+        super().__init__([])
+        self.status = status
+        self.body = body
+        self.location = location
+        self.saved: list[str] = []
+
+    @override
+    def request(self, method: object, url: object, *args: object, **kwargs: object):
+        asked = str(url)
+        if not asked.startswith(f"{archive.SAVE}/"):
+            return super().request(method, url, *args, **kwargs)
+        self.saved.append(asked)
+        response = requests.Response()
+        response.url = asked
+        response.status_code = self.status
+        response._content = self.body.encode()
+        if self.location:
+            response.headers["location"] = self.location
+        return response
+
+
+@pytest.fixture
+def anonymous(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No keys, outside CI, and no waiting between captures."""
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+    monkeypatch.delenv(archive.CI, raising=False)
+    monkeypatch.setattr(archive, "ANONYMOUS_EVERY", timedelta())
+    monkeypatch.setattr(archive, "PATIENCE", (timedelta(),) * 3)
+
+
+def test_without_keys_a_source_with_no_capture_is_captured_anonymously(anonymous: None) -> None:
+    doc = cites("https://a.example/1")
+    session = SavingAnonymously(
+        302, location=f"{archive.REPLAY}/20261009154154/https://a.example/1"
+    )
+    assert archive.capture(doc, session=session) == (0, 1)
+    assert session.saved == [f"{archive.SAVE}/https://a.example/1"]
+    assert doc.archives["https://a.example/1"] == Archived(
+        snapshot="https://web.archive.org/web/20261009154154/https://a.example/1",
+        timestamp="20261009154154",
+    )
+
+
+def test_a_page_anonymous_capture_says_failed_is_recorded_with_why(anonymous: None) -> None:
+    doc = cites("https://a.example/gone")
+    page = (
+        "<html><body><h2>Sorry</h2><p>The target server cannot find "
+        "https://a.example/gone. (HTTP status=404)</p>"
+        "<a>Return to Save Page Now</a></body></html>"
+    )
+    archive.capture(doc, session=SavingAnonymously(523, page))
+    assert doc.archives["https://a.example/gone"].error == (
+        "The target server cannot find https://a.example/gone. (HTTP status=404)"
+    )
+
+
+def test_a_failure_status_without_a_reason_is_not_recorded(anonymous: None) -> None:
+    """A refusal is recorded for good, so only one the service explained."""
+    doc = cites("https://a.example/1")
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=SavingAnonymously(520, "<html>whatever</html>"))
+    assert doc.archives == {}
+
+
+def test_being_rate_limited_anonymously_is_not_an_answer(anonymous: None) -> None:
+    doc = cites("https://a.example/1")
+    session = SavingAnonymously(429)
+    with pytest.raises(archive.Unanswered):
+        archive.capture(doc, session=session)
+    assert len(session.saved) == 4
+    assert doc.archives == {}
+
+
+def test_in_ci_nothing_is_captured_anonymously(
+    anonymous: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv(archive.CI, "true")
+    session = SavingAnonymously(302)
+    assert archive.capture(cites("https://a.example/1"), session=session) == (0, 0)
+    assert session.saved == []

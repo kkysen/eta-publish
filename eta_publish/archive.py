@@ -17,8 +17,10 @@ the emitters read the result off the document and stay pure.
 """
 
 import configparser
+import html
 import json
 import os
+import re
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -490,7 +492,8 @@ def capture(
     # Only a build with no keys defers anything, the index's answer for a week
     # and the replay's for an hour: one with keys submits a source the replay
     # found nothing for, which records an answer either way.
-    cached = _cached() if headers is None else {"index": {}, "replay": {}}
+    anonymous = headers is None and anonymous_allowed()
+    cached = _cached() if headers is None and not anonymous else {"index": {}, "replay": {}}
 
     def archive(url: str) -> Lookup:
         return _archive(
@@ -498,6 +501,7 @@ def capture(
             headers,
             url,
             pdf=url in pdfs,
+            anonymous=anonymous,
             index=not _stands("index", cached["index"].get(url, "")),
             replay=not _stands("replay", cached["replay"].get(url, "")),
         )
@@ -617,6 +621,7 @@ def _archive(
     pdf: bool = False,
     index: bool = True,
     replay: bool = True,
+    anonymous: bool = False,
 ) -> Lookup:
     """One source: the capture it already has, or a new one, or why neither."""
     try:
@@ -628,6 +633,8 @@ def _archive(
         found = _patiently(lambda: _existing(http, url, pdf=pdf, index=index, replay=replay))
         if found is not None:
             return Lookup(found, already=True)
+        if headers is None and anonymous:
+            return Lookup(_patiently(lambda: _submit_anonymously(http, url)))
         if headers is None:
             # `unindexed` only where the index was the one that said so. Where it
             # was held back, this build learned nothing, and writing today's
@@ -1010,6 +1017,76 @@ def _refused(answer: dict[str, object]) -> str:
     """What the service said, short enough to publish beside the source."""
     said = answer.get("status_ext") or answer.get("message") or answer.get("status")
     return str(said) if said else "the capture failed without saying why"
+
+
+ANONYMOUS_EVERY = timedelta(seconds=30)
+"""How long to leave between captures asked for without an account.
+
+What the `automated-metro-data` captures were paced at, and none of them was
+refused for it. A `429` here is waited out like any other, but an anonymous
+caller gets so few that the pacing is what keeps a build from spending its
+patience on them.
+"""
+
+_ANONYMOUSLY = Lock()
+_last_anonymous = [0.0]
+"""One anonymous capture at a time across every report, and when the last began."""
+
+CI = "CI"
+"""Set by GitHub Actions, and by most other CI, on every run."""
+
+
+def anonymous_allowed() -> bool:
+    """Whether a build without keys may capture without an account.
+
+    Not in CI: at one capture every `ANONYMOUS_EVERY`, a report with a dozen
+    new sources is minutes of a runner sitting still, and a source that fails
+    there fails the Pages run. A build somebody is watching can be stopped.
+    """
+    return not os.environ.get(CI)
+
+
+def _submit_anonymously(http: requests.Session, url: str) -> Archived:
+    """Ask Save Page Now for a capture without an account, and wait for it.
+
+    One request that answers when the capture is done, rather than a job to
+    poll: `302` to the capture on success, and on failure a `52x` page whose
+    "Sorry" paragraph says why, which is the reason recorded. Anything else,
+    `429` and the service's own `5xx` included, is about the service.
+    """
+    with _ANONYMOUSLY:
+        wait = _last_anonymous[0] + ANONYMOUS_EVERY.total_seconds() - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        _last_anonymous[0] = time.monotonic()
+        response = http.get(
+            f"{SAVE}/{url}", timeout=CAPTURE_TIMEOUT.total_seconds(), allow_redirects=False
+        )
+    if response.status_code == REDIRECT:
+        stamp = _stamp(response.headers.get("location", ""))
+        if stamp is not None:
+            return Archived(snapshot=f"{REPLAY}/{stamp}/{url}", timestamp=stamp)
+    if TARGET_FAILED[0] <= response.status_code <= TARGET_FAILED[1]:
+        reason = _sorry(response.text)
+        if reason is not None:
+            return Archived(timestamp=today(), error=reason)
+    raise Busy(f"{response.status_code} from {response.url}")
+
+
+TARGET_FAILED = (520, 529)
+"""The statuses anonymous Save Page Now answers with when the page failed.
+
+`523` for a page that answered `404`, with the page's status in the message.
+Read as a refusal only together with the message: one of these without it is
+not known to be about the page, and a refusal is recorded for good.
+"""
+
+
+def _sorry(page: str) -> str | None:
+    """The reason on Save Page Now's error page, if it gives one."""
+    text = " ".join(re.sub(r"<[^>]+>", " ", html.unescape(page)).split())
+    found = re.search(r"Sorry (.+?) Return to Save Page Now", text)
+    return found.group(1) if found else None
 
 
 PDF_TYPE = "application/pdf"
