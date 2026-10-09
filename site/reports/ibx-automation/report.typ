@@ -30,7 +30,7 @@
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): A new artistic rendering of the IBX at New Utrecht Av. They appear to...], [#raw("img-dfdefb85"): \[caption\]], )],
     [18 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [19 comment threads still open on this tab],
-    [3 links show their URL as their text; give each words in the doc:#list([#raw("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")], [#raw("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")], [#raw("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")], )],
+    [2 links show their URL as their text; give each words in the doc:#list([#raw("https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/")], [#raw("https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/")], )],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
     [style: #raw("90 seconds") should be #raw("90 sec"): #raw("...lows headways as low as every 90 seconds, as seen in many existing sys...")],
@@ -225,7 +225,9 @@ NYC has played around with blue lighting for suicide prevention, lasers, and rec
 These do not stop people from falling and dying, but PSDs do, and now the #link("https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn")[MTA has been held liable for their failure to do so]#super[#link(<src38>)[\[38\]]].
 Automation and PSDs are generally considered together, but the safety benefits of PSDs are so strong that they should be installed on the IBX regardless.
 
-#link("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")[https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1]#super[#link(<src39>)[\[39\]]]
+#link("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")[Thought Police HQ (\@ThoughtPolic3HQ) on X: “\#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
+The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
+Hawkins has a criminal record that…”]#super[#link(<src39>)[\[39\]]]
 
 #figure(
   link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/img-dfdefb85.png")[#capped_image("print/img-dfdefb85.jpg", alt: "[caption]")],

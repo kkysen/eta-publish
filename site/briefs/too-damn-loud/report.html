@@ -102,6 +102,84 @@
   opacity: 0.75;
   margin-top: 0.6em;
 }
+/* An embed is a card until it is clicked: the thumbnail, what the post says
+   or what the video is called, and who posted it. Drawn in `currentColor`
+   rather than a colour of its own, so that it takes the site's around it.
+
+   A video is the column's width and a post is the width the platforms set
+   their own to, so the player that replaces either is the size of its card. */
+.eta-report .embed {
+  max-width: 34rem;
+}
+.eta-report .embed-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+.eta-report .embed-card:hover,
+.eta-report .embed-card:focus-visible {
+  border-color: color-mix(in srgb, currentColor 60%, transparent);
+}
+.eta-report .embed-youtube .embed-card img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.eta-report .embed-card img {
+  max-height: 24rem;
+  object-fit: cover;
+}
+.eta-report .embed-text {
+  display: block;
+  padding: 0.8em 1em 0;
+}
+.eta-report .embed-youtube .embed-text {
+  font-weight: bold;
+}
+.eta-report .embed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25em 1em;
+  padding: 0.5em 1em 0.8em;
+  font-size: 0.85rem;
+}
+.eta-report .embed-author {
+  opacity: 0.75;
+}
+.eta-report .embed-play {
+  text-decoration: underline;
+}
+/* The text presentation selector keeps a phone from drawing the triangle as
+   a coloured emoji button. */
+.eta-report .embed-play::before {
+  content: "▶︎";
+  margin-right: 0.4em;
+  display: inline-block;
+  text-decoration: none;
+}
+.eta-report .embed-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+.eta-report .embed-youtube .embed-frame {
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+/* A post's frame says how tall it is once it has loaded; until then it is
+   given room for a short one, rather than the 150px every frame starts at. */
+.eta-report .embed-x .embed-frame,
+.eta-report .embed-bluesky .embed-frame {
+  height: 32rem;
+}
+.eta-report .embed video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 .eta-report .dateline {
   font-size: 0.95rem;
   opacity: 0.75;
@@ -433,6 +511,63 @@
       }, HOLD),
     );
   };
+  // An embed is a card until the reader asks for the player: the card is a
+  // link to the post, and the click is what swaps it for the platform's own
+  // frame. Nothing of the platform's loads before then.
+  let frames = 0;
+  document.addEventListener("click", (event) => {
+    if (
+      event.button ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    const card = event.target.closest?.(
+      ".eta-report .embed[data-player] .embed-card",
+    );
+    if (!card) return;
+    event.preventDefault();
+    const figure = card.closest(".embed");
+    const frame = document.createElement("iframe");
+    // Bluesky's frame says how tall its post is only to a frame that gave it
+    // an id to say it with.
+    const id = String(++frames);
+    const player = figure.dataset.player;
+    frame.src = figure.classList.contains("embed-bluesky")
+      ? `${player}?id=${id}`
+      : player;
+    frame.dataset.frame = id;
+    frame.title = figure.dataset.title || "";
+    frame.className = "embed-frame";
+    frame.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
+    frame.allowFullscreen = true;
+    card.replaceWith(frame);
+    frame.focus();
+  });
+  // A post is as tall as what it says, which only the frame knows: X and
+  // Bluesky each send it up in their own words.
+  addEventListener("message", (event) => {
+    let data = event.data;
+    if (typeof data === "string") {
+      try {
+        data = JSON.parse(data);
+      } catch {
+        return;
+      }
+    }
+    for (const frame of document.querySelectorAll(".eta-report .embed-frame")) {
+      if (frame.contentWindow !== event.source) continue;
+      const resize = data?.["twttr.embed"];
+      const height =
+        resize?.method === "twttr.private.resize"
+          ? resize.params?.[0]?.height
+          : data?.height;
+      if (Number.isFinite(height) && height > 0)
+        frame.style.height = `${height}px`;
+    }
+  });
   for (const name of ["pointerover", "focusin"])
     document.addEventListener(name, place);
   for (const name of ["pointerout", "focusout"])
@@ -574,12 +709,30 @@
       <li><a href="#contributors">Contributors</a></li>
     </ul>
   </nav>
-  <p id="p1"
+  <figure
+    id="embed-youtube-o90JQBWdgTI"
+    class="embed embed-youtube"
+    data-player="https://www.youtube-nocookie.com/embed/o90JQBWdgTI?autoplay=1"
+    data-title="Effective Transit Alliance on YouTube"
     ><a
       class="link-mark"
-      href="#p1"
-      aria-label="Link to this paragraph"
-    ></a>[Insert Video]</p
+      href="#embed-youtube-o90JQBWdgTI"
+      aria-label="Link to this video"
+    ></a><a
+      class="embed-card"
+      href="https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU"
+      ><img src="images/embed-04d52df6.jpg" alt="" loading="lazy"><span
+        class="embed-text"
+        >Too Damn Loud: Announcements on NYC Transit are Out of Control</span
+      ><span class="embed-meta"
+        ><span class="embed-author">Effective Transit Alliance</span><span
+          class="embed-play"
+          >Play on YouTube</span
+        ></span
+      ></a
+    ><sup class="source-ref" id="srcref1-1"
+      ><a href="#src1">[1]</a></sup
+    ></figure
   >
   <figure id="img-831248b1" style="--aspect: 0.648"
     ><a
@@ -642,8 +795,8 @@
       ><a
         href="https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/"
         >begun to experiment with advertisements</a
-      ><sup class="source-ref" id="srcref1-1"
-        ><a href="#src1">[1]</a></sup
+      ><sup class="source-ref" id="srcref2-1"
+        ><a href="#src2">[2]</a></sup
       ></span
     > played to a captive audience over its PA systems. This cacophony has
     reached the point that it is noticeably degrading the riding experience, for
@@ -678,15 +831,15 @@
       ><a
         href="https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link"
         >PNG</a
-      ><sup class="source-ref" id="srcref2-1"
-        ><a href="#src2">[2]</a></sup
+      ><sup class="source-ref" id="srcref3-1"
+        ><a href="#src3">[3]</a></sup
       ></span
     > <span class="cited"
       ><a
         href="https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link"
         >SVG</a
-      ><sup class="source-ref" id="srcref3-1"
-        ><a href="#src3">[3]</a></sup
+      ><sup class="source-ref" id="srcref4-1"
+        ><a href="#src4">[4]</a></sup
       ></span
     ></figcaption></figure
   >
@@ -897,8 +1050,8 @@
         href="https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement"
         >London Transport spent so long developing the now-iconic phrase “Mind
         the Gap”</a
-      ><sup class="source-ref" id="srcref4-1"
-        ><a href="#src4">[4]</a></sup
+      ><sup class="source-ref" id="srcref5-1"
+        ><a href="#src5">[5]</a></sup
       ></span
     >: it was short, clear, and to the point. Similarly, in Berlin, the phrase
     “Zurückbleiben bitte”—“please stay back”—is very short and understandable
@@ -926,8 +1079,8 @@
       class="cited"
       ><a href="https://www.youtube.com/watch?v=KDaRRmUWUZI"
         >shortened versions</a
-      ><sup class="source-ref" id="srcref5-1"
-        ><a href="#src5">[5]</a></sup
+      ><sup class="source-ref" id="srcref6-1"
+        ><a href="#src6">[6]</a></sup
       ></span
     > that the MTA created around 2015 but never put into service.</p
   >
@@ -1013,7 +1166,7 @@
             href="https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php"
             >36 CFR 1192.35</a
           ><sup class="source-ref"
-            ><a tabindex="-1" href="#src7">[7]</a></sup
+            ><a tabindex="-1" href="#src8">[8]</a></sup
           ></span
         ><br><span class="cited"
           ><a
@@ -1021,7 +1174,7 @@
             href="https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167"
             >49 CFR 37.167(b) &amp; (c)</a
           ><sup class="source-ref"
-            ><a tabindex="-1" href="#src8">[8]</a></sup
+            ><a tabindex="-1" href="#src9">[9]</a></sup
           ></span
         ></span
       ></sup
@@ -1118,7 +1271,7 @@
             href="https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393"
             >https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393</a
           ><sup class="source-ref"
-            ><a tabindex="-1" href="#src9">[9]</a></sup
+            ><a tabindex="-1" href="#src10">[10]</a></sup
           ></span
         ></span
       ></sup
@@ -1171,7 +1324,7 @@
             href="https://www.amny.com/news/mta-nyc-subway-ads-and-money/"
             >https://www.amny.com/news/mta-nyc-subway-ads-and-money/</a
           ><sup class="source-ref"
-            ><a tabindex="-1" href="#src10">[10]</a></sup
+            ><a tabindex="-1" href="#src11">[11]</a></sup
           ></span
         ></span
       ></sup
@@ -1276,7 +1429,7 @@
           ><a tabindex="-1" href="https://sbahn.berlin/fahren/bauen-stoerung/"
             >https://sbahn.berlin/fahren/bauen-stoerung/</a
           ><sup class="source-ref"
-            ><a tabindex="-1" href="#src11">[11]</a></sup
+            ><a tabindex="-1" href="#src12">[12]</a></sup
           ></span
         >.</span
       ></sup
@@ -1327,8 +1480,8 @@
     version of the <span class="cited"
       ><a href="https://en.wikipedia.org/wiki/Curb_cut_effect"
         >curb cut effect</a
-      ><sup class="source-ref" id="srcref6-1"
-        ><a href="#src6">[6]</a></sup
+      ><sup class="source-ref" id="srcref7-1"
+        ><a href="#src7">[7]</a></sup
       ></span
     >. In this case, designing announcements that do not grate and do not waste
     straphangers’ time also winds up creating announcements that are less taxing
@@ -1383,8 +1536,8 @@
             ><a
               href="https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php"
               >36 CFR 1192.35</a
-            ><sup class="source-ref" id="srcref7-1"
-              ><a href="#src7">[7]</a></sup
+            ><sup class="source-ref" id="srcref8-1"
+              ><a href="#src8">[8]</a></sup
             ></span
           ></p
         >
@@ -1392,8 +1545,8 @@
           ><a
             href="https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167"
             >49 CFR 37.167(b) &amp; (c)</a
-          ><sup class="source-ref" id="srcref8-1"
-            ><a href="#src8">[8]</a></sup
+          ><sup class="source-ref" id="srcref9-1"
+            ><a href="#src9">[9]</a></sup
           ></span
         ></p></li
       >
@@ -1416,8 +1569,8 @@
             ><a
               href="https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393"
               >https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393</a
-            ><sup class="source-ref" id="srcref9-1"
-              ><a href="#src9">[9]</a></sup
+            ><sup class="source-ref" id="srcref10-1"
+              ><a href="#src10">[10]</a></sup
             ></span
           ></p
         ></li
@@ -1439,8 +1592,8 @@
           July 3, 2025, <span class="cited"
             ><a href="https://www.amny.com/news/mta-nyc-subway-ads-and-money/"
               >https://www.amny.com/news/mta-nyc-subway-ads-and-money/</a
-            ><sup class="source-ref" id="srcref10-1"
-              ><a href="#src10">[10]</a></sup
+            ><sup class="source-ref" id="srcref11-1"
+              ><a href="#src11">[11]</a></sup
             ></span
           ></p
         ></li
@@ -1461,8 +1614,8 @@
           24, 2026, <span class="cited"
             ><a href="https://sbahn.berlin/fahren/bauen-stoerung/"
               >https://sbahn.berlin/fahren/bauen-stoerung/</a
-            ><sup class="source-ref" id="srcref11-1"
-              ><a href="#src11">[11]</a></sup
+            ><sup class="source-ref" id="srcref12-1"
+              ><a href="#src12">[12]</a></sup
             ></span
           >.</p
         ></li
@@ -1503,6 +1656,25 @@
         >
         <a
           class="source-url"
+          href="https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU"
+          >youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU</a
+        >
+        (archived
+        <a
+          class="source-archive"
+          href="https://web.archive.org/web/20261009211344/https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU"
+          >October 9, 2026</a
+        >)</li
+      >
+      <li id="src2"
+        ><a
+          href="#srcref2-1"
+          class="source-back"
+          aria-label="Back to this source in the text"
+          >↑</a
+        >
+        <a
+          class="source-url"
           href="https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/"
           >nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/</a
         >
@@ -1513,9 +1685,9 @@
           >April 10, 2026</a
         >)</li
       >
-      <li id="src2"
+      <li id="src3"
         ><a
-          href="#srcref2-1"
+          href="#srcref3-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1532,9 +1704,9 @@
           >October 9, 2026</a
         >)</li
       >
-      <li id="src3"
+      <li id="src4"
         ><a
-          href="#srcref3-1"
+          href="#srcref4-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1551,9 +1723,9 @@
           >October 9, 2026</a
         >)</li
       >
-      <li id="src4"
+      <li id="src5"
         ><a
-          href="#srcref4-1"
+          href="#srcref5-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1570,9 +1742,9 @@
           >May 5, 2024</a
         >)</li
       >
-      <li id="src5"
+      <li id="src6"
         ><a
-          href="#srcref5-1"
+          href="#srcref6-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1587,9 +1759,9 @@
           >June 6, 2024</a
         >)</li
       >
-      <li id="src6"
+      <li id="src7"
         ><a
-          href="#srcref6-1"
+          href="#srcref7-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1606,9 +1778,9 @@
           >September 11, 2026</a
         >)</li
       >
-      <li id="src7"
+      <li id="src8"
         ><a
-          href="#srcref7-1"
+          href="#srcref8-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1625,9 +1797,9 @@
           >September 20, 2026</a
         >)</li
       >
-      <li id="src8"
+      <li id="src9"
         ><a
-          href="#srcref8-1"
+          href="#srcref9-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1644,9 +1816,9 @@
           >April 1, 2026</a
         >)</li
       >
-      <li id="src9"
+      <li id="src10"
         ><a
-          href="#srcref9-1"
+          href="#srcref10-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1663,9 +1835,9 @@
           >July 29, 2020</a
         >)</li
       >
-      <li id="src10"
+      <li id="src11"
         ><a
-          href="#srcref10-1"
+          href="#srcref11-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a
@@ -1682,9 +1854,9 @@
           >March 28, 2026</a
         >)</li
       >
-      <li id="src11"
+      <li id="src12"
         ><a
-          href="#srcref11-1"
+          href="#srcref12-1"
           class="source-back"
           aria-label="Back to this source in the text"
           >↑</a

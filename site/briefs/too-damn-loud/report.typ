@@ -28,7 +28,7 @@
   ),
 )
 
-\[Insert Video\]
+#link("https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU")[Video: Too Damn Loud: Announcements on NYC Transit are Out of Control (Effective Transit Alliance on YouTube)]#super[#link(<src1>)[\[1\]]]
 
 #figure(
   link("https://kkysen.github.io/eta-publish/briefs/too-damn-loud/images/img-831248b1.jpg")[#capped_image("print/img-831248b1.jpg")],
@@ -45,7 +45,7 @@ But far too much of the noise that bombards New Yorkers’ ears, is not the prod
 Whether waiting on a platform or traveling on a bus or on the subway, transit riders rarely get more than a few moments of peace before being inundated in a stream of unnecessary, verbose announcements.
 
 From incessant “Important reminder\[s\] from the NYPD” about theft, to repeated “It is against New York State law to smoke on platforms and waiting areas” on commuter trains to endless repetitions of “New York has more than 100 accessible stations,” riders’ ears are constantly assailed with messages that have little or no bearing on their travels.
-The MTA has even #link("https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[begun to experiment with advertisements]#super[#link(<src1>)[\[1\]]] played to a captive audience over its PA systems.
+The MTA has even #link("https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[begun to experiment with advertisements]#super[#link(<src2>)[\[2\]]] played to a captive audience over its PA systems.
 This cacophony has reached the point that it is noticeably degrading the riding experience, for no gain at all. 
 
 Indeed, ETA recorded a one-way ride from 34 St-Hudson Yards to Flushing-Main St, and nearly 10 minutes out of a 40 minute ride comprised announcements.
@@ -54,7 +54,7 @@ On the Berlin S-Bahn, a complex branched system that must announce train numbers
 
 #figure(
   link("https://kkysen.github.io/eta-publish/briefs/too-damn-loud/images/img-b17aa21a.png")[#capped_image("print/img-b17aa21a.jpg", alt: "PNG SVG")],
-  caption: [#link("https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[PNG]#super[#link(<src2>)[\[2\]]] #link("https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[SVG]#super[#link(<src3>)[\[3\]]]],
+  caption: [#link("https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[PNG]#super[#link(<src3>)[\[3\]]] #link("https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[SVG]#super[#link(<src4>)[\[4\]]]],
 )
 
 Hands over ears icon created by Gan Khoon Lay from the Noun Project, used with permission.
@@ -121,7 +121,7 @@ Short, simple messages allow non-fluent English speakers to pick out vital words
 The same holds true for the visually impaired: shorter messages mean less time and less mental energy expended on parsing information.
 Finally, short announcements minimize annoyance for frequent transit riders, who will hear them dozens of times daily.
 
-This is why in the 1960s #link("https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[London Transport spent so long developing the now-iconic phrase “Mind the Gap”]#super[#link(<src4>)[\[4\]]]: it was short, clear, and to the point.
+This is why in the 1960s #link("https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[London Transport spent so long developing the now-iconic phrase “Mind the Gap”]#super[#link(<src5>)[\[5\]]]: it was short, clear, and to the point.
 Similarly, in Berlin, the phrase “Zurückbleiben bitte”—“please stay back”—is very short and understandable even by people with middling German.
 In contrast, New York’s “Stand clear of the closing doors please” sentence, while iconic to many, is so long that conductors often interrupt it to close the doors faster.
 It’s even longer than Ottawa’s bilingual announcements.
@@ -130,7 +130,7 @@ Bernie Wagenblast’s announcements have become iconic in New York, and it would
 \[audio files of NYC, Berlin, and Ottawa door closings\]
 
 The audio announcements on today’s subway trains are far too verbose.
-Compare the normal announcements used on these trains with the #link("https://www.youtube.com/watch?v=KDaRRmUWUZI")[shortened versions]#super[#link(<src5>)[\[5\]]] that the MTA created around 2015 but never put into service.
+Compare the normal announcements used on these trains with the #link("https://www.youtube.com/watch?v=KDaRRmUWUZI")[shortened versions]#super[#link(<src6>)[\[6\]]] that the MTA created around 2015 but never put into service.
 
 Beyond verbosity, automated announcements should also be designed to communicate common reroutes and changes.
 This is especially true in New York, where the complicated subway system enables many potential reroutes.
@@ -156,7 +156,7 @@ Audio announcements should remain solely the domain of important, actionable inf
 #strong[Accessibility]
 
 Audio announcements are a vital tool for creating transit systems that are accessible and usable for all.
-Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.#footnote[#link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[36 CFR 1192.35]#super[#link(<src7>)[\[7\]]] #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[49 CFR 37.167(b) & (c)]#super[#link(<src8>)[\[8\]]]] The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.
+Indeed, public address systems are required on transit vehicles by the Americans With Disabilities Act.#footnote[#link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[36 CFR 1192.35]#super[#link(<src8>)[\[8\]]] #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[49 CFR 37.167(b) & (c)]#super[#link(<src9>)[\[9\]]]] The ADA is neutral about whether the announcements are automated, but in practice, automated announcements are enunciated more clearly for riders and with more neutral accent and diction.
 
 Proper design is critical for announcements to serve as an effective accessibility aid.
 The key is to keep the needs of various different groups in mind when designing announcements.
@@ -182,7 +182,7 @@ New York is a world city of the highest order, welcoming untold numbers of visit
 As such, the needs of non-native and non-fluent English speakers needs to be taken into account in any system of announcements.
 
 Unfortunately, the subway’s current user interface is not at all legible to passengers who speak poor English, especially if they only speak languages that don’t use the Latin alphabet, like Mandarin.
-They can’t parse the verbal announcements and often can’t even read the station names; an ethnography found that one Chinese rider navigated by the first letters of the station names on the Flushing Line.#footnote[Yu, Shaolu, 2016. "’I am like a deaf, dumb and blind person’: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,” #emph[Journal of Transport Geography], 54(C) (June 2016): 10–21. #link("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393]#super[#link(<src9>)[\[9\]]]] In countries used to either illiteracy or tourism by people who can’t read the alphabet, such as Japan or China, stations are numbered sequentially within each line.
+They can’t parse the verbal announcements and often can’t even read the station names; an ethnography found that one Chinese rider navigated by the first letters of the station names on the Flushing Line.#footnote[Yu, Shaolu, 2016. "’I am like a deaf, dumb and blind person’: Mobility and immobility of Chinese (im)migrants in Flushing, Queens, New York City,” #emph[Journal of Transport Geography], 54(C) (June 2016): 10–21. #link("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393]#super[#link(<src10>)[\[10\]]]] In countries used to either illiteracy or tourism by people who can’t read the alphabet, such as Japan or China, stations are numbered sequentially within each line.
 
 #strong[Things that should be Avoided or Minimized]
 
@@ -193,7 +193,7 @@ For all the reasons listed above, this is an inappropriate use of passenger info
 Unlike normal visual advertisements, riders can't simply choose to look away from the sound surrounding them.
 Commercials further incentivize passengers to tune out as much as possible, make life harder for the visually impaired, who have no choice but to listen for critical information, and make the system harder to navigate for those who do not speak fluent English.
 
-More fundamentally, while these advertisements have brought in a modicum of revenue,#footnote[Barbara Russo-Lennon, “Subway spots: MTA’s ad blitz delivers big bucks for NYC’s transit system and reliability for riders,” #emph[AMNY], July 3, 2025, #link("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[https://www.amny.com/news/mta-nyc-subway-ads-and-money/]#super[#link(<src10>)[\[10\]]]] they have arguably cost the system more in riders and long-term reputation.
+More fundamentally, while these advertisements have brought in a modicum of revenue,#footnote[Barbara Russo-Lennon, “Subway spots: MTA’s ad blitz delivers big bucks for NYC’s transit system and reliability for riders,” #emph[AMNY], July 3, 2025, #link("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[https://www.amny.com/news/mta-nyc-subway-ads-and-money/]#super[#link(<src11>)[\[11\]]]] they have arguably cost the system more in riders and long-term reputation.
 They cheapen transit, treating riders not as the customers or as citizens, but as the product.
 It screams that the MTA doesn’t care about the experience of its riders.
 In the long run, such maneuvers could well push riders away from transit towards other modes of travel that respect their time and attention.
@@ -225,7 +225,7 @@ Indeed, the MTA already has a successful history of both print and digital PSAs 
 
 One of the key things that audio announcements may be appropriate for is to communicate reroutes and/or delays caused by temporary work.
 When work is scheduled to take around two weeks or more, however, it can generally be assumed that riders are aware of service changes.
-Indeed, Berlin, which sometimes shuts down segments of the subway for long-term renewal work and regularly shuts down commuter rail segments on weekends, announces those changes purely visually and on maps.#footnote[#emph[S-Bahn Berlin], “Störungen und Bauarbeiten,” accessed August 24, 2026, #link("https://sbahn.berlin/fahren/bauen-stoerung/")[https://sbahn.berlin/fahren/bauen-stoerung/]#super[#link(<src11>)[\[11\]]].]
+Indeed, Berlin, which sometimes shuts down segments of the subway for long-term renewal work and regularly shuts down commuter rail segments on weekends, announces those changes purely visually and on maps.#footnote[#emph[S-Bahn Berlin], “Störungen und Bauarbeiten,” accessed August 24, 2026, #link("https://sbahn.berlin/fahren/bauen-stoerung/")[https://sbahn.berlin/fahren/bauen-stoerung/]#super[#link(<src12>)[\[12\]]].]
 
 It is good practice to announce major changes for the week before they happen and then the first week they occur.
 After that point, LCD screens and other information systems are a far better way to keep riders informed than the constant repetition of announcements.
@@ -239,7 +239,7 @@ However, the current state of announcements is very far from any reasonable opti
 The constant barrage of PSAs and lengthy messages about the system disrespects the riders’ attention.
 Transit should strive to be a positive part of a rider's day, not an annoyance.
 
-Announcements that treat riders with respect are almost a reverse version of the #link("https://en.wikipedia.org/wiki/Curb_cut_effect")[curb cut effect]#super[#link(<src6>)[\[6\]]].  In this case, designing announcements that do not grate and do not waste straphangers’ time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.
+Announcements that treat riders with respect are almost a reverse version of the #link("https://en.wikipedia.org/wiki/Curb_cut_effect")[curb cut effect]#super[#link(<src7>)[\[7\]]].  In this case, designing announcements that do not grate and do not waste straphangers’ time also winds up creating announcements that are less taxing for the visually impaired and easier to understand for those who don't speak English as a first language.
 
 There is much more about announcements beyond the scope of this piece.
 This includes equipment design, ensuring that ongoing improvement is easy to implement, operator training, both on automated equipment and on improved techniques for manual announcements, and on the design of the passenger experience, in general.
@@ -253,14 +253,15 @@ It's time to let riders travel in peace.
 
 = Sources
 
-+ #link("https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/] (archived #link("https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[April 10, 2026]) <src1>
-+ #link("https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive\_link] (archived #link("https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[October 9, 2026]) <src2>
-+ #link("https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[https://drive.google.com/file/d/18pQbx\_DJ\_n\_OHNDaQlfHOvRSZqJPd88V/view?usp=drive\_link] (archived #link("https://web.archive.org/web/20261009034236/https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[October 9, 2026]) <src3>
-+ #link("https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement] (archived #link("https://web.archive.org/web/20240505072338/https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[May 5, 2024]) <src4>
-+ #link("https://www.youtube.com/watch?v=KDaRRmUWUZI")[https://www.youtube.com/watch?v=KDaRRmUWUZI] (archived #link("https://web.archive.org/web/20240606135521/https://www.youtube.com/watch?v=KDaRRmUWUZI")[June 6, 2024]) <src5>
-+ #link("https://en.wikipedia.org/wiki/Curb_cut_effect")[https://en.wikipedia.org/wiki/Curb\_cut\_effect] (archived #link("https://web.archive.org/web/20260911062544/https://en.wikipedia.org/wiki/Curb_cut_effect")[September 11, 2026]) <src6>
-+ #link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php] (archived #link("https://web.archive.org/web/20260920115631/https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[September 20, 2026]) <src7>
-+ #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167] (archived #link("https://web.archive.org/web/20260401154612/https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[April 1, 2026]) <src8>
-+ #link("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393] (archived #link("https://web.archive.org/web/20200729104447/https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[July 29, 2020]) <src9>
-+ #link("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[https://www.amny.com/news/mta-nyc-subway-ads-and-money/] (archived #link("https://web.archive.org/web/20260328223010/https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[March 28, 2026]) <src10>
-+ #link("https://sbahn.berlin/fahren/bauen-stoerung/")[https://sbahn.berlin/fahren/bauen-stoerung/] (archived #link("https://web.archive.org/web/20260904171034/https://sbahn.berlin/fahren/bauen-stoerung/")[September 4, 2026]) <src11>
++ #link("https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU")[https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU] (archived #link("https://web.archive.org/web/20261009211344/https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU")[October 9, 2026]) <src1>
++ #link("https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/] (archived #link("https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[April 10, 2026]) <src2>
++ #link("https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive\_link] (archived #link("https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[October 9, 2026]) <src3>
++ #link("https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[https://drive.google.com/file/d/18pQbx\_DJ\_n\_OHNDaQlfHOvRSZqJPd88V/view?usp=drive\_link] (archived #link("https://web.archive.org/web/20261009034236/https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link")[October 9, 2026]) <src4>
++ #link("https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement] (archived #link("https://web.archive.org/web/20240505072338/https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement")[May 5, 2024]) <src5>
++ #link("https://www.youtube.com/watch?v=KDaRRmUWUZI")[https://www.youtube.com/watch?v=KDaRRmUWUZI] (archived #link("https://web.archive.org/web/20240606135521/https://www.youtube.com/watch?v=KDaRRmUWUZI")[June 6, 2024]) <src6>
++ #link("https://en.wikipedia.org/wiki/Curb_cut_effect")[https://en.wikipedia.org/wiki/Curb\_cut\_effect] (archived #link("https://web.archive.org/web/20260911062544/https://en.wikipedia.org/wiki/Curb_cut_effect")[September 11, 2026]) <src7>
++ #link("https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php] (archived #link("https://web.archive.org/web/20260920115631/https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php")[September 20, 2026]) <src8>
++ #link("https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167] (archived #link("https://web.archive.org/web/20260401154612/https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167")[April 1, 2026]) <src9>
++ #link("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393] (archived #link("https://web.archive.org/web/20200729104447/https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[July 29, 2020]) <src10>
++ #link("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[https://www.amny.com/news/mta-nyc-subway-ads-and-money/] (archived #link("https://web.archive.org/web/20260328223010/https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[March 28, 2026]) <src11>
++ #link("https://sbahn.berlin/fahren/bauen-stoerung/")[https://sbahn.berlin/fahren/bauen-stoerung/] (archived #link("https://web.archive.org/web/20260904171034/https://sbahn.berlin/fahren/bauen-stoerung/")[September 4, 2026]) <src12>

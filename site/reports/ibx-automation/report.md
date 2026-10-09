@@ -30,8 +30,7 @@ October 12, 2026
   - `img-dfdefb85`: \[caption\]
 - 18 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 19 comment threads still open on this tab
-- 3 links show their URL as their text; give each words in the doc:
-  - `https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1`
+- 2 links show their URL as their text; give each words in the doc:
   - `https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/`
   - `https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/`
 - the `Header` section has no `Short:` line
@@ -213,7 +212,9 @@ NYC has played around with blue lighting for suicide prevention, lasers, and rec
 These do not stop people from falling and dying, but PSDs do, and now the [MTA has been held liable for their failure to do so](<https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn>)<sup>\[38\]</sup>.
 Automation and PSDs are generally considered together, but the safety benefits of PSDs are so strong that they should be installed on the IBX regardless.
 
-[https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1](<https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1>)<sup>\[39\]</sup>
+[Thought Police HQ (@ThoughtPolic3HQ) on X: “#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
+The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
+Hawkins has a criminal record that…”](<https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1>)<sup>\[39\]</sup>
 
 ![\[caption\]](<images/img-dfdefb85.png>)\
 **\[caption\]**\
