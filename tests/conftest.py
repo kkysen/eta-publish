@@ -74,3 +74,18 @@ def _fresh_lookup_cache(
     from eta_publish.archive import ARCHIVE_CACHE
 
     monkeypatch.setenv(ARCHIVE_CACHE, str(tmp_path_factory.mktemp("cache") / "archive.json"))
+
+
+@pytest.fixture(autouse=True)
+def _no_ia_config(
+    tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The person's own archive.org keys are not a fixture either.
+
+    `archive._keys` falls back to the file `ia configure` writes, so a suite
+    run on a machine with one would ask for captures in every test that set up
+    no keys, and the tests of a build without them would test nothing.
+    """
+    from eta_publish.archive import IA_CONFIG
+
+    monkeypatch.setenv(IA_CONFIG, str(tmp_path_factory.mktemp("ia") / "ia.ini"))

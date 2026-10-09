@@ -16,6 +16,7 @@ Like `images.py`, this is the side that touches the network and the filesystem;
 the emitters read the result off the document and stay pure.
 """
 
+import configparser
 import json
 import os
 import time
@@ -106,7 +107,17 @@ SECRET_KEY = "SPN2_SECRET_KEY"
 """The archive.org keys, from `https://archive.org/account/s3.php`.
 
 Out of the environment rather than a file in the repository, because they are
-credentials and this repository is public.
+credentials and this repository is public. Where the environment has neither,
+`IA_CONFIG` is read instead.
+"""
+
+IA_CONFIG = "IA_CONFIG_FILE"
+"""Where the `ia` command keeps the same keys, if not in its usual place.
+
+`ia configure` writes them to `$XDG_CONFIG_HOME/internetarchive/ia.ini`, as
+`access` and `secret` under `[s3]`, and `$IA_CONFIG_FILE` points it elsewhere.
+They are the keys from `KEYS_PAGE`, so somebody who has set up `ia` has set up
+this too.
 """
 
 INDEX_AT_ONCE = 2
@@ -551,8 +562,23 @@ def _keys() -> dict[str, str] | None:
     """
     access, secret = os.environ.get(ACCESS_KEY), os.environ.get(SECRET_KEY)
     if not access or not secret:
+        access, secret = _ia_keys()
+    if not access or not secret:
         return None
     return {"Accept": "application/json", "Authorization": f"LOW {access}:{secret}"}
+
+
+def _ia_keys() -> tuple[str | None, str | None]:
+    """The keys `ia configure` saved, or `None`s where it saved none."""
+    path = os.environ.get(IA_CONFIG) or (
+        platformdirs.user_config_path("internetarchive") / "ia.ini"
+    )
+    config = configparser.ConfigParser()
+    try:
+        config.read(path)
+    except configparser.Error:
+        return None, None
+    return config.get("s3", "access", fallback=None), config.get("s3", "secret", fallback=None)
 
 
 def have_keys() -> bool:

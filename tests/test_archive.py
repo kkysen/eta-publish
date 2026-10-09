@@ -237,6 +237,42 @@ def test_without_keys_a_source_with_no_capture_is_left_for_a_build_that_can_ask(
     assert missing(doc) == ["https://a.example/1"]
 
 
+def ia_ini(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, text: str) -> None:
+    path = tmp_path / "ia.ini"
+    path.write_text(text)
+    monkeypatch.setenv(archive.IA_CONFIG, str(path))
+
+
+def test_without_keys_in_the_environment_the_ia_config_is_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+    ia_ini(tmp_path, monkeypatch, "[s3]\naccess = from-ia\nsecret = shh\n")
+    assert archive._keys() == {
+        "Accept": "application/json",
+        "Authorization": "LOW from-ia:shh",
+    }
+
+
+def test_keys_in_the_environment_come_before_the_ia_config(
+    keyed: None, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    ia_ini(tmp_path, monkeypatch, "[s3]\naccess = from-ia\nsecret = shh\n")
+    keys = archive._keys()
+    assert keys is not None
+    assert keys["Authorization"] == "LOW access:secret"
+
+
+def test_an_ia_config_without_keys_is_no_keys(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv(archive.ACCESS_KEY, raising=False)
+    monkeypatch.delenv(archive.SECRET_KEY, raising=False)
+    ia_ini(tmp_path, monkeypatch, "not an ini file\n")
+    assert archive._keys() is None
+
+
 class Refusing(Answering):
     """An `Answering` that refuses the connection the first `refusals` times."""
 

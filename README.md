@@ -118,7 +118,8 @@ which needs no account.
 Asking for a *new* capture goes through
 [Save Page Now](https://archive.org/account/s3.php),
 which does need an archive.org account:
-put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`.
+put its keys in `$SPN2_ACCESS_KEY` and `$SPN2_SECRET_KEY`,
+or run `ia configure` once, whose `ia.ini` is read when those are unset.
 Without them a build says how many sources it could not ask about,
 and those publish saying they have no archive, which is true.
 `--no-archive` skips both halves.
