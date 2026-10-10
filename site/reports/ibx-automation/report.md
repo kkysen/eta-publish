@@ -35,7 +35,6 @@ October 12, 2026
 - style: `3 minute` should be `3 min`: `... to affordably maintain those 3 minute headways throughout the day i...`
 - style: `10 minutes` should be `10 min`: `... day instead of collapsing to 10 minutes off-peak.`
 - style: `32 minute` should be `32 min`: `...hieving the MTA’s commendable 32 minute runtime target.`
-- style: `Ball Square` should be `Ball Sq`: `...Green Line Extension designed Ball Square and East Somerville to requir...`
 - style: `Jersey Avenue` should be `Jersey Av`: `...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...`
 - style: `32 minute` should be `32 min`: `...riving up runtimes. The MTA’s 32 minute runtime target, for example, ...`
 - style: an apostrophe should be `’`, not `'`: `...ike with the subway, there isn't a century of physical and op...`
