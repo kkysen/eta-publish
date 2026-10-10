@@ -29,8 +29,8 @@ October 12, 2026
 - 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
   - `img-dfdefb85`: \[caption\]
-- 24 suggestions still open on this tab; the build publishes the document without them, as it reads today
-- 22 comment threads still open on this tab
+- 22 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 29 comment threads still open on this tab
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: an apostrophe should be `’`, not `'`: `... parts of the MTA perhaps didn't get the memo. The IBX websit...`
@@ -134,7 +134,7 @@ Without the constraint of needing to interoperate with a legacy line, automation
 Modern metro technology increasingly runs automated, and ALM is merely the culmination of that trend.
 Today, entirely new metro lines in developed and even middle-income countries are usually driverless, and increasingly so: in 2025, 73% of new metro lines[^5] were automated.
 In fact, when talking to major rolling stock vendors at InnoTrans 2026 who were bidding on the IBX, they could not understand why the MTA would ever consider building the IBX unautomated.
-The global standard for a new-build metro line these days, light or heavy, simply is to be automated.
+The global standard for a new-build metro line these days, light or heavy, is simply to be automated.
 They have told the MTA this, and hopefully the MTA follows their advice.
 
 ![Share of new metro lines worldwide that are automated (> GoA2), by year. 135/361 new grade-separated, non-mainline urban rail lines opened in 2016 to 2026-09-29 are automated.](<images/automated_share_by_year_2016_to_2026.svg>)\
@@ -265,7 +265,7 @@ Furthermore, building high platforms at the outset would greatly simplify any fu
 The MTA has not yet officially made rolling stock procurement decisions.
 However, the influences of earlier project phases continue to be seen.
 Prior to the complete grade separation of the corridor, trains would have needed to run on city streets, and curves in this section would have been much sharper.
-These factors might have justified tram-like light rail vehicles designed for this purpose.
+These factors might have justified tram-like light rail vehicles (LRVs) designed for this purpose.
 
 The All Faiths Tunnel removes the need for street running.
 However, the MTA is still claiming that light rail vehicles are required in order to “[travel through tight curves](<https://ibx.mta.info/about/>)<sup>\[46\]</sup>.”
@@ -350,7 +350,7 @@ We hope the MTA will continue to recognize the merits of our suggestions and bui
 [^18]: We’re not sure where the ~100 ft curve is, but the old South Ferry loop is close (110 ft) and is still in occasional revenue service.
     Other tighter curves may be in yard trackage.
 
-[^19]: In the former street-running section, there were multiple 100 ft curves: IBX1 LRT-647, IBX1 LRT-661, IBX2 LRT641, IBX2 LRT656.
+[^19]: In the former street-running section, there were multiple 100 ft curves: [IBX1 LRT-647](<https://www.mta.info/document/114891#page=1014>)<sup>\[50\]</sup>, [IBX1 LRT-661](<https://www.mta.info/document/114891#page=1014>)<sup>\[50\]</sup>, [IBX2 LRT641](<https://www.mta.info/document/114891#page=1014>)<sup>\[50\]</sup>, [IBX2 LRT656](<https://www.mta.info/document/114891#page=1014>)<sup>\[50\]</sup>.
 
 ## Sources
 
