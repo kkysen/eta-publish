@@ -66,6 +66,17 @@ def test_a_video_line_is_embedded() -> None:
     assert doc.blocks == [Embed(url=url, platform=Platform.X, key="1874861375857541619")]
 
 
+def test_a_graphic_video_line_is_embedded_with_a_warning() -> None:
+    url = "https://www.youtube.com/watch?v=abc"
+    doc = build(
+        [
+            para("Headline", "TITLE"),
+            linked((": ", None), (url, url), underline="Video (Graphic Warning)"),
+        ]
+    )
+    assert doc.blocks == [Embed(url=url, platform=Platform.YOUTUBE, key="abc", graphic=True)]
+
+
 def test_a_titled_link_is_embedded() -> None:
     """Too Damn Loud's video, which Docs shows by its title rather than its address."""
     url = "https://youtube.com/shorts/o90JQBWdgTI?is=I4"

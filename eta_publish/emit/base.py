@@ -188,7 +188,8 @@ class Emitter(ABC):
                 card = self.doc.playable(node)
                 if card is None:
                     # What it was before anything could embed it, and still a citation.
-                    return self.paragraph(Paragraph([Text(node.url, href=node.url)]))
+                    text = GRAPHIC_WARNING + node.url if node.graphic else node.url
+                    return self.paragraph(Paragraph([Text(text, href=node.url)]))
                 return self.embed(node, card)
 
     def inlines(self, content: list[Inline]) -> str:
@@ -253,17 +254,22 @@ PLATFORM_NAMES = {
 }
 
 
+GRAPHIC_WARNING = "Warning, graphic video: "
+"""What a `Video (Graphic Warning):` embed is headed with, before anything else about it."""
+
+
 def embed_label(node: Embed, card: Card) -> str:
     """One line saying what an embed is, for an output that cannot play it.
 
     A video is its title and who posted it; a post is who posted it and what it says,
     in full, because on paper there is no clicking through to read the rest.
     """
+    warning = GRAPHIC_WARNING if node.graphic else ""
     where = PLATFORM_NAMES[node.platform]
     match node.platform:
         case Platform.YOUTUBE:
-            return f"Video: {card.text} ({card.author} on {where})"
+            return f"{warning}Video: {card.text} ({card.author} on {where})"
         case Platform.DRIVE:
-            return "Video"
+            return GRAPHIC_WARNING.removesuffix(": ") if node.graphic else "Video"
         case _:
-            return f"{card.author} on {where}: \u201c{card.text}\u201d"
+            return f"{warning}{card.author} on {where}: \u201c{card.text}\u201d"

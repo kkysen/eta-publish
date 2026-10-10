@@ -41,7 +41,7 @@ from ..nodes import (
     Text,
     plain_text,
 )
-from .base import CONTRIBUTORS_NOTE, PLATFORM_NAMES, Emitter, warning_markup
+from .base import CONTRIBUTORS_NOTE, GRAPHIC_WARNING, PLATFORM_NAMES, Emitter, warning_markup
 
 # Only styles what the emitter produces, inheriting the rest from the theme,
 # so a report does not fight the site around it.
@@ -890,13 +890,19 @@ class HtmlEmitter(Emitter):
         # because the card's hover is a click away from playing.
         if ref is not None:
             ref = tag.span(class_="cited")[ref]
+        # Outside the card, so it stays above the player that replaces the card.
+        warning = (
+            tag.p(class_="embed-warning")[GRAPHIC_WARNING.removesuffix(": ")]
+            if node.graphic
+            else None
+        )
         if node.platform is Platform.DRIVE and file is not None:
             video = tag.video(
                 src=self.media_src(file, VIDEO_DIR), controls=True, preload="metadata"
             )[tag.a(href=node.url)["Watch the video"]]
             return markup(
                 tag.figure(id=anchor, class_="embed embed-video")[
-                    self.mark(anchor, "video"), video, ref
+                    self.mark(anchor, "video"), warning, video, ref
                 ]
             )
         where = PLATFORM_NAMES[node.platform]
@@ -925,6 +931,7 @@ class HtmlEmitter(Emitter):
                 self.mark(
                     anchor, "post" if node.platform in (Platform.X, Platform.BLUESKY) else "video"
                 ),
+                warning,
                 card_link,
                 ref,
             ]

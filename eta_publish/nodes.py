@@ -296,6 +296,9 @@ class Embed:
     """Whether it is a YouTube Short, which is taller than it is wide.
     Played in a landscape frame, it is a strip down the middle of one."""
 
+    graphic: bool = False
+    """Whether its line was `Video (Graphic Warning):`, so the reader is warned first."""
+
 
 @dataclass(frozen=True)
 class Card:

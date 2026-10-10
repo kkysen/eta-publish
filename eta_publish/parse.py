@@ -143,6 +143,7 @@ def unfinished(text: str) -> bool:
 
 
 VIDEO_LABEL = "video"
+GRAPHIC_VIDEO_LABEL = "video (graphic warning)"
 
 
 def is_video_note(line: list[Inline]) -> bool:
@@ -152,9 +153,21 @@ def is_video_note(line: list[Inline]) -> bool:
     on its own line is not enough to go on: SAS West credits two stills with
     a `Credit: MTA` linked whole to the video each was taken from, and a link
     pasted on a line of its own is as often a citation nobody gave words to.
+
+    A `Video (Graphic Warning):` line is one too, for a video the reader is
+    warned about before playing it.
     """
     note = labelled(line)
-    return note.underlined and note.mark == ":" and note.label.casefold() == VIDEO_LABEL
+    return (
+        note.underlined
+        and note.mark == ":"
+        and note.label.casefold() in (VIDEO_LABEL, GRAPHIC_VIDEO_LABEL)
+    )
+
+
+def is_graphic_video_note(line: list[Inline]) -> bool:
+    """Whether `line` is a `Video (Graphic Warning):` line."""
+    return is_video_note(line) and labelled(line).label.casefold() == GRAPHIC_VIDEO_LABEL
 
 
 def after_label(line: list[Inline]) -> list[Inline]:
@@ -1063,6 +1076,7 @@ class Parser:
                     )
                     out.append(Paragraph(content=unmarked(inlines)))
                     continue
+                embed.graphic = is_graphic_video_note(inlines)
                 drop_pending()
                 caption_slot = 0
                 out.append(embed)
