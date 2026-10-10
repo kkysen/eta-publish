@@ -548,6 +548,13 @@ A build submits only what is missing from it,
 so a source keeps the capture it has:
 the point of a snapshot is that it is of the page as the report read it,
 and recapturing would quietly move it forward to whatever the page says now.
+A source the archive gave no answer about,
+because it was busy, refused for the day, or is still capturing it,
+publishes as not archived with the reason, and warns,
+and is recorded `pending` so the next build that can asks again;
+the build itself succeeds.
+A capture already asked for is asked about by its Save Page Now job,
+which the build keeps in its cache, rather than submitted again.
 A document that already writes a link as `web.archive.org/web/<ts>/<url>`
 has it unwrapped on the way in and seeds the record with the capture it named,
 so a source archived by hand and a source archived here are one source.

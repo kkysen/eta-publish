@@ -190,13 +190,20 @@ class Answering(requests.Session):
         return response
 
 
+def pending(doc: Document) -> dict[str, str]:
+    """The sources published as not archived for now, by the reason shown."""
+    return {url: a.error for url, a in doc.archives.items() if a.pending}
+
+
 def test_being_told_to_slow_down_is_not_an_answer_about_the_page(keyed: None) -> None:
-    """A rate limit leaves the source missing, so the next build asks again."""
+    """A rate limit publishes the source as not archived for now,
+    and the next build asks again."""
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=Answering(429))
-    assert doc.archives == {}
+    archive.capture(doc, session=Answering(429))
+    assert pending(doc) == {"https://a.example/1": archive.NO_ANSWER}
     assert missing(doc) == ["https://a.example/1"]
+    archive.check_pending(doc)
+    assert any("could not archive" in str(w) for w in doc.warnings)
 
 
 def test_a_capture_somebody_else_already_made_is_used(keyed: None) -> None:
@@ -208,9 +215,8 @@ def test_a_capture_somebody_else_already_made_is_used(keyed: None) -> None:
 
 def test_a_server_error_is_not_recorded_as_a_fact_about_the_source(keyed: None) -> None:
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=Answering(503))
-    assert doc.archives == {}
+    archive.capture(doc, session=Answering(503))
+    assert pending(doc) == {"https://a.example/1": archive.NO_ANSWER}
 
 
 def test_without_keys_what_is_already_archived_is_still_found(
@@ -297,18 +303,51 @@ def test_a_refused_connection_is_asked_again(keyed: None, monkeypatch: pytest.Mo
     assert archive.capture(doc, session=session) == (1, 0)
 
 
-def test_a_source_the_archive_could_not_be_asked_about_stops_the_build(keyed: None) -> None:
-    """Published, it would read `not archived`, and the next build might not agree."""
+def test_a_source_the_archive_could_not_be_asked_about_does_not_stop_the_build(
+    keyed: None,
+) -> None:
+    """A capture can still be running a day later, and a report held back
+    that long over one source is a report nobody can publish."""
     doc = cites("https://a.example/1", "https://b.example/2")
-    with pytest.raises(archive.Unanswered, match="b.example"):
-        archive.capture(doc, session=Refusing(1_000, 200))
-    assert doc.archives == {}
+    archive.capture(doc, session=Refusing(1_000, 200))
+    assert pending(doc) == {
+        "https://a.example/1": archive.NO_ANSWER,
+        "https://b.example/2": archive.NO_ANSWER,
+    }
 
 
 def test_a_source_the_archive_could_not_be_asked_about_says_why(keyed: None) -> None:
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.Unanswered, match=r"https://a\.example/1 \(refused\)"):
-        archive.capture(doc, session=Refusing(1_000, 200))
+    archive.capture(doc, session=Refusing(1_000, 200))
+    archive.check_pending(doc)
+    assert any("https://a.example/1" in str(w) and "(refused)" in str(w) for w in doc.warnings)
+
+    # The same from the record alone, which is all an offline build has.
+    offline = cites("https://a.example/1")
+    offline.archives = dict(doc.archives)
+    archive.check_pending(offline)
+    assert list(map(str, offline.warnings)) == list(map(str, doc.warnings))
+
+
+def test_a_source_still_waiting_keeps_the_date_it_first_waited(keyed: None) -> None:
+    """Otherwise the page would change on every build over the same answer."""
+    doc = cites("https://a.example/1")
+    doc.archives["https://a.example/1"] = Archived(
+        timestamp="20261001", error=archive.NO_ANSWER, pending=True
+    )
+    archive.capture(doc, session=Answering(503))
+    assert doc.archives["https://a.example/1"].timestamp == "20261001"
+
+
+def test_a_pending_source_is_written_down_as_pending(keyed: None, tmp_path: Path) -> None:
+    """So an offline build publishes it the same, and an online one asks again."""
+    doc = cites("https://a.example/1")
+    archive.capture(doc, session=Answering(503))
+    archive.write_archive_index(tmp_path, doc)
+    again = cites("https://a.example/1")
+    archive.read_archive_index(tmp_path, again)
+    assert again.archives == doc.archives
+    assert missing(again) == ["https://a.example/1"]
 
 
 @pytest.mark.parametrize("when", ["submitted", "polled"])
@@ -654,11 +693,9 @@ def test_being_told_to_slow_down_is_not_cached(unkeyed: None) -> None:
     """Nothing was learned, so there is nothing to remember for a week."""
     doc = cites("https://a.example/1")
     session = Counting(429)
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=session)
+    archive.capture(doc, session=session)
     asked = session.asked
-    with pytest.raises(archive.Unanswered):
-        archive.capture(cites("https://a.example/1"), session=session)
+    archive.capture(cites("https://a.example/1"), session=session)
     assert session.asked > asked
 
 
@@ -777,9 +814,8 @@ def test_a_request_that_never_arrived_says_nothing_about_the_source(keyed: None)
             raise requests.Timeout("read timed out")
 
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=Timing())
-    assert doc.archives == {}
+    archive.capture(doc, session=Timing())
+    assert pending(doc) == {"https://a.example/1": archive.NO_ANSWER}
     assert missing(doc) == ["https://a.example/1"]
 
 
@@ -1257,18 +1293,16 @@ def test_a_page_anonymous_capture_says_failed_is_recorded_with_why(anonymous: No
 def test_a_failure_status_without_a_reason_is_not_recorded(anonymous: None) -> None:
     """A refusal is recorded for good, so only one the service explained."""
     doc = cites("https://a.example/1")
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=SavingAnonymously(520, "<html>whatever</html>"))
-    assert doc.archives == {}
+    archive.capture(doc, session=SavingAnonymously(520, "<html>whatever</html>"))
+    assert pending(doc) == {"https://a.example/1": archive.NO_ANSWER}
 
 
 def test_being_rate_limited_anonymously_is_not_an_answer(anonymous: None) -> None:
     doc = cites("https://a.example/1")
     session = SavingAnonymously(429)
-    with pytest.raises(archive.Unanswered):
-        archive.capture(doc, session=session)
+    archive.capture(doc, session=session)
     assert len(session.saved) == 1
-    assert doc.archives == {}
+    assert pending(doc) == {"https://a.example/1": archive.NO_ANSWER}
 
 
 def test_in_ci_nothing_is_captured_anonymously(

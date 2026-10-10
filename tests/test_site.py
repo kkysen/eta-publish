@@ -706,10 +706,11 @@ def test_the_same_document_copied_twice_is_recognized_as_listed(tmp_path: Path) 
         add_report(f"{listed}&pli=1#heading=h.mkzkbxod1acf", path)
 
 
-def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
+def test_a_build_the_archive_did_not_answer_in_full_is_published(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Sixteen sources that all had to get through one build together never did."""
+    """Sixteen sources that all had to get through one build together never did,
+    and a capture can still be running a day later."""
     from dataclasses import replace
 
     from eta_publish import archive, build
@@ -724,7 +725,11 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
             snapshot=f"https://web.archive.org/web/20261009000000/{url}",
             timestamp="20261009000000",
         )
-        raise archive.Unanswered("could not ask the archive about another")
+        for other in archive.missing(doc)[1:]:
+            doc.archives[other] = Archived(
+                timestamp="20261009", error=archive.STILL_RUNNING, pending=True
+            )
+        return 1, 0
 
     monkeypatch.setattr(archive, "capture", capture)
 
@@ -739,11 +744,12 @@ def test_a_build_the_archive_did_not_answer_in_full_keeps_what_it_did(
     out = tmp_path / "site"
     seed_image_index(out)
     site = build_site([Report(url=str(saved))], out, BuildOptions(images=False))
-    assert not site.built
+    assert site.built
+    assert not site.failed
     record = json.loads((out / SLUG / "archives.json").read_text())
     assert record[answered[0]]["timestamp"] == "20261009000000"
-    # Counted before it was written, as a build that got through would.
     assert record[answered[0]]["pages"] == 3
+    assert not site.failed, site.failed
 
 
 def test_capturing_without_keys_is_said_once_and_again_after_the_summary(

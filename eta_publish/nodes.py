@@ -40,6 +40,17 @@ class Archived:
     """When the snapshot was taken, as the 14 digits Wayback writes, or the
     date the attempt failed."""
     error: str = ""
+    pending: bool = False
+    """Whether `error` is about the moment rather than the source: the archive
+    was busy, refused for now, or is still capturing it. Published as not
+    archived like any failure, and asked about again by the next build that can.
+    Recorded rather than left missing, so an offline build publishes the same."""
+
+    said: str = ""
+    """All the service or the connection said, where `error` is `pending`:
+    `error` is short enough to publish beside the source, and this is the
+    warning's, recorded so an offline build warns the same."""
+
     job: str = ""
     """The Save Page Now job that made the capture or failed to, if this build's
     request made it: what to ask the service about when a capture goes missing."""

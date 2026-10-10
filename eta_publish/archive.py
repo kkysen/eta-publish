@@ -39,7 +39,7 @@ from requests.adapters import HTTPAdapter
 
 from . import PACKAGE_NAME
 from .checks import plural
-from .nodes import UNREWRITTEN, Archived, Document, cited_page, document_url, wayback_url
+from .nodes import UNREWRITTEN, Archived, Document, Shown, cited_page, document_url, wayback_url
 
 ARCHIVES_JSON = "archives.json"
 
@@ -437,6 +437,8 @@ def read_archive_index(dest: Path, doc: Document) -> None:
             timestamp=entry.get("timestamp", ""),
             error=entry.get("error", ""),
             job=entry.get("job", ""),
+            pending=entry.get("pending", False),
+            said=entry.get("said", ""),
             pages=entry.get("pages", 0),
         )
         cited = doc.archives.get(url)
@@ -470,6 +472,9 @@ def write_archive_index(dest: Path, doc: Document) -> None:
         }
         if archived.error:
             entry = {"timestamp": archived.timestamp, "error": archived.error}
+        if archived.pending:
+            entry["pending"] = True
+            entry["said"] = archived.said
         if archived.job:
             entry["job"] = archived.job
         if archived.pages:
@@ -488,9 +493,10 @@ def missing(doc: Document) -> list[str]:
 
     One recorded with an `error` is not among them: that one has been tried,
     and a build that submitted it again on every run would spend the rate limit
-    on the pages least likely to ever answer.
+    on the pages least likely to ever answer. Unless the error is `pending`,
+    about the moment rather than the page, which a later build asks about again.
     """
-    return [url for url in _documents(doc) if url not in doc.archives]
+    return [url for url in _documents(doc) if url not in doc.archives or doc.archives[url].pending]
 
 
 def _documents(doc: Document) -> list[str]:
@@ -533,10 +539,13 @@ def capture(
     wants to say how far along it is: this is the slowest thing a build does,
     and it is slow in a way nothing here controls.
 
-    A source the service would not answer about at all is the exception, and
-    stays missing. Being told to slow down is not a fact about the page, and
-    recording it as one would mean a rate limit hit on a Tuesday permanently
-    left a source with no archive.
+    A source the service would not answer about at all is the exception:
+    it publishes as not archived with the reason, and a warning, but `pending`,
+    so the next build asks again. Being told to slow down is not a fact about
+    the page, and recording it as one would mean a rate limit hit on a Tuesday
+    permanently left a source with no archive. Nor does it stop the build:
+    a capture can still be running a day later, and a report held back that
+    long over one source is a report nobody can publish.
     """
     http = session or _session()
     # Looking up what the archive already holds needs no account, so a build
@@ -606,14 +615,38 @@ def capture(
             "replay": [url for url, result in answered if result.unserved],
         }
     )
-    unanswered = [(url, result.why) for url, result in answered if result.unanswered]
-    if unanswered:
-        raise Unanswered(
-            f"could not ask the archive about {plural(len(unanswered), 'source')}, "
-            "so they would publish as not archived; build again: "
-            + "; ".join(f"{url} ({why})" for url, why in unanswered)
+    for url, result in answered:
+        if not result.unanswered:
+            continue
+        before = doc.archives.get(url)
+        # The date of the first attempt that heard this, so a source still
+        # waiting on the same answer does not change the page on every build.
+        same = before is not None and before.pending and before.error == result.short
+        doc.archives[url] = Archived(
+            timestamp=before.timestamp if same and before else today(),
+            error=result.short,
+            pending=True,
+            said=result.why,
         )
     return found, submitted
+
+
+def check_pending(doc: Document) -> None:
+    """Warn about each source published as not archived for now, on every build.
+
+    From the record rather than as the archive answers, so an offline build
+    warns the same, and the page, which carries its warnings, is the same.
+    """
+    for url in _documents(doc):
+        archived = doc.archives.get(url)
+        if archived is None or not archived.pending:
+            continue
+        doc.warn(
+            "could not archive {} ({}); it publishes as not archived, "
+            "and the next build that can asks again",
+            Shown(url),
+            archived.said or archived.error,
+        )
 
 
 def _keys() -> dict[str, str] | None:
@@ -671,7 +704,9 @@ class Lookup:
     unanswered: bool = False
     """The archive could not be asked at all, so nothing is known either way."""
     why: str = ""
-    """What stopped it, as the service or the connection said it, for whoever builds again."""
+    """What stopped it, as the service or the connection said it, for the warning."""
+    short: str = ""
+    """What stopped it, short enough to publish beside the source."""
 
 
 def _archive(
@@ -727,23 +762,26 @@ def _archive(
         # Not remembered either, for the same reason: a cache of this would be a
         # week of not asking about a page nothing ever learned anything about.
         #
-        # Nor published: `capture` stops the build over it, because the source
-        # would otherwise publish as `not archived`, which is a claim about it.
-        return Lookup(unanswered=True, why=str(e) or type(e).__name__)
+        # `capture` publishes it as not archived, `pending`, so the next build
+        # asks again, and says why in a warning.
+        short = e.short if isinstance(e, Busy) and e.short else NO_ANSWER
+        return Lookup(unanswered=True, why=str(e) or type(e).__name__, short=short)
 
 
-class Unanswered(RuntimeError):
-    """The archive could not be asked about some sources, so the build stops.
-
-    Published anyway, those sources would read `not archived`, and a build an
-    hour later that got through would publish something different from the
-    same document. Stopping keeps the build saying the same thing every time
-    it says anything, and the next one asks again.
-    """
+NO_ANSWER = "the archive did not answer"
+"""What a source the archive could not be asked about is published with."""
 
 
 class Busy(RuntimeError):
-    """The service declined to answer right now, which is not about the page."""
+    """The service declined to answer right now, which is not about the page.
+
+    `short` is what a reader is shown beside the source, where the message is
+    the whole of what the service said, for the warning.
+    """
+
+    def __init__(self, message: str, short: str = "") -> None:
+        super().__init__(message)
+        self.short = short
 
 
 class Stopped(KeyboardInterrupt):
@@ -1074,10 +1112,12 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
             )
         if status == "error":
             return replace(_failed(_refused(state), state, job), job=job)
-    return Archived(
-        timestamp=today(),
-        error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds",
-        job=job,
+    # Still going, which is not an answer about the page: the next build asks
+    # the job rather than waiting on it here.
+    raise Busy(
+        f"the capture is still running after {CAPTURE_TIMEOUT.total_seconds():.0f} seconds "
+        f"(job {job})",
+        short=STILL_RUNNING,
     )
 
 
@@ -1100,7 +1140,11 @@ def _job(http: requests.Session, headers: dict[str, str], url: str, job: str) ->
         if any(later in refused for later in RETRY_LATER):
             return None
         return Archived(timestamp=today(), error=refused, job=job)
-    raise Busy(f"the capture is still running (job {job})")
+    raise Busy(f"the capture is still running (job {job})", short=STILL_RUNNING)
+
+
+STILL_RUNNING = "the capture is still running"
+"""What a source is published with while its capture has not finished."""
 
 
 RETRY_LATER = (
@@ -1114,7 +1158,7 @@ The account already having twelve captures going; the URL having been captured
 as many times today as Save Page Now allows, which repeated builds that could
 not yet see their own captures ran into; and the page's server being slow that
 once. Recorded as a failure, each would leave the source with no archive
-forever, so each is left unanswered for a later build to ask again.
+forever, so each is recorded `pending`, for a later build to ask again.
 """
 
 
@@ -1131,7 +1175,7 @@ def _failed(refused: str, answer: dict[str, object], job: str = "") -> Archived:
             said += f": {answer['message']}"
         if job:
             said += f" (job {job})"
-        raise Busy(said)
+        raise Busy(said, short=refused)
     return Archived(timestamp=today(), error=refused)
 
 
