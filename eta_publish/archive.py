@@ -583,11 +583,12 @@ def capture(
             "replay": [url for url, result in answered if result.unserved],
         }
     )
-    unanswered = [url for url, result in answered if result.unanswered]
+    unanswered = [(url, result.why) for url, result in answered if result.unanswered]
     if unanswered:
         raise Unanswered(
             f"could not ask the archive about {plural(len(unanswered), 'source')}, "
-            "so they would publish as not archived; build again: " + ", ".join(unanswered)
+            "so they would publish as not archived; build again: "
+            + "; ".join(f"{url} ({why})" for url, why in unanswered)
         )
     return found, submitted
 
@@ -646,6 +647,8 @@ class Lookup:
     """The replay was asked and served nothing, which stands for an hour."""
     unanswered: bool = False
     """The archive could not be asked at all, so nothing is known either way."""
+    why: str = ""
+    """What stopped it, as the service or the connection said it, for whoever builds again."""
 
 
 def _archive(
@@ -676,7 +679,7 @@ def _archive(
             # date would renew the entry on every build and expire it never.
             return Lookup(unindexed=index, unserved=replay)
         return Lookup(_patiently(lambda: _submit(http, headers, url)))
-    except Busy, requests.RequestException:
+    except (Busy, requests.RequestException) as e:
         # Nothing about the source. A read that timed out, a connection that
         # dropped, a name that would not resolve: all of them are about getting
         # to `web.archive.org`, and one of them recorded as a failed capture is
@@ -693,7 +696,7 @@ def _archive(
         #
         # Nor published: `capture` stops the build over it, because the source
         # would otherwise publish as `not archived`, which is a claim about it.
-        return Lookup(unanswered=True)
+        return Lookup(unanswered=True, why=str(e) or type(e).__name__)
 
 
 class Unanswered(RuntimeError):
@@ -1018,7 +1021,7 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
     answer = started.json()
     job = answer.get("job_id")
     if not job:
-        return _failed(_refused(answer))
+        return _failed(_refused(answer), answer)
     _remember_job(url, job)
     deadline = time.monotonic() + CAPTURE_TIMEOUT.total_seconds()
     while time.monotonic() < deadline:
@@ -1037,7 +1040,7 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
                 snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp, job=job
             )
         if status == "error":
-            return replace(_failed(_refused(state)), job=job)
+            return replace(_failed(_refused(state), state, job), job=job)
     return Archived(
         timestamp=today(),
         error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds",
@@ -1060,10 +1063,20 @@ forever, so each is left unanswered for a later build to ask again.
 """
 
 
-def _failed(refused: str) -> Archived:
-    """The refusal recorded against the source, or `Busy` if it was about the moment."""
+def _failed(refused: str, answer: dict[str, object], job: str = "") -> Archived:
+    """The refusal recorded against the source, or `Busy` if it was about the moment.
+
+    `Busy` says all the service said, and which job it was about,
+    since it is what the build prints when it stops over one:
+    `error:too-many-daily-captures` alone does not say the limit is per URL.
+    """
     if any(later in refused for later in RETRY_LATER):
-        raise Busy(refused)
+        said = refused
+        if answer.get("message"):
+            said += f": {answer['message']}"
+        if job:
+            said += f" (job {job})"
+        raise Busy(said)
     return Archived(timestamp=today(), error=refused)
 
 

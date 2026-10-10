@@ -305,6 +305,28 @@ def test_a_source_the_archive_could_not_be_asked_about_stops_the_build(keyed: No
     assert doc.archives == {}
 
 
+def test_a_source_the_archive_could_not_be_asked_about_says_why(keyed: None) -> None:
+    doc = cites("https://a.example/1")
+    with pytest.raises(archive.Unanswered, match=r"https://a\.example/1 \(refused\)"):
+        archive.capture(doc, session=Refusing(1_000, 200))
+
+
+@pytest.mark.parametrize("when", ["submitted", "polled"])
+def test_a_refusal_about_the_moment_says_all_the_service_said(no_waiting: None, when: str) -> None:
+    refused = {
+        "status": "error",
+        "status_ext": "error:too-many-daily-captures",
+        "message": "This URL has been already captured 1 times today.",
+    }
+    answers = [refused] if when == "submitted" else [{"job_id": "job-1"}, refused]
+    with pytest.raises(archive.Busy) as busy:
+        archive._submit(Saving(answers), {"Authorization": "LOW a:b"}, "https://a.example/1")
+    expected = "error:too-many-daily-captures: This URL has been already captured 1 times today."
+    if when == "polled":
+        expected += " (job job-1)"
+    assert str(busy.value) == expected
+
+
 # ---- a source that is already an Internet Archive item ---------------
 
 
