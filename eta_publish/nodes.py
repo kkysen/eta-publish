@@ -40,6 +40,10 @@ class Archived:
     """When the snapshot was taken, as the 14 digits Wayback writes, or the
     date the attempt failed."""
     error: str = ""
+    job: str = ""
+    """The Save Page Now job that made the capture or failed to, if this build's
+    request made it: what to ask the service about when a capture goes missing."""
+
     pages: int = 0
     """How many pages the document has, if it is a PDF cited by page, or 0.
 

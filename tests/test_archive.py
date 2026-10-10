@@ -899,6 +899,40 @@ def test_a_status_poll_that_fails_does_not_submit_the_page_again(no_waiting: Non
     assert session.submitted == 1
 
 
+def test_a_capture_keeps_its_job(no_waiting: None) -> None:
+    """In the cache the moment it is given, and on the record once it answers."""
+    session = Saving([{"job_id": "job-1"}, {"status": "success", "timestamp": "20261009120000"}])
+    captured = archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert captured.job == "job-1"
+    jobs = json.loads(archive.archive_cache_path().read_text())["jobs"]
+    assert list(jobs["https://a.example/1"]) == ["job-1"]
+
+
+def test_a_failed_capture_keeps_its_job(no_waiting: None) -> None:
+    refused = {"status": "error", "status_ext": "error:not-found"}
+    session = Saving([{"job_id": "job-2"}, refused])
+    captured = archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/2")
+    assert (captured.error, captured.job) == ("error:not-found", "job-2")
+
+
+def test_a_refused_capture_keeps_its_job_in_the_cache(no_waiting: None) -> None:
+    """The build stops over this one, so the cache is the only place the job is kept."""
+    refused = {"status": "error", "status_ext": "error:too-many-daily-captures"}
+    session = Saving([{"job_id": "job-3"}, refused])
+    with pytest.raises(archive.Busy):
+        archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/3")
+    jobs = json.loads(archive.archive_cache_path().read_text())["jobs"]
+    assert "job-3" in jobs["https://a.example/3"]
+
+
+def test_remembering_lookups_keeps_the_jobs(no_waiting: None) -> None:
+    archive._remember_job("https://a.example/4", "job-4")
+    archive._remember({"index": ["https://a.example/5"], "replay": []})
+    cached = json.loads(archive.archive_cache_path().read_text())
+    assert "job-4" in cached["jobs"]["https://a.example/4"]
+    assert "https://a.example/5" in cached["index"]
+
+
 def test_a_build_with_keys_captures_only_what_has_no_capture(keyed: None) -> None:
     """A capture is somebody else's page fetch, and asking for one of a page the
     archive already holds spends it on nothing: the lookup comes first."""

@@ -22,7 +22,7 @@ import json
 import os
 import re
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
@@ -249,7 +249,10 @@ def archive_cache_path() -> Path:
     `site/` regardless. That is the whole reason it is a cache and not a record.
 
     One file, with the index's lookups under `index` and the replay's under
-    `replay`, each source by when it was asked.
+    `replay`, each source by when it was asked. Under `jobs` is every Save Page
+    Now job a build asked for, by source, by when: written the moment the job is
+    given, so a build that stops before writing `archives.json` still says
+    which capture it asked for.
 
     Read on each call rather than resolved once, so a test can point it
     somewhere else.
@@ -315,20 +318,49 @@ def _remember(found_nothing: dict[str, list[str]]) -> None:
         now = datetime.now(UTC).isoformat(timespec="seconds")
         for kind, urls in found_nothing.items():
             known[kind].update(dict.fromkeys(urls, now))
-        path = archive_cache_path()
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            # Written beside it and moved over it, so nothing ever reads this
-            # half-written. A torn read would parse as nothing, and nothing is
-            # what the next write would then build on: one interrupted write
-            # would throw the whole cache away rather than one entry.
-            temp = path.with_suffix(".writing")
-            temp.write_text(json.dumps(known, indent=2, sort_keys=True) + "\n")
-            temp.replace(path)
-        except OSError:
-            # A cache that cannot be written is a build that is slower than it
-            # needs to be, which is not a build that should fail.
-            pass
+        _write_cache({**known, JOBS: _jobs()})
+
+
+JOBS = "jobs"
+"""Where the cache keeps the Save Page Now jobs asked for, which never expire."""
+
+
+def _jobs() -> dict[str, dict[str, str]]:
+    """Every job asked for, by source, by when, or nothing where the cache cannot be read."""
+    try:
+        loaded = json.loads(archive_cache_path().read_text())
+    except OSError, ValueError:
+        return {}
+    jobs = loaded.get(JOBS) if isinstance(loaded, dict) else None
+    if not isinstance(jobs, dict):
+        return {}
+    return {url: asked for url, asked in jobs.items() if isinstance(asked, dict)}
+
+
+def _remember_job(url: str, job: str) -> None:
+    """Write down that a capture of `url` was asked for as `job`, before waiting on it."""
+    with _REMEMBERING:
+        jobs = _jobs()
+        jobs.setdefault(url, {})[job] = datetime.now(UTC).isoformat(timespec="seconds")
+        _write_cache({**_cached(), JOBS: jobs})
+
+
+def _write_cache(known: Mapping[str, object]) -> None:
+    """Replace the cache with `known`, while holding `_REMEMBERING`."""
+    path = archive_cache_path()
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # Written beside it and moved over it, so nothing ever reads this
+        # half-written. A torn read would parse as nothing, and nothing is
+        # what the next write would then build on: one interrupted write
+        # would throw the whole cache away rather than one entry.
+        temp = path.with_suffix(".writing")
+        temp.write_text(json.dumps(known, indent=2, sort_keys=True) + "\n")
+        temp.replace(path)
+    except OSError:
+        # A cache that cannot be written is a build that is slower than it
+        # needs to be, which is not a build that should fail.
+        pass
 
 
 def _stands(kind: str, when: str) -> bool:
@@ -381,6 +413,7 @@ def read_archive_index(dest: Path, doc: Document) -> None:
             snapshot=entry.get("snapshot", ""),
             timestamp=entry.get("timestamp", ""),
             error=entry.get("error", ""),
+            job=entry.get("job", ""),
             pages=entry.get("pages", 0),
         )
         cited = doc.archives.get(url)
@@ -414,6 +447,8 @@ def write_archive_index(dest: Path, doc: Document) -> None:
         }
         if archived.error:
             entry = {"timestamp": archived.timestamp, "error": archived.error}
+        if archived.job:
+            entry["job"] = archived.job
         if archived.pages:
             entry["pages"] = archived.pages
         index[url] = entry
@@ -984,6 +1019,7 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
     job = answer.get("job_id")
     if not job:
         return _failed(_refused(answer))
+    _remember_job(url, job)
     deadline = time.monotonic() + CAPTURE_TIMEOUT.total_seconds()
     while time.monotonic() < deadline:
         time.sleep(POLL_EVERY.total_seconds())
@@ -997,11 +1033,15 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
         status = state.get("status")
         if status == "success" and state.get("timestamp"):
             stamp = state["timestamp"]
-            return Archived(snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp)
+            return Archived(
+                snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp, job=job
+            )
         if status == "error":
-            return _failed(_refused(state))
+            return replace(_failed(_refused(state)), job=job)
     return Archived(
-        timestamp=today(), error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds"
+        timestamp=today(),
+        error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds",
+        job=job,
     )
 
 
