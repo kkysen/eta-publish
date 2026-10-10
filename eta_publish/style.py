@@ -177,7 +177,7 @@ def _check_apostrophes(doc: Document, text: str) -> None:
             "an apostrophe should be {}, not {}: {}",
             Shown("\u2019"),
             Shown("'"),
-            Shown(_excerpt(text, match.start(), match.end())),
+            Highlighted(_before(text, match.start()), match.group(), _after(text, match.end())),
         )
 
 
