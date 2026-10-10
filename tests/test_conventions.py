@@ -350,6 +350,27 @@ def test_a_soft_line_break_separates_a_caption_from_its_credit() -> None:
     assert text_of(figure.credit) == "Credit: MTA, ETA"
 
 
+def test_a_paragraph_after_a_credit_is_not_the_caption() -> None:
+    """IBX's chart of automated lines by year has a `Credit:` and no caption,
+    and the paragraph after it is body text, not the chart's caption."""
+    doc = build(
+        [
+            para("Header", "HEADING_2"),
+            field("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            field("Credit: ETA"),
+            para("Moreover, even the MTA IBX staff have told us so."),
+        ]
+    )
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.caption == []
+    assert text_of(figure.credit) == "Credit: ETA"
+    after = doc.blocks[-1]
+    assert isinstance(after, Paragraph)
+    assert text_of(after.content) == "Moreover, even the MTA IBX staff have told us so."
+
+
 def test_soft_line_breaks_do_not_reach_the_output_as_control_characters() -> None:
     doc = build(
         [

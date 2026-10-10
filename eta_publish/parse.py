@@ -1063,8 +1063,9 @@ class Parser:
                 caption_slot = 1
                 continue
 
-            # A caption is the one paragraph directly after a figure;
-            # `Credit:` lines keep attaching after that.
+            # A caption is the one paragraph directly after a figure,
+            # and before its `Credit:` line, which closes the caption's slot;
+            # `Credit:` and `Source:` lines keep attaching after that.
             # Matching on length would swallow short body paragraphs,
             # and a report with 50-odd figures has a great many.
             last = out[-1] if out else None
@@ -1078,6 +1079,7 @@ class Parser:
                     if is_credit_note(line):
                         self._bleed(line)
                         last.credit = unmarked(line)
+                        caption_slot = 0
                         claimed = True
                     elif is_source_note(line) or is_asset_note(line):
                         self._bleed(line)
