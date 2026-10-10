@@ -318,23 +318,35 @@ def _remember(found_nothing: dict[str, list[str]]) -> None:
         now = datetime.now(UTC).isoformat(timespec="seconds")
         for kind, urls in found_nothing.items():
             known[kind].update(dict.fromkeys(urls, now))
-        _write_cache({**known, JOBS: _jobs()})
+        _write_cache({**known, JOBS: _jobs(), REQUESTED: _requested()})
 
 
 JOBS = "jobs"
 """Where the cache keeps the Save Page Now jobs asked for, which never expire."""
 
+REQUESTED = "requested"
+"""Where the cache keeps when a capture of each source was last asked for,
+answered with a job or not."""
 
-def _jobs() -> dict[str, dict[str, str]]:
-    """Every job asked for, by source, by when, or nothing where the cache cannot be read."""
+
+def _section(name: str) -> dict[str, object]:
+    """One of the cache's records, or nothing where the cache cannot be read."""
     try:
         loaded = json.loads(archive_cache_path().read_text())
     except OSError, ValueError:
         return {}
-    jobs = loaded.get(JOBS) if isinstance(loaded, dict) else None
-    if not isinstance(jobs, dict):
-        return {}
-    return {url: asked for url, asked in jobs.items() if isinstance(asked, dict)}
+    section = loaded.get(name) if isinstance(loaded, dict) else None
+    return section if isinstance(section, dict) else {}
+
+
+def _jobs() -> dict[str, dict[str, str]]:
+    """Every job asked for, by source, by when."""
+    return {url: asked for url, asked in _section(JOBS).items() if isinstance(asked, dict)}
+
+
+def _requested() -> dict[str, str]:
+    """When a capture of each source was last asked for."""
+    return {url: when for url, when in _section(REQUESTED).items() if isinstance(when, str)}
 
 
 def _remember_job(url: str, job: str) -> None:
@@ -342,7 +354,31 @@ def _remember_job(url: str, job: str) -> None:
     with _REMEMBERING:
         jobs = _jobs()
         jobs.setdefault(url, {})[job] = datetime.now(UTC).isoformat(timespec="seconds")
-        _write_cache({**_cached(), JOBS: jobs})
+        _write_cache({**_cached(), JOBS: jobs, REQUESTED: _requested()})
+
+
+def _remember_request(url: str) -> None:
+    """Write down that a capture of `url` is being asked for, before asking."""
+    with _REMEMBERING:
+        requested = _requested()
+        requested[url] = datetime.now(UTC).isoformat(timespec="seconds")
+        _write_cache({**_cached(), JOBS: _jobs(), REQUESTED: requested})
+
+
+REQUEST_EVERY = timedelta(days=1)
+"""How long after asking for a capture of a source before asking for another.
+
+Save Page Now captures a PDF once a day at most, and refuses the rest,
+so a second request inside the day only ever spends a request on hearing that."""
+
+
+def _requested_lately(url: str) -> bool:
+    """Whether a capture of `url` was asked for within `REQUEST_EVERY`."""
+    try:
+        asked = datetime.fromisoformat(_requested().get(url, ""))
+    except ValueError:
+        return False
+    return asked.tzinfo is not None and datetime.now(UTC) - asked < REQUEST_EVERY
 
 
 JOB_LIFETIME = timedelta(days=7)
@@ -619,6 +655,8 @@ def capture(
         if not result.unanswered:
             continue
         before = doc.archives.get(url)
+        if result.lately and before is not None and before.pending:
+            continue
         # The date of the first attempt that heard this, so a source still
         # waiting on the same answer does not change the page on every build.
         same = before is not None and before.pending and before.error == result.short
@@ -707,6 +745,9 @@ class Lookup:
     """What stopped it, as the service or the connection said it, for the warning."""
     short: str = ""
     """What stopped it, short enough to publish beside the source."""
+    lately: bool = False
+    """Nothing was asked, because a capture was asked for within the day:
+    a source already pending keeps the reason that request heard."""
 
 
 def _archive(
@@ -732,6 +773,8 @@ def _archive(
         if headers is None and anonymous:
             # Not `_patiently`: each attempt is a capture, and one refused
             # about the moment is asked again by the next build, not this one.
+            if _requested_lately(url):
+                return _asked_lately()
             return Lookup(_submit_anonymously(http, url))
         if headers is None:
             # `unindexed` only where the index was the one that said so. Where it
@@ -746,6 +789,8 @@ def _archive(
             asked = _job(http, headers, url, job)
             if asked is not None:
                 return Lookup(asked)
+        if _requested_lately(url):
+            return _asked_lately()
         return Lookup(_submit(http, headers, url))
     except (Busy, requests.RequestException) as e:
         # Nothing about the source. A read that timed out, a connection that
@@ -767,6 +812,20 @@ def _archive(
         short = e.short if isinstance(e, Busy) and e.short else NO_ANSWER
         return Lookup(unanswered=True, why=str(e) or type(e).__name__, short=short)
 
+
+def _asked_lately() -> Lookup:
+    """A source a capture was asked for within the day, which waits for tomorrow."""
+    return Lookup(
+        unanswered=True,
+        why="a capture was already asked for within the last day, and is asked for once a day",
+        short=ASKED_LATELY,
+        lately=True,
+    )
+
+
+ASKED_LATELY = "a capture was asked for today"
+"""What a source is published with when its capture was asked for within the day
+and nothing has answered for it."""
 
 NO_ANSWER = "the archive did not answer"
 """What a source the archive could not be asked about is published with."""
@@ -1088,6 +1147,7 @@ def _submit(http: requests.Session, headers: dict[str, str], url: str) -> Archiv
 
 def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Archived:
     """Ask for the capture and wait for it, while holding the gate."""
+    _remember_request(url)
     started = _checked(http.post(SAVE, headers=headers, data={"url": url}, timeout=60))
     answer = started.json()
     job = answer.get("job_id")
@@ -1225,6 +1285,7 @@ def _submit_anonymously(http: requests.Session, url: str) -> Archived:
         if wait > 0:
             time.sleep(wait)
         _last_anonymous[0] = time.monotonic()
+        _remember_request(url)
         response = http.get(
             f"{SAVE}/{url}", timeout=CAPTURE_TIMEOUT.total_seconds(), allow_redirects=False
         )

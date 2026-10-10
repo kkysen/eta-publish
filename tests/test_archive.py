@@ -1026,6 +1026,66 @@ def test_a_recorded_job_refused_about_the_moment_is_asked_for_again(
     assert session.submitted == 1
 
 
+def test_a_capture_is_asked_for_at_most_once_a_day(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Counted when it is asked for, refused or not: the refusal is the daily limit."""
+    _found_nothing(monkeypatch)
+    refused = {"status": "error", "status_ext": "error:too-many-daily-captures"}
+    session = Saving([refused, refused])
+    headers = {"Authorization": "LOW a:b"}
+    first = archive._archive(session, headers, "https://a.example/1")
+    second = archive._archive(session, headers, "https://a.example/1")
+    assert session.submitted == 1
+    assert first.unanswered
+    assert (second.unanswered, second.short) == (True, archive.ASKED_LATELY)
+
+
+def test_a_capture_is_asked_for_again_the_next_day(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _found_nothing(monkeypatch)
+    archive._remember_request("https://a.example/1")
+    monkeypatch.setattr(archive, "REQUEST_EVERY", timedelta())
+    session = Saving([{"job_id": "job-1"}, {"status": "success", "timestamp": "20261011000000"}])
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.archived is not None
+    assert session.submitted == 1
+
+
+def test_a_recorded_job_is_still_asked_about_within_the_day(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Asking about a job is not asking for a capture."""
+    _found_nothing(monkeypatch)
+    archive._remember_request("https://a.example/1")
+    archive._remember_job("https://a.example/1", "job-1")
+    session = Saving([{"status": "success", "timestamp": "20261010114910"}])
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.archived is not None
+    assert lookup.archived.timestamp == "20261010114910"
+    assert session.submitted == 0
+
+
+def test_a_source_waiting_for_tomorrow_keeps_what_it_last_heard(keyed: None) -> None:
+    """Not replaced by "asked for today", which would say less and change the page."""
+    doc = cites("https://a.example/1")
+    before = Archived(
+        timestamp="20261010", error="error:too-many-daily-captures", pending=True, said="x"
+    )
+    doc.archives["https://a.example/1"] = before
+    archive._remember_request("https://a.example/1")
+    archive.capture(doc, session=Answering(200, [["timestamp"]]))
+    assert doc.archives["https://a.example/1"] == before
+
+
+def test_an_anonymous_capture_is_asked_for_at_most_once_a_day(anonymous: None) -> None:
+    session = SavingAnonymously(429)
+    archive.capture(cites("https://a.example/1"), session=session)
+    archive.capture(cites("https://a.example/1"), session=session)
+    assert len(session.saved) == 1
+
+
 def test_a_job_older_than_its_lifetime_is_taken_as_lost(
     no_waiting: None, monkeypatch: pytest.MonkeyPatch
 ) -> None:

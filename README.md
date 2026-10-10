@@ -554,7 +554,8 @@ publishes as not archived with the reason, and warns,
 and is recorded `pending` so the next build that can asks again;
 the build itself succeeds.
 A capture already asked for is asked about by its Save Page Now job,
-which the build keeps in its cache, rather than submitted again.
+which the build keeps in its cache, rather than submitted again,
+and a capture of any one source is asked for at most once a day.
 A document that already writes a link as `web.archive.org/web/<ts>/<url>`
 has it unwrapped on the way in and seeds the record with the capture it named,
 so a source archived by hand and a source archived here are one source.
