@@ -19,7 +19,7 @@ from .archive import (
     read_archive_index,
     write_archive_index,
 )
-from .checks import check, check_pages, plural
+from .checks import check, check_described, check_pages, plural
 from .docs_json import JsonObject
 from .embeds import check_embeds, look_up, read_embed_index, write_embed_index
 from .embeds import download as download_embeds
@@ -181,6 +181,7 @@ def write_image_index(dest: Path, written: dict[str, Path]) -> None:
             "file": path.name,
             "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             **_pixel_size(path),
+            **_description(path),
         }
         for object_id, path in sorted(written.items())
     }
@@ -201,6 +202,16 @@ def _pixel_size(path: Path) -> dict[str, int]:
             return {"width": opened.width, "height": opened.height}
     except OSError, UnidentifiedImageError:
         return {}
+
+
+def _description(path: Path) -> dict[str, str]:
+    """What an SVG says it shows, as alt text, or nothing for any other file."""
+    if path.suffix != ".svg":
+        return {}
+    from .images import svg_description
+
+    alt = svg_description(path.read_bytes())
+    return {"alt": alt} if alt else {}
 
 
 def has_its_images(dest: Path) -> bool:
@@ -246,6 +257,8 @@ def read_image_index(dest: Path, doc: Document) -> None:
             doc.image_files.setdefault(object_id, entry["file"])
         if "width" in entry and "height" in entry:
             doc.image_shapes.setdefault(object_id, (entry["width"], entry["height"]))
+        if "alt" in entry:
+            doc.image_alts.setdefault(object_id, entry["alt"])
 
 
 def require_image_index(dest: Path, doc: Document) -> None:
@@ -616,6 +629,7 @@ def build_one(
         else:
             require_image_index(dest, doc)
     read_image_index(dest, doc)
+    check_described(doc)
 
     # Every build, embeds or none, so a report that loses its last one loses
     # its record too. Only what is missing is asked about, so the cost after

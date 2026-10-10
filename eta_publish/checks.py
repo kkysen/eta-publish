@@ -11,6 +11,7 @@ and appear both in the build log and on the site's index page.
 """
 
 import re
+from dataclasses import replace
 from itertools import groupby
 
 from .nodes import (
@@ -179,6 +180,26 @@ def _check_stray_fields(doc: Document) -> None:
                     Shown(f"{field}:"),
                     Shown(text),
                 )
+
+
+def check_described(doc: Document) -> None:
+    """Give a figure its SVG's description, and warn about one with none at all.
+
+    After the images, since only the SVG says what is in it:
+    a chart linked on an `SVG:` line is what publishes,
+    and its `<title>` and `<desc>` describe it the way alt text would.
+    """
+    for figure in doc.figures:
+        # Ahead of the raster's own alt text, and of the caption standing in for it:
+        # the raster is only there because Docs cannot place an SVG.
+        alt = doc.image_alts.get(figure.image.object_id, "")
+        if alt:
+            figure.image = replace(figure.image, alt=alt)
+        elif not figure.image.alt and not figure.caption:
+            doc.warn(
+                "the image {} has no alt text and no caption; add a description to it in the doc",
+                Shown(figure.image.filename),
+            )
 
 
 def _check_figures(doc: Document) -> None:

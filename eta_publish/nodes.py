@@ -572,6 +572,14 @@ class Document:
     An SVG has no pixel size to read, so it is one this is empty for.
     """
 
+    image_alts: dict[str, str] = field(default_factory=dict)
+    """Docs object id to the description its SVG gives itself.
+
+    A chart linked on an `SVG:` line is the picture that publishes,
+    and its own `<title>` and `<desc>` say what it shows.
+    Recorded in `images.json` with the filename, for a build without the file.
+    """
+
     archives: dict[str, Archived] = field(default_factory=dict)
     """Source URL to the snapshot of it, keyed by the original and never by the
     snapshot.

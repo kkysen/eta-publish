@@ -255,6 +255,29 @@ def _is_svg(data: bytes) -> bool:
     return b"<svg" in data and not head.startswith((b"<!doctype html", b"<html"))
 
 
+def svg_description(data: bytes) -> str:
+    """The description an SVG gives itself: its own `<title>`, then its `<desc>`.
+
+    Only the root's, not those of the shapes inside it,
+    which describe one bar of the chart rather than the chart.
+    """
+    from xml.etree import ElementTree
+
+    try:
+        root = ElementTree.fromstring(data)
+    except ElementTree.ParseError:
+        return ""
+    said = [
+        " ".join((child.text or "").split())
+        for child in root
+        if child.tag.rpartition("}")[2] in ("title", "desc")
+    ]
+    said = [s for s in said if s]
+    if len(said) < 2:
+        return "".join(said)
+    return " ".join(s if s[-1] in ".!?" else f"{s}." for s in said)
+
+
 def crop_to(image: Image, data: bytes, doc: Document) -> bytes:
     """Trim `data` to the image's crop, returning it unchanged if there is none."""
     if not image.crop.trims:

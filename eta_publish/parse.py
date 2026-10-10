@@ -1120,11 +1120,6 @@ class Parser:
 
         drop_pending()
         for block in out:
-            if isinstance(block, Figure) and not block.image.alt and not block.caption:
-                self.doc.warn(
-                    "image {} has no alt text and no caption; add a description to it in the doc",
-                    Shown(block.image.object_id),
-                )
             if isinstance(block, Figure) and not block.image.alt and block.caption:
                 # The published page uses the caption as alt text as well as showing it,
                 # so an image with no description in Docs is not left unlabelled.

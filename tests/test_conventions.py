@@ -11,10 +11,11 @@ import pytest
 import requests
 from paths import named_images
 
+from eta_publish.checks import check_described
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.typst import TypstEmitter
-from eta_publish.images import download
+from eta_publish.images import download, svg_description
 from eta_publish.nodes import Document, Figure, Heading, Inline, Paragraph, Text
 from eta_publish.parse import parse
 
@@ -325,6 +326,7 @@ def test_an_undescribed_image_is_reported() -> None:
             image(),
         ]
     )
+    check_described(doc)
     assert any("no alt text and no caption" in w for w in map(str, doc.warnings))
 
 
@@ -785,3 +787,22 @@ def test_a_linked_svg_that_is_not_one_warns_and_keeps_the_raster(tmp_path: Path)
     ) in [str(w) for w in doc.warnings]
     assert not (tmp_path / "share.svg").exists()
     assert doc.image_files["io.1"].endswith(".png")
+
+
+def test_a_linked_svg_describes_its_figure() -> None:
+    """IBX's charts have no alt text in Docs, but each SVG titles and describes itself,
+    and the SVG is the picture that publishes."""
+    doc = _linked_svg_doc()
+    doc.image_alts["io.1"] = "Share of new lines automated. 135/361 are automated."
+    check_described(doc)
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.image.alt == "Share of new lines automated. 135/361 are automated."
+    assert not [w for w in map(str, doc.warnings) if "no alt text" in w]
+
+
+def test_an_svg_describes_itself_by_its_own_title_and_desc() -> None:
+    svg = (
+        b'<svg xmlns="http://www.w3.org/2000/svg"><title>Share &gt; GoA2, by year</title>'
+        b"<desc>135/361 are automated.</desc><g><title>2016: 5/26</title></g></svg>"
+    )
+    assert svg_description(svg) == "Share > GoA2, by year. 135/361 are automated."
