@@ -572,6 +572,13 @@ class Document:
     An SVG has no pixel size to read, so it is one this is empty for.
     """
 
+    unpublished: dict[str, str] = field(default_factory=dict)
+    """Docs object id to why its SVG could not be had, for a figure published without one.
+
+    Never the raster instead: it is in the doc only because Docs cannot place an SVG.
+    Recorded in `images.json`, for a build that does not download.
+    """
+
     image_alts: dict[str, str] = field(default_factory=dict)
     """Docs object id to the description its SVG gives itself.
 

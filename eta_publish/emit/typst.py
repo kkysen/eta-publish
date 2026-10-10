@@ -202,7 +202,9 @@ class TypstEmitter(Emitter):
         # The credit on its own line, as the document writes it and the page
         # shows it. Joined with a space it reads as part of the caption.
         caption = " \\\n  ".join(caption_parts)
-        body = f"  {self.image_call(node.image)},"
+        # Published without a picture, as in the HTML, where its SVG could not be had.
+        unpublished = node.image.object_id in self.doc.unpublished
+        body = "  []," if unpublished else f"  {self.image_call(node.image)},"
         if caption:
             return f"#figure(\n{body}\n  caption: [{caption}],\n)"
         return f"#figure(\n{body}\n)"

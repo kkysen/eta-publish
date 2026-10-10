@@ -854,7 +854,10 @@ class HtmlEmitter(Emitter):
         # `Figure.source` is not emitted:
         # it names the original file in Drive, for whoever assembles the report,
         # and does not appear on the published page.
-        parts: list[Piece] = [self.image(node.image)]
+        # A figure whose SVG could not be had is published without a picture,
+        # never with the raster standing in for it.
+        unpublished = node.image.object_id in self.doc.unpublished
+        parts: list[Piece] = [] if unpublished else [self.image(node.image)]
         if node.caption:
             parts.append(tag.figcaption(class_="figure-caption")[self.inlines(node.caption)])
         if node.credit:

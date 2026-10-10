@@ -286,7 +286,12 @@ class MarkdownEmitter(Emitter):
         # the published report italicizes neither,
         # and marking them up would put styling in the archive that the report lacks.
         caption = self.inlines(node.caption)
-        lines = [f"![{escape(node.image.alt)}]({url(self.href(node.image))})"]
+        # Published without a picture, as in the HTML, where its SVG could not be had.
+        lines = (
+            []
+            if node.image.object_id in self.doc.unpublished
+            else [f"![{escape(node.image.alt)}]({url(self.href(node.image))})"]
+        )
         if caption:
             lines.append(caption)
         if node.credit:

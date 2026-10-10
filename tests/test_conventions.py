@@ -14,6 +14,7 @@ from paths import named_images
 from eta_publish.checks import check_described
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
+from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.emit.typst import TypstEmitter
 from eta_publish.images import crop_svg, download, svg_description
 from eta_publish.nodes import Crop, Document, Figure, Heading, Inline, Paragraph, Text
@@ -784,29 +785,52 @@ def test_a_soft_break_with_nothing_on_one_side_is_called_spacing() -> None:
     assert any("standing in for blank space" in w for w in map(str, doc.warnings))
 
 
-def test_a_linked_svg_that_is_not_one_warns_and_keeps_the_raster(tmp_path: Path) -> None:
-    """A link that answers with a page instead of the chart is a problem in the doc."""
+class Serving(requests.Session):
+    """Answers the SVG link with `svg`, and anything else with a raster nothing should ask for."""
 
-    class Page(requests.Session):
-        @override
-        def get(self, url: str | bytes, **kwargs: Any) -> requests.Response:
-            response = requests.Response()
-            response.status_code = 200
-            if url == SVG_URL:
-                response._content = b"<!doctype html><html><body><svg></svg></body></html>"
-            else:
-                response.headers["content-type"] = "image/png"
-                response._content = b"\x89PNG"
-            return response
+    def __init__(self, svg: bytes) -> None:
+        super().__init__()
+        self.svg = svg
+        self.asked: list[str] = []
 
+    @override
+    def get(self, url: str | bytes, **kwargs: Any) -> requests.Response:
+        self.asked.append(str(url))
+        response = requests.Response()
+        response.status_code = 200
+        response._content = self.svg if url == SVG_URL else b"\x89PNG"
+        return response
+
+
+def test_a_linked_svg_that_is_not_one_warns_and_publishes_no_picture(tmp_path: Path) -> None:
+    """A link that answers with a page instead of the chart is a problem in the doc,
+    and the raster is never the stand-in: it is there only because Docs cannot place an SVG."""
+    session = Serving(b"<!doctype html><html><body><svg></svg></body></html>")
     doc = _linked_svg_doc()
-    download(doc, tmp_path, session=Page())
+    download(doc, tmp_path, session=session)
     assert (
         "could not download the vector `share.svg` (it is not an SVG); "
-        "using the image from the document instead"
+        "the figure is published without a picture"
     ) in [str(w) for w in doc.warnings]
-    assert not (tmp_path / "share.svg").exists()
-    assert doc.image_files["io.1"].endswith(".png")
+    assert session.asked == [SVG_URL]
+    assert "io.1" in doc.unpublished
+    assert not list(tmp_path.glob("*.png"))
+    html = HtmlEmitter().emit(doc)
+    assert "<img" not in html
+    assert "<figure" in html
+    assert "![" not in MarkdownEmitter().emit(doc)
+    assert "capped_image(" not in TypstEmitter().emit(doc)
+
+
+def test_an_svg_that_cannot_be_cropped_is_published_whole(tmp_path: Path) -> None:
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg" width="100%"><g/></svg>'
+    doc = _linked_svg_doc(crop={"offsetLeft": 0.1})
+    download(doc, tmp_path, session=Serving(svg))
+    assert [str(w) for w in doc.warnings] == [
+        "could not crop the vector `share.svg` "
+        "(it has neither a `viewBox` nor a fixed size to crop by); it is published uncropped"
+    ]
+    assert (tmp_path / doc.image_files["io.1"]).read_bytes() == svg
 
 
 def test_a_linked_svg_describes_its_figure() -> None:
@@ -826,3 +850,13 @@ def test_an_svg_describes_itself_by_its_own_title_and_desc() -> None:
         b"<desc>135/361 are automated.</desc><g><title>2016: 5/26</title></g></svg>"
     )
     assert svg_description(svg) == "Share > GoA2, by year. 135/361 are automated."
+
+
+def test_a_crop_of_an_svg_sized_in_another_unit_is_in_pixels() -> None:
+    """Only the ratio matters, so any fixed unit will do."""
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg" width="1in" height="0.5in"><g/></svg>'
+    out = crop_svg(svg, Crop(left=0.5))
+    assert out.startswith(
+        b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="48 0 48 48" '
+        b'width="48" height="48"><svg width="96" height="48">'
+    )

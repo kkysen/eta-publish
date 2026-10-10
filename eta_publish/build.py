@@ -147,7 +147,9 @@ def write_split(doc: Document, outdir: Path) -> list[Path]:
     return written
 
 
-def write_image_index(dest: Path, written: dict[str, Path]) -> None:
+def write_image_index(
+    dest: Path, written: dict[str, Path], unpublished: dict[str, str] | None = None
+) -> None:
     """Record what each image was written as, and what is in it.
 
     The images are not committed,
@@ -185,6 +187,9 @@ def write_image_index(dest: Path, written: dict[str, Path]) -> None:
         }
         for object_id, path in sorted(written.items())
     }
+    for object_id, why in (unpublished or {}).items():
+        index[object_id] = {"unpublished": why}
+    index = dict(sorted(index.items()))
     (dest / IMAGES_JSON).write_text(json.dumps(index, indent=2, sort_keys=True) + "\n")
 
 
@@ -233,7 +238,11 @@ def has_its_images(dest: Path) -> bool:
         recorded = json.loads((dest / IMAGES_JSON).read_text())
     except OSError, ValueError:
         return True
-    return all((dest / IMAGE_DIR / entry["file"]).exists() for entry in recorded.values())
+    return all(
+        (dest / IMAGE_DIR / entry["file"]).exists()
+        for entry in recorded.values()
+        if "file" in entry
+    )
 
 
 def read_image_index(dest: Path, doc: Document) -> None:
@@ -259,6 +268,8 @@ def read_image_index(dest: Path, doc: Document) -> None:
             doc.image_shapes.setdefault(object_id, (entry["width"], entry["height"]))
         if "alt" in entry:
             doc.image_alts.setdefault(object_id, entry["alt"])
+        if "unpublished" in entry:
+            doc.unpublished.setdefault(object_id, entry["unpublished"])
 
 
 def require_image_index(dest: Path, doc: Document) -> None:
@@ -620,7 +631,7 @@ def build_one(
             from .images import download, write_print_copies
 
             written_images = download(doc, dest / IMAGE_DIR)
-            write_image_index(dest, written_images)
+            write_image_index(dest, written_images, doc.unpublished)
             # Not recorded in `images.json`: that file is committed, and a
             # JPEG encoder is not byte-stable between versions, so a Pillow
             # release would break the committed-site check months later

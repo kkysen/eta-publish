@@ -15,6 +15,7 @@ The PDF needs these same files,
 so one download serves both the web and the print output.
 """
 
+import hashlib
 import os
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
@@ -207,22 +208,38 @@ def _fetch_one(uri: str, http: requests.Session) -> tuple[str, bytes]:
     return response.headers.get("content-type", "").split(";")[0].strip(), response.content
 
 
+ORIGINALS = ".vectors"
+"""Where each SVG is kept as it was downloaded, under the images.
+
+The published file is made from it on every build, crop and all,
+so a crop that could not be applied says so on every build, not only the first.
+"""
+
+
 def _fetch_vector(
     image: Image, outdir: Path, doc: Document, written: dict[str, Path], http: requests.Session
 ) -> bool:
-    """Write the vector original, returning whether it is what gets used.
+    """Write the vector original, returning whether the image has one.
 
-    A failure falls back to the raster rather than to nothing:
-    a chart that renders slightly softer beats a report with a hole in it.
+    The raster is never the fallback: it is in the doc only because Docs cannot
+    place an SVG. An SVG that cannot be had is said, and the figure is published
+    without a picture; one that cannot be cropped is said, and published whole.
     """
     vector = image.vector
     if vector is None:
         return False
 
-    dest = outdir / vector.filename
-    if not dest.exists():
-        from .fetch import FetchFailed, download_drive_file
+    from .fetch import FetchFailed, download_drive_file
 
+    key = vector.file_id or hashlib.sha256(vector.uri.encode()).hexdigest()[:16]
+    original = outdir / ORIGINALS / f"{key}.svg"
+    dest = outdir / vector.filename
+    if not original.exists() and not image.crop.trims and dest.exists():
+        # Written before the originals were kept apart, and uncropped,
+        # so it is the original: an offline build has no other copy to work from.
+        original.parent.mkdir(parents=True, exist_ok=True)
+        original.write_bytes(dest.read_bytes())
+    if not original.exists():
         try:
             if vector.file_id:
                 data = download_drive_file(vector.file_id)
@@ -232,17 +249,28 @@ def _fetch_vector(
                 data = response.content
             if not _is_svg(data):
                 raise FetchFailed("it is not an SVG")
-            if image.crop.trims:
-                data = crop_svg(data, image.crop)
-            dest.write_bytes(data)
         except (FetchFailed, OSError, requests.RequestException) as e:
             doc.warn(
                 f"could not download the vector {{}} ({e}); "
-                "using the image from the document instead",
+                "the figure is published without a picture",
                 Shown(vector.title or vector.uri),
             )
-            return False
+            doc.unpublished[image.object_id] = str(e)
+            return True
+        original.parent.mkdir(parents=True, exist_ok=True)
+        original.write_bytes(data)
 
+    data = original.read_bytes()
+    if image.crop.trims:
+        try:
+            data = crop_svg(data, image.crop)
+        except FetchFailed as e:
+            doc.warn(
+                f"could not crop the vector {{}} ({e}); it is published uncropped",
+                Shown(vector.title or vector.uri),
+            )
+    if not dest.exists() or dest.read_bytes() != data:
+        dest.write_bytes(data)
     written[image.object_id] = dest
     doc.image_files[image.object_id] = dest.name
     return True
@@ -291,7 +319,9 @@ def crop_svg(data: bytes, crop: Crop) -> bytes:
     if width is None or height is None:
         box = root.get("viewBox", "").replace(",", " ").split()
         if len(box) != 4:
-            raise FetchFailed("it has no `viewBox` or size in pixels to crop by")
+            # Sized by whatever holds it and drawn at no scale of its own,
+            # it has no whole for the raster to have been a picture of.
+            raise FetchFailed("it has neither a `viewBox` nor a fixed size to crop by")
         width, height = float(box[2]), float(box[3])
     kept = (
         crop.left * width,
@@ -308,12 +338,33 @@ def crop_svg(data: bytes, crop: Crop) -> bytes:
     return data[:start] + wrapper.encode() + data[start:].rstrip() + b"</svg></svg>\n"
 
 
+PIXELS_PER = {
+    "px": 1.0,
+    "in": 96.0,
+    "cm": 96 / 2.54,
+    "mm": 96 / 25.4,
+    "q": 96 / 101.6,
+    "pt": 96 / 72,
+    "pc": 16.0,
+    "em": 16.0,
+    "rem": 16.0,
+    "ex": 8.0,
+}
+"""CSS's fixed ratios to the pixel, with a font size of the default 16 px.
+
+Only the ratio of the kept part to the whole matters to a crop,
+so even the font-relative ones only have to agree with each other.
+"""
+
+
 def _pixels(length: str | None) -> float | None:
-    """A length in pixels, written bare or in `px`, or `None` for any other unit."""
+    """A length in pixels, or `None` for one relative to what holds it, like `100%`."""
     if length is None:
         return None
+    text = length.strip().lower()
+    unit = next((u for u in sorted(PIXELS_PER, key=len, reverse=True) if text.endswith(u)), "")
     try:
-        return float(length.strip().removesuffix("px"))
+        return float(text.removesuffix(unit)) * PIXELS_PER.get(unit, 1.0)
     except ValueError:
         return None
 
