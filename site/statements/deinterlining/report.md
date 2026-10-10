@@ -36,11 +36,11 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
-- style: an apostrophe should be ’, not ': `...ry train is running at a snail's pace, all due to an incident...`
-- style: an apostrophe should be ’, not ': `...iddle. In this way, trains don't conflict with one another, a...`
-- style: an apostrophe should be ’, not ': `...k-hour service, however, today's interlined network requires ...`
-- style: an apostrophe should be ’, not ': `...er, even with a transfer. What's more, this service simplific...`
-- style: an apostrophe should be ’, not ': `...ion will make it so delays can't spread, making massive meltd...`
+- style: an apostrophe should be `’`, not `'`: `...ry train is running at a snail's pace, all due to an incident...`
+- style: an apostrophe should be `’`, not `'`: `...iddle. In this way, trains don't conflict with one another, a...`
+- style: an apostrophe should be `’`, not `'`: `...k-hour service, however, today's interlined network requires ...`
+- style: an apostrophe should be `’`, not `'`: `...er, even with a transfer. What's more, this service simplific...`
+- style: an apostrophe should be `’`, not `'`: `...ion will make it so delays can't spread, making massive meltd...`
 - style: `4 minutes` should be `4 min`: `...eir trips slowed by more than 4 minutes. And all riders will see far ...`
 - style: `7 minutes` should be `7 min`: `...n the 63 St line from every 6-7 minutes to every 6 minutes, 1 minute ...`
 - style: `6 minutes` should be `6 min`: `...om every 6-7 minutes to every 6 minutes, 1 minute longer than average...`
@@ -56,10 +56,10 @@
 - style: `1-minute` should be `1 min`, with no hyphen: `...will only incur an additional 1-minute penalty in return for far mor...`
 - style: `10-minute` should be `10-min`: `...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...`
 - style: `10-minute` should be `10 min`, with no hyphen: `...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...`
-- style: an apostrophe should be ’, not ': `...torical artifact of the system's creation is almost unique in...`
-- style: an apostrophe should be ’, not ': `...d causes issues that often don't arise elsewhere. At worst, t...`
+- style: an apostrophe should be `’`, not `'`: `...torical artifact of the system's creation is almost unique in...`
+- style: an apostrophe should be `’`, not `'`: `...d causes issues that often don't arise elsewhere. At worst, t...`
 - style: a sentence should end with 1 space, not 2: `...rain did not increase service.··The schedule does include a mo...`
-- style: an apostrophe should be ’, not ': `...ncorrectly stated that the MTA's new schedule for the M train...`
+- style: an apostrophe should be `’`, not `'`: `...ncorrectly stated that the MTA's new schedule for the M train...`
 - the image `img-96810135` has no alt text and no caption; add a description to it in the doc
 - the image `img-5a4ea5b9` has no alt text and no caption; add a description to it in the doc
 

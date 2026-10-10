@@ -174,7 +174,9 @@ def _check_apostrophes(doc: Document, text: str) -> None:
     for match in STRAIGHT_APOSTROPHE.finditer(text):
         _warn(
             doc,
-            "an apostrophe should be \u2019, not ': {}",
+            "an apostrophe should be {}, not {}: {}",
+            Shown("\u2019"),
+            Shown("'"),
             Shown(_excerpt(text, match.start(), match.end())),
         )
 

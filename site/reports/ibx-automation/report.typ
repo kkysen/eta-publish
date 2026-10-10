@@ -33,7 +33,7 @@
     [22 comment threads still open on this tab],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
-    [style: an apostrophe should be ’, not ': #raw("... parts of the MTA perhaps didn't get the memo. The IBX websit...")],
+    [style: an apostrophe should be #raw("’"), not #raw("'"): #raw("... parts of the MTA perhaps didn't get the memo. The IBX websit...")],
     [style: #raw("90 seconds") should be #raw("90 sec"): #raw("...lows headways as low as every 90 seconds, as seen in many existing sys...")],
     [style: #raw("90 second") should be #raw("90 sec"): #raw("...ial ridership may not warrant 90 second headways, but ALM would allow...")],
     [style: #raw("5 minute") should be #raw("5 min"): #raw("...000 with the currently stated 5 minute peak headway, with off-peak h...")],

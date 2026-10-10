@@ -33,7 +33,7 @@ October 12, 2026
 - 22 comment threads still open on this tab
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
-- style: an apostrophe should be ’, not ': `... parts of the MTA perhaps didn't get the memo. The IBX websit...`
+- style: an apostrophe should be `’`, not `'`: `... parts of the MTA perhaps didn't get the memo. The IBX websit...`
 - style: `90 seconds` should be `90 sec`: `...lows headways as low as every 90 seconds, as seen in many existing sys...`
 - style: `90 second` should be `90 sec`: `...ial ridership may not warrant 90 second headways, but ALM would allow...`
 - style: `5 minute` should be `5 min`: `...000 with the currently stated 5 minute peak headway, with off-peak h...`
