@@ -17,7 +17,6 @@
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[explain one example about how crewing affects this]")],
     [unfinished text in the document: #raw("[car-mile operating costs graph NYCT vs Vancouver]")],
-    [#raw("Copy") is not a modifier #raw("Video:") takes; ignoring it: #raw("Video (Graphic Warning, Copy):...")],
     [unfinished text in the document: #raw("[caption]")],
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[insert image of at-grade station crossing on HBLR]")],

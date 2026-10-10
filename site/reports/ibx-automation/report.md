@@ -15,7 +15,6 @@ October 12, 2026
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[explain one example about how crewing affects this]`
 - unfinished text in the document: `[car-mile operating costs graph NYCT vs Vancouver]`
-- `Copy` is not a modifier `Video:` takes; ignoring it: `Video (Graphic Warning, Copy):...`
 - unfinished text in the document: `[caption]`
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[insert image of at-grade station crossing on HBLR]`
