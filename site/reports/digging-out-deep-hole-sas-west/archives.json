@@ -16,9 +16,9 @@
     "timestamp": "20230504005139"
   },
   "https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf": {
-    "error": "error:too-many-daily-captures",
-    "pages": 83,
-    "timestamp": "20261009"
+    "job": "spn2-c9f96a9a8cfaa291cd4f9f77eb9e6fa65a86e57b",
+    "snapshot": "https://web.archive.org/web/20261010195152/https://bqrail.substack.com/api/v1/file/e01c0e72-8526-4748-879c-5ac271ca3c06.pdf",
+    "timestamp": "20261010195152"
   },
   "https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22": {
     "snapshot": "https://web.archive.org/web/20260411224025/https://bsky.app/profile/ndhapple.bsky.social/post/3mjaivx2t3k22",
@@ -92,16 +92,18 @@
     "timestamp": "20261009033614"
   },
   "https://mp.weixin.qq.com/s/4l7RbnS01yLp1p2Zdee_yA": {
-    "error": "error:too-many-daily-captures",
-    "timestamp": "20261009"
+    "job": "spn2-ad51a6817448e88d189394a5ba3b97e2d63eb37f",
+    "snapshot": "https://web.archive.org/web/20261010195018/https://mp.weixin.qq.com/s/4l7RbnS01yLp1p2Zdee_yA",
+    "timestamp": "20261010195018"
   },
   "https://mp.weixin.qq.com/s/E93D6tELgYmRYaiNY6hhAw": {
     "snapshot": "https://web.archive.org/web/20261009155000/https://mp.weixin.qq.com/s/E93D6tELgYmRYaiNY6hhAw",
     "timestamp": "20261009155000"
   },
   "https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw": {
-    "error": "error:too-many-daily-captures",
-    "timestamp": "20261009"
+    "job": "spn2-0ab76fbbecdbd6bcebc87936926243e02d7c123e",
+    "snapshot": "https://web.archive.org/web/20261010194846/https://mp.weixin.qq.com/s/R7QkLaX_Mt3iPXfBini8rw",
+    "timestamp": "20261010194846"
   },
   "https://mp.weixin.qq.com/s/SBoJE69QTtuc8mzZgKiWwQ": {
     "snapshot": "https://web.archive.org/web/20261009155055/https://mp.weixin.qq.com/s/SBoJE69QTtuc8mzZgKiWwQ",
@@ -349,7 +351,8 @@
     "timestamp": "20260821170758"
   },
   "https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137": {
-    "error": "error:too-many-daily-captures",
-    "timestamp": "20261009"
+    "job": "spn2-3595645572fdd63b8891af1ec1ceb32129ddb54b",
+    "snapshot": "https://web.archive.org/web/20261010195130/https://youtu.be/h6-MVzb58E4?si=rJ-vaBdp1zjrMAAn&t=137",
+    "timestamp": "20261010195130"
   }
 }
