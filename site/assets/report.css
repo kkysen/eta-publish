@@ -110,6 +110,11 @@
 .eta-report .embed {
   max-width: 34rem;
 }
+/* Above the card, and above the player once the card becomes one. */
+.eta-report .embed-warning {
+  margin: 0 0 0.4em;
+  font-weight: bold;
+}
 .eta-report .embed-card {
   display: block;
   text-decoration: none;
