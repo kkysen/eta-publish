@@ -237,9 +237,7 @@ Automation and PSDs are generally considered together as PSDs make it simpler fo
 
 #strong[Warning, graphic video]
 
-#link("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")[Joseph Lynskey hit by the 1 train, from Thought Police HQ (\@ThoughtPolic3HQ) on X: “\#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
-The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
-Hawkins has a criminal record that…”]#super[#link(<src48>)[\[48\]]]
+#link("https://kkysen.github.io/eta-publish/reports/ibx-automation/videos/Joseph_Lynskey_hit_by_the_1_train.mp4")[Joseph Lynskey hit by the 1 train]#super[#link(<src48>)[\[48\]]]
 
 #figure(
   link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/Skyline_platform_screen_doors.png")[#capped_image("print/Skyline_platform_screen_doors.jpg", alt: "Half-height PSDs at Hālawa station of the Honolulu Skyline, an ALM using Hitachi Driverless Metro rolling stock.")],

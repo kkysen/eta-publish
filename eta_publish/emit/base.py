@@ -191,14 +191,16 @@ class Emitter(ABC):
                     return self.linked_embed(node, node.title or node.url)
                 return self.embed(node, card)
 
-    def linked_embed(self, node: Embed, label: str) -> str:
+    def linked_embed(self, node: Embed, label: str, href: str = "", cite: str = "") -> str:
         """An embed as a link saying what it is, for wherever it cannot play.
 
         The warning is a line of its own ahead of the link, rather than the
         start of the link's text: the link is named for the video, and the
         warning is something to read before following it.
         """
-        link = self.paragraph(Paragraph([Text(label, href=node.url)]))
+        # `cite` is the post's citation, for a link that goes somewhere else:
+        # a link to the post carries its own.
+        link = self.paragraph(Paragraph([Text(label, href=href or node.url)])) + cite
         if not node.graphic:
             return link
         return self.join([self.paragraph(Paragraph([Text(GRAPHIC_WARNING, bold=True)])), link])

@@ -19,7 +19,7 @@ import json
 import re
 from typing import override
 
-from ..naming import IMAGE_DIR, PRINT_DIR, SITE, print_href
+from ..naming import IMAGE_DIR, PRINT_DIR, SITE, VIDEO_DIR, print_href
 from ..nodes import (
     Card,
     Document,
@@ -217,6 +217,13 @@ class TypstEmitter(Emitter):
     def embed(self, node: Embed, card: Card) -> str:
         # Nothing here plays anything, so the embed is what it says,
         # linked to where it does play.
+        served = self.doc.served_video(node)
+        if served is not None:
+            # Ours, so named as the document names it and linked to our copy:
+            # the post it came from is the citation's to point at.
+            slug = self.doc.slug.strip("/")
+            href = f"{SITE}/{slug}/{VIDEO_DIR}/{served}" if slug else ""
+            return self.linked_embed(node, node.title or "Video", href, self.source_ref(node.url))
         return self.linked_embed(node, embed_label(node, card))
 
     @override

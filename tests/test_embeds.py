@@ -259,7 +259,9 @@ def test_a_graphic_video_is_warned_about_and_named_apart() -> None:
     caption = html[html.index('<figcaption class="embed-title">') :]
     assert caption.index("link-mark") < caption.index("</figcaption>")
     markdown = MarkdownEmitter().emit(doc)
-    assert "**Warning, graphic video**\n\n[Hit by the 1 train, from someone on X:" in markdown
+    # Ours, so named as the document names it and linked to our copy.
+    link = "[Hit by the 1 train](<videos/Hit_by_the_1_train.mp4>)"
+    assert f"**Warning, graphic video**\n\n{link}" in markdown
 
 
 def test_a_copy_that_failed_shows_its_card() -> None:
