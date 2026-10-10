@@ -37,7 +37,6 @@
     [style: #raw("3 minute") should be #raw("3 min"): #raw("... to affordably maintain those 3 minute headways throughout the day i...")],
     [style: #raw("10 minutes") should be #raw("10 min"): #raw("... day instead of collapsing to 10 minutes off-peak.")],
     [style: #raw("32 minute") should be #raw("32 min"): #raw("...hieving the MTA’s commendable 32 minute runtime target.")],
-    [style: #raw("Jersey Avenue") should be #raw("Jersey Av"): #raw("...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...")],
     [style: #raw("32 minute") should be #raw("32 min"): #raw("...riving up runtimes. The MTA’s 32 minute runtime target, for example, ...")],
     [style: an apostrophe should be #raw("’"), not #raw("'"): #raw("...ike with the subway, there isn't a century of physical and op...")],
     [style: an apostrophe should be #raw("’"), not #raw("'"): #raw("It's clear that the MTA has liste...")],

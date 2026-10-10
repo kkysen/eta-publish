@@ -394,11 +394,12 @@ No street is `The` anything, so this is the one that can be told
 apart by reading it.
 """
 
-ELSEWHERE = frozenset({"Nanba Road", "Heping South Street", "Ball Square"})
+ELSEWHERE = frozenset({"Nanba Road", "Heping South Street", "Ball Square", "Jersey Avenue"})
 """Streets these reports name that are not in New York.
 
 `Nanba Road` is in Shanghai, `Heping South Street` in Beijing,
-and `Ball Square` is a Green Line station outside Boston, and none
+`Ball Square` is a Green Line station outside Boston,
+and `Jersey Avenue` a Hudson-Bergen Light Rail station in Jersey City, and none
 is a street the MTA has a spelling for: restyling them to `Nanba Rd` would be
 inventing a name nothing anywhere calls it.
 Nothing in the text says which city a street is in,

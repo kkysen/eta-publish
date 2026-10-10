@@ -258,6 +258,7 @@ def test_a_street_in_another_city_keeps_its_own_name() -> None:
     """`Nanba Rd` is a name nothing anywhere calls it."""
     assert warnings(written("Cross-traffic on Nanba Road could move underground.")) == []
     assert warnings(written("The Green Line Extension reaches Ball Square.")) == []
+    assert warnings(written("The light rail stops at Jersey Avenue.")) == []
 
 
 def test_a_court_is_a_name_rather_than_a_kind_of_street() -> None:
