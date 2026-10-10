@@ -53,7 +53,7 @@ each, so a thread past the cores this process may use only waits for one.
 
 
 def download(
-    doc: Document, outdir: Path, *, session: requests.Session | None = None
+    doc: Document, outdir: Path, *, session: requests.Session | None = None, offline: bool = False
 ) -> dict[str, Path]:
     """Fetch every image in `doc`, returning object id to written path.
 
@@ -135,7 +135,9 @@ def download(
     # is never saved.
     wanted: list[tuple[Image, str]] = []
     for image in doc.images:
-        if image.vector is not None and _fetch_vector(image, outdir, doc, written, http):
+        if image.vector is not None and _fetch_vector(
+            image, outdir, doc, written, http, online=not offline
+        ):
             continue
         if image.source_uri:
             # Carried along rather than read again where it is used:
@@ -217,7 +219,12 @@ so a crop that could not be applied says so on every build, not only the first.
 
 
 def _fetch_vector(
-    image: Image, outdir: Path, doc: Document, written: dict[str, Path], http: requests.Session
+    image: Image,
+    outdir: Path,
+    doc: Document,
+    written: dict[str, Path],
+    http: requests.Session,
+    online: bool,
 ) -> bool:
     """Write the vector original, returning whether the image has one.
 
@@ -239,7 +246,14 @@ def _fetch_vector(
         # so it is the original: an offline build has no other copy to work from.
         original.parent.mkdir(parents=True, exist_ok=True)
         original.write_bytes(dest.read_bytes())
-    if not original.exists():
+    # Downloaded again on every build that can, like the rasters, and for the
+    # same reason: nothing says whether the copy here is still the picture.
+    # A Drive file keeps its id when it is replaced, and a link to a branch,
+    # like a `raw.githubusercontent.com/.../refs/heads/main/...`, keeps its URL
+    # when the branch moves, and neither is an edit to the document, so a
+    # build that reuses its saved response still has to ask.
+    # The copy is for an `--offline` build, which asks nothing.
+    if online or not original.exists():
         try:
             if vector.file_id:
                 data = download_drive_file(vector.file_id)

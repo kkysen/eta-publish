@@ -4,6 +4,7 @@ Everything here was read off the actual doc and checked against the published pa
 rather than guessed from the fixture.
 """
 
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, override
 
@@ -830,6 +831,39 @@ def test_an_svg_that_cannot_be_cropped_is_published_whole(tmp_path: Path) -> Non
         "could not crop the vector `share.svg` "
         "(it has neither a `viewBox` nor a fixed size to crop by); it is published uncropped"
     ]
+    assert (tmp_path / doc.image_files["io.1"]).read_bytes() == svg
+
+
+def test_a_linked_svg_is_downloaded_again_when_it_changes(tmp_path: Path) -> None:
+    """IBX links its charts from a branch, so the URL stays put when a chart is redrawn."""
+    old = b'<svg xmlns="http://www.w3.org/2000/svg"><g id="old"/></svg>'
+    new = b'<svg xmlns="http://www.w3.org/2000/svg"><g id="new"/></svg>'
+    download(_linked_svg_doc(), tmp_path, session=Serving(old))
+    doc = _linked_svg_doc()
+    download(doc, tmp_path, session=Serving(new))
+    assert (tmp_path / doc.image_files["io.1"]).read_bytes() == new
+
+
+def test_a_saved_response_still_downloads_its_svg_again(tmp_path: Path) -> None:
+    """An unedited document is rebuilt from its saved response, which has no image URLs,
+    and a chart's link can point somewhere new without the document being edited."""
+    old = b'<svg xmlns="http://www.w3.org/2000/svg"><g id="old"/></svg>'
+    new = b'<svg xmlns="http://www.w3.org/2000/svg"><g id="new"/></svg>'
+    download(_linked_svg_doc(), tmp_path, session=Serving(old))
+    doc = _linked_svg_doc()
+    for figure in (b for b in doc.blocks if isinstance(b, Figure)):
+        figure.image = replace(figure.image, source_uri=None)
+    download(doc, tmp_path, session=Serving(new))
+    assert (tmp_path / doc.image_files["io.1"]).read_bytes() == new
+
+
+def test_an_offline_build_uses_the_svg_it_has(tmp_path: Path) -> None:
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg"><g/></svg>'
+    download(_linked_svg_doc(), tmp_path, session=Serving(svg))
+    doc = _linked_svg_doc()
+    session = Serving(b"")
+    download(doc, tmp_path, session=session, offline=True)
+    assert session.asked == []
     assert (tmp_path / doc.image_files["io.1"]).read_bytes() == svg
 
 

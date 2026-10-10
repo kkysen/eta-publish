@@ -630,7 +630,7 @@ def build_one(
         if options.images:
             from .images import download, write_print_copies
 
-            written_images = download(doc, dest / IMAGE_DIR)
+            written_images = download(doc, dest / IMAGE_DIR, offline=options.offline)
             write_image_index(dest, written_images, doc.unpublished)
             # Not recorded in `images.json`: that file is committed, and a
             # JPEG encoder is not byte-stable between versions, so a Pillow
