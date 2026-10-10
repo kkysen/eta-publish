@@ -20,6 +20,7 @@
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[insert image of at-grade station crossing on HBLR]")],
     [image #raw("kix.jgxhj1hqsf1i") has no alt text and no caption; add a description to it in the doc],
+    [image #raw("kix.tx1fjdbmxbaz") has no alt text and no caption; add a description to it in the doc],
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[explain 6B]")],
     [unfinished text in the document: #raw("[cite RAPTOR results, all are around 20k/km]")],
@@ -27,6 +28,7 @@
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[TODO finish and adapt to footnote]")],
     [the image #raw("automated_share_by_year_2016_to_2026") has no caption],
+    [the image #raw("automated_share_by_year_ex_china_2016_to_2026") has no caption],
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): A new artistic rendering of the IBX at New Utrecht Av. They appear to...], [#raw("img-dfdefb85"): \[caption\]], )],
     [8 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [19 comment threads still open on this tab],
@@ -154,10 +156,15 @@ They have told the MTA this, and hopefully the MTA follows their advice.
 )
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_ex_china_2016_to_2026.png")[#capped_image("print/automated_share_by_year_ex_china_2016_to_2026.jpg", alt: "Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision. We know the MTA has been considering this already, as even 2 years ago, consultants presented to the MTA about driverless operations for the IBX. More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM. Now we need those with the power to make such a decision to follow through and commit to automation.")],
-  caption: [Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision. We know the MTA has been considering this already, as even 2 years ago, #link("https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf#page=5")[consultants presented to the MTA about driverless operations]#super[#link(<src25>)[\[25\]]]#footnote[As #link("https://bqrail.substack.com/p/interborough-express-progress-reports#:~:text=driverless%20vehicle%20operations")[FOILed]#super[#link(<src51>)[\[51\]]] by John Pegram (BQRail). The presentation was done on 3/26/2024 by WSP, the consultant for the environmental review.] for the IBX. More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM. Now we need those with the power to make such a decision to follow through and commit to automation. \
-  #link("https://github.com/kkysen/automated-metro-data")[Credit: ETA (Khyber Sen)]#super[#link(<src22>)[\[22\]]], #link("https://www.urbanrail.net/news.htm")[UrbanRail.net]#super[#link(<src23>)[\[23\]]], #link("https://www.camet.org.cn/")[CAMET]#super[#link(<src24>)[\[24\]]]],
+  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_ex_china_2016_to_2026.png")[#capped_image("print/automated_share_by_year_ex_china_2016_to_2026.jpg")],
+  caption: [#link("https://github.com/kkysen/automated-metro-data")[Credit: ETA (Khyber Sen)]#super[#link(<src22>)[\[22\]]], #link("https://www.urbanrail.net/news.htm")[UrbanRail.net]#super[#link(<src23>)[\[23\]]], #link("https://www.camet.org.cn/")[CAMET]#super[#link(<src24>)[\[24\]]]],
 )
+
+Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision.
+We know the MTA has been considering this already, as even 2 years ago, #link("https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf#page=5")[consultants presented to the MTA about driverless operations]#super[#link(<src25>)[\[25\]]]#footnote[As #link("https://bqrail.substack.com/p/interborough-express-progress-reports#:~:text=driverless%20vehicle%20operations")[FOILed]#super[#link(<src51>)[\[51\]]] by John Pegram (BQRail).
+The presentation was done on 3/26/2024 by WSP, the consultant for the environmental review.] for the IBX.
+More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM.
+Now we need those with the power to make such a decision to follow through and commit to automation.
 
 Automation is classified in the following internationally standardized grades, each called #emph[grades of automation] (GoA) with an associated number:
 

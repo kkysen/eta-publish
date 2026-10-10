@@ -18,6 +18,7 @@ October 12, 2026
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[insert image of at-grade station crossing on HBLR]`
 - image `kix.jgxhj1hqsf1i` has no alt text and no caption; add a description to it in the doc
+- image `kix.tx1fjdbmxbaz` has no alt text and no caption; add a description to it in the doc
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[explain 6B]`
 - unfinished text in the document: `[cite RAPTOR results, all are around 20k/km]`
@@ -25,6 +26,7 @@ October 12, 2026
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[TODO finish and adapt to footnote]`
 - the image `automated_share_by_year_2016_to_2026` has no caption
+- the image `automated_share_by_year_ex_china_2016_to_2026` has no caption
 - 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
   - `img-dfdefb85`: \[caption\]
@@ -142,10 +144,14 @@ They have told the MTA this, and hopefully the MTA follows their advice.
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[22\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[23\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[24\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_2016_to_2026.svg>) -->
 
-![Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision. We know the MTA has been considering this already, as even 2 years ago, consultants presented to the MTA about driverless operations for the IBX. More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM. Now we need those with the power to make such a decision to follow through and commit to automation.](<images/automated_share_by_year_ex_china_2016_to_2026.png>)\
-Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision. We know the MTA has been considering this already, as even 2 years ago, [consultants presented to the MTA about driverless operations](<https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf#page=5>)<sup>\[25\]</sup>[^7] for the IBX. More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM. Now we need those with the power to make such a decision to follow through and commit to automation.\
+![](<images/automated_share_by_year_ex_china_2016_to_2026.png>)\
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[22\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[23\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[24\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_ex\_china\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_ex_china_2016_to_2026.svg>) -->
+
+Moreover, even the MTA IBX staff have told us at IBX Open Houses that they would prefer the IBX to be automated, but that this is ultimately the MTA board and governor’s decision.
+We know the MTA has been considering this already, as even 2 years ago, [consultants presented to the MTA about driverless operations](<https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf#page=5>)<sup>\[25\]</sup>[^7] for the IBX.
+More recently, they have visited REM in Montreal and the under-construction Ontario Line in Toronto, both of which are ALM.
+Now we need those with the power to make such a decision to follow through and commit to automation.
 
 Automation is classified in the following internationally standardized grades, each called *grades of automation* (GoA) with an associated number:
 
