@@ -9,7 +9,6 @@ September 9, 2026
 - the `Header` section has an unrecognized `Related Document:` line; check it for a typo
 - the `Header` section has an unrecognized `Video:` line; check it for a typo
 - 2 images share one paragraph; only the first becomes a figure
-- image `kix.djm0a1aand4k` has no alt text and no caption; add a description to it in the doc
 - the image `img-831248b1` has no caption
 - the image `img-831248b1` has no `Credit:` line
 - the image `img-b17aa21a` has no `Credit:` line
@@ -29,6 +28,7 @@ September 9, 2026
 - style: `15 seconds` should be `15 sec`: `... the door closing warning—are 15 seconds per interstation segment, onl...`
 - style: a sentence should end with 1 space, not 2: `..., often one message at a time.··Slowly, by following the path ...`
 - style: a sentence should end with 1 space, not 2: `...ersion of the curb cut effect.··In this case, designing announ...`
+- the image `img-831248b1` has no alt text and no caption; add a description to it in the doc
 
 [Video: Too Damn Loud: Announcements on NYC Transit are Out of Control (Effective Transit Alliance on YouTube)](<https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>)<sup>\[1\]</sup>
 

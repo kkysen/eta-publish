@@ -11,8 +11,6 @@
     [dropped a line before the #raw("Header") section: #raw("Deinterlining")],
     [the #raw("Header") section has an unrecognized #raw("Before:") line; check it for a typo],
     [the #raw("Header") section has an unrecognized #raw("Thesis:") line; check it for a typo],
-    [image #raw("kix.r5dr7c744w41") has no alt text and no caption; add a description to it in the doc],
-    [image #raw("kix.ltdn9d3lr6ci") has no alt text and no caption; add a description to it in the doc],
     [the image #raw("img-a199edea") has a #raw("Credit:") line under it that is not read as its credit, because #raw("Credit") is not underlined; underline it in the doc],
     [the image #raw("img-da01ab69") has no #raw("Credit:") line],
     [the image #raw("img-5f0a3a08") has a #raw("Credit:") line under it that is not read as its credit, because #raw("Credit") is not underlined; underline it in the doc],
@@ -43,6 +41,8 @@
     [style: #raw("10-minute") should be #raw("10-min"): #raw("...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...")],
     [style: #raw("10-minute") should be #raw("10 min"), with no hyphen: #raw("...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...")],
     [style: a sentence should end with 1 space, not 2: #raw("...rain did not increase service.··The schedule does include a mo...")],
+    [the image #raw("img-96810135") has no alt text and no caption; add a description to it in the doc],
+    [the image #raw("img-5a4ea5b9") has no alt text and no caption; add a description to it in the doc],
   ),
 )
 

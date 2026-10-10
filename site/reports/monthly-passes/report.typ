@@ -10,7 +10,6 @@
   warnings: (
     [the #raw("Header") section has an unrecognized #raw("Description:") line; check it for a typo],
     [no #raw("Title")-styled paragraph, so the document name #raw("Monthly Passes") is being used as the headline; style the headline as #raw("Title") in the doc],
-    [image #raw("kix.a8pybogzdcax") has no alt text and no caption; add a description to it in the doc],
     [the image #raw("img-ae6ddd33") has no caption],
     [the image #raw("img-ae6ddd33") has no #raw("Credit:") line],
     [the image #raw("img-cf3f2056") has a #raw("Credit:") line under it that is not read as its credit, because #raw("Credit") is not underlined; underline it in the doc],
@@ -23,6 +22,7 @@
     [the #raw("Header") section has no #raw("Publish Due Date:") line],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
+    [the image #raw("img-ae6ddd33") has no alt text and no caption; add a description to it in the doc],
   ),
   hero: [
 #figure(

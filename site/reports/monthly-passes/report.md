@@ -4,7 +4,6 @@
 
 - the `Header` section has an unrecognized `Description:` line; check it for a typo
 - no `Title`-styled paragraph, so the document name `Monthly Passes` is being used as the headline; style the headline as `Title` in the doc
-- image `kix.a8pybogzdcax` has no alt text and no caption; add a description to it in the doc
 - the image `img-ae6ddd33` has no caption
 - the image `img-ae6ddd33` has no `Credit:` line
 - the image `img-cf3f2056` has a `Credit:` line under it that is not read as its credit, because `Credit` is not underlined; underline it in the doc
@@ -25,6 +24,7 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
+- the image `img-ae6ddd33` has no alt text and no caption; add a description to it in the doc
 
 ![](<images/img-ae6ddd33.jpg>)
 

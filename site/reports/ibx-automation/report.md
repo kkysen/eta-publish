@@ -18,8 +18,6 @@ October 12, 2026
 - unfinished text in the document: `[caption]`
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[insert image of at-grade station crossing on HBLR]`
-- image `kix.jgxhj1hqsf1i` has no alt text and no caption; add a description to it in the doc
-- image `kix.tx1fjdbmxbaz` has no alt text and no caption; add a description to it in the doc
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[explain 6B]`
 - unfinished text in the document: `[cite RAPTOR results, all are around 20k/km]`
@@ -138,11 +136,11 @@ In fact, when talking to major rolling stock vendors at InnoTrans 2026 who were 
 The global standard for a new-build metro line these days, light or heavy, simply is to be automated.
 They have told the MTA this, and hopefully the MTA follows their advice.
 
-![](<images/automated_share_by_year_2016_to_2026.svg>)\
+![Share of new metro lines worldwide that are automated (> GoA2), by year. 135/361 new grade-separated, non-mainline urban rail lines opened in 2016 to 2026-09-29 are automated.](<images/automated_share_by_year_2016_to_2026.svg>)\
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[24\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[25\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[26\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_2016_to_2026.svg>) -->
 
-![](<images/automated_share_by_year_ex_china_2016_to_2026.svg>)\
+![Share of new metro lines outside mainland China that are automated (> GoA2), by year. 65/127 new grade-separated, non-mainline urban rail lines opened in 2016 to 2026-09-05 are automated.](<images/automated_share_by_year_ex_china_2016_to_2026.svg>)\
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[24\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[25\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[26\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_ex\_china\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_ex_china_2016_to_2026.svg>) -->
 

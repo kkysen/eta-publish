@@ -11,7 +11,6 @@
     [the #raw("Header") section has an unrecognized #raw("Related Document:") line; check it for a typo],
     [the #raw("Header") section has an unrecognized #raw("Video:") line; check it for a typo],
     [2 images share one paragraph; only the first becomes a figure],
-    [image #raw("kix.djm0a1aand4k") has no alt text and no caption; add a description to it in the doc],
     [the image #raw("img-831248b1") has no caption],
     [the image #raw("img-831248b1") has no #raw("Credit:") line],
     [the image #raw("img-b17aa21a") has no #raw("Credit:") line],
@@ -25,6 +24,7 @@
     [style: #raw("15 seconds") should be #raw("15 sec"): #raw("... the door closing warning—are 15 seconds per interstation segment, onl...")],
     [style: a sentence should end with 1 space, not 2: #raw("..., often one message at a time.··Slowly, by following the path ...")],
     [style: a sentence should end with 1 space, not 2: #raw("...ersion of the curb cut effect.··In this case, designing announ...")],
+    [the image #raw("img-831248b1") has no alt text and no caption; add a description to it in the doc],
   ),
 )
 
