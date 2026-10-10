@@ -208,7 +208,7 @@ def is_video(card: Card | None) -> bool:
 
 
 def download(doc: Document, dest: Path, http: requests.Session | None = None) -> None:
-    """Write each embed's thumbnail, and each Drive video, beside the images.
+    """Write each embed's thumbnail, and each Drive or copied video, beside the images.
 
     Fetched every build, as the images are, because nothing is committed to
     tell a changed file from an unchanged one. A failure warns and the card
@@ -221,7 +221,9 @@ def download(doc: Document, dest: Path, http: requests.Session | None = None) ->
             continue
         stem = f"embed-{hashlib.sha256(embed.url.encode()).hexdigest()[:8]}"
         try:
-            if embed.platform is Platform.DRIVE:
+            if embed.copy and embed.platform is not Platform.DRIVE:
+                doc.media_files[embed.url] = _copied(embed, stem, dest / VIDEO_DIR, doc)
+            elif embed.platform is Platform.DRIVE:
                 if is_video(card):
                     doc.media_files[embed.url] = _video(embed, card, stem, dest / VIDEO_DIR, doc)
             elif card.thumbnail:
@@ -246,13 +248,49 @@ def _video(embed: Embed, card: Card, stem: str, outdir: Path, doc: Document) -> 
     from .fetch import download_drive_file
 
     data = download_drive_file(embed.key)
-    if len(data) > PAGES_FILE_LIMIT:
-        doc.warn(
-            f"the video {{}} is {len(data):,} bytes, over the {PAGES_FILE_LIMIT:,} bytes "
-            "GitHub Pages will publish; the deploy will fail until it is smaller",
-            Shown(embed.url),
-        )
+    _check_size(embed, len(data), doc)
     name = f"{stem}{VIDEO_TYPES[card.mime]}"
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / name).write_bytes(data)
     return name
+
+
+def _copied(embed: Embed, stem: str, outdir: Path, doc: Document) -> str:
+    """Download the video a `Video (Copy):` post or link plays, with `yt-dlp`.
+
+    MP4 where the platform has it, since that is what every browser plays,
+    and H.264 in it before anything newer: YouTube's best MP4 is often AV1,
+    which an older iPhone does not play. Joining a separate video and audio
+    stream into one takes `ffmpeg`.
+    """
+    from yt_dlp import YoutubeDL
+
+    outdir.mkdir(parents=True, exist_ok=True)
+    options = {
+        "format": (
+            "bv*[ext=mp4][vcodec^=avc1]+ba[ext=m4a]/b[ext=mp4][vcodec^=avc1]"
+            "/bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b"
+        ),
+        "merge_output_format": "mp4",
+        "outtmpl": str(outdir / f"{stem}.%(ext)s"),
+        "noplaylist": True,
+        "quiet": True,
+        "noprogress": True,
+        "overwrites": True,
+    }
+    with YoutubeDL(options) as ydl:
+        info = ydl.extract_info(embed.url, download=True)
+        path = Path(ydl.prepare_filename(info)).with_suffix(".mp4")
+    if not path.exists():
+        raise ValueError(f"{path.name} was not written")
+    _check_size(embed, path.stat().st_size, doc)
+    return path.name
+
+
+def _check_size(embed: Embed, size: int, doc: Document) -> None:
+    if size > PAGES_FILE_LIMIT:
+        doc.warn(
+            f"the video {{}} is {size:,} bytes, over the {PAGES_FILE_LIMIT:,} bytes "
+            "GitHub Pages will publish; the deploy will fail until it is smaller",
+            Shown(embed.url),
+        )

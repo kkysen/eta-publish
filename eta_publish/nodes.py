@@ -15,6 +15,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field, replace
 from datetime import datetime
 from enum import Enum
+from pathlib import Path
 from string import ascii_letters
 from typing import override
 from urllib.parse import urlsplit
@@ -325,6 +326,10 @@ class Embed:
     graphic: bool = False
     """Whether its line was `Video (Graphic Warning):`, so the reader is warned first."""
 
+    copy: bool = False
+    """Whether its line was `Video (Copy):`, so the build downloads the video
+    and the site serves it, rather than leaving it to a post that can be deleted."""
+
 
 @dataclass(frozen=True)
 class Card:
@@ -631,7 +636,7 @@ class Document:
 
     media_files: dict[str, str] = field(default_factory=dict)
     """Embed URL to the file written for it: a thumbnail under `IMAGE_DIR`,
-    or the video itself under `VIDEO_DIR` for one in Drive.
+    or the video itself under `VIDEO_DIR` for one in Drive or one copied.
 
     Recorded in `embeds.json` for the same reason as `image_files`:
     the extension is learned by fetching."""
@@ -873,6 +878,19 @@ class Document:
         ):
             return None
         return card
+
+    def served_video(self, embed: Embed) -> str | None:
+        """The video file the site serves for `embed`, if it serves one.
+
+        Checked by extension as well, since a copy that failed to download
+        leaves the thumbnail an earlier build recorded for the same URL.
+        """
+        if embed.platform is not Platform.DRIVE and not embed.copy:
+            return None
+        file = self.media_files.get(embed.url)
+        if file is None or Path(file).suffix not in VIDEO_TYPES.values():
+            return None
+        return file
 
     def image_aspect(self, image: Image) -> float | None:
         """The written file's width over its height, if that was recorded."""

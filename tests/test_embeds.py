@@ -204,6 +204,32 @@ def test_a_drive_video_plays_from_the_site() -> None:
     assert '<video src="videos/embed-1.mp4" controls preload="metadata">' in html
 
 
+def copied(url: str) -> JsonObject:
+    """A `Video (Graphic Warning, Copy):` line."""
+    return linked((": ", None), (url, url), underline="Video (Graphic Warning, Copy)")
+
+
+def test_a_copied_video_plays_from_the_site() -> None:
+    url = "https://x.com/someone/status/123"
+    doc = build([para("Headline", "TITLE"), copied(url)])
+    assert doc.blocks == [Embed(url=url, platform=Platform.X, key="123", graphic=True, copy=True)]
+    assert not [w for w in doc.warnings if "not a modifier" in str(w)]
+    doc.cards[url] = Card(author="someone", text="a post")
+    doc.media_files[url] = "embed-1.mp4"
+    html = HtmlEmitter(image_base="images").emit(doc)
+    assert '<video src="videos/embed-1.mp4" controls preload="metadata">' in html
+
+
+def test_a_copy_that_failed_shows_its_card() -> None:
+    url = "https://x.com/someone/status/123"
+    doc = build([para("Headline", "TITLE"), copied(url)])
+    doc.cards[url] = Card(author="someone", text="a post")
+    doc.media_files[url] = "embed-1.jpg"
+    html = HtmlEmitter(image_base="images").emit(doc)
+    assert "<video " not in html
+    assert 'src="images/embed-1.jpg"' in html
+
+
 def test_a_drive_file_that_is_not_a_video_is_a_link() -> None:
     url = "https://drive.google.com/file/d/1abc/view"
     doc = build([para("Headline", "TITLE"), video(url)])

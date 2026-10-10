@@ -8,6 +8,7 @@ render as undifferentiated body text.
 """
 
 from collections.abc import Callable, Iterable
+from pathlib import Path
 from string import ascii_lowercase
 from typing import cast, override
 
@@ -19,6 +20,7 @@ from markupsafe import Markup
 from ..assets import read
 from ..naming import ASSET_DIR, IMAGE_DIR, VIDEO_DIR, content_anchor
 from ..nodes import (
+    VIDEO_TYPES,
     Archived,
     Block,
     Card,
@@ -870,8 +872,8 @@ class HtmlEmitter(Emitter):
         post, so without the script, or in a reader that strips it, it is still
         the way there. The player's address rides on the figure for the script.
 
-        A video in Drive is served from here, so it has nobody to keep out and
-        plays where it is.
+        A video in Drive, or one copied from a `Video (Copy):` line, is served
+        from here, so it has nobody to keep out and plays where it is.
         """
         file = self.doc.media_files.get(node.url)
         anchor = self.take(f"embed-{node.platform.value}-{node.key.replace('/', '-')}")
@@ -887,9 +889,10 @@ class HtmlEmitter(Emitter):
             if node.graphic
             else None
         )
-        if node.platform is Platform.DRIVE and file is not None:
+        served = self.doc.served_video(node)
+        if served is not None:
             video = tag.video(
-                src=self.media_src(file, VIDEO_DIR), controls=True, preload="metadata"
+                src=self.media_src(served, VIDEO_DIR), controls=True, preload="metadata"
             )[tag.a(href=node.url)["Watch the video"]]
             return markup(
                 tag.figure(id=anchor, class_="embed embed-video")[
@@ -898,7 +901,7 @@ class HtmlEmitter(Emitter):
             )
         where = PLATFORM_NAMES[node.platform]
         picture = None
-        if file is not None:
+        if file is not None and Path(file).suffix not in VIDEO_TYPES.values():
             picture = htpy.img(src=self.media_src(file, IMAGE_DIR), alt="", loading="lazy")
         verb = "Play on" if node.platform is Platform.YOUTUBE else "View on"
         card_link = tag.a(class_="embed-card", href=node.url)[
