@@ -342,6 +342,11 @@ def test_an_item_is_archived_at_itself_the_day_it_was_added() -> None:
     assert session.wayback_asked == 0
 
 
+def test_a_capture_date_writes_its_month_in_three_letters() -> None:
+    """So a list of them is one width, rather than as wide as `September`."""
+    assert Archived(timestamp="20260902181426").date == "Sep 2, 2026"
+
+
 def test_the_archived_copy_is_the_page_that_was_cited() -> None:
     """`/page/34/mode/2up` is the page the claim is about, not the front matter."""
     url = "https://archive.org/details/slurrywallsasstr0000xant/page/34/mode/2up"

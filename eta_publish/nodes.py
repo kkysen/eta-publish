@@ -50,14 +50,17 @@ class Archived:
 
     @property
     def date(self) -> str:
-        """The capture written out, e.g. `May 3, 2024`.
+        """The capture written out, e.g. `Sep 3, 2024`.
+
+        The month as its three letters, so that a list of them is all one width
+        rather than as wide as whichever month is longest.
 
         A reader checking a source against the page it cites is asking when the
         report read it, and 14 digits is not an answer anyone reads.
         Whatever does not parse as a date is shown as it is, which is the same
         choice `dateline` makes and for the same reason.
         """
-        return _long_date(self.timestamp[:8])
+        return _long_date(self.timestamp[:8], month="%b")
 
 
 @dataclass(frozen=True)
@@ -871,14 +874,17 @@ class Document:
 DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%Y-%m-%d", "%m/%d/%Y", "%Y%m%d")
 
 
-def _long_date(text: str) -> str:
-    """`Aug 19, 2026` written out, or `text` unchanged if it is not a date."""
+def _long_date(text: str, month: str = "%B") -> str:
+    """`Aug 19, 2026` written out, or `text` unchanged if it is not a date.
+
+    `month` is how the month is written: in full by default, `%b` for its three letters.
+    """
     for fmt in DATE_FORMATS:
         try:
             date = datetime.strptime(text, fmt).date()
         except ValueError:
             continue
-        return f"{date:%B} {date.day}, {date.year}"
+        return f"{date:{month}} {date.day}, {date.year}"
     return text
 
 
