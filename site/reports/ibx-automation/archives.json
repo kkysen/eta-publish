@@ -20,6 +20,30 @@
     "snapshot": "https://web.archive.org/web/20240921120558/https://bqrail.substack.com/api/v1/file/332c7174-b5cf-4d76-9462-e72ad568bdd8.pdf",
     "timestamp": "20240921120558"
   },
+  "https://bqrail.substack.com/api/v1/file/42b8fb33-73ef-4a87-8d9a-31260d311b91.pdf": {
+    "snapshot": "https://web.archive.org/web/20261010113008/https://bqrail.substack.com/api/v1/file/42b8fb33-73ef-4a87-8d9a-31260d311b91.pdf",
+    "timestamp": "20261010113008"
+  },
+  "https://bqrail.substack.com/api/v1/file/444137f8-68a8-4ab2-92e4-b52053366020.pdf": {
+    "error": "the archive did not answer",
+    "pages": 30,
+    "pending": true,
+    "said": "HTTPSConnectionPool(host='web.archive.org', port=443): Max retries exceeded with url: /web/2099/https://bqrail.substack.com/api/v1/file/444137f8-68a8-4ab2-92e4-b52053366020.pdf (Caused by NewConnectionError(\"HTTPSConnection(host='web.archive.org', port=443): Failed to establish a new connection: [Errno 111] Connection refused\"))",
+    "timestamp": "20261010"
+  },
+  "https://bqrail.substack.com/api/v1/file/69603a69-34d1-4d20-b44a-921b6c45714e.pdf": {
+    "snapshot": "https://web.archive.org/web/20261010091720/https://bqrail.substack.com/api/v1/file/69603a69-34d1-4d20-b44a-921b6c45714e.pdf",
+    "timestamp": "20261010091720"
+  },
+  "https://bqrail.substack.com/api/v1/file/be8e35d6-2103-4be7-9f92-f1806c182602.pdf": {
+    "job": "spn2-6507be1a066d6ab3bb850260070eae96d42677a2",
+    "snapshot": "https://web.archive.org/web/20261010114910/https://bqrail.substack.com/api/v1/file/be8e35d6-2103-4be7-9f92-f1806c182602.pdf",
+    "timestamp": "20261010114910"
+  },
+  "https://bqrail.substack.com/api/v1/file/cce3e5d4-3702-4e13-a96f-f5d4d0d99e6e.pdf": {
+    "snapshot": "https://web.archive.org/web/20261010112952/https://bqrail.substack.com/api/v1/file/cce3e5d4-3702-4e13-a96f-f5d4d0d99e6e.pdf",
+    "timestamp": "20261010112952"
+  },
   "https://bqrail.substack.com/p/interborough-express-progress-reports": {
     "snapshot": "https://web.archive.org/web/20260304064215/https://bqrail.substack.com/p/interborough-express-progress-reports",
     "timestamp": "20260304064215"
@@ -39,6 +63,10 @@
   "https://github.com/kkysen/automated-metro-data": {
     "snapshot": "https://web.archive.org/web/20261009033813/https://github.com/kkysen/automated-metro-data",
     "timestamp": "20261009033813"
+  },
+  "https://github.com/kkysen/ibx-ridership-charts/": {
+    "snapshot": "https://web.archive.org/web/20261010091656/https://github.com/kkysen/ibx-ridership-charts/",
+    "timestamp": "20261010091656"
   },
   "https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park": {
     "snapshot": "https://web.archive.org/web/20260902012928/https://gothamist.com/news/mamdani-eyes-sweeping-housing-plan-for-blocks-south-of-brooklyns-prospect-park",
@@ -60,6 +88,14 @@
     "snapshot": "https://web.archive.org/web/20260512184007/https://ibx.transitcosts.com/ibx-1/",
     "timestamp": "20260512184007"
   },
+  "https://journals.sagepub.com/doi/10.1177/0361198118784386": {
+    "snapshot": "https://web.archive.org/web/20250603012443/https://journals.sagepub.com/doi/10.1177/0361198118784386",
+    "timestamp": "20250603012443"
+  },
+  "https://jrurbanenetwork.substack.com/p/guangzhou-metro-2024-openings-part": {
+    "snapshot": "https://web.archive.org/web/20251027132111/https://jrurbanenetwork.substack.com/p/guangzhou-metro-2024-openings-part",
+    "timestamp": "20251027132111"
+  },
   "https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056": {
     "snapshot": "https://web.archive.org/web/20261009033703/https://myemail.constantcontact.com/News-from-the-Honolulu-Rail-Transit-Project.html?aid=Hx5Y3V3IrQE&soid=1102697428056",
     "timestamp": "20261009033703"
@@ -67,10 +103,6 @@
   "https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn": {
     "snapshot": "https://web.archive.org/web/20260708134117/https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn",
     "timestamp": "20260708134117"
-  },
-  "https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/": {
-    "snapshot": "https://web.archive.org/web/20260719213805/https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/",
-    "timestamp": "20260719213805"
   },
   "https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/": {
     "snapshot": "https://web.archive.org/web/20260515114508/https://rail.kychung.com/en/2d-en/guangzhou-metro-line-6-csr-sifang-emu/",
@@ -84,9 +116,17 @@
     "snapshot": "https://web.archive.org/web/20260513035917/https://www.6sqft.com/mta-awards-166m-design-contract-for-interborough-express/",
     "timestamp": "20260513035917"
   },
+  "https://www.amny.com/nyc-transit/queens-graveyard-hochul-interborough-express/": {
+    "snapshot": "https://web.archive.org/web/20260722064922/https://www.amny.com/nyc-transit/queens-graveyard-hochul-interborough-express/",
+    "timestamp": "20260722064922"
+  },
   "https://www.camet.org.cn/": {
     "snapshot": "https://web.archive.org/web/20260609080936/https://www.camet.org.cn/",
     "timestamp": "20260609080936"
+  },
+  "https://www.checkerboardhill.com/2022/04/metro-train-carbody-standards-of-china/": {
+    "snapshot": "https://web.archive.org/web/20260629223055/https://www.checkerboardhill.com/2022/04/metro-train-carbody-standards-of-china/",
+    "timestamp": "20260629223055"
   },
   "https://www.civilbeat.org/2013/09/19830-honolulu-rails-new-27-million-safety-feature-to-avert-track-fatalities/": {
     "snapshot": "https://web.archive.org/web/20180704003258/https://www.civilbeat.org/2013/09/19830-honolulu-rails-new-27-million-safety-feature-to-avert-track-fatalities/",
@@ -99,10 +139,6 @@
   "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase": {
     "snapshot": "https://web.archive.org/web/20260829123215/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-advancing-planning-active-phase",
     "timestamp": "20260829123215"
-  },
-  "https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review": {
-    "snapshot": "https://web.archive.org/web/20260914114804/https://www.governor.ny.gov/news/governor-hochul-announces-interborough-express-project-design-and-environmental-review",
-    "timestamp": "20260914114804"
   },
   "https://www.grandparisexpress.fr/ligne-15": {
     "snapshot": "https://web.archive.org/web/20260313040341/https://www.grandparisexpress.fr/ligne-15",
@@ -138,6 +174,11 @@
     "snapshot": "https://web.archive.org/web/20260518002035/https://www.mta.info/document/72081",
     "timestamp": "20260518002035"
   },
+  "https://www.mta.info/document/73241": {
+    "pages": 3920,
+    "snapshot": "https://web.archive.org/web/20260906081133/https://www.mta.info/document/73241",
+    "timestamp": "20260906081133"
+  },
   "https://www.mta.info/document/77166": {
     "pages": 18,
     "snapshot": "https://web.archive.org/web/20260518163429/https://www.mta.info/document/77166",
@@ -146,6 +187,10 @@
   "https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase": {
     "snapshot": "https://web.archive.org/web/20260518022508/https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-advancing-planning-active-phase",
     "timestamp": "20260518022508"
+  },
+  "https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-project-design-and-environmental": {
+    "snapshot": "https://web.archive.org/web/20260910033654/https://www.mta.info/press-release/icymi-governor-hochul-announces-interborough-express-project-design-and-environmental",
+    "timestamp": "20260910033654"
   },
   "https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml": {
     "snapshot": "https://web.archive.org/web/20260912070442/https://www.nyc.gov/html/dot/html/infrastructure/bqecentral.shtml",
