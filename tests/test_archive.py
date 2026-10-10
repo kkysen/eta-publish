@@ -824,38 +824,6 @@ def test_being_stopped_says_what_it_was_waiting_on(monkeypatch: pytest.MonkeyPat
     assert isinstance(stopped.value, KeyboardInterrupt)
 
 
-def test_a_session_limit_is_waited_out_rather_than_written_down(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Twelve captures already going is a fact about the build, not the page:
-    recorded as a failure it would leave the source with no archive forever."""
-    monkeypatch.setattr(archive, "PATIENCE", (timedelta(),) * 3)
-    answers = [
-        {"status": "error", "status_ext": "error:user-session-limit"},
-        {"job_id": "job-1"},
-        {"status": "success", "timestamp": "20240503123456"},
-    ]
-
-    class Limiting(requests.Session):
-        @override
-        def request(self, *args: object, **kwargs: object) -> requests.Response:
-            response = requests.Response()
-            response.status_code = 200
-            response.url = "https://web.archive.org/save"
-            response._content = json.dumps(answers.pop(0) if answers else {}).encode()
-            return response
-
-    def instantly(_seconds: float) -> None:
-        return None
-
-    monkeypatch.setattr(archive.time, "sleep", instantly)
-    # Through `_patiently`, which is how `_archive` asks: the refusal is a
-    # `Busy`, and waiting it out is what the caller does with one.
-    session, headers = Limiting(), {"Authorization": "LOW a:b"}
-    captured = archive._patiently(lambda: archive._submit(session, headers, "https://a.example/1"))
-    assert (captured.error, captured.timestamp) == ("", "20240503123456")
-
-
 class Saving(requests.Session):
     """Save Page Now answering each request in turn from `answers`.
 
@@ -894,19 +862,25 @@ def no_waiting(monkeypatch: pytest.MonkeyPatch) -> None:
 @pytest.mark.parametrize("refusal", archive.RETRY_LATER)
 @pytest.mark.parametrize("when", ["submitted", "polled"])
 def test_a_refusal_about_the_moment_is_not_written_down(
-    no_waiting: None, refusal: str, when: str
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch, refusal: str, when: str
 ) -> None:
     """`too-many-daily-captures` was recorded against four sources for good, after
-    a day of builds that could not yet see their own captures used it up."""
+    a day of builds that could not yet see their own captures used it up.
+
+    Nor submitted again: each submission is a capture, and the daily limit
+    is one capture of a PDF, so asking again only ever hears the refusal."""
+
+    def nothing(*_args: object, **_kwargs: object) -> None:
+        return None
+
+    monkeypatch.setattr(archive, "_existing", nothing)
     refused = {"status": "error", "status_ext": refusal}
     job = {"job_id": "job-1"}
-    answers = ([refused] if when == "submitted" else [job, refused]) * 4
-    with pytest.raises(archive.Busy):
-        archive._patiently(
-            lambda: archive._submit(
-                Saving(answers), {"Authorization": "LOW a:b"}, "https://a.example/1"
-            )
-        )
+    session = Saving(([refused] if when == "submitted" else [job, refused]) * 4)
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.unanswered
+    assert lookup.archived is None
+    assert session.submitted == 1
 
 
 def test_a_status_poll_that_fails_does_not_submit_the_page_again(no_waiting: None) -> None:
@@ -914,9 +888,7 @@ def test_a_status_poll_that_fails_does_not_submit_the_page_again(no_waiting: Non
     session = Saving(
         [{"job_id": "job-1"}, 503, 503, {"status": "success", "timestamp": "20261009120000"}]
     )
-    captured = archive._patiently(
-        lambda: archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
-    )
+    captured = archive._submit(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
     assert captured.timestamp == "20261009120000"
     assert session.submitted == 1
 
@@ -1223,7 +1195,7 @@ def test_being_rate_limited_anonymously_is_not_an_answer(anonymous: None) -> Non
     session = SavingAnonymously(429)
     with pytest.raises(archive.Unanswered):
         archive.capture(doc, session=session)
-    assert len(session.saved) == 4
+    assert len(session.saved) == 1
     assert doc.archives == {}
 
 

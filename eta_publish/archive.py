@@ -672,13 +672,15 @@ def _archive(
         if found is not None:
             return Lookup(found, already=True)
         if headers is None and anonymous:
-            return Lookup(_patiently(lambda: _submit_anonymously(http, url)))
+            # Not `_patiently`: each attempt is a capture, and one refused
+            # about the moment is asked again by the next build, not this one.
+            return Lookup(_submit_anonymously(http, url))
         if headers is None:
             # `unindexed` only where the index was the one that said so. Where it
             # was held back, this build learned nothing, and writing today's
             # date would renew the entry on every build and expire it never.
             return Lookup(unindexed=index, unserved=replay)
-        return Lookup(_patiently(lambda: _submit(http, headers, url)))
+        return Lookup(_submit(http, headers, url))
     except (Busy, requests.RequestException) as e:
         # Nothing about the source. A read that timed out, a connection that
         # dropped, a name that would not resolve: all of them are about getting
