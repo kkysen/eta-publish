@@ -29,8 +29,8 @@ October 12, 2026
 - 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
   - `img-dfdefb85`: \[caption\]
-- 21 suggestions still open on this tab; the build publishes the document without them, as it reads today
-- 21 comment threads still open on this tab
+- 24 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 22 comment threads still open on this tab
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: `90 seconds` should be `90 sec`: `...lows headways as low as every 90 seconds, as seen in many existing sys...`
@@ -215,7 +215,7 @@ NYC has played around with blue lighting for suicide prevention, lasers, and rec
 These do not stop people from falling and dying, but PSDs do, and now the [MTA has been held liable for their failure to do so](<https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn>)<sup>\[40\]</sup>.
 Automation and PSDs are generally considered together, but the safety benefits of PSDs are so strong that they should be installed on the IBX regardless.
 
-[Thought Police HQ (@ThoughtPolic3HQ) on X: “#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
+[Warning, graphic video: Thought Police HQ (@ThoughtPolic3HQ) on X: “#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
 The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
 Hawkins has a criminal record that…”](<https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1>)<sup>\[41\]</sup>
 

@@ -29,8 +29,8 @@
     [the image #raw("automated_share_by_year_2016_to_2026") has no caption],
     [the image #raw("automated_share_by_year_ex_china_2016_to_2026") has no caption],
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): A new artistic rendering of the IBX at New Utrecht Av. They appear to...], [#raw("img-dfdefb85"): \[caption\]], )],
-    [21 suggestions still open on this tab; the build publishes the document without them, as it reads today],
-    [21 comment threads still open on this tab],
+    [24 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [22 comment threads still open on this tab],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
     [style: #raw("90 seconds") should be #raw("90 sec"): #raw("...lows headways as low as every 90 seconds, as seen in many existing sys...")],
@@ -231,7 +231,7 @@ NYC has played around with blue lighting for suicide prevention, lasers, and rec
 These do not stop people from falling and dying, but PSDs do, and now the #link("https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn")[MTA has been held liable for their failure to do so]#super[#link(<src40>)[\[40\]]].
 Automation and PSDs are generally considered together, but the safety benefits of PSDs are so strong that they should be installed on the IBX regardless.
 
-#link("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")[Thought Police HQ (\@ThoughtPolic3HQ) on X: “\#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
+#link("https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1")[Warning, graphic video: Thought Police HQ (\@ThoughtPolic3HQ) on X: “\#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
 The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
 Hawkins has a criminal record that…”]#super[#link(<src41>)[\[41\]]]
 
