@@ -604,6 +604,8 @@ class HtmlEmitter(Emitter):
     def source(self, number: int, url: str, uses: int) -> Tag:
         """One entry: the ways back to it, its archived copy, and the source.
 
+        Each of the three in a box of its own, so that the list can line them
+        up in columns: the arrows, then the archives, then the addresses.
         The archive before the address rather than after it, so that it stays
         beside the arrows where a long address would push it onto a line of its own.
 
@@ -626,8 +628,10 @@ class HtmlEmitter(Emitter):
                 ]
             )
         return tag.li(id=f"src{number}")[
-            back,
-            self.source_archive(self.doc.archived(url)),
+            tag.span(class_="source-backs")[back],
+            tag.span(class_="source-archived")[self.source_archive(self.doc.archived(url))],
+            # A space the grid ignores, and the line of text needs.
+            " ",
             tag.a(class_="source-url", href=url)[shown_url(url)],
         ]
 
@@ -639,13 +643,13 @@ class HtmlEmitter(Emitter):
         identical on the page otherwise, and they are not the same thing.
         """
         if archived is None:
-            return tag.span(class_="source-none")["(not archived) "]
+            return tag.span(class_="source-none")["(not archived)"]
         if archived.error:
-            return tag.span(class_="source-none")[f"(not archived: {archived.error}) "]
+            return tag.span(class_="source-none")[f"(not archived: {archived.error})"]
         return [
             "(archived ",
             tag.a(class_="source-archive", href=archived.snapshot)[archived.date],
-            ") ",
+            ")",
         ]
 
     def footnotes(self, doc: Document) -> str:

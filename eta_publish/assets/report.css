@@ -140,12 +140,30 @@
    matter a sentence points at rather than part of the argument. */
 .eta-report .sources { font-size: .9rem; opacity: .85; }
 .eta-report .sources ol { padding-left: 3.4em; }
+/* Wide enough, an entry's number, arrows, archive and address are each a
+   column, so the archives line up rather than starting wherever the arrows
+   before them happen to end. Numbered by hand, since an item laid out as a
+   grid is no longer a list item and loses its marker.
+   Narrower, the archive would leave the address too little room to read,
+   so the entry is the one line of text it otherwise is.
+   The arrows and archives are capped at about what most entries need, so a
+   source cited seven times, or a capture that failed with a long reason,
+   wraps within its own column rather than narrowing every address. */
+@media (min-width: 40rem) {
+  .eta-report .sources ol { display: grid; grid-template-columns: auto fit-content(5em) fit-content(16em) minmax(0, 1fr);
+                            column-gap: .5em; padding-left: 0; counter-reset: source; }
+  .eta-report .sources li { display: grid; grid-column: 1 / -1;
+                            grid-template-columns: subgrid; counter-increment: source; }
+  .eta-report .sources li::before { content: counter(source) "."; text-align: right;
+                                    min-width: 2.9em; }
+}
 .eta-report .source-ref a,
 .eta-report .source-back { text-decoration: none; }
 /* The URL itself is the entry, so it has to be able to break: these are long,
    and a query string with no spaces in it would otherwise run off the page. */
 .eta-report .source-url { word-break: break-word; }
 .eta-report .source-none { opacity: .8; }
+.eta-report .source-archive { white-space: nowrap; }
 /* The note itself, shown where the reference is, so that reading a sentence
    does not mean leaving it. The link stays exactly what it was.
 

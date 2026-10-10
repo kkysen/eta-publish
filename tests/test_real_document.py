@@ -337,7 +337,10 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
     #
     # And from 210,000 when embedded videos and posts landed: about 3 KB of
     # stylesheet and script that every fragment carries, embeds or none.
-    assert size < 215_000, f"grown to {size:,} bytes; still fits, worth a look"
+    #
+    # And from 215,000 when Sources lined up in columns: a `span` around each
+    # entry's arrows and another around its archive, about 80 bytes an entry.
+    assert size < 225_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:
