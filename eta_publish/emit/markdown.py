@@ -213,7 +213,7 @@ class MarkdownEmitter(Emitter):
         if archived is None:
             return f"(not archived) {shown}"
         if archived.error:
-            return f"(not archived: {escape(archived.error)}) {shown}"
+            return f"(not archived: {escape(archived.reason)}) {shown}"
         return f"(archived [{archived.date}]({url(archived.snapshot)})) {shown}"
 
     def source_ref(self, href: str) -> str:

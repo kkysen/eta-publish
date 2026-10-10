@@ -347,6 +347,10 @@ def test_a_capture_date_writes_its_month_in_three_letters() -> None:
     assert Archived(timestamp="20260902181426").date == "Sep 2, 2026"
 
 
+def test_a_failed_capture_is_shown_without_its_error_prefix() -> None:
+    assert Archived(error="error:blocked-url").reason == "blocked-url"
+
+
 def test_the_archived_copy_is_the_page_that_was_cited() -> None:
     """`/page/34/mode/2up` is the page the claim is about, not the front matter."""
     url = "https://archive.org/details/slurrywallsasstr0000xant/page/34/mode/2up"

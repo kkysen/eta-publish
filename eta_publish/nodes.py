@@ -49,6 +49,14 @@ class Archived:
     """
 
     @property
+    def reason(self) -> str:
+        """Why it was not archived, as a reader is shown it: `error` without its `error:`.
+
+        Wayback starts every reason with it, and beside "not archived" it says nothing.
+        """
+        return self.error.removeprefix("error:")
+
+    @property
     def date(self) -> str:
         """The capture written out, e.g. `Sep 3, 2024`.
 

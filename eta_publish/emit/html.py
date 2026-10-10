@@ -629,7 +629,7 @@ class HtmlEmitter(Emitter):
         if archived is None:
             return tag.span(class_="source-none")["(not archived)"]
         if archived.error:
-            return tag.span(class_="source-none")[f"(not archived: {archived.error})"]
+            return tag.span(class_="source-none")[f"(not archived: {archived.reason})"]
         return [
             "(archived ",
             tag.a(class_="source-archive", href=archived.snapshot)[archived.date],
