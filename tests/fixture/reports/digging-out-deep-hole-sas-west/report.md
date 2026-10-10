@@ -36,4 +36,4 @@ Stations are over 100 ft deep.[^2]
 
 ## Sources
 
-1. (not archived) <https://www.mta.info/document/196361>
+1. (not archived) [mta.info/document/196361](<https://www.mta.info/document/196361>)

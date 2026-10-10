@@ -269,18 +269,18 @@ It's time to let riders travel in peace.
 
 ## Sources
 
-1. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009211344/https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>)) <https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>
-2. (archived [Apr 10, 2026](<https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>)) <https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>
-3. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>)) <https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>
-4. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009034236/https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>)) <https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>
-5. (archived [May 5, 2024](<https://web.archive.org/web/20240505072338/https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>)) <https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>
-6. (archived [Jun 6, 2024](<https://web.archive.org/web/20240606135521/https://www.youtube.com/watch?v=KDaRRmUWUZI>)) <https://www.youtube.com/watch?v=KDaRRmUWUZI>
-7. (archived [Sep 11, 2026](<https://web.archive.org/web/20260911062544/https://en.wikipedia.org/wiki/Curb_cut_effect>)) <https://en.wikipedia.org/wiki/Curb_cut_effect>
-8. (archived [Sep 20, 2026](<https://web.archive.org/web/20260920115631/https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)) <https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>
-9. (archived [Apr 1, 2026](<https://web.archive.org/web/20260401154612/https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)) <https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>
-10. (archived [Jul 29, 2020](<https://web.archive.org/web/20200729104447/https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)) <https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>
-11. (archived [Mar 28, 2026](<https://web.archive.org/web/20260328223010/https://www.amny.com/news/mta-nyc-subway-ads-and-money/>)) <https://www.amny.com/news/mta-nyc-subway-ads-and-money/>
-12. (archived [Sep 4, 2026](<https://web.archive.org/web/20260904171034/https://sbahn.berlin/fahren/bauen-stoerung/>)) <https://sbahn.berlin/fahren/bauen-stoerung/>
+1. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009211344/https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>)) [youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU](<https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>)
+2. (archived [Apr 10, 2026](<https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>)) [nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/](<https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/>)
+3. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>)) [drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive\_link](<https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link>)
+4. (archived [Oct 9, 2026](<https://web.archive.org/web/20261009034236/https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>)) [drive.google.com/file/d/18pQbx\_DJ\_n\_OHNDaQlfHOvRSZqJPd88V/view?usp=drive\_link](<https://drive.google.com/file/d/18pQbx_DJ_n_OHNDaQlfHOvRSZqJPd88V/view?usp=drive_link>)
+5. (archived [May 5, 2024](<https://web.archive.org/web/20240505072338/https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>)) [ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement](<https://www.ltmuseum.co.uk/blog/mind-gap-story-embankment-stations-announcement>)
+6. (archived [Jun 6, 2024](<https://web.archive.org/web/20240606135521/https://www.youtube.com/watch?v=KDaRRmUWUZI>)) [youtube.com/watch?v=KDaRRmUWUZI](<https://www.youtube.com/watch?v=KDaRRmUWUZI>)
+7. (archived [Sep 11, 2026](<https://web.archive.org/web/20260911062544/https://en.wikipedia.org/wiki/Curb_cut_effect>)) [en.wikipedia.org/wiki/Curb\_cut\_effect](<https://en.wikipedia.org/wiki/Curb_cut_effect>)
+8. (archived [Sep 20, 2026](<https://web.archive.org/web/20260920115631/https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)) [chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php](<https://chanrobles.com/usa/uslaws/cfr/title36/36-3.0.9.1.7.2.1.8.php>)
+9. (archived [Apr 1, 2026](<https://web.archive.org/web/20260401154612/https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)) [ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167](<https://www.ecfr.gov/current/title-49/subtitle-A/part-37/subpart-G/section-37.167>)
+10. (archived [Jul 29, 2020](<https://web.archive.org/web/20200729104447/https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)) [sciencedirect.com/science/article/abs/pii/S0966692316302393](<https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393>)
+11. (archived [Mar 28, 2026](<https://web.archive.org/web/20260328223010/https://www.amny.com/news/mta-nyc-subway-ads-and-money/>)) [amny.com/news/mta-nyc-subway-ads-and-money/](<https://www.amny.com/news/mta-nyc-subway-ads-and-money/>)
+12. (archived [Sep 4, 2026](<https://web.archive.org/web/20260904171034/https://sbahn.berlin/fahren/bauen-stoerung/>)) [sbahn.berlin/fahren/bauen-stoerung/](<https://sbahn.berlin/fahren/bauen-stoerung/>)
 
 ## Contributors
 

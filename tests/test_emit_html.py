@@ -9,7 +9,8 @@ import pytest
 from htpy import a
 from paths import FIXTURE_DIR, named_images
 
-from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page, shown_url
+from eta_publish.emit.base import shown_url
+from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 

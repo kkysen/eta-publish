@@ -38,7 +38,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, warning_markup
+from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, shown_url, warning_markup
 
 # Typst's markup characters.
 # `#` and `@` start code and references, and the rest delimit markup,
@@ -152,7 +152,7 @@ class TypstEmitter(Emitter):
 
     def source(self, doc: Document, source: str) -> str:
         """One entry: where the source is archived, or that it is not, then the source."""
-        shown = f"#link({string(source)})[{escape(source)}]"
+        shown = f"#link({string(source)})[{escape(shown_url(source))}]"
         archived = doc.archived(source)
         if archived is None:
             return f"(not archived) {shown}"

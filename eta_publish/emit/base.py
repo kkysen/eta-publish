@@ -273,3 +273,26 @@ def embed_label(node: Embed, card: Card) -> str:
             return GRAPHIC_WARNING.removesuffix(": ") if node.graphic else "Video"
         case _:
             return f"{warning}{card.author} on {where}: \u201c{card.text}\u201d"
+
+
+TEXT_FRAGMENT = "#:~:text="
+"""The start of a link's text fragment, which tells the browser what to highlight.
+
+Not part of the address: it is 300 characters of percent-encoded sentence on
+some of these, and a reader checking where a citation goes is reading the host
+and the path. The link still carries it, so the page still opens on the
+sentence it was citing.
+
+Cut on the marker rather than on the `#`: an ordinary fragment is an anchor in
+the page and belongs in what is shown.
+"""
+
+
+def shown_url(url: str) -> str:
+    """A source URL as the entry prints it: the address, without the machinery.
+
+    The scheme goes, the way every address written for a person to read drops
+    it, and so does a text fragment, and a leading `www.`. Only what is shown
+    is shortened; the link is the URL the document holds.
+    """
+    return url.split("://", 1)[-1].partition(TEXT_FRAGMENT)[0].removeprefix("www.")

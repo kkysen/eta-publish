@@ -41,7 +41,14 @@ from ..nodes import (
     Text,
     plain_text,
 )
-from .base import CONTRIBUTORS_NOTE, GRAPHIC_WARNING, PLATFORM_NAMES, Emitter, warning_markup
+from .base import (
+    CONTRIBUTORS_NOTE,
+    GRAPHIC_WARNING,
+    PLATFORM_NAMES,
+    Emitter,
+    shown_url,
+    warning_markup,
+)
 
 # Only styles what the emitter produces, inheriting the rest from the theme,
 # so a report does not fight the site around it.
@@ -171,19 +178,6 @@ def phase_markup(phase: str) -> str:
     return markup(tag.p(class_="phase")[tag.span(class_="phase-label")["Phase: "], phase])
 
 
-TEXT_FRAGMENT = "#:~:text="
-"""The start of a link's text fragment, which tells the browser what to highlight.
-
-Not part of the address: it is 300 characters of percent-encoded sentence on
-some of these, and a reader checking where a citation goes is reading the host
-and the path. The link still carries it, so the page still opens on the
-sentence it was citing.
-
-Cut on the marker rather than on the `#`: an ordinary fragment is an anchor in
-the page and belongs in what is shown.
-"""
-
-
 def player_url(node: Embed, card: Card) -> str:
     """The platform's own player for `node`, which the script loads on click.
 
@@ -203,16 +197,6 @@ def player_url(node: Embed, card: Card) -> str:
             return f"https://embed.bsky.app/embed/{card.did}/app.bsky.feed.post/{rkey}"
         case Platform.DRIVE:
             return ""
-
-
-def shown_url(url: str) -> str:
-    """A source URL as the entry prints it: the address, without the machinery.
-
-    The scheme goes, the way every address written for a person to read drops
-    it, and so does a text fragment, and a leading `www.`. Only what is shown
-    is shortened; the link is the URL the document holds.
-    """
-    return url.split("://", 1)[-1].partition(TEXT_FRAGMENT)[0].removeprefix("www.")
 
 
 class HtmlEmitter(Emitter):

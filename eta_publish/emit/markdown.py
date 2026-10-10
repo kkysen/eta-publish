@@ -41,7 +41,7 @@ from ..nodes import (
     Text,
 )
 from ..sentences import split
-from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, warning_markup
+from .base import CONTRIBUTORS_NOTE, Emitter, embed_label, shown_url, warning_markup
 
 
 def fence(value: str) -> str:
@@ -208,12 +208,13 @@ class MarkdownEmitter(Emitter):
 
     def source(self, doc: Document, source: str) -> str:
         """One entry: where the source is archived, or that it is not, then the source."""
+        shown = f"[{escape(shown_url(source))}]({url(source)})"
         archived = doc.archived(source)
         if archived is None:
-            return f"(not archived) {url(source)}"
+            return f"(not archived) {shown}"
         if archived.error:
-            return f"(not archived: {escape(archived.error)}) {url(source)}"
-        return f"(archived [{archived.date}]({url(archived.snapshot)})) {url(source)}"
+            return f"(not archived: {escape(archived.error)}) {shown}"
+        return f"(archived [{archived.date}]({url(archived.snapshot)})) {shown}"
 
     def source_ref(self, href: str) -> str:
         """The `[12]` after a link, which is its number in Sources.
