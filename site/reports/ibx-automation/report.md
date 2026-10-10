@@ -140,11 +140,11 @@ In fact, when talking to major rolling stock vendors at InnoTrans 2026 who were 
 The global standard for a new-build metro line these days, light or heavy, simply is to be automated.
 They have told the MTA this, and hopefully the MTA follows their advice.
 
-![](<images/automated_share_by_year_2016_to_2026.png>)\
+![](<images/automated_share_by_year_2016_to_2026.svg>)\
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[22\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[23\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[24\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_2016_to_2026.svg>) -->
 
-![](<images/automated_share_by_year_ex_china_2016_to_2026.png>)\
+![](<images/automated_share_by_year_ex_china_2016_to_2026.svg>)\
 [Credit: ETA (Khyber Sen)](<https://github.com/kkysen/automated-metro-data>)<sup>\[22\]</sup>, [UrbanRail.net](<https://www.urbanrail.net/news.htm>)<sup>\[23\]</sup>, [CAMET](<https://www.camet.org.cn/>)<sup>\[24\]</sup>
 <!-- SVG: [automated\_share\_by\_year\_ex\_china\_2016\_to\_2026.svg](<https://raw.githubusercontent.com/kkysen/automated-metro-data/refs/heads/main/charts/automated_share_by_year_ex_china_2016_to_2026.svg>) -->
 

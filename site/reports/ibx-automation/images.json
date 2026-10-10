@@ -6,10 +6,8 @@
     "width": 2048
   },
   "kix.jgxhj1hqsf1i": {
-    "file": "automated_share_by_year_2016_to_2026.png",
-    "height": 872,
-    "sha256": "82a6cd9f850eb19a0dfd0e5b11896ce1695193259829bc53f56c58ba603c6d0a",
-    "width": 1520
+    "file": "automated_share_by_year_2016_to_2026.svg",
+    "sha256": "beae4b0f869ccc367bec31c70a694a32652af931291a5ee639954d6fef40dc2e"
   },
   "kix.ngnc6vb5jx8e": {
     "file": "img-dfdefb85.png",
@@ -18,9 +16,7 @@
     "width": 2048
   },
   "kix.tx1fjdbmxbaz": {
-    "file": "automated_share_by_year_ex_china_2016_to_2026.png",
-    "height": 872,
-    "sha256": "b170e8f15a5fde1237e47fc76e616c6bb1d8c8054dce1ed597a733e57787e9e8",
-    "width": 1520
+    "file": "automated_share_by_year_ex_china_2016_to_2026.svg",
+    "sha256": "01cb6448798434451616587fd6e72bb7dd22b44a86c5c546bcfb04ca3a552789"
   }
 }

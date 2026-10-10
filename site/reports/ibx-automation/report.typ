@@ -151,12 +151,12 @@ The global standard for a new-build metro line these days, light or heavy, simpl
 They have told the MTA this, and hopefully the MTA follows their advice.
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_2016_to_2026.png")[#capped_image("print/automated_share_by_year_2016_to_2026.jpg")],
+  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_2016_to_2026.svg")[#capped_image("print/automated_share_by_year_2016_to_2026.svg")],
   caption: [#link("https://github.com/kkysen/automated-metro-data")[Credit: ETA (Khyber Sen)]#super[#link(<src22>)[\[22\]]], #link("https://www.urbanrail.net/news.htm")[UrbanRail.net]#super[#link(<src23>)[\[23\]]], #link("https://www.camet.org.cn/")[CAMET]#super[#link(<src24>)[\[24\]]]],
 )
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_ex_china_2016_to_2026.png")[#capped_image("print/automated_share_by_year_ex_china_2016_to_2026.jpg")],
+  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/automated_share_by_year_ex_china_2016_to_2026.svg")[#capped_image("print/automated_share_by_year_ex_china_2016_to_2026.svg")],
   caption: [#link("https://github.com/kkysen/automated-metro-data")[Credit: ETA (Khyber Sen)]#super[#link(<src22>)[\[22\]]], #link("https://www.urbanrail.net/news.htm")[UrbanRail.net]#super[#link(<src23>)[\[23\]]], #link("https://www.camet.org.cn/")[CAMET]#super[#link(<src24>)[\[24\]]]],
 )
 
