@@ -9,6 +9,7 @@ October 12, 2026
 - the `Header` section has an unrecognized `SME/Liaison:` line; check it for a typo
 - the `Header` section has an unrecognized `Goals:` line; check it for a typo
 - the `Header` section has an unrecognized `Audience:` line; check it for a typo
+- write `Image Source` as a `Source:` line above the image instead; it takes a URL as well: `https://images-prod.gothamist.com/images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg`
 - unfinished text in the document: `[picture of JFK AirTrain]`
 - unfinished text in the document: `[picture of NYC CBTC trains extremely close to each other]`
 - unfinished text in the document: `[cite]`

@@ -356,9 +356,11 @@ so adding a field to a future report is safe.
 - **Real footnotes.** Numbering and backlinks are generated from them.
 - **Images inserted inline.**
   The lines around an image are folded into its figure:
-  a `Source: <file>` paragraph before it,
+  a `Source: <file>` or `Source: <url>` paragraph before it,
   or an `[Image Source](<url>)` paragraph after the caption,
   plus the caption and a `Credit:` line.
+  `Image Source` still works but warns, asking for a `Source:` line instead:
+  one label, in one place.
   Each of these names is underlined too, for the same reason a field's is;
   a linked one needs no underline, since Docs draws one under every link.
   The underline marks the line and is not published:

@@ -139,6 +139,13 @@ def test_an_image_source_link_names_the_image_after_its_file(url: str, filename:
         assert figure.image.filename == filename
 
 
+def test_an_image_source_is_warned_to_be_a_source_line(appendix: Document) -> None:
+    """One label in one place: `Source:` above the image takes a URL as well."""
+    (warning,) = [str(w) for w in appendix.warnings if "Image Source" in str(w)]
+    assert "Source:" in warning
+    assert "flickr.com/photo_download.gne" in warning
+
+
 def test_image_source_does_not_become_a_paragraph(appendix: Document) -> None:
     paragraphs = [text_of(b.content) for b in appendix.blocks if isinstance(b, Paragraph)]
     assert paragraphs == ["The Freedom Tunnel was formerly the 4-track West Side Line."]
@@ -149,6 +156,9 @@ def test_image_source_never_reaches_a_published_output(
     emitter: HtmlEmitter | TypstEmitter, appendix: Document
 ) -> None:
     """`Image Source` appears zero times on the live page."""
+    # The page lists its warnings, and one says to write `Source:` instead,
+    # which names the label without publishing the note.
+    appendix.warnings.clear()
     out = emitter.emit(appendix)
     assert "Image Source" not in out
     assert "flickr.com/photo_download" not in out

@@ -596,8 +596,13 @@ def source_name(source: list[Inline]) -> str:
         return url_filename(value)
     if value:
         return value
-    href = next((i.href for i in source if isinstance(i, Text) and i.href), "")
+    href = source_href(source)
     return url_filename(href) if href else ""
+
+
+def source_href(source: list[Inline]) -> str:
+    """Where a source line links, if it links anywhere."""
+    return next((i.href for i in source if isinstance(i, Text) and i.href), "")
 
 
 def video_name(link: list[Inline]) -> str:
@@ -1212,6 +1217,14 @@ class Parser:
         and an `Image Source` link takes its name from the `Source:`,
         and from the link only where the `Source:` names nothing.
         """
+        if labelled(source).label.casefold().split() == ["image", SOURCE_LABEL]:
+            # One label in one place: `Source:` above the image takes a URL too.
+            self.doc.warn(
+                "write {} as a {} line above the image instead; it takes a URL as well: {}",
+                Shown("Image Source"),
+                Shown("Source:"),
+                Shown(source_href(source) or plain_text(source).strip()[:80]),
+            )
         name = source_name(source)
         if name:
             self._source_names.setdefault(figure.image.object_id, name)

@@ -194,6 +194,7 @@ def test_smart_chips_resolve(doc: Document) -> None:
 
 
 KNOWN_WARNINGS = (
+    "as a `Source:` line above the image instead",
     "unnamed, so each publishes under a hash",
     "suggestions still open on this tab",
     "suggestion still open on this tab",
@@ -340,7 +341,11 @@ def test_the_fragment_fits_in_one_code_block(doc: Document) -> None:
     #
     # And from 215,000 when Sources lined up in columns: a `span` around each
     # entry's arrows and another around its archive, about 80 bytes an entry.
-    assert size < 225_000, f"grown to {size:,} bytes; still fits, worth a look"
+    #
+    # And from 225,000 when `Image Source` began asking to be `Source:`:
+    # twelve warnings, each carrying its URL, about 1.4 KB that goes away
+    # again as the document is converted.
+    assert size < 230_000, f"grown to {size:,} bytes; still fits, worth a look"
 
 
 def test_every_image_has_something_describing_it(doc: Document) -> None:
