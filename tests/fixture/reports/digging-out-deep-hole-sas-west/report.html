@@ -52,8 +52,8 @@
 /* A footnote's mark goes outside its number rather than after it, where it
    was crowding the arrow back to the text. The list is indented far enough
    to leave room for both. */
-.eta-report .footnotes ol { padding-left: 3.4em; }
-.eta-report .footnotes li > .link-mark { left: -3.4em; }
+.eta-report .footnotes ol { padding-left: 2.6em; }
+.eta-report .footnotes li > .link-mark { left: -2.6em; }
 @media print { .eta-report .link-mark { display: none; } }
 /* Caption and credit are styled alike, which is what the published report
    does: both are small text, and neither is italic. The classes stay
@@ -140,7 +140,9 @@
 /* Sources are set like the footnotes, because that is what they are: back
    matter a sentence points at rather than part of the argument. */
 .eta-report .sources { font-size: .9rem; opacity: .85; }
-.eta-report .sources ol { padding-left: 3.4em; }
+/* Indented only as far as a three-digit number needs, since every em here
+   is one a long address does not get, and on a phone that is a line more. */
+.eta-report .sources ol { padding-left: 2.4em; }
 /* Wide enough, an entry's number, arrows, archive and address are each a
    column, so the archives line up rather than starting wherever the arrows
    before them happen to end. Numbered by hand, since an item laid out as a
@@ -151,12 +153,11 @@
    source cited seven times, or a capture that failed with a long reason,
    wraps within its own column rather than narrowing every address. */
 @media (min-width: 40rem) {
-  .eta-report .sources ol { display: grid; grid-template-columns: auto fit-content(5em) fit-content(16em) minmax(0, 1fr);
+  .eta-report .sources ol { display: grid; grid-template-columns: auto fit-content(5em) fit-content(12.5em) minmax(0, 1fr);
                             column-gap: .5em; padding-left: 0; counter-reset: source; }
   .eta-report .sources li { display: grid; grid-column: 1 / -1;
                             grid-template-columns: subgrid; counter-increment: source; }
-  .eta-report .sources li::before { content: counter(source) "."; text-align: right;
-                                    min-width: 2.9em; }
+  .eta-report .sources li::before { content: counter(source) "."; text-align: right; }
 }
 .eta-report .source-ref a,
 .eta-report .source-back { text-decoration: none; }

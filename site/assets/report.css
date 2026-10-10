@@ -83,10 +83,10 @@
    was crowding the arrow back to the text. The list is indented far enough
    to leave room for both. */
 .eta-report .footnotes ol {
-  padding-left: 3.4em;
+  padding-left: 2.6em;
 }
 .eta-report .footnotes li > .link-mark {
-  left: -3.4em;
+  left: -2.6em;
 }
 @media print {
   .eta-report .link-mark {
@@ -280,8 +280,10 @@
   font-size: 0.9rem;
   opacity: 0.85;
 }
+/* Indented only as far as a three-digit number needs, since every em here
+   is one a long address does not get, and on a phone that is a line more. */
 .eta-report .sources ol {
-  padding-left: 3.4em;
+  padding-left: 2.4em;
 }
 /* Wide enough, an entry's number, arrows, archive and address are each a
    column, so the archives line up rather than starting wherever the arrows
@@ -295,7 +297,7 @@
 @media (min-width: 40rem) {
   .eta-report .sources ol {
     display: grid;
-    grid-template-columns: auto fit-content(5em) fit-content(16em) minmax(
+    grid-template-columns: auto fit-content(5em) fit-content(12.5em) minmax(
         0,
         1fr
       );
@@ -312,7 +314,6 @@
   .eta-report .sources li::before {
     content: counter(source) ".";
     text-align: right;
-    min-width: 2.9em;
   }
 }
 .eta-report .source-ref a,
