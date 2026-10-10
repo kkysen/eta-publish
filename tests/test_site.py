@@ -12,11 +12,13 @@ from pathlib import Path
 
 import pytest
 from paths import FIXTURE_DIR
+from test_conventions import build, field, image, para
 
 from eta_publish import console
 from eta_publish.build import (
     IMAGES_JSON,
     BuildOptions,
+    has_its_figures,
     read_image_index,
     require_image_index,
     write_image_index,
@@ -567,6 +569,18 @@ def test_a_response_whose_images_are_there_is_reused(tmp_path: Path) -> None:
     previous = _report_dir(tmp_path, {"kix.1": {"file": "img-a.jpg"}})
     (previous / "images" / "img-a.jpg").write_bytes(b"")
     assert reusable(previous, BuildOptions(archive=False)) == previous / "doc.json"
+
+
+def test_an_image_the_code_now_names_differently_is_not_on_disk(tmp_path: Path) -> None:
+    """The old file still passes `has_its_images`, so the saved response is reused,
+    and it has no `contentUri` to download the new name from."""
+    doc = build([para("Headline", "TITLE"), field("Source: W125irtjeh.JPG"), image()])
+    images = tmp_path / "images"
+    images.mkdir()
+    (images / "img-a.jpg").write_bytes(b"")
+    assert not has_its_figures(tmp_path, doc)
+    (images / "W125irtjeh.jpg").write_bytes(b"")
+    assert has_its_figures(tmp_path, doc)
 
 
 def test_a_build_that_wants_no_images_does_not_ask_where_they_are(tmp_path: Path) -> None:

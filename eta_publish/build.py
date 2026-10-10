@@ -1,5 +1,6 @@
 """The build itself: fetch, emit, compile, and the checks around them."""
 
+import glob
 import hashlib
 import json
 import threading
@@ -217,6 +218,23 @@ def _description(path: Path) -> dict[str, str]:
 
     alt = svg_description(path.read_bytes())
     return {"alt": alt} if alt else {}
+
+
+def has_its_figures(dest: Path, doc: Document) -> bool:
+    """Whether every figure's file is on disk under the name this build gives it.
+
+    `has_its_images` asks the same of the names the last build wrote,
+    which is not enough when the code now names an image differently:
+    the old file is still there, the saved response is reused,
+    and it has no `contentUri` to download the new name from.
+    The extension is not known until the download, so any one will do.
+    """
+    images = dest / IMAGE_DIR
+    return all(
+        any(images.glob(f"{glob.escape(figure.image.filename)}.*"))
+        for figure in doc.figures
+        if figure.image.filename and not figure.image.vector
+    )
 
 
 def has_its_images(dest: Path) -> bool:
@@ -610,6 +628,13 @@ def build_one(
         verify(doc)
     path = report_path(doc)
     dest = outdir / path
+    # Only a reused response: a fetched one has the URIs to download from.
+    reused = cached is not None and '"contentUri"' not in json.dumps(document)
+    if reused and options.images and not options.offline and not has_its_figures(dest, doc):
+        document = load(ref, options.suggestions, options.comments)
+        doc = parse(document)
+        if verify is not None:
+            verify(doc)
     dest.mkdir(parents=True, exist_ok=True)
 
     # Before the checks, which warn about what it says,
