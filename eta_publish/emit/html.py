@@ -882,6 +882,11 @@ class HtmlEmitter(Emitter):
         file = self.doc.media_files.get(node.url)
         anchor = self.take(f"embed-{node.platform.value}-{node.key.replace('/', '-')}")
         ref = self.source_ref(node.url)
+        # In a `cited` of its own, the way a link's is, since that is what the
+        # script hangs a source's box off; the card is not in it,
+        # because the card's hover is a click away from playing.
+        if ref is not None:
+            ref = tag.span(class_="cited")[ref]
         if node.platform is Platform.DRIVE and file is not None:
             video = tag.video(
                 src=self.media_src(file, VIDEO_DIR), controls=True, preload="metadata"

@@ -154,6 +154,15 @@ def test_a_card_loads_nothing_until_clicked() -> None:
     assert "[Bluesky (@bsky.app) on Bluesky: “Hello”]" in markdown
 
 
+def test_an_embeds_source_has_a_box_on_hover() -> None:
+    """The script hangs a source's box off a `cited`,
+    and IBX's X post's `[39]` had none to hang it off."""
+    html, _ = card_page(
+        Platform.X, "https://x.com/someone/status/123", "123", Card(author="Someone", text="Hi")
+    )
+    assert '<span class="cited"><sup class="source-ref"' in html
+
+
 def test_an_embed_nothing_could_describe_is_the_link_it_was() -> None:
     url = "https://x.com/someone/status/123"
     html, markdown = card_page(Platform.X, url, "123", Card(error="404"))
