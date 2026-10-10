@@ -1146,13 +1146,19 @@ class Parser:
         vector = self._vector(para)
         if vector is None:
             return
-        if figure.image.crop.trims:
-            self.doc.warn(
-                "image {} is both cropped and given a vector original; "
-                "the crop cannot be applied to it, so the raster is used",
-                Shown(figure.image.object_id),
+        crop = figure.image.crop
+        if crop.trims:
+            # Named for the crop as well, as a cropped raster is:
+            # recropping it in the doc publishes a different picture.
+            vector = replace(
+                vector,
+                filename=image_filename(
+                    vector.file_id or vector.uri,
+                    extension=".svg",
+                    crop_key=crop.key,
+                    name=vector.title,
+                ),
             )
-            return
         figure.image = replace(figure.image, vector=vector)
 
     def _only_image(self, inlines: list[Inline]) -> Image:

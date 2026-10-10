@@ -15,8 +15,8 @@ from eta_publish.checks import check_described
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.typst import TypstEmitter
-from eta_publish.images import download, svg_description
-from eta_publish.nodes import Document, Figure, Heading, Inline, Paragraph, Text
+from eta_publish.images import crop_svg, download, svg_description
+from eta_publish.nodes import Crop, Document, Figure, Heading, Inline, Paragraph, Text
 from eta_publish.parse import parse
 
 
@@ -465,7 +465,7 @@ def test_a_non_vector_link_is_not_mistaken_for_one() -> None:
 SVG_URL = "https://raw.githubusercontent.com/kkysen/automated-metro-data/main/charts/share.svg"
 
 
-def _linked_svg_doc() -> Document:
+def _linked_svg_doc(crop: JsonObject | None = None) -> Document:
     url = SVG_URL
     return build(
         [
@@ -483,7 +483,8 @@ def _linked_svg_doc() -> Document:
                     ],
                 }
             },
-        ]
+        ],
+        crop=crop,
     )
 
 
@@ -496,24 +497,43 @@ def test_an_svg_linked_outside_drive_becomes_the_figure_file() -> None:
     assert figure.image.vector.filename == "share.svg"
 
 
-def test_a_cropped_figure_keeps_its_raster() -> None:
-    """The crop is expressed in pixels of the rasterized copy,
-    so it cannot be carried over to the vector."""
-    doc = build(
-        [
-            para("Header", "HEADING_2"),
-            field("URL: /reports/x"),
-            para("Headline", "TITLE"),
-            image(),
-            field("SVG: chart.svg"),
-        ],
-        crop={"offsetLeft": 0.1},
+def test_a_cropped_linked_svg_is_named_for_its_crop() -> None:
+    """The crop is fractions of the raster, which is the whole SVG drawn out,
+    so it carries over to the vector, and recropping renames it as it does a raster."""
+    plain = next(b for b in _linked_svg_doc().blocks if isinstance(b, Figure))
+    cropped = next(
+        b for b in _linked_svg_doc(crop={"offsetLeft": 0.1}).blocks if isinstance(b, Figure)
     )
-    figure = next(b for b in doc.blocks if isinstance(b, Figure))
-    assert figure.image.crop.trims
+    assert plain.image.vector is not None
+    assert cropped.image.vector is not None
+    assert plain.image.vector.filename == "share.svg"
+    assert cropped.image.vector.filename.startswith("share-")
+    assert cropped.image.vector.filename.endswith(".svg")
 
 
-# ---- italicized section names are links ------------------------------
+def test_a_crop_is_mirrored_onto_the_svg() -> None:
+    """The original is nested whole, after its XML declaration, and not rewritten."""
+    svg = (
+        b'<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg" '
+        b'viewBox=\'0 0 760 436\' width="760" height="436"><g/></svg>\n'
+    )
+    out = crop_svg(svg, Crop(left=0.1, right=0.1, top=0.25, bottom=0.25))
+    assert out == (
+        b'<?xml version="1.0"?>\n'
+        b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="76 109 608 218" '
+        b'width="608" height="218"><svg width="760" height="436">'
+        b"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox='0 0 760 436' "
+        b'width="760" height="436"><g/></svg></svg></svg>\n'
+    )
+
+
+def test_a_crop_without_a_size_is_taken_from_the_viewbox() -> None:
+    svg = b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><g/></svg>'
+    out = crop_svg(svg, Crop(top=0.5))
+    assert out.startswith(
+        b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 200 50" '
+        b'width="200" height="50"><svg width="200" height="100">'
+    )
 
 
 def runs(*pieces: tuple[str, bool]) -> JsonObject:

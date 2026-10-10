@@ -23,7 +23,7 @@ from pathlib import Path
 import requests
 
 from .naming import print_href
-from .nodes import Document, Image, Shown
+from .nodes import Crop, Document, Image, Shown
 
 EXTENSIONS = {
     "image/png": ".png",
@@ -232,6 +232,8 @@ def _fetch_vector(
                 data = response.content
             if not _is_svg(data):
                 raise FetchFailed("it is not an SVG")
+            if image.crop.trims:
+                data = crop_svg(data, image.crop)
             dest.write_bytes(data)
         except (FetchFailed, OSError, requests.RequestException) as e:
             doc.warn(
@@ -253,6 +255,67 @@ def _is_svg(data: bytes) -> bool:
     """
     head = data.lstrip()[:15].lower()
     return b"<svg" in data and not head.startswith((b"<!doctype html", b"<html"))
+
+
+def crop_svg(data: bytes, crop: Crop) -> bytes:
+    """`data` with the doc's crop of its raster applied, by wrapping it.
+
+    The crop is fractions of the raster, which is the whole SVG drawn out,
+    so the same fractions of the SVG's own size are the same part of the picture.
+    The original is nested whole inside an `svg` whose `viewBox` is that part,
+    rather than edited: nothing of the drawing is rewritten, so nothing can be lost.
+    The `svg` between them gives the original its full size to draw at,
+    which it needs where it sizes itself to whatever holds it.
+    """
+    from xml.parsers import expat
+
+    from .fetch import FetchFailed
+
+    root: dict[str, str] = {}
+    start = -1
+    parser = expat.ParserCreate()
+
+    def first(name: str, attrs: dict[str, str]) -> None:
+        nonlocal start
+        if start < 0:
+            start = parser.CurrentByteIndex
+            root.update(attrs)
+
+    parser.StartElementHandler = first
+    try:
+        parser.Parse(data, True)
+    except expat.ExpatError as e:
+        raise FetchFailed(f"it could not be read to crop ({e})") from e
+    width = _pixels(root.get("width"))
+    height = _pixels(root.get("height"))
+    if width is None or height is None:
+        box = root.get("viewBox", "").replace(",", " ").split()
+        if len(box) != 4:
+            raise FetchFailed("it has no `viewBox` or size in pixels to crop by")
+        width, height = float(box[2]), float(box[3])
+    kept = (
+        crop.left * width,
+        crop.top * height,
+        width * (1 - crop.left - crop.right),
+        height * (1 - crop.top - crop.bottom),
+    )
+    view = " ".join(f"{n:g}" for n in kept)
+    wrapper = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{view}" '
+        f'width="{kept[2]:g}" height="{kept[3]:g}">'
+        f'<svg width="{width:g}" height="{height:g}">'
+    )
+    return data[:start] + wrapper.encode() + data[start:].rstrip() + b"</svg></svg>\n"
+
+
+def _pixels(length: str | None) -> float | None:
+    """A length in pixels, written bare or in `px`, or `None` for any other unit."""
+    if length is None:
+        return None
+    try:
+        return float(length.strip().removesuffix("px"))
+    except ValueError:
+        return None
 
 
 def svg_description(data: bytes) -> str:
