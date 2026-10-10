@@ -207,13 +207,13 @@ class MarkdownEmitter(Emitter):
         return "## Sources\n\n" + "\n".join(items)
 
     def source(self, doc: Document, source: str) -> str:
-        """One entry: the source, and where it is archived, or that it is not."""
+        """One entry: where the source is archived, or that it is not, then the source."""
         archived = doc.archived(source)
         if archived is None:
-            return f"{url(source)} (not archived)"
+            return f"(not archived) {url(source)}"
         if archived.error:
-            return f"{url(source)} (not archived: {escape(archived.error)})"
-        return f"{url(source)} (archived [{archived.date}]({url(archived.snapshot)}))"
+            return f"(not archived: {escape(archived.error)}) {url(source)}"
+        return f"(archived [{archived.date}]({url(archived.snapshot)})) {url(source)}"
 
     def source_ref(self, href: str) -> str:
         """The `[12]` after a link, which is its number in Sources.

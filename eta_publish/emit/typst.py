@@ -151,14 +151,14 @@ class TypstEmitter(Emitter):
         return "= Sources\n\n" + "\n".join(items)
 
     def source(self, doc: Document, source: str) -> str:
-        """One entry: the source, and where it is archived, or that it is not."""
+        """One entry: where the source is archived, or that it is not, then the source."""
         shown = f"#link({string(source)})[{escape(source)}]"
         archived = doc.archived(source)
         if archived is None:
-            return f"{shown} (not archived)"
+            return f"(not archived) {shown}"
         if archived.error:
-            return f"{shown} (not archived: {escape(archived.error)})"
-        return f"{shown} (archived #link({string(archived.snapshot)})[{escape(archived.date)}])"
+            return f"(not archived: {escape(archived.error)}) {shown}"
+        return f"(archived #link({string(archived.snapshot)})[{escape(archived.date)}]) {shown}"
 
     def source_ref(self, href: str) -> str:
         """The `[12]` after a link, which jumps to its entry in Sources."""
