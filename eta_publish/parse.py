@@ -17,7 +17,7 @@ because they are facts about how the docs are written:
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, replace
 from datetime import datetime
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from .docs_json import JsonObject
 from .naming import AnchorAllocator, image_filename, image_filenames, names_nothing
@@ -852,25 +852,37 @@ class Parser:
     def _vector(self, para: JsonObject) -> Vector | None:
         """The vector original a `SVG:` line links, if it links one.
 
-        Only a link to Drive counts.
+        Any link counts: a Drive file, or a URL anywhere else.
+        Whether it really is an SVG is settled when it is downloaded,
+        except for a Drive chip, which says its type itself.
         `SVG: TODO` is a note, with nothing to publish for it.
         """
         for el in para.get("elements", []):
             props = el.get("richLink", {}).get("richLinkProperties", {})
             uri = props.get("uri", "")
-            if not uri or "image/svg" not in props.get("mimeType", ""):
-                continue
-            file_id = self._drive_id(uri)
-            if not file_id:
-                self.doc.warn("cannot read a Drive file id from {}; the raster is used", Shown(uri))
-                continue
             title = props.get("title", "")
+            if uri and "image/svg" not in props.get("mimeType", ""):
+                self.doc.warn(
+                    "the {} line links {}, which is not an SVG; the raster is used",
+                    Shown("SVG:"),
+                    Shown(title or uri),
+                )
+                return None
+            if not uri:
+                run = el.get("textRun", {})
+                uri = run.get("textStyle", {}).get("link", {}).get("url", "")
+                title = run.get("content", "").strip()
+            if not uri:
+                continue
+            if not title or title == uri:
+                title = unquote(urlsplit(uri).path.rpartition("/")[2])
+            file_id = self._drive_id(uri)
             return Vector(
                 file_id=file_id,
-                # Drive's name for the linked file names the picture,
+                # The linked file's name names the picture,
                 # the same as a `Source:` line does.
                 # No crop key: the crop is applied to pixels.
-                filename=image_filename(file_id, extension=".svg", name=title),
+                filename=image_filename(file_id or uri, extension=".svg", name=title),
                 title=title,
                 uri=uri,
             )
@@ -1031,7 +1043,8 @@ class Parser:
                     note = unmarked(inlines)
                     last.source = last.source + note
                     self._claim_name(last, note)
-                    self._attach_vector(last, para)
+                    if is_asset_note(inlines) and starts_with_label(inlines, "svg"):
+                        self._attach_vector(last, para)
                     continue
                 drop_pending()
                 pending_source = unmarked(inlines)

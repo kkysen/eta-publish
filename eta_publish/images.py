@@ -134,7 +134,7 @@ def download(
     # is never saved.
     wanted: list[tuple[Image, str]] = []
     for image in doc.images:
-        if image.vector is not None and _fetch_vector(image, outdir, doc, written):
+        if image.vector is not None and _fetch_vector(image, outdir, doc, written, http):
             continue
         if image.source_uri:
             # Carried along rather than read again where it is used:
@@ -207,7 +207,9 @@ def _fetch_one(uri: str, http: requests.Session) -> tuple[str, bytes]:
     return response.headers.get("content-type", "").split(";")[0].strip(), response.content
 
 
-def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, Path]) -> bool:
+def _fetch_vector(
+    image: Image, outdir: Path, doc: Document, written: dict[str, Path], http: requests.Session
+) -> bool:
     """Write the vector original, returning whether it is what gets used.
 
     A failure falls back to the raster rather than to nothing:
@@ -222,18 +224,35 @@ def _fetch_vector(image: Image, outdir: Path, doc: Document, written: dict[str, 
         from .fetch import FetchFailed, download_drive_file
 
         try:
-            dest.write_bytes(download_drive_file(vector.file_id))
-        except (FetchFailed, OSError) as e:
+            if vector.file_id:
+                data = download_drive_file(vector.file_id)
+            else:
+                response = http.get(vector.uri, timeout=60)
+                response.raise_for_status()
+                data = response.content
+            if not _is_svg(data):
+                raise FetchFailed("it is not an SVG")
+            dest.write_bytes(data)
+        except (FetchFailed, OSError, requests.RequestException) as e:
             doc.warn(
                 f"could not download the vector {{}} ({e}); "
                 "using the image from the document instead",
-                Shown(vector.title or vector.file_id),
+                Shown(vector.title or vector.uri),
             )
             return False
 
     written[image.object_id] = dest
     doc.image_files[image.object_id] = dest.name
     return True
+
+
+def _is_svg(data: bytes) -> bool:
+    """Whether `data` is an SVG, read from the bytes rather than a server's word for it.
+
+    A link to a page about a chart answers `200` too, with HTML.
+    """
+    head = data.lstrip()[:15].lower()
+    return b"<svg" in data and not head.startswith((b"<!doctype html", b"<html"))
 
 
 def crop_to(image: Image, data: bytes, doc: Document) -> bytes:

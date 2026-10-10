@@ -4,12 +4,17 @@ Everything here was read off the actual doc and checked against the published pa
 rather than guessed from the fixture.
 """
 
+from pathlib import Path
+from typing import Any, override
+
 import pytest
+import requests
 from paths import named_images
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.typst import TypstEmitter
+from eta_publish.images import download
 from eta_publish.nodes import Document, Figure, Heading, Inline, Paragraph, Text
 from eta_publish.parse import parse
 
@@ -447,8 +452,46 @@ def test_a_source_line_that_links_no_vector_leaves_the_raster() -> None:
 
 
 def test_a_non_vector_link_is_not_mistaken_for_one() -> None:
-    figure = next(b for b in _svg_doc(mime="image/png").blocks if isinstance(b, Figure))
+    doc = _svg_doc(mime="image/png")
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
     assert figure.image.vector is None
+    assert "the `SVG:` line links `chart.svg`, which is not an SVG; the raster is used" in [
+        str(w) for w in doc.warnings
+    ]
+
+
+SVG_URL = "https://raw.githubusercontent.com/kkysen/automated-metro-data/main/charts/share.svg"
+
+
+def _linked_svg_doc() -> Document:
+    url = SVG_URL
+    return build(
+        [
+            para("Header", "HEADING_2"),
+            field("URL: /reports/x"),
+            para("Headline", "TITLE"),
+            image(),
+            {
+                "paragraph": {
+                    "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                    "elements": [
+                        {"textRun": {"content": "SVG", "textStyle": {"underline": True}}},
+                        {"textRun": {"content": ": ", "textStyle": {}}},
+                        {"textRun": {"content": url + "\n", "textStyle": {"link": {"url": url}}}},
+                    ],
+                }
+            },
+        ]
+    )
+
+
+def test_an_svg_linked_outside_drive_becomes_the_figure_file() -> None:
+    """IBX's charts are linked from GitHub, not Drive, and as plain links."""
+    figure = next(b for b in _linked_svg_doc().blocks if isinstance(b, Figure))
+    assert figure.image.vector is not None
+    assert figure.image.vector.file_id == ""
+    assert figure.image.vector.uri == SVG_URL
+    assert figure.image.vector.filename == "share.svg"
 
 
 def test_a_cropped_figure_keeps_its_raster() -> None:
@@ -717,3 +760,28 @@ def test_a_soft_break_with_nothing_on_one_side_is_called_spacing() -> None:
         ]
     )
     assert any("standing in for blank space" in w for w in map(str, doc.warnings))
+
+
+def test_a_linked_svg_that_is_not_one_warns_and_keeps_the_raster(tmp_path: Path) -> None:
+    """A link that answers with a page instead of the chart is a problem in the doc."""
+
+    class Page(requests.Session):
+        @override
+        def get(self, url: str | bytes, **kwargs: Any) -> requests.Response:
+            response = requests.Response()
+            response.status_code = 200
+            if url == SVG_URL:
+                response._content = b"<!doctype html><html><body><svg></svg></body></html>"
+            else:
+                response.headers["content-type"] = "image/png"
+                response._content = b"\x89PNG"
+            return response
+
+    doc = _linked_svg_doc()
+    download(doc, tmp_path, session=Page())
+    assert (
+        "could not download the vector `share.svg` (it is not an SVG); "
+        "using the image from the document instead"
+    ) in [str(w) for w in doc.warnings]
+    assert not (tmp_path / "share.svg").exists()
+    assert doc.image_files["io.1"].endswith(".png")

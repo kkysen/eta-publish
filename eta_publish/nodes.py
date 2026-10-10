@@ -151,7 +151,10 @@ class Vector:
     """
 
     file_id: str
-    """The Drive file id, which is what the API downloads by."""
+    """The Drive file id, which is what the API downloads by.
+
+    Empty for a link outside Drive, which is downloaded from `uri` instead.
+    """
 
     filename: str
     title: str = ""
