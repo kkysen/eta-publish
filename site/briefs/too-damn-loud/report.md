@@ -21,6 +21,9 @@ September 9, 2026
   - `https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393`
   - `https://www.amny.com/news/mta-nyc-subway-ads-and-money/`
   - `https://sbahn.berlin/fahren/bauen-stoerung/`
+- the `Header` section has no `SME/Liaison:` line
+- the `Header` section has no `Goals:` line
+- the `Header` section has no `Audience:` line
 - `SEO Description:` is 363 characters, over the 300 a search result shows:
   > The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I~~t's time to stop the cacophony, and let riders travel in peace.~~
 - style: an apostrophe should be `’`, not `'`: `...for actionable information. It's time to stop the cacophony, ...`

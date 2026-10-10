@@ -33,7 +33,10 @@
   - `https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn`
   - `https://www.mta.info/map/40511`
   - `https://www.etany.org/statements/deinterlining`
+- the `Header` section has no `SME/Liaison:` line
 - the `Header` section has no `Publish Due Date:` line
+- the `Header` section has no `Goals:` line
+- the `Header` section has no `Audience:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: an apostrophe should be `’`, not `'`: `...ry train is running at a snail's pace, all due to an incident...`

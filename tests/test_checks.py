@@ -42,7 +42,7 @@ def test_a_complete_header_is_not_warned_about(doc: Document) -> None:
 
 
 def test_a_missing_field_is_named(doc: Document) -> None:
-    """By name, rather than as a list of nine:
+    """By name, rather than as a list of twelve:
     a warning naming one line is a line to go and add."""
     del doc.meta["Discussion Channel"]
     check(doc)
@@ -70,8 +70,22 @@ def test_an_empty_private_list_is_an_answer(doc: Document) -> None:
     assert doc.warnings == []
 
 
+def test_an_empty_sme_liaison_is_an_answer(doc: Document) -> None:
+    """Not every report has a subject-matter expert to check it."""
+    doc.meta["SME/Liaison"] = ""
+    check(doc)
+    assert doc.warnings == []
+
+
+@pytest.mark.parametrize("field", ["SME/Liaison", "Goals", "Audience"])
+def test_the_planning_fields_are_required(doc: Document, field: str) -> None:
+    del doc.meta[field]
+    check(doc)
+    assert [str(w) for w in doc.warnings] == [f"the `Header` section has no `{field}:` line"]
+
+
 def test_a_document_with_no_header_is_left_to_the_parser(doc: Document) -> None:
-    """`parse` has already said so; nine more warnings would bury it."""
+    """`parse` has already said so; twelve more warnings would bury it."""
     doc.meta.clear()
     check(doc)
     assert doc.warnings == []

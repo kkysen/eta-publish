@@ -21,7 +21,10 @@
   - `https://www.ironmanturnstile.com/transportation-and-smart-hubs/`
   - `https://www.cubic.com/news-events/blogs/why-enforcement-cant-be-the-only-solution-for-transit-revenue-protection`
   - `https://www.etany.org/modernizing-new-york-commuter-rail`
+- the `Header` section has no `SME/Liaison:` line
 - the `Header` section has no `Publish Due Date:` line
+- the `Header` section has no `Goals:` line
+- the `Header` section has no `Audience:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
 - style: an apostrophe should be `’`, not `'`: `...o make is the one that you don't have to think about.`

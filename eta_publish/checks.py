@@ -52,11 +52,12 @@ so the sentence that decides whether anyone clicks ends mid-word,
 and the writer never sees where it was cut.
 """
 
-MAY_BE_EMPTY = frozenset({"Private Contributors"})
+MAY_BE_EMPTY = frozenset({"Private Contributors", "SME/Liaison"})
 """Fields whose emptiness says something rather than being an omission.
 
 A report with nobody uncredited has an empty `Private Contributors:` line,
 and that is the answer, not a missing one.
+A report with no subject-matter expert to check it has an empty `SME/Liaison:`.
 Every other field empty is a line somebody meant to come back to.
 """
 
@@ -74,7 +75,7 @@ def check(doc: Document) -> None:
 
     if not doc.meta:
         # `parse` has already said the header is missing or empty.
-        # Nine more warnings saying the same thing would bury it.
+        # Twelve more warnings saying the same thing would bury it.
         return
 
     for field in REQUIRED_FIELDS:

@@ -194,6 +194,10 @@ def test_smart_chips_resolve(doc: Document) -> None:
 
 
 KNOWN_WARNINGS = (
+    # Written before the header asked for them.
+    "the `Header` section has no `SME/Liaison:` line",
+    "the `Header` section has no `Goals:` line",
+    "the `Header` section has no `Audience:` line",
     "as a `Source:` line above the image instead",
     "unnamed, so each publishes under a hash",
     "suggestions still open on this tab",

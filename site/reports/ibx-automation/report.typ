@@ -8,9 +8,6 @@
   contributors: ("John Ericson", "Madison Feinberg", "Daniel Fleer", "Robert Hale", "Darius Jankauskas", "Alon Levy", "Blair Lorenzo", "Khyber Sen", ),
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
-    [the #raw("Header") section has an unrecognized #raw("SME/Liaison:") line; check it for a typo],
-    [the #raw("Header") section has an unrecognized #raw("Goals:") line; check it for a typo],
-    [the #raw("Header") section has an unrecognized #raw("Audience:") line; check it for a typo],
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[cite]")],
     [unfinished text in the document: #raw("[explain one example about how crewing affects this]")],

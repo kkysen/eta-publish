@@ -6,9 +6,6 @@ October 12, 2026
 
 **Warnings**
 
-- the `Header` section has an unrecognized `SME/Liaison:` line; check it for a typo
-- the `Header` section has an unrecognized `Goals:` line; check it for a typo
-- the `Header` section has an unrecognized `Audience:` line; check it for a typo
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[cite]`
 - unfinished text in the document: `[explain one example about how crewing affects this]`

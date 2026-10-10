@@ -318,6 +318,8 @@ named the way the header lists them,
 and `Final Due Date:` becomes the dateline.
 `Private Contributors:` is never read for the byline,
 which is the point of the two fields being separate.
+`SME/Liaison:`, `Goals:`, and `Audience:` are for the editors and never published,
+but a header without them warns; `SME/Liaison:` may be left empty.
 Everything else is carried along and made available to the templates.
 
 Three rules matter, because all three are load-bearing:

@@ -81,9 +81,12 @@ SOFT_BREAK = "\v"
 
 REQUIRED_FIELDS = (
     "Project Manager",
+    "SME/Liaison",
     "Phase",
     "Discussion Channel",
     "Publish Due Date",
+    "Goals",
+    "Audience",
     "Public Contributors",
     "Private Contributors",
     "URL",
@@ -98,9 +101,9 @@ but an unrecognized field, and says so.
 That is the point of checking at all,
 since a misspelled field is silently missing everywhere it is read.
 
-A missing one is warned about by name rather than as a list of nine,
+A missing one is warned about by name rather than as a list of twelve,
 because a warning naming one line is a line to go and add
-and a warning naming nine is a paragraph nobody reads twice.
+and a warning naming twelve is a paragraph nobody reads twice.
 """
 
 # Fields the header may carry and nothing requires.
