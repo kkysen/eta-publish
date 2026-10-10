@@ -112,9 +112,23 @@
   max-width: 34rem;
 }
 /* Above the card, and above the player once the card becomes one. */
+/* A notice, not a heading: tinted and set off, so it is read before the
+   video is, and the name below is what the embed is called. A fixed amber
+   mixed with the page's own background reads in light and dark alike. */
 .eta-report .embed-warning {
-  margin: 0 0 0.4em;
+  margin: 0 0 0.5em;
+  padding: 0.5em 0.75em;
   font-weight: bold;
+  border-left: 0.3em solid #d97706;
+  border-radius: 0.25em;
+  background: color-mix(in srgb, #d97706 18%, transparent);
+}
+.eta-report .embed-warning::before {
+  content: "⚠ ";
+}
+.eta-report .embed-title {
+  font-weight: bold;
+  opacity: 1;
 }
 .eta-report .embed-card {
   display: block;

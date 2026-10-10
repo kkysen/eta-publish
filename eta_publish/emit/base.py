@@ -188,9 +188,20 @@ class Emitter(ABC):
                 card = self.doc.playable(node)
                 if card is None:
                     # What it was before anything could embed it, and still a citation.
-                    text = GRAPHIC_WARNING + node.url if node.graphic else node.url
-                    return self.paragraph(Paragraph([Text(text, href=node.url)]))
+                    return self.linked_embed(node, node.title or node.url)
                 return self.embed(node, card)
+
+    def linked_embed(self, node: Embed, label: str) -> str:
+        """An embed as a link saying what it is, for wherever it cannot play.
+
+        The warning is a line of its own ahead of the link, rather than the
+        start of the link's text: the link is named for the video, and the
+        warning is something to read before following it.
+        """
+        link = self.paragraph(Paragraph([Text(label, href=node.url)]))
+        if not node.graphic:
+            return link
+        return self.join([self.paragraph(Paragraph([Text(GRAPHIC_WARNING, bold=True)])), link])
 
     def inlines(self, content: list[Inline]) -> str:
         return "".join(self.inline(i) for i in content)
@@ -254,7 +265,7 @@ PLATFORM_NAMES = {
 }
 
 
-GRAPHIC_WARNING = "Warning, graphic video: "
+GRAPHIC_WARNING = "Warning, graphic video"
 """What a `Video (Graphic Warning):` embed is headed with, before anything else about it."""
 
 
@@ -263,16 +274,17 @@ def embed_label(node: Embed, card: Card) -> str:
 
     A video is its title and who posted it; a post is who posted it and what it says,
     in full, because on paper there is no clicking through to read the rest.
+    The `Video:` line's own name for it comes first, where it gave one.
     """
-    warning = GRAPHIC_WARNING if node.graphic else ""
     where = PLATFORM_NAMES[node.platform]
     match node.platform:
         case Platform.YOUTUBE:
-            return f"{warning}Video: {card.text} ({card.author} on {where})"
+            return f"Video: {node.title or card.text} ({card.author} on {where})"
         case Platform.DRIVE:
-            return GRAPHIC_WARNING.removesuffix(": ") if node.graphic else "Video"
+            return node.title or "Video"
         case _:
-            return f"{warning}{card.author} on {where}: \u201c{card.text}\u201d"
+            said = f"{card.author} on {where}: \u201c{card.text}\u201d"
+            return f"{node.title}, from {said}" if node.title else said
 
 
 TEXT_FRAGMENT = "#:~:text="

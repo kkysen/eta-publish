@@ -112,9 +112,23 @@
   max-width: 34rem;
 }
 /* Above the card, and above the player once the card becomes one. */
+/* A notice, not a heading: tinted and set off, so it is read before the
+   video is, and the name below is what the embed is called. A fixed amber
+   mixed with the page's own background reads in light and dark alike. */
 .eta-report .embed-warning {
-  margin: 0 0 0.4em;
+  margin: 0 0 0.5em;
+  padding: 0.5em 0.75em;
   font-weight: bold;
+  border-left: 0.3em solid #d97706;
+  border-radius: 0.25em;
+  background: color-mix(in srgb, #d97706 18%, transparent);
+}
+.eta-report .embed-warning::before {
+  content: "⚠ ";
+}
+.eta-report .embed-title {
+  font-weight: bold;
+  opacity: 1;
 }
 .eta-report .embed-card {
   display: block;
@@ -831,10 +845,6 @@
     data-player="https://www.youtube-nocookie.com/embed/o90JQBWdgTI?autoplay=1"
     data-title="Effective Transit Alliance on YouTube"
     ><a
-      class="link-mark"
-      href="#embed-youtube-o90JQBWdgTI"
-      aria-label="Link to this video"
-    ></a><a
       class="embed-card"
       href="https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU"
       ><img
@@ -849,10 +859,17 @@
           >Play on YouTube</span
         ></span
       ></a
-    ><span class="cited"
-      ><sup class="source-ref" id="srcref1-1"
-        ><a href="#src1">[1]</a></sup
-      ></span
+    ><figcaption class="embed-title"
+      ><a
+        class="link-mark"
+        href="#embed-youtube-o90JQBWdgTI"
+        aria-label="Link to this video"
+      ></a>Too Damn Loud: Announcements on NYC Transit are Out of Control<span
+        class="cited"
+        ><sup class="source-ref" id="srcref1-1"
+          ><a href="#src1">[1]</a></sup
+        ></span
+      ></figcaption
     ></figure
   >
   <figure id="img-831248b1" style="--aspect: 0.648"

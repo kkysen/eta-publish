@@ -213,7 +213,9 @@ These do not stop people from falling and dying; PSDs do.
 In fact, the [MTA has now even been held liable for their failure to do so](<https://ny1.com/nyc/brooklyn/transit/2025/11/22/mta-ordered-to-pay--81-7-million-to-woman-struck-by-subway-in-brooklyn>)<sup>\[47\]</sup>.
 Automation and PSDs are generally considered together as PSDs make it simpler for trains to operate unattended, but the safety benefits of PSDs are so strong that they should be installed on the IBX regardless.
 
-[Warning, graphic video: Thought Police HQ (@ThoughtPolic3HQ) on X: “#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
+**Warning, graphic video**
+
+[Joseph Lynskey hit by the 1 train, from Thought Police HQ (@ThoughtPolic3HQ) on X: “#UPDATE Joseph Lynskey, a 45-year-old NYC music programmer, was viciously pushed in front of a subway train, leaving him with serious injuries but stable.
 The assailant, 23-year-old Kamel Hawkins, faces charges of attempted murder and assault.
 Hawkins has a criminal record that…”](<https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1>)<sup>\[48\]</sup>
 

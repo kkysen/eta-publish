@@ -884,20 +884,28 @@ class HtmlEmitter(Emitter):
         if ref is not None:
             ref = tag.span(class_="cited")[ref]
         # Outside the card, so it stays above the player that replaces the card.
+        # A notice rather than a heading: the `#` that links to the embed goes
+        # on its name, so the warning is not what the embed reads as called.
         warning = (
-            tag.p(class_="embed-warning")[GRAPHIC_WARNING.removesuffix(": ")]
-            if node.graphic
+            tag.p(class_="embed-warning", role="note")[GRAPHIC_WARNING] if node.graphic else None
+        )
+        what = "post" if node.platform in (Platform.X, Platform.BLUESKY) else "video"
+        # The citation follows the name, where there is one, as it follows a link.
+        title = (
+            tag.figcaption(class_="embed-title")[self.mark(anchor, what), node.title, ref]
+            if node.title
             else None
         )
+        mark = None if title is not None else self.mark(anchor, what)
+        if title is not None:
+            ref = None
         served = self.doc.served_video(node)
         if served is not None:
             video = tag.video(
                 src=self.media_src(served, VIDEO_DIR), controls=True, preload="metadata"
             )[tag.a(href=node.url)["Watch the video"]]
             return markup(
-                tag.figure(id=anchor, class_="embed embed-video")[
-                    self.mark(anchor, "video"), warning, video, ref
-                ]
+                tag.figure(id=anchor, class_="embed embed-video")[mark, warning, video, title, ref]
             )
         where = PLATFORM_NAMES[node.platform]
         picture = None
@@ -922,11 +930,10 @@ class HtmlEmitter(Emitter):
                 data_player=player_url(node, card),
                 data_title=f"{card.author} on {where}",
             )[
-                self.mark(
-                    anchor, "post" if node.platform in (Platform.X, Platform.BLUESKY) else "video"
-                ),
+                mark,
                 warning,
                 card_link,
+                title,
                 ref,
             ]
         )

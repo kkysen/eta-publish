@@ -67,7 +67,14 @@
    their own to, so the player that replaces either is the size of its card. */
 .eta-report .embed { max-width: 34rem; }
 /* Above the card, and above the player once the card becomes one. */
-.eta-report .embed-warning { margin: 0 0 .4em; font-weight: bold; }
+/* A notice, not a heading: tinted and set off, so it is read before the
+   video is, and the name below is what the embed is called. A fixed amber
+   mixed with the page's own background reads in light and dark alike. */
+.eta-report .embed-warning { margin: 0 0 .5em; padding: .5em .75em; font-weight: bold;
+                             border-left: .3em solid #d97706; border-radius: .25em;
+                             background: color-mix(in srgb, #d97706 18%, transparent); }
+.eta-report .embed-warning::before { content: "⚠ "; }
+.eta-report .embed-title { font-weight: bold; opacity: 1; }
 .eta-report .embed-card { display: block; text-decoration: none; color: inherit;
                           border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
                           border-radius: .5em; overflow: hidden; }

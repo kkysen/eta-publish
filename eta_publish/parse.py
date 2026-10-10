@@ -24,7 +24,6 @@ from .naming import (
     AnchorAllocator,
     image_filename,
     image_filenames,
-    media_stem,
     names_nothing,
     url_filename,
 )
@@ -608,15 +607,15 @@ def source_href(source: list[Inline]) -> str:
     return next((i.href for i in source if isinstance(i, Text) and i.href), "")
 
 
-def video_name(link: list[Inline]) -> str:
-    """The file stem a `Video:` line's link text makes, or nothing.
+def video_title(link: list[Inline]) -> str:
+    """What a `Video:` line's link calls the video, or nothing.
 
-    A link pasted bare reads as its own URL, which says nothing a hash does not.
+    A link pasted bare reads as its own URL, which is no name for anything.
     """
     text = plain_text(link).strip()
-    if text.startswith(("http:", "https:", "//")):
+    if text.startswith(("http:", "https:", "//")) or names_nothing(text):
         return ""
-    return media_stem(text)
+    return text
 
 
 def date_text(chip: JsonObject) -> str:
@@ -1144,7 +1143,7 @@ class Parser:
                     continue
                 embed.graphic = is_graphic_video_note(inlines)
                 embed.copy = is_copied_video_note(inlines)
-                embed.name = video_name(after_label(inlines))
+                embed.title = video_title(after_label(inlines))
                 drop_pending()
                 caption_slot = 0
                 out.append(embed)

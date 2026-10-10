@@ -217,7 +217,7 @@ class TypstEmitter(Emitter):
     def embed(self, node: Embed, card: Card) -> str:
         # Nothing here plays anything, so the embed is what it says,
         # linked to where it does play.
-        return self.paragraph(Paragraph([Text(embed_label(node, card), href=node.url)]))
+        return self.linked_embed(node, embed_label(node, card))
 
     @override
     def table(self, node: Table) -> str:

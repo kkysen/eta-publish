@@ -112,9 +112,23 @@
   max-width: 34rem;
 }
 /* Above the card, and above the player once the card becomes one. */
+/* A notice, not a heading: tinted and set off, so it is read before the
+   video is, and the name below is what the embed is called. A fixed amber
+   mixed with the page's own background reads in light and dark alike. */
 .eta-report .embed-warning {
-  margin: 0 0 0.4em;
+  margin: 0 0 0.5em;
+  padding: 0.5em 0.75em;
   font-weight: bold;
+  border-left: 0.3em solid #d97706;
+  border-radius: 0.25em;
+  background: color-mix(in srgb, #d97706 18%, transparent);
+}
+.eta-report .embed-warning::before {
+  content: "⚠ ";
+}
+.eta-report .embed-title {
+  font-weight: bold;
+  opacity: 1;
 }
 .eta-report .embed-card {
   display: block;
@@ -1975,11 +1989,7 @@
     are so strong that they should be installed on the IBX regardless.</p
   >
   <figure id="embed-x-1874861375857541619" class="embed embed-video"
-    ><a
-      class="link-mark"
-      href="#embed-x-1874861375857541619"
-      aria-label="Link to this video"
-    ></a><p class="embed-warning">Warning, graphic video</p><video
+    ><p class="embed-warning" role="note">Warning, graphic video</p><video
       src="videos/Joseph_Lynskey_hit_by_the_1_train.mp4"
       controls
       preload="metadata"
@@ -1987,10 +1997,16 @@
         href="https://x.com/ThoughtPolic3HQ/status/1874861375857541619/video/1"
         >Watch the video</a
       ></video
-    ><span class="cited"
-      ><sup class="source-ref" id="srcref48-1"
-        ><a href="#src48">[48]</a></sup
-      ></span
+    ><figcaption class="embed-title"
+      ><a
+        class="link-mark"
+        href="#embed-x-1874861375857541619"
+        aria-label="Link to this post"
+      ></a>Joseph Lynskey hit by the 1 train<span class="cited"
+        ><sup class="source-ref" id="srcref48-1"
+          ><a href="#src48">[48]</a></sup
+        ></span
+      ></figcaption
     ></figure
   >
   <figure id="Skyline_platform_screen_doors" style="--aspect: 1.333"

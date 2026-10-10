@@ -330,8 +330,9 @@ class Embed:
     """Whether its line was `Video (Copy):`, so the build downloads the video
     and the site serves it, rather than leaving it to a post that can be deleted."""
 
-    name: str = ""
-    """The file stem its `Video:` line's link text makes, or empty if it has none."""
+    title: str = ""
+    """Its `Video:` line's link text, which names the video on the page and its file,
+    or empty where the link reads as its own URL."""
 
 
 @dataclass(frozen=True)

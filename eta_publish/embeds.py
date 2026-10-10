@@ -18,7 +18,7 @@ from urllib.parse import quote
 import requests
 
 from .docs_json import JsonObject
-from .naming import IMAGE_DIR, VIDEO_DIR
+from .naming import IMAGE_DIR, VIDEO_DIR, media_stem
 from .nodes import VIDEO_TYPES, Card, Document, Embed, Platform, Shown
 
 EMBEDS_JSON = "embeds.json"
@@ -240,19 +240,21 @@ def _stems(embeds: list[Embed]) -> dict[str, str]:
     Two embeds whose links read alike both carry the hash too,
     decided knowing all of them, so which comes first renames neither.
     """
+    names = {embed.url: media_stem(embed.title) for embed in embeds}
     claimants: dict[str, set[str]] = defaultdict(set)
-    for embed in embeds:
-        if embed.name:
-            claimants[embed.name].add(embed.url)
+    for url, name in names.items():
+        if name:
+            claimants[name].add(url)
     stems: dict[str, str] = {}
     for embed in embeds:
+        name = names[embed.url]
         short = hashlib.sha256(embed.url.encode()).hexdigest()[:8]
-        if not embed.name:
+        if not name:
             stems[embed.url] = f"embed-{short}"
-        elif len(claimants[embed.name]) > 1:
-            stems[embed.url] = f"{embed.name}-{short}"
+        elif len(claimants[name]) > 1:
+            stems[embed.url] = f"{name}-{short}"
         else:
-            stems[embed.url] = embed.name
+            stems[embed.url] = name
     return stems
 
 

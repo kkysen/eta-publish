@@ -228,18 +228,38 @@ def test_a_video_is_named_after_its_link_text() -> None:
             linked((": ", None), ("Hit by the 1 train", url), underline="Video"),
         ]
     )
-    assert [b.name for b in doc.blocks if isinstance(b, Embed)] == ["Hit_by_the_1_train"]
+    assert [b.title for b in doc.blocks if isinstance(b, Embed)] == ["Hit by the 1 train"]
+    assert _stems(doc.embeds) == {url: "Hit_by_the_1_train"}
 
 
 def test_two_videos_whose_links_read_alike_both_carry_a_hash() -> None:
-    first = Embed(url="https://x.com/a/status/1", platform=Platform.X, key="1", name="clip")
-    second = Embed(url="https://x.com/b/status/2", platform=Platform.X, key="2", name="clip")
-    alone = Embed(url="https://x.com/c/status/3", platform=Platform.X, key="3", name="other")
+    first = Embed(url="https://x.com/a/status/1", platform=Platform.X, key="1", title="clip")
+    second = Embed(url="https://x.com/b/status/2", platform=Platform.X, key="2", title="clip")
+    alone = Embed(url="https://x.com/c/status/3", platform=Platform.X, key="3", title="other")
     stems = _stems([first, second, alone])
     assert stems[first.url].startswith("clip-")
     assert stems[second.url].startswith("clip-")
     assert stems[first.url] != stems[second.url]
     assert stems[alone.url] == "other"
+
+
+def test_a_graphic_video_is_warned_about_and_named_apart() -> None:
+    """The warning is a notice of its own, and the `#` linking to the video
+    sits on the video's name rather than beside the warning."""
+    url = "https://x.com/someone/status/123"
+    line = linked(
+        (": ", None), ("Hit by the 1 train", url), underline="Video (Graphic Warning, Copy)"
+    )
+    doc = build([para("Headline", "TITLE"), line])
+    doc.cards[url] = Card(author="someone", text="a post")
+    doc.media_files[url] = "Hit_by_the_1_train.mp4"
+    html = HtmlEmitter(image_base="images").emit(doc)
+    assert '<p class="embed-warning" role="note">Warning, graphic video</p>' in html
+    assert "Hit by the 1 train" in html[html.index('class="embed-title"') :]
+    caption = html[html.index('<figcaption class="embed-title">') :]
+    assert caption.index("link-mark") < caption.index("</figcaption>")
+    markdown = MarkdownEmitter().emit(doc)
+    assert "**Warning, graphic video**\n\n[Hit by the 1 train, from someone on X:" in markdown
 
 
 def test_a_copy_that_failed_shows_its_card() -> None:
