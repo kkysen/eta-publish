@@ -541,13 +541,15 @@
     const figure = card.closest(".embed");
     // YouTube's player refuses a page that sends no `Referer`, with "Error
     // 153", and a page opened as a file sends none: there the card stays the
-    // link to the video it already is.
+    // link to the video it already is, opened in a new tab so the report stays.
+    event.preventDefault();
     if (
       location.protocol === "file:" &&
       figure.classList.contains("embed-youtube")
-    )
+    ) {
+      open(card.href, "_blank", "noopener");
       return;
-    event.preventDefault();
+    }
     const frame = document.createElement("iframe");
     // Bluesky's frame says how tall its post is only to a frame that gave it
     // an id to say it with.
