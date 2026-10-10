@@ -99,8 +99,10 @@ def test_a_range_is_not_warned_about() -> None:
 
 def test_a_spaced_em_dash_is_warned_about() -> None:
     found = warnings(written("They are unfixable mistakes — while the debt is not."))
-    assert len(found) == 1
-    assert "mistakes — while" in found[0]
+    assert found == [
+        "style: an em dash should not have spaces: "
+        "`They are unfixable mistakes\u00b7—\u00b7while the debt is not.`"
+    ]
 
 
 def test_a_dash_spaced_on_one_side_is_warned_about() -> None:
@@ -108,7 +110,9 @@ def test_a_dash_spaced_on_one_side_is_warned_about() -> None:
 
 
 def test_a_spaced_en_dash_is_warned_about() -> None:
-    assert len(warnings(written("It spans 125 St, 2 – 3x the station width."))) == 1
+    found = warnings(written("It spans 125 St, 2 – 3x the station width."))
+    assert len(found) == 1
+    assert found[0].startswith("style: an en dash should not have spaces: ")
 
 
 def test_a_hyphen_is_not_a_dash() -> None:

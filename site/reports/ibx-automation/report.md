@@ -51,7 +51,7 @@ October 12, 2026
 - style: `3 minute` should be `3 min`: `... to affordably maintain those 3 minute headways throughout the day i...`
 - style: `10 minutes` should be `10 min`: `... day instead of collapsing to 10 minutes off-peak.`
 - style: `180 meters` should be `180 m`: `... on the New York City Subway (180 meters) or longer exclusively use hi...`
-- style: a dash is written with a space beside it, and the house style closes it up: `...urage walking across the track — note this doesn’t matter so m...`
+- style: an em dash should not have spaces: `...urage walking across the track·—·note this doesn’t matter so mu...`
 - style: `Ball Square` should be `Ball Sq`: `...Green Line Extension designed Ball Square and East Somerville to requir...`
 - style: `Jersey Avenue` should be `Jersey Av`: `...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...`
 - style: `32 minute` should be `32 min`: `...ntimes. The MTA’s commendable 32 minute runtime target, for example, ...`

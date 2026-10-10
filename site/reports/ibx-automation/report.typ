@@ -51,7 +51,7 @@
     [style: #raw("3 minute") should be #raw("3 min"): #raw("... to affordably maintain those 3 minute headways throughout the day i...")],
     [style: #raw("10 minutes") should be #raw("10 min"): #raw("... day instead of collapsing to 10 minutes off-peak.")],
     [style: #raw("180 meters") should be #raw("180 m"): #raw("... on the New York City Subway (180 meters) or longer exclusively use hi...")],
-    [style: a dash is written with a space beside it, and the house style closes it up: #raw("...urage walking across the track — note this doesn’t matter so m...")],
+    [style: an em dash should not have spaces: #raw("...urage walking across the track·—·note this doesn’t matter so mu...")],
     [style: #raw("Ball Square") should be #raw("Ball Sq"): #raw("...Green Line Extension designed Ball Square and East Somerville to requir...")],
     [style: #raw("Jersey Avenue") should be #raw("Jersey Av"): #raw("...s Newport, Harsimus Cove, and Jersey Avenue. This is not acceptable for a...")],
     [style: #raw("32 minute") should be #raw("32 min"): #raw("...ntimes. The MTA’s commendable 32 minute runtime target, for example, ...")],

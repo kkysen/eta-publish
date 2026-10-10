@@ -138,7 +138,10 @@ Not the hyphen: `pipe-jacking` is one word and `10-15` is somebody
 reaching for an en dash, which is a different thing to say about a line.
 """
 
-SPACED_DASH = re.compile(rf"(?: +[{DASHES}]|[{DASHES}] +)")
+SPACED_DASH = re.compile(rf"(?: +(?P<before>[{DASHES}]) *|(?P<after>[{DASHES}]) +)")
+"""A dash with spaces on one side of it or both, taken as one match with them."""
+
+DASH_NAMES = {"\u2014": "an em dash", "\u2013": "an en dash"}
 
 
 def _check_dash_spacing(doc: Document, text: str) -> None:
@@ -150,10 +153,14 @@ def _check_dash_spacing(doc: Document, text: str) -> None:
     is visible on the page next to the rest.
     """
     for match in SPACED_DASH.finditer(text):
+        dash = match.group("before") or match.group("after")
+        start, end = match.span()
+        # The spaces drawn, as for a gap: quoted as spaces, they are invisible.
+        drawn = match.group().replace(" ", SPACE)
         _warn(
             doc,
-            "a dash is written with a space beside it, and the house style closes it up: {}",
-            Shown(_excerpt(text, match.start(), match.end())),
+            f"{DASH_NAMES[dash]} should not have spaces: {{}}",
+            Highlighted(_before(text, start), drawn, _after(text, end)),
         )
 
 
