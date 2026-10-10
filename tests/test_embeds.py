@@ -77,6 +77,20 @@ def test_a_graphic_video_line_is_embedded_with_a_warning() -> None:
     assert doc.blocks == [Embed(url=url, platform=Platform.YOUTUBE, key="abc", graphic=True)]
 
 
+def test_an_unknown_modifier_is_warned_about_and_ignored() -> None:
+    url = "https://www.youtube.com/watch?v=abc"
+    doc = build(
+        [
+            para("Headline", "TITLE"),
+            linked((": ", None), (url, url), underline="Video (graphic warning, Grafic)"),
+        ]
+    )
+    assert doc.blocks == [Embed(url=url, platform=Platform.YOUTUBE, key="abc", graphic=True)]
+    warnings = [str(w) for w in doc.warnings if "not a modifier" in str(w)]
+    assert len(warnings) == 1
+    assert "Grafic" in warnings[0]
+
+
 def test_a_titled_link_is_embedded() -> None:
     """Too Damn Loud's video, which Docs shows by its title rather than its address."""
     url = "https://youtube.com/shorts/o90JQBWdgTI?is=I4"

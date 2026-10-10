@@ -143,7 +143,13 @@ def unfinished(text: str) -> bool:
 
 
 VIDEO_LABEL = "video"
-GRAPHIC_VIDEO_LABEL = "video (graphic warning)"
+GRAPHIC_WARNING = "graphic warning"
+
+# What each label may be modified by, in parentheses after it:
+# `Video (Graphic Warning):`. A label missing here takes none.
+LABEL_MODIFIERS: dict[str, frozenset[str]] = {
+    VIDEO_LABEL: frozenset({GRAPHIC_WARNING}),
+}
 
 
 def is_video_note(line: list[Inline]) -> bool:
@@ -158,16 +164,12 @@ def is_video_note(line: list[Inline]) -> bool:
     warned about before playing it.
     """
     note = labelled(line)
-    return (
-        note.underlined
-        and note.mark == ":"
-        and note.label.casefold() in (VIDEO_LABEL, GRAPHIC_VIDEO_LABEL)
-    )
+    return note.underlined and note.mark == ":" and note.label.casefold() == VIDEO_LABEL
 
 
 def is_graphic_video_note(line: list[Inline]) -> bool:
     """Whether `line` is a `Video (Graphic Warning):` line."""
-    return is_video_note(line) and labelled(line).label.casefold() == GRAPHIC_VIDEO_LABEL
+    return is_video_note(line) and GRAPHIC_WARNING in labelled(line).modified_by()
 
 
 def after_label(line: list[Inline]) -> list[Inline]:
@@ -313,8 +315,12 @@ class Labelled:
     """
 
     label: str
-    """As written. Header fields are case-sensitive and figure notes are not,
-    so the casefolding is the caller's to do."""
+    """As written, without its modifiers. Header fields are case-sensitive
+    and figure notes are not, so the casefolding is the caller's to do."""
+
+    modifiers: tuple[str, ...]
+    """What the label is qualified by, as written: the comma-separated
+    `Graphic Warning` of `Video (Graphic Warning):`."""
 
     mark: str
     """`:` where the line was typed, `]` where the label is the text of a link,
@@ -351,6 +357,27 @@ class Labelled:
     so a label underlined and a value underlined with it is the one
     mistake this convention invites. The line is still the label it looks like;
     the underline is what needs fixing, and the warning says so."""
+
+    def modified_by(self) -> frozenset[str]:
+        """The modifiers, casefolded, since they are matched like figure notes."""
+        return frozenset(modifier.casefold() for modifier in self.modifiers)
+
+    def unknown_modifiers(self) -> list[str]:
+        """The modifiers this label does not take, as written."""
+        allowed = LABEL_MODIFIERS.get(self.label.casefold(), frozenset())
+        return [modifier for modifier in self.modifiers if modifier.casefold() not in allowed]
+
+
+def _modified(label: str) -> tuple[str, tuple[str, ...]]:
+    """`label` split from the parenthesized modifiers it ends with, if any.
+
+    `Label (Modifier 1, Modifier 2)` is `Label` modified by both.
+    """
+    name, paren, rest = label.partition("(")
+    if not paren or not rest.endswith(")"):
+        return label, ()
+    modifiers = tuple(m.strip() for m in rest.removesuffix(")").split(",") if m.strip())
+    return name.strip(), modifiers
 
 
 @dataclass(frozen=True)
@@ -404,8 +431,10 @@ def labelled(content: list[Inline]) -> Labelled:
     end = next((i for i, m in enumerate(head) if m.character in LABEL_MARKS), None)
     label = head if end is None else head[:end]
     rest = [] if end is None else head[end + 1 :]
+    name, modifiers = _modified(_text(label).strip())
     return Labelled(
-        label=_text(label).strip(),
+        label=name,
+        modifiers=modifiers,
         mark="" if end is None else head[end].character,
         value=_text(rest).lstrip(),
         bracketed=bracketed,
@@ -1048,7 +1077,7 @@ class Parser:
                 self.doc.warn("unfinished text in the document: {}", Shown(placeholder[:80]))
 
             if is_source_note(inlines) or is_asset_note(inlines):
-                self._bleed(inlines)
+                self._check_label(inlines)
                 last = out[-1] if out else None
                 if isinstance(last, Figure):
                     # A source line after a figure sits between the image and
@@ -1065,7 +1094,7 @@ class Parser:
                 continue
 
             if is_video_note(inlines):
-                self._bleed(inlines)
+                self._check_label(inlines)
                 embed = embed_of(after_label(inlines))
                 if embed is None:
                     self.doc.warn(
@@ -1104,12 +1133,12 @@ class Parser:
                     if not plain_text(line).strip():
                         continue
                     if is_credit_note(line):
-                        self._bleed(line)
+                        self._check_label(line)
                         last.credit = unmarked(line)
                         caption_slot = 0
                         claimed = True
                     elif is_source_note(line) or is_asset_note(line):
-                        self._bleed(line)
+                        self._check_label(line)
                         last.source = last.source + unmarked(line)
                         self._claim_name(last, line)
                         claimed = True
@@ -1329,7 +1358,7 @@ class Parser:
                     wrapped = plain_text(line).strip()
                     self.doc.meta[key] = f"{self.doc.meta[key]} {wrapped}".strip()
                     continue
-                self._bleed(line)
+                self._check_label(line)
                 key = self._meta_line(*field)
             end = i + 1
 
@@ -1343,6 +1372,26 @@ class Parser:
                 Shown("SEO Description:"),
             )
         return [content[i] for i in pictures if i < end] + content[end:]
+
+    def _check_label(self, line: list[Inline]) -> None:
+        """Warn about anything wrong with how a note's label is written."""
+        self._bleed(line)
+        self._modifiers(line)
+
+    def _modifiers(self, line: list[Inline]) -> None:
+        """Warn about a modifier its label does not take.
+
+        Likeliest a misspelling, and a misspelled `Graphic Warning`
+        publishes a graphic video with no warning at all.
+        """
+        note = labelled(line)
+        for modifier in note.unknown_modifiers():
+            self.doc.warn(
+                "{} is not a modifier {} takes; ignoring it: {}",
+                Shown(modifier),
+                Shown(f"{note.label}:"),
+                Shown(_clipped(plain_text(line).strip())),
+            )
 
     def _bleed(self, line: list[Inline]) -> None:
         """Warn where the underline marking a label ran on into its value.
