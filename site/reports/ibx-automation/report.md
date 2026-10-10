@@ -29,7 +29,7 @@ October 12, 2026
 - 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
   - `img-dfdefb85`: \[caption\]
-- 19 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 21 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 21 comment threads still open on this tab
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line

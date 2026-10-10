@@ -29,7 +29,7 @@
     [the image #raw("automated_share_by_year_2016_to_2026") has no caption],
     [the image #raw("automated_share_by_year_ex_china_2016_to_2026") has no caption],
     [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): A new artistic rendering of the IBX at New Utrecht Av. They appear to...], [#raw("img-dfdefb85"): \[caption\]], )],
-    [19 suggestions still open on this tab; the build publishes the document without them, as it reads today],
+    [21 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [21 comment threads still open on this tab],
     [the #raw("Header") section has no #raw("Short:") line],
     [the #raw("Header") section has no #raw("SEO Description:") line],
