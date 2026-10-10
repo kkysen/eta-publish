@@ -23,11 +23,17 @@ September 9, 2026
   - `https://sbahn.berlin/fahren/bauen-stoerung/`
 - `SEO Description:` is 363 characters, over the 300 a search result shows:
   > The seemingly-endless onslaught of announcements on NY transit not only annoys riders, but impairs accessibility, making navigating transit far more difficult than it needs to be. ETA outlines the best practices for transit audio design: clear, concise messages reserved for actionable information. I~~t's time to stop the cacophony, and let riders travel in peace.~~
+- style: an apostrophe should be ’, not ': `...for actionable information. It's time to stop the cacophony, ...`
 - style: `10 minutes` should be `10 min`: `... Flushing-Main St, and nearly 10 minutes out of a 40 minute ride compr...`
 - style: `40 minute` should be `40 min`: `...nd nearly 10 minutes out of a 40 minute ride comprised announcements....`
 - style: `15 seconds` should be `15 sec`: `... the door closing warning—are 15 seconds per interstation segment, onl...`
 - style: a sentence should end with 1 space, not 2: `..., often one message at a time.··Slowly, by following the path ...`
+- style: an apostrophe should be ’, not ': `...ual advertisements, riders can't simply choose to look away f...`
+- style: an apostrophe should be ’, not ': `... be a positive part of a rider's day, not an annoyance.`
 - style: a sentence should end with 1 space, not 2: `...ersion of the curb cut effect.··In this case, designing announ...`
+- style: an apostrophe should be ’, not ': `...o understand for those who don't speak English as a first lan...`
+- style: an apostrophe should be ’, not ': `...become intolerable. The region's transit agencies, and the MT...`
+- style: an apostrophe should be ’, not ': `... New York is too damn loud. It's time to let riders travel in...`
 - the image `img-831248b1` has no alt text and no caption; add a description to it in the doc
 
 [Video: Too Damn Loud: Announcements on NYC Transit are Out of Control (Effective Transit Alliance on YouTube)](<https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU>)<sup>\[1\]</sup>

@@ -24,6 +24,7 @@
 - the `Header` section has no `Publish Due Date:` line
 - the `Header` section has no `Short:` line
 - the `Header` section has no `SEO Description:` line
+- style: an apostrophe should be ’, not ': `...o make is the one that you don't have to think about.`
 - the image `img-ae6ddd33` has no alt text and no caption; add a description to it in the doc
 
 ![](<images/img-ae6ddd33.jpg>)

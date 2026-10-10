@@ -74,6 +74,20 @@ def test_a_footnote_is_read_like_the_body() -> None:
     assert len(warnings(cited('Barbara Russo-Lennon, "Subway spots.  The ad blitz."'))) == 1
 
 
+def test_a_curled_apostrophe_is_not_warned_about() -> None:
+    assert warnings(written("The MTA\u2019s trains don\u2019t wait.")) == []
+
+
+def test_a_straight_apostrophe_is_warned_about() -> None:
+    found = warnings(written("The MTA's trains don\u2019t wait."))
+    assert len(found) == 1
+    assert "MTA's" in found[0]
+
+
+def test_a_straight_quote_around_words_is_not_an_apostrophe() -> None:
+    assert warnings(written("It was called 'automation' then.")) == []
+
+
 def test_a_closed_up_dash_is_not_warned_about() -> None:
     assert warnings(written("They are unfixable mistakes—while the debt is not.")) == []
 
@@ -99,7 +113,7 @@ def test_a_spaced_en_dash_is_warned_about() -> None:
 
 def test_a_hyphen_is_not_a_dash() -> None:
     """`pipe-jacking` is one word, and `2 - 3` is a different thing to say."""
-    assert warnings(written("The pipe-jacking at Jing'an Temple station.")) == []
+    assert warnings(written("The pipe-jacking at Jing\u2019an Temple station.")) == []
 
 
 def test_a_footnote_dash_is_read_like_the_body() -> None:

@@ -83,6 +83,7 @@ def style(doc: Document) -> None:
     for text in _prose(doc):
         _check_spacing(doc, text)
         _check_dash_spacing(doc, text)
+        _check_apostrophes(doc, text)
         _check_organization_name(doc, text)
         _check_street_names(doc, text)
         _check_units(doc, text)
@@ -152,6 +153,28 @@ def _check_dash_spacing(doc: Document, text: str) -> None:
         _warn(
             doc,
             "a dash is written with a space beside it, and the house style closes it up: {}",
+            Shown(_excerpt(text, match.start(), match.end())),
+        )
+
+
+STRAIGHT_APOSTROPHE = re.compile(r"(?<=\w)'(?=\w)")
+"""A straight quote inside a word, which can only be an apostrophe.
+
+Only inside one: `riders'` or `'90s` could as well be a quote opening or closing,
+and warning about every quote would bury the apostrophes it is after.
+"""
+
+
+def _check_apostrophes(doc: Document, text: str) -> None:
+    """A straight `'` for an apostrophe, where the house style curls it: `’`.
+
+    Docs curls it as it is typed, so a straight one arrives by pasting,
+    and sits on the page beside the curled ones around it.
+    """
+    for match in STRAIGHT_APOSTROPHE.finditer(text):
+        _warn(
+            doc,
+            "an apostrophe should be \u2019, not ': {}",
             Shown(_excerpt(text, match.start(), match.end())),
         )
 
