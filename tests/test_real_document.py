@@ -252,7 +252,7 @@ def test_every_unnamed_image_is_listed_with_what_it_shows(doc: Document) -> None
     warning = next(w for w in map(str, doc.warnings) if "unnamed" in w)
     listed = [line for line in warning.split("\n") if line.startswith("- ")]
     unnamed = [b for b in doc.blocks if isinstance(b, Figure) and not b.image.named]
-    assert len(listed) == len(unnamed) == 17
+    assert len(listed) == len(unnamed) == 9
     assert listed[0].startswith("- `img-6fb0f9c4`: Composite image of the MTA")
     # Every one says which picture it is, from its caption or its alt text.
     assert all(": " in line for line in listed)

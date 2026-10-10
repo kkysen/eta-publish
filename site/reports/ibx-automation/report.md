@@ -23,8 +23,7 @@ October 12, 2026
 - the image `ridership` has no caption
 - the image `automated_share_by_year_2016_to_2026` has no caption
 - the image `automated_share_by_year_ex_china_2016_to_2026` has no caption
-- 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
-  - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
+- 1 image is unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-dfdefb85`: \[caption\]
 - 14 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 9 comment threads still open on this tab
@@ -52,7 +51,7 @@ October 12, 2026
 - the image `ridership` has no alt text and no caption; add a description to it in the doc
 - could not archive `https://bqrail.substack.com/api/v1/file/444137f8-68a8-4ab2-92e4-b52053366020.pdf` (HTTPSConnectionPool(host='web.archive.org', port=443): Max retries exceeded with url: /web/2099/https://bqrail.substack.com/api/v1/file/444137f8-68a8-4ab2-92e4-b52053366020.pdf (Caused by NewConnectionError("HTTPSConnection(host='web.archive.org', port=443): Failed to establish a new connection: \[Errno 111\] Connection refused"))); it publishes as not archived, and the next build that can asks again
 
-![A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/img-e3ef182e.jpg>)\
+![A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).](<images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg>)\
 A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).\
 Credit: MTA, [via Gothamist](<https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out>)<sup>\[1\]</sup>
 <!-- [Image Source](<https://images-prod.gothamist.com/images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg>) -->

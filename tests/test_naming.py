@@ -4,7 +4,15 @@ These tests use headings that genuinely collide,
 since the collision branch is the only one that can be positional.
 """
 
-from eta_publish.naming import AnchorAllocator, image_filename, image_filenames, slugify
+import pytest
+
+from eta_publish.naming import (
+    AnchorAllocator,
+    image_filename,
+    image_filenames,
+    slugify,
+    url_filename,
+)
 
 # Two distinct headings that slugify identically.
 COST_COLON = "Cost: Overview"
@@ -140,3 +148,23 @@ def test_a_heading_cannot_take_an_id_the_emitter_reserves():
 def test_reserving_does_not_disturb_other_headings():
     a = AnchorAllocator(["Footnotes", "Station Depth"], reserved={"footnotes"})
     assert a.allocate("Station Depth") == "station-depth"
+
+
+@pytest.mark.parametrize(
+    ("url", "name"),
+    [
+        ("https://upload.wikimedia.org/wikipedia/commons/d/d9/W125irtjeh.JPG", "W125irtjeh.JPG"),
+        ("https://www.theurbanist.org/content/images/2026/03/image-9.png?w=2", "image-9.png"),
+        # The original's URL, escaped into the CDN's.
+        (
+            "https://substackcdn.com/image/fetch/$s_!EoCi!,f_auto/"
+            "https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fab_650x862.png",
+            "ab_650x862.png",
+        ),
+        ("https://www.flickr.com/photo_download.gne?id=8475914281", ""),
+        ("https://mmbiz.qpic.cn/mmbiz_jpg/R3QIfMDE0S8gZD/", ""),
+        ("https://example.com/", ""),
+    ],
+)
+def test_a_url_names_the_image_file_its_path_ends_in(url: str, name: str) -> None:
+    assert url_filename(url) == name

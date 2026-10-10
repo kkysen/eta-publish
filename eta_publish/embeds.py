@@ -11,6 +11,7 @@ it had. The thumbnail and a Drive video are files, rebuilt like the images.
 
 import hashlib
 import json
+from collections import defaultdict
 from pathlib import Path
 from urllib.parse import quote
 
@@ -215,11 +216,12 @@ def download(doc: Document, dest: Path, http: requests.Session | None = None) ->
     goes without its picture.
     """
     http = http or requests.Session()
+    stems = _stems(doc.embeds)
     for embed in doc.embeds:
         card = doc.cards.get(embed.url)
         if card is None or card.error:
             continue
-        stem = f"embed-{hashlib.sha256(embed.url.encode()).hexdigest()[:8]}"
+        stem = stems[embed.url]
         try:
             if embed.copy and embed.platform is not Platform.DRIVE:
                 doc.media_files[embed.url] = _copied(embed, stem, dest / VIDEO_DIR, doc)
@@ -230,6 +232,28 @@ def download(doc: Document, dest: Path, http: requests.Session | None = None) ->
                 doc.media_files[embed.url] = _thumbnail(card, stem, dest / IMAGE_DIR, http)
         except Exception as e:
             doc.warn("could not download what {} shows ({})", Shown(embed.url), str(e))
+
+
+def _stems(embeds: list[Embed]) -> dict[str, str]:
+    """A file stem for each embed: its `Video:` link's text, or a hash of its URL.
+
+    Two embeds whose links read alike both carry the hash too,
+    decided knowing all of them, so which comes first renames neither.
+    """
+    claimants: dict[str, set[str]] = defaultdict(set)
+    for embed in embeds:
+        if embed.name:
+            claimants[embed.name].add(embed.url)
+    stems: dict[str, str] = {}
+    for embed in embeds:
+        short = hashlib.sha256(embed.url.encode()).hexdigest()[:8]
+        if not embed.name:
+            stems[embed.url] = f"embed-{short}"
+        elif len(claimants[embed.name]) > 1:
+            stems[embed.url] = f"{embed.name}-{short}"
+        else:
+            stems[embed.url] = embed.name
+    return stems
 
 
 def _thumbnail(card: Card, stem: str, outdir: Path, http: requests.Session) -> str:

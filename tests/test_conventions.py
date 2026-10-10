@@ -117,6 +117,28 @@ def test_image_source_lines_attach_to_the_figure(appendix: Document) -> None:
     assert "Credit: Logan Hicks" in text_of(figure.credit)
 
 
+def image_source(url: str) -> JsonObject:
+    """`Image Source` as the document has it: the whole line is the link."""
+    run = {"textRun": {"content": "Image Source\n", "textStyle": {"link": {"url": url}}}}
+    return {"paragraph": {"paragraphStyle": {"namedStyleType": "NORMAL_TEXT"}, "elements": [run]}}
+
+
+@pytest.mark.parametrize(
+    ("url", "filename"),
+    [
+        ("https://upload.wikimedia.org/wikipedia/commons/d/d9/W125irtjeh.JPG", "W125irtjeh"),
+        # The page Flickr serves a download from, not a file.
+        ("https://www.flickr.com/photo_download.gne?id=4490800374", ""),
+    ],
+)
+def test_an_image_source_link_names_the_image_after_its_file(url: str, filename: str) -> None:
+    doc = build([*APPENDIX[:5], image_source(url)])
+    figure = next(b for b in doc.blocks if isinstance(b, Figure))
+    assert figure.image.named == bool(filename)
+    if filename:
+        assert figure.image.filename == filename
+
+
 def test_image_source_does_not_become_a_paragraph(appendix: Document) -> None:
     paragraphs = [text_of(b.content) for b in appendix.blocks if isinstance(b, Paragraph)]
     assert paragraphs == ["The Freedom Tunnel was formerly the 4-track West Side Line."]

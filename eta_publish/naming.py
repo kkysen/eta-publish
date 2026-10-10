@@ -13,6 +13,7 @@ import re
 import unicodedata
 from collections import defaultdict
 from collections.abc import Iterable
+from urllib.parse import unquote, urlsplit
 
 from pymdownx.slugs import slugify as _slugify
 
@@ -214,6 +215,29 @@ def names_nothing(name: str) -> bool:
     that name no file, and an image under one is as unnamed as an image under none.
     """
     return not _ascii_name(name).strip("_.-")
+
+
+def url_filename(url: str) -> str:
+    """The file a URL names, or nothing if its path ends in no image file.
+
+    The last segment of the path, decoded, and then its last segment again,
+    because an image CDN often carries the original's whole URL as that segment:
+    Substack's `fetch/.../https%3A%2F%2F...%2Ff4648f0c_650x862.png`.
+    Only a segment ending in an image extension is a name:
+    `photo_download.gne` is the page Flickr serves a download from,
+    and a path of hashes with no extension names nothing anyone wrote.
+    """
+    segments = [s for s in urlsplit(url).path.split("/") if s]
+    if not segments:
+        return ""
+    name = unquote(segments[-1]).rsplit("/", 1)[-1]
+    _, dot, extension = name.rpartition(".")
+    return name if dot and extension.lower() in _ASSET_EXTENSIONS else ""
+
+
+def media_stem(name: str) -> str:
+    """A file stem for a video named `name`, or nothing if it names nothing."""
+    return "" if names_nothing(name) else _ascii_name(name)
 
 
 def image_filename(object_id: str, extension: str = "", crop_key: str = "", name: str = "") -> str:

@@ -9,7 +9,7 @@
   contributors_note: "We wish to acknowledge the following ETA members who contributed to this report, and without whose hard work it would not be possible:",
   warnings: (
     [unfinished text in the document: #raw("SVG: TODO")],
-    [17 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-6fb0f9c4"): Composite image of the MTA’s SAS West St Nicholas Av station diagram a...], [#raw("img-4b8ff8de"): One of the two massive caverns blasted out of bedrock 140 ft below Gra...], [#raw("img-f5b8dae7"): Cross-section of Zhongsheng station.], [#raw("img-6a139fa2"): Cross-section of the pipe-jacking at Jing’an Temple station.], [#raw("img-6c3ad309"): The existing elevated 125 St/Broadway station with a wide, 172 ft arch...], [#raw("img-a5e93aab"): The 72 St headhouse in the Broadway median.], [#raw("img-60a0a749"): Heping South Street station utilized cut-and-cover except for the inte...], [#raw("img-a718beb8"): Cross-section of the 116 St station on SAS Phase 2. This is before the...], [#raw("img-44bf278f"): Station length as a percentage of platform length.], [#raw("img-2a097531"): The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Pha...], [#raw("img-d4ca00ff"): Sound Transit recently reduced the scope of its proposed Alaska Juncti...], [#raw("img-dff7e45d"): Milan Metro Line 4 includes ventilation fans within station structures...], [#raw("img-3230dd0e"): The engineering schematic of the Port Authority’s 1957 plans to connec...], [#raw("img-e47b1bdb"): A cross-section of the Steinway tubes, which carry the 7 under the Eas...], [#raw("img-d4734d4b"): A photo inside the Freedom Tunnel, showing room for 4 tracks.], [#raw("img-0fb4cdcf"): A rendering of the short below-mezzanine and elevator-only entrance to...], [#raw("img-ed748d24"): A station diagram of Montreal’s Édouard-Montpetit station, showing the...], )],
+    [9 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-6fb0f9c4"): Composite image of the MTA’s SAS West St Nicholas Av station diagram a...], [#raw("img-4b8ff8de"): One of the two massive caverns blasted out of bedrock 140 ft below Gra...], [#raw("img-f5b8dae7"): Cross-section of Zhongsheng station.], [#raw("img-6a139fa2"): Cross-section of the pipe-jacking at Jing’an Temple station.], [#raw("img-44bf278f"): Station length as a percentage of platform length.], [#raw("img-2a097531"): The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Pha...], [#raw("img-3230dd0e"): The engineering schematic of the Port Authority’s 1957 plans to connec...], [#raw("img-e47b1bdb"): A cross-section of the Steinway tubes, which carry the 7 under the Eas...], [#raw("img-d4734d4b"): A photo inside the Freedom Tunnel, showing room for 4 tracks.], )],
     [7 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [2 comment threads still open on this tab],
     [1 link shows its URL as its text; give it words in the doc:#list([#raw("https://link.nfpa.org/free-access/publications/130/2026")], )],
@@ -290,13 +290,13 @@ This would be especially useful at Lenox Av (2/3), which currently has no mezzan
 Conversely, St Nicholas Av (A/B/C/D) already has a mezzanine, so the new SAS station could either reuse it (adding direct stairs and escalators from the SAS platform) or build a new below-mezzanine to help underpin the existing station and ease transfers.
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-6c3ad309.jpg")[#capped_image("print/img-6c3ad309.jpg", alt: "The existing elevated 125 St/Broadway station with a wide, 172 ft arch.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/W125irtjeh-6c3ad309.jpg")[#capped_image("print/W125irtjeh-6c3ad309.jpg", alt: "The existing elevated 125 St/Broadway station with a wide, 172 ft arch.")],
   caption: [The existing elevated 125 St/Broadway station with a wide, 172 ft arch. \
   #link("https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG")[Credit: Jim Henderson]#super[#link(<src55>)[\[55\]]]],
 )
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-a5e93aab.jpg")[#capped_image("print/img-a5e93aab.jpg", alt: "The 72 St headhouse in the Broadway median.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/72nd_Street_IRT_Broadway_013-a5e93aab.jpg")[#capped_image("print/72nd_Street_IRT_Broadway_013-a5e93aab.jpg", alt: "The 72 St headhouse in the Broadway median.")],
   caption: [The 72 St headhouse in the Broadway median. \
   #link("https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG")[Credit: Gryffindor]#super[#link(<src56>)[\[56\]]]],
 )
@@ -321,7 +321,7 @@ For example, the Heping South Street Station on Line 3 of the Shenyang, China Me
 There, engineers mixed traditional cut-and-cover with a #link("https://doi.org/10.1016/j.cscm.2025.e05615")[pipe roof method called SP-TS]#super[#link(<src62>)[\[62\]]], very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-60a0a749.png")[#capped_image("print/img-60a0a749.jpg", alt: "Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/1-s2.0-S2214509525014135-gr2_lrg.png")[#capped_image("print/1-s2.0-S2214509525014135-gr2_lrg.jpg", alt: "Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.")],
   caption: [Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically. \
   #link("https://doi.org/10.1016/j.cscm.2025.e05615")[Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025]#super[#link(<src62>)[\[62\]]]],
 )
@@ -359,7 +359,7 @@ And at 116 St, which will be built within an existing subway tunnel built during
 All on its own, narrowing the station on SAS West from 75 ft to the already large 63 ft of Phases 1 and 2 would reduce the amount of required excavation by 16%.
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-a718beb8.png")[#capped_image("print/img-a718beb8.jpg", alt: "Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/nyc-mta-116th-station-design-a718beb8.png")[#capped_image("print/nyc-mta-116th-station-design-a718beb8.jpg", alt: "Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.")],
   caption: [Cross-section of the 116 St station on SAS Phase 2. This is before the #link("https://www.mta.info/document/179396")[June 2025 cost containment measures]#super[#link(<src69>)[\[69\]]] that switched the mezzanine from above to below the platform. \
   Credit: MTA, #link("https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/")[via The Urbanist]#super[#link(<src70>)[\[70\]]]],
 )
@@ -432,7 +432,7 @@ At Alaska Junction station, two station headhouses, a vent structure, and a trac
 At SODO station, they’ve reduced the size of an overbuilt mezzanine and removed redundant stairs and escalators, saving \$125–160 million. 
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-d4ca00ff.png")[#capped_image("print/img-d4ca00ff.jpg", alt: "Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/image-9.png")[#capped_image("print/image-9.jpg", alt: "Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.")],
   caption: [Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save \$190–235 million. \
   Credit: Sound Transit, #link("https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/")[via The Urbanist]#super[#link(<src79>)[\[79\]]]],
 )
@@ -466,7 +466,7 @@ However, NFPA 130 permits ventilation openings only 6 inches above roadway heigh
 Instead, ventilation fans can be included as part of the station structure or within ventilation shafts, with ventilation grates built in roadway medians or on sidewalk structures.
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-dff7e45d.png")[#capped_image("print/img-dff7e45d.jpg", alt: "Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/galleria-tratta-centrale.png")[#capped_image("print/galleria-tratta-centrale.jpg", alt: "Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.")],
   caption: [Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover. \
   #link("https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/")[Credit: M4 S.p.A.]#super[#link(<src82>)[\[82\]]]],
 )
@@ -664,13 +664,13 @@ Modern stations like REM’s Édouard-Montpetit, often use elevators for all or 
 See section 5.3 of NFPA 130: #link("https://link.nfpa.org/free-access/publications/130/2026")[https://link.nfpa.org/free-access/publications/130/2026]#super[#link(<src112>)[\[112\]]]]
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-0fb4cdcf.jpg")[#capped_image("print/img-0fb4cdcf.jpg", alt: "A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/1000024411-0fb4cdcf.jpg")[#capped_image("print/1000024411-0fb4cdcf.jpg", alt: "A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.")],
   caption: [A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2. \
   #link("https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg")[Credit: MTA]#super[#link(<src102>)[\[102\]]]],
 )
 
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/img-ed748d24.png")[#capped_image("print/img-ed748d24.jpg", alt: "A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.")],
+  link("https://kkysen.github.io/eta-publish/reports/digging-out-deep-hole-sas-west/images/diagram-station-edouard-montpetit-REM-ed748d24.png")[#capped_image("print/diagram-station-edouard-montpetit-REM-ed748d24.jpg", alt: "A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.")],
   caption: [A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM. \
   #link("https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png")[Credit: CDPQ Infra]#super[#link(<src103>)[\[103\]]]],
 )

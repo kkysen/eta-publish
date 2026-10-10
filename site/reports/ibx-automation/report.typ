@@ -25,7 +25,7 @@
     [the image #raw("ridership") has no caption],
     [the image #raw("automated_share_by_year_2016_to_2026") has no caption],
     [the image #raw("automated_share_by_year_ex_china_2016_to_2026") has no caption],
-    [2 images are unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-e3ef182e"): A new artistic rendering of the IBX at New Utrecht Av. They appear to...], [#raw("img-dfdefb85"): \[caption\]], )],
+    [1 image is unnamed, so each publishes under a hash; give each a #raw("Source:") line naming its file:#list([#raw("img-dfdefb85"): \[caption\]], )],
     [14 suggestions still open on this tab; the build publishes the document without them, as it reads today],
     [9 comment threads still open on this tab],
     [the #raw("Header") section has no #raw("Short:") line],
@@ -54,7 +54,7 @@
   ),
   hero: [
 #figure(
-  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/img-e3ef182e.jpg")[#capped_image("print/img-e3ef182e.jpg", alt: "A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).")],
+  link("https://kkysen.github.io/eta-publish/reports/ibx-automation/images/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg")[#capped_image("print/IBX_NU_Side_Platform_Crop_2026_0825.original.jpg", alt: "A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs).")],
   caption: [A new artistic rendering of the IBX at New Utrecht Av. They appear to show a high-level platform on the far-side platform, although this is not yet confirmed. The station still lacks any platform screen doors (PSDs). \
   Credit: MTA, #link("https://gothamist.com/news/new-renderings-of-the-mtas-ibx-project-serving-brooklyn-queens-are-out")[via Gothamist]#super[#link(<src1>)[\[1\]]]],
 )

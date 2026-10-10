@@ -482,7 +482,9 @@ becomes noise in a diff that someone has to read.
 So image filenames are keyed on what the document says about an image
 rather than on a counter:
 the file its `Source:` line names,
+or the file at the end of the URL a `Source:` or `Image Source` links,
 and the stable Docs object id where there is no such line.
+A `Video:` line's file is named for its link's text, or hashed from its URL where the text is the URL.
 Inserting one image into a 54-image report
 must not rename the other 53 or move their published URLs.
 The same applies to heading anchors.

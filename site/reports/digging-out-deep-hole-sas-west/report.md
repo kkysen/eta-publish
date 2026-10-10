@@ -7,24 +7,16 @@ August 19, 2026
 **Warnings**
 
 - unfinished text in the document: `SVG: TODO`
-- 17 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
+- 9 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-6fb0f9c4`: Composite image of the MTA’s SAS West St Nicholas Av station diagram a...
   - `img-4b8ff8de`: One of the two massive caverns blasted out of bedrock 140 ft below Gra...
   - `img-f5b8dae7`: Cross-section of Zhongsheng station.
   - `img-6a139fa2`: Cross-section of the pipe-jacking at Jing’an Temple station.
-  - `img-6c3ad309`: The existing elevated 125 St/Broadway station with a wide, 172 ft arch...
-  - `img-a5e93aab`: The 72 St headhouse in the Broadway median.
-  - `img-60a0a749`: Heping South Street station utilized cut-and-cover except for the inte...
-  - `img-a718beb8`: Cross-section of the 116 St station on SAS Phase 2. This is before the...
   - `img-44bf278f`: Station length as a percentage of platform length.
   - `img-2a097531`: The nearly 10-story ventilation structure at 69 St and 2 Av on SAS Pha...
-  - `img-d4ca00ff`: Sound Transit recently reduced the scope of its proposed Alaska Juncti...
-  - `img-dff7e45d`: Milan Metro Line 4 includes ventilation fans within station structures...
   - `img-3230dd0e`: The engineering schematic of the Port Authority’s 1957 plans to connec...
   - `img-e47b1bdb`: A cross-section of the Steinway tubes, which carry the 7 under the Eas...
   - `img-d4734d4b`: A photo inside the Freedom Tunnel, showing room for 4 tracks.
-  - `img-0fb4cdcf`: A rendering of the short below-mezzanine and elevator-only entrance to...
-  - `img-ed748d24`: A station diagram of Montreal’s Édouard-Montpetit station, showing the...
 - 7 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 2 comment threads still open on this tab
 - 1 link shows its URL as its text; give it words in the doc:
@@ -292,12 +284,12 @@ Furthermore, underpinning can be built in combination with short mezzanines dire
 This would be especially useful at Lenox Av (2/3), which currently has no mezzanine to facilitate transferring from uptown to downtown (with the proposed design, this would take 7 minutes on escalators).
 Conversely, St Nicholas Av (A/B/C/D) already has a mezzanine, so the new SAS station could either reuse it (adding direct stairs and escalators from the SAS platform) or build a new below-mezzanine to help underpin the existing station and ease transfers.
 
-![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/img-6c3ad309.jpg>)\
+![The existing elevated 125 St/Broadway station with a wide, 172 ft arch.](<images/W125irtjeh-6c3ad309.jpg>)\
 The existing elevated 125 St/Broadway station with a wide, 172 ft arch.\
 [Credit: Jim Henderson](<https://en.wikipedia.org/wiki/125th_Street_%28Manhattan%29#/media/File:W125irtjeh.JPG>)<sup>\[55\]</sup>
 <!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/d/d9/W125irtjeh.JPG>): -->
 
-![The 72 St headhouse in the Broadway median.](<images/img-a5e93aab.jpg>)\
+![The 72 St headhouse in the Broadway median.](<images/72nd_Street_IRT_Broadway_013-a5e93aab.jpg>)\
 The 72 St headhouse in the Broadway median.\
 [Credit: Gryffindor](<https://en.wikipedia.org/wiki/72nd_Street_station_%28IRT_Broadway%E2%80%93Seventh_Avenue_Line%29#/media/File:72nd_Street_IRT_Broadway_013.JPG>)<sup>\[56\]</sup>
 <!-- [Image Source](<https://upload.wikimedia.org/wikipedia/commons/2/27/72nd_Street_IRT_Broadway_013.JPG>): -->
@@ -320,7 +312,7 @@ Techniques like these can all be combined depending on exact site specifics.
 For example, the Heping South Street Station on Line 3 of the Shenyang, China Metro was constructed in similarly challenging soil conditions with a high water table.
 There, engineers mixed traditional cut-and-cover with a [pipe roof method called SP-TS](<https://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>, very similar to TRCM, possibly to avoid construction-related disruption at a busy intersection, while largely preserving the cost benefits of cut-and-cover station construction.
 
-![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/img-60a0a749.png>)\
+![Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.](<images/1-s2.0-S2214509525014135-gr2_lrg.png>)\
 Heping South Street station utilized cut-and-cover except for the intersection with Nanba Road, where a pipe roof similar to TRCM was used instead. The station was constructed in a high water table environment with similarly challenging soil conditions as on 125 St. While the source does not explain this design choice, many possible constraints, like cross-traffic on Nanba Road, could motivate avoiding cut-and-cover in the intersection specifically.\
 [Credit: Figure 2, Bai et al.. Case Studies in Construction Materials, Volume 23, 2025](<https://doi.org/10.1016/j.cscm.2025.e05615>)<sup>\[62\]</sup>
 <!-- [Image Source](<https://ars.els-cdn.com/content/image/1-s2.0-S2214509525014135-gr2_lrg.jpg>): -->
@@ -355,7 +347,7 @@ Measurements are similar at 86 St and 96 St (which has a 30 ft-wide platform).[^
 And at 116 St, which will be built within an existing subway tunnel built during the 1970s, the station box will be 59 ft wide with a 25.25 ft-wide platform.
 All on its own, narrowing the station on SAS West from 75 ft to the already large 63 ft of Phases 1 and 2 would reduce the amount of required excavation by 16%.
 
-![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/img-a718beb8.png>)\
+![Cross-section of the 116 St station on SAS Phase 2. This is before the June 2025 cost containment measures that switched the mezzanine from above to below the platform.](<images/nyc-mta-116th-station-design-a718beb8.png>)\
 Cross-section of the 116 St station on SAS Phase 2. This is before the [June 2025 cost containment measures](<https://www.mta.info/document/179396>)<sup>\[69\]</sup> that switched the mezzanine from above to below the platform.\
 Credit: MTA, [via The Urbanist](<https://www.theurbanist.org/op-ed-how-to-close-sound-transits-35-billion-dollar-gap-without-breaking-the-system/>)<sup>\[70\]</sup>
 <!-- [Image Source](<https://storage.ghost.io/c/19/31/1931222a-d1c5-42ac-8932-2ee3ac1f8927/content/images/old-theurbanist-org/wp-content/uploads/2026/01/nyc-mta-116th-station-design.png>): -->
@@ -419,7 +411,7 @@ Early signs from cost-savings measures on the proposed [West Seattle Link Extens
 At Alaska Junction station, two station headhouses, a vent structure, and a traction and power subsystem structure (TPSS) were consolidated from four buildings to one, reducing the station box to a footprint not much longer than the trains, saving $190–235 million.
 At SODO station, they’ve reduced the size of an overbuilt mezzanine and removed redundant stairs and escalators, saving $125–160 million.
 
-![Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.](<images/img-d4ca00ff.png>)\
+![Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.](<images/image-9.png>)\
 Sound Transit recently reduced the scope of its proposed Alaska Junction station to a single box just as long as its trains, with no tail tracks, which is projected to save $190–235 million.\
 Credit: Sound Transit, [via The Urbanist](<https://www.theurbanist.org/sound-transit-reveals-new-cost-saving-measures-for-west-seattle-link/>)<sup>\[79\]</sup>
 <!-- [Image Source](<https://www.theurbanist.org/content/images/2026/03/image-9.png>): -->
@@ -450,7 +442,7 @@ As previously discussed, the MTA plans for some stations to have multiple ancill
 However, NFPA 130 permits ventilation openings only 6 inches above roadway height, obviating the need for an above-ground structure and its attendant real estate acquisition costs.
 Instead, ventilation fans can be included as part of the station structure or within ventilation shafts, with ventilation grates built in roadway medians or on sidewalk structures.
 
-![Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.](<images/img-dff7e45d.png>)\
+![Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.](<images/galleria-tratta-centrale.png>)\
 Milan Metro Line 4 includes ventilation fans within station structures constructed via cut-and-cover.\
 [Credit: M4 S.p.A.](<https://www.metro4milano.it/costruire-una-metropolitana/tecniche-di-costruzione/>)<sup>\[82\]</sup>
 <!-- [Image Source](<https://www.metro4milano.it/wordpress/wp-content/uploads/2016/09/galleria-tratta-centrale.jpg>): -->
@@ -634,12 +626,12 @@ Elevators, in contrast with the proposed escalators, only take [1.6](<https://ww
 At the 236 ft-deep Édouard-Montpetit REM station in Montreal, high-speed elevators traverse 198 ft to the Blue Line in [19 seconds](<https://londonreconnections.com/rem-part-deux-montreals-new-automated-metro-expands/#:~:text=depth%20in%20only-,19%20seconds,-from%20door%20closing>)<sup>\[101\]</sup>, door closing to door opening.
 Furthermore, while this station is not truly elevator-only, the stairs are only for emergency use, similar to 116 St. The elevators are a means of egress in a fire, and the station is NFPA 130-compliant.[^20]
 
-![A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.](<images/img-0fb4cdcf.jpg>)\
+![A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.](<images/1000024411-0fb4cdcf.jpg>)\
 A rendering of the short below-mezzanine and elevator-only entrance to the 116 St station on SAS Phase 2.\
 [Credit: MTA](<https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>)<sup>\[102\]</sup>
 <!-- [Image Source](<https://pedestrianobservations.com/wp-content/uploads/2025/06/1000024411.jpg>)<sup>\[102\]</sup>: -->
 
-![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/img-ed748d24.png>)\
+![A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.](<images/diagram-station-edouard-montpetit-REM-ed748d24.png>)\
 A station diagram of Montreal’s Édouard-Montpetit station, showing the elevator-only interchange between the Blue Line and REM.\
 [Credit: CDPQ Infra](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)<sup>\[103\]</sup>
 <!-- [Image Source](<https://londonreconnections.com/content/images/2026/01/diagram-station-edouard-montpetit-REM.png>)<sup>\[103\]</sup>: -->

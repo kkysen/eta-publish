@@ -7,7 +7,7 @@ import requests
 from test_conventions import build, image, para
 
 from eta_publish.docs_json import JsonObject
-from eta_publish.embeds import look_up
+from eta_publish.embeds import _stems, look_up
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.markdown import MarkdownEmitter
 from eta_publish.nodes import Card, Embed, Figure, Paragraph, Platform
@@ -218,6 +218,28 @@ def test_a_copied_video_plays_from_the_site() -> None:
     doc.media_files[url] = "embed-1.mp4"
     html = HtmlEmitter(image_base="images").emit(doc)
     assert '<video src="videos/embed-1.mp4" controls preload="metadata">' in html
+
+
+def test_a_video_is_named_after_its_link_text() -> None:
+    url = "https://x.com/someone/status/123"
+    doc = build(
+        [
+            para("Headline", "TITLE"),
+            linked((": ", None), ("Hit by the 1 train", url), underline="Video"),
+        ]
+    )
+    assert [b.name for b in doc.blocks if isinstance(b, Embed)] == ["Hit_by_the_1_train"]
+
+
+def test_two_videos_whose_links_read_alike_both_carry_a_hash() -> None:
+    first = Embed(url="https://x.com/a/status/1", platform=Platform.X, key="1", name="clip")
+    second = Embed(url="https://x.com/b/status/2", platform=Platform.X, key="2", name="clip")
+    alone = Embed(url="https://x.com/c/status/3", platform=Platform.X, key="3", name="other")
+    stems = _stems([first, second, alone])
+    assert stems[first.url].startswith("clip-")
+    assert stems[second.url].startswith("clip-")
+    assert stems[first.url] != stems[second.url]
+    assert stems[alone.url] == "other"
 
 
 def test_a_copy_that_failed_shows_its_card() -> None:

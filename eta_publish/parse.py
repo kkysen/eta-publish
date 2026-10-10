@@ -20,7 +20,14 @@ from datetime import datetime
 from urllib.parse import parse_qs, unquote, urlsplit
 
 from .docs_json import JsonObject
-from .naming import AnchorAllocator, image_filename, image_filenames, names_nothing
+from .naming import (
+    AnchorAllocator,
+    image_filename,
+    image_filenames,
+    media_stem,
+    names_nothing,
+    url_filename,
+)
 from .nodes import (
     Block,
     Crop,
@@ -578,14 +585,30 @@ def source_name(source: list[Inline]) -> str:
 
     The value after the colon:
     a Drive chip's title where the line links the file, plain text where it was typed.
-    `Source: TODO` is a note rather than a name,
-    and a bare URL names a page rather than a file,
-    so neither becomes a filename.
+    `Source: TODO` is a note rather than a name.
+    A URL, typed after the colon or linked as `[Image Source](<url>)`,
+    names the file at the end of its path, if it ends in one.
     """
     value = labelled(source).value.strip()
-    if not value or unfinished(value) or value.startswith(("http:", "https:", "//")):
+    if unfinished(value):
         return ""
-    return value
+    if value.startswith(("http:", "https:", "//")):
+        return url_filename(value)
+    if value:
+        return value
+    href = next((i.href for i in source if isinstance(i, Text) and i.href), "")
+    return url_filename(href) if href else ""
+
+
+def video_name(link: list[Inline]) -> str:
+    """The file stem a `Video:` line's link text makes, or nothing.
+
+    A link pasted bare reads as its own URL, which says nothing a hash does not.
+    """
+    text = plain_text(link).strip()
+    if text.startswith(("http:", "https:", "//")):
+        return ""
+    return media_stem(text)
 
 
 def date_text(chip: JsonObject) -> str:
@@ -1113,6 +1136,7 @@ class Parser:
                     continue
                 embed.graphic = is_graphic_video_note(inlines)
                 embed.copy = is_copied_video_note(inlines)
+                embed.name = video_name(after_label(inlines))
                 drop_pending()
                 caption_slot = 0
                 out.append(embed)
@@ -1185,7 +1209,8 @@ class Parser:
         depends on whether another one further down names the same file.
 
         The first line to name a file wins, so a figure with both a `Source:`
-        and an `Image Source` link takes its name from the `Source:`.
+        and an `Image Source` link takes its name from the `Source:`,
+        and from the link only where the `Source:` names nothing.
         """
         name = source_name(source)
         if name:
