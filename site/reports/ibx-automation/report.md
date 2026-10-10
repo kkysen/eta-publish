@@ -28,7 +28,7 @@ October 12, 2026
 - 2 images are unnamed, so each publishes under a hash; give each a `Source:` line naming its file:
   - `img-e3ef182e`: A new artistic rendering of the IBX at New Utrecht Av. They appear to...
   - `img-dfdefb85`: \[caption\]
-- 18 suggestions still open on this tab; the build publishes the document without them, as it reads today
+- 8 suggestions still open on this tab; the build publishes the document without them, as it reads today
 - 19 comment threads still open on this tab
 - 2 links show their URL as their text; give each words in the doc:
   - `https://qns.com/2024/10/mta-looking-to-dig-tunnel-underneath-cemetery-in-middle-village-for-interborough-express-scrapping-street-running-plan/`
@@ -73,7 +73,7 @@ What broad type of service should be run, and what type of construction is neede
 The original design for the IBX was forced at the time to be light rail by a street-running section with truly tight curves.
 That section, by All Faiths Cemetery, will thankfully now be [built as a tunnel](<https://www.youtube.com/watch?v=HEfH7R6j6QY>)<sup>\[3\]</sup>, as [ETA had pushed for](<https://www.etany.org/ibx-all-faiths-tunnel>) before this change was made.
 This is a huge improvement: the IBX right-of-way is now guaranteed to be completely grade-separated, significantly improving speed, reliability, and achievable frequency.
-It also raises the question of what service and rolling stock design is now best for the project, now that the street running constraint is lifted.
+A key way grade separation does this is by unlocking better service and rolling stock designs.
 Will the MTA actually seize that opportunity?
 On this front, there have been mixed signals.
 This document aims to make clear what the needs of IBX are, what constraints no longer apply, and how all this determines clear best choices for the IBX going forward.
@@ -81,7 +81,8 @@ This document aims to make clear what the needs of IBX are, what constraints no 
 Since announcing the All Faiths tunnel, the MTA has started to describe the IBX more as a light metro.
 Jamie Torres-Springer, head of MTA Construction & Development, described the IBX at that press conference as a [“light rail metro,”](<https://www.youtube.com/live/HEfH7R6j6QY?t=911s>)<sup>\[4\]</sup> and at IBX Open Houses, MTA IBX staff also said that the IBX will now be a lot closer to a light metro.
 
-However, the MTA [claims light rail is necessary to deal with tight curves](<https://ibx.mta.info/about/#:~:text=to%20travel%20through-,tight%20curves,-Fit%20through%20the>)<sup>\[5\]</sup>, but in fact, due to the removal of the street-running segment, the minimum IBX curve radius is exceptionally gentle and [twice as much as that of the Washington Metro](<https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4>)<sup>\[6\]</sup>, more than enough to permit any type of train at over 30 mph (see [Rolling Stock](<#rolling-stock>) for more detail).
+However, other parts of the MTA perhaps didn't get the memo.
+The IBX website [claims light rail is necessary to deal with tight curves](<https://ibx.mta.info/about/#:~:text=to%20travel%20through-,tight%20curves,-Fit%20through%20the>)<sup>\[5\]</sup>, but in fact, due to the removal of the street-running segment, the minimum IBX curve radius is exceptionally gentle and [twice as much as that of the Washington Metro](<https://www.wmata.com/business/procurement/solicitations/documents/General%20Design%20Criteria%20-%208K%202017%2001%2024.pdf#page=4>)<sup>\[6\]</sup>, more than enough to permit any type of train at over 30 mph (see [Rolling Stock](<#rolling-stock>) for more detail).
 Failure to cull unneeded constraints like this from the rolling stock procurement process will likely drive up costs without benefiting IBX riders in any way.
 
 Therefore, while the words have been a welcoming and encouraging sign, the MTA has yet to commit to the concrete details underlying this: high-floor light metro vehicles.
@@ -129,7 +130,7 @@ Light metro can scale from something  as small and limited as an airport’s peo
 
 The rider capacity and high frequency needs of the IBX described above make automation the obvious best choice for the IBX.
 Not only is it the best choice, but also it should be seen as the default choice for any new line not extending a pre-existing line.
-Absent the constraint of needing to interoperate with a legacy line, automation is a clear net-benefit and a cornerstone of modern rapid transit planning.
+Without the constraint of needing to interoperate with a legacy line, automation is a clear net-benefit and a cornerstone of modern rapid transit planning.
 
 Modern metro technology increasingly runs automated, and ALM is merely the culmination of that trend.
 Today, entirely new metro lines in developed and even middle-income countries are usually driverless, and increasingly so: in 2025, 73% of new metro lines[^6] were automated.
