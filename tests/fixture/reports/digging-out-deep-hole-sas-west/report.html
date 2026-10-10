@@ -337,8 +337,12 @@
     if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const card = event.target.closest?.(".eta-report .embed[data-player] .embed-card");
     if (!card) return;
-    event.preventDefault();
     const figure = card.closest(".embed");
+    // YouTube's player refuses a page that sends no `Referer`, with "Error
+    // 153", and a page opened as a file sends none: there the card stays the
+    // link to the video it already is.
+    if (location.protocol === "file:" && figure.classList.contains("embed-youtube")) return;
+    event.preventDefault();
     const frame = document.createElement("iframe");
     // Bluesky's frame says how tall its post is only to a frame that gave it
     // an id to say it with.
