@@ -209,10 +209,10 @@ def shown_url(url: str) -> str:
     """A source URL as the entry prints it: the address, without the machinery.
 
     The scheme goes, the way every address written for a person to read drops
-    it, and so does a text fragment. Only what is shown is shortened; the link
-    is the URL the document holds.
+    it, and so does a text fragment, and a leading `www.`. Only what is shown
+    is shortened; the link is the URL the document holds.
     """
-    return url.split("://", 1)[-1].partition(TEXT_FRAGMENT)[0]
+    return url.split("://", 1)[-1].partition(TEXT_FRAGMENT)[0].removeprefix("www.")
 
 
 class HtmlEmitter(Emitter):

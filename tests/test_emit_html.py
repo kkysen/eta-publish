@@ -9,7 +9,7 @@ import pytest
 from htpy import a
 from paths import FIXTURE_DIR, named_images
 
-from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page
+from eta_publish.emit.html import HtmlEmitter, link_mark, markup, report_page, shown_url
 from eta_publish.nodes import Document, Heading, Paragraph, Shown, Text
 from eta_publish.parse import parse
 
@@ -498,3 +498,9 @@ def test_nothing_a_document_says_becomes_markup(doc: Document) -> None:
     for output in (HtmlEmitter().emit(doc), report_page(doc)):
         assert "<script>alert(1)</script>" not in output
         assert "alert(1)" in output, "the text itself should survive, escaped"
+
+
+def test_a_source_is_shown_without_its_www() -> None:
+    """Only what is shown: the link still goes where the document said."""
+    assert shown_url("https://www.mta.info/document/196361") == "mta.info/document/196361"
+    assert shown_url("https://web.archive.org/x/www.a.b") == "web.archive.org/x/www.a.b"
