@@ -44,4 +44,8 @@ Stations are over 100 ft deep.#footnote[Measured from street level to platform.]
 
 = Sources
 
+#[
+#set par(justify: false)
+#set text(hyphenate: false)
 + (not archived) #link("https://www.mta.info/document/196361")[mta.info/document/196361] <src1>
+]

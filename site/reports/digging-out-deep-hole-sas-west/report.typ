@@ -677,6 +677,9 @@ See section 5.3 of NFPA 130: #link("https://link.nfpa.org/free-access/publicatio
 
 = Sources
 
+#[
+#set par(justify: false)
+#set text(hyphenate: false)
 + (archived #link("https://web.archive.org/web/20260518003215id_/https://www.mta.info/document/196361#page=28")[May 18, 2026]) #link("https://www.mta.info/document/196361#page=28")[mta.info/document/196361\#page=28] <src1>
 + (archived #link("https://web.archive.org/web/20260518003215/https://www.mta.info/document/196361")[May 18, 2026]) #link("https://www.mta.info/document/196361")[mta.info/document/196361] <src2>
 + (archived #link("https://web.archive.org/web/20251009140800/https://reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72#dbaf")[Oct 9, 2025]) #link("https://reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72#dbaf")[reorientations.medium.com/where-should-nyc-build-brt-8d9dd852fc72\#dbaf] <src3>
@@ -789,3 +792,4 @@ See section 5.3 of NFPA 130: #link("https://link.nfpa.org/free-access/publicatio
 + (archived #link("https://web.archive.org/web/20230405012348id_/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50")[Apr 5, 2023]) #link("https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf#page=50")[transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf\#page=50] <src110>
 + (archived #link("https://web.archive.org/web/20230405012348/https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf")[Apr 5, 2023]) #link("https://transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf")[transitinnovation.org/wp-content/uploads/2019/12/R211%20Tech%20Spec.pdf] <src111>
 + (archived #link("https://web.archive.org/web/20251223020221/https://link.nfpa.org/free-access/publications/130/2026")[Dec 23, 2025]) #link("https://link.nfpa.org/free-access/publications/130/2026")[link.nfpa.org/free-access/publications/130/2026] <src112>
+]

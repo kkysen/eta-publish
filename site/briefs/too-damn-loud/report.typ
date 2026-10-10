@@ -259,6 +259,9 @@ It's time to let riders travel in peace.
 
 = Sources
 
+#[
+#set par(justify: false)
+#set text(hyphenate: false)
 + (archived #link("https://web.archive.org/web/20261009211344/https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU")[Oct 9, 2026]) #link("https://youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU")[youtube.com/shorts/o90JQBWdgTI?is=I4sZ3txy37d2RiGU] <src1>
 + (archived #link("https://web.archive.org/web/20260410141149/https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[Apr 10, 2026]) #link("https://nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/")[nypost.com/2026/02/25/us-news/mta-to-blast-75-decibel-ads-in-subways-as-critics-blast-fahrenheit-451-style-spin/] <src2>
 + (archived #link("https://web.archive.org/web/20261009033511/https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[Oct 9, 2026]) #link("https://drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive_link")[drive.google.com/file/d/1ceFr--thicXMKXMuKG87Rhxs7oY2xWgC/view?usp=drive\_link] <src3>
@@ -271,3 +274,4 @@ It's time to let riders travel in peace.
 + (archived #link("https://web.archive.org/web/20200729104447/https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[Jul 29, 2020]) #link("https://www.sciencedirect.com/science/article/abs/pii/S0966692316302393")[sciencedirect.com/science/article/abs/pii/S0966692316302393] <src10>
 + (archived #link("https://web.archive.org/web/20260328223010/https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[Mar 28, 2026]) #link("https://www.amny.com/news/mta-nyc-subway-ads-and-money/")[amny.com/news/mta-nyc-subway-ads-and-money/] <src11>
 + (archived #link("https://web.archive.org/web/20260904171034/https://sbahn.berlin/fahren/bauen-stoerung/")[Sep 4, 2026]) #link("https://sbahn.berlin/fahren/bauen-stoerung/")[sbahn.berlin/fahren/bauen-stoerung/] <src12>
+]

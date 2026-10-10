@@ -148,7 +148,11 @@ class TypstEmitter(Emitter):
             f"+ {self.source(doc, source)} <src{n}>"
             for n, source in enumerate(doc.sources, start=1)
         ]
-        return "= Sources\n\n" + "\n".join(items)
+        # Ragged and unhyphenated: justifying a line that a long address
+        # ends stretches its spaces wide, and a hyphen inside an address
+        # reads as part of it.
+        body = "\n".join(items)
+        return f"= Sources\n\n#[\n#set par(justify: false)\n#set text(hyphenate: false)\n{body}\n]"
 
     def source(self, doc: Document, source: str) -> str:
         """One entry: where the source is archived, or that it is not, then the source."""

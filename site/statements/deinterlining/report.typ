@@ -345,6 +345,9 @@ Tweets:
 
 = Sources
 
+#[
+#set par(justify: false)
+#set text(hyphenate: false)
 + (archived #link("https://web.archive.org/web/20251212033206/https://thetransitgirl.tumblr.com/")[Dec 12, 2025]) #link("https://thetransitgirl.tumblr.com/")[thetransitgirl.tumblr.com/] <src1>
 + (archived #link("https://web.archive.org/web/20260129025930/https://pedestrianobservations.com/2018/06/12/how-deinterlining-can-improve-new-york-city-transit/")[Jan 29, 2026]) #link("https://pedestrianobservations.com/2018/06/12/how-deinterlining-can-improve-new-york-city-transit/")[pedestrianobservations.com/2018/06/12/how-deinterlining-can-improve-new-york-city-transit/] <src2>
 + (archived #link("https://web.archive.org/web/20250925011114/https://www.vanshnookenraggen.com/_index/2020/10/deinterlining-with-one-switch/")[Sep 25, 2025]) #link("https://www.vanshnookenraggen.com/_index/2020/10/deinterlining-with-one-switch/")[vanshnookenraggen.com/\_index/2020/10/deinterlining-with-one-switch/] <src3>
@@ -379,3 +382,4 @@ Tweets:
 + (archived #link("https://web.archive.org/web/20261009033515/https://www.youtube.com/live/0AEaaKvpMQw")[Oct 9, 2026]) #link("https://www.youtube.com/live/0AEaaKvpMQw")[youtube.com/live/0AEaaKvpMQw] <src32>
 + (archived #link("https://web.archive.org/web/20260615050241/https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn")[Jun 15, 2026]) #link("https://nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn")[nyc.streetsblog.org/2025/08/11/the-mta-begins-to-untangle-a-notorious-subway-snarl-in-brooklyn] <src33>
 + (archived #link("https://web.archive.org/web/20260518011635/https://www.mta.info/map/40511")[May 18, 2026]) #link("https://www.mta.info/map/40511")[mta.info/map/40511] <src34>
+]
