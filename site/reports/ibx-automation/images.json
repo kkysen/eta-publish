@@ -1,4 +1,10 @@
 {
+  "kix.3ceb7gpb6okx": {
+    "file": "Close_CBTC_operations_at_Jackson_Heights_20250717_204920.jpg",
+    "height": 2048,
+    "sha256": "6cc43aee14a730a6ffa98dba8d6b3253d157ff1d72e496157d692234d148ceea",
+    "width": 1536
+  },
   "kix.5qe5oqancvsg": {
     "file": "IBX_NU_Side_Platform_Crop_2026_0825.original.jpg",
     "height": 1365,
@@ -9,13 +15,19 @@
     "file": "ridership.svg",
     "sha256": "bf8ae8b1cde86eede61c10cfab05e00ec0e16237db7240a024b64e35523ea646"
   },
+  "kix.az6krmcamhxp": {
+    "file": "JFK_AirTrain_interior_facing_forward_toward_the_driverless_front_window.jpg",
+    "height": 1080,
+    "sha256": "ed8c3d442239b9d9afe604f6c516fc8523a773a5a33489d170eeda58c06dfe75",
+    "width": 1920
+  },
   "kix.jgxhj1hqsf1i": {
     "alt": "Share of new metro lines worldwide that are automated (> GoA2), by year. 135/361 new grade-separated, non-mainline urban rail lines opened in 2016 to 2026-09-29 are automated.",
     "file": "automated_share_by_year_2016_to_2026.svg",
     "sha256": "5b6b5195266b740ecd88fe6837874d35e31509665eed81ed3d463f2830a40b97"
   },
   "kix.ngnc6vb5jx8e": {
-    "file": "img-dfdefb85.png",
+    "file": "Skyline_platform_screen_doors.png",
     "height": 1536,
     "sha256": "e70a0e68cf8eddb2dbe93127906886a5be67ac788b4dc29437544251ad4448df",
     "width": 2048
