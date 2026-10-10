@@ -345,6 +345,29 @@ def _remember_job(url: str, job: str) -> None:
         _write_cache({**_cached(), JOBS: jobs})
 
 
+JOB_LIFETIME = timedelta(days=7)
+"""How long a recorded job is asked about before it is taken as lost.
+
+Save Page Now answers `pending` for a job it has never heard of,
+so a job that was dropped looks like one still running, forever.
+A capture can take more than a day, so this is a week."""
+
+
+def _recorded_job(url: str) -> str | None:
+    """The newest job asked for to capture `url`, if it is recent enough to ask about."""
+    newest = None
+    for job, when in _jobs().get(url, {}).items():
+        try:
+            asked = datetime.fromisoformat(str(when))
+        except ValueError:
+            continue
+        if asked.tzinfo is None or datetime.now(UTC) - asked >= JOB_LIFETIME:
+            continue
+        if newest is None or asked > newest[1]:
+            newest = (job, asked)
+    return newest[0] if newest else None
+
+
 def _write_cache(known: Mapping[str, object]) -> None:
     """Replace the cache with `known`, while holding `_REMEMBERING`."""
     path = archive_cache_path()
@@ -680,6 +703,14 @@ def _archive(
             # was held back, this build learned nothing, and writing today's
             # date would renew the entry on every build and expire it never.
             return Lookup(unindexed=index, unserved=replay)
+        job = _recorded_job(url)
+        if job is not None:
+            # What became of the capture already asked for, rather than a
+            # second one: that one may have worked where no lookup can see it,
+            # filed under the address the source redirected to.
+            asked = _job(http, headers, url, job)
+            if asked is not None:
+                return Lookup(asked)
         return Lookup(_submit(http, headers, url))
     except (Busy, requests.RequestException) as e:
         # Nothing about the source. A read that timed out, a connection that
@@ -1048,6 +1079,28 @@ def _submitted(http: requests.Session, headers: dict[str, str], url: str) -> Arc
         error=f"no answer within {CAPTURE_TIMEOUT.total_seconds():.0f} seconds",
         job=job,
     )
+
+
+def _job(http: requests.Session, headers: dict[str, str], url: str, job: str) -> Archived | None:
+    """What became of `job`, asked once, or `None` where a new capture is worth asking for.
+
+    A job refused about the moment captured nothing, so another may work;
+    one refused about the page is the answer, and one still running is waited
+    on by the builds after this one, not by this one.
+    """
+    state = _checked(http.get(f"{SAVE}/status/{job}", headers=headers, timeout=30)).json()
+    status = state.get("status")
+    if status == "success" and state.get("timestamp"):
+        stamp = state["timestamp"]
+        return Archived(
+            snapshot=f"https://web.archive.org/web/{stamp}/{url}", timestamp=stamp, job=job
+        )
+    if status == "error":
+        refused = _refused(state)
+        if any(later in refused for later in RETRY_LATER):
+            return None
+        return Archived(timestamp=today(), error=refused, job=job)
+    raise Busy(f"the capture is still running (job {job})")
 
 
 RETRY_LATER = (

@@ -927,6 +927,78 @@ def test_remembering_lookups_keeps_the_jobs(no_waiting: None) -> None:
     assert "https://a.example/5" in cached["index"]
 
 
+def _found_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    def nothing(*_args: object, **_kwargs: object) -> None:
+        return None
+
+    monkeypatch.setattr(archive, "_existing", nothing)
+
+
+def test_a_recorded_job_that_worked_is_the_capture(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Asked about rather than submitted again: the capture it made may be
+    filed under where the source redirected, where no lookup finds it."""
+    _found_nothing(monkeypatch)
+    archive._remember_job("https://a.example/1", "job-1")
+    session = Saving([{"status": "success", "timestamp": "20261010114910"}])
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.archived is not None
+    assert (lookup.archived.timestamp, lookup.archived.job) == ("20261010114910", "job-1")
+    assert session.submitted == 0
+
+
+def test_a_recorded_job_still_running_is_not_submitted_again(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _found_nothing(monkeypatch)
+    archive._remember_job("https://a.example/1", "job-1")
+    session = Saving([{"status": "pending"}])
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.unanswered
+    assert "job-1" in lookup.why
+    assert session.submitted == 0
+
+
+def test_a_recorded_job_refused_about_the_page_is_the_answer(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _found_nothing(monkeypatch)
+    archive._remember_job("https://a.example/1", "job-1")
+    session = Saving([{"status": "error", "status_ext": "error:not-found"}])
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.archived is not None
+    assert (lookup.archived.error, lookup.archived.job) == ("error:not-found", "job-1")
+    assert session.submitted == 0
+
+
+def test_a_recorded_job_refused_about_the_moment_is_asked_for_again(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _found_nothing(monkeypatch)
+    archive._remember_job("https://a.example/1", "job-1")
+    session = Saving(
+        [
+            {"status": "error", "status_ext": "error:user-session-limit"},
+            {"job_id": "job-2"},
+            {"status": "success", "timestamp": "20261011000000"},
+        ]
+    )
+    lookup = archive._archive(session, {"Authorization": "LOW a:b"}, "https://a.example/1")
+    assert lookup.archived is not None
+    assert lookup.archived.job == "job-2"
+    assert session.submitted == 1
+
+
+def test_a_job_older_than_its_lifetime_is_taken_as_lost(
+    no_waiting: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Save Page Now answers `pending` for a job it never heard of."""
+    archive._remember_job("https://a.example/1", "job-1")
+    monkeypatch.setattr(archive, "JOB_LIFETIME", timedelta())
+    assert archive._recorded_job("https://a.example/1") is None
+
+
 def test_a_build_with_keys_captures_only_what_has_no_capture(keyed: None) -> None:
     """A capture is somebody else's page fetch, and asking for one of a page the
     archive already holds spends it on nothing: the lookup comes first."""
