@@ -421,9 +421,10 @@ making the reports agree is the writer's, and the build only says where to look.
   so `Nanba Road` and `Heping South Street` are listed in `ELSEWHERE`
   in `eta_publish/style.py`, which is where the next one goes.
 - **Units as symbols after a number**:
-  `137 ft`, `180 m`, `5 min`, `30 sec`, `3 lb`.
+  `137 ft`, `180 m`, `3 lb`.
   A column of `137 ft`, `140 ft`, `969 ft` is a comparison;
   the same numbers spelled out is a paragraph to read twice.
+  Times may be either: `5 min` and `5 minutes`, `30 sec` and `30 seconds`.
   `mile` is the one length written out, and a number written as a word is
   left alone: `ten minutes` is a duration being described rather than measured.
   The units `eta_publish/style.py` knows are the ones these reports use:

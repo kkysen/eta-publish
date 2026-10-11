@@ -294,12 +294,22 @@ def test_the_joke_on_the_project_name_keeps_the_name_it_is_on() -> None:
     )
 
 
+def test_a_time_may_be_written_out_or_abbreviated() -> None:
+    assert warnings(written("It cost riders 5 minutes every trip.")) == []
+    assert warnings(written("It cost riders 5 min every trip.")) == []
+    assert warnings(written("Doors close in 20 seconds.")) == []
+
+
+def test_a_hyphenated_time_keeps_its_word() -> None:
+    found = warnings(written("It runs on 3-minute headways."))
+    assert len(found) == 1
+    assert "`3 minute`" in found[0]
+
+
 def test_a_unit_after_a_number_is_the_symbol() -> None:
     assert "`130 ft`" in warnings(written("Stations between 100 and 130 feet down."))[0]
     assert "`180 m`" in warnings(written("Trains of 180 meters or longer."))[0]
     assert "`6 in`" in warnings(written("Openings only 6 inches above the road."))[0]
-    assert "`5 min`" in warnings(written("It cost riders 5 minutes every trip."))[0]
-    assert "`30 sec`" in warnings(written("Reached within 30 seconds of arriving."))[0]
 
 
 def test_a_symbol_has_no_plural() -> None:

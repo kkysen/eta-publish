@@ -38,41 +38,26 @@ August 19, 2026
 - the `Header` section has no `Audience:` line
 - `SEO Description:` is 398 characters, over the 300 a search result shows:
   > A 125 St subway should be a slam dunk. But at $7.7B and with stations more than 100 ft underground, it would be the most expensive subway in the world, and cost riders more than 5 minutes every trip before ever stepping on a train. By using international best practices & building more shallowly, how~~ever, NY would not only be able to build more for less, but would also save riders time every day.~~
-- style: `5 minutes` should be `5 min`: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
-- style: `5 minutes` should be `5 min`: `...ld, and cost riders more than 5 minutes every trip before ever steppi...`
 - style: `125th Street` should be `125 St`: `...enue Subway (SAS) west across 125th Street (SAS West) should be a slam d...`
 - style: `Second Ave Subway` should be `Second Avenue Subway`: `...nflation-adjusted cost of the Second Ave Subway’s first phase, a project that...`
 - style: `130 feet` should be `130 ft`: `...with stations between 100 and 130 feet beneath the surface. Accordin...`
-- style: `5 minutes` should be `5 min`: `...escalator transfer times over 5 minutes.`
 - style: an apostrophe should be `’`, not `'`: `...t of subway construction. That's why, in most projects, stati...`
 - style: an apostrophe should be `’`, not `'`: `...ould become GCM, however, didn't begin until 1999, with const...`
 - style: an apostrophe should be `’`, not `'`: `... finally starting in 2006. GCM's original sin came early on i...`
 - style: an apostrophe should be `’`, not `'`: `...e part because most riders don't see any major time improveme...`
 - style: `Hunterspoint Avenue` should be `Hunterspoint Av`: `...ed with using Penn Station or Hunterspoint Avenue and the 7 train. At a normal ...`
-- style: `8 minutes` should be `8 min`: `...normal walking pace, it takes 8 minutes to travel from GCM’s lower me...`
-- style: `10 minutes` should be `10 min`: `... to GCT’s Main Concourse, and 10 minutes to reach the 4/5/6 trains. Gi...`
-- style: `15 minutes` should be `15 min`: `...ven that it only takes around 15 minutes to travel between Penn Statio...`
-- style: `3.5 minutes` should be `3.5 min`: `...subway lines along the route: 3.5 minutes at Lenox Av via escalators, 5...`
-- style: `5.1 minutes` should be `5.1 min`: `...s at Lenox Av via escalators, 5.1 minutes at St Nicholas Av via escalat...`
-- style: `5.1 minutes` should be `5.1 min`: `...cholas Av via escalators, and 5.1 minutes at Broadway via elevators. Th...`
-- style: `5 minutes` should be `5 min`: `...escalator transfer times over 5 minutes.`
 - style: an apostrophe should be `’`, not `'`: `...s and ceiling caving in. There's no doubt that cut-and-cover ...`
-- style: `7 minutes` should be `7 min`: `...posed design, this would take 7 minutes on escalators). Conversely, S...`
 - style: an apostrophe should be `’`, not `'`: `...ctions, especially as New York's subway trains are quite long...`
 - style: an apostrophe should be `’`, not `'`: `... St/Lexington Av. Even if that's not possible, however, there...`
 - style: an apostrophe should be `’`, not `'`: `...rt digging until 2027, and won't reach Lenox Av until 2028. S...`
 - style: an apostrophe should be `’`, not `'`: `Depth isn't the only problem driving up ...`
 - style: `Second Ave subway` should be `Second Avenue Subway`: `... even by the standards of the Second Ave subway. `
-- style: `30 seconds` should be `30 sec`: `... platform or mezzanine within 30 seconds, which, while certainly nice ...`
 - style: `6 inches` should be `6 in`: `...its ventilation openings only 6 inches above roadway height, obviati...`
 - style: `Second Ave subway` should be `Second Avenue Subway`: `...ive, oversize features of the Second Ave subway. The MTA and its contractors ...`
 - style: an apostrophe should be `’`, not `'`: `... train on the Manhattan Bridge's outdoor approaches, subject ...`
 - style: an apostrophe should be `’`, not `'`: `...the feasibility study, the MTA's consultants proposed tail tr...`
 - style: an apostrophe should be `’`, not `'`: `...7 St. So even if the MTA doesn't wish to reuse the Freedom Tu...`
 - style: an apostrophe should be `’`, not `'`: `... still simpler and cheaper: it's on publicly owned land, at a...`
-- style: `5 minutes` should be `5 min`: `...tchbacks that would take over 5 minutes to reach the platform. Transf...`
-- style: `2.1 minutes` should be `2.1 min`: `... escalators, only take 1.6 to 2.1 minutes for transfers in the feasibil...`
-- style: `19 seconds` should be `19 sec`: `...se 198 ft to the Blue Line in 19 seconds, door closing to door opening...`
 
 ![Composite image of the MTA’s SAS West St Nicholas Av station diagram and a Grand Central Madison escalator.](<images/img-6fb0f9c4.jpg>)\
 Composite image of the MTA’s [SAS West St Nicholas Av station diagram](<https://www.mta.info/document/196361#page=28>)<sup>\[1\]</sup> and a Grand Central Madison escalator.\

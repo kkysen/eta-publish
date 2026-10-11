@@ -579,6 +579,14 @@ where `137 ft` and `1.2 km` are measurements a reader compares.
 """
 
 
+TIME_UNITS = frozenset({"minutes", "minute", "seconds", "second"})
+"""Units that may be written out as well as abbreviated: the times.
+
+`3 min` and `3 minutes` are both how these reports write a headway,
+and a time is read in a sentence rather than compared down a column,
+so neither spelling is wrong. The symbols are still read as units.
+"""
+
 SYMBOLS = frozenset(UNITS.values())
 """The symbols themselves, for a measurement that is already spelled right."""
 
@@ -667,7 +675,7 @@ def _check_units(doc: Document, text: str) -> None:
     """
     for start, end, amount, gap, unit in _measurements(text):
         symbol = UNITS.get(unit)
-        if symbol is None or _defines(text, end, symbol):
+        if symbol is None or unit in TIME_UNITS or _defines(text, end, symbol):
             continue
         _warn(
             doc,
@@ -698,7 +706,7 @@ def _check_hyphenated_units(doc: Document, text: str) -> None:
             doc,
             "{} should be {}, with no hyphen: {}",
             Shown(text[start:end]),
-            Shown(f"{amount} {UNITS.get(unit, unit)}"),
+            Shown(f"{amount} {unit if unit in TIME_UNITS else UNITS.get(unit, unit)}"),
             Highlighted(_before(text, start), text[start:end], _after(text, end)),
         )
 

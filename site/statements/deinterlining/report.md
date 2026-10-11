@@ -44,21 +44,11 @@
 - style: an apostrophe should be `’`, not `'`: `...k-hour service, however, today's interlined network requires ...`
 - style: an apostrophe should be `’`, not `'`: `...er, even with a transfer. What's more, this service simplific...`
 - style: an apostrophe should be `’`, not `'`: `...ion will make it so delays can't spread, making massive meltd...`
-- style: `4 minutes` should be `4 min`: `...eir trips slowed by more than 4 minutes. And all riders will see far ...`
-- style: `7 minutes` should be `7 min`: `...n the 63 St line from every 6-7 minutes to every 6 minutes, 1 minute ...`
-- style: `6 minutes` should be `6 min`: `...om every 6-7 minutes to every 6 minutes, 1 minute longer than average...`
-- style: `1 minute` should be `1 min`: `...7 minutes to every 6 minutes, 1 minute longer than average waits for...`
-- style: `4 minutes` should be `4 min`: `...aits for the current F (every 4 minutes). This is the key to successf...`
 - style: a sentence should end with 1 space, not 2: `...ce over the course of the day.··There will be 9 tph both befor...`
-- style: `6-minute` should be `6-min`: `... M trains having the promised 6-minute headways or better. We hope t...`
-- style: `6-minute` should be `6-min`: `..., at least up to the promised 6-minute headways, to ensure that as m...`
-- style: `6-minute` should be `6 min`, with no hyphen: `... M trains having the promised 6-minute headways or better. We hope t...`
-- style: `6-minute` should be `6 min`, with no hyphen: `..., at least up to the promised 6-minute headways, to ensure that as m...`
-- style: `1.7 minutes` should be `1.7 min`: `...and Junction will save riders 1.7 minutes every day, a cumulative 1 yea...`
-- style: `1-minute` should be `1-min`: `...will only incur an additional 1-minute penalty in return for far mor...`
-- style: `1-minute` should be `1 min`, with no hyphen: `...will only incur an additional 1-minute penalty in return for far mor...`
-- style: `10-minute` should be `10-min`: `...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...`
-- style: `10-minute` should be `10 min`, with no hyphen: `...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...`
+- style: `6-minute` should be `6 minute`, with no hyphen: `... M trains having the promised 6-minute headways or better. We hope t...`
+- style: `6-minute` should be `6 minute`, with no hyphen: `..., at least up to the promised 6-minute headways, to ensure that as m...`
+- style: `1-minute` should be `1 minute`, with no hyphen: `...will only incur an additional 1-minute penalty in return for far mor...`
+- style: `10-minute` should be `10 minute`, with no hyphen: `...top is less than a half-mile (10-minute) walk from a 6 Av Express sto...`
 - style: an apostrophe should be `’`, not `'`: `...torical artifact of the system's creation is almost unique in...`
 - style: an apostrophe should be `’`, not `'`: `...d causes issues that often don't arise elsewhere. At worst, t...`
 - style: a sentence should end with 1 space, not 2: `...rain did not increase service.··The schedule does include a mo...`
