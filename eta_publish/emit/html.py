@@ -899,13 +899,21 @@ class HtmlEmitter(Emitter):
         mark = None if title is not None else self.mark(anchor, what)
         if title is not None:
             ref = None
+        # Under the name, as an image's credit is under its caption.
+        credit = (
+            tag.figcaption(class_="figure-credit")[self.inlines(node.credit)]
+            if node.credit
+            else None
+        )
         served = self.doc.served_video(node)
         if served is not None:
             video = tag.video(
                 src=self.media_src(served, VIDEO_DIR), controls=True, preload="metadata"
             )[tag.a(href=node.url)["Watch the video"]]
             return markup(
-                tag.figure(id=anchor, class_="embed embed-video")[mark, warning, video, title, ref]
+                tag.figure(id=anchor, class_="embed embed-video")[
+                    mark, warning, video, title, credit, ref
+                ]
             )
         where = PLATFORM_NAMES[node.platform]
         picture = None
@@ -934,6 +942,7 @@ class HtmlEmitter(Emitter):
                 warning,
                 card_link,
                 title,
+                credit,
                 ref,
             ]
         )

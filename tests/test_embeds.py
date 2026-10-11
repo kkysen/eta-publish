@@ -4,13 +4,13 @@ from typing import cast
 
 import pytest
 import requests
-from test_conventions import build, image, para
+from test_conventions import build, field, image, para
 
 from eta_publish.docs_json import JsonObject
 from eta_publish.embeds import _stems, look_up
 from eta_publish.emit.html import HtmlEmitter
 from eta_publish.emit.markdown import MarkdownEmitter
-from eta_publish.nodes import Card, Embed, Figure, Paragraph, Platform
+from eta_publish.nodes import Card, Embed, Figure, Paragraph, Platform, Text
 from eta_publish.parse import embedded
 
 
@@ -262,6 +262,22 @@ def test_a_graphic_video_is_warned_about_and_named_apart() -> None:
     # Ours, so named as the document names it and linked to our copy.
     link = "[Hit by the 1 train](<videos/Hit_by_the_1_train.mp4>)"
     assert f"**Warning, graphic video**\n\n{link}" in markdown
+
+
+def test_a_video_takes_a_credit_line_as_a_figure_does() -> None:
+    url = "https://x.com/someone/status/123"
+    line = linked((": ", None), ("Hit by the 1 train", url), underline="Video (Copy)")
+    doc = build([para("Headline", "TITLE"), line, field("Credit: ETA (Khyber Sen)")])
+    (embed,) = doc.blocks
+    assert isinstance(embed, Embed)
+    assert (
+        "".join(i.text for i in embed.credit if isinstance(i, Text)) == "Credit: ETA (Khyber Sen)"
+    )
+    doc.cards[url] = Card(author="someone", text="a post")
+    doc.media_files[url] = "Hit_by_the_1_train.mp4"
+    html = HtmlEmitter(image_base="images").emit(doc)
+    assert '<figcaption class="figure-credit">Credit: ETA (Khyber Sen)</figcaption>' in html
+    assert "Credit: ETA (Khyber Sen)" in MarkdownEmitter().emit(doc)
 
 
 def test_a_copy_that_failed_shows_its_card() -> None:

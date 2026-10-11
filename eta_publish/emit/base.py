@@ -201,9 +201,11 @@ class Emitter(ABC):
         # `cite` is the post's citation, for a link that goes somewhere else:
         # a link to the post carries its own.
         link = self.paragraph(Paragraph([Text(label, href=href or node.url)])) + cite
-        if not node.graphic:
-            return link
-        return self.join([self.paragraph(Paragraph([Text(GRAPHIC_WARNING, bold=True)])), link])
+        warning = self.paragraph(Paragraph([Text(GRAPHIC_WARNING, bold=True)]))
+        credit = self.paragraph(Paragraph(node.credit))
+        return self.join(
+            [*([warning] if node.graphic else []), link, *([credit] if node.credit else [])]
+        )
 
     def inlines(self, content: list[Inline]) -> str:
         return "".join(self.inline(i) for i in content)

@@ -334,6 +334,9 @@ class Embed:
     """Its `Video:` line's link text, which names the video on the page and its file,
     or empty where the link reads as its own URL."""
 
+    credit: list[Inline] = field(default_factory=list)
+    """The `Credit:` line under it, as a figure has, or empty where there is none."""
+
 
 @dataclass(frozen=True)
 class Card:

@@ -1163,6 +1163,11 @@ class Parser:
             # Matching on length would swallow short body paragraphs,
             # and a report with 50-odd figures has a great many.
             last = out[-1] if out else None
+            if isinstance(last, Embed) and not last.credit and is_credit_note(inlines):
+                # Credited the way a figure is, by the line right under it.
+                self._check_label(inlines)
+                last.credit = unmarked(inlines)
+                continue
             if isinstance(last, Figure):
                 # A caption and its credit are often one paragraph split by a soft line break,
                 # so each line is classified separately.
